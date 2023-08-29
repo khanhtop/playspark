@@ -1,7 +1,28 @@
 import { useState } from "react";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
 export default function Home() {
   const [reveal, setReveal] = useState(false);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const addToList = async () => {
+    setLoading(true);
+    const formatted = email.toLowerCase().trim();
+    await fetch("/api/addToHubspot", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: formatted,
+      }),
+    });
+    setLoading(false);
+    setEmail("");
+    setReveal(false);
+    alert("Email address has been added!");
+  };
 
   return (
     <div className="h-screen w-screen bg-gradient-to-b from-white to-blue-500 flex justify-center">
@@ -21,14 +42,22 @@ export default function Home() {
           {reveal ? (
             <div className="flex h-10 mt-8">
               <input
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeHolder="Enter Email"
                 className="flex-1 h-full px-3 rounded-tl-lg rounded-bl-lg"
               />
+
               <button
-                onClick={() => setReveal(true)}
-                className="w-24 bg-purple-500 hover:bg-purple-700 transition text-white py-2 uppercase font-bold tracking-wide rounded-tr-lg rounded-br-lg h-full"
+                disabled={loading}
+                onClick={() => addToList()}
+                className="flex items-center justify-center w-24 bg-purple-500 hover:bg-purple-700 transition text-white py-2 uppercase font-bold tracking-wide rounded-tr-lg rounded-br-lg h-full"
               >
-                Submit
+                {!loading ? (
+                  <p className="text-sm">Submit</p>
+                ) : (
+                  <ArrowPathIcon className="animate-spin h-6 w-6 text-white" />
+                )}
               </button>
             </div>
           ) : (
