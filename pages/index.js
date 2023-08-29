@@ -7,6 +7,10 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const addToList = async () => {
+    if (email.length < 6 || !email.includes("@")) {
+      alert("Please ensure the email address is correctly formatted");
+      return;
+    }
     setLoading(true);
     const formatted = email.toLowerCase().trim();
     await fetch("/api/addToHubspot", {
