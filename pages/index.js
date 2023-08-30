@@ -91,11 +91,11 @@ export default function Home() {
           <MuxPlayer
             playbackId="jes2JpY021gTDjtGdbxMMUq6BjSgcdJXjdMJ7CcFmb2Q"
             className="mt-4"
-            // metadata={{
-            //   video_id: "video-id-123456",
-            //   video_title: "Bick Buck Bunny",
-            //   viewer_user_id: "user-id-bc-789",
-            // }}
+            metadata={{
+              video_id: "video-id-123456",
+              video_title: "Bick Buck Bunny",
+              viewer_user_id: "user-id-bc-789",
+            }}
             streamType="on-demand"
           />
         </div>
