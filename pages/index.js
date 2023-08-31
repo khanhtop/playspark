@@ -31,10 +31,10 @@ export default function Home() {
 
   return (
     <>
-      <div className="w-screen flex flex-col justify-center bg-gradient-to-b from-white to-indigo-500  items-center ">
+      <div className="w-screen flex flex-col justify-center bg-gradient-to-b from-[#000] to-[#000]  items-center ">
         <div className="gap-8 h-screen w-screen  flex w-full max-w-[1200px] px-4 md:px-12 gap-2">
           <div className="flex-1 flex flex-col justify-center items-center md:items-start">
-            <img className="-my-[10%] -mx-[8%] " src="/branding/logo.png" />
+            <img className="-my-[10%] -mx-[8%] " src="/branding/logo2.png" />
             <h3 className="text-2xl md:text-3xl lg:text-6xl text-white font-bold">
               SPORTS ADVERTISING
             </h3>
@@ -67,7 +67,7 @@ export default function Home() {
                 <button
                   disabled={loading}
                   onClick={() => addToList()}
-                  className="flex items-center justify-center w-24 bg-purple-500 hover:bg-purple-700 transition text-white py-2 uppercase font-bold tracking-wide rounded-tr-lg rounded-br-lg h-full"
+                  className="flex items-center justify-center w-24 bg-cyan-300 hover:bg-sky-900 hover:text-white  transition text-black py-2 uppercase font-bold tracking-wide rounded-tr-lg rounded-br-lg h-full"
                 >
                   {!loading ? (
                     <p className="text-sm">Submit</p>
@@ -79,7 +79,7 @@ export default function Home() {
             ) : (
               <button
                 onClick={() => setReveal(true)}
-                className="bg-purple-600 hover:bg-purple-700 transition w-[220px] md:w-[300px] text-white py-2 uppercase font-bold tracking-wide rounded-lg mt-8"
+                className="bg-cyan-300 hover:bg-sky-900 hover:text-white transition w-[220px] md:w-[300px] text-black py-2 uppercase font-bold tracking-wide rounded-lg mt-8"
               >
                 Join Waitlist
               </button>
@@ -88,7 +88,7 @@ export default function Home() {
           <div className="hidden flex-1 md:flex items-center">
             <MuxPlayer
               playbackId="jes2JpY021gTDjtGdbxMMUq6BjSgcdJXjdMJ7CcFmb2Q"
-              className="mt-4"
+              className="border-cyan-300 border-2 rounded-lg overflow-hidden"
               metadata={{
                 video_id: "video-id-123456",
                 video_title: "Bick Buck Bunny",
