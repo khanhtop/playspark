@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ArrowPathIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import MuxPlayer from "@mux/mux-player-react";
+import Navbar from "@/components/nav/navbar";
 
 export default function Home() {
   const [reveal, setReveal] = useState(false);
@@ -31,6 +32,7 @@ export default function Home() {
 
   return (
     <>
+      <Navbar />
       <div className="w-screen flex flex-col justify-center bg-gradient-to-b from-[#000] to-[#000]  items-center ">
         <div className="gap-8 h-screen w-screen  flex w-full max-w-[1200px] px-4 md:px-12 gap-2">
           <div className="flex-1 flex flex-col justify-center items-center md:items-start">
