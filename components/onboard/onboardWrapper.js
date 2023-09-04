@@ -1,5 +1,5 @@
 import { useAppContext } from "@/helpers/store";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Input from "../forms/input";
 import CardSelect from "./cardSelect";
 import {
@@ -7,6 +7,8 @@ import {
   PlayCircleIcon,
   PlayIcon,
 } from "@heroicons/react/24/solid";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { firestore } from "@/helpers/firebase";
 
 export default function OnboardWrapper({ children }) {
   const context = useAppContext();
@@ -16,7 +18,23 @@ export default function OnboardWrapper({ children }) {
   const [companyName, setCompanyName] = useState("");
   const [purpose, setPurpose] = useState(0);
 
-  if (context?.profile?.hasOnboarded) {
+  // Methods
+
+  const saveProfile = async () => {
+    await setDoc(doc(firestore, "users", context.loggedIn?.uid), {
+      companyName: companyName,
+      purpose: purpose,
+      hasOnboarded: true,
+    });
+  };
+
+  useEffect(() => {
+    console.log(companyName, purpose);
+  }, [companyName, purpose]);
+
+  if (!context.profile) {
+    return <div className="h-screen w-screen bg-black" />;
+  } else if (context?.profile?.hasOnboarded) {
     return children;
   } else {
     return (
@@ -36,7 +54,7 @@ export default function OnboardWrapper({ children }) {
         ) : stage === 1 ? (
           <InnerWrap
             continueWhen={companyName?.length > 2}
-            onContinue={() => setStage(2)}
+            onContinue={() => saveProfile()}
             text="What are you primarily using PlaySpark for?"
           >
             <CardSelect
@@ -59,7 +77,7 @@ export default function OnboardWrapper({ children }) {
             />
           </InnerWrap>
         ) : (
-          children
+          <div />
         )}
       </div>
     );
