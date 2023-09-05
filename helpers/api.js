@@ -1,7 +1,10 @@
+import Pong from "@/components/games/pong";
+
 export function getAd(id) {
   if (id === "123") {
     return {
       gameName: "Tottenham Shootout",
+      game: 0,
       primaryColor: "#132257",
       textColor: "#FFF",
       backgroundImage:
@@ -10,4 +13,8 @@ export function getAd(id) {
   } else {
     return null;
   }
+}
+
+export function getGame(id) {
+  if (id === 0) return <Pong />;
 }

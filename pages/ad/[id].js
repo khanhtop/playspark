@@ -3,7 +3,7 @@ import { getAd } from "@/helpers/api";
 
 export default function Ad({ ad, id }) {
   return (
-    <div className="text-white font-bold h-screen w-screen bg-gradient-to-b from-white to-blue-500 flex justify-center items-center">
+    <div className="text-white font-bold h-screen w-screen flex justify-center items-center">
       {ad ? <Advert data={ad} /> : <p>{id} - AD NOT FOUND</p>}
     </div>
   );
