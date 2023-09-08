@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>PlaySpark</title>
         <meta
           property="description"
           content="Dynamic playable ads that generate a higher ROI and engagement for

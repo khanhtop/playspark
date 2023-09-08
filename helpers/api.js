@@ -1,4 +1,6 @@
-import Pong from "@/components/games/pong";
+//import Pong from ;
+import dynamic from "next/dynamic";
+const Pong = dynamic(() => import("@/components/games/pong"), { ssr: false });
 
 export function getAd(id) {
   if (id === "123") {
@@ -15,6 +17,6 @@ export function getAd(id) {
   }
 }
 
-export function getGame(id) {
-  if (id === 0) return <Pong />;
+export function getGame(id, data) {
+  if (id === 0) return <Pong data={data} />;
 }
