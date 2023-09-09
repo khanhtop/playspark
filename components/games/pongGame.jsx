@@ -1,20 +1,17 @@
 import Phaser from 'phaser';
 import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import MainScene from './mainScene';
-const PongClientComponent = ({ handleScore }, ref) => {
+
+const PongClientComponent = forwardRef(({ handleScore }, ref) => {
     const [hasRendered, setHasRendered] = useState(false);
     const memoizedHasRendered = useMemo(() => hasRendered, [hasRendered]);
-    let scene;
-
-    const initGame = (lives) => {
-        if (scene) {
-            scene.initGame(lives);
-        }
-    }
+    let mainScene;
 
     useImperativeHandle(ref, () => ({
-        initGame: initGame,
-    }));
+        initGame: (lives) => {
+            mainScene.initGame(lives);
+        },
+    }), [mainScene]);
 
     useEffect(() => {
         if (!memoizedHasRendered) {
@@ -35,8 +32,8 @@ const PongClientComponent = ({ handleScore }, ref) => {
 
             const game = new Phaser.Game(config);
             game.events.once('ready', () => {
-                scene = game.scene.scenes[0];
-                scene.setScoreHandle(handleScore);
+                mainScene = game.scene.scenes[0];
+                mainScene.setScoreHandle(handleScore);
             });
 
             console.log('game setup');
@@ -49,6 +46,10 @@ const PongClientComponent = ({ handleScore }, ref) => {
     }, [memoizedHasRendered]);
 
     return <div id="game" className={`w-full flex-grow justify-center items-center`}> </div>
-}
+})
 
-export default forwardRef(PongClientComponent);
+export default function MiddlePong({ handleScore, pongRef }) {
+    return (
+        <PongClientComponent handleScore={handleScore} ref={pongRef} />
+    );
+}

@@ -145,8 +145,6 @@ export default class MainScene extends Phaser.Scene {
             repeat: -1
         });
 
-        this.cameras.main.fadeIn(1200);
-
         /*
         const ballFx = this.ball.postFX.addBloom(0xffffff, 0, 0, 0, 1);
 
@@ -206,11 +204,26 @@ export default class MainScene extends Phaser.Scene {
     }
 
     public initGame(lives = 3) {
+        this.cameras.main.fadeIn(1200);
+
         this.goalTxt.setVisible(false);
         this.addedScrTxt.setVisible(false);
 
         this.player.setPosition(mW, h - goalH - playerR / 2);
-        this.ai.setPosition(mW, scr + goalH + playerR / 2);
+        this.ai.setPosition(mW, scr + goalH + aiR / 2);
+        this.player.setVelocity(0, 0);
+        this.ai.setVelocity(0, 0);
+
+        this.ball.setVelocity(0, 0);
+
+        this.ball.setPosition(mW, mH);
+
+        this.aiTargetX = mW;
+        this.aiTargetY = scr + goalH + aiR / 2;
+
+        this.goalXPos = mW;
+        this.goalYPos = h - goalH - playerR / 2;
+
         this.scoreNum = 0;
         this.ballDir = 1;
         this.scoreText.text = '0000';
@@ -224,6 +237,7 @@ export default class MainScene extends Phaser.Scene {
             ).setDisplaySize(heartR, heartR);
             this.hearts.push(heart);
         }
+        console.log(this.hearts);
         this.ball.setAlpha(0.5);
         this.ball.setCircle(0.1);
 
@@ -236,11 +250,8 @@ export default class MainScene extends Phaser.Scene {
         this.aiSpeed = 250;
         this.aiSize = 1;
 
-
         this.aiIsMoving = false;
         this.aiMoveTime = 0;
-        this.aiTargetX = 0;
-        this.aiTargetY = 0;
 
         setTimeout(() => this.startRound(), 2500);
     }
