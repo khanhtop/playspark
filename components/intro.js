@@ -24,7 +24,7 @@ export default function Intro({ data, setStage }) {
             borderWidth: 3,
             color: data?.textColor,
           }}
-          className="h-12 w-[200px] rounded-lg hover:scale-105 transition"
+          className="h-12 w-[200px] rounded-full hover:scale-105 transition"
         >
           Start
         </button>
