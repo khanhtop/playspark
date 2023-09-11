@@ -25,3 +25,17 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+@font-face {
+    font-family: 'enhanced_led_board-7';
+    src: url('/pong/assets/min/enhanced_led_board-7.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TitanOne-Regular';
+    src: url('/pong/assets/min/TitanOne-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

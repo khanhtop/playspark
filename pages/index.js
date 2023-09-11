@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { ArrowPathIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
-import MuxPlayer from "@mux/mux-player-react";
 import Navbar from "@/components/nav/navbar";
+import dynamic from "next/dynamic";
+
+const MuxPlayer = dynamic(() => import('@mux/mux-player-react'), { ssr: false });
 
 export default function Home() {
   const [reveal, setReveal] = useState(false);
