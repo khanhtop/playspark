@@ -21,6 +21,8 @@ export default class MainScene extends Phaser.Scene {
         this.load.image('heart', '/pong/assets/min/heart.png');
         this.load.image('score', '/pong/assets/min/score.png');
 
+        this.load.image('middleAd', '/pong/assets/min/middleAd.png');
+
         this.load.audio('bg', '/pong/assets/min/sfx/bgNoise.ogg');
         this.load.audio('whistle', '/pong/assets/min/sfx/whistle.ogg');
         this.load.audio('ballHit', '/pong/assets/min/sfx/ballHit.ogg');
@@ -68,6 +70,7 @@ export default class MainScene extends Phaser.Scene {
 
         this.physics.world.setBounds(sideW, scr + goalH, boundW, boundH, true, true, false, false);
         this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
+        this.add.image(mW, mH, 'middleAd').setDisplaySize(50, 50).setAlpha(0.7);
         //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
 
         this.add.image(mW, 37, 'score').setDisplaySize(scrW, scrH);
