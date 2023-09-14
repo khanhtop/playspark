@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 const Intro = dynamic(() => import('./intro'), { ssr: false });
 
 export default function Advert({ data }) {
-    const [stage, setStage] = useState(1); // TODO: reset stage to 0
+    const [stage, setStage] = useState(0); // TODO: reset stage to 0
     useEffect(() => {
         console.log("Advert Loaded");
     }, []);
