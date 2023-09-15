@@ -1,6 +1,6 @@
 export default function Intro({ data, setStage }) {
   return (
-    <div className="h-full w-full flex">
+    <div className="h-full w-full relative">
       <img
         src={data?.backgroundImage}
         className="absolute top-0 left-0 h-full w-full object-cover"

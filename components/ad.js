@@ -10,7 +10,7 @@ export default function Advert({ data }) {
         console.log("Advert Loaded");
     }, []);
     return (
-        <div className="h-full w-full">
+        <div className="h-[884px] w-[500px]">
             {stage === 0 && <Intro data={data} setStage={setStage} />}
             {stage === 1 && getGame(0, data)}
         </div>

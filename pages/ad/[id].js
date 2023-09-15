@@ -7,7 +7,7 @@ export default function Ad({ ad, id }) {
         console.log("AD Loaded");
     }, []);
     return (
-        <div className="text-white font-bold h-screen w-screen flex justify-center items-center">
+        <div className="text-white font-bold ">
             {ad ? <Advert data={ad} /> : <p>{id} - AD NOT FOUND</p>}
         </div>
     );
