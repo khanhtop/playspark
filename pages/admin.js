@@ -1,5 +1,6 @@
 import AuthWrapper from "@/components/auth/authWrapper";
 import Avatar from "@/components/dash/avatar";
+import MarketPlace from "@/components/dash/marketplace";
 import Pane from "@/components/dash/pane";
 import Sidebar from "@/components/dash/sidebar";
 import OnboardWrapper from "@/components/onboard/onboardWrapper";
@@ -19,7 +20,10 @@ export default function Application() {
             selectedPane={selectedPane}
             setSelectedPane={setSelectedPane}
           />
-          <Pane />
+          {selectedPane === 1 ? <Pane /> : selectedPane === 0 ? <Pane>
+            <MarketPlace />
+          </Pane> : <Pane />}
+          
           <Avatar character={context.profile?.companyName?.substring(0, 1)} />
         </div>
       </OnboardWrapper>

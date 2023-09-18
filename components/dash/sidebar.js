@@ -11,12 +11,12 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
       <h3 className="text-sm mb-8">{context.profile?.companyName}</h3>
       <div className="flex-1 w-full overflow-y-scroll">
         <Row
-          text="My Games"
+          text="Marketplace"
           selected={selectedPane === 0}
           setSelectedPane={() => setSelectedPane(0)}
         />
-        <Row
-          text="Marketplace"
+          <Row
+          text="My Games"
           selected={selectedPane === 1}
           setSelectedPane={() => setSelectedPane(1)}
         />
