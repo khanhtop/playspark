@@ -23,8 +23,8 @@ export default function Pong({ data }) {
       style={{
         backgroundColor: data?.primaryColor,
         color: data?.textColor,
-        width: "500px",
-        height: "884px",
+        width: "100%",
+        height: "100%",
       }}
       className={`aspect-w-9 aspect-h-19 h-full w-auto relative flex flex-col`}
     >

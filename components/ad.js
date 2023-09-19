@@ -5,12 +5,20 @@ import dynamic from "next/dynamic";
 const Intro = dynamic(() => import('./intro'), { ssr: false });
 
 export default function Advert({ data }) {
-    const [stage, setStage] = useState(0); // TODO: reset stage to 0
+    const [stage, setStage] = useState(0);
+    const [dimensions, setDimensions] = useState({x: 0, y: 0})
+
     useEffect(() => {
         console.log("Advert Loaded");
+        const width = window.frameElement.offsetWidth
+        const height = window.frameElement.offsetHeight
+        setDimensions({x: width, y: height})
     }, []);
     return (
-        <div className="h-[884px] w-[500px]">
+        <div style={{
+            width: dimensions.x,
+            height: dimensions.y
+        }}>
             {stage === 0 && <Intro data={data} setStage={setStage} />}
             {stage === 1 && getGame(0, data)}
         </div>

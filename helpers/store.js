@@ -38,6 +38,7 @@ export function AppWrapper({ children }) {
     if (loggedIn && !profile) {
       onSnapshot(doc(firestore, "users", loggedIn.uid), (doc) => {
         const data = doc.data();
+        console.log(data)
         setProfile(doc.data() || {});
       });
     }

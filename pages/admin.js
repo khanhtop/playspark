@@ -1,6 +1,7 @@
 import AuthWrapper from "@/components/auth/authWrapper";
 import Avatar from "@/components/dash/avatar";
 import MarketPlace from "@/components/dash/marketplace";
+import MyGames from "@/components/dash/mygames";
 import Pane from "@/components/dash/pane";
 import Sidebar from "@/components/dash/sidebar";
 import OnboardWrapper from "@/components/onboard/onboardWrapper";
@@ -20,7 +21,7 @@ export default function Application() {
             selectedPane={selectedPane}
             setSelectedPane={setSelectedPane}
           />
-          {selectedPane === 1 ? <Pane /> : selectedPane === 0 ? <Pane>
+          {selectedPane === 1 ? <Pane><MyGames /></Pane> : selectedPane === 0 ? <Pane>
             <MarketPlace />
           </Pane> : <Pane />}
           
