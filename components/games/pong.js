@@ -5,7 +5,7 @@ const MiddlePong = dynamic(() => import("./pongGame"), {
   ssr: false,
 });
 
-export default function Pong({ data }) {
+export default function Pong({ data, gameType }) {
   const childRef = useRef();
 
   const startNewGame = () => {
@@ -55,7 +55,7 @@ export default function Pong({ data }) {
       <MiddlePong
         pongRef={childRef}
         handleScore={scoreHandler}
-        gameType={"football"}
+        gameType={gameType}
       />
     </div>
   );
