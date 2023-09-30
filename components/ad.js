@@ -22,7 +22,7 @@ export default function Advert({ data }) {
       }}
     >
       {stage === 0 && <Intro data={data} setStage={setStage} />}
-      {stage === 1 && getGame(data.game, data)}
+      {stage === 1 && getGame(data.id, data)}
     </div>
   );
 }
