@@ -1,8 +1,8 @@
 import Advert from "@/components/ad";
-import { getAd } from "@/helpers/api";
+import { getAd, getDemo } from "@/helpers/api";
 import { useEffect } from "react";
 
-export default function Ad({ ad, id }) {
+export default function Demo({ ad, id }) {
   useEffect(() => {
     console.log("AD Loaded");
   }, []);
@@ -15,8 +15,7 @@ export default function Ad({ ad, id }) {
 
 export async function getServerSideProps(context) {
   // Get the ad from the id here:
-  const ad = await getAd(context.query?.id);
-  console.log(ad);
+  const ad = await getDemo(context.query?.id);
   return {
     props: {
       id: context.query?.id,
