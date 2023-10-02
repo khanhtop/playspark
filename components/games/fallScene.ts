@@ -1,0 +1,694 @@
+import Phaser from "phaser";
+
+let w: number,
+  h: number,
+  mW: number,
+  mH: number,
+  ballR: number,
+  playerR: number,
+  aiR: number,
+  scr: number,
+  goalH: number,
+  sideW: number,
+  boundW: number,
+  boundH: number,
+  ballVY: number,
+  ballVX: number,
+  collW: number,
+  scrW: number,
+  scrH: number,
+  heartR: number,
+  distance: number,
+  speed: number,
+  deltaSpeed: number,
+  boosterNum: number,
+  boosterBat: number,
+  throwSpeed: number,
+  heartNum: number,
+  comboNum: number,
+  deltaDistance: number;
+
+let gameType = "football";
+
+export default class FallScene extends Phaser.Scene {
+  public static instance: FallScene;
+  private ball!: Phaser.Physics.Arcade.Image;
+  private player!: Phaser.Physics.Arcade.Image;
+  private ai!: Phaser.Physics.Arcade.Image;
+  private lastBall!: Phaser.Physics.Arcade.Image;
+  load: any;
+  game: any;
+  sound: any;
+  physics: any;
+  add: any;
+  fallBall: any;
+  textures: any;
+  input: any;
+  tweens: any;
+  cameras: any;
+  bombSprite: any;
+  bg: any;
+  boosterGroup: any;
+  lifeNumText: any;
+
+  constructor(newGameType: string) {
+    super();
+    FallScene.instance = this;
+    gameType = newGameType;
+  }
+
+  preload() {
+
+    this.load.image("bomb", "/pong/" + gameType + "/bomb.png");
+    // this.load.image("bombEffect", "/pong/" + gameType + "/bomb-effect.png");
+    this.load.image("boosterBall", "/pong/" + gameType + "/booster-ball.png");
+    this.load.image("boosterBat", "/pong/" + gameType + "/booster-bat.png");
+    this.load.image("boosterBatNum", "/pong/" + gameType + "/booster-bat.png");
+    this.load.spritesheet('bombEffect', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('player', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 128, frameHeight: 128 });
+
+    this.load.image("ball", "/pong/" + gameType + "/ball.png");
+    this.load.image("peck", "/pong/" + gameType + "/peck.png");
+    this.load.image("bg", "/pong/" + gameType + "/bg.png");
+    //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
+    this.load.image("heart", "/pong/" + gameType + "/heart.png");
+    this.load.image("score", "/pong/" + gameType + "/score.png");
+
+    this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
+
+    this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
+    this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
+    this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
+    this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
+    this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
+    this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
+    this.load.audio("loselife", "/pong/" + gameType + "/sfx/loseLife.mp3");
+
+    w = this.game.canvas.clientWidth;
+    h = this.game.canvas.clientHeight;
+    ballR = w * 0.1;
+    playerR = w * 0.175;
+    aiR = w * 0.175;
+    scr = h * 0.08;
+    mW = w / 2;
+    mH = (h - scr) / 2 + scr;
+    goalH = h * 0.1;
+    sideW = w * 0.08;
+    boundW = w - 2 * sideW;
+    boundH = h - scr - 2 * goalH;
+    ballVY = h * 0.5;
+    ballVX = w * 0.75;
+    collW = w * 0.2;
+    scrW = w * 0.4;
+    scrH = w * 0.175 / 1.614;
+    heartR = w * 0.0625;
+    distance = 500;
+    speed = 200;
+    deltaSpeed = 10;
+    deltaDistance = 10;
+    boosterNum = 0;
+    boosterBat = 0;
+    throwSpeed = 500;
+    heartNum = 3;
+    comboNum = 0;
+  }
+
+  // 400 800
+
+  private gr: Phaser.Physics.Arcade.StaticGroup;
+
+  private whistle: any;
+  private ballHit: any;
+  private final: any;
+  private goal: any;
+  private lost: any;
+  private lose: any;
+  private fallBallList: any;
+
+  create() {
+    this.sound.add("bg").setLoop(true).play();
+    this.whistle = this.sound.add("whistle");
+    this.ballHit = this.sound.add("ballHit");
+    this.final = this.sound.add("final");
+    this.goal = this.sound.add("goal");
+    this.lost = this.sound.add("lost");
+    this.lose = this.sound.add("loselife");
+
+    this.physics.world.setBounds(
+      sideW,
+      scr + goalH,
+      boundW,
+      boundH,
+      true,
+      true,
+      false,
+      false
+    );
+    this.bg = this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
+    this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0.2);
+
+    this.add.image(30, 30, "boosterBatNum").setDisplaySize(30, 30);
+
+    this.fallBallList = [];
+
+    this.add.image(mW, 37, "score").setDisplaySize(scrW, scrH);
+
+    this.boosterGroup = this.add.group();
+
+
+    this.bg.setInteractive();
+
+    // Variables to track the flick gesture
+    let startX;
+    let startY;
+
+    // Event listener for pointer down event
+    this.bg.on('pointerdown', (pointer) => {
+      console.log("booster click------", startX, "  ", startY)
+      startX = pointer.x;
+      startY = pointer.y;
+    });
+
+    // Event listener for pointer up event
+    this.bg.on('pointerup', (pointer) => {
+
+      const endX = pointer.x;
+      const endY = pointer.y;
+      console.log("booster up------",endX, "  ", endY)
+
+      // Calculate the distance and angle of the flick gesture
+      const distanceX = endX - startX;
+      const distanceY = endY - startY;
+      const angle = Phaser.Math.Angle.Between(startX, startY, endX, endY);
+
+      console.log("booster up------",distanceY, "  ", distanceX)
+
+      // Check if the flick gesture is upwards
+      if (distanceY < 0 ) {
+        // Throw the bat upwards
+        this.throwBatUp(angle);
+      }
+    });
+
+    this.bombSprite = this.add.sprite(-200, 200, 'bombEffect').setDisplaySize(80, 80);
+    const frameNames = this.anims.generateFrameNumbers('bombEffect', { start: 0, end: 15 });
+    this.anims.create({
+      key: 'bombAnimation',
+      frames: frameNames,
+      frameRate: 10,
+      repeat: 0
+    });
+    // this.bombSprite.play('bombAnimation');
+
+    this.player = this.physics.add
+      .sprite(mW, h - goalH - playerR / 2, "peck")
+      .setTint(0x0000ff)
+      .setAlpha(0.75)
+      .setDisplaySize(playerR, playerR)
+      .setCircle(this.textures.get("peck").getSourceImage().width / 2)
+      .setCollideWorldBounds(true)
+      .setPushable(false);
+
+    this.gr = this.physics.add.staticGroup();
+
+    (this.gr.create(mW, mH) as Phaser.Physics.Arcade.Image)
+      .setSize(collW, goalH)
+      .setOrigin(0)
+      .setPosition(sideW, scr)
+      .setVisible(false);
+    (this.gr.create(mW, mH) as Phaser.Physics.Arcade.Image)
+      .setSize(collW, goalH)
+      .setOrigin(0)
+      .setPosition(w - sideW - collW, scr)
+      .setVisible(false);
+    (this.gr.create(mW, mH) as Phaser.Physics.Arcade.Image)
+      .setSize(collW, goalH)
+      .setOrigin(0)
+      .setPosition(sideW, h - goalH)
+      .setVisible(false);
+    (this.gr.create(mW, mH) as Phaser.Physics.Arcade.Image)
+      .setSize(collW, goalH)
+      .setOrigin(0)
+      .setPosition(w - sideW - collW, h - goalH)
+      .setVisible(false);
+
+    this.gr.refresh();
+
+    this.player.setInteractive();
+    this.input.setDraggable(this.player);
+
+    this.player.on(
+      "pointerdown",
+      function (pointer) {
+        // Update the goal position when the mouse button is pressed
+        this.goalXPos = Phaser.Math.Clamp(
+          pointer.x,
+          sideW + playerR / 2,
+          w - sideW - playerR / 2
+        );
+        this.goalYPos = Phaser.Math.Clamp(
+          pointer.y,
+          mH + playerR / 2,
+          h - goalH - playerR / 2
+        );
+        this.isDragging = true;
+      },
+      this
+    );
+
+    this.player.on(
+      "drag",
+      function (pointer, dragX, dragY) {
+        // Update the goal position when the mouse is moving
+        this.goalXPos = Phaser.Math.Clamp(
+          dragX,
+          sideW + playerR / 2,
+          w - sideW - playerR / 2
+        );
+        this.goalYPos = Phaser.Math.Clamp(
+          dragY,
+          mH + playerR / 2,
+          h - goalH - playerR / 2
+        );
+      },
+      this
+    );
+
+    this.player.on(
+      "pointerup",
+      function () {
+        // Stop dragging and stop the player
+        this.isDragging = false;
+        this.player.setVelocity(0, 0);
+      },
+      this
+    );
+
+    this.lifeNumText = this.add
+    .text(w - 70, 30, "0", {
+      fontFamily: "enhanced_led_board-7",
+      fontSize: "22px",
+      color: "#ffffff",
+    })
+    .setOrigin(0.5, 0.5);
+
+    this.boostNumText = this.add
+    .text(70, 30, "0", {
+      fontFamily: "enhanced_led_board-7",
+      fontSize: "22px",
+      color: "#ffffff",
+    })
+    .setOrigin(0.5, 0.5);
+
+    this.scoreText = this.add
+      .text(mW + 2, 36, "0000", {
+        fontFamily: "enhanced_led_board-7",
+        fontSize: "26px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5, 0.5);
+
+    this.goalTxt = this.add
+      .text(mW, mH - 122, "GOAL!", {
+        fontFamily: "TitanOne-Regular",
+        fontSize: "40px",
+        color: "#345e8e",
+        stroke: "#ffffff",
+        strokeThickness: 10,
+      })
+      .setOrigin(0.5, 0.5);
+
+    this.addedScrTxt = this.add
+      .text(mW, 126, "+100", {
+        fontFamily: "TitanOne-Regular",
+        fontSize: "40px",
+        color: "#ffffff",
+        stroke: "#345e8e",
+        strokeThickness: 10,
+      })
+      .setOrigin(0.5, 0.5);
+
+    this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
+    this.cameras.main.postFX
+      .addColorMatrix()
+      .contrast(1.25)
+      .polaroid()
+      .brightness(0.9);
+    this.player.preFX.addShadow();
+
+    this.initGame();
+  }
+
+  private ballDir: number = 1;
+  private hearts = [];
+  private scoreNum = 0;
+  private scoreText: Phaser.GameObjects.Text;
+  private boostNumText: Phaser.GameObjects.Text;
+  private goalTxt: Phaser.GameObjects.Text;
+  private addedScrTxt: Phaser.GameObjects.Text;
+
+  private scoreHandler;
+
+  public setScoreHandle(handleScore: any) {
+    this.scoreHandler = handleScore;
+  }
+
+  public initGame(lives = 3) {
+    this.cameras.main.fadeIn(1200);
+
+    this.goalTxt.setVisible(false);
+    this.addedScrTxt.setVisible(false);
+
+    this.goalXPos = mW;
+    this.goalYPos = h - goalH - playerR / 2;
+
+    heartNum = lives;
+    this.scoreNum = 0;
+    this.scoreText.text = "0000";
+    this.hearts.forEach((h) => h.destroy);
+    this.hearts.length = 0;
+    for (let i = 0; i < 1; i++) {
+      const heart = this.add
+        .image(w - 30 - i * 40, 30, "heart")
+        .setDisplaySize(heartR, heartR);
+      this.hearts.push(heart);
+    }
+
+    this.touches = 0;
+    this.scored = false;
+    this.isDragging = false;
+
+    this.patrolAiSpeed = 75;
+    this.defenceAiSpeed = 250;
+    this.aiSpeed = 250;
+    this.aiSize = 1;
+
+    this.aiIsMoving = false;
+    this.aiMoveTime = 0;
+
+    this.initFallBall();
+
+    setTimeout(() => this.startRound(), 2500);
+  }
+
+  loseGame() {
+    this.cameras.main.fadeOut(1000);
+    this.lose.play();
+
+    this.scoreHandler(this.scoreNum);
+    // game is lost
+    //this.initGame();
+  }
+
+  loseLife(): boolean {
+    if (heartNum > 0) {
+      heartNum--;
+      this.lifeNumText.setText(heartNum);
+      // Handle life loss logic here
+      comboNum = 0;
+      if (heartNum === 0) {
+        // Game lost
+        this.loseGame();
+        return true;
+      }
+      return false;
+    }
+
+    // if (this.hearts.length > 0) {
+    //   this.hearts.pop().destroy();
+    //   // Handle life loss logic here
+
+    //   if (this.hearts.length === 0) {
+    //     // Game lost
+    //     this.loseGame();
+    //     return true;
+    //   }
+    //   return false;
+    // }
+  }
+
+  startRound() {
+    this.player.setPosition(mW, h - goalH - playerR / 2);
+    this.lastBall = null;
+    this.fallBallList.forEach((fb, i) => {
+      fb.setPosition(0, i * distance);
+      fb.setVelocity(0, speed)
+    });
+
+
+    const dirX = Math.random() > 0.5 ? 1 : -1;
+    this.whistle.play();
+    this.scored = false;
+    this.player.setVelocity(0, 0);
+    this.goalXPos = this.player.x;
+    this.goalYPos = this.player.y;
+    this.isDragging = false;
+    this.touches = 0;
+
+    this.goalTxt.setVisible(false);
+    this.addedScrTxt.setVisible(false);
+  }
+
+  score1(which = 0) {
+    this.scored = true;
+
+    //this.cameras.main.fadeIn(1000);
+
+
+    let lost = false;
+    if (which === 1) {
+      lost = this.loseLife();
+      // this.lost.play();
+      //this.cameras.main.flash(50);
+      this.cameras.main.shake(30, 0.01);
+    } else if (which === 0) {
+      this.scoreNum += comboNum * 100;
+      // this.goal.play();
+      this.scoreText.text = this.scoreNum.toString().padStart(4, "0");
+      this.goalTxt.text = comboNum == 1 ? "" : (comboNum + " x Combo");
+      this.addedScrTxt.text = "+" + comboNum * 100;
+
+      if (this.touches === 1) {
+        //this.cameras.main.flash(50);
+        this.cameras.main.shake(40, 0.02);
+      } else {
+        //this.cameras.main.flash(30);
+        this.cameras.main.shake(25, 0.01);
+      }
+
+      this.goalTxt.setVisible(true);
+      this.addedScrTxt.setVisible(true);
+    }
+
+    setTimeout(() => {
+      this.goalTxt.setVisible(false);
+      this.addedScrTxt.setVisible(false);
+    }, 1000);
+
+  }
+
+  initFallBall() {
+    for(let i = 0; i < 5; i ++) {
+      this.fallBallList.push(this.addFallBall('ball'));
+    }
+  }
+
+  addFallBall(type = 'ball') {
+    let bball = this.physics.add
+    .image(mW, mH, "ball")
+    .setAlpha(0.85)
+    .setDisplaySize(ballR, ballR)
+    .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+    .setCollideWorldBounds(true)
+    .setBounce(1, 1);
+
+    this.tweens.add({
+      targets: bball,
+      duration: 50000,
+      rotation: 360,
+      repeat: -1,
+    })
+
+    this.physics.add.collider(
+      this.player,
+      bball,
+      () => {
+        console.log("-------type : ", bball.type);
+
+        switch(bball.type) {
+          case 'ball':
+            comboNum++;
+            if(comboNum % 10 == 0) {
+              heartNum++;
+              this.lifeNumText.setText(heartNum);
+            }
+            this.score1();
+            break;
+          case 'bomb':
+            this.playBombEffect(bball.x, bball.y)
+            this.score1(1);
+            break;
+          case 'boosterBall':
+            console.log('boosterBall hit')
+            this.setBooster();
+            break;
+            default:
+        }
+
+        this.randomBallPos(bball)
+
+        if (!this.ballHit.isPlaying) this.ballHit.play();
+      },
+      null,
+      this
+    );
+
+    this.physics.add.overlap(
+      this.boosterGroup,
+      bball,
+      (booster, bb) => {
+        console.log("booster - colider", bb.type);
+
+        if(bb.type == 'bomb') {
+          this.playBombEffect(bball.x, bball.y)
+          this.randomBallPos(bball)
+          this.boosterGroup.remove(booster);
+          booster.destroy();
+        }
+
+        if (!this.ballHit.isPlaying) this.ballHit.play();
+      },
+      null,
+      this
+    );
+
+    bball.type = type;
+    return bball;
+  }
+
+  randomBallPos(bb) {
+    let y = this.lastBall == null? 0 : this.lastBall.y;
+
+    bb.setPosition( w / 2 + (0.5 - Math.random()) * w, y - distance);
+    // bb.setPosition( 0, y - distance);
+    bb.setVelocity(0, speed)
+    distance -= deltaDistance;
+    speed += deltaSpeed;
+
+    distance = Math.max(100, distance);
+    speed = Math.min(500, speed);
+
+    let rate = Math.random();
+    if(rate < 0.2) {
+      bb.setTexture('boosterBall');
+      bb.type = 'boosterBall';
+    } else if(rate < 0.7 && rate >= 0.2) {
+      bb.setTexture('ball');
+      bb.type = 'ball';
+    } else {
+      bb.setTexture('bomb');
+      bb.type = 'bomb';
+    }
+
+    this.lastBall = bb;
+  }
+
+  setBooster() {
+    boosterNum++;
+    if(boosterNum > 2) {
+      boosterNum = 0;
+      boosterBat += 10;
+      this.boostNumText.setText(boosterBat.toString());
+    }
+  }
+
+  playBombEffect(x, y) {
+    this.bombSprite.setPosition(x, y);
+    this.bombSprite.play('bombAnimation')
+  }
+
+  throwBatUp(angle) {
+    if(boosterBat > 0) {
+      boosterBat--;
+      this.boostNumText.setText(boosterBat.toString());
+    } else {
+      return;
+    }
+    const booster = this.physics.add
+    .image(100, mH, "boosterBat")
+    .setAlpha(0.85)
+    .setDisplaySize(ballR, ballR)
+    .setCollideWorldBounds(true)
+    .setPosition(this.player.x, this.player.y)
+    .setBounce(1, 1);
+
+    this.tweens.add({
+      targets: booster,
+      duration: 30000,
+      rotation: 360,
+      repeat: -1,
+    })
+
+    booster.setVelocity(Math.cos(angle) * throwSpeed, Math.sin(angle) * throwSpeed);
+    
+    this.boosterGroup.add(booster)
+
+    setTimeout(() => {
+      this.boosterGroup.remove(booster);
+      booster.destroy();
+    }, 2000);
+  }
+
+  private touches = 0;
+  private scored = false;
+  private goalXPos: number;
+  private goalYPos: number;
+  private isDragging = false;
+
+  update(time, delta) {
+    // this.aiUpdate(time, delta);
+
+    if (this.isDragging) {
+      this.goalXPos = Phaser.Math.Clamp(
+        this.goalXPos,
+        sideW + playerR / 2,
+        w - sideW - playerR / 2
+      );
+      this.goalYPos = Phaser.Math.Clamp(
+        this.goalYPos,
+        mH + playerR / 2,
+        h - goalH - playerR / 2
+      );
+
+      const dx = this.goalXPos - this.player.x;
+      const dy = this.goalYPos - this.player.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Calculate the velocity based on the distance to the target
+      const playerSpeed = 1050; // Adjust the speed as needed
+      const maxDistance = 45; // Adjust the speed as needed
+      const velocity = (playerSpeed * distance) / maxDistance;
+
+      // Calculate the direction towards the goal
+      const angle = Math.atan2(dy, dx);
+
+      // Calculate the velocity components
+      const vx = Math.cos(angle) * velocity;
+      const vy = Math.sin(angle) * velocity;
+
+      // Set the player's velocity
+      this.player.setVelocity(vx, vy);
+    }
+
+    this.fallBallList.forEach(fb => {
+      if(fb.y >= h - goalH + ballR / 2) {
+        if(fb.type == 'ball') {
+          comboNum = 0;
+        }
+        this.randomBallPos(fb);
+      }
+    });
+
+    if (this.scored) return;
+  }
+}

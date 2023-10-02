@@ -48,6 +48,15 @@ export function getAd(id) {
       backgroundImage:
         "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
     };
+  } else if (id === "128") {
+    return {
+      gameName: "Tottenham Baseball Fall",
+      game: 5,
+      primaryColor: "#132257",
+      textColor: "#FFF",
+      backgroundImage:
+        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
+    };
   } else {
     return null;
   }
@@ -59,4 +68,5 @@ export function getGame(id, data) {
   if (id === 2) return <Pong data={data} gameType="baseball" />;
   if (id === 3) return <Pong data={data} gameType="nfl" />;
   if (id === 4) return <Pong data={data} gameType="basketball" />;
+  if (id === 5) return <Pong data={data} gameType="baseballFall" />;
 }
