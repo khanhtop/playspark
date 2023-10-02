@@ -8,13 +8,13 @@ export default function Intro({ data, setStage }) {
       <div className="text-white items-center justify-end absolute top-0 left-0 h-full w-full  flex flex-col p-8">
         <h1
           style={{
-            backgroundColor: data?.primaryColor,
-            borderColor: data?.textColor,
-            borderWidth: 3,
+            // backgroundColor: data?.primaryColor,
+            color: data?.textColor,
+            // borderWidth: 3,
           }}
           className="animate-pulse text-2xl mb-4 px-2 py-1 rounded-lg"
         >
-          {data?.gameName}
+          {data?.name}
         </h1>
         <button
           onClick={() => setStage(1)}

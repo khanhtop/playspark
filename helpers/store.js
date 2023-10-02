@@ -16,6 +16,7 @@ export function AppWrapper({ children }) {
   const [isAuthed, setIsAuthed] = useState(false);
   const [loggedIn, setLoggedIn] = useState();
   const [profile, setProfile] = useState();
+  const [myGames, setMyGames] = useState();
 
   // Auth State
 
@@ -35,19 +36,47 @@ export function AppWrapper({ children }) {
   // Profile
 
   useEffect(() => {
+    // Listen To Profile
+    let _profileUnsub = () => null;
+    let _myGamesUnsub = () => null;
     if (loggedIn && !profile) {
-      onSnapshot(doc(firestore, "users", loggedIn.uid), (doc) => {
-        const data = doc.data();
-        console.log(data)
-        setProfile(doc.data() || {});
+      _profileUnsub = onSnapshot(
+        doc(firestore, "users", loggedIn.uid),
+        (doc) => {
+          const data = doc.data();
+          console.log(data);
+          setProfile(doc.data() || {});
+        }
+      );
+    }
+    if (loggedIn && !myGames) {
+      const q = query(
+        collection(firestore, "tournaments"),
+        where("ownerId", "==", loggedIn.uid)
+      );
+      const _myGamesUnsub = onSnapshot(q, (querySnapshot) => {
+        const _myGames = [];
+        querySnapshot.forEach((doc) => {
+          _myGames.push(doc.data());
+        });
+        setMyGames(_myGames);
       });
     }
+    return () => {
+      _profileUnsub();
+      _myGamesUnsub();
+      setProfile();
+      setMyGames();
+    };
   }, [loggedIn]);
+
+  // My Games
 
   const sharedState = {
     isAuthed,
     loggedIn,
     profile,
+    myGames,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

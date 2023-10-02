@@ -18,12 +18,12 @@ export default function MyGames({}) {
 
   return (
     <div className="flex flex-wrap gap-4">
-      {context.profile?.myGames.map((item, key) => (
+      {context.myGames?.map((item, key) => (
         <GameCard
-          onAdd={() => showEmbedCode(games[item].id)}
+          onAdd={() => showEmbedCode(item.tournamentId)}
           buttonText="Get Embed Code"
-          game={games[item]}
-          onDemo={() => setDemo(games[item].id)}
+          game={item}
+          onDemo={() => setDemo(item.tournamentId)}
         />
       ))}
       {demo && (
