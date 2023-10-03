@@ -16,15 +16,6 @@ export async function getAd(id) {
         ad.data()?.backgroundImage ??
         "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
     };
-  } else if (id === "6") {
-    return {
-      gameName: "Tottenham Baseball Fall",
-      game: 6,
-      primaryColor: "#132257",
-      textColor: "#FFF",
-      backgroundImage:
-        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
-    };
   } else {
     return null;
   }
