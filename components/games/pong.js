@@ -53,8 +53,6 @@ export default function Pong({ data, gameType }) {
           src="/defaults/banner.jpg"
           className="object-cover h-full w-full"
         />
-        {/* <p>Branding Banner Goes Here</p>
-        <button onClick={startNewGame}>Restart with reward</button> */}
       </div>
       <MiddlePong
         pongRef={childRef}
