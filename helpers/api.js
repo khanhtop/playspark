@@ -48,6 +48,6 @@ export function getGame(id, data, callback) {
     return <Pong data={data} gameType="baseballFall" callback={callback} />;
   if (id === 7) {
     console.log("RUNNER");
-    return <Runner data={data} gameType="baseballFall" callback={callback} />;
+    return <Runner data={data} gameType="runner" callback={callback} />;
   }
 }
