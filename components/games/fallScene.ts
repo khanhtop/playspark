@@ -33,7 +33,7 @@ let gameType = "football";
 export default class FallScene extends Phaser.Scene {
   public static instance: FallScene;
   private ball!: Phaser.Physics.Arcade.Image;
-  private player!: Phaser.Physics.Arcade.Image;
+  private player!: Phaser.Physics.Arcade.Sprite;
   private ai!: Phaser.Physics.Arcade.Image;
   private lastBall!: Phaser.Physics.Arcade.Image;
   load: any;
@@ -50,6 +50,10 @@ export default class FallScene extends Phaser.Scene {
   bg: any;
   boosterGroup: any;
   lifeNumText: any;
+  lifeup: any;
+  booster: any;
+  bomb: any;
+  powerup: any;
 
   constructor(newGameType: string) {
     super();
@@ -65,10 +69,10 @@ export default class FallScene extends Phaser.Scene {
     this.load.image("boosterBat", "/pong/" + gameType + "/booster-bat.png");
     this.load.image("boosterBatNum", "/pong/" + gameType + "/booster-bat.png");
     this.load.spritesheet('bombEffect', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 128, frameHeight: 128 });
-    this.load.spritesheet('player', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('playerAnim', "/pong/" + gameType + "/player-animation.png", { frameWidth: 200, frameHeight: 200 });
 
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
-    this.load.image("peck", "/pong/" + gameType + "/peck.png");
+    this.load.image("peck", "/pong/" + gameType + "/player-static-catch.png");
     this.load.image("bg", "/pong/" + gameType + "/bg.png");
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
@@ -83,11 +87,15 @@ export default class FallScene extends Phaser.Scene {
     this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
     this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
     this.load.audio("loselife", "/pong/" + gameType + "/sfx/loseLife.mp3");
+    this.load.audio("lifeup", "/pong/" + gameType + "/sfx/lifeup.mp3");
+    this.load.audio("booster", "/pong/" + gameType + "/sfx/booster.mp3");
+    this.load.audio("bomb", "/pong/" + gameType + "/sfx/bomb.mp3");
+    this.load.audio("powerup", "/pong/" + gameType + "/sfx/powerup.mp3");
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     ballR = w * 0.1;
-    playerR = w * 0.175;
+    playerR = w * 0.35;
     aiR = w * 0.175;
     scr = h * 0.08;
     mW = w / 2;
@@ -124,15 +132,20 @@ export default class FallScene extends Phaser.Scene {
   private lost: any;
   private lose: any;
   private fallBallList: any;
+  private currentAnim: any;
 
   create() {
-    this.sound.add("bg").setLoop(true).play();
+    this.sound.add("bg").setVolume(0.3).setLoop(true).play();
     this.whistle = this.sound.add("whistle");
     this.ballHit = this.sound.add("ballHit");
     this.final = this.sound.add("final");
     this.goal = this.sound.add("goal");
     this.lost = this.sound.add("lost");
     this.lose = this.sound.add("loselife");
+    this.lifeup = this.sound.add("lifeup");
+    this.booster = this.sound.add("booster");
+    this.bomb = this.sound.add("bomb").setVolume(1.3);
+    this.powerup = this.sound.add("powerup");
 
     this.physics.world.setBounds(
       sideW,
@@ -198,14 +211,54 @@ export default class FallScene extends Phaser.Scene {
       frameRate: 10,
       repeat: 0
     });
-    // this.bombSprite.play('bombAnimation');
+
+    // Player Anim init
+    const playerIdle = this.anims.generateFrameNumbers('playerAnim', { start: 0, end: 0 });
+    this.anims.create({
+      key: 'playerIdle',
+      frames: playerIdle,
+      frameRate: 10,
+      repeat: -1
+    });
+
+    const playerLeft = this.anims.generateFrameNumbers('playerAnim', { start: 2, end: 4 });
+    this.anims.create({
+      key: 'playerLeft',
+      frames: playerLeft,
+      frameRate: 7,
+      repeat: -1
+    });
+
+    const playerRight = this.anims.generateFrameNumbers('playerAnim', { start: 5, end: 7 });
+    this.anims.create({
+      key: 'playerRight',
+      frames: playerRight,
+      frameRate: 7,
+      repeat: -1
+    });
+
+    const playerStatic = this.anims.generateFrameNumbers('playerAnim', { start: 1, end: 1 });
+    this.anims.create({
+      key: 'playerStatic',
+      frames: playerStatic,
+      frameRate: 10,
+      repeat: 3
+    });
+
+    const playerThrow = this.anims.generateFrameNumbers('playerAnim', { start: 8, end: 10 });
+    this.anims.create({
+      key: 'playerThrow',
+      frames: playerThrow,
+      frameRate: 10,
+      repeat: 0
+    });
+
+    this.currentAnim = 'playerIdle';
+    // End Player Anim
 
     this.player = this.physics.add
-      .sprite(mW, h - goalH - playerR / 2, "peck")
-      .setTint(0x0000ff)
-      .setAlpha(0.75)
+      .sprite(mW, h - goalH - playerR / 2, "playerAnim")
       .setDisplaySize(playerR, playerR)
-      .setCircle(this.textures.get("peck").getSourceImage().width / 2)
       .setCollideWorldBounds(true)
       .setPushable(false);
 
@@ -240,6 +293,8 @@ export default class FallScene extends Phaser.Scene {
     this.player.on(
       "pointerdown",
       function (pointer) {
+        this.player.play('playerStatic')
+
         // Update the goal position when the mouse button is pressed
         this.goalXPos = Phaser.Math.Clamp(
           pointer.x,
@@ -279,10 +334,20 @@ export default class FallScene extends Phaser.Scene {
       function () {
         // Stop dragging and stop the player
         this.isDragging = false;
+
+        this.currentAnim = 'playerIdle'
+        this.player.play('playerIdle')
         this.player.setVelocity(0, 0);
       },
       this
     );
+
+    this.player.on('animationcomplete', function (animation, frame) {
+      if (animation.key === 'playerThrow') {
+        // Play the second animation after the first animation has finished
+        this.play('playerStatic');
+      }
+    });
 
     this.lifeNumText = this.add
     .text(w - 70, 30, "0", {
@@ -377,14 +442,6 @@ export default class FallScene extends Phaser.Scene {
     this.touches = 0;
     this.scored = false;
     this.isDragging = false;
-
-    this.patrolAiSpeed = 75;
-    this.defenceAiSpeed = 250;
-    this.aiSpeed = 250;
-    this.aiSize = 1;
-
-    this.aiIsMoving = false;
-    this.aiMoveTime = 0;
 
     this.initFallBall();
 
@@ -517,14 +574,18 @@ export default class FallScene extends Phaser.Scene {
 
         switch(bball.type) {
           case 'ball':
+            // this.player.play('playerStatic')
+            this.ballHit.play();
             comboNum++;
             if(comboNum % 10 == 0) {
+              this.lifeup.play();
               heartNum++;
               this.lifeNumText.setText(heartNum);
             }
             this.score1();
             break;
           case 'bomb':
+            this.bomb.play();
             this.playBombEffect(bball.x, bball.y)
             this.score1(1);
             break;
@@ -537,7 +598,7 @@ export default class FallScene extends Phaser.Scene {
 
         this.randomBallPos(bball)
 
-        if (!this.ballHit.isPlaying) this.ballHit.play();
+        // if (!this.ballHit.isPlaying) this.ballHit.play();
       },
       null,
       this
@@ -550,6 +611,7 @@ export default class FallScene extends Phaser.Scene {
         console.log("booster - colider", bb.type);
 
         if(bb.type == 'bomb') {
+          this.bomb.play();
           this.playBombEffect(bball.x, bball.y)
           this.randomBallPos(bball)
           this.boosterGroup.remove(booster);
@@ -595,7 +657,9 @@ export default class FallScene extends Phaser.Scene {
 
   setBooster() {
     boosterNum++;
+    this.booster.play();
     if(boosterNum > 2) {
+      this.powerup.play();
       boosterNum = 0;
       boosterBat += 10;
       this.boostNumText.setText(boosterBat.toString());
@@ -609,6 +673,11 @@ export default class FallScene extends Phaser.Scene {
 
   throwBatUp(angle) {
     if(boosterBat > 0) {
+      this.currentAnim = 'playerThrow'
+      this.player.play('playerThrow');
+
+
+
       boosterBat--;
       this.boostNumText.setText(boosterBat.toString());
     } else {
@@ -675,9 +744,20 @@ export default class FallScene extends Phaser.Scene {
       // Calculate the velocity components
       const vx = Math.cos(angle) * velocity;
       const vy = Math.sin(angle) * velocity;
-
+      console.log(dx, dy)
       // Set the player's velocity
-      this.player.setVelocity(vx, vy);
+      if(dx < -8) {
+        if(this.currentAnim != 'playerLeft') {
+          this.currentAnim = 'playerLeft';
+          this.player.play('playerLeft')
+        }
+      } else if(dx > 8) {
+        if(this.currentAnim != 'playerRight') {
+          this.currentAnim = 'playerRight';
+          this.player.play('playerRight')
+        }
+      }
+      this.player.setVelocity(vx, 0);
     }
 
     this.fallBallList.forEach(fb => {
