@@ -350,7 +350,7 @@ export default class FallScene extends Phaser.Scene {
     });
 
     this.lifeNumText = this.add
-    .text(w - 70, 30, "0", {
+    .text(w - 70, 30, heartNum, {
       fontFamily: "enhanced_led_board-7",
       fontSize: "22px",
       color: "#ffffff",
