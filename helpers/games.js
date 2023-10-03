@@ -53,7 +53,7 @@ export const games = [
     name: "Baseball Fall",
     description:
       "Quick avoid basketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
-    backgroundImage: "/screenshots/baseball-fall.png",
+    backgroundImage: "/defaults/baseball-fall.jpg",
     screenshot: "baseball-fall.png",
     primaryColor: "#F69B01",
     textColor: "#FFF",

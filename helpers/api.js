@@ -33,11 +33,16 @@ export async function getDemo(id) {
   };
 }
 
-export function getGame(id, data) {
-  if (id === 1) return <Pong data={data} gameType="football" />;
-  if (id === 2) return <Pong data={data} gameType="hockey" />;
-  if (id === 3) return <Pong data={data} gameType="baseball" />;
-  if (id === 4) return <Pong data={data} gameType="nfl" />;
-  if (id === 5) return <Pong data={data} gameType="basketball" />;
-  if (id === 6) return <Pong data={data} gameType="baseballFall" />;
+export function getGame(id, data, callback) {
+  if (id === 1)
+    return <Pong data={data} gameType="football" callback={callback} />;
+  if (id === 2)
+    return <Pong data={data} gameType="hockey" callback={callback} />;
+  if (id === 3)
+    return <Pong data={data} gameType="baseball" callback={callback} />;
+  if (id === 4) return <Pong data={data} gameType="nfl" callback={callback} />;
+  if (id === 5)
+    return <Pong data={data} gameType="basketball" callback={callback} />;
+  if (id === 6)
+    return <Pong data={data} gameType="baseballFall" callback={callback} />;
 }
