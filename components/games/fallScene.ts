@@ -54,6 +54,7 @@ export default class FallScene extends Phaser.Scene {
   booster: any;
   bomb: any;
   powerup: any;
+  timer: NodeJS.Timeout;
 
   constructor(newGameType: string) {
     super();
@@ -564,7 +565,8 @@ export default class FallScene extends Phaser.Scene {
       this.addedScrTxt.setVisible(true);
     }
 
-    setTimeout(() => {
+    clearTimeout(this.timer);
+    this.timer =  setTimeout(() => {
       this.goalTxt.setVisible(false);
       this.addedScrTxt.setVisible(false);
     }, 1000);
