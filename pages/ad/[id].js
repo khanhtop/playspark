@@ -3,23 +3,24 @@ import { getAd } from "@/helpers/api";
 import { useEffect } from "react";
 
 export default function Ad({ ad, id }) {
-    useEffect(() => {
-        console.log("AD Loaded");
-    }, []);
-    return (
-        <div className="text-white font-bold ">
-            {ad ? <Advert data={ad} /> : <p>{id} - AD NOT FOUND</p>}
-        </div>
-    );
+  useEffect(() => {
+    console.log("AD Loaded");
+  }, []);
+  return (
+    <div className="text-white font-bold ">
+      {ad ? <Advert data={ad} /> : <p>{id} - AD NOT FOUND</p>}
+    </div>
+  );
 }
 
 export async function getServerSideProps(context) {
-    // Get the ad from the id here:
-    const ad = getAd(context.query?.id);
-    return {
-        props: {
-            id: context.query?.id,
-            ad: ad,
-        },
-    };
+  // Get the ad from the id here:
+  const ad = await getAd(context.query?.id);
+  console.log(ad);
+  return {
+    props: {
+      id: context.query?.id,
+      ad: ad,
+    },
+  };
 }

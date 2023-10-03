@@ -19,8 +19,8 @@ let w: number,
   scrH: number,
   heartR: number;
 
-let gameType = "football";
-
+let gameType = "runner";
+let timerEvent;
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
   private ball!: Phaser.Physics.Arcade.Image;
@@ -28,13 +28,252 @@ export default class MainSceneRunner extends Phaser.Scene {
   private ai!: Phaser.Physics.Arcade.Image;
 
   constructor(newGameType: string) {
+
     super();
     MainSceneRunner.instance = this;
     gameType = newGameType;
+    
+  }
+  preload() {
+    console.log("runner game gameType", gameType);
+    this.load.image('cover', "/" + gameType + "/images/cover.jpg");
+    this.load.image('barFill', "/" + gameType + "/images/bar-fill.png");
+    this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
+  }
+  create() {
+    w = this.game.canvas.clientWidth;
+    h = this.game.canvas.clientHeight;
+    this.cover = this.add.image(0, 0, 'cover').setOrigin(0, 0);
+    this.cover.setDisplaySize(w, h);
+
+    this.loadingText = this.add.text(w / 2, h / 2 + 20, 'Loading...', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' });
+    this.loadingText.setOrigin(0.5);
+
+
+    this.barFrame = this.add.image(w / 2, h / 2 + 80, 'barFrame');
+    this.barFill = this.add.image(0, 0, 'barFill').setOrigin(0, 0);
+    this.barFill.setPosition(w / 2 - this.barFill.displayWidth / 2, h / 2 - this.barFill.displayHeight / 2 + 80);
+
+    this.barFill.scaleX = 0;
+    this.loadAssets();
+  }
+  loadAssets() {
+    this.load.once("complete", this.loadComplete, this);
+    this.load.on("progress", this.loadProgress, this);
+    //this.load.image('player', "/" + gameType + "/images/player.png");
+    //this.load.image('enemy', "/" + gameType + "/images/enemy.png");
+    this.load.image('grassRegular', "/" + gameType + "/images/grass-regular.png");
+    this.load.image('grassWinter', "/" + gameType + "/images/grass-winter.png");
+    this.load.image('grassRain', "/" + gameType + "/images/grass-rain.png");
+    this.load.image("title", "/" + gameType + "/images/title.png");
+    this.load.image("middleAd", "/" + gameType + "/images/middleAd.png");
+
+    this.load.spritesheet(
+      "playerOne", "/" + gameType + "/images/player-one.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+	this.load.spritesheet(
+      "enemyOne", "/" + gameType + "/images/enemy-one.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+	
+
+    this.load.audio("bg", "/" + gameType + "/sfx/bgNoise.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/clap.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/collide.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/kittyopening.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/opening.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/slowmo.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/swing.mp3");
+
+    this.load.start();
+  }
+  loadProgress(percents) {
+    this.barFill.scaleX = percents;
+  }
+  loadComplete() {
+    console.log("loadComplete1");
+    this.initGame1();
+
   }
 
-  preload() {
-    this.load.image("ball", "/pong/" + gameType + "/ball.png");
+  initGame1() {    
+    this.anims.create({
+      key: "playerOneAnim",
+      frames: this.anims.generateFrameNumbers("playerOne", {}),
+      frameRate: 24,
+      repeat: -1
+    });
+	this.anims.create({
+      key: "enemyOneAnim",
+      frames: this.anims.generateFrameNumbers("enemyOne", {}),
+      frameRate: 24,
+      repeat: -1
+    });
+    this.cover.destroy();
+    this.cover = null;
+    this.barFrame.destroy();
+    this.barFrame = null;
+    this.barFill.destroy();
+    this.barFill = null;
+    this.loadingText.destroy();
+    this.loadingText = null;
+
+    this.sound.add("bg").setLoop(true).play();
+
+
+
+
+    const backgroundTexture = this.textures.get('grassRegular')!;
+    const tileSpriteHeight = (backgroundTexture.source[0].height / backgroundTexture.source[0].width) * w;
+    this.grassRegular = this.add.image(0, 0, 'grassRegular').setOrigin(0, 0.5);
+    this.grassRegular.setDisplaySize(w, tileSpriteHeight);
+    this.grassWinter = this.add.image(0, -1 * this.grassRegular.displayHeight, 'grassWinter').setOrigin(0, 0.5);
+    this.grassWinter.setDisplaySize(w, tileSpriteHeight);
+    this.grassRain = this.add.image(0, this.grassWinter.y - 1 * this.grassRegular.displayHeight / 2, 'grassRain').setOrigin(0, 0.5);
+    this.grassRain.setDisplaySize(w, tileSpriteHeight);
+
+    this.title = this.add.image(w / 2, 80, 'title').setOrigin(0.5);
+    this.title.setScale(0.7);
+    this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
+    this.instText.setOrigin(0.5);
+
+    this.player = this.physics.add.sprite(w / 2, h / 2 + 100, "playerOne");
+    this.player.play("playerOneAnim");
+	
+	
+
+  
+  
+	this.player.setInteractive({ useHandCursor: true }); 
+	this.player.on('pointerdown', this.onPointerDown, this);
+    this.player.on('pointerup', this.onPointerUp, this);
+	
+	
+	
+
+  
+  
+
+    this.player.setCollideWorldBounds(true);
+
+    this.input.on('pointermove', (pointer) => {
+      if (pointer.worldX < this.player.x) {
+        this.player.angle = -15;
+      } else {
+        this.player.angle = 15;
+      }
+    });
+
+    this.enemies = this.physics.add.group();
+
+    /*this.time.addEvent({
+      delay: 1000,
+      callback: this.spawnEnemy,
+      callbackScope: this,
+      loop: true,
+    });*/
+
+
+  }
+  onPointerDown(){
+	  this.instText.setVisible(false);
+	 timerEvent = this.time.addEvent({
+     delay: 1000,
+      callback: this.spawnEnemy,
+      callbackScope: this,
+      loop: true,
+    }); 
+  }
+  onPointerUp(){
+	  if (timerEvent) {
+		  timerEvent.destroy();
+		}
+  }
+  spawnEnemy() {
+    const x = Phaser.Math.Between(0, w);
+    const enemy = this.enemies.create(x, -50, 'enemyOne');
+	enemy.play("enemyOneAnim");
+    enemy.setVelocityY(100);
+  }
+  onCollision() {
+	this.game.sound.stopAll();
+    
+    this.scene.restart();
+  }
+  update(time, delta) {
+    let speed = 5;
+    let maxOffsetY = 2 * h + 100;
+
+    if (this.grassRegular) {
+      let imageHeight = this.grassRegular.displayHeight;
+      this.grassRegular.y += speed;
+      this.grassWinter.y += speed;
+      this.grassRain.y += speed;
+
+      if (this.grassRegular.y > maxOffsetY) {
+        this.grassRegular.y = this.grassRain.y - imageHeight;
+      }
+      if (this.grassWinter.y > maxOffsetY) {
+        this.grassWinter.y = this.grassRegular.y - imageHeight;
+      }
+      if (this.grassRain.y > maxOffsetY) {
+        this.grassRain.y = this.grassWinter.y - imageHeight;
+      }
+    }
+    if (this.player) {
+      const pointer = this.input.activePointer;
+      if (pointer.isDown) {
+        this.player.x = pointer.x;
+        this.player.y = pointer.y;
+      } else {
+        this.player.angle = 0;
+      }
+
+      const cursors = this.input.keyboard.createCursorKeys();
+
+      if (cursors.left.isDown) {
+        this.player.setVelocityX(-160);
+        this.player.angle = -15;
+      } else if (cursors.right.isDown) {
+        this.player.setVelocityX(160);
+        this.player.angle = 15;
+      } else if (!pointer.isDown) {
+        this.player.setVelocityX(0);
+        this.player.angle = 0;
+      }
+
+      this.physics.world.collide(
+        this.player,
+        this.enemies,
+        this.onCollision,
+        null,
+        this
+      );
+
+
+    }
+
+
+  }
+  preload1() {
+
+
+
+    /*this.load.image('player', "/" + gameType + "/images/player.png");
+      this.load.image('enemy', "/" + gameType + "/images/enemy.png");
+      this.load.image('bg', "/" + gameType + "/images/bg.png");
+    this.load.image("middleAd", "/" + gameType + "/images/middleAd.png");
+  	
+    this.load.audio("bg", "/" + gameType + "/sfx/bgNoise.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/clap.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/collide.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/kittyopening.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/opening.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/slowmo.mp3");
+    this.load.audio("bg", "/" + gameType + "/sfx/swing.mp3");*/
+
+    /*this.load.image("ball", "/pong/" + gameType + "/ball.png");
     this.load.image("peck", "/pong/" + gameType + "/peck.png");
     this.load.image("bg", "/pong/" + gameType + "/bg.png");
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
@@ -48,7 +287,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
     this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
-    this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
+    this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");*/
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
@@ -80,9 +319,11 @@ export default class MainSceneRunner extends Phaser.Scene {
   private goal: any;
   private lost: any;
 
-  create() {
+  create1() {
     this.sound.add("bg").setLoop(true).play();
-    this.whistle = this.sound.add("whistle");
+    this.bg = this.add.tileSprite(0, 0, w, h, 'bg');
+    this.bg.setOrigin(0, 0);
+    /*this.whistle = this.sound.add("whistle");
     this.ballHit = this.sound.add("ballHit");
     this.final = this.sound.add("final");
     this.goal = this.sound.add("goal");
@@ -239,7 +480,7 @@ export default class MainSceneRunner extends Phaser.Scene {
       duration: 50000,
       rotation: 360,
       repeat: -1,
-    });
+    });*/
 
     /*
         const ballFx = this.ball.postFX.addBloom(0xffffff, 0, 0, 0, 1);
@@ -257,7 +498,7 @@ export default class MainSceneRunner extends Phaser.Scene {
         });
         */
 
-    this.physics.add.collider(
+    /*this.physics.add.collider(
       this.player,
       this.ball,
       () => {
@@ -294,7 +535,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.ai.preFX.addShadow();
     //this.cameras.main.postFX.addGlow();
 
-    this.ball.setMaxVelocity(ballVX * 3, ballVY * 3);
+    this.ball.setMaxVelocity(ballVX * 3, ballVY * 3);*/
 
     this.initGame();
   }
@@ -313,6 +554,9 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
 
   public initGame(lives = 3) {
+
+
+    return;
     this.cameras.main.fadeIn(1200);
 
     this.goalTxt.setVisible(false);
@@ -551,7 +795,11 @@ export default class MainSceneRunner extends Phaser.Scene {
     }
   }
 
-  update(time, delta) {
+  update1(time, delta) {
+    //this.bg.tilePositionY -= 1
+
+
+    return;
     this.aiUpdate(time, delta);
 
     if (this.isDragging) {

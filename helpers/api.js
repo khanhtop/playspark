@@ -1,51 +1,20 @@
 //import Pong from ;
+import { doc, getDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
+import { firestore } from "./firebase";
+import { games } from "./games";
+import Runner from "@/components/runnergame/runner";
 const Pong = dynamic(() => import("@/components/games/pong"), { ssr: false });
 
-export function getAd(id) {
-  if (id === "123") {
-    return {
-      gameName: "Tottenham Shootout",
-      game: 0,
-      primaryColor: "#132257",
-      textColor: "#FFF",
+export async function getAd(id) {
+  const ad = await getDoc(doc(firestore, "tournaments", id));
+  if (ad.exists()) {
+    const packet = {
+      ...ad.data(),
+      primaryColor: ad.data()?.primaryColor ?? "#132257",
+      textColor: ad.data()?.textColor ?? "#FFF",
       backgroundImage:
-        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
-    };
-  } else if (id === "124") {
-    return {
-      gameName: "Tottenham Hockey",
-      game: 1,
-      primaryColor: "#132257",
-      textColor: "#FFF",
-      backgroundImage:
-        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
-    };
-  } else if (id === "125") {
-    return {
-      gameName: "Tottenham Baseball",
-      game: 2,
-      primaryColor: "#132257",
-      textColor: "#FFF",
-      backgroundImage:
-        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
-    };
-  } else if (id === "126") {
-    return {
-      gameName: "Tottenham NFL",
-      game: 3,
-      primaryColor: "#132257",
-      textColor: "#FFF",
-      backgroundImage:
-        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
-    };
-  } else if (id === "127") {
-    return {
-      gameName: "Tottenham Basketball",
-      game: 4,
-      primaryColor: "#132257",
-      textColor: "#FFF",
-      backgroundImage:
+        ad.data()?.backgroundImage ??
         "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
     };
   } else {
@@ -53,10 +22,32 @@ export function getAd(id) {
   }
 }
 
-export function getGame(id, data) {
-  if (id === 0) return <Pong data={data} gameType="football" />;
-  if (id === 1) return <Pong data={data} gameType="hockey" />;
-  if (id === 2) return <Pong data={data} gameType="baseball" />;
-  if (id === 3) return <Pong data={data} gameType="nfl" />;
-  if (id === 4) return <Pong data={data} gameType="basketball" />;
+export async function getDemo(id) {
+  const game = games.find((a) => a.id === parseInt(id));
+  return {
+    ...game,
+    backgroundImage:
+      game?.backgroundImage ??
+      "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
+    primaryColor: game.primaryColor ?? "#132257",
+    textColor: game.textColor ?? "#FFF",
+  };
+}
+
+export function getGame(id, data, callback) {
+  if (id === 1)
+    return <Pong data={data} gameType="football" callback={callback} />;
+  if (id === 2)
+    return <Pong data={data} gameType="hockey" callback={callback} />;
+  if (id === 3)
+    return <Pong data={data} gameType="baseball" callback={callback} />;
+  if (id === 4) return <Pong data={data} gameType="nfl" callback={callback} />;
+  if (id === 5)
+    return <Pong data={data} gameType="basketball" callback={callback} />;
+  if (id === 6)
+    return <Pong data={data} gameType="baseballFall" callback={callback} />;
+  if (id === 7) {
+    console.log("RUNNER");
+    return <Runner data={data} gameType="runner" callback={callback} />;
+  }
 }

@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import MainScene from "./mainScene";
+import FallScene from "./fallScene";
 
 const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
   const [hasRendered, setHasRendered] = useState(false);
@@ -26,8 +27,12 @@ const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
   useEffect(() => {
     if (!memoizedHasRendered) {
       setHasRendered(true);
-
-      const scene = new MainScene(gameType);
+      let scene;
+      if(gameType == 'baseballFall') {
+        scene = new FallScene(gameType);
+      } else {
+        scene = new MainScene(gameType);
+      }
 
       const config = {
         type: Phaser.AUTO,
