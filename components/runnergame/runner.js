@@ -49,8 +49,10 @@ export default function Runner({ data, gameType }) {
         .
       </div>
       <div className="w-full h-24 bg-white/20 flex items-center justify-center">
-        <p>Branding Banner Goes Here</p>
-        <button onClick={startNewGame}>Restart with reward</button>
+        <img
+          src="/defaults/banner.jpg"
+          className="object-cover h-full w-full"
+        />
       </div>
       <MiddleRunner
         runnerRef={childRef}

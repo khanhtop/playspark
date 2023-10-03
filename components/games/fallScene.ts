@@ -158,7 +158,7 @@ export default class FallScene extends Phaser.Scene {
       false
     );
     this.bg = this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
-    this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0.2);
+    this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
 
     this.add.image(30, 30, "boosterBatNum").setDisplaySize(30, 30);
 

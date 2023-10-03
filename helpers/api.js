@@ -3,6 +3,7 @@ import { doc, getDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
 import { firestore } from "./firebase";
 import { games } from "./games";
+import Runner from "@/components/runnergame/runner";
 const Pong = dynamic(() => import("@/components/games/pong"), { ssr: false });
 
 export async function getAd(id) {
@@ -45,4 +46,8 @@ export function getGame(id, data, callback) {
     return <Pong data={data} gameType="basketball" callback={callback} />;
   if (id === 6)
     return <Pong data={data} gameType="baseballFall" callback={callback} />;
+  if (id === 7) {
+    console.log("RUNNER");
+    return <Runner data={data} gameType="baseballFall" callback={callback} />;
+  }
 }

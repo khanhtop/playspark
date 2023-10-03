@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 export default function Demo({ ad, id }) {
   useEffect(() => {
-    console.log("AD Loaded");
+    console.log("DEMO Loaded");
   }, []);
   return (
     <div className="text-white font-bold ">

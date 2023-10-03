@@ -59,4 +59,13 @@ export const games = [
     textColor: "#FFF",
     id: 6,
   },
+  {
+    name: "Runner",
+    description: "Endless Runner",
+    backgroundImage: "/defaults/baseball-fall.jpg",
+    screenshot: "baseball-fall.png",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 7,
+  },
 ];
