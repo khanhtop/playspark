@@ -21,7 +21,7 @@ export default function Pong({ data, gameType }) {
   return (
     <div
       style={{
-        backgroundColor: data?.primaryColor,
+        backgroundColor: "black",
         color: data?.textColor,
         width: "100%",
         height: "100%",
@@ -49,8 +49,10 @@ export default function Pong({ data, gameType }) {
         .
       </div>
       <div className="w-full h-24 bg-white/20 flex items-center justify-center">
-        <p>Branding Banner Goes Here</p>
-        <button onClick={startNewGame}>Restart with reward</button>
+        <img
+          src="/defaults/banner.jpg"
+          className="object-cover h-full w-full"
+        />
       </div>
       <MiddlePong
         pongRef={childRef}

@@ -16,15 +16,6 @@ export async function getAd(id) {
         ad.data()?.backgroundImage ??
         "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
     };
-  } else if (id === "6") {
-    return {
-      gameName: "Tottenham Baseball Fall",
-      game: 6,
-      primaryColor: "#132257",
-      textColor: "#FFF",
-      backgroundImage:
-        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
-    };
   } else {
     return null;
   }
@@ -43,10 +34,10 @@ export async function getDemo(id) {
 }
 
 export function getGame(id, data) {
-  if (id === 0) return <Pong data={data} gameType="football" />;
-  if (id === 1) return <Pong data={data} gameType="hockey" />;
-  if (id === 2) return <Pong data={data} gameType="baseball" />;
-  if (id === 3) return <Pong data={data} gameType="nfl" />;
-  if (id === 4) return <Pong data={data} gameType="basketball" />;
-  if (id === 5) return <Pong data={data} gameType="baseballFall" />;
+  if (id === 1) return <Pong data={data} gameType="football" />;
+  if (id === 2) return <Pong data={data} gameType="hockey" />;
+  if (id === 3) return <Pong data={data} gameType="baseball" />;
+  if (id === 4) return <Pong data={data} gameType="nfl" />;
+  if (id === 5) return <Pong data={data} gameType="basketball" />;
+  if (id === 6) return <Pong data={data} gameType="baseballFall" />;
 }

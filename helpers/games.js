@@ -50,10 +50,13 @@ export const games = [
     id: 5,
   },
   {
-    name: "Baseball Fall Pong",
+    name: "Baseball Fall",
     description:
       "Quick avoid basketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
-    screenshot: "basketball-fall-pong.png",
+    backgroundImage: "/screenshots/baseball-fall.png",
+    screenshot: "baseball-fall.png",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
     id: 6,
   },
 ];
