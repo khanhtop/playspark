@@ -2,6 +2,8 @@ import { games } from "@/helpers/games";
 import { useState } from "react";
 import GameCard from "./gameCard";
 import { useAppContext } from "@/helpers/store";
+import { deleteDoc, doc } from "firebase/firestore";
+import { firestore } from "@/helpers/firebase";
 
 export default function MyGames({}) {
   const context = useAppContext();
@@ -16,6 +18,17 @@ export default function MyGames({}) {
     );
   };
 
+  const deleteGame = async (item) => {
+    if (
+      confirm(
+        "Are you sure you want to remove this tournament?  The tournament and all of the associated data will be lost"
+      ) == true
+    ) {
+      const tId = item.tournamentId.toString();
+      await deleteDoc(doc(firestore, "tournaments", tId));
+    }
+  };
+
   return (
     <div className="flex flex-wrap gap-4">
       {context.myGames?.map((item, key) => (
@@ -24,6 +37,7 @@ export default function MyGames({}) {
           buttonText="Get Embed Code"
           game={item}
           onDemo={() => setDemo(item.tournamentId)}
+          onDelete={() => deleteGame(item)}
         />
       ))}
       {demo && (

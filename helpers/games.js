@@ -3,7 +3,7 @@ export const games = [
     name: "Soccer Pong",
     description:
       "Get ready to test your precision and reflexes as you flick your way to victory in this addictive game, where the goal is simple: sink that ball and become the ultimate soccer pong champion!",
-    screenshot: "soccer-pong.png",
+    muxId: "01wVyhLx4pTjh2Bh4rZbOBEmHPmNJBc5Jr7hwG8mHmZA",
     id: 1,
     primaryColor: "#55AA55",
     textColor: "#FFF",
@@ -13,8 +13,8 @@ export const games = [
     name: "Hockey Pong",
     description:
       "Experience the thrill of fast-paced fun as you flick, aim, and score your way to victory in this game that puts your air hockey skills to the test!",
-    screenshot: "hockey-pong.png",
     backgroundImage: "/defaults/hockey-pong.jpg",
+    muxId: "W6zCKx802PXnE8tI3yE8XUqmIRxqEtemuX02z00XN8xcbA",
     primaryColor: "#0C56FB",
     textColor: "#FFF",
     id: 2,
@@ -23,8 +23,8 @@ export const games = [
     name: "Baseball Pong",
     description:
       "Step into the arena and become a flick-master in this hyper casual sensation, where every swipe counts as you aim to flick the baseball into the goal, air hockey style!",
-    screenshot: "baseball-pong.png",
     backgroundImage: "/defaults/baseball-pong.jpg",
+    muxId: "ThPFNo9W3tr02bbvO3o5aQJ01MO3MP30100EsKFaPeEshs00",
     primaryColor: "#FFF",
     textColor: "#FD0404",
     id: 3,
@@ -33,20 +33,20 @@ export const games = [
     name: "NFL Pong",
     description:
       "Unleash your inner flick champion in this game, where precision meets excitement as you aim to flick the ball into the goal with air hockey-inspired flair!",
-    screenshot: "nfl-pong.png",
     backgroundImage: "/defaults/nfl-pong.jpg",
     primaryColor: "#71592B",
     textColor: "#FFF",
+    muxId: "LFKpfV02Uf9ZLoNGKPuL02Ja8UMy6Qd8GyujXzR2zC29w",
     id: 4,
   },
   {
     name: "Basketball Pong",
     description:
       "Master the art of precision flicking and outscore your opponents in this game that combines air hockey-style action with addictive gameplay!",
-    screenshot: "basketball-pong.png",
     backgroundImage: "/defaults/basketball-pong.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
+    muxId: "m01Gz2wnX02F2Md4oMOlZDdK6nNPQNskW0000jhvgFr3NpA",
     id: 5,
   },
   {

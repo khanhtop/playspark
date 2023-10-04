@@ -3,6 +3,7 @@ import { getAd } from "@/helpers/api";
 import { useEffect } from "react";
 
 export default function Ad({ ad, id }) {
+  console.log(ad);
   useEffect(() => {
     console.log("AD Loaded");
   }, []);

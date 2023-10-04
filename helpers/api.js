@@ -17,6 +17,7 @@ export async function getAd(id) {
         ad.data()?.backgroundImage ??
         "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
     };
+    return packet;
   } else {
     return null;
   }
