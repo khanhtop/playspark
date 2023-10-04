@@ -21,7 +21,7 @@ export default function Runner({ data, gameType }) {
   return (
     <div
       style={{
-        backgroundColor: data?.primaryColor,
+        backgroundColor: "black",
         color: data?.textColor,
         width: "100%",
         height: "100%",

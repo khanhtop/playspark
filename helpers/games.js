@@ -60,10 +60,10 @@ export const games = [
     id: 6,
   },
   {
-    name: "Touchdown Pro",
+    name: "Touchdown Master",
     description:
       "Get past swarms of oncoming defenders and get the highest score in this fast-paced endless NFL runner.",
-    backgroundImage: "/defaults/baseball-fall.jpg",
+    backgroundImage: "/defaults/touchdown-master.jpg",
     screenshot: "touchdown-pro.png",
     primaryColor: "#F69B01",
     textColor: "#FFF",
