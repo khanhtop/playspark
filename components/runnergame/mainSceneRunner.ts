@@ -21,6 +21,9 @@ let w: number,
 
 let gameType = "runner";
 let timerEvent;
+let playerClicked = false;
+let firstLoad;
+
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
   private ball!: Phaser.Physics.Arcade.Image;
@@ -32,7 +35,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     super();
     MainSceneRunner.instance = this;
     gameType = newGameType;
-    
+
   }
   preload() {
     console.log("runner game gameType", gameType);
@@ -60,8 +63,9 @@ export default class MainSceneRunner extends Phaser.Scene {
   loadAssets() {
     this.load.once("complete", this.loadComplete, this);
     this.load.on("progress", this.loadProgress, this);
-    //this.load.image('player', "/" + gameType + "/images/player.png");
-    //this.load.image('enemy', "/" + gameType + "/images/enemy.png");
+    this.load.image('btnShop', "/" + gameType + "/images/btn-shop.png");
+    this.load.image('shop', "/" + gameType + "/images/shop.png");
+    this.load.image('buttonSelect', "/" + gameType + "/images/button-select.png");
     this.load.image('grassRegular', "/" + gameType + "/images/grass-regular.png");
     this.load.image('grassWinter', "/" + gameType + "/images/grass-winter.png");
     this.load.image('grassRain', "/" + gameType + "/images/grass-rain.png");
@@ -72,19 +76,23 @@ export default class MainSceneRunner extends Phaser.Scene {
       "playerOne", "/" + gameType + "/images/player-one.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "enemyOne", "/" + gameType + "/images/enemy-one.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	
+    this.load.spritesheet(
+      "buttonArrow", "/" + gameType + "/images/button-arrow.png",
+      { frameWidth: 96, frameHeight: 78 }
+    );
+
 
     this.load.audio("bg", "/" + gameType + "/sfx/bgNoise.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/clap.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/collide.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/kittyopening.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/opening.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/slowmo.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/swing.mp3");
+    this.load.audio("clap", "/" + gameType + "/sfx/clap.mp3");
+    this.load.audio("collide", "/" + gameType + "/sfx/collide.mp3");
+    this.load.audio("kittyOpening", "/" + gameType + "/sfx/kittyopening.mp3");
+    this.load.audio("opening", "/" + gameType + "/sfx/opening.mp3");
+    this.load.audio("slowmo", "/" + gameType + "/sfx/slowmo.mp3");
+    this.load.audio("swing", "/" + gameType + "/sfx/swing.mp3");
 
     this.load.start();
   }
@@ -92,24 +100,31 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.barFill.scaleX = percents;
   }
   loadComplete() {
-    console.log("loadComplete1");
     this.initGame1();
-
   }
 
-  initGame1() {    
-    this.anims.create({
-      key: "playerOneAnim",
-      frames: this.anims.generateFrameNumbers("playerOne", {}),
-      frameRate: 24,
-      repeat: -1
-    });
-	this.anims.create({
-      key: "enemyOneAnim",
-      frames: this.anims.generateFrameNumbers("enemyOne", {}),
-      frameRate: 24,
-      repeat: -1
-    });
+  initGame1() {
+    if (!this.anims.exists("playerOneAnim")) {
+		firstLoad = true;
+      this.anims.create({
+        key: "playerOneAnim",
+        frames: this.anims.generateFrameNumbers("playerOne", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+      this.anims.create({
+        key: "enemyOneAnim",
+        frames: this.anims.generateFrameNumbers("enemyOne", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+      this.anims.create({
+        key: "buttonArrowPos",
+        frames: this.anims.generateFrameNumbers("buttonArrow", {}),
+        frameRate: 24
+      });
+    }
+
     this.cover.destroy();
     this.cover = null;
     this.barFrame.destroy();
@@ -120,9 +135,9 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.loadingText = null;
 
     this.sound.add("bg").setLoop(true).play();
-
-
-
+    this.kittyOpening = this.sound.add("kittyOpening");
+    this.swing = this.sound.add("swing");
+    this.clap = this.sound.add("clap");
 
     const backgroundTexture = this.textures.get('grassRegular')!;
     const tileSpriteHeight = (backgroundTexture.source[0].height / backgroundTexture.source[0].width) * w;
@@ -133,31 +148,24 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.grassRain = this.add.image(0, this.grassWinter.y - 1 * this.grassRegular.displayHeight / 2, 'grassRain').setOrigin(0, 0.5);
     this.grassRain.setDisplaySize(w, tileSpriteHeight);
 
-    this.title = this.add.image(w / 2, 80, 'title').setOrigin(0.5);
+    this.title = this.add.image(w / 2, -80, 'title').setOrigin(0.5);
     this.title.setScale(0.7);
+    this.moveTitle(80);
+
     this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
     this.instText.setOrigin(0.5);
 
-    this.player = this.physics.add.sprite(w / 2, h / 2 + 100, "playerOne");
+    this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
     this.player.play("playerOneAnim");
-	
-	
 
-  
-  
-	this.player.setInteractive({ useHandCursor: true }); 
-	this.player.on('pointerdown', this.onPointerDown, this);
+    this.player.setInteractive({ useHandCursor: true });
+    this.player.on('pointerdown', this.onPointerDown, this);
     this.player.on('pointerup', this.onPointerUp, this);
-	
-	
-	
-
-  
-  
 
     this.player.setCollideWorldBounds(true);
 
     this.input.on('pointermove', (pointer) => {
+
       if (pointer.worldX < this.player.x) {
         this.player.angle = -15;
       } else {
@@ -165,40 +173,111 @@ export default class MainSceneRunner extends Phaser.Scene {
       }
     });
 
+    this.btnShop = this.add.image(w / 2, h + 40, 'btnShop').setOrigin(0.5);
+    this.btnShop.setInteractive({ useHandCursor: true });
+    this.btnShop.setScale(0.8);
+    this.btnShop.on('pointerdown', this.onShop, this);
+    this.moveShopBtn(h - 50);
+
+
+
     this.enemies = this.physics.add.group();
 
-    /*this.time.addEvent({
+    this.input.on('pointerdown', this.playKitty, this);
+    this.shopContainer = this.make.container();
+    this.shop = this.add.image(w / 2, 20, 'shop').setOrigin(0.5, 0);
+    this.buttonSelect = this.add.image(w / 2, h - 50, 'buttonSelect').setOrigin(0.5);
+    this.buttonSelect.setScale(0.7);
+    this.buttonSelect.setInteractive({ useHandCursor: true });
+    this.buttonSelect.on('pointerdown', this.onSelect, this);
+    this.leftArrow = this.physics.add.sprite(w / 2 - 120, h - 50, "buttonArrow");
+    this.leftArrow.setFrame(0);
+    this.leftArrow.setScale(0.7);
+    this.leftArrow.setInteractive({ useHandCursor: true });
+    this.leftArrow.on('pointerdown', this.onLeft, this);
+    this.rightArrow = this.physics.add.sprite(w / 2 + 120, h - 50, "buttonArrow");
+    this.rightArrow.setFrame(1);
+    this.rightArrow.setScale(0.7);
+    this.rightArrow.setInteractive({ useHandCursor: true });
+    this.rightArrow.on('pointerdown', this.onRight, this);
+    this.shopContainer.add([this.shop, this.buttonSelect, this.leftArrow, this.rightArrow]);
+
+    this.shopContainer.setVisible(false);
+
+  }
+  playKitty() {
+	if(firstLoad){
+		firstLoad = false;
+		this.kittyOpening.play();
+	}    
+    this.input.off('pointerdown', this.playKitty, this);
+  }
+  onSelect() {
+    this.instText.setVisible(true);
+    this.clap.play();
+    this.moveTitle(80);
+    this.moveShopBtn(h - 50);
+    this.shopContainer.setVisible(false);
+  }
+  onLeft() {
+    this.swing.play();
+
+  }
+  onRight() {
+    this.swing.play();
+
+  }
+  onShop() {
+    this.swing.play();
+    this.moveTitle(-80);
+    this.moveShopBtn(h + 80);
+    this.shopContainer.setVisible(true);
+    this.instText.setVisible(false);
+    console.log("onshop");
+  }
+  moveTitle(yPos) {
+    this.tweens.add({
+      targets: this.title,
+      duration: 2000,
+      ease: 'Back.Out',
+      y: yPos
+    });
+  }
+  moveShopBtn(yPos) {
+    this.tweens.add({
+      targets: this.btnShop,
+      duration: 2000,
+      ease: 'Back.Out',
+      y: yPos
+    });
+  }
+  onPointerDown() {
+    playerClicked = true;
+    this.moveShopBtn(h + 80);
+    this.moveTitle(-80);
+    this.instText.setVisible(false);
+    timerEvent = this.time.addEvent({
       delay: 1000,
       callback: this.spawnEnemy,
       callbackScope: this,
       loop: true,
-    });*/
-
-
+    });
   }
-  onPointerDown(){
-	  this.instText.setVisible(false);
-	 timerEvent = this.time.addEvent({
-     delay: 1000,
-      callback: this.spawnEnemy,
-      callbackScope: this,
-      loop: true,
-    }); 
-  }
-  onPointerUp(){
-	  if (timerEvent) {
-		  timerEvent.destroy();
-		}
+  onPointerUp() {
+    playerClicked = false;
+    if (timerEvent) {
+      timerEvent.destroy();
+    }
   }
   spawnEnemy() {
     const x = Phaser.Math.Between(0, w);
     const enemy = this.enemies.create(x, -50, 'enemyOne');
-	enemy.play("enemyOneAnim");
+    enemy.play("enemyOneAnim");
     enemy.setVelocityY(100);
   }
   onCollision() {
-	this.game.sound.stopAll();
-    
+    this.game.sound.stopAll();
+
     this.scene.restart();
   }
   update(time, delta) {
@@ -224,8 +303,10 @@ export default class MainSceneRunner extends Phaser.Scene {
     if (this.player) {
       const pointer = this.input.activePointer;
       if (pointer.isDown) {
-        this.player.x = pointer.x;
-        this.player.y = pointer.y;
+        if (playerClicked) {
+          this.player.x = pointer.x;
+          this.player.y = pointer.y;
+        }
       } else {
         this.player.angle = 0;
       }

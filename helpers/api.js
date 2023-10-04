@@ -17,6 +17,7 @@ export async function getAd(id) {
         ad.data()?.backgroundImage ??
         "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
     };
+    return packet;
   } else {
     return null;
   }
@@ -47,7 +48,6 @@ export function getGame(id, data, callback) {
   if (id === 6)
     return <Pong data={data} gameType="baseballFall" callback={callback} />;
   if (id === 7) {
-    console.log("RUNNER");
     return <Runner data={data} gameType="runner" callback={callback} />;
   }
 }
