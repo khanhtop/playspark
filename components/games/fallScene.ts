@@ -54,6 +54,7 @@ export default class FallScene extends Phaser.Scene {
   booster: any;
   bomb: any;
   powerup: any;
+  timer: NodeJS.Timeout;
 
   constructor(newGameType: string) {
     super();
@@ -68,7 +69,7 @@ export default class FallScene extends Phaser.Scene {
     this.load.image("boosterBall", "/pong/" + gameType + "/booster-ball.png");
     this.load.image("boosterBat", "/pong/" + gameType + "/booster-bat.png");
     this.load.image("boosterBatNum", "/pong/" + gameType + "/booster-bat.png");
-    this.load.spritesheet('bombEffect', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 128, frameHeight: 128 });
+    this.load.spritesheet('bombEffect', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 200, frameHeight: 200 });
     this.load.spritesheet('playerAnim', "/pong/" + gameType + "/player-animation.png", { frameWidth: 200, frameHeight: 200 });
 
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
@@ -204,7 +205,7 @@ export default class FallScene extends Phaser.Scene {
     });
 
     this.bombSprite = this.add.sprite(-200, 200, 'bombEffect').setDisplaySize(80, 80);
-    const frameNames = this.anims.generateFrameNumbers('bombEffect', { start: 0, end: 15 });
+    const frameNames = this.anims.generateFrameNumbers('bombEffect', { start: 0, end: 7 });
     this.anims.create({
       key: 'bombAnimation',
       frames: frameNames,
@@ -350,7 +351,7 @@ export default class FallScene extends Phaser.Scene {
     });
 
     this.lifeNumText = this.add
-    .text(w - 70, 30, "0", {
+    .text(w - 70, 30, heartNum, {
       fontFamily: "enhanced_led_board-7",
       fontSize: "22px",
       color: "#ffffff",
@@ -453,6 +454,11 @@ export default class FallScene extends Phaser.Scene {
     this.lose.play();
 
     this.scoreHandler(this.scoreNum);
+
+    this.player.setVisible(false);
+    this.bombSprite.setDisplaySize(150, 150);
+    this.playBombEffect(this.player.x, this.player.y)
+
     // game is lost
     //this.initGame();
   }
@@ -519,6 +525,28 @@ export default class FallScene extends Phaser.Scene {
       //this.cameras.main.flash(50);
       this.cameras.main.shake(30, 0.01);
     } else if (which === 0) {
+      this.goalTxt.setScale(0)
+      .setAlpha(0)
+      this.addedScrTxt.setScale(0)
+      .setAlpha(0)
+
+      this.tweens.add({
+        targets: this.goalTxt,
+        scaleX: 1, // Scale to 1 (original size)
+        scaleY: 1,
+        alpha: 1, // Fade in to full opacity
+        duration: 600, // Duration of the animation in milliseconds
+        ease: 'Bounce', // Easing function for a bouncing effect
+      });
+      this.tweens.add({
+        targets: this.addedScrTxt,
+        scaleX: 1, // Scale to 1 (original size)
+        scaleY: 1,
+        alpha: 1, // Fade in to full opacity
+        duration: 600, // Duration of the animation in milliseconds
+        ease: 'Bounce', // Easing function for a bouncing effect
+      });
+
       this.scoreNum += comboNum * 100;
       // this.goal.play();
       this.scoreText.text = this.scoreNum.toString().padStart(4, "0");
@@ -537,7 +565,8 @@ export default class FallScene extends Phaser.Scene {
       this.addedScrTxt.setVisible(true);
     }
 
-    setTimeout(() => {
+    clearTimeout(this.timer);
+    this.timer =  setTimeout(() => {
       this.goalTxt.setVisible(false);
       this.addedScrTxt.setVisible(false);
     }, 1000);
