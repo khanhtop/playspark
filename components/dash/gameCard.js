@@ -12,7 +12,9 @@ export default function GameCard({
   return (
     <div className="bg-[#000] rounded-lg text-white basis-[300px] p-4">
       <h3 className="text-lg">{game.name}</h3>
-      <h5 className="text-xs mb-4 text-white/75">{game.description}</h5>
+      <h5 className="text-xs mb-4 text-white/75 h-[80px] overflow-ellipsis">
+        {game.description}
+      </h5>
       <img src={`/screenshots/${game.screenshot}`} className="rounded-md" />
       <div className="flex gap-2 text-sm">
         <button

@@ -5,6 +5,8 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
+        <link rel="icon" href="/favicon.png" sizes="any" />
+        <link rel="icon" href="/icon.png" />
         <meta
           property="description"
           content="Dynamic playable ads that generate a higher ROI and engagement for

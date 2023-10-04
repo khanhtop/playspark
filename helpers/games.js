@@ -2,7 +2,7 @@ export const games = [
   {
     name: "Soccer Pong",
     description:
-      "Quick fire soccer game using touch controls.  Try to score as many points as you can before you concede three goals!",
+      "Get ready to test your precision and reflexes as you flick your way to victory in this addictive game, where the goal is simple: sink that ball and become the ultimate soccer pong champion!",
     screenshot: "soccer-pong.png",
     id: 1,
     primaryColor: "#55AA55",
@@ -12,7 +12,7 @@ export const games = [
   {
     name: "Hockey Pong",
     description:
-      "Quick fire hockey game using touch controls.  Try to score as many points as you can before you concede three goals!",
+      "Experience the thrill of fast-paced fun as you flick, aim, and score your way to victory in this game that puts your air hockey skills to the test!",
     screenshot: "hockey-pong.png",
     backgroundImage: "/defaults/hockey-pong.jpg",
     primaryColor: "#0C56FB",
@@ -22,7 +22,7 @@ export const games = [
   {
     name: "Baseball Pong",
     description:
-      "Quick fire baseball game using touch controls.  Try to score as many points as you can before you concede three goals!",
+      "Step into the arena and become a flick-master in this hyper casual sensation, where every swipe counts as you aim to flick the baseball into the goal, air hockey style!",
     screenshot: "baseball-pong.png",
     backgroundImage: "/defaults/baseball-pong.jpg",
     primaryColor: "#FFF",
@@ -32,7 +32,7 @@ export const games = [
   {
     name: "NFL Pong",
     description:
-      "Quick fire NFL game using touch controls.  Try to score as many points as you can before you concede three goals!",
+      "Unleash your inner flick champion in this game, where precision meets excitement as you aim to flick the ball into the goal with air hockey-inspired flair!",
     screenshot: "nfl-pong.png",
     backgroundImage: "/defaults/nfl-pong.jpg",
     primaryColor: "#71592B",
@@ -42,7 +42,7 @@ export const games = [
   {
     name: "Basketball Pong",
     description:
-      "Quick fire basketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
+      "Master the art of precision flicking and outscore your opponents in this game that combines air hockey-style action with addictive gameplay!",
     screenshot: "basketball-pong.png",
     backgroundImage: "/defaults/basketball-pong.jpg",
     primaryColor: "#F69B01",
