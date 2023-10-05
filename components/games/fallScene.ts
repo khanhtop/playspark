@@ -119,8 +119,8 @@ export default class FallScene extends Phaser.Scene {
     heartR = w * 0.0625;
     distance = 500;
     speed = 200;
-    deltaSpeed = 10;
-    deltaDistance = 10;
+    deltaSpeed = 15;
+    deltaDistance = 15;
     boosterNum = 0;
     boosterBat = 0;
     throwSpeed = 500;
@@ -269,7 +269,6 @@ export default class FallScene extends Phaser.Scene {
       .setPushable(false);
 
     this.player.body.setSize(playerColliderR, playerColliderR, true)
-    this.player.setDebug(true, true, 111);
 
     this.bombSprite = this.add.sprite(-200, 200, 'bombEffect').setDisplaySize(140, 140);
 
@@ -605,7 +604,7 @@ export default class FallScene extends Phaser.Scene {
       repeat: -1,
     })
 
-    this.physics.add.collider(
+    this.physics.add.overlap(
       this.player,
       bball,
       () => {
@@ -680,15 +679,15 @@ export default class FallScene extends Phaser.Scene {
     speed = Math.min(500, speed);
 
     let rate = Math.random();
-    if(rate < 0.2) {
-      bb.setTexture('boosterBall');
-      bb.type = 'boosterBall';
-    } else if(rate < 0.7 && rate >= 0.2) {
+    if(rate < 0.35) {
+      bb.setTexture('bomb');
+      bb.type = 'bomb';
+    } else if(rate < 0.8 && rate >= 0.35) {
       bb.setTexture('ball');
       bb.type = 'ball';
     } else {
-      bb.setTexture('bomb');
-      bb.type = 'bomb';
+      bb.setTexture('boosterBall');
+      bb.type = 'boosterBall';
     }
 
     this.lastBall = bb;
