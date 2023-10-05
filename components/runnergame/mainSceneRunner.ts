@@ -44,17 +44,16 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.load.image('cover', "/" + gameType + "/images/cover.jpg");
     this.load.image('barFill', "/" + gameType + "/images/bar-fill.png");
     this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
+	this.load.image('loading', "/" + gameType + "/images/loading.png");
+	
   }
   create() {
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     this.cover = this.add.image(0, 0, 'cover').setOrigin(0, 0);
-    this.cover.setDisplaySize(w, h);
+    this.cover.setDisplaySize(w, h);    
 
-    this.loadingText = this.add.text(w / 2, h / 2 + 20, 'Loading...', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' });
-    this.loadingText.setOrigin(0.5);
-
-
+	this.loadingTxtImg = this.add.image(w / 2, h / 2 + 20, 'loading');
     this.barFrame = this.add.image(w / 2, h / 2 + 80, 'barFrame');
     this.barFill = this.add.image(0, 0, 'barFill').setOrigin(0, 0);
     this.barFill.setPosition(w / 2 - this.barFill.displayWidth / 2, h / 2 - this.barFill.displayHeight / 2 + 80);
@@ -64,7 +63,7 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   loadAssets() {
     this.load.once("complete", this.loadComplete, this);
-    this.load.on("progress", this.loadProgress, this);
+    this.load.on("progress", this.loadProgress, this);	
     this.load.image('btnShop', "/" + gameType + "/images/btn-shop.png");
     this.load.image('shop', "/" + gameType + "/images/shop.png");
     this.load.image('buttonSelect', "/" + gameType + "/images/button-select.png");
@@ -102,7 +101,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     );
     this.load.spritesheet(
       "buttonArrow", "/" + gameType + "/images/button-arrow.png",
-      { frameWidth: 96, frameHeight: 78 }
+      { frameWidth: 96, frameHeight: 93 }
     );
 	this.load.spritesheet(
       "smoke", "/" + gameType + "/images/smoke.png",
@@ -124,6 +123,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.barFill.scaleX = percents;
   }
   loadComplete() {
+	 
     this.initGame1();
   }
 
@@ -185,8 +185,8 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.barFrame = null;
     this.barFill.destroy();
     this.barFill = null;
-    this.loadingText.destroy();
-    this.loadingText = null;
+    this.loadingTxtImg.destroy();
+    this.loadingTxtImg = null;
 
     this.sound.add("bg").setLoop(true).play();
     this.kittyOpening = this.sound.add("kittyOpening");
@@ -207,7 +207,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.title.setScale(0.7);
     this.moveTitle(80);
 
-    this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
+    this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.instText.setOrigin(0.5);
 	
 	this.smoke = this.physics.add.sprite(0, 0, "smoke");
@@ -250,10 +250,10 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.buttonRetry.setInteractive({ useHandCursor: true });
     this.buttonRetry.on('pointerdown', this.onRetry, this);
 	
-	this.buttonRetryText = this.add.text(this.buttonRetry.x, this.buttonRetry.y, "Retry", { fontFamily: 'Arial', fontSize: 24, color: '#ffffff', align: 'center' });
+	this.buttonRetryText = this.add.text(this.buttonRetry.x, this.buttonRetry.y, "Retry", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.buttonRetryText.setOrigin(0.5);
 	
-	this.scoreText = this.add.text(w / 2, 280, score, { fontFamily: 'Arial', fontSize: 44, color: '#ffffff', align: 'center' });
+	this.scoreText = this.add.text(w / 2, 280, score, { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
     this.scoreText.setOrigin(0.5);
 	
 	this.tackledContainer.add([this.tackled, this.buttonRetry, this.buttonRetryText, this.scoreText]);
@@ -282,16 +282,16 @@ export default class MainSceneRunner extends Phaser.Scene {
 	
 	this.currShopIndex = 0;
 	
-	this.touchDownText = this.add.text(w / 2 - 80, h / 2 - 72, this.touchDowns, { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
+	this.touchDownText = this.add.text(w / 2 - 80, h / 2 - 72, this.touchDowns, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.touchDownText.setOrigin(0.5);
 	
-	this.recordText = this.add.text(w / 2 + 80, h / 2 - 72, this.record, { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
+	this.recordText = this.add.text(w / 2 + 80, h / 2 - 72, this.record, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.recordText.setOrigin(0.5);
 	
-	this.playerNameText = this.add.text(w / 2, h / 2 - 17, this.shopData[this.currShopIndex].actor, { fontFamily: 'Arial', fontSize: 24, color: '#FCF28D', align: 'center' });
+	this.playerNameText = this.add.text(w / 2, h / 2 - 17, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 24, color: '#FCF28D', align: 'center' });
     this.playerNameText.setOrigin(0.5);
 	
-	this.playerDescText = this.add.text(w / 2, h / 2, this.shopData[this.currShopIndex].msg, { fontFamily: 'Arial', fontSize: 18, color: '#ffffff', align: 'center' , lineSpacing: -7});
+	this.playerDescText = this.add.text(w / 2, h / 2, this.shopData[this.currShopIndex].msg, { fontFamily: 'Gamer', fontSize: 18, color: '#ffffff', align: 'center' , lineSpacing: -7});
     this.playerDescText.setOrigin(0.5, 0);
 	
 	
@@ -434,8 +434,18 @@ export default class MainSceneRunner extends Phaser.Scene {
 	  }
     let speed = 5;
     let maxOffsetY = 2 * h + 100;
+	/*
+	if(this.enemies){
+		this.enemies.children.iterate(function (enemy) {
+			enemy.rotation = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y);
+			const velocity = this.physics.velocityFromRotation(enemy.rotation, 100);
+			enemy.setVelocity(velocity.x, velocity.y);
+	   }, this);
+	}*/
 
     if (this.grassRegular) {
+	    
+
       let imageHeight = this.grassRegular.displayHeight;
       this.grassRegular.y += speed;
       this.grassWinter.y += speed;
