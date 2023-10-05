@@ -6,6 +6,9 @@ let w: number,
   mH: number,
   ballR: number,
   playerR: number,
+  playerW: number,
+  playerH: number,
+  playerColliderR: number,
   aiR: number,
   scr: number,
   goalH: number,
@@ -70,7 +73,7 @@ export default class FallScene extends Phaser.Scene {
     this.load.image("boosterBat", "/pong/" + gameType + "/booster-bat.png");
     this.load.image("boosterBatNum", "/pong/" + gameType + "/booster-bat.png");
     this.load.spritesheet('bombEffect', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 200, frameHeight: 200 });
-    this.load.spritesheet('playerAnim', "/pong/" + gameType + "/player-animation.png", { frameWidth: 200, frameHeight: 200 });
+    this.load.spritesheet('playerAnim', "/pong/" + gameType + "/player-animation.png", { frameWidth: 180, frameHeight: 300 });
 
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
     this.load.image("peck", "/pong/" + gameType + "/player-static-catch.png");
@@ -96,13 +99,16 @@ export default class FallScene extends Phaser.Scene {
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     ballR = w * 0.1;
-    playerR = w * 0.35;
+    playerR = w * 0.3;
+    playerW = w * 0.3 * 0.6;
+    playerH = w * 0.3
+    playerColliderR = playerR / 2;
     aiR = w * 0.175;
     scr = h * 0.08;
     mW = w / 2;
     mH = (h - scr) / 2 + scr;
     goalH = h * 0.1;
-    sideW = w * 0.08;
+    sideW = w * 0.01;
     boundW = w - 2 * sideW;
     boundH = h - scr - 2 * goalH;
     ballVY = h * 0.5;
@@ -204,7 +210,6 @@ export default class FallScene extends Phaser.Scene {
       }
     });
 
-    this.bombSprite = this.add.sprite(-200, 200, 'bombEffect').setDisplaySize(80, 80);
     const frameNames = this.anims.generateFrameNumbers('bombEffect', { start: 0, end: 7 });
     this.anims.create({
       key: 'bombAnimation',
@@ -222,7 +227,7 @@ export default class FallScene extends Phaser.Scene {
       repeat: -1
     });
 
-    const playerLeft = this.anims.generateFrameNumbers('playerAnim', { start: 2, end: 4 });
+    const playerLeft = this.anims.generateFrameNumbers('playerAnim', { start: 2, end: 3 });
     this.anims.create({
       key: 'playerLeft',
       frames: playerLeft,
@@ -230,7 +235,7 @@ export default class FallScene extends Phaser.Scene {
       repeat: -1
     });
 
-    const playerRight = this.anims.generateFrameNumbers('playerAnim', { start: 5, end: 7 });
+    const playerRight = this.anims.generateFrameNumbers('playerAnim', { start: 4, end: 5 });
     this.anims.create({
       key: 'playerRight',
       frames: playerRight,
@@ -246,7 +251,7 @@ export default class FallScene extends Phaser.Scene {
       repeat: 3
     });
 
-    const playerThrow = this.anims.generateFrameNumbers('playerAnim', { start: 8, end: 10 });
+    const playerThrow = this.anims.generateFrameNumbers('playerAnim', { start: 6, end: 7 });
     this.anims.create({
       key: 'playerThrow',
       frames: playerThrow,
@@ -258,10 +263,15 @@ export default class FallScene extends Phaser.Scene {
     // End Player Anim
 
     this.player = this.physics.add
-      .sprite(mW, h - goalH - playerR / 2, "playerAnim")
-      .setDisplaySize(playerR, playerR)
+      .sprite(mW, h - goalH - playerH / 2, "playerAnim")
+      .setDisplaySize(playerW, playerH)
       .setCollideWorldBounds(true)
       .setPushable(false);
+
+    this.player.body.setSize(playerColliderR, playerColliderR, true)
+    this.player.setDebug(true, true, 111);
+
+    this.bombSprite = this.add.sprite(-200, 200, 'bombEffect').setDisplaySize(140, 140);
 
     this.gr = this.physics.add.staticGroup();
 
@@ -299,8 +309,8 @@ export default class FallScene extends Phaser.Scene {
         // Update the goal position when the mouse button is pressed
         this.goalXPos = Phaser.Math.Clamp(
           pointer.x,
-          sideW + playerR / 2,
-          w - sideW - playerR / 2
+          sideW ,
+          w - sideW
         );
         this.goalYPos = Phaser.Math.Clamp(
           pointer.y,
@@ -318,8 +328,8 @@ export default class FallScene extends Phaser.Scene {
         // Update the goal position when the mouse is moving
         this.goalXPos = Phaser.Math.Clamp(
           dragX,
-          sideW + playerR / 2,
-          w - sideW - playerR / 2
+          sideW ,
+          w - sideW
         );
         this.goalYPos = Phaser.Math.Clamp(
           dragY,
@@ -749,13 +759,13 @@ export default class FallScene extends Phaser.Scene {
     if (this.isDragging) {
       this.goalXPos = Phaser.Math.Clamp(
         this.goalXPos,
-        sideW + playerR / 2,
-        w - sideW - playerR / 2
+        sideW ,
+        w - sideW 
       );
       this.goalYPos = Phaser.Math.Clamp(
         this.goalYPos,
-        mH + playerR / 2,
-        h - goalH - playerR / 2
+        mH ,
+        h - goalH
       );
 
       const dx = this.goalXPos - this.player.x;
