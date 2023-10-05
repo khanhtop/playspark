@@ -23,6 +23,8 @@ let gameType = "runner";
 let timerEvent;
 let playerClicked = false;
 let firstLoad;
+let gameOver = false;
+let score = 0;
 
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
@@ -66,11 +68,13 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.load.image('btnShop', "/" + gameType + "/images/btn-shop.png");
     this.load.image('shop', "/" + gameType + "/images/shop.png");
     this.load.image('buttonSelect', "/" + gameType + "/images/button-select.png");
+	this.load.image('buttonRetry', "/" + gameType + "/images/button-retry.png");
     this.load.image('grassRegular', "/" + gameType + "/images/grass-regular.png");
     this.load.image('grassWinter', "/" + gameType + "/images/grass-winter.png");
     this.load.image('grassRain', "/" + gameType + "/images/grass-rain.png");
     this.load.image("title", "/" + gameType + "/images/title.png");
     this.load.image("middleAd", "/" + gameType + "/images/middleAd.png");
+	this.load.image("tackled", "/" + gameType + "/images/tackled.png");
 
     this.load.spritesheet(
       "playerOne", "/" + gameType + "/images/player-one.png",
@@ -99,6 +103,10 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.load.spritesheet(
       "buttonArrow", "/" + gameType + "/images/button-arrow.png",
       { frameWidth: 96, frameHeight: 78 }
+    );
+	this.load.spritesheet(
+      "smoke", "/" + gameType + "/images/smoke.png",
+      { frameWidth: 156, frameHeight: 105 }
     );
 
 
@@ -158,6 +166,12 @@ export default class MainSceneRunner extends Phaser.Scene {
         frameRate: 24,
         repeat: -1
       });
+	  this.anims.create({
+        key: "smokeAnim",
+        frames: this.anims.generateFrameNumbers("smoke", {}),
+        frameRate: 24,
+        repeat: -1
+      });
       this.anims.create({
         key: "buttonArrowPos",
         frames: this.anims.generateFrameNumbers("buttonArrow", {}),
@@ -178,6 +192,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.kittyOpening = this.sound.add("kittyOpening");
     this.swing = this.sound.add("swing");
     this.clap = this.sound.add("clap");
+	this.collide = this.sound.add("collide");
 
     const backgroundTexture = this.textures.get('grassRegular')!;
     const tileSpriteHeight = (backgroundTexture.source[0].height / backgroundTexture.source[0].width) * w;
@@ -194,6 +209,8 @@ export default class MainSceneRunner extends Phaser.Scene {
 
     this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
     this.instText.setOrigin(0.5);
+	
+	this.smoke = this.physics.add.sprite(0, 0, "smoke");
 
     this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
     this.player.play("playerOneAnim");
@@ -221,9 +238,27 @@ export default class MainSceneRunner extends Phaser.Scene {
 
 
 
-    this.enemies = this.physics.add.group();
+    this.enemies = this.physics.add.group(); 
 
     this.input.on('pointerdown', this.playKitty, this);
+	
+	this.tackledContainer = this.make.container();
+	this.tackled = this.add.image(w / 2, 20, 'tackled').setOrigin(0.5, 0);
+	
+	this.buttonRetry = this.add.image(w / 2, 185, 'buttonRetry').setOrigin(0.5);
+    this.buttonRetry.setScale(0.7);
+    this.buttonRetry.setInteractive({ useHandCursor: true });
+    this.buttonRetry.on('pointerdown', this.onRetry, this);
+	
+	this.buttonRetryText = this.add.text(this.buttonRetry.x, this.buttonRetry.y, "Retry", { fontFamily: 'Arial', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.buttonRetryText.setOrigin(0.5);
+	
+	this.scoreText = this.add.text(w / 2, 280, score, { fontFamily: 'Arial', fontSize: 44, color: '#ffffff', align: 'center' });
+    this.scoreText.setOrigin(0.5);
+	
+	this.tackledContainer.add([this.tackled, this.buttonRetry, this.buttonRetryText, this.scoreText]);
+	this.tackledContainer.setVisible(false);
+	
     this.shopContainer = this.make.container();
     this.shop = this.add.image(w / 2, 20, 'shop').setOrigin(0.5, 0);
     this.buttonSelect = this.add.image(w / 2, h - 50, 'buttonSelect').setOrigin(0.5);
@@ -281,19 +316,13 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.shopContainer.setVisible(false);
   }
   onLeft() {
-    this.swing.play();
-	this.currShopIndex--;
-	if(this.currShopIndex < 0){
-		this.currShopIndex = this.shopData.length - 1;
-	}
+    this.swing.play();	
+	this.currShopIndex = (this.currShopIndex - 1 + this.shopData.length) % this.shopData.length;
 	this.updateShopDisplay();
   }
   onRight() {
-    this.swing.play();
-	this.currShopIndex++;
-	if(this.currShopIndex > this.shopData.length - 1){
-		this.currShopIndex = 0;
-	}
+    this.swing.play();	
+	this.currShopIndex = (this.currShopIndex + 1) % this.shopData.length;
 	this.updateShopDisplay();
   }
   updateShopDisplay(){
@@ -379,12 +408,30 @@ export default class MainSceneRunner extends Phaser.Scene {
     enemy.play("enemyOneAnim");
     enemy.setVelocityY(100);
   }
+  onRetry(){
+	  gameOver = false;
+	  this.scene.restart();
+	  this.player.setPosition(w / 2, h / 2 + 160);
+  }
   onCollision() {
+	gameOver = true;
+	if (timerEvent) {
+      timerEvent.destroy();
+    }
+	this.enemies.clear(true, true);
     this.game.sound.stopAll();
-
-    this.scene.restart();
+	this.collide.play();
+	this.smoke.setVisible(true);
+	this.smoke.play("smokeAnim");
+	this.smoke.setPosition(this.player.x, this.player.y);
+	this.player.setVisible(false);
+	this.tackledContainer.setVisible(true);
+    //this.scene.restart();
   }
   update(time, delta) {
+	  if(gameOver){
+		 return; 
+	  }
     let speed = 5;
     let maxOffsetY = 2 * h + 100;
 
