@@ -76,6 +76,22 @@ export default class MainSceneRunner extends Phaser.Scene {
       "playerOne", "/" + gameType + "/images/player-one.png",
       { frameWidth: 84, frameHeight: 90 }
     );
+	this.load.spritesheet(
+      "rayLewis", "/" + gameType + "/images/ray-lewis.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+	this.load.spritesheet(
+      "michaelStrahat", "/" + gameType + "/images/michael-strahat.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+	this.load.spritesheet(
+      "johnElway", "/" + gameType + "/images/john-elway.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+	this.load.spritesheet(
+      "jeromeBettis", "/" + gameType + "/images/jerome-bettis.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
     this.load.spritesheet(
       "enemyOne", "/" + gameType + "/images/enemy-one.png",
       { frameWidth: 84, frameHeight: 90 }
@@ -109,6 +125,30 @@ export default class MainSceneRunner extends Phaser.Scene {
       this.anims.create({
         key: "playerOneAnim",
         frames: this.anims.generateFrameNumbers("playerOne", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "rayLewisAnim",
+        frames: this.anims.generateFrameNumbers("rayLewis", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "michaelStrahatAnim",
+        frames: this.anims.generateFrameNumbers("michaelStrahat", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "johnElwayAnim",
+        frames: this.anims.generateFrameNumbers("johnElway", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "jeromeBettisAnim",
+        frames: this.anims.generateFrameNumbers("jeromeBettis", {}),
         frameRate: 24,
         repeat: -1
       });
@@ -200,9 +240,30 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.rightArrow.setScale(0.7);
     this.rightArrow.setInteractive({ useHandCursor: true });
     this.rightArrow.on('pointerdown', this.onRight, this);
-    this.shopContainer.add([this.shop, this.buttonSelect, this.leftArrow, this.rightArrow]);
-
+	
+	this.touchDowns = 4;
+	this.record = 1;
+	this.shopData = [{actor:"Rookie", msg:"Available",y:0, available:true}, {actor:"Jeremy Bettings", msg:"25 touchdowns\nor\n5 highscore to unlock", y:-14, available:false}, {actor:"Big Ben", msg:"50 touchdowns\nor\n10 highscore to unlock",y:-14, available:false}, {actor:"Mikael Stronghat", msg:"75 touchdowns\nor\n15 highscore to unlock",y:-14, available:false}, {actor:"Bay Newest", msg:"150 touchdowns\nor\n25 highscore to unlock",y:-14, available:false}];
+	
+	this.currShopIndex = 0;
+	
+	this.touchDownText = this.add.text(w / 2 - 80, h / 2 - 72, this.touchDowns, { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
+    this.touchDownText.setOrigin(0.5);
+	
+	this.recordText = this.add.text(w / 2 + 80, h / 2 - 72, this.record, { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
+    this.recordText.setOrigin(0.5);
+	
+	this.playerNameText = this.add.text(w / 2, h / 2 - 17, this.shopData[this.currShopIndex].actor, { fontFamily: 'Arial', fontSize: 24, color: '#FCF28D', align: 'center' });
+    this.playerNameText.setOrigin(0.5);
+	
+	this.playerDescText = this.add.text(w / 2, h / 2, this.shopData[this.currShopIndex].msg, { fontFamily: 'Arial', fontSize: 18, color: '#ffffff', align: 'center' , lineSpacing: -7});
+    this.playerDescText.setOrigin(0.5, 0);
+	
+	
+    this.shopContainer.add([this.shop, this.buttonSelect, this.leftArrow, this.rightArrow, this.touchDownText, this.recordText, this.playerNameText, this.playerDescText]);
+	this.updateShopDisplay();
     this.shopContainer.setVisible(false);
+	
 
   }
   playKitty() {
@@ -221,12 +282,55 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   onLeft() {
     this.swing.play();
-
+	this.currShopIndex--;
+	if(this.currShopIndex < 0){
+		this.currShopIndex = this.shopData.length - 1;
+	}
+	this.updateShopDisplay();
   }
   onRight() {
     this.swing.play();
-
+	this.currShopIndex++;
+	if(this.currShopIndex > this.shopData.length - 1){
+		this.currShopIndex = 0;
+	}
+	this.updateShopDisplay();
   }
+  updateShopDisplay(){
+	  let currdata = this.shopData[this.currShopIndex];
+	  let actor = this.shopData[this.currShopIndex].actor
+	  this.touchDownText.text = this.touchDowns;
+	  this.recordText.text = this.record;
+	  this.playerNameText.text = actor;
+	  this.playerDescText.text = this.shopData[this.currShopIndex].msg;
+	  this.playerDescText.y = h / 2 + 13 + this.shopData[this.currShopIndex].y;
+	  this.buttonSelect.setVisible(currdata.available);
+	  switch(actor){
+		  case "Rookie":
+		   this.player.setTexture('playerOne');
+		   this.player.anims.play('playerOneAnim', true);
+		  break;
+		  case "Big Ben":
+		   this.player.setTexture('rayLewis');
+		   this.player.anims.play('rayLewisAnim', true);
+		  break;
+		  case "Mikael Stronghat":
+		   this.player.setTexture('michaelStrahat');
+		   this.player.anims.play('michaelStrahatAnim', true);
+		  break;
+		  case "Bay Newest":
+		   this.player.setTexture('johnElway');
+		   this.player.anims.play('johnElwayAnim', true);
+		  break;
+		  case "Jeremy Bettings":
+		   this.player.setTexture('jeromeBettis');
+		   this.player.anims.play('jeromeBettisAnim', true);
+		  break;
+		  
+	  }
+	  
+  }
+  
   onShop() {
     this.swing.play();
     this.moveTitle(-80);
