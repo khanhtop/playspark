@@ -48,6 +48,16 @@ export default function Runner({ data, gameType }) {
       >
         .
       </div>
+	  <div
+        style={{
+          fontFamily: "Gamer",
+          visibility: "hidden",
+          height: "0px",
+          width: "0px",
+        }}
+      >
+        .
+      </div>
       <div className="w-full h-24 bg-white/20 flex items-center justify-center">
         <img
           src="/defaults/banner.jpg"
