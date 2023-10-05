@@ -24,6 +24,7 @@ let w: number,
   distance: number,
   speed: number,
   deltaSpeed: number,
+  deltaBomb: number,
   boosterNum: number,
   boosterBat: number,
   throwSpeed: number,
@@ -121,6 +122,7 @@ export default class FallScene extends Phaser.Scene {
     speed = 200;
     deltaSpeed = 15;
     deltaDistance = 15;
+    deltaBomb = 0.1;
     boosterNum = 0;
     boosterBat = 0;
     throwSpeed = 500;
@@ -674,15 +676,20 @@ export default class FallScene extends Phaser.Scene {
     bb.setVelocity(0, speed)
     distance -= deltaDistance;
     speed += deltaSpeed;
+    deltaBomb += 0.1;
+
 
     distance = Math.max(100, distance);
     speed = Math.min(500, speed);
 
+    bb.setDisplaySize(ballR, ballR)
+
     let rate = Math.random();
-    if(rate < 0.35) {
+    if(rate < 0.55) {
       bb.setTexture('bomb');
       bb.type = 'bomb';
-    } else if(rate < 0.8 && rate >= 0.35) {
+      bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 1.4), Math.min(ballR + deltaBomb, ballR * 1.4))
+    } else if(rate < 0.8 && rate >= 0.55) {
       bb.setTexture('ball');
       bb.type = 'ball';
     } else {
