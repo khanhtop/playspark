@@ -39,3 +39,9 @@ body {
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: "Gamer";
+  src: url("/runner/fonts/Gamer.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}

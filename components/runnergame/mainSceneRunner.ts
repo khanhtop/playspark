@@ -21,6 +21,11 @@ let w: number,
 
 let gameType = "runner";
 let timerEvent;
+let playerClicked = false;
+let firstLoad;
+let gameOver = false;
+let score = 0;
+
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
   private ball!: Phaser.Physics.Arcade.Image;
@@ -32,24 +37,23 @@ export default class MainSceneRunner extends Phaser.Scene {
     super();
     MainSceneRunner.instance = this;
     gameType = newGameType;
-    
+
   }
   preload() {
     console.log("runner game gameType", gameType);
     this.load.image('cover', "/" + gameType + "/images/cover.jpg");
     this.load.image('barFill', "/" + gameType + "/images/bar-fill.png");
     this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
+	this.load.image('loading', "/" + gameType + "/images/loading.png");
+	
   }
   create() {
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     this.cover = this.add.image(0, 0, 'cover').setOrigin(0, 0);
-    this.cover.setDisplaySize(w, h);
+    this.cover.setDisplaySize(w, h);    
 
-    this.loadingText = this.add.text(w / 2, h / 2 + 20, 'Loading...', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' });
-    this.loadingText.setOrigin(0.5);
-
-
+	this.loadingTxtImg = this.add.image(w / 2, h / 2 + 20, 'loading');
     this.barFrame = this.add.image(w / 2, h / 2 + 80, 'barFrame');
     this.barFill = this.add.image(0, 0, 'barFill').setOrigin(0, 0);
     this.barFill.setPosition(w / 2 - this.barFill.displayWidth / 2, h / 2 - this.barFill.displayHeight / 2 + 80);
@@ -59,32 +63,59 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   loadAssets() {
     this.load.once("complete", this.loadComplete, this);
-    this.load.on("progress", this.loadProgress, this);
-    //this.load.image('player', "/" + gameType + "/images/player.png");
-    //this.load.image('enemy', "/" + gameType + "/images/enemy.png");
+    this.load.on("progress", this.loadProgress, this);	
+    this.load.image('btnShop', "/" + gameType + "/images/btn-shop.png");
+    this.load.image('shop', "/" + gameType + "/images/shop.png");
+    this.load.image('buttonSelect', "/" + gameType + "/images/button-select.png");
+	this.load.image('buttonRetry', "/" + gameType + "/images/button-retry.png");
     this.load.image('grassRegular', "/" + gameType + "/images/grass-regular.png");
     this.load.image('grassWinter', "/" + gameType + "/images/grass-winter.png");
     this.load.image('grassRain', "/" + gameType + "/images/grass-rain.png");
     this.load.image("title", "/" + gameType + "/images/title.png");
     this.load.image("middleAd", "/" + gameType + "/images/middleAd.png");
+	this.load.image("tackled", "/" + gameType + "/images/tackled.png");
 
     this.load.spritesheet(
       "playerOne", "/" + gameType + "/images/player-one.png",
       { frameWidth: 84, frameHeight: 90 }
     );
 	this.load.spritesheet(
+      "rayLewis", "/" + gameType + "/images/ray-lewis.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+	this.load.spritesheet(
+      "michaelStrahat", "/" + gameType + "/images/michael-strahat.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+	this.load.spritesheet(
+      "johnElway", "/" + gameType + "/images/john-elway.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+	this.load.spritesheet(
+      "jeromeBettis", "/" + gameType + "/images/jerome-bettis.png",
+      { frameWidth: 84, frameHeight: 90 }
+    );
+    this.load.spritesheet(
       "enemyOne", "/" + gameType + "/images/enemy-one.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	
+    this.load.spritesheet(
+      "buttonArrow", "/" + gameType + "/images/button-arrow.png",
+      { frameWidth: 96, frameHeight: 93 }
+    );
+	this.load.spritesheet(
+      "smoke", "/" + gameType + "/images/smoke.png",
+      { frameWidth: 156, frameHeight: 105 }
+    );
+
 
     this.load.audio("bg", "/" + gameType + "/sfx/bgNoise.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/clap.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/collide.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/kittyopening.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/opening.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/slowmo.mp3");
-    this.load.audio("bg", "/" + gameType + "/sfx/swing.mp3");
+    this.load.audio("clap", "/" + gameType + "/sfx/clap.mp3");
+    this.load.audio("collide", "/" + gameType + "/sfx/collide.mp3");
+    this.load.audio("kittyOpening", "/" + gameType + "/sfx/kittyopening.mp3");
+    this.load.audio("opening", "/" + gameType + "/sfx/opening.mp3");
+    this.load.audio("slowmo", "/" + gameType + "/sfx/slowmo.mp3");
+    this.load.audio("swing", "/" + gameType + "/sfx/swing.mp3");
 
     this.load.start();
   }
@@ -92,37 +123,76 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.barFill.scaleX = percents;
   }
   loadComplete() {
-    console.log("loadComplete1");
+	 
     this.initGame1();
-
   }
 
-  initGame1() {    
-    this.anims.create({
-      key: "playerOneAnim",
-      frames: this.anims.generateFrameNumbers("playerOne", {}),
-      frameRate: 24,
-      repeat: -1
-    });
-	this.anims.create({
-      key: "enemyOneAnim",
-      frames: this.anims.generateFrameNumbers("enemyOne", {}),
-      frameRate: 24,
-      repeat: -1
-    });
+  initGame1() {
+    if (!this.anims.exists("playerOneAnim")) {
+		firstLoad = true;
+      this.anims.create({
+        key: "playerOneAnim",
+        frames: this.anims.generateFrameNumbers("playerOne", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "rayLewisAnim",
+        frames: this.anims.generateFrameNumbers("rayLewis", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "michaelStrahatAnim",
+        frames: this.anims.generateFrameNumbers("michaelStrahat", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "johnElwayAnim",
+        frames: this.anims.generateFrameNumbers("johnElway", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "jeromeBettisAnim",
+        frames: this.anims.generateFrameNumbers("jeromeBettis", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+      this.anims.create({
+        key: "enemyOneAnim",
+        frames: this.anims.generateFrameNumbers("enemyOne", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+	  this.anims.create({
+        key: "smokeAnim",
+        frames: this.anims.generateFrameNumbers("smoke", {}),
+        frameRate: 24,
+        repeat: -1
+      });
+      this.anims.create({
+        key: "buttonArrowPos",
+        frames: this.anims.generateFrameNumbers("buttonArrow", {}),
+        frameRate: 24
+      });
+    }
+
     this.cover.destroy();
     this.cover = null;
     this.barFrame.destroy();
     this.barFrame = null;
     this.barFill.destroy();
     this.barFill = null;
-    this.loadingText.destroy();
-    this.loadingText = null;
+    this.loadingTxtImg.destroy();
+    this.loadingTxtImg = null;
 
     this.sound.add("bg").setLoop(true).play();
-
-
-
+    this.kittyOpening = this.sound.add("kittyOpening");
+    this.swing = this.sound.add("swing");
+    this.clap = this.sound.add("clap");
+	this.collide = this.sound.add("collide");
 
     const backgroundTexture = this.textures.get('grassRegular')!;
     const tileSpriteHeight = (backgroundTexture.source[0].height / backgroundTexture.source[0].width) * w;
@@ -133,31 +203,26 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.grassRain = this.add.image(0, this.grassWinter.y - 1 * this.grassRegular.displayHeight / 2, 'grassRain').setOrigin(0, 0.5);
     this.grassRain.setDisplaySize(w, tileSpriteHeight);
 
-    this.title = this.add.image(w / 2, 80, 'title').setOrigin(0.5);
+    this.title = this.add.image(w / 2, -80, 'title').setOrigin(0.5);
     this.title.setScale(0.7);
-    this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Arial', fontSize: 34, color: '#ffffff', align: 'center' });
+    this.moveTitle(80);
+
+    this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.instText.setOrigin(0.5);
+	
+	this.smoke = this.physics.add.sprite(0, 0, "smoke");
 
-    this.player = this.physics.add.sprite(w / 2, h / 2 + 100, "playerOne");
+    this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
     this.player.play("playerOneAnim");
-	
-	
 
-  
-  
-	this.player.setInteractive({ useHandCursor: true }); 
-	this.player.on('pointerdown', this.onPointerDown, this);
+    this.player.setInteractive({ useHandCursor: true });
+    this.player.on('pointerdown', this.onPointerDown, this);
     this.player.on('pointerup', this.onPointerUp, this);
-	
-	
-	
-
-  
-  
 
     this.player.setCollideWorldBounds(true);
 
     this.input.on('pointermove', (pointer) => {
+
       if (pointer.worldX < this.player.x) {
         this.player.angle = -15;
       } else {
@@ -165,47 +230,222 @@ export default class MainSceneRunner extends Phaser.Scene {
       }
     });
 
-    this.enemies = this.physics.add.group();
+    this.btnShop = this.add.image(w / 2, h + 40, 'btnShop').setOrigin(0.5);
+    this.btnShop.setInteractive({ useHandCursor: true });
+    this.btnShop.setScale(0.8);
+    this.btnShop.on('pointerdown', this.onShop, this);
+    this.moveShopBtn(h - 50);
 
-    /*this.time.addEvent({
+
+
+    this.enemies = this.physics.add.group(); 
+
+    this.input.on('pointerdown', this.playKitty, this);
+	
+	this.tackledContainer = this.make.container();
+	this.tackled = this.add.image(w / 2, 20, 'tackled').setOrigin(0.5, 0);
+	
+	this.buttonRetry = this.add.image(w / 2, 185, 'buttonRetry').setOrigin(0.5);
+    this.buttonRetry.setScale(0.7);
+    this.buttonRetry.setInteractive({ useHandCursor: true });
+    this.buttonRetry.on('pointerdown', this.onRetry, this);
+	
+	this.buttonRetryText = this.add.text(this.buttonRetry.x, this.buttonRetry.y, "Retry", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.buttonRetryText.setOrigin(0.5);
+	
+	this.scoreText = this.add.text(w / 2, 280, score, { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
+    this.scoreText.setOrigin(0.5);
+	
+	this.tackledContainer.add([this.tackled, this.buttonRetry, this.buttonRetryText, this.scoreText]);
+	this.tackledContainer.setVisible(false);
+	
+    this.shopContainer = this.make.container();
+    this.shop = this.add.image(w / 2, 20, 'shop').setOrigin(0.5, 0);
+    this.buttonSelect = this.add.image(w / 2, h - 50, 'buttonSelect').setOrigin(0.5);
+    this.buttonSelect.setScale(0.7);
+    this.buttonSelect.setInteractive({ useHandCursor: true });
+    this.buttonSelect.on('pointerdown', this.onSelect, this);
+    this.leftArrow = this.physics.add.sprite(w / 2 - 120, h - 50, "buttonArrow");
+    this.leftArrow.setFrame(0);
+    this.leftArrow.setScale(0.7);
+    this.leftArrow.setInteractive({ useHandCursor: true });
+    this.leftArrow.on('pointerdown', this.onLeft, this);
+    this.rightArrow = this.physics.add.sprite(w / 2 + 120, h - 50, "buttonArrow");
+    this.rightArrow.setFrame(1);
+    this.rightArrow.setScale(0.7);
+    this.rightArrow.setInteractive({ useHandCursor: true });
+    this.rightArrow.on('pointerdown', this.onRight, this);
+	
+	this.touchDowns = 4;
+	this.record = 1;
+	this.shopData = [{actor:"Rookie", msg:"Available",y:0, available:true}, {actor:"Jeremy Bettings", msg:"25 touchdowns\nor\n5 highscore to unlock", y:-14, available:false}, {actor:"Big Ben", msg:"50 touchdowns\nor\n10 highscore to unlock",y:-14, available:false}, {actor:"Mikael Stronghat", msg:"75 touchdowns\nor\n15 highscore to unlock",y:-14, available:false}, {actor:"Bay Newest", msg:"150 touchdowns\nor\n25 highscore to unlock",y:-14, available:false}];
+	
+	this.currShopIndex = 0;
+	
+	this.touchDownText = this.add.text(w / 2 - 80, h / 2 - 72, this.touchDowns, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
+    this.touchDownText.setOrigin(0.5);
+	
+	this.recordText = this.add.text(w / 2 + 80, h / 2 - 72, this.record, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
+    this.recordText.setOrigin(0.5);
+	
+	this.playerNameText = this.add.text(w / 2, h / 2 - 17, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 24, color: '#FCF28D', align: 'center' });
+    this.playerNameText.setOrigin(0.5);
+	
+	this.playerDescText = this.add.text(w / 2, h / 2, this.shopData[this.currShopIndex].msg, { fontFamily: 'Gamer', fontSize: 18, color: '#ffffff', align: 'center' , lineSpacing: -7});
+    this.playerDescText.setOrigin(0.5, 0);
+	
+	
+    this.shopContainer.add([this.shop, this.buttonSelect, this.leftArrow, this.rightArrow, this.touchDownText, this.recordText, this.playerNameText, this.playerDescText]);
+	this.updateShopDisplay();
+    this.shopContainer.setVisible(false);
+	
+
+  }
+  playKitty() {
+	if(firstLoad){
+		firstLoad = false;
+		this.kittyOpening.play();
+	}    
+    this.input.off('pointerdown', this.playKitty, this);
+  }
+  onSelect() {
+    this.instText.setVisible(true);
+    this.clap.play();
+    this.moveTitle(80);
+    this.moveShopBtn(h - 50);
+    this.shopContainer.setVisible(false);
+  }
+  onLeft() {
+    this.swing.play();	
+	this.currShopIndex = (this.currShopIndex - 1 + this.shopData.length) % this.shopData.length;
+	this.updateShopDisplay();
+  }
+  onRight() {
+    this.swing.play();	
+	this.currShopIndex = (this.currShopIndex + 1) % this.shopData.length;
+	this.updateShopDisplay();
+  }
+  updateShopDisplay(){
+	  let currdata = this.shopData[this.currShopIndex];
+	  let actor = this.shopData[this.currShopIndex].actor
+	  this.touchDownText.text = this.touchDowns;
+	  this.recordText.text = this.record;
+	  this.playerNameText.text = actor;
+	  this.playerDescText.text = this.shopData[this.currShopIndex].msg;
+	  this.playerDescText.y = h / 2 + 13 + this.shopData[this.currShopIndex].y;
+	  this.buttonSelect.setVisible(currdata.available);
+	  switch(actor){
+		  case "Rookie":
+		   this.player.setTexture('playerOne');
+		   this.player.anims.play('playerOneAnim', true);
+		  break;
+		  case "Big Ben":
+		   this.player.setTexture('rayLewis');
+		   this.player.anims.play('rayLewisAnim', true);
+		  break;
+		  case "Mikael Stronghat":
+		   this.player.setTexture('michaelStrahat');
+		   this.player.anims.play('michaelStrahatAnim', true);
+		  break;
+		  case "Bay Newest":
+		   this.player.setTexture('johnElway');
+		   this.player.anims.play('johnElwayAnim', true);
+		  break;
+		  case "Jeremy Bettings":
+		   this.player.setTexture('jeromeBettis');
+		   this.player.anims.play('jeromeBettisAnim', true);
+		  break;
+		  
+	  }
+	  
+  }
+  
+  onShop() {
+    this.swing.play();
+    this.moveTitle(-80);
+    this.moveShopBtn(h + 80);
+    this.shopContainer.setVisible(true);
+    this.instText.setVisible(false);
+    console.log("onshop");
+  }
+  moveTitle(yPos) {
+    this.tweens.add({
+      targets: this.title,
+      duration: 2000,
+      ease: 'Back.Out',
+      y: yPos
+    });
+  }
+  moveShopBtn(yPos) {
+    this.tweens.add({
+      targets: this.btnShop,
+      duration: 2000,
+      ease: 'Back.Out',
+      y: yPos
+    });
+  }
+  onPointerDown() {
+    playerClicked = true;
+    this.moveShopBtn(h + 80);
+    this.moveTitle(-80);
+    this.instText.setVisible(false);
+    timerEvent = this.time.addEvent({
       delay: 1000,
       callback: this.spawnEnemy,
       callbackScope: this,
       loop: true,
-    });*/
-
-
+    });
   }
-  onPointerDown(){
-	  this.instText.setVisible(false);
-	 timerEvent = this.time.addEvent({
-     delay: 1000,
-      callback: this.spawnEnemy,
-      callbackScope: this,
-      loop: true,
-    }); 
-  }
-  onPointerUp(){
-	  if (timerEvent) {
-		  timerEvent.destroy();
-		}
+  onPointerUp() {
+    playerClicked = false;
+    if (timerEvent) {
+      timerEvent.destroy();
+    }
   }
   spawnEnemy() {
     const x = Phaser.Math.Between(0, w);
     const enemy = this.enemies.create(x, -50, 'enemyOne');
-	enemy.play("enemyOneAnim");
+    enemy.play("enemyOneAnim");
     enemy.setVelocityY(100);
   }
+  onRetry(){
+	  gameOver = false;
+	  this.scene.restart();
+	  this.player.setPosition(w / 2, h / 2 + 160);
+  }
   onCollision() {
-	this.game.sound.stopAll();
-    
-    this.scene.restart();
+	gameOver = true;
+	if (timerEvent) {
+      timerEvent.destroy();
+    }
+	this.enemies.clear(true, true);
+    this.game.sound.stopAll();
+	this.collide.play();
+	this.smoke.setVisible(true);
+	this.smoke.play("smokeAnim");
+	this.smoke.setPosition(this.player.x, this.player.y);
+	this.player.setVisible(false);
+	this.tackledContainer.setVisible(true);
+    //this.scene.restart();
   }
   update(time, delta) {
+	  if(gameOver){
+		 return; 
+	  }
     let speed = 5;
     let maxOffsetY = 2 * h + 100;
+	/*
+	if(this.enemies){
+		this.enemies.children.iterate(function (enemy) {
+			enemy.rotation = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y);
+			const velocity = this.physics.velocityFromRotation(enemy.rotation, 100);
+			enemy.setVelocity(velocity.x, velocity.y);
+	   }, this);
+	}*/
 
     if (this.grassRegular) {
+	    
+
       let imageHeight = this.grassRegular.displayHeight;
       this.grassRegular.y += speed;
       this.grassWinter.y += speed;
@@ -224,8 +464,10 @@ export default class MainSceneRunner extends Phaser.Scene {
     if (this.player) {
       const pointer = this.input.activePointer;
       if (pointer.isDown) {
-        this.player.x = pointer.x;
-        this.player.y = pointer.y;
+        if (playerClicked) {
+          this.player.x = pointer.x;
+          this.player.y = pointer.y;
+        }
       } else {
         this.player.angle = 0;
       }
