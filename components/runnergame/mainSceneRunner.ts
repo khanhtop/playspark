@@ -66,7 +66,14 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.load.on("progress", this.loadProgress, this);	
     this.load.image('btnShop', "/" + gameType + "/images/btn-shop.png");
     this.load.image('shop', "/" + gameType + "/images/shop.png");
-    this.load.image('buttonSelect', "/" + gameType + "/images/button-select.png");
+	this.load.image('blue', "/" + gameType + "/images/blue.png");
+    this.load.image('shopBg', "/" + gameType + "/images/shopBg.png");
+	this.load.image('coinBase', "/" + gameType + "/images/coinBase.png");
+	this.load.image('coin', "/" + gameType + "/images/coin.png");
+	this.load.image('heartBase', "/" + gameType + "/images/heartBase.png");
+	this.load.image('heart', "/" + gameType + "/images/heart.png");
+	this.load.image('scoreBase', "/" + gameType + "/images/scoreBase.png");
+	this.load.image('powerUp', "/" + gameType + "/images/powerUp.png");
 	this.load.image('buttonRetry', "/" + gameType + "/images/button-retry.png");
     this.load.image('grassRegular', "/" + gameType + "/images/grass-regular.png");
     this.load.image('grassWinter', "/" + gameType + "/images/grass-winter.png");
@@ -206,12 +213,14 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.title = this.add.image(w / 2, -80, 'title').setOrigin(0.5);
     this.title.setScale(0.7);
     this.moveTitle(80);
+	
+	
 
     this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.instText.setOrigin(0.5);
 	
 	this.smoke = this.physics.add.sprite(0, 0, "smoke");
-
+	this.shopContainer = this.make.container();
     this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
     this.player.play("playerOneAnim");
 
@@ -259,12 +268,15 @@ export default class MainSceneRunner extends Phaser.Scene {
 	this.tackledContainer.add([this.tackled, this.buttonRetry, this.buttonRetryText, this.scoreText]);
 	this.tackledContainer.setVisible(false);
 	
-    this.shopContainer = this.make.container();
-    this.shop = this.add.image(w / 2, 20, 'shop').setOrigin(0.5, 0);
-    this.buttonSelect = this.add.image(w / 2, h - 50, 'buttonSelect').setOrigin(0.5);
-    this.buttonSelect.setScale(0.7);
-    this.buttonSelect.setInteractive({ useHandCursor: true });
-    this.buttonSelect.on('pointerdown', this.onSelect, this);
+    
+    this.shop = this.add.image(w / 2, 20, 'shop').setOrigin(0.5, 0).setAlpha(0.7);
+	this.shopBg = this.add.image(w / 2, 20, 'shopBg').setOrigin(0.5, 0);
+	this.blueBar = this.add.image(w / 2, 20, 'blue').setOrigin(0.5).setScale(1.2);
+	this.blueBar.setInteractive({ useHandCursor: true });
+	this.blueBar.on('pointerdown', this.onSelect, this);
+	this.shopText = this.add.text(this.blueBar.x, this.blueBar.y - 2, "SHOP", { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
+    this.shopText.setOrigin(0.5);
+    
     this.leftArrow = this.physics.add.sprite(w / 2 - 120, h - 50, "buttonArrow");
     this.leftArrow.setFrame(0);
     this.leftArrow.setScale(0.7);
@@ -295,9 +307,54 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.playerDescText.setOrigin(0.5, 0);
 	
 	
-    this.shopContainer.add([this.shop, this.buttonSelect, this.leftArrow, this.rightArrow, this.touchDownText, this.recordText, this.playerNameText, this.playerDescText]);
+    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText,  this.leftArrow, this.rightArrow, this.touchDownText, this.recordText, this.playerNameText, this.playerDescText]);
 	this.updateShopDisplay();
     this.shopContainer.setVisible(false);
+	
+	 
+	this.statusBarCon = this.make.container();
+	this.statusBarCon.setDepth(2);
+	this.coinBase = this.add.image(50, 0, 'coinBase').setOrigin(0.5);
+    this.coinBase.setScale(0.4);
+	this.coin = this.add.image(23, 0, 'coin').setOrigin(0.5);
+    this.coin.setScale(1);
+	this.Coinscollected = 450;
+	this.coinsCollectedText = this.add.text(60, -2, this.Coinscollected, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.coinsCollectedText.setOrigin(0.5);
+	
+	this.heartBase = this.add.image(w-50, 0, 'heartBase').setOrigin(0.5);
+	this.heartBase.flipX = true;
+    this.heartBase.setScale(0.4);
+	
+	this.heart = this.add.image(w-23, 0, 'heart').setOrigin(0.5);
+    this.heart.setScale(0.8);
+	
+	this.currLives = 10;
+	this.currLivesText = this.add.text(w-60, -2, this.currLives, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.currLivesText.setOrigin(0.5);
+	
+	this.scoreBase = this.add.image(w/2, 0, 'scoreBase').setOrigin(0.5);
+    this.scoreBase.setScale(0.4);
+	
+	this.currScore = 0;
+	this.currScoreText = this.add.text(w/2, -2, this.currScore, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.currScoreText.setOrigin(0.5);
+	
+	this.powerBase = this.add.image(w-50, 30, 'coinBase').setOrigin(0.45);
+	this.powerBase.flipX = true;
+    this.powerBase.setScale(0.36);
+	
+	this.powerUp = this.add.image(w-17, 30, 'powerUp').setOrigin(0.5);
+    this.powerUp.setScale(0.1);
+	
+	this.currPowers = 0;
+	this.currPowersText = this.add.text(w-60, 28, this.currPowers +"/3", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.currPowersText.setOrigin(0.5);
+	
+	
+	this.statusBarCon.add([this.coinBase, this.coin, this.coinsCollectedText, this.heartBase, this.heart, this.currLivesText, this.scoreBase, this.currScoreText, this.powerBase, this.currPowersText, this.powerUp]);
+	
+	this.moveGameStatusBar(-80);
 	
 
   }
@@ -333,7 +390,8 @@ export default class MainSceneRunner extends Phaser.Scene {
 	  this.playerNameText.text = actor;
 	  this.playerDescText.text = this.shopData[this.currShopIndex].msg;
 	  this.playerDescText.y = h / 2 + 13 + this.shopData[this.currShopIndex].y;
-	  this.buttonSelect.setVisible(currdata.available);
+	  this.shopText.setVisible(currdata.available);
+	  this.blueBar.setVisible(currdata.available);
 	  switch(actor){
 		  case "Rookie":
 		   this.player.setTexture('playerOne');
@@ -368,6 +426,14 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.instText.setVisible(false);
     console.log("onshop");
   }
+  moveGameStatusBar(yPos){
+	  this.tweens.add({
+		  targets: this.statusBarCon,
+		  duration: 2000,
+		  ease: 'Back.Out',
+		  y: yPos
+		});
+  }
   moveTitle(yPos) {
     this.tweens.add({
       targets: this.title,
@@ -388,6 +454,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     playerClicked = true;
     this.moveShopBtn(h + 80);
     this.moveTitle(-80);
+	this.moveGameStatusBar(25);
     this.instText.setVisible(false);
     timerEvent = this.time.addEvent({
       delay: 1000,
@@ -426,6 +493,7 @@ export default class MainSceneRunner extends Phaser.Scene {
 	this.smoke.setPosition(this.player.x, this.player.y);
 	this.player.setVisible(false);
 	this.tackledContainer.setVisible(true);
+	//this.moveGameStatusBar(-80);
     //this.scene.restart();
   }
   update(time, delta) {
