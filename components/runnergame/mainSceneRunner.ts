@@ -24,7 +24,16 @@ let timerEvent;
 let playerClicked = false;
 let firstLoad;
 let gameOver = false;
-let score = 0;
+let gameInProgress = false;
+let score = 0, maxLife = 3;
+let touchdownOccurred = false;
+let gameLevelConfig = [
+  { coins: 3, boosters: 0 },
+  { coins: 5, boosters: 1 },
+  { coins: 6, boosters: 2 },
+  { coins: 8, boosters: 2 },
+  { coins: 10, boosters: 3 }
+];
 
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
@@ -44,16 +53,16 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.load.image('cover', "/" + gameType + "/images/cover.jpg");
     this.load.image('barFill', "/" + gameType + "/images/bar-fill.png");
     this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
-	this.load.image('loading', "/" + gameType + "/images/loading.png");
-	
+    this.load.image('loading', "/" + gameType + "/images/loading.png");
+
   }
   create() {
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     this.cover = this.add.image(0, 0, 'cover').setOrigin(0, 0);
-    this.cover.setDisplaySize(w, h);    
+    this.cover.setDisplaySize(w, h);
 
-	this.loadingTxtImg = this.add.image(w / 2, h / 2 + 20, 'loading');
+    this.loadingTxtImg = this.add.image(w / 2, h / 2 + 20, 'loading');
     this.barFrame = this.add.image(w / 2, h / 2 + 80, 'barFrame');
     this.barFill = this.add.image(0, 0, 'barFill').setOrigin(0, 0);
     this.barFill.setPosition(w / 2 - this.barFill.displayWidth / 2, h / 2 - this.barFill.displayHeight / 2 + 80);
@@ -63,42 +72,44 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   loadAssets() {
     this.load.once("complete", this.loadComplete, this);
-    this.load.on("progress", this.loadProgress, this);	
+    this.load.on("progress", this.loadProgress, this);
+    this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
     this.load.image('btnShop', "/" + gameType + "/images/btn-shop.png");
     this.load.image('shop', "/" + gameType + "/images/shop.png");
-	this.load.image('blue', "/" + gameType + "/images/blue.png");
+    this.load.image('blue', "/" + gameType + "/images/blue.png");
     this.load.image('shopBg', "/" + gameType + "/images/shopBg.png");
-	this.load.image('coinBase', "/" + gameType + "/images/coinBase.png");
-	this.load.image('coin', "/" + gameType + "/images/coin.png");
-	this.load.image('heartBase', "/" + gameType + "/images/heartBase.png");
-	this.load.image('heart', "/" + gameType + "/images/heart.png");
-	this.load.image('scoreBase', "/" + gameType + "/images/scoreBase.png");
-	this.load.image('powerUp', "/" + gameType + "/images/powerUp.png");
-	this.load.image('buttonRetry', "/" + gameType + "/images/button-retry.png");
+    this.load.image('coinBase', "/" + gameType + "/images/coinBase.png");
+    this.load.image('coin', "/" + gameType + "/images/coin.png");
+    this.load.image('heartBase', "/" + gameType + "/images/heartBase.png");
+    this.load.image('heart', "/" + gameType + "/images/heart.png");
+    this.load.image('scoreBase', "/" + gameType + "/images/scoreBase.png");
+    this.load.image('powerBase', "/" + gameType + "/images/powerBase.png");
+    this.load.image('powerUp', "/" + gameType + "/images/powerUp.png");
+    this.load.image('buttonRetry', "/" + gameType + "/images/button-retry.png");
     this.load.image('grassRegular', "/" + gameType + "/images/grass-regular.png");
     this.load.image('grassWinter', "/" + gameType + "/images/grass-winter.png");
     this.load.image('grassRain', "/" + gameType + "/images/grass-rain.png");
     this.load.image("title", "/" + gameType + "/images/title.png");
     this.load.image("middleAd", "/" + gameType + "/images/middleAd.png");
-	this.load.image("tackled", "/" + gameType + "/images/tackled.png");
+    this.load.image("tackled", "/" + gameType + "/images/tackled.png");
 
     this.load.spritesheet(
       "playerOne", "/" + gameType + "/images/player-one.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "rayLewis", "/" + gameType + "/images/ray-lewis.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "michaelStrahat", "/" + gameType + "/images/michael-strahat.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "johnElway", "/" + gameType + "/images/john-elway.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "jeromeBettis", "/" + gameType + "/images/jerome-bettis.png",
       { frameWidth: 84, frameHeight: 90 }
     );
@@ -110,7 +121,7 @@ export default class MainSceneRunner extends Phaser.Scene {
       "buttonArrow", "/" + gameType + "/images/button-arrow.png",
       { frameWidth: 96, frameHeight: 93 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "smoke", "/" + gameType + "/images/smoke.png",
       { frameWidth: 156, frameHeight: 105 }
     );
@@ -130,38 +141,38 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.barFill.scaleX = percents;
   }
   loadComplete() {
-	 
+
     this.initGame1();
   }
 
   initGame1() {
     if (!this.anims.exists("playerOneAnim")) {
-		firstLoad = true;
+      firstLoad = true;
       this.anims.create({
         key: "playerOneAnim",
         frames: this.anims.generateFrameNumbers("playerOne", {}),
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "rayLewisAnim",
         frames: this.anims.generateFrameNumbers("rayLewis", {}),
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "michaelStrahatAnim",
         frames: this.anims.generateFrameNumbers("michaelStrahat", {}),
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "johnElwayAnim",
         frames: this.anims.generateFrameNumbers("johnElway", {}),
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "jeromeBettisAnim",
         frames: this.anims.generateFrameNumbers("jeromeBettis", {}),
         frameRate: 24,
@@ -173,7 +184,7 @@ export default class MainSceneRunner extends Phaser.Scene {
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "smokeAnim",
         frames: this.anims.generateFrameNumbers("smoke", {}),
         frameRate: 24,
@@ -199,7 +210,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.kittyOpening = this.sound.add("kittyOpening");
     this.swing = this.sound.add("swing");
     this.clap = this.sound.add("clap");
-	this.collide = this.sound.add("collide");
+    this.collide = this.sound.add("collide");
 
     const backgroundTexture = this.textures.get('grassRegular')!;
     const tileSpriteHeight = (backgroundTexture.source[0].height / backgroundTexture.source[0].width) * w;
@@ -210,17 +221,25 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.grassRain = this.add.image(0, this.grassWinter.y - 1 * this.grassRegular.displayHeight / 2, 'grassRain').setOrigin(0, 0.5);
     this.grassRain.setDisplaySize(w, tileSpriteHeight);
 
+    this.grassRegularBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5);
+    this.grassWinterBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5).setAlpha(0.6);
+    this.grassRainBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5).setAlpha(0.3);
+
+    this.grassRegularBar.setAlpha(0);
+    this.grassWinterBar.setAlpha(0);
+    this.grassRainBar.setAlpha(0);
+
     this.title = this.add.image(w / 2, -80, 'title').setOrigin(0.5);
     this.title.setScale(0.7);
     this.moveTitle(80);
-	
-	
+
+
 
     this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.instText.setOrigin(0.5);
-	
-	this.smoke = this.physics.add.sprite(0, 0, "smoke");
-	this.shopContainer = this.make.container();
+
+    this.smoke = this.physics.add.sprite(0, 0, "smoke");
+    this.shopContainer = this.make.container();
     this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
     this.player.play("playerOneAnim");
 
@@ -229,6 +248,8 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.player.on('pointerup', this.onPointerUp, this);
 
     this.player.setCollideWorldBounds(true);
+
+
 
     this.input.on('pointermove', (pointer) => {
 
@@ -247,36 +268,36 @@ export default class MainSceneRunner extends Phaser.Scene {
 
 
 
-    this.enemies = this.physics.add.group(); 
+    this.enemies = this.physics.add.group();
 
     this.input.on('pointerdown', this.playKitty, this);
-	
-	this.tackledContainer = this.make.container();
-	this.tackled = this.add.image(w / 2, 20, 'tackled').setOrigin(0.5, 0);
-	
-	this.buttonRetry = this.add.image(w / 2, 185, 'buttonRetry').setOrigin(0.5);
+
+    this.tackledContainer = this.make.container();
+    this.tackled = this.add.image(w / 2, 20, 'tackled').setOrigin(0.5, 0);
+
+    this.buttonRetry = this.add.image(w / 2, 185, 'buttonRetry').setOrigin(0.5);
     this.buttonRetry.setScale(0.7);
     this.buttonRetry.setInteractive({ useHandCursor: true });
     this.buttonRetry.on('pointerdown', this.onRetry, this);
-	
-	this.buttonRetryText = this.add.text(this.buttonRetry.x, this.buttonRetry.y, "Retry", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+
+    this.buttonRetryText = this.add.text(this.buttonRetry.x, this.buttonRetry.y, "Retry", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.buttonRetryText.setOrigin(0.5);
-	
-	this.scoreText = this.add.text(w / 2, 280, score, { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
+
+    this.scoreText = this.add.text(w / 2, 280, score, { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
     this.scoreText.setOrigin(0.5);
-	
-	this.tackledContainer.add([this.tackled, this.buttonRetry, this.buttonRetryText, this.scoreText]);
-	this.tackledContainer.setVisible(false);
-	
-    
+
+    this.tackledContainer.add([this.tackled, this.buttonRetry, this.buttonRetryText, this.scoreText]);
+    this.tackledContainer.setVisible(false);
+
+
     this.shop = this.add.image(w / 2, 20, 'shop').setOrigin(0.5, 0).setAlpha(0.7);
-	this.shopBg = this.add.image(w / 2, 20, 'shopBg').setOrigin(0.5, 0);
-	this.blueBar = this.add.image(w / 2, 20, 'blue').setOrigin(0.5).setScale(1.2);
-	this.blueBar.setInteractive({ useHandCursor: true });
-	this.blueBar.on('pointerdown', this.onSelect, this);
-	this.shopText = this.add.text(this.blueBar.x, this.blueBar.y - 2, "SHOP", { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
+    this.shopBg = this.add.image(w / 2, 20, 'shopBg').setOrigin(0.5, 0);
+    this.blueBar = this.add.image(w / 2, 20, 'blue').setOrigin(0.5).setScale(1.2);
+    this.blueBar.setInteractive({ useHandCursor: true });
+    this.blueBar.on('pointerdown', this.onSelect, this);
+    this.shopText = this.add.text(this.blueBar.x, this.blueBar.y - 2, "SHOP", { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
     this.shopText.setOrigin(0.5);
-    
+
     this.leftArrow = this.physics.add.sprite(w / 2 - 120, h - 50, "buttonArrow");
     this.leftArrow.setFrame(0);
     this.leftArrow.setScale(0.7);
@@ -287,82 +308,100 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.rightArrow.setScale(0.7);
     this.rightArrow.setInteractive({ useHandCursor: true });
     this.rightArrow.on('pointerdown', this.onRight, this);
-	
-	this.touchDowns = 4;
-	this.record = 1;
-	this.shopData = [{actor:"Rookie", msg:"Available",y:0, available:true}, {actor:"Jeremy Bettings", msg:"25 touchdowns\nor\n5 highscore to unlock", y:-14, available:false}, {actor:"Big Ben", msg:"50 touchdowns\nor\n10 highscore to unlock",y:-14, available:false}, {actor:"Mikael Stronghat", msg:"75 touchdowns\nor\n15 highscore to unlock",y:-14, available:false}, {actor:"Bay Newest", msg:"150 touchdowns\nor\n25 highscore to unlock",y:-14, available:false}];
-	
-	this.currShopIndex = 0;
-	
-	this.touchDownText = this.add.text(w / 2 - 80, h / 2 - 72, this.touchDowns, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
+
+    this.touchDowns = 4;
+    this.record = 1;
+    this.shopData = [{ actor: "Rookie", msg: "Available", y: 0, available: true }, { actor: "Jeremy Bettings", msg: "25 touchdowns\nor\n5 highscore to unlock", y: -14, available: false }, { actor: "Big Ben", msg: "50 touchdowns\nor\n10 highscore to unlock", y: -14, available: false }, { actor: "Mikael Stronghat", msg: "75 touchdowns\nor\n15 highscore to unlock", y: -14, available: false }, { actor: "Bay Newest", msg: "150 touchdowns\nor\n25 highscore to unlock", y: -14, available: false }];
+
+    this.currShopIndex = 0;
+
+    this.touchDownText = this.add.text(w / 2 - 80, h / 2 - 72, this.touchDowns, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.touchDownText.setOrigin(0.5);
-	
-	this.recordText = this.add.text(w / 2 + 80, h / 2 - 72, this.record, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
+
+    this.recordText = this.add.text(w / 2 + 80, h / 2 - 72, this.record, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.recordText.setOrigin(0.5);
-	
-	this.playerNameText = this.add.text(w / 2, h / 2 - 17, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 24, color: '#FCF28D', align: 'center' });
+
+    this.playerNameText = this.add.text(w / 2, h / 2 - 17, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 24, color: '#FCF28D', align: 'center' });
     this.playerNameText.setOrigin(0.5);
-	
-	this.playerDescText = this.add.text(w / 2, h / 2, this.shopData[this.currShopIndex].msg, { fontFamily: 'Gamer', fontSize: 18, color: '#ffffff', align: 'center' , lineSpacing: -7});
+
+    this.playerDescText = this.add.text(w / 2, h / 2, this.shopData[this.currShopIndex].msg, { fontFamily: 'Gamer', fontSize: 18, color: '#ffffff', align: 'center', lineSpacing: -7 });
     this.playerDescText.setOrigin(0.5, 0);
-	
-	
-    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText,  this.leftArrow, this.rightArrow, this.touchDownText, this.recordText, this.playerNameText, this.playerDescText]);
-	this.updateShopDisplay();
+
+
+    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText, this.leftArrow, this.rightArrow, this.touchDownText, this.recordText, this.playerNameText, this.playerDescText]);
+    this.updateShopDisplay();
     this.shopContainer.setVisible(false);
-	
-	 
-	this.statusBarCon = this.make.container();
-	this.statusBarCon.setDepth(2);
-	this.coinBase = this.add.image(50, 0, 'coinBase').setOrigin(0.5);
+
+
+    this.statusBarCon = this.make.container();
+    this.statusBarCon.setDepth(2);
+    this.coinBase = this.add.image(50, 0, 'coinBase').setOrigin(0.5);
     this.coinBase.setScale(0.4);
-	this.coin = this.add.image(23, 0, 'coin').setOrigin(0.5);
+    this.coin = this.add.image(23, 0, 'coin').setOrigin(0.5);
     this.coin.setScale(1);
-	this.Coinscollected = 450;
-	this.coinsCollectedText = this.add.text(60, -2, this.Coinscollected, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.Coinscollected = 450;
+    this.coinsCollectedText = this.add.text(60, -2, this.Coinscollected, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.coinsCollectedText.setOrigin(0.5);
-	
-	this.heartBase = this.add.image(w-50, 0, 'heartBase').setOrigin(0.5);
-	this.heartBase.flipX = true;
+
+    this.heartBase = this.add.image(w - 50, 0, 'heartBase').setOrigin(0.5);
+    this.heartBase.flipX = true;
     this.heartBase.setScale(0.4);
-	
-	this.heart = this.add.image(w-23, 0, 'heart').setOrigin(0.5);
+
+    this.heart = this.add.image(w - 23, 0, 'heart').setOrigin(0.5);
     this.heart.setScale(0.8);
-	
-	this.currLives = 10;
-	this.currLivesText = this.add.text(w-60, -2, this.currLives, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+
+    this.currLives = maxLife;
+    this.currLivesText = this.add.text(w - 60, -2, this.currLives, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.currLivesText.setOrigin(0.5);
-	
-	this.scoreBase = this.add.image(w/2, 0, 'scoreBase').setOrigin(0.5);
+
+    this.scoreBase = this.add.image(w / 2, 0, 'scoreBase').setOrigin(0.5);
     this.scoreBase.setScale(0.4);
-	
-	this.currScore = 0;
-	this.currScoreText = this.add.text(w/2, -2, this.currScore, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+
+    this.currScore = 0;
+    this.currScoreText = this.add.text(w / 2, -2, this.currScore, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.currScoreText.setOrigin(0.5);
-	
-	this.powerBase = this.add.image(w-50, 30, 'coinBase').setOrigin(0.45);
-	this.powerBase.flipX = true;
+
+    this.powerBase = this.add.image(w - 50, 30, 'powerBase').setOrigin(0.45);
     this.powerBase.setScale(0.36);
-	
-	this.powerUp = this.add.image(w-17, 30, 'powerUp').setOrigin(0.5);
+
+    this.powerUp = this.add.image(w - 17, 30, 'powerUp').setOrigin(0.5);
     this.powerUp.setScale(0.1);
-	
-	this.currPowers = 0;
-	this.currPowersText = this.add.text(w-60, 28, this.currPowers +"/3", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+
+    this.currPowers = 0;
+    this.currPowersText = this.add.text(w - 60, 28, this.currPowers + "/3", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.currPowersText.setOrigin(0.5);
-	
-	
-	this.statusBarCon.add([this.coinBase, this.coin, this.coinsCollectedText, this.heartBase, this.heart, this.currLivesText, this.scoreBase, this.currScoreText, this.powerBase, this.currPowersText, this.powerUp]);
-	
-	this.moveGameStatusBar(-80);
-	
+
+
+    this.statusBarCon.add([this.coinBase, this.coin, this.coinsCollectedText, this.heartBase, this.heart, this.currLivesText, this.scoreBase, this.currScoreText, this.powerBase, this.currPowersText, this.powerUp]);
+
+    this.moveGameStatusBar(-80);
+
+    this.touchDownText = this.add.text(w / 2, 40, 'TOUCHDOWN!', { fontFamily: 'Gamer', fontSize: 74, color: '#ffffff', align: 'center' });
+    this.touchDownText.setOrigin(0.5);
+    this.touchDownText.setDepth(3);
+    this.touchDownText.setAlpha(0);
 
   }
+  handleTouchdown() {
+    console.log("Touchdown!");
+    this.touchDownText.setAlpha(0);
+    this.tweens.add({
+      targets: this.touchDownText,
+      duration: 100,
+      ease: 'Linear',
+      alpha: 1,
+      onComplete: () => {
+        this.time.delayedCall(700, () => {
+          this.touchDownText.setAlpha(0);
+        }, this);
+      }
+    });
+  }
   playKitty() {
-	if(firstLoad){
-		firstLoad = false;
-		this.kittyOpening.play();
-	}    
+    if (firstLoad) {
+      firstLoad = false;
+      this.kittyOpening.play();
+    }
     this.input.off('pointerdown', this.playKitty, this);
   }
   onSelect() {
@@ -373,51 +412,51 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.shopContainer.setVisible(false);
   }
   onLeft() {
-    this.swing.play();	
-	this.currShopIndex = (this.currShopIndex - 1 + this.shopData.length) % this.shopData.length;
-	this.updateShopDisplay();
+    this.swing.play();
+    this.currShopIndex = (this.currShopIndex - 1 + this.shopData.length) % this.shopData.length;
+    this.updateShopDisplay();
   }
   onRight() {
-    this.swing.play();	
-	this.currShopIndex = (this.currShopIndex + 1) % this.shopData.length;
-	this.updateShopDisplay();
+    this.swing.play();
+    this.currShopIndex = (this.currShopIndex + 1) % this.shopData.length;
+    this.updateShopDisplay();
   }
-  updateShopDisplay(){
-	  let currdata = this.shopData[this.currShopIndex];
-	  let actor = this.shopData[this.currShopIndex].actor
-	  this.touchDownText.text = this.touchDowns;
-	  this.recordText.text = this.record;
-	  this.playerNameText.text = actor;
-	  this.playerDescText.text = this.shopData[this.currShopIndex].msg;
-	  this.playerDescText.y = h / 2 + 13 + this.shopData[this.currShopIndex].y;
-	  this.shopText.setVisible(currdata.available);
-	  this.blueBar.setVisible(currdata.available);
-	  switch(actor){
-		  case "Rookie":
-		   this.player.setTexture('playerOne');
-		   this.player.anims.play('playerOneAnim', true);
-		  break;
-		  case "Big Ben":
-		   this.player.setTexture('rayLewis');
-		   this.player.anims.play('rayLewisAnim', true);
-		  break;
-		  case "Mikael Stronghat":
-		   this.player.setTexture('michaelStrahat');
-		   this.player.anims.play('michaelStrahatAnim', true);
-		  break;
-		  case "Bay Newest":
-		   this.player.setTexture('johnElway');
-		   this.player.anims.play('johnElwayAnim', true);
-		  break;
-		  case "Jeremy Bettings":
-		   this.player.setTexture('jeromeBettis');
-		   this.player.anims.play('jeromeBettisAnim', true);
-		  break;
-		  
-	  }
-	  
+  updateShopDisplay() {
+    let currdata = this.shopData[this.currShopIndex];
+    let actor = this.shopData[this.currShopIndex].actor
+    this.touchDownText.text = this.touchDowns;
+    this.recordText.text = this.record;
+    this.playerNameText.text = actor;
+    this.playerDescText.text = this.shopData[this.currShopIndex].msg;
+    this.playerDescText.y = h / 2 + 13 + this.shopData[this.currShopIndex].y;
+    this.shopText.setVisible(currdata.available);
+    this.blueBar.setVisible(currdata.available);
+    switch (actor) {
+      case "Rookie":
+        this.player.setTexture('playerOne');
+        this.player.anims.play('playerOneAnim', true);
+        break;
+      case "Big Ben":
+        this.player.setTexture('rayLewis');
+        this.player.anims.play('rayLewisAnim', true);
+        break;
+      case "Mikael Stronghat":
+        this.player.setTexture('michaelStrahat');
+        this.player.anims.play('michaelStrahatAnim', true);
+        break;
+      case "Bay Newest":
+        this.player.setTexture('johnElway');
+        this.player.anims.play('johnElwayAnim', true);
+        break;
+      case "Jeremy Bettings":
+        this.player.setTexture('jeromeBettis');
+        this.player.anims.play('jeromeBettisAnim', true);
+        break;
+
+    }
+
   }
-  
+
   onShop() {
     this.swing.play();
     this.moveTitle(-80);
@@ -426,13 +465,13 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.instText.setVisible(false);
     console.log("onshop");
   }
-  moveGameStatusBar(yPos){
-	  this.tweens.add({
-		  targets: this.statusBarCon,
-		  duration: 2000,
-		  ease: 'Back.Out',
-		  y: yPos
-		});
+  moveGameStatusBar(yPos) {
+    this.tweens.add({
+      targets: this.statusBarCon,
+      duration: 2000,
+      ease: 'Back.Out',
+      y: yPos
+    });
   }
   moveTitle(yPos) {
     this.tweens.add({
@@ -454,8 +493,9 @@ export default class MainSceneRunner extends Phaser.Scene {
     playerClicked = true;
     this.moveShopBtn(h + 80);
     this.moveTitle(-80);
-	this.moveGameStatusBar(25);
+    this.moveGameStatusBar(25);
     this.instText.setVisible(false);
+    gameInProgress = true;
     timerEvent = this.time.addEvent({
       delay: 1000,
       callback: this.spawnEnemy,
@@ -475,46 +515,49 @@ export default class MainSceneRunner extends Phaser.Scene {
     enemy.play("enemyOneAnim");
     enemy.setVelocityY(100);
   }
-  onRetry(){
-	  gameOver = false;
-	  this.scene.restart();
-	  this.player.setPosition(w / 2, h / 2 + 160);
+  onRetry() {
+    gameOver = false;
+
+    this.scene.restart();
+    this.player.setPosition(w / 2, h / 2 + 160);
   }
   onCollision() {
-	gameOver = true;
-	if (timerEvent) {
+    gameOver = true;
+    gameInProgress = false;
+    if (timerEvent) {
       timerEvent.destroy();
     }
-	this.enemies.clear(true, true);
+    this.enemies.clear(true, true);
     this.game.sound.stopAll();
-	this.collide.play();
-	this.smoke.setVisible(true);
-	this.smoke.play("smokeAnim");
-	this.smoke.setPosition(this.player.x, this.player.y);
-	this.player.setVisible(false);
-	this.tackledContainer.setVisible(true);
-	//this.moveGameStatusBar(-80);
+    this.collide.play();
+    this.smoke.setVisible(true);
+    this.smoke.play("smokeAnim");
+    this.smoke.setPosition(this.player.x, this.player.y);
+    this.player.setVisible(false);
+    this.tackledContainer.setVisible(true);
+    //this.moveGameStatusBar(-80);
     //this.scene.restart();
   }
   update(time, delta) {
-	  if(gameOver){
-		 return; 
-	  }
+    if (gameOver) {
+      return;
+    }
     let speed = 5;
     let maxOffsetY = 2 * h + 100;
-	/*
-	if(this.enemies){
-		this.enemies.children.iterate(function (enemy) {
-			enemy.rotation = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y);
-			const velocity = this.physics.velocityFromRotation(enemy.rotation, 100);
-			enemy.setVelocity(velocity.x, velocity.y);
-	   }, this);
-	}*/
+    /*
+    if(this.enemies){
+      this.enemies.children.iterate(function (enemy) {
+        enemy.rotation = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y);
+        const velocity = this.physics.velocityFromRotation(enemy.rotation, 100);
+        enemy.setVelocity(velocity.x, velocity.y);
+       }, this);
+    }*/
 
     if (this.grassRegular) {
-	    
+
 
       let imageHeight = this.grassRegular.displayHeight;
+      let halfImageHeight = imageHeight / 2;
       this.grassRegular.y += speed;
       this.grassWinter.y += speed;
       this.grassRain.y += speed;
@@ -528,6 +571,23 @@ export default class MainSceneRunner extends Phaser.Scene {
       if (this.grassRain.y > maxOffsetY) {
         this.grassRain.y = this.grassWinter.y - imageHeight;
       }
+      this.grassRegularBar.y = this.grassRegular.y + halfImageHeight;
+      this.grassWinterBar.y = this.grassWinter.y + halfImageHeight;
+      this.grassRainBar.y = this.grassRain.y + halfImageHeight;
+      if (gameInProgress) {
+        if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassRegularBar.getBounds()) ||
+          Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassWinterBar.getBounds()) ||
+          Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassRainBar.getBounds())) {
+          if (!touchdownOccurred) {
+            touchdownOccurred = true;
+            this.handleTouchdown();
+          }
+        } else {
+          touchdownOccurred = false;
+        }
+      }
+
+
     }
     if (this.player) {
       const pointer = this.input.activePointer;
@@ -553,6 +613,7 @@ export default class MainSceneRunner extends Phaser.Scene {
         this.player.angle = 0;
       }
 
+
       this.physics.world.collide(
         this.player,
         this.enemies,
@@ -560,6 +621,8 @@ export default class MainSceneRunner extends Phaser.Scene {
         null,
         this
       );
+
+
 
 
     }
