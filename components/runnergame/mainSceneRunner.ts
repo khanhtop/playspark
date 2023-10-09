@@ -34,6 +34,7 @@ let gameLevelConfig = [
   { coins: 8, boosters: 2 },
   { coins: 10, boosters: 3 }
 ];
+let touchDownCount = 0;
 
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
@@ -235,7 +236,7 @@ export default class MainSceneRunner extends Phaser.Scene {
 
 
 
-    this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
+    this.instText = this.add.text(w / 2, h / 2 + 70, 'Hold player\nto start', { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.instText.setOrigin(0.5);
 
     this.smoke = this.physics.add.sprite(0, 0, "smoke");
@@ -252,12 +253,14 @@ export default class MainSceneRunner extends Phaser.Scene {
 
 
     this.input.on('pointermove', (pointer) => {
-
-      if (pointer.worldX < this.player.x) {
-        this.player.angle = -15;
-      } else {
-        this.player.angle = 15;
-      }
+		if(gameInProgress){
+			if (pointer.worldX < this.player.x) {
+				this.player.angle = -15;
+			 } else {
+				this.player.angle = 15;
+			 }
+		}
+      
     });
 
     this.btnShop = this.add.image(w / 2, h + 40, 'btnShop').setOrigin(0.5);
@@ -290,45 +293,49 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.tackledContainer.setVisible(false);
 
 
-    this.shop = this.add.image(w / 2, 20, 'shop').setOrigin(0.5, 0).setAlpha(0.7);
-    this.shopBg = this.add.image(w / 2, 20, 'shopBg').setOrigin(0.5, 0);
-    this.blueBar = this.add.image(w / 2, 20, 'blue').setOrigin(0.5).setScale(1.2);
+    this.shop = this.add.image(w / 2, 80, 'shop').setOrigin(0.5, 0).setAlpha(0.7);
+    this.shopBg = this.add.image(w / 2, 135, 'shopBg').setOrigin(0.5, 0).setScale(0.75);
+    this.blueBar = this.add.image(w / 2, 80, 'blue').setOrigin(0.5).setScale(1.2);
     this.blueBar.setInteractive({ useHandCursor: true });
     this.blueBar.on('pointerdown', this.onSelect, this);
     this.shopText = this.add.text(this.blueBar.x, this.blueBar.y - 2, "SHOP", { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
     this.shopText.setOrigin(0.5);
 
-    this.leftArrow = this.physics.add.sprite(w / 2 - 120, h - 50, "buttonArrow");
+    this.leftArrow = this.physics.add.sprite(w / 2 - 120, h /2 - 10, "buttonArrow");
     this.leftArrow.setFrame(0);
-    this.leftArrow.setScale(0.7);
+    this.leftArrow.setScale(0.5);
     this.leftArrow.setInteractive({ useHandCursor: true });
     this.leftArrow.on('pointerdown', this.onLeft, this);
-    this.rightArrow = this.physics.add.sprite(w / 2 + 120, h - 50, "buttonArrow");
+    this.rightArrow = this.physics.add.sprite(w / 2 + 120, this.leftArrow.y, "buttonArrow");
     this.rightArrow.setFrame(1);
-    this.rightArrow.setScale(0.7);
+    this.rightArrow.setScale(0.5);
     this.rightArrow.setInteractive({ useHandCursor: true });
     this.rightArrow.on('pointerdown', this.onRight, this);
 
     this.touchDowns = 4;
     this.record = 1;
-    this.shopData = [{ actor: "Rookie", msg: "Available", y: 0, available: true }, { actor: "Jeremy Bettings", msg: "25 touchdowns\nor\n5 highscore to unlock", y: -14, available: false }, { actor: "Big Ben", msg: "50 touchdowns\nor\n10 highscore to unlock", y: -14, available: false }, { actor: "Mikael Stronghat", msg: "75 touchdowns\nor\n15 highscore to unlock", y: -14, available: false }, { actor: "Bay Newest", msg: "150 touchdowns\nor\n25 highscore to unlock", y: -14, available: false }];
+    this.shopData = [{ actor: "Rookie", coins: 0, touchdowns: 0, y: 0 }, { actor: "Jeremy\nBettings", coins: 5, touchdowns: 25, y: -14 }, { actor: "Big\nBen", coins: 10, touchdowns: 50, y: -14 }, { actor: "Mikael\nStronghat", coins: 15, touchdowns: 75, y: -14 }, { actor: "Bay\nNewest", coins: 25, touchdowns: 150, y: -14 }];
 
     this.currShopIndex = 0;
+    
 
-    this.touchDownText = this.add.text(w / 2 - 80, h / 2 - 72, this.touchDowns, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
-    this.touchDownText.setOrigin(0.5);
-
-    this.recordText = this.add.text(w / 2 + 80, h / 2 - 72, this.record, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
-    this.recordText.setOrigin(0.5);
-
-    this.playerNameText = this.add.text(w / 2, h / 2 - 17, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 24, color: '#FCF28D', align: 'center' });
+    this.playerNameText = this.add.text(w / 2, h / 2 - 100, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.playerNameText.setOrigin(0.5);
+	
+	this.shopCoinBase = this.add.image(w / 2, h / 2 + 45, 'heartBase').setOrigin(0.5);    
+    this.shopCoinBase.setScale(0.4);
+	this.shopCoin = this.add.image(this.shopCoinBase. x - 27, this.shopCoinBase.y - 1, 'coin').setOrigin(0.5);
+    this.shopCoin.setScale(0.4);
+	
+	
+    this.shopCoinValueText = this.add.text(this.shopCoinBase. x + 3, this.shopCoinBase.y -2, 0 , { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.shopCoinValueText.setOrigin(0.5);
 
-    this.playerDescText = this.add.text(w / 2, h / 2, this.shopData[this.currShopIndex].msg, { fontFamily: 'Gamer', fontSize: 18, color: '#ffffff', align: 'center', lineSpacing: -7 });
-    this.playerDescText.setOrigin(0.5, 0);
+    this.playerTouchdownText = this.add.text(w / 2, h / 2 + 60, this.shopData[this.currShopIndex].touchdowns, { fontFamily: 'Gamer', fontSize: 22, color: '#ffffff', align: 'center', lineSpacing: 4 });
+    this.playerTouchdownText.setOrigin(0.5, 0);
 
 
-    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText, this.leftArrow, this.rightArrow, this.touchDownText, this.recordText, this.playerNameText, this.playerDescText]);
+    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText, this.leftArrow, this.rightArrow,  this.playerNameText, this.shopCoinBase, this.shopCoin, this.shopCoinValueText,  this.playerTouchdownText]);
     this.updateShopDisplay();
     this.shopContainer.setVisible(false);
 
@@ -339,7 +346,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.coinBase.setScale(0.4);
     this.coin = this.add.image(23, 0, 'coin').setOrigin(0.5);
     this.coin.setScale(1);
-    this.Coinscollected = 450;
+    this.Coinscollected = 0;
     this.coinsCollectedText = this.add.text(60, -2, this.Coinscollected, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.coinsCollectedText.setOrigin(0.5);
 
@@ -385,6 +392,7 @@ export default class MainSceneRunner extends Phaser.Scene {
   handleTouchdown() {
     console.log("Touchdown!");
     this.touchDownText.setAlpha(0);
+	
     this.tweens.add({
       targets: this.touchDownText,
       duration: 100,
@@ -393,6 +401,7 @@ export default class MainSceneRunner extends Phaser.Scene {
       onComplete: () => {
         this.time.delayedCall(700, () => {
           this.touchDownText.setAlpha(0);
+		  touchDownCount++;
         }, this);
       }
     });
@@ -409,7 +418,11 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.clap.play();
     this.moveTitle(80);
     this.moveShopBtn(h - 50);
+	this.moveGameStatusBar(-80);
     this.shopContainer.setVisible(false);
+	this.player.on('pointerdown', this.onPointerDown, this);
+    this.player.on('pointerup', this.onPointerUp, this);
+	this.player.setInteractive({ useHandCursor: true });
   }
   onLeft() {
     this.swing.play();
@@ -424,31 +437,35 @@ export default class MainSceneRunner extends Phaser.Scene {
   updateShopDisplay() {
     let currdata = this.shopData[this.currShopIndex];
     let actor = this.shopData[this.currShopIndex].actor
-    this.touchDownText.text = this.touchDowns;
-    this.recordText.text = this.record;
+    
     this.playerNameText.text = actor;
-    this.playerDescText.text = this.shopData[this.currShopIndex].msg;
-    this.playerDescText.y = h / 2 + 13 + this.shopData[this.currShopIndex].y;
-    this.shopText.setVisible(currdata.available);
-    this.blueBar.setVisible(currdata.available);
+    this.playerTouchdownText.text = "OR\n"+this.shopData[this.currShopIndex].touchdowns + " TOUCHDOWNS";
+    this.shopCoinValueText.text = this.shopData[this.currShopIndex].coins;
+	let showShopBtn = false;
+	if(this.Coinscollected >= this.shopData[this.currShopIndex].coins || touchDownCount >= this.shopData[this.currShopIndex].touchdowns){
+		showShopBtn = true;
+	}
+    this.shopText.setVisible(showShopBtn);
+    this.blueBar.setVisible(showShopBtn);
+	console.log("actor",actor);
     switch (actor) {
       case "Rookie":
         this.player.setTexture('playerOne');
         this.player.anims.play('playerOneAnim', true);
         break;
-      case "Big Ben":
+      case "Big\nBen":
         this.player.setTexture('rayLewis');
         this.player.anims.play('rayLewisAnim', true);
         break;
-      case "Mikael Stronghat":
+      case "Mikael\nStronghat":
         this.player.setTexture('michaelStrahat');
         this.player.anims.play('michaelStrahatAnim', true);
         break;
-      case "Bay Newest":
+      case "Bay\nNewest":
         this.player.setTexture('johnElway');
         this.player.anims.play('johnElwayAnim', true);
         break;
-      case "Jeremy Bettings":
+      case "Jeremy\nBettings":
         this.player.setTexture('jeromeBettis');
         this.player.anims.play('jeromeBettisAnim', true);
         break;
@@ -463,6 +480,11 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.moveShopBtn(h + 80);
     this.shopContainer.setVisible(true);
     this.instText.setVisible(false);
+	this.moveGameStatusBar(25);
+	this.player.setPosition( w / 2, h / 2);
+	this.player.off('pointerdown', this.onPointerDown, this);
+    this.player.off('pointerup', this.onPointerUp, this);
+	this.player.setInteractive({ useHandCursor: false });
     console.log("onshop");
   }
   moveGameStatusBar(yPos) {
