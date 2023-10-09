@@ -32,6 +32,14 @@ export async function getDemo(id) {
       "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
     primaryColor: game.primaryColor ?? "#132257",
     textColor: game.textColor ?? "#FFF",
+    demo: true,
+    leaderboard: [
+      {
+        name: "Demo Player",
+        uid: "demoplayer",
+        score: Math.floor(Math.random() * 10000),
+      },
+    ],
   };
 }
 

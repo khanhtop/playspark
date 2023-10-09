@@ -789,7 +789,7 @@ export default class FallScene extends Phaser.Scene {
       // Calculate the velocity components
       const vx = Math.cos(angle) * velocity;
       const vy = Math.sin(angle) * velocity;
-      console.log(dx, dy)
+      // console.log(dx, dy)
       // Set the player's velocity
       if(dx < -8) {
         if(this.currentAnim != 'playerLeft') {

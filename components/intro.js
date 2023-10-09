@@ -1,3 +1,5 @@
+import ColoredButton from "@/components/forms/colors";
+
 export default function Intro({ data, setStage }) {
   return (
     <div className="h-full w-full relative">
@@ -12,21 +14,27 @@ export default function Intro({ data, setStage }) {
             color: data?.textColor,
             // borderWidth: 3,
           }}
-          className="animate-pulse text-2xl mb-4 px-2 py-1 rounded-lg"
+          className="font-titan font-light animate-pulse text-2xl mb-4 px-2 py-1 rounded-lg"
         >
           {data?.name}
         </h1>
         <button
           onClick={() => setStage(1)}
           style={{
-            backgroundColor: data?.primaryColor,
-            borderColor: data?.textColor,
-            borderWidth: 3,
+            // backgroundColor: data?.primaryColor,
+            // borderColor: data?.textColor,
+            // borderWidth: 3,
             color: data?.textColor,
           }}
-          className="h-12 w-[200px] rounded-full hover:scale-105 transition"
+          className="font-titan  font-light h-[65px] w-[160px] rounded-full hover:scale-105 transition"
         >
-          Start
+          <div className="h-full w-full flex items-center justify-center relative">
+            <img
+              src="/ui/button-blue.png"
+              className="absolute top-0 left-0 h-full w-full"
+            />
+            <p className="z-10 text-2xl">Start</p>
+          </div>
         </button>
       </div>
     </div>

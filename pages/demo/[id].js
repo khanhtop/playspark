@@ -3,9 +3,6 @@ import { getAd, getDemo } from "@/helpers/api";
 import { useEffect } from "react";
 
 export default function Demo({ ad, id }) {
-  useEffect(() => {
-    console.log("DEMO Loaded");
-  }, []);
   return (
     <div className="text-white font-bold ">
       {ad ? <Advert data={ad} /> : <p>{id} - AD NOT FOUND</p>}
