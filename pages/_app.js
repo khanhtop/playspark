@@ -1,6 +1,7 @@
 import { AppWrapper } from "@/helpers/store";
 import "@/styles/globals.css";
 import localFont from "@next/font/local";
+import { Roboto } from "next/font/google";
 
 const titan = localFont({
   src: [
@@ -12,9 +13,18 @@ const titan = localFont({
   variable: "--font-titan",
 });
 
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-roboto",
+  display: "swap",
+});
+
 export default function App({ Component, pageProps }) {
   return (
-    <main className={`${titan.variable} font-sans`}>
+    <main
+      className={`${titan.variable} ${roboto.variable} font-sans font-roboto`}
+    >
       <AppWrapper>
         <Component {...pageProps} />
       </AppWrapper>

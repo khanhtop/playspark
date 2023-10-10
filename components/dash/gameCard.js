@@ -46,7 +46,7 @@ export default function GameCard({
       className="bg-[#000] rounded-lg text-white basis-[300px] p-4"
     >
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg">{game.name}</h3>
+        <h3 className="text-lg font-titan">{game.name}</h3>
         {onDelete && (
           <XMarkIcon
             onClick={() => onDelete()}
@@ -55,7 +55,7 @@ export default function GameCard({
         )}
       </div>
 
-      <h5 className="text-xs mb-4 text-white/75 h-[80px] overflow-ellipsis">
+      <h5 className="font-roboto text-xs mb-4 text-white/75 h-[80px] overflow-ellipsis">
         {game.description}
       </h5>
       <div className="h-[400px]">
@@ -71,7 +71,7 @@ export default function GameCard({
         )}
       </div>
 
-      <div className="flex gap-2 text-sm">
+      <div className="flex gap-2 text-md font-bold">
         <button
           onClick={() => onAdd()}
           disabled={added || saving}

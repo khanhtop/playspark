@@ -1,11 +1,16 @@
-export default function Leaderboard({ data }) {
+export default function Leaderboard({ data, primaryColor, textColor }) {
   return (
-    <div className="py-4 h-full w-full text-black top-0 left-0 w-full h-full flex flex-col items-center">
+    <div className="py-4 h-full w-full overflow-y-scroll text-black top-0 left-0 w-full h-full flex flex-col items-center gap-2">
       {data.map((item, key) => (
-        <div key={key}>
-          <p>
-            {key + 1}: {item.name} {item.score}
-          </p>
+        <div key={key} className="flex w-full px-8 gap-4 items-center">
+          <div
+            style={{ backgroundColor: primaryColor }}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-white"
+          >
+            <p>{key + 1}</p>
+          </div>
+          <p className="flex-1">{item.name}</p>
+          <p className="font-bold">{item.score}</p>
         </div>
       ))}
     </div>

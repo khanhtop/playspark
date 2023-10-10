@@ -13,8 +13,8 @@ export default function Outro({ score, setStage, data, leaderboard }) {
   const context = useAppContext();
 
   return (
-    <div className="bg-white text-black font-titan font-light py-12 h-full w-full relative flex items-center justify-start flex-col">
-      <h1 className="text-2xl mb-4 ">Game Over</h1>
+    <div className="bg-white text-black font-light py-12 h-full w-full relative flex items-center justify-start flex-col">
+      <h1 className="text-2xl mb-4 font-titan ">Game Over</h1>
       <p className="font-bold text-sm">Your Score</p>
       <h1
         style={{ color: data.primaryColor }}
@@ -28,14 +28,20 @@ export default function Outro({ score, setStage, data, leaderboard }) {
         uid={context?.loggedIn?.uid}
       />
       {!context?.loggedIn?.uid && <SignUp data={data} />}
-      {context?.loggedIn?.uid && <Leaderboard data={leaderboard} />}
+      {context?.loggedIn?.uid && (
+        <Leaderboard
+          data={leaderboard}
+          primaryColor={data.primaryColor}
+          textColor={data.textColor}
+        />
+      )}
       <div className="text-white mt-4">
         {!context?.loggedIn?.uid && (
           <p className="text-black/60 text-center">OR</p>
         )}
 
         <button
-          onClick={() => setStage(0)}
+          onClick={() => setStage(3)}
           style={{
             color: data?.textColor,
             backgroundColor: data.primaryColor,

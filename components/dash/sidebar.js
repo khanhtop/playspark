@@ -8,14 +8,16 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
   return (
     <div className="w-[300px] h-full bg-black flex flex-col items-center px-8 pb-8 text-white">
       <img src="/branding/logo2.png" className="-mb-6" />
-      <h3 className="text-sm mb-8">{context.profile?.companyName}</h3>
+      <h3 className="text-sm mb-8 font-roboto">
+        {context.profile?.companyName}
+      </h3>
       <div className="flex-1 w-full overflow-y-scroll">
         <Row
           text="Marketplace"
           selected={selectedPane === 0}
           setSelectedPane={() => setSelectedPane(0)}
         />
-          <Row
+        <Row
           text="My Games"
           selected={selectedPane === 1}
           setSelectedPane={() => setSelectedPane(1)}

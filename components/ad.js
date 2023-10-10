@@ -5,6 +5,7 @@ import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
+import VideoAd from "./videoAd";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -86,6 +87,7 @@ export default function Advert({ data }) {
           leaderboard={leaderboard}
         />
       )}
+      {stage === 3 && <VideoAd onSkip={() => setStage(0)} />}
     </div>
   );
 }
