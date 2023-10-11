@@ -5,6 +5,7 @@ import {
   useImperativeHandle,
   useMemo,
   useState,
+  useRef
 } from "react";
 import MainScene from "./mainScene";
 import FallScene from "./fallScene";
@@ -12,6 +13,7 @@ import FallScene from "./fallScene";
 const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
   const [hasRendered, setHasRendered] = useState(false);
   const memoizedHasRendered = useMemo(() => hasRendered, [hasRendered]);
+  const gameRef = useRef()
   let mainScene;
 
   useImperativeHandle(
@@ -48,20 +50,23 @@ const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
         scene: scene,
       };
 
-      const game = new Phaser.Game(config);
-      game.events.once("ready", () => {
-        mainScene = game.scene.scenes[0];
+      gameRef.current = new Phaser.Game(config);
+      gameRef.current.events.once("ready", () => {
+        mainScene = gameRef.current.scene.scenes[0];
         mainScene.setScoreHandle(handleScore);
       });
 
       console.log("game setup");
 
-      return () => {
-        //console.log('destroyed');
-        //game.destroy(true);
-      };
+
     }
   }, [memoizedHasRendered]);
+
+  useEffect(() => {
+          return () => {
+        gameRef.current.destroy(true);
+      };
+  }, [])
 
   return (
     <div id="game" className={`w-full flex-grow justify-center items-center`}>
