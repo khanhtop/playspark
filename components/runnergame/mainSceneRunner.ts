@@ -35,6 +35,10 @@ let gameLevelConfig = [
   { coins: 10, boosters: 3 }
 ];
 let touchDownCount = 0;
+let isSwiping = false;
+let swipeStartPosition;
+let levelEnemyReleased = 0;
+let levelEnemyAllowed = 4;
 
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
@@ -217,10 +221,13 @@ export default class MainSceneRunner extends Phaser.Scene {
     const tileSpriteHeight = (backgroundTexture.source[0].height / backgroundTexture.source[0].width) * w;
     this.grassRegular = this.add.image(0, 0, 'grassRegular').setOrigin(0, 0.5);
     this.grassRegular.setDisplaySize(w, tileSpriteHeight);
-    this.grassWinter = this.add.image(0, -1 * this.grassRegular.displayHeight, 'grassWinter').setOrigin(0, 0.5);
+    this.grassWinter = this.add.image(0, 0, 'grassWinter').setOrigin(0, 0.5);
     this.grassWinter.setDisplaySize(w, tileSpriteHeight);
-    this.grassRain = this.add.image(0, this.grassWinter.y - 1 * this.grassRegular.displayHeight / 2, 'grassRain').setOrigin(0, 0.5);
+	this.grassWinter.y = this.grassRegular.y - tileSpriteHeight;
+	
+    this.grassRain = this.add.image(0, 0, 'grassRain').setOrigin(0, 0.5);
     this.grassRain.setDisplaySize(w, tileSpriteHeight);
+	this.grassRain.y = this.grassWinter.y - tileSpriteHeight;
 
     this.grassRegularBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5);
     this.grassWinterBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5).setAlpha(0.6);
@@ -243,24 +250,25 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.shopContainer = this.make.container();
     this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
     this.player.play("playerOneAnim");
-
+	this.physics.world.enable(this.player);
     this.player.setInteractive({ useHandCursor: true });
     this.player.on('pointerdown', this.onPointerDown, this);
     this.player.on('pointerup', this.onPointerUp, this);
+	this.player.on('pointermove', this.handleSwipe, this);
 
     this.player.setCollideWorldBounds(true);
 
 
 
     this.input.on('pointermove', (pointer) => {
-		if(gameInProgress){
-			if (pointer.worldX < this.player.x) {
-				this.player.angle = -15;
-			 } else {
-				this.player.angle = 15;
-			 }
-		}
-      
+      if (gameInProgress) {
+        if (pointer.worldX < this.player.x) {
+          //this.player.angle = -15;
+        } else {
+          //this.player.angle = 15;
+        }
+      }
+
     });
 
     this.btnShop = this.add.image(w / 2, h + 40, 'btnShop').setOrigin(0.5);
@@ -301,7 +309,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.shopText = this.add.text(this.blueBar.x, this.blueBar.y - 2, "SHOP", { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
     this.shopText.setOrigin(0.5);
 
-    this.leftArrow = this.physics.add.sprite(w / 2 - 120, h /2 - 10, "buttonArrow");
+    this.leftArrow = this.physics.add.sprite(w / 2 - 120, h / 2 - 10, "buttonArrow");
     this.leftArrow.setFrame(0);
     this.leftArrow.setScale(0.5);
     this.leftArrow.setInteractive({ useHandCursor: true });
@@ -317,25 +325,25 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.shopData = [{ actor: "Rookie", coins: 0, touchdowns: 0, y: 0 }, { actor: "Jeremy\nBettings", coins: 5, touchdowns: 25, y: -14 }, { actor: "Big\nBen", coins: 10, touchdowns: 50, y: -14 }, { actor: "Mikael\nStronghat", coins: 15, touchdowns: 75, y: -14 }, { actor: "Bay\nNewest", coins: 25, touchdowns: 150, y: -14 }];
 
     this.currShopIndex = 0;
-    
+
 
     this.playerNameText = this.add.text(w / 2, h / 2 - 100, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.playerNameText.setOrigin(0.5);
-	
-	this.shopCoinBase = this.add.image(w / 2, h / 2 + 45, 'heartBase').setOrigin(0.5);    
+
+    this.shopCoinBase = this.add.image(w / 2, h / 2 + 45, 'heartBase').setOrigin(0.5);
     this.shopCoinBase.setScale(0.4);
-	this.shopCoin = this.add.image(this.shopCoinBase. x - 27, this.shopCoinBase.y - 1, 'coin').setOrigin(0.5);
+    this.shopCoin = this.add.image(this.shopCoinBase.x - 27, this.shopCoinBase.y - 1, 'coin').setOrigin(0.5);
     this.shopCoin.setScale(0.4);
-	
-	
-    this.shopCoinValueText = this.add.text(this.shopCoinBase. x + 3, this.shopCoinBase.y -2, 0 , { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+
+
+    this.shopCoinValueText = this.add.text(this.shopCoinBase.x + 3, this.shopCoinBase.y - 2, 0, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.shopCoinValueText.setOrigin(0.5);
 
     this.playerTouchdownText = this.add.text(w / 2, h / 2 + 60, this.shopData[this.currShopIndex].touchdowns, { fontFamily: 'Gamer', fontSize: 22, color: '#ffffff', align: 'center', lineSpacing: 4 });
     this.playerTouchdownText.setOrigin(0.5, 0);
 
 
-    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText, this.leftArrow, this.rightArrow,  this.playerNameText, this.shopCoinBase, this.shopCoin, this.shopCoinValueText,  this.playerTouchdownText]);
+    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText, this.leftArrow, this.rightArrow, this.playerNameText, this.shopCoinBase, this.shopCoin, this.shopCoinValueText, this.playerTouchdownText]);
     this.updateShopDisplay();
     this.shopContainer.setVisible(false);
 
@@ -387,12 +395,19 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.touchDownText.setOrigin(0.5);
     this.touchDownText.setDepth(3);
     this.touchDownText.setAlpha(0);
+	
+	this.physics.add.collider(this.player, this.enemies, this.onCollision, null, this);
 
+  }
+  
+  collisionHandler() {
+	  
+	  console.log('Perfect collision detected!');
   }
   handleTouchdown() {
     console.log("Touchdown!");
     this.touchDownText.setAlpha(0);
-	
+
     this.tweens.add({
       targets: this.touchDownText,
       duration: 100,
@@ -401,7 +416,7 @@ export default class MainSceneRunner extends Phaser.Scene {
       onComplete: () => {
         this.time.delayedCall(700, () => {
           this.touchDownText.setAlpha(0);
-		  touchDownCount++;
+          touchDownCount++;
         }, this);
       }
     });
@@ -418,11 +433,11 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.clap.play();
     this.moveTitle(80);
     this.moveShopBtn(h - 50);
-	this.moveGameStatusBar(-80);
+    this.moveGameStatusBar(-80);
     this.shopContainer.setVisible(false);
-	this.player.on('pointerdown', this.onPointerDown, this);
+    this.player.on('pointerdown', this.onPointerDown, this);
     this.player.on('pointerup', this.onPointerUp, this);
-	this.player.setInteractive({ useHandCursor: true });
+    this.player.setInteractive({ useHandCursor: true });
   }
   onLeft() {
     this.swing.play();
@@ -437,17 +452,17 @@ export default class MainSceneRunner extends Phaser.Scene {
   updateShopDisplay() {
     let currdata = this.shopData[this.currShopIndex];
     let actor = this.shopData[this.currShopIndex].actor
-    
+
     this.playerNameText.text = actor;
-    this.playerTouchdownText.text = "OR\n"+this.shopData[this.currShopIndex].touchdowns + " TOUCHDOWNS";
+    this.playerTouchdownText.text = "OR\n" + this.shopData[this.currShopIndex].touchdowns + " TOUCHDOWNS";
     this.shopCoinValueText.text = this.shopData[this.currShopIndex].coins;
-	let showShopBtn = false;
-	if(this.Coinscollected >= this.shopData[this.currShopIndex].coins || touchDownCount >= this.shopData[this.currShopIndex].touchdowns){
-		showShopBtn = true;
-	}
+    let showShopBtn = false;
+    if (this.Coinscollected >= this.shopData[this.currShopIndex].coins || touchDownCount >= this.shopData[this.currShopIndex].touchdowns) {
+      showShopBtn = true;
+    }
     this.shopText.setVisible(showShopBtn);
     this.blueBar.setVisible(showShopBtn);
-	console.log("actor",actor);
+    console.log("actor", actor);
     switch (actor) {
       case "Rookie":
         this.player.setTexture('playerOne');
@@ -480,11 +495,11 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.moveShopBtn(h + 80);
     this.shopContainer.setVisible(true);
     this.instText.setVisible(false);
-	this.moveGameStatusBar(25);
-	this.player.setPosition( w / 2, h / 2);
-	this.player.off('pointerdown', this.onPointerDown, this);
+    this.moveGameStatusBar(25);
+    this.player.setPosition(w / 2, h / 2);
+    this.player.off('pointerdown', this.onPointerDown, this);
     this.player.off('pointerup', this.onPointerUp, this);
-	this.player.setInteractive({ useHandCursor: false });
+    this.player.setInteractive({ useHandCursor: false });
     console.log("onshop");
   }
   moveGameStatusBar(yPos) {
@@ -511,13 +526,16 @@ export default class MainSceneRunner extends Phaser.Scene {
       y: yPos
     });
   }
-  onPointerDown() {
+  onPointerDown(pointer) {
+	isSwiping = true;
+	swipeStartPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
     playerClicked = true;
     this.moveShopBtn(h + 80);
     this.moveTitle(-80);
     this.moveGameStatusBar(25);
     this.instText.setVisible(false);
     gameInProgress = true;
+	
     timerEvent = this.time.addEvent({
       delay: 1000,
       callback: this.spawnEnemy,
@@ -525,17 +543,54 @@ export default class MainSceneRunner extends Phaser.Scene {
       loop: true,
     });
   }
-  onPointerUp() {
+  handleSwipe(pointer) {
+	  if (isSwiping) {
+		let swipeEndPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
+		let swipeVector = swipeEndPosition.subtract(swipeStartPosition);
+		let swipeAngle = Phaser.Math.RadToDeg(Math.atan2(swipeVector.y, swipeVector.x));
+		console.log("swipeAngle",swipeAngle);
+		if(swipeAngle < 60){
+			if (pointer.worldX < this.player.x) {
+			  swipeAngle = -15;
+			} else {
+			  swipeAngle = 15;
+			}
+		}else{
+			if (pointer.worldX < this.player.x) {
+			  swipeAngle = -260;
+			} else {
+			  swipeAngle = 260;
+			}
+		}
+		//console.log("swipeAngle",swipeAngle);
+		this.player.angle = swipeAngle;
+		
+	  }else{
+		  this.player.angle = 0;
+	  }
+  }
+  onPointerUp(pointer) {
+	isSwiping = false;
     playerClicked = false;
     if (timerEvent) {
       timerEvent.destroy();
     }
   }
   spawnEnemy() {
-    const x = Phaser.Math.Between(0, w);
+    const x = Phaser.Math.Between(-w/2, w + w/2);
     const enemy = this.enemies.create(x, -50, 'enemyOne');
     enemy.play("enemyOneAnim");
     enemy.setVelocityY(100);
+	enemy.setScale(Phaser.Math.Between(0.4, 1));
+	enemy.setVelocityY(Phaser.Math.Between(10, 50));
+	this.physics.world.enable(enemy);
+	levelEnemyReleased++;
+	if(levelEnemyReleased == levelEnemyAllowed){
+		if (timerEvent) {
+		  timerEvent.destroy();
+		}
+	}
+	
   }
   onRetry() {
     gameOver = false;
@@ -546,6 +601,7 @@ export default class MainSceneRunner extends Phaser.Scene {
   onCollision() {
     gameOver = true;
     gameInProgress = false;
+	levelEnemyReleased = 0;
     if (timerEvent) {
       timerEvent.destroy();
     }
@@ -566,20 +622,24 @@ export default class MainSceneRunner extends Phaser.Scene {
     }
     let speed = 5;
     let maxOffsetY = 2 * h + 100;
-    /*
-    if(this.enemies){
+	
+	if(this.enemies){
       this.enemies.children.iterate(function (enemy) {
-        enemy.rotation = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y);
-        const velocity = this.physics.velocityFromRotation(enemy.rotation, 100);
-        enemy.setVelocity(velocity.x, velocity.y);
+        enemy.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y)) + 90;
+		this.physics.moveToObject(enemy, this.player, 100);
+        
        }, this);
-    }*/
+	   
+	   
+	  
+    }
+    
 
     if (this.grassRegular) {
 
 
       let imageHeight = this.grassRegular.displayHeight;
-      let halfImageHeight = imageHeight / 2;
+      let shiftImageHeight = imageHeight / 2.5;
       this.grassRegular.y += speed;
       this.grassWinter.y += speed;
       this.grassRain.y += speed;
@@ -593,9 +653,12 @@ export default class MainSceneRunner extends Phaser.Scene {
       if (this.grassRain.y > maxOffsetY) {
         this.grassRain.y = this.grassWinter.y - imageHeight;
       }
-      this.grassRegularBar.y = this.grassRegular.y + halfImageHeight;
-      this.grassWinterBar.y = this.grassWinter.y + halfImageHeight;
-      this.grassRainBar.y = this.grassRain.y + halfImageHeight;
+      //this.grassRegularBar.y = this.grassRegular.y + halfImageHeight;
+      //this.grassWinterBar.y = this.grassWinter.y + halfImageHeight;
+      //this.grassRainBar.y = this.grassRain.y + halfImageHeight;
+	  this.grassRegularBar.y = this.grassRegular.y - shiftImageHeight;
+      this.grassWinterBar.y = this.grassWinter.y - shiftImageHeight;
+      this.grassRainBar.y = this.grassRain.y - shiftImageHeight ;
       if (gameInProgress) {
         if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassRegularBar.getBounds()) ||
           Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassWinterBar.getBounds()) ||
@@ -619,12 +682,12 @@ export default class MainSceneRunner extends Phaser.Scene {
           this.player.y = pointer.y;
         }
       } else {
-        this.player.angle = 0;
+        //this.player.angle = 0;
       }
 
       const cursors = this.input.keyboard.createCursorKeys();
 
-      if (cursors.left.isDown) {
+      /*if (cursors.left.isDown) {
         this.player.setVelocityX(-160);
         this.player.angle = -15;
       } else if (cursors.right.isDown) {
@@ -633,16 +696,16 @@ export default class MainSceneRunner extends Phaser.Scene {
       } else if (!pointer.isDown) {
         this.player.setVelocityX(0);
         this.player.angle = 0;
-      }
+      }*/
 
 
-      this.physics.world.collide(
+      /*this.physics.world.collide(
         this.player,
         this.enemies,
         this.onCollision,
         null,
         this
-      );
+      );*/
 
 
 
