@@ -12,7 +12,7 @@ export default function Embed({ setShowEmbed, id, onClick, link, setLink }) {
       setEmbedCode(
         `<iframe src="https://playspark.co/ad/` +
           id +
-          ` class="h-[663px] w-[375px]"/>`
+          `" style="height: 884px; width: 500px;"/>`
       );
     } else {
       setEmbedCode(`https://playspark.co/ad/` + id);
