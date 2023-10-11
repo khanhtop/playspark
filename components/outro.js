@@ -8,6 +8,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import BannerAd from "./advertising/bannerAd";
 
 export default function Outro({ score, setStage, data, leaderboard }) {
   const context = useAppContext();
@@ -15,7 +16,7 @@ export default function Outro({ score, setStage, data, leaderboard }) {
   return (
     <div className="bg-white text-black font-light py-12 h-full w-full relative flex items-center justify-start flex-col">
       <h1 className="text-2xl mb-4 font-titan ">Game Over</h1>
-      <p className="font-bold text-sm">Your Score</p>
+      <p className="font-bold text-sm font-titan">Your Score</p>
       <h1
         style={{ color: data.primaryColor }}
         className="text-4xl mb-4 font-titan font-light"
@@ -46,10 +47,11 @@ export default function Outro({ score, setStage, data, leaderboard }) {
             color: data?.textColor,
             backgroundColor: data.primaryColor,
           }}
-          className="w-48 h-12 rounded-full mt-4"
+          className="w-48 h-12 mb-48 rounded-full mt-4 font-titan"
         >
           Play Again
         </button>
+        <BannerAd size="large" position="bottom" delay={1000} />
       </div>
     </div>
   );
@@ -66,8 +68,8 @@ function Ranking({ pos, best, uid }) {
         className="animate-bounce h-12 w-12 object-contain"
       />
       <div className="flex-1 flex flex-col items-center justify-center">
-        <p className="text-2xl"># {pos} </p>
-        <p className="flex-1 text-center text-xs">of {best}</p>
+        <p className="text-2xl font-titan"># {pos} </p>
+        <p className="flex-1 text-center text-xs font-titan">of {best}</p>
       </div>
     </div>
   );

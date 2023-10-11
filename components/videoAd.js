@@ -1,3 +1,4 @@
+import { mockVideos } from "@/helpers/mocks";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
@@ -21,7 +22,7 @@ export default function VideoAd({ onSkip }) {
   return (
     <div className="bg-black h-full w-full relative">
       <MuxPlayer
-        playbackId="KNGFc1e3LlWUXKsUa02002Cs1ycALrRmfNuMgpUxk01OLM"
+        playbackId={mockVideos[Math.floor(Math.random() * mockVideos.length)]}
         onLoadedMetadata={(a) => setTotalLength(a.currentTarget.duration)}
         onTimeUpdate={(a) => shouldClaim(a.target.currentTime)}
         className="h-full w-full"

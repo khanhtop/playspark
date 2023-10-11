@@ -1,8 +1,10 @@
 import ColoredButton from "@/components/forms/colors";
+import BannerAd from "./advertising/bannerAd";
 
 export default function Intro({ data, setStage }) {
   return (
     <div className="h-full w-full relative">
+      <BannerAd size="small" position="top" delay={1000} />
       <img
         src={data?.backgroundImage}
         className="absolute top-0 left-0 h-full w-full object-cover"

@@ -7,10 +7,10 @@ export default function Leaderboard({ data, primaryColor, textColor }) {
             style={{ backgroundColor: primaryColor }}
             className="w-8 h-8 rounded-full flex items-center justify-center text-white"
           >
-            <p>{key + 1}</p>
+            <p className="font-titan">{key + 1}</p>
           </div>
           <p className="flex-1">{item.name}</p>
-          <p className="font-bold">{item.score}</p>
+          <p className="font-bold font-titan">{item.score}</p>
         </div>
       ))}
     </div>

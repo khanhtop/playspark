@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRef } from "react";
+import BannerAd from "../advertising/bannerAd";
 
 const MiddlePong = dynamic(() => import("./pongGame"), {
   ssr: false,
@@ -48,11 +49,9 @@ export default function Pong({ data, gameType, callback }) {
       >
         .
       </div>
-      <div className="w-full h-24 bg-white/20 flex items-center justify-center">
-        <img
-          src="/defaults/banner.jpg"
-          className="object-cover h-full w-full"
-        />
+
+      <div className="w-full h-[90px] bg-black flex items-center justify-center">
+        <BannerAd size="small" position="top" delay={250} />
       </div>
       <MiddlePong
         pongRef={childRef}
