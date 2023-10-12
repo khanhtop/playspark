@@ -27,6 +27,8 @@ let gameOver = false;
 let gameInProgress = false;
 let score = 0, maxLife = 3;
 let touchdownOccurred = false;
+//let touchdownOccurred = false;
+//let touchdownOccurred = false;
 let gameLevelConfig = [
   { coins: 3, boosters: 0 },
   { coins: 5, boosters: 1 },
@@ -39,6 +41,7 @@ let isSwiping = false;
 let swipeStartPosition;
 let levelEnemyReleased = 0;
 let levelEnemyAllowed = 4;
+let currRandomPoints = [];
 
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
@@ -280,6 +283,8 @@ export default class MainSceneRunner extends Phaser.Scene {
 
 
     this.enemies = this.physics.add.group();
+	this.coins = this.physics.add.group();
+	this.boosters = this.physics.add.group();
 
     this.input.on('pointerdown', this.playKitty, this);
 
@@ -354,8 +359,8 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.coinBase.setScale(0.4);
     this.coin = this.add.image(23, 0, 'coin').setOrigin(0.5);
     this.coin.setScale(1);
-    this.Coinscollected = 0;
-    this.coinsCollectedText = this.add.text(60, -2, this.Coinscollected, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.coinscollected = 0;
+    this.coinsCollectedText = this.add.text(60, -2, this.coinscollected, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.coinsCollectedText.setOrigin(0.5);
 
     this.heartBase = this.add.image(w - 50, 0, 'heartBase').setOrigin(0.5);
@@ -397,6 +402,10 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.touchDownText.setAlpha(0);
 	
 	this.physics.add.collider(this.player, this.enemies, this.onCollision, null, this);
+	
+	this.physics.add.collider(this.player, this.coins, this.collectCoin, null, this);
+	
+	this.physics.add.collider(this.player, this.boosters, this.collectBooster, null, this);
 
   }
   
@@ -457,7 +466,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.playerTouchdownText.text = "OR\n" + this.shopData[this.currShopIndex].touchdowns + " TOUCHDOWNS";
     this.shopCoinValueText.text = this.shopData[this.currShopIndex].coins;
     let showShopBtn = false;
-    if (this.Coinscollected >= this.shopData[this.currShopIndex].coins || touchDownCount >= this.shopData[this.currShopIndex].touchdowns) {
+    if (this.coinscollected >= this.shopData[this.currShopIndex].coins || touchDownCount >= this.shopData[this.currShopIndex].touchdowns) {
       showShopBtn = true;
     }
     this.shopText.setVisible(showShopBtn);
@@ -534,14 +543,40 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.moveTitle(-80);
     this.moveGameStatusBar(25);
     this.instText.setVisible(false);
-    gameInProgress = true;
+    //currRandomPoints = this.generateRandomPoints(15);
+	currRandomPoints = [{x:100, y:150}, {x:150, y:250},{x:400, y:500},{x:250, y:250},{x:300, y:300},{x:350, y:350},{x:400, y:400},{x:250, y:350},{x:450, y:500},{x:200, y:350}]
+	Phaser.Utils.Array.Shuffle(currRandomPoints);
+	console.log("currRandomPoints", currRandomPoints);
+	let posPoints = 0;
+	if(!gameInProgress){
+		timerEvent = this.time.addEvent({
+		  delay: 1000,
+		  callback: this.spawnEnemy,
+		  callbackScope: this,
+		  loop: true,
+		});
+		for (let i = 0; i < 3; i++) {
+			this.addCoin(currRandomPoints[posPoints++]);
+		}
+		for (let i = 0; i < 3; i++) {
+			this.addBooster(currRandomPoints[posPoints++]);
+		}
+	}
+	gameInProgress = true;
 	
-    timerEvent = this.time.addEvent({
-      delay: 1000,
-      callback: this.spawnEnemy,
-      callbackScope: this,
-      loop: true,
-    });
+  }
+  addBooster(pos) {	
+	let booster = this.boosters.create(pos.x, pos.y, 'powerUp');
+	booster.setScale(0.15);
+	this.physics.world.enable(booster);
+	booster.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));    
+    booster.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));	
+  }
+  addCoin(pos) {	
+	let coin = this.coins.create(pos.x, pos.y, 'coin');
+	this.physics.world.enable(coin);
+	coin.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));    
+    coin.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));	
   }
   handleSwipe(pointer) {
 	  if (isSwiping) {
@@ -592,11 +627,66 @@ export default class MainSceneRunner extends Phaser.Scene {
 	}
 	
   }
+  generateRandomPoints(numPoints) {
+  var points = [];
+
+  while (points.length < numPoints) {
+    var x = Phaser.Math.Between(100, w - 100);
+    var y = Phaser.Math.Between(100, h - 100);
+
+    
+    var isValid = points.every(function (existingPoint) {
+      var distance = Phaser.Math.Distance.Between(x, y, existingPoint.x, existingPoint.y);
+      return distance >= 80;
+    });
+
+    
+    if (isValid) {
+      points.push({ x: x, y: y });
+    }
+  }
+
+  return points;
+}
   onRetry() {
     gameOver = false;
 
     this.scene.restart();
     this.player.setPosition(w / 2, h / 2 + 160);
+  }
+  collectCoin(player, coin){
+	  console.log("coin collected");	  
+	  this.tweens.add({
+        targets: coin,
+        alpha: 0,
+        scaleX: 2,
+        scaleY: 2,
+        duration: 500,
+        ease: 'Power1',
+        onComplete: function () {          
+          this.coins.remove(coin);          
+          coin.destroy();
+		  this.coinscollected++;
+		  this.coinsCollectedText.text = this.coinscollected;
+        },
+        callbackScope: this
+      });
+  }
+  collectBooster(player, booster){
+	  console.log("booster collected");	  
+	  this.tweens.add({
+        targets: booster,
+        alpha: 0,
+        scaleX: 0,
+        scaleY: 0,
+        duration: 500,
+        ease: 'Power2',
+        onComplete: function () {          
+          this.boosters.remove(booster);          
+          booster.destroy();
+        },
+        callbackScope: this
+      });
   }
   onCollision() {
     gameOver = true;
@@ -606,6 +696,8 @@ export default class MainSceneRunner extends Phaser.Scene {
       timerEvent.destroy();
     }
     this.enemies.clear(true, true);
+	this.coins.clear(true, true);
+	this.boosters.clear(true, true);
     this.game.sound.stopAll();
     this.collide.play();
     this.smoke.setVisible(true);
@@ -622,7 +714,22 @@ export default class MainSceneRunner extends Phaser.Scene {
     }
     let speed = 5;
     let maxOffsetY = 2 * h + 100;
-	
+	if(this.boosters){
+		this.boosters.getChildren().forEach(function (booster) {			
+			let velocity = booster.getData('velocity');
+			let offset = booster.getData('offset');
+			booster.y = booster.y + Math.sin(offset) * 0.5;
+			booster.setData('offset', offset + velocity);
+		});
+	}
+	if(this.coins){
+		this.coins.getChildren().forEach(function (coin) {			
+			let velocity = coin.getData('velocity');
+			let offset = coin.getData('offset');
+			coin.y = coin.y + Math.sin(offset) * 0.5;
+			coin.setData('offset', offset + velocity);
+		});
+	}
 	if(this.enemies){
       this.enemies.children.iterate(function (enemy) {
         enemy.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y)) + 90;
