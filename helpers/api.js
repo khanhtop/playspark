@@ -1,5 +1,5 @@
 //import Pong from ;
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
 import dynamic from "next/dynamic";
 import { firestore } from "./firebase";
 import { games } from "./games";
@@ -58,4 +58,12 @@ export function getGame(id, data, callback) {
   if (id === 7) {
     return <Runner data={data} gameType="runner" callback={callback} />;
   }
+}
+
+export function incrementPlayCount(tournamentId, gameType = "freemium") {
+  const key =
+    gameType === "freemium" ? "freemiumPlayCount" : "premiumPlayCount";
+  updateDoc(doc(firestore, "tournaments", tournamentId), {
+    [key]: increment(1),
+  });
 }

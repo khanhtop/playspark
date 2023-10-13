@@ -22,6 +22,11 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           selected={selectedPane === 1}
           setSelectedPane={() => setSelectedPane(1)}
         />
+        <Row
+          text="Usage"
+          selected={selectedPane === 2}
+          setSelectedPane={() => setSelectedPane(2)}
+        />
       </div>
       <Button onClick={() => logout()} className="w-full">
         Logout

@@ -11,14 +11,6 @@ export default function MyGames({}) {
   const [demo, setDemo] = useState();
   const [showEmbed, setShowEmbed] = useState();
 
-  const showEmbedCode = (id) => {
-    // setLink(
-    //   `<iframe src="https://playspark.co/ad/` +
-    //     id +
-    //     ` class="h-[663px] w-[375px]"/>`
-    // );
-  };
-
   const deleteGame = async (item) => {
     if (
       confirm(

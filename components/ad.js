@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getGame } from "@/helpers/api";
+import { getGame, incrementPlayCount } from "@/helpers/api";
 import dynamic from "next/dynamic";
 import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
@@ -20,6 +20,10 @@ export default function Advert({ data }) {
 
   const callback = (score) => {
     setScore(score);
+    if (!data.demo) {
+      console.log("Incrementing Plays");
+      incrementPlayCount(data.tournamentId.toString(), "freemium");
+    }
     setStage(2);
   };
 
