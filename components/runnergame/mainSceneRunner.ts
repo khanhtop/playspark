@@ -27,6 +27,7 @@ let gameOver = false;
 let gameInProgress = false;
 let score = 0, maxLife = 3;
 let touchdownOccurred = false;
+
 //let touchdownOccurred = false;
 //let touchdownOccurred = false;
 let gameLevelConfig = [
@@ -226,11 +227,11 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.grassRegular.setDisplaySize(w, tileSpriteHeight);
     this.grassWinter = this.add.image(0, 0, 'grassWinter').setOrigin(0, 0.5);
     this.grassWinter.setDisplaySize(w, tileSpriteHeight);
-	this.grassWinter.y = this.grassRegular.y - tileSpriteHeight;
-	
+    this.grassWinter.y = this.grassRegular.y - tileSpriteHeight;
+
     this.grassRain = this.add.image(0, 0, 'grassRain').setOrigin(0, 0.5);
     this.grassRain.setDisplaySize(w, tileSpriteHeight);
-	this.grassRain.y = this.grassWinter.y - tileSpriteHeight;
+    this.grassRain.y = this.grassWinter.y - tileSpriteHeight;
 
     this.grassRegularBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5);
     this.grassWinterBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5).setAlpha(0.6);
@@ -252,12 +253,13 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.smoke = this.physics.add.sprite(0, 0, "smoke");
     this.shopContainer = this.make.container();
     this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
+    this.player.setData('tackled', false);
     this.player.play("playerOneAnim");
-	this.physics.world.enable(this.player);
+    this.physics.world.enable(this.player);
     this.player.setInteractive({ useHandCursor: true });
     this.player.on('pointerdown', this.onPointerDown, this);
     this.player.on('pointerup', this.onPointerUp, this);
-	this.player.on('pointermove', this.handleSwipe, this);
+    this.player.on('pointermove', this.handleSwipe, this);
 
     this.player.setCollideWorldBounds(true);
 
@@ -283,8 +285,8 @@ export default class MainSceneRunner extends Phaser.Scene {
 
 
     this.enemies = this.physics.add.group();
-	this.coins = this.physics.add.group();
-	this.boosters = this.physics.add.group();
+    this.coins = this.physics.add.group();
+    this.boosters = this.physics.add.group();
 
     this.input.on('pointerdown', this.playKitty, this);
 
@@ -325,7 +327,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.rightArrow.setInteractive({ useHandCursor: true });
     this.rightArrow.on('pointerdown', this.onRight, this);
 
-    this.touchDowns = 4;
+
     this.record = 1;
     this.shopData = [{ actor: "Rookie", coins: 0, touchdowns: 0, y: 0 }, { actor: "Jeremy\nBettings", coins: 5, touchdowns: 25, y: -14 }, { actor: "Big\nBen", coins: 10, touchdowns: 50, y: -14 }, { actor: "Mikael\nStronghat", coins: 15, touchdowns: 75, y: -14 }, { actor: "Bay\nNewest", coins: 25, touchdowns: 150, y: -14 }];
 
@@ -400,18 +402,18 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.touchDownText.setOrigin(0.5);
     this.touchDownText.setDepth(3);
     this.touchDownText.setAlpha(0);
-	
-	this.physics.add.collider(this.player, this.enemies, this.onCollision, null, this);
-	
-	this.physics.add.collider(this.player, this.coins, this.collectCoin, null, this);
-	
-	this.physics.add.collider(this.player, this.boosters, this.collectBooster, null, this);
+
+    this.physics.add.collider(this.player, this.enemies, this.onCollision, null, this);
+
+    this.physics.add.collider(this.player, this.coins, this.collectCoin, null, this);
+
+    this.physics.add.collider(this.player, this.boosters, this.collectBooster, null, this);
 
   }
-  
+
   collisionHandler() {
-	  
-	  console.log('Perfect collision detected!');
+
+    console.log('Perfect collision detected!');
   }
   handleTouchdown() {
     console.log("Touchdown!");
@@ -426,6 +428,8 @@ export default class MainSceneRunner extends Phaser.Scene {
         this.time.delayedCall(700, () => {
           this.touchDownText.setAlpha(0);
           touchDownCount++;
+          this.currScoreText.text = this.currScore = (this.currScore === 0) ? 100 : (this.currScore + (this.currScore * 0.5));
+
         }, this);
       }
     });
@@ -536,175 +540,252 @@ export default class MainSceneRunner extends Phaser.Scene {
     });
   }
   onPointerDown(pointer) {
-	isSwiping = true;
-	swipeStartPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
+    isSwiping = true;
+    swipeStartPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
     playerClicked = true;
     this.moveShopBtn(h + 80);
     this.moveTitle(-80);
     this.moveGameStatusBar(25);
     this.instText.setVisible(false);
-    //currRandomPoints = this.generateRandomPoints(15);
-	currRandomPoints = [{x:100, y:150}, {x:150, y:250},{x:400, y:500},{x:250, y:250},{x:300, y:300},{x:350, y:350},{x:400, y:400},{x:250, y:350},{x:450, y:500},{x:200, y:350}]
-	Phaser.Utils.Array.Shuffle(currRandomPoints);
-	console.log("currRandomPoints", currRandomPoints);
-	let posPoints = 0;
-	if(!gameInProgress){
-		timerEvent = this.time.addEvent({
-		  delay: 1000,
-		  callback: this.spawnEnemy,
-		  callbackScope: this,
-		  loop: true,
-		});
-		for (let i = 0; i < 3; i++) {
-			this.addCoin(currRandomPoints[posPoints++]);
-		}
-		for (let i = 0; i < 3; i++) {
-			this.addBooster(currRandomPoints[posPoints++]);
-		}
-	}
-	gameInProgress = true;
-	
+    //currRandomPoints = this.generateRandomPoints(2250);
+    let baseRandomPoints = [{ x: 288, y: 408 }, { x: 188, y: 175 }, { x: 115, y: 276 }, { x: 288, y: 161 }, { x: 301, y: 305 }, { x: 252, y: 447 }, { x: 228, y: 497 }, { x: 100, y: 228 }, { x: 170, y: 296 }, { x: 232, y: 252 }, { x: 305, y: 111 }, { x: 132, y: 496 }, { x: 247, y: 123 }, { x: 239, y: 182 }, { x: 104, y: 419 }, { x: 202, y: 454 }, { x: 132, y: 336 }, { x: 174, y: 239 }, { x: 111, y: 117 }, { x: 282, y: 258 }, { x: 235, y: 382 }, { x: 178, y: 371 }, { x: 234, y: 316 }, { x: 151, y: 441 }, { x: 165, y: 118 }, { x: 275, y: 350 }, { x: 134, y: 181 }, { x: 278, y: 494 }];
+
+    currRandomPoints = [];
+    let basePointsLength = baseRandomPoints.length;
+    for (let j = 0; j < basePointsLength; j++) {
+      let currPoint = baseRandomPoints[j];
+      let distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, currPoint.x, currPoint.y);
+      if (distance >= 20) {
+        currRandomPoints.push(currPoint);
+      }
+    }
+
+
+    Phaser.Utils.Array.Shuffle(currRandomPoints);
+    console.log("currRandomPoints", currRandomPoints);
+    let posPoints = 0;
+    if (!gameInProgress) {
+      timerEvent = this.time.addEvent({
+        delay: 1000,
+        callback: this.spawnEnemy,
+        callbackScope: this,
+        loop: true,
+      });
+      for (let i = 0; i < 3; i++) {
+        this.addCoin(currRandomPoints[posPoints++]);
+      }
+      for (let i = 0; i < 3; i++) {
+        this.addBooster(currRandomPoints[posPoints++]);
+      }
+    }
+    gameInProgress = true;
+
   }
-  addBooster(pos) {	
-	let booster = this.boosters.create(pos.x, pos.y, 'powerUp');
-	booster.setScale(0.15);
-	this.physics.world.enable(booster);
-	booster.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));    
-    booster.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));	
+  addBooster(pos) {
+    let booster = this.boosters.create(pos.x, pos.y, 'powerUp');
+    booster.setScale(0.15);
+    this.physics.world.enable(booster);
+    booster.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));
+    booster.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));
+    booster.setData('collected', false);
   }
-  addCoin(pos) {	
-	let coin = this.coins.create(pos.x, pos.y, 'coin');
-	this.physics.world.enable(coin);
-	coin.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));    
-    coin.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));	
+  addCoin(pos) {
+    let coin = this.coins.create(pos.x, pos.y, 'coin');
+    this.physics.world.enable(coin);
+    coin.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));
+    coin.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));
+    coin.setData('collected', false);
   }
   handleSwipe(pointer) {
-	  if (isSwiping) {
-		let swipeEndPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
-		let swipeVector = swipeEndPosition.subtract(swipeStartPosition);
-		let swipeAngle = Phaser.Math.RadToDeg(Math.atan2(swipeVector.y, swipeVector.x));
-		console.log("swipeAngle",swipeAngle);
-		if(swipeAngle < 60){
-			if (pointer.worldX < this.player.x) {
-			  swipeAngle = -15;
-			} else {
-			  swipeAngle = 15;
-			}
-		}else{
-			if (pointer.worldX < this.player.x) {
-			  swipeAngle = -260;
-			} else {
-			  swipeAngle = 260;
-			}
-		}
-		//console.log("swipeAngle",swipeAngle);
-		this.player.angle = swipeAngle;
-		
-	  }else{
-		  this.player.angle = 0;
-	  }
+    if (isSwiping) {
+      let swipeEndPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
+      let swipeVector = swipeEndPosition.subtract(swipeStartPosition);
+      let swipeAngle = Phaser.Math.RadToDeg(Math.atan2(swipeVector.y, swipeVector.x));
+      console.log("swipeAngle", swipeAngle);
+      if (swipeAngle < 60) {
+        if (pointer.worldX < this.player.x) {
+          swipeAngle = -15;
+        } else {
+          swipeAngle = 15;
+        }
+      } else {
+        if (pointer.worldX < this.player.x) {
+          swipeAngle = -260;
+        } else {
+          swipeAngle = 260;
+        }
+      }
+      //console.log("swipeAngle",swipeAngle);
+      this.player.angle = swipeAngle;
+
+    } else {
+      this.player.angle = 0;
+    }
   }
   onPointerUp(pointer) {
-	isSwiping = false;
+    isSwiping = false;
     playerClicked = false;
     if (timerEvent) {
       timerEvent.destroy();
     }
   }
   spawnEnemy() {
-    const x = Phaser.Math.Between(-w/2, w + w/2);
+    const x = Phaser.Math.Between(-w / 2, w + w / 2);
     const enemy = this.enemies.create(x, -50, 'enemyOne');
     enemy.play("enemyOneAnim");
     enemy.setVelocityY(100);
-	enemy.setScale(Phaser.Math.Between(0.4, 1));
-	enemy.setVelocityY(Phaser.Math.Between(10, 50));
-	this.physics.world.enable(enemy);
-	levelEnemyReleased++;
-	if(levelEnemyReleased == levelEnemyAllowed){
-		if (timerEvent) {
-		  timerEvent.destroy();
-		}
-	}
-	
+    enemy.setScale(Phaser.Math.Between(0.4, 1));
+    enemy.setVelocityY(Phaser.Math.Between(10, 50));
+    enemy.setData('tackled', false);
+    this.physics.world.enable(enemy);
+    levelEnemyReleased++;
+    if (levelEnemyReleased == levelEnemyAllowed) {
+      if (timerEvent) {
+        timerEvent.destroy();
+      }
+
+    }
+
   }
   generateRandomPoints(numPoints) {
-  var points = [];
+    let points = [];
 
-  while (points.length < numPoints) {
-    var x = Phaser.Math.Between(100, w - 100);
-    var y = Phaser.Math.Between(100, h - 100);
+    for (let j = 0; j < numPoints; j++) {
+      let x = Phaser.Math.Between(100, w - 70);
+      let y = Phaser.Math.Between(100, h - 70);
 
-    
-    var isValid = points.every(function (existingPoint) {
-      var distance = Phaser.Math.Distance.Between(x, y, existingPoint.x, existingPoint.y);
-      return distance >= 80;
-    });
 
-    
-    if (isValid) {
-      points.push({ x: x, y: y });
+      let isValid = points.every(function (existingPoint) {
+        let distance = Phaser.Math.Distance.Between(x, y, existingPoint.x, existingPoint.y);
+        return distance >= 50;
+      });
+
+
+      if (isValid) {
+        points.push({ x: x, y: y });
+      }
     }
-  }
 
-  return points;
-}
+    return points;
+  }
   onRetry() {
     gameOver = false;
 
     this.scene.restart();
     this.player.setPosition(w / 2, h / 2 + 160);
+
+    // this.player.setAlpha(1);
+    //this.player.setScale(1);
+    //this.player.angle = 0;
   }
-  collectCoin(player, coin){
-	  console.log("coin collected");	  
-	  this.tweens.add({
-        targets: coin,
-        alpha: 0,
-        scaleX: 2,
-        scaleY: 2,
-        duration: 500,
-        ease: 'Power1',
-        onComplete: function () {          
-          this.coins.remove(coin);          
-          coin.destroy();
-		  this.coinscollected++;
-		  this.coinsCollectedText.text = this.coinscollected;
-        },
-        callbackScope: this
-      });
-  }
-  collectBooster(player, booster){
-	  console.log("booster collected");	  
-	  this.tweens.add({
-        targets: booster,
-        alpha: 0,
-        scaleX: 0,
-        scaleY: 0,
-        duration: 500,
-        ease: 'Power2',
-        onComplete: function () {          
-          this.boosters.remove(booster);          
-          booster.destroy();
-        },
-        callbackScope: this
-      });
-  }
-  onCollision() {
-    gameOver = true;
-    gameInProgress = false;
-	levelEnemyReleased = 0;
-    if (timerEvent) {
-      timerEvent.destroy();
+  collectCoin(player, coin) {
+    let collected = coin.getData('collected');
+    if (collected) {
+      return;
     }
-    this.enemies.clear(true, true);
-	this.coins.clear(true, true);
-	this.boosters.clear(true, true);
-    this.game.sound.stopAll();
-    this.collide.play();
-    this.smoke.setVisible(true);
-    this.smoke.play("smokeAnim");
-    this.smoke.setPosition(this.player.x, this.player.y);
-    this.player.setVisible(false);
-    this.tackledContainer.setVisible(true);
+    coin.setData('collected', true);
+    console.log("coin collected");
+    this.tweens.add({
+      targets: coin,
+      alpha: 0,
+      scaleX: 2,
+      scaleY: 2,
+      duration: 500,
+      ease: 'Power1',
+      onComplete: function () {
+        this.coins.remove(coin);
+        coin.destroy();
+        this.coinscollected++;
+        this.coinsCollectedText.text = this.coinscollected;
+      },
+      callbackScope: this
+    });
+  }
+  collectBooster(player, booster) {
+    let collected = booster.getData('collected');
+    if (collected) {
+      return;
+    }
+    booster.setData('collected', true);
+    console.log("booster collected");
+    this.tweens.add({
+      targets: booster,
+      alpha: 0,
+      scaleX: 0,
+      scaleY: 0,
+      duration: 500,
+      ease: 'Power2',
+      onComplete: function () {
+        this.boosters.remove(booster);
+        booster.destroy();
+        this.currPowers++;
+        this.currPowersText.text = this.currPowers + "/3";
+      },
+      callbackScope: this
+    });
+  }
+  onCollision(player, enemy) {
+    let tackled = this.player.getData('tackled');
+    if (tackled) {
+      return;
+    }
+    let playerPos = { x: this.player.x, y: this.player.y };
+
+    this.player.setData('tackled', true);
+    this.currLives--;
+    this.currLivesText.text = this.currLives;
+    if (this.currLives > 0) {
+      this.tweens.add({
+        targets: this.player,
+        alpha: 0.5,
+        duration: 500,
+        scaleX: 1.5,
+        scaleY: 1.5,
+        angle: 180,
+        onComplete: function () {
+          this.time.delayedCall(700, () => {
+            this.enemies.clear(true, true);
+            this.player.setAlpha(1);
+            this.player.setScale(1);
+            this.player.angle = 0;
+            this.player.x = playerPos.x;
+            this.player.y = playerPos.y;
+			this.player.setData('tackled', false);
+            levelEnemyReleased = 0;
+			timerEvent = this.time.addEvent({
+				delay: 1000,
+				callback: this.spawnEnemy,
+				callbackScope: this,
+				loop: true,
+			});
+
+          }, this);
+
+        },
+        callbackScope: this
+      });
+    } else {
+      gameOver = true;
+      gameInProgress = false;
+      levelEnemyReleased = 0;
+      if (timerEvent) {
+        timerEvent.destroy();
+      }
+      this.enemies.clear(true, true);
+      this.coins.clear(true, true);
+      this.boosters.clear(true, true);
+      this.game.sound.stopAll();
+      this.collide.play();
+      this.smoke.setVisible(true);
+      this.smoke.play("smokeAnim");
+      this.smoke.setPosition(this.player.x, this.player.y);
+      this.player.setVisible(false);
+      this.tackledContainer.setVisible(true);
+    }
+
+
+
+
     //this.moveGameStatusBar(-80);
     //this.scene.restart();
   }
@@ -714,33 +795,33 @@ export default class MainSceneRunner extends Phaser.Scene {
     }
     let speed = 5;
     let maxOffsetY = 2 * h + 100;
-	if(this.boosters){
-		this.boosters.getChildren().forEach(function (booster) {			
-			let velocity = booster.getData('velocity');
-			let offset = booster.getData('offset');
-			booster.y = booster.y + Math.sin(offset) * 0.5;
-			booster.setData('offset', offset + velocity);
-		});
-	}
-	if(this.coins){
-		this.coins.getChildren().forEach(function (coin) {			
-			let velocity = coin.getData('velocity');
-			let offset = coin.getData('offset');
-			coin.y = coin.y + Math.sin(offset) * 0.5;
-			coin.setData('offset', offset + velocity);
-		});
-	}
-	if(this.enemies){
+    if (this.boosters) {
+      this.boosters.getChildren().forEach(function (booster) {
+        let velocity = booster.getData('velocity');
+        let offset = booster.getData('offset');
+        booster.y = booster.y + Math.sin(offset) * 0.5;
+        booster.setData('offset', offset + velocity);
+      });
+    }
+    if (this.coins) {
+      this.coins.getChildren().forEach(function (coin) {
+        let velocity = coin.getData('velocity');
+        let offset = coin.getData('offset');
+        coin.y = coin.y + Math.sin(offset) * 0.5;
+        coin.setData('offset', offset + velocity);
+      });
+    }
+    if (this.enemies) {
       this.enemies.children.iterate(function (enemy) {
         enemy.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y)) + 90;
-		this.physics.moveToObject(enemy, this.player, 100);
-        
-       }, this);
-	   
-	   
-	  
+        this.physics.moveToObject(enemy, this.player, 100);
+
+      }, this);
+
+
+
     }
-    
+
 
     if (this.grassRegular) {
 
@@ -763,9 +844,9 @@ export default class MainSceneRunner extends Phaser.Scene {
       //this.grassRegularBar.y = this.grassRegular.y + halfImageHeight;
       //this.grassWinterBar.y = this.grassWinter.y + halfImageHeight;
       //this.grassRainBar.y = this.grassRain.y + halfImageHeight;
-	  this.grassRegularBar.y = this.grassRegular.y - shiftImageHeight;
+      this.grassRegularBar.y = this.grassRegular.y - shiftImageHeight;
       this.grassWinterBar.y = this.grassWinter.y - shiftImageHeight;
-      this.grassRainBar.y = this.grassRain.y - shiftImageHeight ;
+      this.grassRainBar.y = this.grassRain.y - shiftImageHeight;
       if (gameInProgress) {
         if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassRegularBar.getBounds()) ||
           Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassWinterBar.getBounds()) ||
