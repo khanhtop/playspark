@@ -208,7 +208,7 @@ export default class FallScene extends Phaser.Scene {
       // Check if the flick gesture is upwards
       if (distanceY < 0 ) {
         // Throw the bat upwards
-        this.throwBatUp(angle);
+        // this.throwBatUp(angle);
       }
     });
 
@@ -350,6 +350,8 @@ export default class FallScene extends Phaser.Scene {
         this.currentAnim = 'playerIdle'
         this.player.play('playerIdle')
         this.player.setVelocity(0, 0);
+
+        this.throwBatUp(-Math.PI / 2)
       },
       this
     );
@@ -535,7 +537,7 @@ export default class FallScene extends Phaser.Scene {
       // this.lost.play();
       //this.cameras.main.flash(50);
       this.cameras.main.shake(30, 0.01);
-    } else if (which === 0) {
+    } else if (which === 0 || which === 2) {
       this.goalTxt.setScale(0)
       .setAlpha(0)
       this.addedScrTxt.setScale(0)
@@ -558,11 +560,13 @@ export default class FallScene extends Phaser.Scene {
         ease: 'Bounce', // Easing function for a bouncing effect
       });
 
-      this.scoreNum += comboNum * 100;
+      let combo = which === 2 ? 1 : comboNum;
+      let score = which === 2 ? 10 : combo * 100;
+      this.scoreNum += score;
       // this.goal.play();
       this.scoreText.text = this.scoreNum.toString().padStart(4, "0");
-      this.goalTxt.text = comboNum == 1 ? "" : (comboNum + " x Combo");
-      this.addedScrTxt.text = "+" + comboNum * 100;
+      this.goalTxt.text = combo == 1 ? "" : (combo + " x Combo");
+      this.addedScrTxt.text = "+" + score;
 
       if (this.touches === 1) {
         //this.cameras.main.flash(50);
@@ -656,6 +660,7 @@ export default class FallScene extends Phaser.Scene {
           this.randomBallPos(bball)
           this.boosterGroup.remove(booster);
           booster.destroy();
+          this.score1(2);
         }
 
         if (!this.ballHit.isPlaying) this.ballHit.play();
