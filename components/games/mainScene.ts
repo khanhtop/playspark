@@ -17,6 +17,7 @@ let w: number,
   collW: number,
   scrW: number,
   scrH: number,
+  heartNum: number,
   heartR: number;
 
 let gameType = "football";
@@ -26,6 +27,7 @@ export default class MainScene extends Phaser.Scene {
   private ball!: Phaser.Physics.Arcade.Image;
   private player!: Phaser.Physics.Arcade.Image;
   private ai!: Phaser.Physics.Arcade.Image;
+  lifeNumText: any;
 
   constructor(newGameType: string) {
     super();
@@ -58,16 +60,17 @@ export default class MainScene extends Phaser.Scene {
     scr = h * 0.08;
     mW = w / 2;
     mH = (h - scr) / 2 + scr;
-    goalH = h * 0.1;
+    goalH = h * 0.09;
     sideW = w * 0.08;
     boundW = w - 2 * sideW;
     boundH = h - scr - 2 * goalH;
     ballVY = h * 0.5;
     ballVX = w * 0.75;
-    collW = w * 0.2;
-    scrW = w * 0.175;
-    scrH = scrW / 1.614;
+    collW = w * 0.24;
+    scrW = w * 0.375;
+    scrH = w * 0.175 / 1.614;
     heartR = w * 0.0625;
+    heartNum = 3;
   }
 
   // 400 800
@@ -127,33 +130,64 @@ export default class MainScene extends Phaser.Scene {
       .setCollideWorldBounds(true)
       .setPushable(false);
 
+    this.aa = this.physics.add.image(0, h - goalH, "peck")
+      .setTint(0xff0000)
+      .setAlpha(0.75)
+      .setOrigin(0)
+      .setPosition(0, h - goalH - ballR / 2)
+      .setDisplaySize(ballR / 2, ballR / 2)
+      .setCollideWorldBounds(true)
+      .setVisible(false)
+      .setPushable(false);
+
+    this.aa1 = this.physics.add.image(0, h - goalH, "peck")
+      .setTint(0xff0000)
+      .setAlpha(0.75)
+      .setOrigin(0)
+      .setPosition(w - ballR, h - goalH - ballR / 2)
+      .setDisplaySize(ballR / 2, ballR / 2)
+      .setCollideWorldBounds(true)
+      .setVisible(false)
+      .setPushable(false);
+
     this.gr = this.physics.add.staticGroup();
 
-    (this.gr.create(mW, mH) as Phaser.Physics.Arcade.Image)
+    (this.gr.create(collW, goalH) as Phaser.Physics.Arcade.Image)
       .setSize(collW, goalH)
+      .setDisplaySize(collW, goalH)
       .setOrigin(0)
-      .setPosition(sideW, scr)
+      .setPosition(0, scr)
       .setVisible(false);
-    (this.gr.create(mW, mH) as Phaser.Physics.Arcade.Image)
+    (this.gr.create(collW, goalH) as Phaser.Physics.Arcade.Image)
       .setSize(collW, goalH)
+      .setDisplaySize(collW, goalH)
       .setOrigin(0)
-      .setPosition(w - sideW - collW, scr)
+      .setPosition(w - collW, scr)
       .setVisible(false);
-    (this.gr.create(mW, mH) as Phaser.Physics.Arcade.Image)
+    (this.gr.create(collW, goalH) as Phaser.Physics.Arcade.Image)
       .setSize(collW, goalH)
+      .setDisplaySize(collW, goalH)
       .setOrigin(0)
-      .setPosition(sideW, h - goalH)
+      .setPosition(0, h - goalH)
       .setVisible(false);
-    (this.gr.create(mW, mH) as Phaser.Physics.Arcade.Image)
+    (this.gr.create(collW, goalH) as Phaser.Physics.Arcade.Image)
       .setSize(collW, goalH)
+      .setDisplaySize(collW, goalH)
       .setOrigin(0)
-      .setPosition(w - sideW - collW, h - goalH)
+      .setPosition(w - collW, h - goalH)
       .setVisible(false);
 
     this.gr.refresh();
 
     //this.physics.add.collider(this.player, gr);
     //this.physics.add.collider(this.ai, gr);
+
+    this.lifeNumText = this.add
+    .text(w - 70, 13, heartNum.toString(), {
+      fontFamily: "enhanced_led_board-7",
+      fontSize: "22px",
+      color: "#ffffff",
+    })
 
     this.player.setInteractive();
     //(this.player as any).setDraggable(true);
@@ -217,7 +251,7 @@ export default class MainScene extends Phaser.Scene {
     this.goalTxt = this.add
       .text(mW, mH - 52, "GOAL!", {
         fontFamily: "TitanOne-Regular",
-        fontSize: "76px",
+        fontSize: "56px",
         color: "#345e8e",
         stroke: "#ffffff",
         strokeThickness: 10,
@@ -227,7 +261,7 @@ export default class MainScene extends Phaser.Scene {
     this.addedScrTxt = this.add
       .text(mW, mH + 26, "+100", {
         fontFamily: "TitanOne-Regular",
-        fontSize: "76px",
+        fontSize: "56px",
         color: "#ffffff",
         stroke: "#345e8e",
         strokeThickness: 10,
@@ -279,6 +313,13 @@ export default class MainScene extends Phaser.Scene {
     this.physics.add.collider(this.ball, this.gr, () => {
       if (!this.ballHit.isPlaying) this.ballHit.play();
     });
+
+    this.physics.add.collider(this.ai, this.gr, () => {
+      // if (!this.ballHit.isPlaying) this.ballHit.play();
+    });
+
+    this.physics.add.collider(this.ball, this.aa, () => {})
+    this.physics.add.collider(this.ball, this.aa1, () => {})
 
     //this.cameras.main.postFX.addBloom(0xffffff, 1, 1, 10, 0.5);
     //this.cameras.main.postFX.addBokeh(0.1, 0.5, 0.05);
@@ -338,7 +379,7 @@ export default class MainScene extends Phaser.Scene {
     this.scoreText.text = "0000";
     this.hearts.forEach((h) => h.destroy);
     this.hearts.length = 0;
-    for (let i = 0; i < lives; i++) {
+    for (let i = 0; i < 1; i++) {
       const heart = this.add
         .image(w - 30 - i * 40, 30, "heart")
         .setDisplaySize(heartR, heartR);
@@ -372,11 +413,14 @@ export default class MainScene extends Phaser.Scene {
   }
 
   loseLife(): boolean {
-    if (this.hearts.length > 0) {
-      this.hearts.pop().destroy();
+    if (heartNum > 0) {
+      // this.hearts.pop().destroy();
       // Handle life loss logic here
 
-      if (this.hearts.length === 0) {
+      heartNum--;
+      this.lifeNumText.setText(heartNum);
+
+      if (heartNum === 0) {
         // Game lost
         this.loseGame();
         return true;
