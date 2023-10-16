@@ -10,6 +10,7 @@ module.exports = {
       fontFamily: {
         titan: ["var(--font-titan)"],
         roboto: ["var(--font-roboto)"],
+        pixel: ["var(--font-pixel)"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

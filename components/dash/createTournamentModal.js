@@ -16,6 +16,8 @@ import {
   CheckIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/solid";
+import UIButton from "../ui/button";
+import Text from "../ui/text";
 
 export default function CreateTournamentModal({ data, hide }) {
   const context = useAppContext();
@@ -44,7 +46,7 @@ export default function CreateTournamentModal({ data, hide }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="flex flex-col bg-black border-cyan-400 border-2 w-[90%] max-w-[900px] h-[90%] max-h-[800px] rounded-xl p-8 "
+        className="flex flex-col bg-black border-cyan-400 border-2 w-[90%] max-w-[1000px] h-[90%] max-h-[800px] rounded-xl p-8 "
       >
         <Header
           text="Set up your tournament"
@@ -62,29 +64,52 @@ export default function CreateTournamentModal({ data, hide }) {
         />
         <Progress length={3} stage={stage} setStage={setStage} />
         {stage === 1 && (
-          <div className="flex-1 overflow-y-scroll pb-4">
-            <Input
-              label="Tournament Name"
-              className="bg-black border-cyan-400/50 border-[1px] w-full py-2 text-white"
-              placeHolder={tournament.name}
-              value={tournament.name}
-              labelColor="text-white"
-            />
-            <ColorPicker
-              label="Primary Color"
-              labelColor="text-white"
-              value={tournament.primaryColor}
-              onSelect={(a) => {
-                setTournament({ ...tournament, primaryColor: a.hex });
-              }}
-            />
-            <ColorPicker
-              label="Text Color"
-              value={tournament.textColor}
-              onSelect={(a) => {
-                setTournament({ ...tournament, textColor: a.hex });
-              }}
-            />
+          <div className="flex-1 overflow-y-scroll pb-4 flex">
+            <div>
+              <Input
+                label="Tournament Name"
+                className="bg-black border-cyan-400/50 border-[1px] w-full py-2 text-white"
+                placeHolder={tournament.name}
+                value={tournament.name}
+                labelColor="text-white"
+                onChange={(e) =>
+                  setTournament({ ...tournament, name: e.target.value })
+                }
+              />
+              <p className="text-xs text-white mt-2">Theme</p>
+              <select
+                className="bg-transparent text-white w-full h-10 border-cyan-400/50 border-[1px]"
+                onChange={(e) =>
+                  setTournament({ ...tournament, theme: e.target.value })
+                }
+              >
+                <option default value="default">
+                  Default
+                </option>
+                <option value="pixel">Pixel</option>
+              </select>
+              <ColorPicker
+                label="Primary Color"
+                labelColor="text-white"
+                value={tournament.primaryColor}
+                onSelect={(a) => {
+                  setTournament({ ...tournament, primaryColor: a.hex });
+                }}
+              />
+              <ColorPicker
+                label="Text Color"
+                value={tournament.textColor}
+                onSelect={(a) => {
+                  setTournament({ ...tournament, textColor: a.hex });
+                }}
+              />
+            </div>
+            <div className="flex flex-col items-center flex-1 text-white p-2">
+              <div className="">
+                <p className="flex-1">Preview</p>
+                <Preview tournament={tournament} />
+              </div>
+            </div>
           </div>
         )}
         {stage === 2 && (
@@ -103,28 +128,36 @@ export default function CreateTournamentModal({ data, hide }) {
               look. If you are happy, click "Finish" to add the game to your
               library.
             </p>
-            <div
-              style={{ backgroundColor: tournament.primaryColor }}
-              className={`mt-4 w-[300px] h-[500px] rounded-lg overflow-hidden relative flex flex-col items-center justify-end`}
-            >
-              <img
-                src={tournament.backgroundImage}
-                className="object-cover absolute h-full w-full"
-              />
-              <div className="text-white z-20 flex flex-col items-center mb-12">
-                <h1 className="text-lg" style={{ color: tournament.textColor }}>
-                  {tournament.name}
-                </h1>
-                <div
-                  style={{ backgroundColor: tournament.primaryColor }}
-                  className="rounded-lg h-10 w-40 flex items-center justify-center mt-4"
-                >
-                  <p style={{ color: tournament.textColor }}>Start</p>
-                </div>
-              </div>
-            </div>
+            <Preview tournament={tournament} />
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function Preview({ tournament }) {
+  return (
+    <div
+      style={{ backgroundColor: tournament.primaryColor }}
+      className={`mt-4 w-[300px] h-[500px] rounded-lg overflow-hidden relative flex flex-col items-center justify-end`}
+    >
+      <img
+        src={tournament.backgroundImage}
+        className="object-cover absolute h-full w-full"
+      />
+      <div className="text-white z-20 flex flex-col items-center mb-12">
+        {/* <h1 className="text-lg" style={{ color: tournament.textColor }}>
+          {tournament.name}
+        </h1> */}
+        <Text {...tournament}>{tournament.name}</Text>
+        <UIButton {...tournament} className="mt-2" text="Start" />
+        {/* <div
+          style={{ backgroundColor: tournament.primaryColor }}
+          className="rounded-lg h-10 w-40 flex items-center justify-center mt-4"
+        >
+          <p style={{ color: tournament.textColor }}>Start</p>
+        </div> */}
       </div>
     </div>
   );

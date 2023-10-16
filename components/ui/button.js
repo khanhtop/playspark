@@ -1,0 +1,50 @@
+export default function UIButton({
+  text,
+  primaryColor,
+  textColor,
+  theme,
+  onClick,
+  className,
+}) {
+  if (theme === "pixel") {
+    return (
+      <button
+        onClick={onClick}
+        className={`${className} relative font-pixel flex text-xl hover:contrast-125 transition bg-sky-200 pb-1`}
+      >
+        <div
+          style={{ backgroundColor: primaryColor, color: textColor }}
+          className="absolute bg-red-500 top-[10%] left-0 scale-105 w-full h-[70%]"
+        >
+          <div className="absolute w-12 h-full bg-black/10" />
+          <div className="w-full absolute bottom-0 bg-black/30 h-[3px]" />
+        </div>
+        <div
+          className="flex relative"
+          style={{ backgroundColor: primaryColor, color: textColor }}
+        >
+          <div className="h-12 w-12 bg-black/10 flex items-center justify-center">
+            {/* <ChevronRightIcon className="h-8 w-8" /> */}
+            <p className="text-5xl mb-3">{`>`}</p>
+          </div>
+          <div className="px-8 flex items-center pb-2 text-4xl uppercase">
+            {text}
+          </div>
+          <div className="w-full absolute bottom-0 bg-black/30 h-[5px]" />
+        </div>
+      </button>
+    );
+  }
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        backgroundColor: primaryColor,
+        color: textColor,
+      }}
+      className={`${className} font-titan text-xl rounded-full px-12 py-2 hover:contrast-125  transition`}
+    >
+      <h3>{text}</h3>
+    </button>
+  );
+}

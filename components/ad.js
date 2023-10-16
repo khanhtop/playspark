@@ -9,7 +9,7 @@ import VideoAd from "./videoAd";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
-export default function Advert({ data }) {
+export default function Advert({ data, theme }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
   const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
@@ -81,9 +81,9 @@ export default function Advert({ data }) {
         height: dimensions.y,
       }}
     >
-      {stage === 0 && <Intro data={data} setStage={setStage} />}
+      {stage === 2 && <Intro data={data} setStage={setStage} />}
       {stage === 1 && getGame(data.id, data, callback)}
-      {stage === 2 && (
+      {stage === 0 && (
         <Outro
           data={data}
           setStage={setStage}

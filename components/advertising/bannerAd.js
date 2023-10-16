@@ -42,7 +42,7 @@ export default function BannerAd({
         ...(position === "top" && { top: offset, left: 0 }),
         ...(position === "bottom" && { bottom: offset, left: 0 }),
       }}
-      className="animate-pulse cursor-pointer"
+      className="cursor-pointer"
     >
       <img src={ad?.image} />
     </div>

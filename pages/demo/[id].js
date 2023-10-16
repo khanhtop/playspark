@@ -16,7 +16,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       id: context.query?.id,
-      ad: ad,
+      ad: { ...ad, theme: "pixel" },
     },
   };
 }

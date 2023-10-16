@@ -9,28 +9,37 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import BannerAd from "./advertising/bannerAd";
+import Text from "./ui/text";
+import UIButton from "./ui/button";
 
 export default function Outro({ score, setStage, data, leaderboard }) {
   const context = useAppContext();
 
   return (
-    <div className="bg-white text-black font-light py-12 h-full w-full relative flex items-center justify-start flex-col">
-      <h1 className="text-2xl mb-4 font-titan ">Game Over</h1>
-      <p className="font-bold text-sm font-titan">Your Score</p>
-      <h1
+    <div className="bg-white text-black font-light pt-4 h-full w-full relative flex items-center justify-start flex-col">
+      <Text {...data} className="text-2xl mb-4 font-titan ">
+        Game Over
+      </Text>
+      <Text {...data} className="font-bold text-sm font-titan">
+        Your Score
+      </Text>
+      <Text
+        {...data}
         style={{ color: data.primaryColor }}
         className="text-4xl mb-4 font-titan font-light"
       >
         {score}
-      </h1>
+      </Text>
       <Ranking
         pos={leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) + 1}
         best={leaderboard.length}
         uid={context?.loggedIn?.uid}
+        data={data}
       />
       {!context?.loggedIn?.uid && <SignUp data={data} />}
       {context?.loggedIn?.uid && (
         <Leaderboard
+          gameData={data}
           data={leaderboard}
           primaryColor={data.primaryColor}
           textColor={data.textColor}
@@ -41,23 +50,19 @@ export default function Outro({ score, setStage, data, leaderboard }) {
           <p className="text-black/60 text-center">OR</p>
         )}
 
-        <button
+        <UIButton
+          text="Play Again"
+          {...data}
           onClick={() => setStage(3)}
-          style={{
-            color: data?.textColor,
-            backgroundColor: data.primaryColor,
-          }}
-          className="w-48 h-12 mb-48 rounded-full mt-4 font-titan"
-        >
-          Play Again
-        </button>
-        <BannerAd size="large" position="bottom" delay={1000} />
+          className="h-12 mb-48 rounded-full mt-4 font-titan"
+        ></UIButton>
+        <BannerAd size="small" position="bottom" delay={1000} />
       </div>
     </div>
   );
 }
 
-function Ranking({ pos, best, uid }) {
+function Ranking({ pos, best, uid, data }) {
   return (
     <div className="flex mb-4 items-center">
       <p className="text-center flex-1 text-xs">
@@ -68,8 +73,12 @@ function Ranking({ pos, best, uid }) {
         className="animate-bounce h-12 w-12 object-contain"
       />
       <div className="flex-1 flex flex-col items-center justify-center">
-        <p className="text-2xl font-titan"># {pos} </p>
-        <p className="flex-1 text-center text-xs font-titan">of {best}</p>
+        <Text {...data} className="text-2xl font-titan">
+          # {pos}{" "}
+        </Text>
+        <Text {...data} className="flex-1 text-center text-xs font-titan">
+          of {best}
+        </Text>
       </div>
     </div>
   );
@@ -113,16 +122,18 @@ function SignUp({ data }) {
               prizes.
             </p>
           </div>
-          <button
+          <UIButton
+            {...data}
+            text="Start"
+            small
             onClick={() => setStage(1)}
             style={{
               backgroundColor: data.primaryColor,
               color: data.textColor,
+              fontSize: 12,
             }}
-            className="mt-4 px-4 py-2 rounded-full text-white"
-          >
-            Sign Up/Login
-          </button>
+            className="mt-4 rounded-full text-white text-lg"
+          ></UIButton>
         </div>
       )}
       {stage === 1 && (
@@ -163,16 +174,12 @@ function SignUp({ data }) {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button
+          <UIButton
+            {...data}
+            text={phase === "signup" ? "Sign Up" : "Login"}
             onClick={() => (phase === "signup" ? signUp() : signIn())}
-            style={{
-              backgroundColor: data.primaryColor,
-              color: data.textColor,
-            }}
-            className="mt-4 w-36 py-2 rounded-full text-white"
-          >
-            {phase === "signup" ? "Sign Up" : "Login"}
-          </button>
+            className="mt-4 rounded-full text-white"
+          ></UIButton>
         </div>
       )}
     </div>

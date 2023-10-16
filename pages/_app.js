@@ -13,6 +13,16 @@ const titan = localFont({
   variable: "--font-titan",
 });
 
+const pixel = localFont({
+  src: [
+    {
+      path: "../public/fonts/Gamer.ttf",
+      weight: "400",
+    },
+  ],
+  variable: "--font-pixel",
+});
+
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -23,7 +33,7 @@ const roboto = Roboto({
 export default function App({ Component, pageProps }) {
   return (
     <main
-      className={`${titan.variable} ${roboto.variable} font-sans font-roboto`}
+      className={`${titan.variable} ${roboto.variable} ${pixel.variable} font-sans font-roboto`}
     >
       <AppWrapper>
         <Component {...pageProps} />

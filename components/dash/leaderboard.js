@@ -1,4 +1,11 @@
-export default function Leaderboard({ data, primaryColor, textColor }) {
+import Text from "../ui/text";
+
+export default function Leaderboard({
+  gameData,
+  data,
+  primaryColor,
+  textColor,
+}) {
   return (
     <div className="py-4 h-full w-full overflow-y-scroll text-black top-0 left-0 w-full h-full flex flex-col items-center gap-2">
       {data.map((item, key) => (
@@ -7,10 +14,14 @@ export default function Leaderboard({ data, primaryColor, textColor }) {
             style={{ backgroundColor: primaryColor }}
             className="w-8 h-8 rounded-full flex items-center justify-center text-white"
           >
-            <p className="font-titan">{key + 1}</p>
+            <Text {...gameData} className="font-titan">
+              {key + 1}
+            </Text>
           </div>
           <p className="flex-1">{item.name}</p>
-          <p className="font-bold font-titan">{item.score}</p>
+          <Text {...gameData} className="font-bold font-titan">
+            {item.score}
+          </Text>
         </div>
       ))}
     </div>
