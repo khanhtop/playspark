@@ -81,9 +81,9 @@ export default function Advert({ data, theme }) {
         height: dimensions.y,
       }}
     >
-      {stage === 2 && <Intro data={data} setStage={setStage} />}
+      {stage === 0 && <Intro data={data} setStage={setStage} />}
       {stage === 1 && getGame(data.id, data, callback)}
-      {stage === 0 && (
+      {stage === 2 && (
         <Outro
           data={data}
           setStage={setStage}
