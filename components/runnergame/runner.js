@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRef } from "react";
+import BannerAd from "../advertising/bannerAd";
 
 const MiddleRunner = dynamic(() => import("./runnerGame"), {
   ssr: false,
@@ -7,11 +8,6 @@ const MiddleRunner = dynamic(() => import("./runnerGame"), {
 
 export default function Runner({ data, gameType }) {
   const childRef = useRef();
-
-  const startNewGame = () => {
-    // this is how to start a new game with 5 lives
-    childRef.current.initGame(5);
-  };
 
   const scoreHandler = (score) => {
     // this is where you can handle the score event when game is finished
@@ -48,7 +44,7 @@ export default function Runner({ data, gameType }) {
       >
         .
       </div>
-	  <div
+      <div
         style={{
           fontFamily: "Gamer",
           visibility: "hidden",
@@ -58,11 +54,8 @@ export default function Runner({ data, gameType }) {
       >
         .
       </div>
-      <div className="w-full h-24 bg-white/20 flex items-center justify-center">
-        <img
-          src="/defaults/banner.jpg"
-          className="object-cover h-full w-full"
-        />
+      <div className="w-full h-[90px] bg-black flex items-center justify-center">
+        <BannerAd size="small" position="top" delay={250} />
       </div>
       <MiddleRunner
         runnerRef={childRef}

@@ -9,16 +9,6 @@ const MiddlePong = dynamic(() => import("./pongGame"), {
 export default function Pong({ data, gameType, callback }) {
   const childRef = useRef();
 
-  const startNewGame = () => {
-    // this is how to start a new game with 5 lives
-    childRef.current.initGame(5);
-  };
-
-  const scoreHandler = (score) => {
-    // this is where you can handle the score event when game is finished
-    alert("YOU WON: " + score);
-  };
-
   return (
     <div
       style={{
