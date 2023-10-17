@@ -296,7 +296,9 @@ export default class MainScene extends Phaser.Scene {
       this.ball,
       () => {
         this.touches++;
-        if (!this.ballHit.isPlaying) this.ballHit.play();
+        // if (!this.ballHit.isPlaying) this.ballHit.play();
+        this.ballHit.stop();
+        this.ballHit.play();
       },
       null,
       this
@@ -305,13 +307,15 @@ export default class MainScene extends Phaser.Scene {
       this.ai,
       this.ball,
       () => {
-        if (!this.ballHit.isPlaying) this.ballHit.play();
+        this.ballHit.stop();
+        this.ballHit.play();
       },
       null,
       this
     );
     this.physics.add.collider(this.ball, this.gr, () => {
-      if (!this.ballHit.isPlaying) this.ballHit.play();
+        this.ballHit.stop();
+        this.ballHit.play();
     });
 
     this.physics.add.collider(this.ai, this.gr, () => {

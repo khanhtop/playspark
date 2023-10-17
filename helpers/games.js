@@ -52,7 +52,7 @@ export const games = [
   {
     name: "Baseball Fall",
     description:
-      "Quick avoid basketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
+      "Quick avoid Baseball game using touch controls.  Try to score as many points as you can before you concede three goals!",
     backgroundImage: "/defaults/baseball-fall.jpg",
     screenshot: "baseball-fall.png",
     primaryColor: "#F69B01",
@@ -68,5 +68,25 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 7,
+  },
+  {
+    name: "Basketball Fall",
+    description:
+      "Quick avoid basketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/basketball-fall.jpg",
+    screenshot: "basketball-fall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 8,
+  },
+  {
+    name: "Cricket Fall",
+    description:
+      "Quick avoid cricketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/cricket-fall.jpg",
+    screenshot: "cricket-fall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 9,
   },
 ];

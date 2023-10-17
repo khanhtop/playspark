@@ -30,7 +30,7 @@ const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
     if (!memoizedHasRendered) {
       setHasRendered(true);
       let scene;
-      if(gameType == 'baseballFall') {
+      if(gameType == 'baseballFall' || gameType == 'basketballFall' || gameType == 'cricketFall') {
         scene = new FallScene(gameType);
       } else {
         scene = new MainScene(gameType);
