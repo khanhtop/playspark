@@ -6,6 +6,7 @@ import { useAppContext } from "@/helpers/store";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import VideoAd from "./videoAd";
+import { mockVideos } from "@/helpers/mocks";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -91,7 +92,13 @@ export default function Advert({ data, theme }) {
           leaderboard={leaderboard}
         />
       )}
-      {stage === 3 && <VideoAd onSkip={() => setStage(0)} />}
+      {stage === 3 && (
+        <VideoAd
+          video={mockVideos[Math.floor(Math.random() * mockVideos.length)]}
+          data={data}
+          onSkip={() => setStage(0)}
+        />
+      )}
     </div>
   );
 }

@@ -14,12 +14,12 @@ export default function Leaderboard({
             style={{ backgroundColor: primaryColor }}
             className="w-8 h-8 rounded-full flex items-center justify-center text-white"
           >
-            <Text {...gameData} className="font-titan">
+            <Text {...gameData} className="">
               {key + 1}
             </Text>
           </div>
           <p className="flex-1">{item.name}</p>
-          <Text {...gameData} className="font-bold font-titan">
+          <Text {...gameData} className="font-bold">
             {item.score}
           </Text>
         </div>

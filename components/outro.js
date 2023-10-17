@@ -17,16 +17,16 @@ export default function Outro({ score, setStage, data, leaderboard }) {
 
   return (
     <div className="bg-white text-black font-light pt-4 h-full w-full relative flex items-center justify-start flex-col">
-      <Text {...data} className="text-2xl mb-4 font-titan ">
+      <Text {...data} className="text-2xl mb-4">
         Game Over
       </Text>
-      <Text {...data} className="font-bold text-sm font-titan">
+      <Text {...data} className="font-bold text-sm">
         Your Score
       </Text>
       <Text
         {...data}
         style={{ color: data.primaryColor }}
-        className="text-4xl mb-4 font-titan font-light"
+        className="text-4xl mb-4 font-light"
       >
         {score}
       </Text>
@@ -54,7 +54,7 @@ export default function Outro({ score, setStage, data, leaderboard }) {
           text="Play Again"
           {...data}
           onClick={() => setStage(3)}
-          className="h-12 mb-48 rounded-full mt-4 font-titan"
+          className="h-12 mb-48 rounded-full mt-4"
         ></UIButton>
         <BannerAd size="small" position="bottom" delay={1000} />
       </div>
@@ -73,10 +73,10 @@ function Ranking({ pos, best, uid, data }) {
         className="animate-bounce h-12 w-12 object-contain"
       />
       <div className="flex-1 flex flex-col items-center justify-center">
-        <Text {...data} className="text-2xl font-titan">
+        <Text {...data} className="text-2xl">
           # {pos}{" "}
         </Text>
-        <Text {...data} className="flex-1 text-center text-xs font-titan">
+        <Text {...data} className="flex-1 text-center text-xs">
           of {best}
         </Text>
       </div>

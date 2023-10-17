@@ -1,28 +1,29 @@
 import { mockVideos } from "@/helpers/mocks";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import UIButton from "./ui/button";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
 });
 
-export default function VideoAd({ onSkip }) {
+export default function VideoAd({ data, onSkip, video }) {
   const [totalLength, setTotalLength] = useState();
-  const [showClaim, setShowClaim] = useState(true);
+  const [remainingTime, setRemainingTime] = useState();
+  const [showClaim, setShowClaim] = useState(false);
   const [right, setRight] = useState(-260);
 
   const shouldClaim = (time) => {
+    setRemainingTime(Math.floor(totalLength - time - 9));
     if (time > totalLength - 10) {
-      setRight(0);
+      console.log("TRIG");
       setShowClaim(true);
-    } else {
-      setShowClaim(false);
     }
   };
   return (
     <div className="bg-black h-full w-full relative">
       <MuxPlayer
-        playbackId={mockVideos[Math.floor(Math.random() * mockVideos.length)]}
+        playbackId={video}
         onLoadedMetadata={(a) => setTotalLength(a.currentTarget.duration)}
         onTimeUpdate={(a) => shouldClaim(a.target.currentTime)}
         className="h-full w-full"
@@ -37,12 +38,26 @@ export default function VideoAd({ onSkip }) {
         }}
         streamType="on-demand"
       />
-      <div
+      <div className="px-4 absolute bg-[#222] w-full bottom-0 left-0 h-16 flex items-center">
+        <button
+          disabled={!showClaim}
+          onClick={onSkip}
+          className={`${
+            showClaim ? "opacity-100 underline" : "opacity-50"
+          } flex-1 text-left`}
+        >
+          {!remainingTime
+            ? ""
+            : showClaim
+            ? "Claim Extra Life"
+            : `Claim In ${remainingTime}`}
+        </button>
+        <button className="text-black bg-white/50 px-6 rounded-full py-2">
+          Learn More
+        </button>
+      </div>
+      {/* <div
         onClick={onSkip}
-        style={{
-          right: right,
-          transition: "1s right",
-        }}
         className="cursor-pointer absolute h-[40px]  bottom-[20%] bg-black w-[260px] rounded-l-xl border-white border-l-2  border-t-2  border-b-2 flex items-center justify-center"
       >
         <p
@@ -52,7 +67,7 @@ export default function VideoAd({ onSkip }) {
         >
           SKIP
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }
