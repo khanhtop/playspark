@@ -24,7 +24,25 @@ let timerEvent;
 let playerClicked = false;
 let firstLoad;
 let gameOver = false;
-let score = 0;
+let gameInProgress = false;
+let score = 0, maxLife = 3;
+let touchdownOccurred = false;
+
+//let touchdownOccurred = false;
+//let touchdownOccurred = false;
+let gameLevelConfig = [
+  { coins: 3, boosters: 0 },
+  { coins: 5, boosters: 1 },
+  { coins: 6, boosters: 2 },
+  { coins: 8, boosters: 2 },
+  { coins: 10, boosters: 3 }
+];
+let touchDownCount = 0;
+let isSwiping = false;
+let swipeStartPosition;
+let levelEnemyReleased = 0;
+let levelEnemyAllowed = 4;
+let currRandomPoints = [];
 
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
@@ -44,16 +62,16 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.load.image('cover', "/" + gameType + "/images/cover.jpg");
     this.load.image('barFill', "/" + gameType + "/images/bar-fill.png");
     this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
-	this.load.image('loading', "/" + gameType + "/images/loading.png");
-	
+    this.load.image('loading', "/" + gameType + "/images/loading.png");
+
   }
   create() {
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     this.cover = this.add.image(0, 0, 'cover').setOrigin(0, 0);
-    this.cover.setDisplaySize(w, h);    
+    this.cover.setDisplaySize(w, h);
 
-	this.loadingTxtImg = this.add.image(w / 2, h / 2 + 20, 'loading');
+    this.loadingTxtImg = this.add.image(w / 2, h / 2 + 20, 'loading');
     this.barFrame = this.add.image(w / 2, h / 2 + 80, 'barFrame');
     this.barFill = this.add.image(0, 0, 'barFill').setOrigin(0, 0);
     this.barFill.setPosition(w / 2 - this.barFill.displayWidth / 2, h / 2 - this.barFill.displayHeight / 2 + 80);
@@ -63,35 +81,44 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   loadAssets() {
     this.load.once("complete", this.loadComplete, this);
-    this.load.on("progress", this.loadProgress, this);	
+    this.load.on("progress", this.loadProgress, this);
+    this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
     this.load.image('btnShop', "/" + gameType + "/images/btn-shop.png");
     this.load.image('shop', "/" + gameType + "/images/shop.png");
-    this.load.image('buttonSelect', "/" + gameType + "/images/button-select.png");
-	this.load.image('buttonRetry', "/" + gameType + "/images/button-retry.png");
+    this.load.image('blue', "/" + gameType + "/images/blue.png");
+    this.load.image('shopBg', "/" + gameType + "/images/shopBg.png");
+    this.load.image('coinBase', "/" + gameType + "/images/coinBase.png");
+    this.load.image('coin', "/" + gameType + "/images/coin.png");
+    this.load.image('heartBase', "/" + gameType + "/images/heartBase.png");
+    this.load.image('heart', "/" + gameType + "/images/heart.png");
+    this.load.image('scoreBase', "/" + gameType + "/images/scoreBase.png");
+    this.load.image('powerBase', "/" + gameType + "/images/powerBase.png");
+    this.load.image('powerUp', "/" + gameType + "/images/powerUp.png");
+    this.load.image('buttonRetry', "/" + gameType + "/images/button-retry.png");
     this.load.image('grassRegular', "/" + gameType + "/images/grass-regular.png");
     this.load.image('grassWinter', "/" + gameType + "/images/grass-winter.png");
     this.load.image('grassRain', "/" + gameType + "/images/grass-rain.png");
     this.load.image("title", "/" + gameType + "/images/title.png");
     this.load.image("middleAd", "/" + gameType + "/images/middleAd.png");
-	this.load.image("tackled", "/" + gameType + "/images/tackled.png");
+    this.load.image("tackled", "/" + gameType + "/images/tackled.png");
 
     this.load.spritesheet(
       "playerOne", "/" + gameType + "/images/player-one.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "rayLewis", "/" + gameType + "/images/ray-lewis.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "michaelStrahat", "/" + gameType + "/images/michael-strahat.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "johnElway", "/" + gameType + "/images/john-elway.png",
       { frameWidth: 84, frameHeight: 90 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "jeromeBettis", "/" + gameType + "/images/jerome-bettis.png",
       { frameWidth: 84, frameHeight: 90 }
     );
@@ -103,7 +130,7 @@ export default class MainSceneRunner extends Phaser.Scene {
       "buttonArrow", "/" + gameType + "/images/button-arrow.png",
       { frameWidth: 96, frameHeight: 93 }
     );
-	this.load.spritesheet(
+    this.load.spritesheet(
       "smoke", "/" + gameType + "/images/smoke.png",
       { frameWidth: 156, frameHeight: 105 }
     );
@@ -123,38 +150,38 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.barFill.scaleX = percents;
   }
   loadComplete() {
-	 
+
     this.initGame1();
   }
 
   initGame1() {
     if (!this.anims.exists("playerOneAnim")) {
-		firstLoad = true;
+      firstLoad = true;
       this.anims.create({
         key: "playerOneAnim",
         frames: this.anims.generateFrameNumbers("playerOne", {}),
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "rayLewisAnim",
         frames: this.anims.generateFrameNumbers("rayLewis", {}),
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "michaelStrahatAnim",
         frames: this.anims.generateFrameNumbers("michaelStrahat", {}),
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "johnElwayAnim",
         frames: this.anims.generateFrameNumbers("johnElway", {}),
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "jeromeBettisAnim",
         frames: this.anims.generateFrameNumbers("jeromeBettis", {}),
         frameRate: 24,
@@ -166,7 +193,7 @@ export default class MainSceneRunner extends Phaser.Scene {
         frameRate: 24,
         repeat: -1
       });
-	  this.anims.create({
+      this.anims.create({
         key: "smokeAnim",
         frames: this.anims.generateFrameNumbers("smoke", {}),
         frameRate: 24,
@@ -192,42 +219,61 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.kittyOpening = this.sound.add("kittyOpening");
     this.swing = this.sound.add("swing");
     this.clap = this.sound.add("clap");
-	this.collide = this.sound.add("collide");
+    this.collide = this.sound.add("collide");
 
     const backgroundTexture = this.textures.get('grassRegular')!;
     const tileSpriteHeight = (backgroundTexture.source[0].height / backgroundTexture.source[0].width) * w;
     this.grassRegular = this.add.image(0, 0, 'grassRegular').setOrigin(0, 0.5);
     this.grassRegular.setDisplaySize(w, tileSpriteHeight);
-    this.grassWinter = this.add.image(0, -1 * this.grassRegular.displayHeight, 'grassWinter').setOrigin(0, 0.5);
+    this.grassWinter = this.add.image(0, 0, 'grassWinter').setOrigin(0, 0.5);
     this.grassWinter.setDisplaySize(w, tileSpriteHeight);
-    this.grassRain = this.add.image(0, this.grassWinter.y - 1 * this.grassRegular.displayHeight / 2, 'grassRain').setOrigin(0, 0.5);
+    this.grassWinter.y = this.grassRegular.y - tileSpriteHeight;
+
+    this.grassRain = this.add.image(0, 0, 'grassRain').setOrigin(0, 0.5);
     this.grassRain.setDisplaySize(w, tileSpriteHeight);
+    this.grassRain.y = this.grassWinter.y - tileSpriteHeight;
+
+    this.grassRegularBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5);
+    this.grassWinterBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5).setAlpha(0.6);
+    this.grassRainBar = this.add.image(w / 2, 0, 'barFrame').setOrigin(0.5).setAlpha(0.3);
+
+    this.grassRegularBar.setAlpha(0);
+    this.grassWinterBar.setAlpha(0);
+    this.grassRainBar.setAlpha(0);
 
     this.title = this.add.image(w / 2, -80, 'title').setOrigin(0.5);
     this.title.setScale(0.7);
     this.moveTitle(80);
 
-    this.instText = this.add.text(w / 2, h / 2 - 20, 'Hold player\nto start', { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
+
+
+    this.instText = this.add.text(w / 2, h / 2 + 70, 'Hold player\nto start', { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.instText.setOrigin(0.5);
-	
-	this.smoke = this.physics.add.sprite(0, 0, "smoke");
 
+    this.smoke = this.physics.add.sprite(0, 0, "smoke");
+    this.shopContainer = this.make.container();
     this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
+    this.player.setData('tackled', false);
     this.player.play("playerOneAnim");
-
+    this.physics.world.enable(this.player);
     this.player.setInteractive({ useHandCursor: true });
     this.player.on('pointerdown', this.onPointerDown, this);
     this.player.on('pointerup', this.onPointerUp, this);
+    this.player.on('pointermove', this.handleSwipe, this);
 
     this.player.setCollideWorldBounds(true);
 
-    this.input.on('pointermove', (pointer) => {
 
-      if (pointer.worldX < this.player.x) {
-        this.player.angle = -15;
-      } else {
-        this.player.angle = 15;
+
+    this.input.on('pointermove', (pointer) => {
+      if (gameInProgress) {
+        if (pointer.worldX < this.player.x) {
+          //this.player.angle = -15;
+        } else {
+          //this.player.angle = 15;
+        }
       }
+
     });
 
     this.btnShop = this.add.image(w / 2, h + 40, 'btnShop').setOrigin(0.5);
@@ -238,74 +284,161 @@ export default class MainSceneRunner extends Phaser.Scene {
 
 
 
-    this.enemies = this.physics.add.group(); 
+    this.enemies = this.physics.add.group();
+    this.coins = this.physics.add.group();
+    this.boosters = this.physics.add.group();
 
     this.input.on('pointerdown', this.playKitty, this);
-	
-	this.tackledContainer = this.make.container();
-	this.tackled = this.add.image(w / 2, 20, 'tackled').setOrigin(0.5, 0);
-	
-	this.buttonRetry = this.add.image(w / 2, 185, 'buttonRetry').setOrigin(0.5);
+
+    this.tackledContainer = this.make.container();
+    this.tackled = this.add.image(w / 2, 20, 'tackled').setOrigin(0.5, 0);
+
+    this.buttonRetry = this.add.image(w / 2, 185, 'buttonRetry').setOrigin(0.5);
     this.buttonRetry.setScale(0.7);
     this.buttonRetry.setInteractive({ useHandCursor: true });
     this.buttonRetry.on('pointerdown', this.onRetry, this);
-	
-	this.buttonRetryText = this.add.text(this.buttonRetry.x, this.buttonRetry.y, "Retry", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+
+    this.buttonRetryText = this.add.text(this.buttonRetry.x, this.buttonRetry.y, "Retry", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
     this.buttonRetryText.setOrigin(0.5);
-	
-	this.scoreText = this.add.text(w / 2, 280, score, { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
+
+    this.scoreText = this.add.text(w / 2, 280, score, { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
     this.scoreText.setOrigin(0.5);
-	
-	this.tackledContainer.add([this.tackled, this.buttonRetry, this.buttonRetryText, this.scoreText]);
-	this.tackledContainer.setVisible(false);
-	
-    this.shopContainer = this.make.container();
-    this.shop = this.add.image(w / 2, 20, 'shop').setOrigin(0.5, 0);
-    this.buttonSelect = this.add.image(w / 2, h - 50, 'buttonSelect').setOrigin(0.5);
-    this.buttonSelect.setScale(0.7);
-    this.buttonSelect.setInteractive({ useHandCursor: true });
-    this.buttonSelect.on('pointerdown', this.onSelect, this);
-    this.leftArrow = this.physics.add.sprite(w / 2 - 120, h - 50, "buttonArrow");
+
+    this.tackledContainer.add([this.tackled, this.buttonRetry, this.buttonRetryText, this.scoreText]);
+    this.tackledContainer.setVisible(false);
+
+
+    this.shop = this.add.image(w / 2, 80, 'shop').setOrigin(0.5, 0).setAlpha(0.7);
+    this.shopBg = this.add.image(w / 2, 135, 'shopBg').setOrigin(0.5, 0).setScale(0.75);
+    this.blueBar = this.add.image(w / 2, 80, 'blue').setOrigin(0.5).setScale(1.2);
+    this.blueBar.setInteractive({ useHandCursor: true });
+    this.blueBar.on('pointerdown', this.onSelect, this);
+    this.shopText = this.add.text(this.blueBar.x, this.blueBar.y - 2, "SHOP", { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
+    this.shopText.setOrigin(0.5);
+
+    this.leftArrow = this.physics.add.sprite(w / 2 - 120, h / 2 - 10, "buttonArrow");
     this.leftArrow.setFrame(0);
-    this.leftArrow.setScale(0.7);
+    this.leftArrow.setScale(0.5);
     this.leftArrow.setInteractive({ useHandCursor: true });
     this.leftArrow.on('pointerdown', this.onLeft, this);
-    this.rightArrow = this.physics.add.sprite(w / 2 + 120, h - 50, "buttonArrow");
+    this.rightArrow = this.physics.add.sprite(w / 2 + 120, this.leftArrow.y, "buttonArrow");
     this.rightArrow.setFrame(1);
-    this.rightArrow.setScale(0.7);
+    this.rightArrow.setScale(0.5);
     this.rightArrow.setInteractive({ useHandCursor: true });
     this.rightArrow.on('pointerdown', this.onRight, this);
-	
-	this.touchDowns = 4;
-	this.record = 1;
-	this.shopData = [{actor:"Rookie", msg:"Available",y:0, available:true}, {actor:"Jeremy Bettings", msg:"25 touchdowns\nor\n5 highscore to unlock", y:-14, available:false}, {actor:"Big Ben", msg:"50 touchdowns\nor\n10 highscore to unlock",y:-14, available:false}, {actor:"Mikael Stronghat", msg:"75 touchdowns\nor\n15 highscore to unlock",y:-14, available:false}, {actor:"Bay Newest", msg:"150 touchdowns\nor\n25 highscore to unlock",y:-14, available:false}];
-	
-	this.currShopIndex = 0;
-	
-	this.touchDownText = this.add.text(w / 2 - 80, h / 2 - 72, this.touchDowns, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
-    this.touchDownText.setOrigin(0.5);
-	
-	this.recordText = this.add.text(w / 2 + 80, h / 2 - 72, this.record, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
-    this.recordText.setOrigin(0.5);
-	
-	this.playerNameText = this.add.text(w / 2, h / 2 - 17, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 24, color: '#FCF28D', align: 'center' });
+
+
+    this.record = 1;
+    this.shopData = [{ actor: "Rookie", coins: 0, touchdowns: 0, y: 0 }, { actor: "Jeremy\nBettings", coins: 5, touchdowns: 25, y: -14 }, { actor: "Big\nBen", coins: 10, touchdowns: 50, y: -14 }, { actor: "Mikael\nStronghat", coins: 15, touchdowns: 75, y: -14 }, { actor: "Bay\nNewest", coins: 25, touchdowns: 150, y: -14 }];
+
+    this.currShopIndex = 0;
+
+
+    this.playerNameText = this.add.text(w / 2, h / 2 - 100, this.shopData[this.currShopIndex].actor, { fontFamily: 'Gamer', fontSize: 34, color: '#ffffff', align: 'center' });
     this.playerNameText.setOrigin(0.5);
-	
-	this.playerDescText = this.add.text(w / 2, h / 2, this.shopData[this.currShopIndex].msg, { fontFamily: 'Gamer', fontSize: 18, color: '#ffffff', align: 'center' , lineSpacing: -7});
-    this.playerDescText.setOrigin(0.5, 0);
-	
-	
-    this.shopContainer.add([this.shop, this.buttonSelect, this.leftArrow, this.rightArrow, this.touchDownText, this.recordText, this.playerNameText, this.playerDescText]);
-	this.updateShopDisplay();
+
+    this.shopCoinBase = this.add.image(w / 2, h / 2 + 45, 'heartBase').setOrigin(0.5);
+    this.shopCoinBase.setScale(0.4);
+    this.shopCoin = this.add.image(this.shopCoinBase.x - 27, this.shopCoinBase.y - 1, 'coin').setOrigin(0.5);
+    this.shopCoin.setScale(0.4);
+
+
+    this.shopCoinValueText = this.add.text(this.shopCoinBase.x + 3, this.shopCoinBase.y - 2, 0, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.shopCoinValueText.setOrigin(0.5);
+
+    this.playerTouchdownText = this.add.text(w / 2, h / 2 + 60, this.shopData[this.currShopIndex].touchdowns, { fontFamily: 'Gamer', fontSize: 22, color: '#ffffff', align: 'center', lineSpacing: 4 });
+    this.playerTouchdownText.setOrigin(0.5, 0);
+
+
+    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText, this.leftArrow, this.rightArrow, this.playerNameText, this.shopCoinBase, this.shopCoin, this.shopCoinValueText, this.playerTouchdownText]);
+    this.updateShopDisplay();
     this.shopContainer.setVisible(false);
-	
+
+
+    this.statusBarCon = this.make.container();
+    this.statusBarCon.setDepth(2);
+    this.coinBase = this.add.image(50, 0, 'coinBase').setOrigin(0.5);
+    this.coinBase.setScale(0.4);
+    this.coin = this.add.image(23, 0, 'coin').setOrigin(0.5);
+    this.coin.setScale(1);
+    this.coinscollected = 0;
+    this.coinsCollectedText = this.add.text(60, -2, this.coinscollected, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.coinsCollectedText.setOrigin(0.5);
+
+    this.heartBase = this.add.image(w - 50, 0, 'heartBase').setOrigin(0.5);
+    this.heartBase.flipX = true;
+    this.heartBase.setScale(0.4);
+
+    this.heart = this.add.image(w - 23, 0, 'heart').setOrigin(0.5);
+    this.heart.setScale(0.8);
+
+    this.currLives = maxLife;
+    this.currLivesText = this.add.text(w - 60, -2, this.currLives, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.currLivesText.setOrigin(0.5);
+
+    this.scoreBase = this.add.image(w / 2, 0, 'scoreBase').setOrigin(0.5);
+    this.scoreBase.setScale(0.4);
+
+    this.currScore = 0;
+    this.currScoreText = this.add.text(w / 2, -2, this.currScore, { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.currScoreText.setOrigin(0.5);
+
+    this.powerBase = this.add.image(w - 50, 30, 'powerBase').setOrigin(0.45);
+    this.powerBase.setScale(0.36);
+
+    this.powerUp = this.add.image(w - 17, 30, 'powerUp').setOrigin(0.5);
+    this.powerUp.setScale(0.1);
+
+    this.currPowers = 0;
+    this.currPowersText = this.add.text(w - 60, 28, this.currPowers + "/3", { fontFamily: 'Gamer', fontSize: 24, color: '#ffffff', align: 'center' });
+    this.currPowersText.setOrigin(0.5);
+
+
+    this.statusBarCon.add([this.coinBase, this.coin, this.coinsCollectedText, this.heartBase, this.heart, this.currLivesText, this.scoreBase, this.currScoreText, this.powerBase, this.currPowersText, this.powerUp]);
+
+    this.moveGameStatusBar(-80);
+
+    this.touchDownText = this.add.text(w / 2, 40, 'TOUCHDOWN!', { fontFamily: 'Gamer', fontSize: 74, color: '#ffffff', align: 'center' });
+    this.touchDownText.setOrigin(0.5);
+    this.touchDownText.setDepth(3);
+    this.touchDownText.setAlpha(0);
+
+    this.physics.add.collider(this.player, this.enemies, this.onCollision, null, this);
+
+    this.physics.add.collider(this.player, this.coins, this.collectCoin, null, this);
+
+    this.physics.add.collider(this.player, this.boosters, this.collectBooster, null, this);
 
   }
+
+  collisionHandler() {
+
+    console.log('Perfect collision detected!');
+  }
+  handleTouchdown() {
+    console.log("Touchdown!");
+    this.touchDownText.setAlpha(0);
+
+    this.tweens.add({
+      targets: this.touchDownText,
+      duration: 100,
+      ease: 'Linear',
+      alpha: 1,
+      onComplete: () => {
+        this.time.delayedCall(700, () => {
+          this.touchDownText.setAlpha(0);
+          touchDownCount++;
+          this.currScoreText.text = this.currScore = (this.currScore === 0) ? 100 : (this.currScore + (this.currScore * 0.5));
+
+        }, this);
+      }
+    });
+  }
   playKitty() {
-	if(firstLoad){
-		firstLoad = false;
-		this.kittyOpening.play();
-	}    
+    if (firstLoad) {
+      firstLoad = false;
+      this.kittyOpening.play();
+    }
     this.input.off('pointerdown', this.playKitty, this);
   }
   onSelect() {
@@ -313,60 +446,82 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.clap.play();
     this.moveTitle(80);
     this.moveShopBtn(h - 50);
+    this.moveGameStatusBar(-80);
     this.shopContainer.setVisible(false);
+    this.player.on('pointerdown', this.onPointerDown, this);
+    this.player.on('pointerup', this.onPointerUp, this);
+    this.player.setInteractive({ useHandCursor: true });
   }
   onLeft() {
-    this.swing.play();	
-	this.currShopIndex = (this.currShopIndex - 1 + this.shopData.length) % this.shopData.length;
-	this.updateShopDisplay();
+    this.swing.play();
+    this.currShopIndex = (this.currShopIndex - 1 + this.shopData.length) % this.shopData.length;
+    this.updateShopDisplay();
   }
   onRight() {
-    this.swing.play();	
-	this.currShopIndex = (this.currShopIndex + 1) % this.shopData.length;
-	this.updateShopDisplay();
+    this.swing.play();
+    this.currShopIndex = (this.currShopIndex + 1) % this.shopData.length;
+    this.updateShopDisplay();
   }
-  updateShopDisplay(){
-	  let currdata = this.shopData[this.currShopIndex];
-	  let actor = this.shopData[this.currShopIndex].actor
-	  this.touchDownText.text = this.touchDowns;
-	  this.recordText.text = this.record;
-	  this.playerNameText.text = actor;
-	  this.playerDescText.text = this.shopData[this.currShopIndex].msg;
-	  this.playerDescText.y = h / 2 + 13 + this.shopData[this.currShopIndex].y;
-	  this.buttonSelect.setVisible(currdata.available);
-	  switch(actor){
-		  case "Rookie":
-		   this.player.setTexture('playerOne');
-		   this.player.anims.play('playerOneAnim', true);
-		  break;
-		  case "Big Ben":
-		   this.player.setTexture('rayLewis');
-		   this.player.anims.play('rayLewisAnim', true);
-		  break;
-		  case "Mikael Stronghat":
-		   this.player.setTexture('michaelStrahat');
-		   this.player.anims.play('michaelStrahatAnim', true);
-		  break;
-		  case "Bay Newest":
-		   this.player.setTexture('johnElway');
-		   this.player.anims.play('johnElwayAnim', true);
-		  break;
-		  case "Jeremy Bettings":
-		   this.player.setTexture('jeromeBettis');
-		   this.player.anims.play('jeromeBettisAnim', true);
-		  break;
-		  
-	  }
-	  
+  updateShopDisplay() {
+    let currdata = this.shopData[this.currShopIndex];
+    let actor = this.shopData[this.currShopIndex].actor
+
+    this.playerNameText.text = actor;
+    this.playerTouchdownText.text = "OR\n" + this.shopData[this.currShopIndex].touchdowns + " TOUCHDOWNS";
+    this.shopCoinValueText.text = this.shopData[this.currShopIndex].coins;
+    let showShopBtn = false;
+    if (this.coinscollected >= this.shopData[this.currShopIndex].coins || touchDownCount >= this.shopData[this.currShopIndex].touchdowns) {
+      showShopBtn = true;
+    }
+    this.shopText.setVisible(showShopBtn);
+    this.blueBar.setVisible(showShopBtn);
+    console.log("actor", actor);
+    switch (actor) {
+      case "Rookie":
+        this.player.setTexture('playerOne');
+        this.player.anims.play('playerOneAnim', true);
+        break;
+      case "Big\nBen":
+        this.player.setTexture('rayLewis');
+        this.player.anims.play('rayLewisAnim', true);
+        break;
+      case "Mikael\nStronghat":
+        this.player.setTexture('michaelStrahat');
+        this.player.anims.play('michaelStrahatAnim', true);
+        break;
+      case "Bay\nNewest":
+        this.player.setTexture('johnElway');
+        this.player.anims.play('johnElwayAnim', true);
+        break;
+      case "Jeremy\nBettings":
+        this.player.setTexture('jeromeBettis');
+        this.player.anims.play('jeromeBettisAnim', true);
+        break;
+
+    }
+
   }
-  
+
   onShop() {
     this.swing.play();
     this.moveTitle(-80);
     this.moveShopBtn(h + 80);
     this.shopContainer.setVisible(true);
     this.instText.setVisible(false);
+    this.moveGameStatusBar(25);
+    this.player.setPosition(w / 2, h / 2);
+    this.player.off('pointerdown', this.onPointerDown, this);
+    this.player.off('pointerup', this.onPointerUp, this);
+    this.player.setInteractive({ useHandCursor: false });
     console.log("onshop");
+  }
+  moveGameStatusBar(yPos) {
+    this.tweens.add({
+      targets: this.statusBarCon,
+      duration: 2000,
+      ease: 'Back.Out',
+      y: yPos
+    });
   }
   moveTitle(yPos) {
     this.tweens.add({
@@ -384,69 +539,295 @@ export default class MainSceneRunner extends Phaser.Scene {
       y: yPos
     });
   }
-  onPointerDown() {
+  onPointerDown(pointer) {
+    isSwiping = true;
+    swipeStartPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
     playerClicked = true;
     this.moveShopBtn(h + 80);
     this.moveTitle(-80);
+    this.moveGameStatusBar(25);
     this.instText.setVisible(false);
-    timerEvent = this.time.addEvent({
-      delay: 1000,
-      callback: this.spawnEnemy,
-      callbackScope: this,
-      loop: true,
-    });
+    //currRandomPoints = this.generateRandomPoints(2250);
+    let baseRandomPoints = [{ x: 288, y: 408 }, { x: 188, y: 175 }, { x: 115, y: 276 }, { x: 288, y: 161 }, { x: 301, y: 305 }, { x: 252, y: 447 }, { x: 228, y: 497 }, { x: 100, y: 228 }, { x: 170, y: 296 }, { x: 232, y: 252 }, { x: 305, y: 111 }, { x: 132, y: 496 }, { x: 247, y: 123 }, { x: 239, y: 182 }, { x: 104, y: 419 }, { x: 202, y: 454 }, { x: 132, y: 336 }, { x: 174, y: 239 }, { x: 111, y: 117 }, { x: 282, y: 258 }, { x: 235, y: 382 }, { x: 178, y: 371 }, { x: 234, y: 316 }, { x: 151, y: 441 }, { x: 165, y: 118 }, { x: 275, y: 350 }, { x: 134, y: 181 }, { x: 278, y: 494 }];
+
+    currRandomPoints = [];
+    let basePointsLength = baseRandomPoints.length;
+    for (let j = 0; j < basePointsLength; j++) {
+      let currPoint = baseRandomPoints[j];
+      let distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, currPoint.x, currPoint.y);
+      if (distance >= 20) {
+        currRandomPoints.push(currPoint);
+      }
+    }
+
+
+    Phaser.Utils.Array.Shuffle(currRandomPoints);
+    console.log("currRandomPoints", currRandomPoints);
+    let posPoints = 0;
+    if (!gameInProgress) {
+      timerEvent = this.time.addEvent({
+        delay: 1000,
+        callback: this.spawnEnemy,
+        callbackScope: this,
+        loop: true,
+      });
+      for (let i = 0; i < 3; i++) {
+        this.addCoin(currRandomPoints[posPoints++]);
+      }
+      for (let i = 0; i < 3; i++) {
+        this.addBooster(currRandomPoints[posPoints++]);
+      }
+    }
+    gameInProgress = true;
+
   }
-  onPointerUp() {
+  addBooster(pos) {
+    let booster = this.boosters.create(pos.x, pos.y, 'powerUp');
+    booster.setScale(0.15);
+    this.physics.world.enable(booster);
+    booster.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));
+    booster.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));
+    booster.setData('collected', false);
+  }
+  addCoin(pos) {
+    let coin = this.coins.create(pos.x, pos.y, 'coin');
+    this.physics.world.enable(coin);
+    coin.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));
+    coin.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));
+    coin.setData('collected', false);
+  }
+  handleSwipe(pointer) {
+    if (isSwiping) {
+      let swipeEndPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
+      let swipeVector = swipeEndPosition.subtract(swipeStartPosition);
+      let swipeAngle = Phaser.Math.RadToDeg(Math.atan2(swipeVector.y, swipeVector.x));
+      console.log("swipeAngle", swipeAngle);
+      if (swipeAngle < 60) {
+        if (pointer.worldX < this.player.x) {
+          swipeAngle = -15;
+        } else {
+          swipeAngle = 15;
+        }
+      } else {
+        if (pointer.worldX < this.player.x) {
+          swipeAngle = -260;
+        } else {
+          swipeAngle = 260;
+        }
+      }
+      //console.log("swipeAngle",swipeAngle);
+      this.player.angle = swipeAngle;
+
+    } else {
+      this.player.angle = 0;
+    }
+  }
+  onPointerUp(pointer) {
+    isSwiping = false;
     playerClicked = false;
     if (timerEvent) {
       timerEvent.destroy();
     }
   }
   spawnEnemy() {
-    const x = Phaser.Math.Between(0, w);
+    const x = Phaser.Math.Between(-w / 2, w + w / 2);
     const enemy = this.enemies.create(x, -50, 'enemyOne');
     enemy.play("enemyOneAnim");
     enemy.setVelocityY(100);
-  }
-  onRetry(){
-	  gameOver = false;
-	  this.scene.restart();
-	  this.player.setPosition(w / 2, h / 2 + 160);
-  }
-  onCollision() {
-	gameOver = true;
-	if (timerEvent) {
-      timerEvent.destroy();
+    enemy.setScale(Phaser.Math.Between(0.4, 1));
+    enemy.setVelocityY(Phaser.Math.Between(10, 50));
+    enemy.setData('tackled', false);
+    this.physics.world.enable(enemy);
+    levelEnemyReleased++;
+    if (levelEnemyReleased == levelEnemyAllowed) {
+      if (timerEvent) {
+        timerEvent.destroy();
+      }
+
     }
-	this.enemies.clear(true, true);
-    this.game.sound.stopAll();
-	this.collide.play();
-	this.smoke.setVisible(true);
-	this.smoke.play("smokeAnim");
-	this.smoke.setPosition(this.player.x, this.player.y);
-	this.player.setVisible(false);
-	this.tackledContainer.setVisible(true);
+
+  }
+  generateRandomPoints(numPoints) {
+    let points = [];
+
+    for (let j = 0; j < numPoints; j++) {
+      let x = Phaser.Math.Between(100, w - 70);
+      let y = Phaser.Math.Between(100, h - 70);
+
+
+      let isValid = points.every(function (existingPoint) {
+        let distance = Phaser.Math.Distance.Between(x, y, existingPoint.x, existingPoint.y);
+        return distance >= 50;
+      });
+
+
+      if (isValid) {
+        points.push({ x: x, y: y });
+      }
+    }
+
+    return points;
+  }
+  onRetry() {
+    gameOver = false;
+
+    this.scene.restart();
+    this.player.setPosition(w / 2, h / 2 + 160);
+
+    // this.player.setAlpha(1);
+    //this.player.setScale(1);
+    //this.player.angle = 0;
+  }
+  collectCoin(player, coin) {
+    let collected = coin.getData('collected');
+    if (collected) {
+      return;
+    }
+    coin.setData('collected', true);
+    console.log("coin collected");
+    this.tweens.add({
+      targets: coin,
+      alpha: 0,
+      scaleX: 2,
+      scaleY: 2,
+      duration: 500,
+      ease: 'Power1',
+      onComplete: function () {
+        this.coins.remove(coin);
+        coin.destroy();
+        this.coinscollected++;
+        this.coinsCollectedText.text = this.coinscollected;
+      },
+      callbackScope: this
+    });
+  }
+  collectBooster(player, booster) {
+    let collected = booster.getData('collected');
+    if (collected) {
+      return;
+    }
+    booster.setData('collected', true);
+    console.log("booster collected");
+    this.tweens.add({
+      targets: booster,
+      alpha: 0,
+      scaleX: 0,
+      scaleY: 0,
+      duration: 500,
+      ease: 'Power2',
+      onComplete: function () {
+        this.boosters.remove(booster);
+        booster.destroy();
+        this.currPowers++;
+        this.currPowersText.text = this.currPowers + "/3";
+      },
+      callbackScope: this
+    });
+  }
+  onCollision(player, enemy) {
+    let tackled = this.player.getData('tackled');
+    if (tackled) {
+      return;
+    }
+    let playerPos = { x: this.player.x, y: this.player.y };
+
+    this.player.setData('tackled', true);
+    this.currLives--;
+    this.currLivesText.text = this.currLives;
+    if (this.currLives > 0) {
+      this.tweens.add({
+        targets: this.player,
+        alpha: 0.5,
+        duration: 500,
+        scaleX: 1.5,
+        scaleY: 1.5,
+        angle: 180,
+        onComplete: function () {
+          this.time.delayedCall(700, () => {
+            this.enemies.clear(true, true);
+            this.player.setAlpha(1);
+            this.player.setScale(1);
+            this.player.angle = 0;
+            this.player.x = playerPos.x;
+            this.player.y = playerPos.y;
+			this.player.setData('tackled', false);
+            levelEnemyReleased = 0;
+			timerEvent = this.time.addEvent({
+				delay: 1000,
+				callback: this.spawnEnemy,
+				callbackScope: this,
+				loop: true,
+			});
+
+          }, this);
+
+        },
+        callbackScope: this
+      });
+    } else {
+      gameOver = true;
+      gameInProgress = false;
+      levelEnemyReleased = 0;
+      if (timerEvent) {
+        timerEvent.destroy();
+      }
+      this.enemies.clear(true, true);
+      this.coins.clear(true, true);
+      this.boosters.clear(true, true);
+      this.game.sound.stopAll();
+      this.collide.play();
+      this.smoke.setVisible(true);
+      this.smoke.play("smokeAnim");
+      this.smoke.setPosition(this.player.x, this.player.y);
+      this.player.setVisible(false);
+      this.tackledContainer.setVisible(true);
+    }
+
+
+
+
+    //this.moveGameStatusBar(-80);
     //this.scene.restart();
   }
   update(time, delta) {
-	  if(gameOver){
-		 return; 
-	  }
+    if (gameOver) {
+      return;
+    }
     let speed = 5;
     let maxOffsetY = 2 * h + 100;
-	/*
-	if(this.enemies){
-		this.enemies.children.iterate(function (enemy) {
-			enemy.rotation = Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y);
-			const velocity = this.physics.velocityFromRotation(enemy.rotation, 100);
-			enemy.setVelocity(velocity.x, velocity.y);
-	   }, this);
-	}*/
+    if (this.boosters) {
+      this.boosters.getChildren().forEach(function (booster) {
+        let velocity = booster.getData('velocity');
+        let offset = booster.getData('offset');
+        booster.y = booster.y + Math.sin(offset) * 0.5;
+        booster.setData('offset', offset + velocity);
+      });
+    }
+    if (this.coins) {
+      this.coins.getChildren().forEach(function (coin) {
+        let velocity = coin.getData('velocity');
+        let offset = coin.getData('offset');
+        coin.y = coin.y + Math.sin(offset) * 0.5;
+        coin.setData('offset', offset + velocity);
+      });
+    }
+    if (this.enemies) {
+      this.enemies.children.iterate(function (enemy) {
+        enemy.angle = Phaser.Math.RadToDeg(Phaser.Math.Angle.Between(enemy.x, enemy.y, this.player.x, this.player.y)) + 90;
+        this.physics.moveToObject(enemy, this.player, 100);
+
+      }, this);
+
+
+
+    }
+
 
     if (this.grassRegular) {
-	    
+
 
       let imageHeight = this.grassRegular.displayHeight;
+      let shiftImageHeight = imageHeight / 2.5;
       this.grassRegular.y += speed;
       this.grassWinter.y += speed;
       this.grassRain.y += speed;
@@ -460,6 +841,26 @@ export default class MainSceneRunner extends Phaser.Scene {
       if (this.grassRain.y > maxOffsetY) {
         this.grassRain.y = this.grassWinter.y - imageHeight;
       }
+      //this.grassRegularBar.y = this.grassRegular.y + halfImageHeight;
+      //this.grassWinterBar.y = this.grassWinter.y + halfImageHeight;
+      //this.grassRainBar.y = this.grassRain.y + halfImageHeight;
+      this.grassRegularBar.y = this.grassRegular.y - shiftImageHeight;
+      this.grassWinterBar.y = this.grassWinter.y - shiftImageHeight;
+      this.grassRainBar.y = this.grassRain.y - shiftImageHeight;
+      if (gameInProgress) {
+        if (Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassRegularBar.getBounds()) ||
+          Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassWinterBar.getBounds()) ||
+          Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.grassRainBar.getBounds())) {
+          if (!touchdownOccurred) {
+            touchdownOccurred = true;
+            this.handleTouchdown();
+          }
+        } else {
+          touchdownOccurred = false;
+        }
+      }
+
+
     }
     if (this.player) {
       const pointer = this.input.activePointer;
@@ -469,12 +870,12 @@ export default class MainSceneRunner extends Phaser.Scene {
           this.player.y = pointer.y;
         }
       } else {
-        this.player.angle = 0;
+        //this.player.angle = 0;
       }
 
       const cursors = this.input.keyboard.createCursorKeys();
 
-      if (cursors.left.isDown) {
+      /*if (cursors.left.isDown) {
         this.player.setVelocityX(-160);
         this.player.angle = -15;
       } else if (cursors.right.isDown) {
@@ -483,15 +884,18 @@ export default class MainSceneRunner extends Phaser.Scene {
       } else if (!pointer.isDown) {
         this.player.setVelocityX(0);
         this.player.angle = 0;
-      }
+      }*/
 
-      this.physics.world.collide(
+
+      /*this.physics.world.collide(
         this.player,
         this.enemies,
         this.onCollision,
         null,
         this
-      );
+      );*/
+
+
 
 
     }
