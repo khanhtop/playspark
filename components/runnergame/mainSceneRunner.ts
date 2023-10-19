@@ -20,7 +20,7 @@ let w: number,
   heartR: number;
 
 let gameType = "runner";
-let timerEvent;
+let enemyTimerEvent, coinTimerEvent, boosterTimerEvent;
 let playerClicked = false;
 let firstLoad;
 let gameOver = false;
@@ -56,6 +56,10 @@ export default class MainSceneRunner extends Phaser.Scene {
     MainSceneRunner.instance = this;
     gameType = newGameType;
 
+  }
+  public setScoreHandle(handleScore: any) {
+	  console.log("setScoreHandle", setScoreHandle)
+    this.scoreHandler = handleScore;
   }
   preload() {
     console.log("runner game gameType", gameType);
@@ -137,6 +141,9 @@ export default class MainSceneRunner extends Phaser.Scene {
 
 
     this.load.audio("bg", "/" + gameType + "/sfx/bgNoise.mp3");
+	this.load.audio("boosterCollect", "/" + gameType + "/sfx/booster-collect.mp3");
+	this.load.audio("coinCollect", "/" + gameType + "/sfx/coin-collect.mp3");
+	this.load.audio("touchdown", "/" + gameType + "/sfx/touchdown.mp3");
     this.load.audio("clap", "/" + gameType + "/sfx/clap.mp3");
     this.load.audio("collide", "/" + gameType + "/sfx/collide.mp3");
     this.load.audio("kittyOpening", "/" + gameType + "/sfx/kittyopening.mp3");
@@ -220,6 +227,9 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.swing = this.sound.add("swing");
     this.clap = this.sound.add("clap");
     this.collide = this.sound.add("collide");
+	this.boosterCollect = this.sound.add("boosterCollect");
+	this.coinCollect = this.sound.add("coinCollect", {volume: 2});
+	this.touchdown = this.sound.add("touchdown");
 
     const backgroundTexture = this.textures.get('grassRegular')!;
     const tileSpriteHeight = (backgroundTexture.source[0].height / backgroundTexture.source[0].width) * w;
@@ -252,16 +262,38 @@ export default class MainSceneRunner extends Phaser.Scene {
 
     this.smoke = this.physics.add.sprite(0, 0, "smoke");
     this.shopContainer = this.make.container();
+	
+	
+	
     this.player = this.physics.add.sprite(w / 2, h / 2 + 160, "playerOne");
     this.player.setData('tackled', false);
     this.player.play("playerOneAnim");
     this.physics.world.enable(this.player);
     this.player.setInteractive({ useHandCursor: true });
+	
+	 const hitAreaWidth = 50;
+	  const hitAreaHeight = 50;
+	  this.player.body.setSize(hitAreaWidth, hitAreaHeight);
+	  this.player.body.setOffset(
+		(this.player.width - hitAreaWidth) / 2,
+		(this.player.height - hitAreaHeight) / 2
+	  );
+  
+  
     this.player.on('pointerdown', this.onPointerDown, this);
     this.player.on('pointerup', this.onPointerUp, this);
     this.player.on('pointermove', this.handleSwipe, this);
 
     this.player.setCollideWorldBounds(true);
+	
+	
+	this.lifeLooseCon = this.make.container();
+	let lifeLooseText = this.add.text(0, 0, "-", { fontFamily: 'Gamer', fontSize: 44, color: '#ff0000', align: 'center' });
+    lifeLooseText.setOrigin(0.5);
+	let lifeLooseHeart = this.add.image(20, 0, 'heart').setOrigin(0.5).setScale(0.6);;
+	this.lifeLooseCon.add([lifeLooseText,lifeLooseHeart]);
+	this.lifeLooseCon.setAlpha(0);
+	//this.lifeLooseCon.setPosition(this.player.x -20, this.player.y + 40);
 
 
 
@@ -398,7 +430,7 @@ export default class MainSceneRunner extends Phaser.Scene {
 
     this.moveGameStatusBar(-80);
 
-    this.touchDownText = this.add.text(w / 2, 40, 'TOUCHDOWN!', { fontFamily: 'Gamer', fontSize: 74, color: '#ffffff', align: 'center' });
+    this.touchDownText = this.add.text(w / 2, 140, 'TOUCHDOWN!', { fontFamily: 'Gamer', fontSize: 74, color: '#ffffff', align: 'center' });
     this.touchDownText.setOrigin(0.5);
     this.touchDownText.setDepth(3);
     this.touchDownText.setAlpha(0);
@@ -418,7 +450,9 @@ export default class MainSceneRunner extends Phaser.Scene {
   handleTouchdown() {
     console.log("Touchdown!");
     this.touchDownText.setAlpha(0);
-
+	this.touchdown.play();
+	let scoreEarned = (this.currScore === 0) ? 100 : Math.floor(this.currScore * 0.5);
+	this.touchDownText.text = 'TOUCHDOWN!\n+' + scoreEarned + ' points';
     this.tweens.add({
       targets: this.touchDownText,
       duration: 100,
@@ -428,7 +462,8 @@ export default class MainSceneRunner extends Phaser.Scene {
         this.time.delayedCall(700, () => {
           this.touchDownText.setAlpha(0);
           touchDownCount++;
-          this.currScoreText.text = this.currScore = (this.currScore === 0) ? 100 : (this.currScore + (this.currScore * 0.5));
+          //this.currScoreText.text = this.currScore = (this.currScore === 0) ? 100 : (this.currScore + (this.currScore * 0.5));
+		  this.currScoreText.text = this.currScore = this.currScore + scoreEarned;
 
         }, this);
       }
@@ -565,24 +600,39 @@ export default class MainSceneRunner extends Phaser.Scene {
     console.log("currRandomPoints", currRandomPoints);
     let posPoints = 0;
     if (!gameInProgress) {
-      timerEvent = this.time.addEvent({
+      enemyTimerEvent = this.time.addEvent({
         delay: 1000,
         callback: this.spawnEnemy,
         callbackScope: this,
         loop: true,
       });
-      for (let i = 0; i < 3; i++) {
+	  coinTimerEvent = this.time.addEvent({
+        delay: 1000,
+        callback: this.addCoin,
+		args: [currRandomPoints[posPoints++]],
+        callbackScope: this,
+        repeat: 3,
+      });
+	  boosterTimerEvent = this.time.addEvent({
+        delay: 600,
+        callback: this.addBooster,
+		args: [currRandomPoints[posPoints++]],
+        callbackScope: this,
+        repeat: 3,
+      });
+      /*for (let i = 0; i < 3; i++) {
         this.addCoin(currRandomPoints[posPoints++]);
       }
       for (let i = 0; i < 3; i++) {
         this.addBooster(currRandomPoints[posPoints++]);
-      }
+      }*/
     }
     gameInProgress = true;
 
   }
   addBooster(pos) {
-    let booster = this.boosters.create(pos.x, pos.y, 'powerUp');
+	const x = Phaser.Math.Between(50, w -50);
+    let booster = this.boosters.create(x, 0, 'powerUp');
     booster.setScale(0.15);
     this.physics.world.enable(booster);
     booster.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));
@@ -590,7 +640,8 @@ export default class MainSceneRunner extends Phaser.Scene {
     booster.setData('collected', false);
   }
   addCoin(pos) {
-    let coin = this.coins.create(pos.x, pos.y, 'coin');
+	const x = Phaser.Math.Between(50, w -50);
+    let coin = this.coins.create(x, 0, 'coin');
     this.physics.world.enable(coin);
     coin.setData('velocity', Phaser.Math.FloatBetween(0.1, 0.2));
     coin.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));
@@ -625,9 +676,9 @@ export default class MainSceneRunner extends Phaser.Scene {
   onPointerUp(pointer) {
     isSwiping = false;
     playerClicked = false;
-    if (timerEvent) {
-      timerEvent.destroy();
-    }
+    //if (enemyTimerEvent) {
+      //enemyTimerEvent.destroy();
+    //}
   }
   spawnEnemy() {
     const x = Phaser.Math.Between(-w / 2, w + w / 2);
@@ -640,8 +691,8 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.physics.world.enable(enemy);
     levelEnemyReleased++;
     if (levelEnemyReleased == levelEnemyAllowed) {
-      if (timerEvent) {
-        timerEvent.destroy();
+      if (enemyTimerEvent) {
+        enemyTimerEvent.destroy();
       }
 
     }
@@ -687,16 +738,17 @@ export default class MainSceneRunner extends Phaser.Scene {
     console.log("coin collected");
     this.tweens.add({
       targets: coin,
-      alpha: 0,
-      scaleX: 2,
-      scaleY: 2,
+	  x: this.coinBase.x,
+      y: this.coinBase.y + 20,
+      scale: 0.5,      
       duration: 500,
-      ease: 'Power1',
+      ease: 'Linear',
       onComplete: function () {
         this.coins.remove(coin);
         coin.destroy();
         this.coinscollected++;
         this.coinsCollectedText.text = this.coinscollected;
+		this.coinCollect.play();
       },
       callbackScope: this
     });
@@ -710,16 +762,17 @@ export default class MainSceneRunner extends Phaser.Scene {
     console.log("booster collected");
     this.tweens.add({
       targets: booster,
-      alpha: 0,
-      scaleX: 0,
-      scaleY: 0,
+      x: this.powerBase.x,
+      y: this.powerBase.y + 20,
+      scale: 0.2,      
       duration: 500,
-      ease: 'Power2',
+      ease: 'Linear',
       onComplete: function () {
         this.boosters.remove(booster);
         booster.destroy();
         this.currPowers++;
         this.currPowersText.text = this.currPowers + "/3";
+		this.boosterCollect.play();
       },
       callbackScope: this
     });
@@ -730,18 +783,53 @@ export default class MainSceneRunner extends Phaser.Scene {
       return;
     }
     let playerPos = { x: this.player.x, y: this.player.y };
+	
+	this.lifeLooseCon.setPosition(this.player.x -20, this.player.y + 40);
+	this.tweens.add({
+      targets: this.lifeLooseCon,
+      duration: 100,
+      ease: 'Linear',
+      alpha: 1,
+      onComplete: () => {
+        this.time.delayedCall(1700, () => {
+          this.lifeLooseCon.setAlpha(0);        
+
+        }, this);
+      }
+    });
 
     this.player.setData('tackled', true);
     this.currLives--;
     this.currLivesText.text = this.currLives;
+	
+	const flashColor = 0xff0000; 
+    const flashDuration = 200; 	
+	const numFlashes = 5;
+	let currentFlash = 0;
+	this.player.setTint(flashColor);
+	const flashInterval = setInterval(() => {
+    if (currentFlash % 2 === 0) {
+      this.player.clearTint();
+    } else {
+      this.player.setTint(flashColor);
+    }
+    
+    currentFlash++;
+    
+    if (currentFlash >= numFlashes * 2) {
+      clearInterval(flashInterval);
+      this.player.clearTint();
+    }
+  }, flashDuration);
+  
     if (this.currLives > 0) {
       this.tweens.add({
         targets: this.player,
-        alpha: 0.5,
+        /*alpha: 0.5,
         duration: 500,
         scaleX: 1.5,
         scaleY: 1.5,
-        angle: 180,
+        angle: 180,*/
         onComplete: function () {
           this.time.delayedCall(700, () => {
             this.enemies.clear(true, true);
@@ -752,7 +840,7 @@ export default class MainSceneRunner extends Phaser.Scene {
             this.player.y = playerPos.y;
 			this.player.setData('tackled', false);
             levelEnemyReleased = 0;
-			timerEvent = this.time.addEvent({
+			enemyTimerEvent = this.time.addEvent({
 				delay: 1000,
 				callback: this.spawnEnemy,
 				callbackScope: this,
@@ -768,8 +856,14 @@ export default class MainSceneRunner extends Phaser.Scene {
       gameOver = true;
       gameInProgress = false;
       levelEnemyReleased = 0;
-      if (timerEvent) {
-        timerEvent.destroy();
+      if (enemyTimerEvent) {
+        enemyTimerEvent.destroy();
+      }
+	  if (coinTimerEvent) {
+        coinTimerEvent.destroy();
+      }
+	  if (boosterTimerEvent) {
+        boosterTimerEvent.destroy();
       }
       this.enemies.clear(true, true);
       this.coins.clear(true, true);
@@ -797,18 +891,21 @@ export default class MainSceneRunner extends Phaser.Scene {
     let maxOffsetY = 2 * h + 100;
     if (this.boosters) {
       this.boosters.getChildren().forEach(function (booster) {
-        let velocity = booster.getData('velocity');
+        /*let velocity = booster.getData('velocity');
         let offset = booster.getData('offset');
         booster.y = booster.y + Math.sin(offset) * 0.5;
-        booster.setData('offset', offset + velocity);
+        booster.setData('offset', offset + velocity);*/
+		booster.y += speed;
       });
     }
     if (this.coins) {
       this.coins.getChildren().forEach(function (coin) {
-        let velocity = coin.getData('velocity');
+        /*let velocity = coin.getData('velocity');
         let offset = coin.getData('offset');
         coin.y = coin.y + Math.sin(offset) * 0.5;
-        coin.setData('offset', offset + velocity);
+        coin.setData('offset', offset + velocity);*/
+		coin.y += speed;
+		
       });
     }
     if (this.enemies) {
