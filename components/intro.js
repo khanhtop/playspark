@@ -3,10 +3,14 @@ import BannerAd from "./advertising/bannerAd";
 import UIButton from "./ui/button";
 import Text from "./ui/text";
 
-export default function Intro({ data, setStage }) {
+export default function Intro({ data, setStage, premium, ready }) {
   return (
-    <div className="h-full w-full relative">
-      <BannerAd size="small" position="top" delay={1000} />
+    <div
+      className={`h-full w-full ${
+        premium ? "absolute top-0 left-0" : "relative"
+      }`}
+    >
+      {/* <BannerAd size="small" position="top" delay={1000} /> */}
       <img
         src={data?.backgroundImage}
         className="absolute top-0 left-0 h-full w-full object-cover"
@@ -22,7 +26,9 @@ export default function Intro({ data, setStage }) {
         >
           {data?.name}
         </Text>
-        <UIButton {...data} onClick={() => setStage(1)} text="START" />
+        {premium && ready && (
+          <UIButton {...data} onClick={() => setStage(1)} text="START" />
+        )}
       </div>
     </div>
   );

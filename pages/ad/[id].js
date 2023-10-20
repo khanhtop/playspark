@@ -1,11 +1,10 @@
 import Advert from "@/components/ad";
+import PremiumAdvert from "@/components/premiumAd";
 import { getAd } from "@/helpers/api";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
 export default function Ad({ ad, id }) {
-  console.log(ad);
-
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
     return "https://playspark.co" + url;
@@ -43,7 +42,15 @@ export default function Ad({ ad, id }) {
         <meta name="twitter:image" content={getImageURL(ad.backgroundImage)} />
       </Head>
       <div className="text-white font-bold ">
-        {ad ? <Advert data={ad} /> : <p>{id} - AD NOT FOUND</p>}
+        {ad ? (
+          ad.isPremium ? (
+            <PremiumAdvert data={ad} />
+          ) : (
+            <Advert data={ad} />
+          )
+        ) : (
+          <p>{id} - AD NOT FOUND</p>
+        )}
       </div>
     </>
   );
@@ -56,6 +63,7 @@ export async function getServerSideProps(context) {
     props: {
       id: context.query?.id,
       ad: ad,
+      isPremium: true,
     },
   };
 }

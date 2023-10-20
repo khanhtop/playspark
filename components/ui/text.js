@@ -1,6 +1,5 @@
 export default function Text({ className, style, children, theme }) {
   if (theme === "pixel") {
-    console.log("PIXEL");
     return (
       <p
         style={{

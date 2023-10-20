@@ -69,4 +69,18 @@ export const games = [
     textColor: "#FFF",
     id: 7,
   },
+
+  // PREMIUM UNITY GAMES > 1000
+
+  {
+    name: "Unity Throw",
+    description:
+      "Get past swarms of oncoming defenders and get the highest score in this fast-paced endless NFL runner.",
+    backgroundImage: "/defaults/touchdown-master.jpg",
+    screenshot: "baseball-throw.png",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 1000,
+    isPremium: true,
+  },
 ];
