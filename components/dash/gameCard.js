@@ -62,10 +62,10 @@ export default function GameCard({
         )}
       </div>
 
-      <h5 className="font-roboto text-md mb-4 opacity-100 h-[120px] overflow-ellipsis">
+      <h5 className="font-roboto text-md mb-4 opacity-100 h-[92px] overflow-hidden">
         {game.description}
       </h5>
-      <div className="h-[400px]">
+      <div className="h-[540px] mt-6">
         {loading ? (
           <div className="h-full w-full flex items-center justify-center">
             <ArrowPathIcon className="h-8 w-8 animate-spin" />
