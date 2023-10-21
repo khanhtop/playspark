@@ -73,14 +73,55 @@ export const games = [
   // PREMIUM UNITY GAMES > 1000
 
   {
-    name: "Unity Throw",
+    name: "Baseball Throw",
     description:
-      "Get past swarms of oncoming defenders and get the highest score in this fast-paced endless NFL runner.",
+      "Test your throwing arm and try to hit as many targets as you can in this 3D baseball pitching game.",
     backgroundImage: "/defaults/touchdown-master.jpg",
     screenshot: "baseball-throw.png",
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 1000,
     isPremium: true,
+    unityBundle: "baseball-throw",
+    unityGameType: 0,
   },
+  {
+    name: "Cricket Throw",
+    description:
+      "Line and length count in this 3D cricket game, where the objective is to accurately bowl at targets and amass a high score.",
+    backgroundImage: "/defaults/touchdown-master.jpg",
+    screenshot: "baseball-throw.png",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 1001,
+    isPremium: true,
+    unityBundle: "baseball-throw",
+    unityGameType: 1,
+  },
+  // {
+  //   name: "Basketball Throw",
+  //   description:
+  //     "Get past swarms of oncoming defenders and get the highest score in this fast-paced endless NFL runner.",
+  //   backgroundImage: "/defaults/touchdown-master.jpg",
+  //   screenshot: "baseball-throw.png",
+  //   primaryColor: "#F69B01",
+  //   textColor: "#FFF",
+  //   id: 1002,
+  //   isPremium: true,
+  //   unityBundle: "baseball-throw",
+  //   unityGameType: 2,
+  // },
+  // {
+  //   name: "Tennis Throw",
+  //   description:
+  //     "Get past swarms of oncoming defenders and get the highest score in this fast-paced endless NFL runner.",
+  //   backgroundImage: "/defaults/touchdown-master.jpg",
+  //   screenshot: "baseball-throw.png",
+  //   primaryColor: "#F69B01",
+  //   textColor: "#FFF",
+  //   id: 1003,
+  //   isPremium: true,
+  //   unityBundle: "baseball-throw",
+  //   unityGameType: 3,
+  // },
 ];

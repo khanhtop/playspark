@@ -18,83 +18,12 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 export default function PremiumAdvert({ data }) {
   const context = useAppContext();
   const [isLoaded, setIsLoaded] = useState(false);
-  const unloadRef = useRef();
   const [stage, setStage] = useState(0);
   const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
   const [score, setScore] = useState(0);
   const [leaderboard, setLeaderboard] = useState(
     data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
   );
-
-  // PREMIUM GAMES SECTION
-
-  // const {
-  //   unityProvider,
-  //   sendMessage,
-  //   isLoaded,
-  //   unload,
-  //   addEventListener,
-  //   removeEventListener,
-  // } = useUnityContext({
-  //   loaderUrl: `/premiumGames/${tryGetGame(data.id - 1000)?.bundle}/Build/${
-  //     tryGetGame(data.id - 1000)?.bundle
-  //   }.loader.js`,
-  //   dataUrl: `/premiumGames/${tryGetGame(data.id - 1000)?.bundle}/Build/${
-  //     tryGetGame(data.id - 1000)?.bundle
-  //   }.data`,
-  //   frameworkUrl: `/premiumGames/${tryGetGame(data.id - 1000)?.bundle}/Build/${
-  //     tryGetGame(data.id - 1000)?.bundle
-  //   }.framework.js`,
-  //   codeUrl: `/premiumGames/${tryGetGame(data.id - 1000)?.bundle}/Build/${
-  //     tryGetGame(data.id - 1000)?.bundle
-  //   }.wasm`,
-  // });
-
-  // useEffect(() => {
-  //   if (unload) unloadRef.current = unload;
-  // }, [unload]);
-
-  // const handleGameOver = useCallback(
-  //   async (userId, score, power, coins, revives) => {
-  //     console.log(score);
-  //     setScore(score);
-  //     if (!data.demo) {
-  //       console.log("Incrementing Plays");
-  //       incrementPlayCount(data.tournamentId.toString(), "freemium");
-  //     }
-  //     await unloadRef.current();
-  //     setStage(2);
-  //   },
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   if (!isLoaded) return;
-  //   sendMessage(
-  //     "ReactController",
-  //     "LoadParameter",
-  //     JSON.stringify({
-  //       gameType: 0,
-  //       backgroundColor: data.primaryColor,
-  //       textColor: data.textColor,
-  //       accentColor: "#000000",
-  //       lifeCount: 1,
-  //       power: 0,
-  //       coins: 0,
-  //     })
-  //   );
-  //   addEventListener("GameOver", handleGameOver);
-  //   return () => {
-  //     removeEventListener("GameOver", handleGameOver);
-  //   };
-  // }, [isLoaded]);
-
-  // useEffect(() => {
-  //   addEventListener("GameOver", handleGameOver);
-  //   return () => {
-  //     removeEventListener("GameOver", handleGameOver);
-  //   };
-  // }, [addEventListener, removeEventListener, handleGameOver]);
 
   useEffect(() => {
     const _leaderboard = [...leaderboard];
@@ -152,6 +81,7 @@ export default function PremiumAdvert({ data }) {
     >
       {(stage === 0 || stage === 1) && (
         <UnityGame
+          shouldPlay={stage === 1}
           data={data}
           onLoad={() => setIsLoaded(true)}
           onFinish={(score) => {

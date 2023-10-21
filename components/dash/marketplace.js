@@ -6,10 +6,12 @@ import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import Advert from "../ad";
 import CreateTournamentModal from "./createTournamentModal";
+import FilterPills from "./filterPills";
 
 export default function MarketPlace({}) {
   const context = useAppContext();
   const [demo, setDemo] = useState();
+  const [filter, setFilter] = useState("");
   const [adding, setAdding] = useState(false);
   const [showAddTournamentModal, setShowAddTournamentModal] = useState(false);
 
@@ -31,38 +33,65 @@ export default function MarketPlace({}) {
   };
 
   return (
-    <div className="flex gap-4 flex-wrap pb-8">
-      {games.map((item, key) => (
-        <GameCard
-          key={key}
-          buttonText="Create Tournament"
-          game={item}
-          saving={adding === item.id}
-          added={context.profile?.myGames?.includes(
-            games.findIndex((a) => a.id === item.id)
-          )}
-          onDemo={() => setDemo(item.id)}
-          onAdd={() => {
-            // addToLibrary(item);
-            setShowAddTournamentModal(item);
-          }}
-        />
-      ))}
-      {demo && (
-        <div
-          onClick={() => setDemo()}
-          className="absolute top-0 left-0 h-screen w-screen bg-black/95 z-10 flex items-center justify-center"
-        >
-          <iframe src={`/demo/${demo}`} className="h-[663px] w-[375px]" />
-        </div>
-      )}
-      {showAddTournamentModal && (
-        <CreateTournamentModal
-          data={showAddTournamentModal}
-          hide={() => setShowAddTournamentModal(false)}
-          setAdding={setAdding}
-        />
-      )}
-    </div>
+    <>
+      <FilterPills
+        selected={filter}
+        onSelect={(a) => setFilter(a)}
+        options={[
+          {
+            value: "",
+            text: "All",
+            onSelected: () => null,
+          },
+          {
+            value: "free",
+            text: "Free Games",
+            onSelected: () => null,
+          },
+          {
+            value: "premium",
+            text: "Premium Games",
+            onSelected: () => null,
+          },
+        ]}
+      />
+      <div className="flex gap-4 flex-wrap pb-8">
+        {games
+          .filter((a) =>
+            filter === "" ? a : filter === "free" ? !a.isPremium : a.isPremium
+          )
+          ?.map((item, key) => (
+            <GameCard
+              key={key}
+              buttonText="Create Tournament"
+              game={item}
+              saving={adding === item.id}
+              added={context.profile?.myGames?.includes(
+                games.findIndex((a) => a.id === item.id)
+              )}
+              onDemo={() => setDemo(item.id)}
+              onAdd={() => {
+                // addToLibrary(item);
+                setShowAddTournamentModal(item);
+              }}
+            />
+          ))}
+        {demo && (
+          <div
+            onClick={() => setDemo()}
+            className="absolute top-0 left-0 h-screen w-screen bg-black/95 z-10 flex items-center justify-center"
+          >
+            <iframe src={`/demo/${demo}`} className="h-[663px] w-[375px]" />
+          </div>
+        )}
+        {showAddTournamentModal && (
+          <CreateTournamentModal
+            data={showAddTournamentModal}
+            hide={() => setShowAddTournamentModal(false)}
+            setAdding={setAdding}
+          />
+        )}
+      </div>
+    </>
   );
 }

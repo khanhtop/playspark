@@ -26,7 +26,7 @@ export default function Intro({ data, setStage, premium, ready }) {
         >
           {data?.name}
         </Text>
-        {premium && ready && (
+        {(!premium || ready) && (
           <UIButton {...data} onClick={() => setStage(1)} text="START" />
         )}
       </div>

@@ -43,19 +43,26 @@ export default function GameCard({
     <div
       onMouseOver={() => setImageUrl(animatedImageUrl)}
       onMouseLeave={() => setImageUrl(staticImageUrl)}
-      className="bg-[#000] rounded-lg text-white basis-[300px] p-4"
+      className={`${
+        game.isPremium
+          ? "bg-gradient-to-b from-amber-400 to-amber-600 text-black"
+          : "bg-[#000] text-white"
+      } rounded-lg  basis-[350px] p-4`}
     >
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-titan">{game.name}</h3>
+        <h3 className="text-lg font-titan uppercase">{game.name}</h3>
         {onDelete && (
           <XMarkIcon
             onClick={() => onDelete()}
             className="h-8 w-8 hover:text-sky-400 transition"
           />
         )}
+        {!onDelete && game.isPremium && (
+          <img className="h-6" src="/branding/crown.png" />
+        )}
       </div>
 
-      <h5 className="font-roboto text-xs mb-4 text-white/75 h-[80px] overflow-ellipsis">
+      <h5 className="font-roboto text-md mb-4 opacity-100 h-[120px] overflow-ellipsis">
         {game.description}
       </h5>
       <div className="h-[400px]">

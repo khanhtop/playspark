@@ -1,8 +1,9 @@
 import { tryGetGame } from "@/helpers/premiumGames";
 import { useCallback, useEffect, useRef } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
+import BannerAd from "../advertising/bannerAd";
 
-export default function UnityGame({ data, onLoad, onFinish }) {
+export default function UnityGame({ data, onLoad, onFinish, shouldPlay }) {
   const unloadRef = useRef();
   const {
     unityProvider,
@@ -12,18 +13,10 @@ export default function UnityGame({ data, onLoad, onFinish }) {
     addEventListener,
     removeEventListener,
   } = useUnityContext({
-    loaderUrl: `/premiumGames/${tryGetGame(data.id - 1000)?.bundle}/Build/${
-      tryGetGame(data.id - 1000)?.bundle
-    }.loader.js`,
-    dataUrl: `/premiumGames/${tryGetGame(data.id - 1000)?.bundle}/Build/${
-      tryGetGame(data.id - 1000)?.bundle
-    }.data`,
-    frameworkUrl: `/premiumGames/${tryGetGame(data.id - 1000)?.bundle}/Build/${
-      tryGetGame(data.id - 1000)?.bundle
-    }.framework.js`,
-    codeUrl: `/premiumGames/${tryGetGame(data.id - 1000)?.bundle}/Build/${
-      tryGetGame(data.id - 1000)?.bundle
-    }.wasm`,
+    loaderUrl: `/premiumGames/${data.unityBundle}/Build/${data.unityBundle}.loader.js`,
+    dataUrl: `/premiumGames/${data.unityBundle}/Build/${data.unityBundle}.data`,
+    frameworkUrl: `/premiumGames/${data.unityBundle}/Build/${data.unityBundle}.framework.js`,
+    codeUrl: `/premiumGames/${data.unityBundle}/Build/${data.unityBundle}.wasm`,
   });
 
   useEffect(() => {
@@ -44,7 +37,7 @@ export default function UnityGame({ data, onLoad, onFinish }) {
       "ReactController",
       "LoadParameter",
       JSON.stringify({
-        gameType: 0,
+        gameType: data.unityGameType,
         backgroundColor: data.primaryColor,
         textColor: data.textColor,
         accentColor: "#000000",
@@ -60,5 +53,14 @@ export default function UnityGame({ data, onLoad, onFinish }) {
     };
   }, [isLoaded]);
 
-  return <Unity className="w-full h-full" unityProvider={unityProvider} />;
+  return (
+    <div className="h-full w-full">
+      {shouldPlay && (
+        <div className="w-full h-[90px] bg-black flex items-center justify-center">
+          <BannerAd size="small" position="top" delay={250} />
+        </div>
+      )}
+      <Unity className="w-full h-full" unityProvider={unityProvider} />;
+    </div>
+  );
 }
