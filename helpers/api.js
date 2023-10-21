@@ -58,6 +58,10 @@ export function getGame(id, data, callback) {
   if (id === 7) {
     return <Runner data={data} gameType="runner" callback={callback} />;
   }
+  if (id === 8)
+  return <Pong data={data} gameType="basketballFall" callback={callback} />;
+  if (id === 9)
+  return <Pong data={data} gameType="cricketFall" callback={callback} />;
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {

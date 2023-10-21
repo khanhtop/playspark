@@ -441,7 +441,7 @@ export default class FallScene extends Phaser.Scene {
     this.goalXPos = mW;
     this.goalYPos = h - goalH - playerR / 2;
 
-    heartNum = lives;
+    heartNum = 3;
     this.scoreNum = 0;
     this.scoreText.text = "0000";
     this.hearts.forEach((h) => h.destroy);
@@ -726,8 +726,6 @@ export default class FallScene extends Phaser.Scene {
       this.currentAnim = 'playerThrow'
       this.player.play('playerThrow');
 
-
-
       boosterBat--;
       this.boostNumText.setText(boosterBat.toString());
     } else {
@@ -752,10 +750,12 @@ export default class FallScene extends Phaser.Scene {
     
     this.boosterGroup.add(booster)
 
-    setTimeout(() => {
-      this.boosterGroup.remove(booster);
-      booster.destroy();
-    }, 2000);
+    // setTimeout(() => {
+    //   if(this.boosterGroup.contains(booster)) {
+    //     this.boosterGroup.remove(booster);
+    //     booster.destroy();
+    //   }
+    // }, 2000);
   }
 
   private touches = 0;
@@ -818,6 +818,15 @@ export default class FallScene extends Phaser.Scene {
         this.randomBallPos(fb);
       }
     });
+
+    const items = this.boosterGroup.getChildren();
+
+    items.forEach(item => {
+      if(item.y >= h - goalH + ballR / 2) {
+          this.boosterGroup.remove(item);
+          item.remove();
+      }
+    })
 
     if (this.scored) return;
   }
