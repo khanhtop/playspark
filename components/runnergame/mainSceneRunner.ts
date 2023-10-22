@@ -59,6 +59,9 @@ export default class MainSceneRunner extends Phaser.Scene {
     gameType = newGameType;
 
   }
+  onGameOver(score){
+	  console.log("onGameOver", score)
+  }
   public setScoreHandle(handleScore: any) {
     console.log("setScoreHandle", setScoreHandle)
     this.scoreHandler = handleScore;
@@ -963,7 +966,8 @@ export default class MainSceneRunner extends Phaser.Scene {
       this.smoke.play("smokeAnim");
       this.smoke.setPosition(this.player.x, this.player.y);
       this.player.setVisible(false);
-      this.tackledContainer.setVisible(true);
+	  this.onGameOver(this.currScore);
+      //this.tackledContainer.setVisible(true);
     }
 
 
