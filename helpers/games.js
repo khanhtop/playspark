@@ -58,6 +58,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 6,
+    muxId: "j3ZlLeM901T301003jI7mTN9xdYZHu3DQFsCz2t011SX901k",
   },
   {
     name: "Touchdown Master",
@@ -68,6 +69,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 7,
+    muxId: "kv3nafmeYitHbRztA98TfVfVLvl6GXUf2U8FCtfHUf4",
   },
   {
     name: "Basketball Fall",
@@ -78,6 +80,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 8,
+    muxId: "7YBfAPyXH5zRkyYzNejAnigNV02zPGrEz76OsDCBVu7Q",
   },
   {
     name: "Cricket Fall",
@@ -88,6 +91,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 9,
+    muxId: "LADl2T9sM9xKJJ6QDGG5uSidkg1xPPRJyn0002haYkTRo",
   },
 
   // PREMIUM UNITY GAMES > 1000
@@ -96,7 +100,7 @@ export const games = [
     name: "Baseball Throw",
     description:
       "Test your throwing arm and try to hit as many targets as you can in this 3D baseball pitching game.",
-    backgroundImage: "/defaults/touchdown-master.jpg",
+    backgroundImage: "/defaults/pitch-champ.jpg",
     screenshot: "baseball-throw.png",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -104,12 +108,13 @@ export const games = [
     isPremium: true,
     unityBundle: "baseball-throw",
     unityGameType: 0,
+    muxId: "XE8vut8sCeOLFibwyi2ZswYmaryJydwJnOBZkd1w9rI",
   },
   {
     name: "Cricket Throw",
     description:
       "Line and length count in this 3D cricket game, where the objective is to accurately bowl at targets and amass a high score.",
-    backgroundImage: "/defaults/touchdown-master.jpg",
+    backgroundImage: "/defaults/flick-stars.jpg",
     screenshot: "baseball-throw.png",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -117,5 +122,6 @@ export const games = [
     isPremium: true,
     unityBundle: "baseball-throw",
     unityGameType: 1,
+    muxId: "3Sai2FJp1csTqGeqdq100GaKLmwnSUPH4nH2B3aIR3EA",
   },
 ];

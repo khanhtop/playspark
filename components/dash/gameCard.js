@@ -21,7 +21,8 @@ export default function GameCard({
     if (game.muxId) {
       const staticImage = new Image();
       const animatedImage = new Image();
-      staticImage.src = getMuxAsset(game.muxId, false);
+      // staticImage.src = getMuxAsset(game.muxId, false);
+      staticImage.src = `${game.backgroundImage}`;
       animatedImage.src = getMuxAsset(game.muxId);
       staticImage.onload = () => {
         setImageUrl(staticImage.src);
@@ -33,9 +34,12 @@ export default function GameCard({
       };
     } else {
       setLoading(false);
-      setStaticImageUrl(`/screenshots/${game.screenshot}`);
-      setAnimatedImageUrl(`/screenshots/${game.screenshot}`);
-      setImageUrl(`/screenshots/${game.screenshot}`);
+      // setStaticImageUrl(`/screenshots/${game.screenshot}`);
+      // setAnimatedImageUrl(`/screenshots/${game.screenshot}`);
+      // setImageUrl(`/screenshots/${game.screenshot}`);
+      setStaticImageUrl(`${game.backgroundImage}`);
+      setAnimatedImageUrl(`${game.backgroundImage}`);
+      setImageUrl(`${game.backgroundImage}`);
     }
   }, []);
 
