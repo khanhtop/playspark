@@ -41,7 +41,7 @@ export default function Ad({ ad, id }) {
         />
         <meta name="twitter:image" content={getImageURL(ad.backgroundImage)} />
       </Head>
-      <div className="text-white font-bold w-screen h-screen flex items-center bg-black justify-center">
+      <div className="text-white font-bold w-screen h-[calc(100vh-230px)] md:h-screen flex items-center bg-black justify-center">
         {ad ? (
           ad.isPremium ? (
             <PremiumAdvert data={ad} />
