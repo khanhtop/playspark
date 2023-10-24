@@ -77,6 +77,7 @@ export default function PremiumAdvert({ data }) {
       style={{
         width: dimensions.x,
         height: dimensions.y,
+        overflow: "hidden",
       }}
     >
       {(stage === 0 || stage === 1) && (

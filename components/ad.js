@@ -80,6 +80,7 @@ export default function Advert({ data, theme }) {
       style={{
         width: dimensions.x,
         height: dimensions.y,
+        overflow: "hidden",
       }}
     >
       {stage === 0 && <Intro data={data} setStage={setStage} />}
