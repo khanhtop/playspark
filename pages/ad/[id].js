@@ -1,10 +1,12 @@
 import Advert from "@/components/ad";
 import PremiumAdvert from "@/components/premiumAd";
 import { getAd } from "@/helpers/api";
+import { useAppContext } from "@/helpers/store";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
 export default function Ad({ ad, id }) {
+  const context = useAppContext();
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
     return "https://playspark.co" + url;
@@ -41,7 +43,11 @@ export default function Ad({ ad, id }) {
         />
         <meta name="twitter:image" content={getImageURL(ad.backgroundImage)} />
       </Head>
-      <div className="text-white font-bold w-screen h-[calc(100vh-230px)] md:h-screen flex items-center bg-black justify-center">
+      <div
+        className={`text-white font-bold w-screen ${
+          context.device === "ios" ? "h-[calc(100vh-80px)]" : "h-screen"
+        } flex items-center bg-black justify-center`}
+      >
         {ad ? (
           ad.isPremium ? (
             <PremiumAdvert data={ad} />

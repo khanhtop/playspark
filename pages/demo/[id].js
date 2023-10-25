@@ -1,11 +1,16 @@
 import Advert from "@/components/ad";
 import PremiumAdvert from "@/components/premiumAd";
-import { getAd, getDemo } from "@/helpers/api";
-import { useEffect } from "react";
+import { getDemo } from "@/helpers/api";
+import { useAppContext } from "@/helpers/store";
 
 export default function Demo({ ad, id }) {
+  const context = useAppContext();
   return (
-    <div className="text-white font-bold ">
+    <div
+      className={`text-white font-bold w-screen ${
+        context.device === "ios" ? "h-[calc(100vh-80px)]" : "h-screen"
+      } flex items-center bg-black justify-center`}
+    >
       {ad ? (
         ad.isPremium ? (
           <PremiumAdvert data={ad} />
