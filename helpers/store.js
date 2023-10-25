@@ -9,7 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { isIOS, isAndroid } from "react-device-detect";
+import { isIOS, isAndroid, isSafari } from "react-device-detect";
 
 export const AppContext = createContext();
 
@@ -21,11 +21,8 @@ export function AppWrapper({ children }) {
   const [device, setDevice] = useState("desktop");
 
   useEffect(() => {
-    if (isIOS) {
+    if (isIOS && isSafari) {
       setDevice("ios");
-    }
-    if (isAndroid) {
-      setDevice("android");
     }
   }, [isIOS, isAndroid]);
 
