@@ -9,7 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { isIOS, isAndroid } from "react-device-detect";
+// import { isIOS, isAndroid } from "react-device-detect";
 
 export const AppContext = createContext();
 
@@ -20,14 +20,14 @@ export function AppWrapper({ children }) {
   const [myGames, setMyGames] = useState();
   const [device, setDevice] = useState("desktop");
 
-  useEffect(() => {
-    if (isIOS) {
-      setDevice("ios");
-    }
-    if (isAndroid) {
-      setDevice("android");
-    }
-  }, [isIOS, isAndroid]);
+  // useEffect(() => {
+  //   if (isIOS) {
+  //     setDevice("ios");
+  //   }
+  //   if (isAndroid) {
+  //     setDevice("android");
+  //   }
+  // }, [isIOS, isAndroid]);
 
   // Auth State
 
@@ -88,7 +88,7 @@ export function AppWrapper({ children }) {
     loggedIn,
     profile,
     myGames,
-    device,
+    // device,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>
