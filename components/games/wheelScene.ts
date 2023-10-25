@@ -5,6 +5,13 @@ let gameType = "football";
 let counter = 0;
 let w = 0;
 let h = 0;
+let wheelR = 0;
+let centerH = 0;
+let centerW = 0;
+let centerX = 0;
+let centerY = 0;
+let btnW = 0;
+let btnH = 0;
 let spinTimes = 5;
 
 export default class WheelScene extends Phaser.Scene {
@@ -63,6 +70,11 @@ export default class WheelScene extends Phaser.Scene {
 
     console.log("Preload");
     this.load.image('background', "/pong/" + gameType + '/back3.jpg');
+    this.load.image('ui-center', "/pong/" + gameType + '/ui-center.png');
+    this.load.image('ui-btn-top', "/pong/" + gameType + '/ui-btn-top.png');
+    this.load.image('ui-btn-down', "/pong/" + gameType + '/ui-btn-down.png');
+
+
     this.load.image('wheel', "/pong/" + gameType + '/whl.png');
     this.load.image('pin', "/pong/" + gameType + '/pin.png');
     this.load.image('button', "/pong/" + gameType + '/spin.png');
@@ -76,7 +88,12 @@ export default class WheelScene extends Phaser.Scene {
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
+    wheelR = w / 1.2;
 
+    centerW = w * 0.97;
+    centerH = h * 0.8;
+    centerX = w / 2;
+    centerY = h * 0.05;
   }
 
   // 400 800
@@ -84,15 +101,16 @@ export default class WheelScene extends Phaser.Scene {
   create() {
     // this.sound.add("bg").setVolume(0.3).setLoop(true).play();
 
-    this.bg=this.add.sprite(0, 0,'background').setOrigin(0).setDisplaySize(w, h);;
+    this.bg=this.add.sprite(0, 0,'background').setOrigin(0).setDisplaySize(w, h);
     // this.bg.setScale(1);
     
+    this.add.sprite(centerX, centerY, 'ui-center').setOrigin(0.5, 0).setDisplaySize(centerW, centerH);
     
     this.base=this.add.sprite(w/2,h/2+170,'base');
     this.base.setScale(0.2);
     
-    this.wheel=this.add.sprite(w/2,h/2,'wheel');
-    this.wheel.setScale(0.65);
+    this.wheel=this.add.sprite(w/2, h/2,'wheel').setDisplaySize(wheelR, wheelR);
+    // this.wheel.setScale(0.65);
     
     
     this.pin=this.add.sprite(w/2,h/2-170,'pin');
@@ -121,6 +139,10 @@ export default class WheelScene extends Phaser.Scene {
     var but = this.add.image(w / 2,50,'button').setInteractive();
     but.on('pointerup', this.spinwheel, this);
     but.setScale(0.6);
+
+
+    var btn = this.add.image(centerX, centerY + centerH - 100, 'ui-btn-down').setDisplaySize(w / 3, 50).setInteractive();
+    btn.on('pointerup', this.spinwheel, this);
 
 
     this.music = this.sound.add('audio1');
