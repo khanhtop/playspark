@@ -40,9 +40,9 @@ export default function Pong({ data, gameType, callback }) {
         .
       </div>
 
-      <div className="w-full h-[90px] bg-black flex items-center justify-center">
+      {/* <div className="w-full h-[90px] bg-black flex items-center justify-center">
         <BannerAd size="small" position="top" delay={250} />
-      </div>
+      </div> */}
       <MiddlePong
         pongRef={childRef}
         handleScore={callback}

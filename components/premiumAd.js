@@ -67,8 +67,9 @@ export default function PremiumAdvert({ data }) {
   }, [score, context.loggedIn, context.profile]);
 
   useEffect(() => {
-    const width = window?.frameElement?.offsetWidth || 500;
-    const height = window?.frameElement?.offsetHeight || 900;
+    const width =
+      window?.frameElement?.offsetWidth || window?.innerHeight * 0.58;
+    const height = window?.frameElement?.offsetHeight || window?.innerHeight;
     setDimensions({ x: width, y: height });
   }, []);
 
@@ -78,6 +79,7 @@ export default function PremiumAdvert({ data }) {
         width: dimensions.x,
         height: dimensions.y,
         overflow: "hidden",
+        position: "relative",
       }}
     >
       {(stage === 0 || stage === 1) && (

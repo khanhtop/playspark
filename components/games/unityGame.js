@@ -55,11 +55,11 @@ export default function UnityGame({ data, onLoad, onFinish, shouldPlay }) {
 
   return (
     <div className="h-full w-full">
-      {shouldPlay && (
+      {/* {shouldPlay && (
         <div className="w-full h-[90px] bg-black flex items-center justify-center">
           <BannerAd size="small" position="top" delay={250} />
         </div>
-      )}
+      )} */}
       <Unity className="w-full h-full" unityProvider={unityProvider} />;
     </div>
   );

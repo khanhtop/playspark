@@ -69,7 +69,6 @@ export async function getServerSideProps(context) {
     props: {
       id: context.query?.id,
       ad: ad,
-      isPremium: true,
     },
   };
 }

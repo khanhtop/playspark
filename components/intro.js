@@ -6,6 +6,7 @@ import Text from "./ui/text";
 export default function Intro({ data, setStage, premium, ready }) {
   return (
     <div
+      style={{ width: "100%" }}
       className={`h-full w-full ${
         premium ? "absolute top-0 left-0" : "relative"
       }`}
