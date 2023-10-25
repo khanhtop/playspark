@@ -89,4 +89,14 @@ export const games = [
     textColor: "#FFF",
     id: 9,
   },
+  {
+    name: "Wheel Spin",
+    description:
+      "Quick avoid cricketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/cricket-fall.jpg",
+    screenshot: "cricket-fall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 10,
+  },
 ];

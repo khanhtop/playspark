@@ -9,6 +9,7 @@ import {
 } from "react";
 import MainScene from "./mainScene";
 import FallScene from "./fallScene";
+import WheelScene from "./wheelScene";
 
 const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
   const [hasRendered, setHasRendered] = useState(false);
@@ -32,6 +33,8 @@ const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
       let scene;
       if(gameType == 'baseballFall' || gameType == 'basketballFall' || gameType == 'cricketFall') {
         scene = new FallScene(gameType);
+      } else if(gameType == 'wheelspin') {
+        scene = new WheelScene(gameType);
       } else {
         scene = new MainScene(gameType);
       }
