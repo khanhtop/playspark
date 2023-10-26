@@ -18,6 +18,7 @@ import {
 } from "@heroicons/react/24/solid";
 import UIButton from "../ui/button";
 import Text from "../ui/text";
+import ImagePicker from "../forms/imagePicker";
 
 export default function CreateTournamentModal({ data, hide }) {
   const context = useAppContext();
@@ -64,8 +65,9 @@ export default function CreateTournamentModal({ data, hide }) {
         />
         <Progress length={3} stage={stage} setStage={setStage} />
         {stage === 1 && (
-          <div className="flex-1 overflow-y-scroll pb-4 flex">
-            <div>
+          <div className="flex-1 overflow-y-scroll pb-4 flex gap-8">
+            <div className="flex-1">
+              <p className="flex-1 text-white mt-1 mb-4">Tournament Settings</p>
               <Input
                 label="Tournament Name"
                 className="bg-black border-cyan-400/50 border-[1px] w-full py-2 text-white"
@@ -76,7 +78,7 @@ export default function CreateTournamentModal({ data, hide }) {
                   setTournament({ ...tournament, name: e.target.value })
                 }
               />
-              <p className="text-xs text-white mt-2">Theme</p>
+              <p className="text-xs text-white mt-4 mb-1">Theme</p>
               <select
                 className="bg-transparent text-white w-full h-10 border-cyan-400/50 border-[1px]"
                 onChange={(e) =>
@@ -104,7 +106,7 @@ export default function CreateTournamentModal({ data, hide }) {
                 }}
               />
             </div>
-            <div className="flex flex-col items-center flex-1 text-white p-2">
+            <div className="flex flex-col items-center text-white p-2">
               <div className="">
                 <p className="flex-1">Preview</p>
                 <Preview tournament={tournament} />
@@ -113,12 +115,25 @@ export default function CreateTournamentModal({ data, hide }) {
           </div>
         )}
         {stage === 2 && (
-          <div className="flex-1 overflow-y-scroll text-white">
-            <p>
-              We are building features to allow you to add premium features to
-              your game, such as adding brand or sponsor branding. For now, the
-              games will run as ad-supported games. loca
-            </p>
+          <div className="flex-1 overflow-y-scroll pb-4 flex">
+            <div className="flex-1">
+              <p className="text-white mt-1 mb-4">Tournament Branding</p>
+              <ImagePicker
+                label="Replace Background Image (Aim for 800px x 1600px)"
+                image={tournament.backgroundImage}
+                onChange={(url) => {
+                  console.log(url);
+                  setTournament({ ...tournament, backgroundImage: url });
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col items-center text-white p-2">
+              <div className="">
+                <p className="flex-1">Preview</p>
+                <Preview tournament={tournament} />
+              </div>
+            </div>
           </div>
         )}
         {stage === 3 && (
@@ -140,7 +155,7 @@ function Preview({ tournament }) {
   return (
     <div
       style={{ backgroundColor: tournament.primaryColor }}
-      className={`mt-4 w-[300px] h-[500px] rounded-lg overflow-hidden relative flex flex-col items-center justify-end`}
+      className={`mt-4 w-[200px] h-[400px] rounded-lg overflow-hidden relative flex flex-col items-center justify-end`}
     >
       <img
         src={tournament.backgroundImage}
@@ -240,8 +255,8 @@ function Progress({ stage, length, setStage }) {
 function ColorPicker({ label, value, onSelect }) {
   return (
     <div className="mt-4">
-      <p className="text-xs text-black/70 mb-1 text-white">{label}</p>
-      <PhotoshopPicker color={value} onChangeComplete={onSelect} />
+      <p className="text-xs text-black/70 mb-4 text-white">{label}</p>
+      <TwitterPicker color={value} onChangeComplete={onSelect} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 export default function Input(props) {
   return (
-    <div className="px-1">
+    <div className="">
       {props.label && (
         <p className={`text-xs ${props.labelColor ?? "text-black/70"} mb-1`}>
           {props.label}
