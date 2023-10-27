@@ -19,6 +19,8 @@ import {
 import UIButton from "../ui/button";
 import Text from "../ui/text";
 import ImagePicker from "../forms/imagePicker";
+import VideoPicker from "../forms/videoPicker";
+import { mockVideos } from "@/helpers/mocks";
 
 export default function CreateTournamentModal({ data, hide }) {
   const context = useAppContext();
@@ -122,8 +124,14 @@ export default function CreateTournamentModal({ data, hide }) {
                 label="Replace Background Image (Aim for 800px x 1600px)"
                 image={tournament.backgroundImage}
                 onChange={(url) => {
-                  console.log(url);
                   setTournament({ ...tournament, backgroundImage: url });
+                }}
+              />
+
+              <VideoPicker
+                video={tournament.sponsoredVideo}
+                onChange={(id) => {
+                  setTournament({ ...tournament, sponsoredVideo: id });
                 }}
               />
             </div>

@@ -96,9 +96,12 @@ export default function Advert({ data, theme }) {
       )}
       {stage === 3 && (
         <VideoAd
-          video={mockVideos[Math.floor(Math.random() * mockVideos.length)]}
+          video={
+            data?.sponsoredVideo ??
+            mockVideos[Math.floor(Math.random() * mockVideos.length)]
+          }
           data={data}
-          onSkip={() => setStage(0)}
+          onSkip={() => setStage(1)}
         />
       )}
     </div>

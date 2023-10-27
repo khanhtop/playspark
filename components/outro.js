@@ -53,7 +53,9 @@ export default function Outro({ score, setStage, data, leaderboard }) {
         <UIButton
           text="Play Again"
           {...data}
-          onClick={() => setStage(3)}
+          onClick={() =>
+            data.demo || data.sponsoredVideo ? setStage(3) : setStage(1)
+          }
           className="h-12 mb-48 rounded-full mt-4"
         ></UIButton>
         <BannerAd size="small" position="bottom" delay={1000} />

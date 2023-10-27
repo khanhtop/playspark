@@ -30,7 +30,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       id: context.query?.id,
-      ad: { ...ad, theme: "pixel" },
+      ad: { ...ad, theme: "pixel", demo: true },
     },
   };
 }
