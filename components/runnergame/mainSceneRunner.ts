@@ -147,6 +147,10 @@ export default class MainSceneRunner extends Phaser.Scene {
       "enemyBlowUp", "/" + gameType + "/images/enemyBlowUp.png",
       { frameWidth: 200, frameHeight: 200 }
     );
+	this.load.spritesheet(
+      "confetti", "/" + gameType + "/images/confetti.png",
+      { frameWidth: 512, frameHeight: 512 }
+    );
 
     this.load.audio("bgNoise", "/" + gameType + "/sfx/bgNoise.mp3");
     this.load.audio("boosterBgNoise", "/" + gameType + "/sfx/boosterBgNoise.mp3");
@@ -218,6 +222,13 @@ export default class MainSceneRunner extends Phaser.Scene {
       this.anims.create({
         key: "enemyBlowUpAnim",
         frames: this.anims.generateFrameNumbers("enemyBlowUp", {}),
+        frameRate: 24,
+        repeat: 0,
+        hideOnComplete: true
+      });
+	  this.anims.create({
+        key: "confettiAnim",
+        frames: this.anims.generateFrameNumbers("confetti", {}),
         frameRate: 24,
         repeat: 0,
         hideOnComplete: true
@@ -476,6 +487,8 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   handleTouchdown() {
     //console.log("Touchdown!");
+	const confetti = this.add.sprite(w/2, h/2, 'confetti');
+    confetti.anims.play('confettiAnim', true);
     this.touchDownText.setAlpha(0);
     this.touchdown.play();
     let scoreEarned = (this.currScore === 0) ? 100 : Math.floor(this.currScore * 0.5);
