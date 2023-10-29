@@ -32,20 +32,34 @@ let powerUpActive = false;
 
 //let touchdownOccurred = false;
 //let touchdownOccurred = false;
+let lowSpeed = 10;
+let mediumSpeed = 25;
+let fastSpeed = 50;
 let gameLevelConfig = [
-  { coins: 3, boosters: 0 },
-  { coins: 5, boosters: 1 },
-  { coins: 6, boosters: 2 },
-  { coins: 8, boosters: 2 },
-  { coins: 10, boosters: 3 }
+  { coins: 3, boosters: 0, enemySpeed:lowSpeed, regularSizeEnemyCount:3, mediumSizeEnemyCount:0},
+  { coins: 5, boosters: 1, enemySpeed:lowSpeed, regularSizeEnemyCount:5, mediumSizeEnemyCount:0 },
+  { coins: 6, boosters: 2, enemySpeed:mediumSpeed, regularSizeEnemyCount:5, mediumSizeEnemyCount:0 },
+  { coins: 8, boosters: 2, enemySpeed:mediumSpeed, regularSizeEnemyCount:4, mediumSizeEnemyCount:2 },
+  { coins: 10, boosters: 3, enemySpeed:mediumSpeed, regularSizeEnemyCount:4, mediumSizeEnemyCount:2 },
+  { coins: 10, boosters: 3, enemySpeed:mediumSpeed, regularSizeEnemyCount:5, mediumSizeEnemyCount:2 },
+  { coins: 10, boosters: 3, enemySpeed:fastSpeed, regularSizeEnemyCount:4, mediumSizeEnemyCount:2 },
+  { coins: 10, boosters: 3, enemySpeed:fastSpeed, regularSizeEnemyCount:4, mediumSizeEnemyCount:2 },
+  { coins: 10, boosters: 3, enemySpeed:mediumSpeed, regularSizeEnemyCount:5, mediumSizeEnemyCount:3 },
+  { coins: 10, boosters: 3, enemySpeed:mediumSpeed, regularSizeEnemyCount:5, mediumSizeEnemyCount:3 }
 ];
+let baseRandomPoints = [{ x: 288, y: 408 }, { x: 188, y: 175 }, { x: 115, y: 276 }, { x: 288, y: 161 }, { x: 301, y: 305 }, { x: 252, y: 447 }, { x: 228, y: 497 }, { x: 100, y: 228 }, { x: 170, y: 296 }, { x: 232, y: 252 }, { x: 305, y: 111 }, { x: 132, y: 496 }, { x: 247, y: 123 }, { x: 239, y: 182 }, { x: 104, y: 419 }, { x: 202, y: 454 }, { x: 132, y: 336 }, { x: 174, y: 239 }, { x: 111, y: 117 }, { x: 282, y: 258 }, { x: 235, y: 382 }, { x: 178, y: 371 }, { x: 234, y: 316 }, { x: 151, y: 441 }, { x: 165, y: 118 }, { x: 275, y: 350 }, { x: 134, y: 181 }, { x: 278, y: 494 }];
+let posPoints = 0;
 let touchDownCount = 0;
 let isSwiping = false;
 let swipeStartPosition;
 let levelEnemyReleased = 0;
-let levelEnemyAllowed = 4;
+let levelRegEnemyAllowed = 0;
+let levelMedEnemyAllowed = 0;
+let levelEnemiesList = [];
+let levelEnemySpeed = 0;
 let currRandomPoints = [];
-
+let currGameConfigLevel = 0;
+let currGameConfigObj = gameLevelConfig[0];
 export default class MainSceneRunner extends Phaser.Scene {
   public static instance: MainSceneRunner;
   private ball!: Phaser.Physics.Arcade.Image;
@@ -93,6 +107,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.load.on("progress", this.loadProgress, this);
     this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
     this.load.image('btnShop', "/" + gameType + "/images/btn-shop.png");
+	this.load.image('close', "/" + gameType + "/images/close.png");
     this.load.image('shop', "/" + gameType + "/images/shop.png");
     this.load.image('blue', "/" + gameType + "/images/blue.png");
     this.load.image('shopBg', "/" + gameType + "/images/shopBg.png");
@@ -383,6 +398,12 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.blueBar = this.add.image(w / 2, 80, 'blue').setOrigin(0.5).setScale(1.2);
     this.blueBar.setInteractive({ useHandCursor: true });
     this.blueBar.on('pointerdown', this.onSelect, this);
+	
+	this.closeShopBtn = this.add.image(w - 40, 84, 'close').setOrigin(0.5).setScale(0.3);
+    this.closeShopBtn.setInteractive({ useHandCursor: true });
+    this.closeShopBtn.on('pointerdown', this.onSelect, this);
+	
+	
     this.shopText = this.add.text(this.blueBar.x, this.blueBar.y - 2, "SHOP", { fontFamily: 'Gamer', fontSize: 44, color: '#ffffff', align: 'center' });
     this.shopText.setOrigin(0.5);
 
@@ -420,7 +441,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.playerTouchdownText.setOrigin(0.5, 0);
 
 
-    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.shopText, this.leftArrow, this.rightArrow, this.playerNameText, this.shopCoinBase, this.shopCoin, this.shopCoinValueText, this.playerTouchdownText]);
+    this.shopContainer.add([this.shop, this.shopBg, this.blueBar, this.closeShopBtn, this.shopText, this.leftArrow, this.rightArrow, this.playerNameText, this.shopCoinBase, this.shopCoin, this.shopCoinValueText, this.playerTouchdownText]);
     this.updateShopDisplay();
     this.shopContainer.setVisible(false);
 
@@ -504,6 +525,7 @@ export default class MainSceneRunner extends Phaser.Scene {
           touchDownCount++;
           //this.currScoreText.text = this.currScore = (this.currScore === 0) ? 100 : (this.currScore + (this.currScore * 0.5));
           this.currScoreText.text = this.currScore = this.currScore + scoreEarned;
+		  this.startLevelRelease();
 
         }, this);
       }
@@ -515,6 +537,9 @@ export default class MainSceneRunner extends Phaser.Scene {
       this.kittyOpening.play();
     }
     this.input.off('pointerdown', this.playKitty, this);
+  }
+  onCloseShop(){
+	  
   }
   onSelect() {
     this.instText.setVisible(true);
@@ -548,6 +573,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     if (this.coinscollected >= this.shopData[this.currShopIndex].coins || touchDownCount >= this.shopData[this.currShopIndex].touchdowns) {
       showShopBtn = true;
     }
+	showShopBtn = true;
     this.shopText.setVisible(showShopBtn);
     this.blueBar.setVisible(showShopBtn);
     //console.log("actor", actor);
@@ -623,7 +649,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.moveGameStatusBar(25);
     this.instText.setVisible(false);
     //currRandomPoints = this.generateRandomPoints(2250);
-    let baseRandomPoints = [{ x: 288, y: 408 }, { x: 188, y: 175 }, { x: 115, y: 276 }, { x: 288, y: 161 }, { x: 301, y: 305 }, { x: 252, y: 447 }, { x: 228, y: 497 }, { x: 100, y: 228 }, { x: 170, y: 296 }, { x: 232, y: 252 }, { x: 305, y: 111 }, { x: 132, y: 496 }, { x: 247, y: 123 }, { x: 239, y: 182 }, { x: 104, y: 419 }, { x: 202, y: 454 }, { x: 132, y: 336 }, { x: 174, y: 239 }, { x: 111, y: 117 }, { x: 282, y: 258 }, { x: 235, y: 382 }, { x: 178, y: 371 }, { x: 234, y: 316 }, { x: 151, y: 441 }, { x: 165, y: 118 }, { x: 275, y: 350 }, { x: 134, y: 181 }, { x: 278, y: 494 }];
+    
 
     currRandomPoints = [];
     let basePointsLength = baseRandomPoints.length;
@@ -638,28 +664,22 @@ export default class MainSceneRunner extends Phaser.Scene {
 
     Phaser.Utils.Array.Shuffle(currRandomPoints);
     //console.log("currRandomPoints", currRandomPoints);
-    let posPoints = 0;
+    posPoints = 0;
     if (!gameInProgress) {
-      enemyTimerEvent = this.time.addEvent({
+      /*enemyTimerEvent = this.time.addEvent({
         delay: 1000,
         callback: this.spawnEnemy,
         callbackScope: this,
         loop: true,
-      });
-      coinTimerEvent = this.time.addEvent({
-        delay: 1000,
-        callback: this.addCoin,
-        args: [currRandomPoints[posPoints++]],
-        callbackScope: this,
-        repeat: 3,
-      });
-      boosterTimerEvent = this.time.addEvent({
+      });*/
+      this.startLevelRelease();
+      /*boosterTimerEvent = this.time.addEvent({
         delay: 600,
         callback: this.addBooster,
         args: [currRandomPoints[posPoints++]],
         callbackScope: this,
         repeat: 3,
-      });
+      });*/
       /*for (let i = 0; i < 3; i++) {
         this.addCoin(currRandomPoints[posPoints++]);
       }
@@ -712,6 +732,59 @@ export default class MainSceneRunner extends Phaser.Scene {
     booster.setData('offset', Phaser.Math.FloatBetween(0, Math.PI * 0.5));
     booster.setData('collected', false);
   }
+  startLevelRelease(){	   
+	  if(touchDownCount > gameLevelConfig.length-1){
+		  currGameConfigLevel = gameLevelConfig.length-1;
+	  }else{
+		 currGameConfigLevel = touchDownCount; 
+	  }
+	  currGameConfigObj = gameLevelConfig[currGameConfigLevel];
+	  
+	  if (coinTimerEvent) {
+        coinTimerEvent.destroy();
+      }	  
+	  coinTimerEvent = this.time.addEvent({
+        delay: 300,
+        callback: this.addCoin,
+        args: [currRandomPoints[posPoints++]],
+        callbackScope: this,
+        repeat: currGameConfigObj.coins,
+      });
+	  if (boosterTimerEvent) {
+        boosterTimerEvent.destroy();
+      }	
+	  boosterTimerEvent = this.time.addEvent({
+        delay: 600,
+        callback: this.addBooster,
+        args: [currRandomPoints[posPoints++]],
+        callbackScope: this,
+        repeat: currGameConfigObj.boosters,
+      });
+	  
+	  levelEnemySpeed = currGameConfigObj.enemySpeed;
+	  levelRegEnemyAllowed =  currGameConfigObj.regularSizeEnemyCount;
+	  levelMedEnemyAllowed = currGameConfigObj.mediumSizeEnemyCount;
+	  levelEnemiesList = [];
+	  for(let t=0; t<levelRegEnemyAllowed; t++){
+		  levelEnemiesList.push(1);
+	  }
+	  for(let t=0; t<levelMedEnemyAllowed; t++){
+		  levelEnemiesList.push(1.5);
+	  }
+	  Phaser.Utils.Array.Shuffle(levelEnemiesList);
+	  console.log("levelEnemiesList",levelEnemiesList);
+	  
+	  if (enemyTimerEvent) {
+        enemyTimerEvent.destroy();
+      }
+	  this.spawnEnemy();
+	  enemyTimerEvent = this.time.addEvent({
+        delay: 600,
+        callback: this.spawnEnemy,
+        callbackScope: this,
+        repeat: levelEnemiesList.length -1
+      });
+  }
   addCoin(pos) {
     const x = Phaser.Math.Between(50, w - 50);
     let coin = this.coins.create(x, 0, 'coin');
@@ -757,20 +830,21 @@ export default class MainSceneRunner extends Phaser.Scene {
     const x = Phaser.Math.Between(-w / 2, w + w / 2);
     const enemy = this.enemies.create(x, -50, 'enemyOne');
     enemy.play("enemyOneAnim");
-    enemy.setVelocityY(100);
+    enemy.setVelocityY(levelEnemySpeed);
+	enemy.setScale(levelEnemiesList[levelEnemyReleased]);
     enemy.setData('tackled', false);
     //enemy.setData('blowUp', this.physics.add.sprite(0, 0, "enemyBlowUp"));
-    enemy.setScale(Phaser.Math.Between(0.4, 1));
-    enemy.setVelocityY(Phaser.Math.Between(10, 50));
+    //enemy.setScale(Phaser.Math.Between(0.4, 1));
+    //enemy.setVelocityY(Phaser.Math.Between(10, 50));
     enemy.setData('tackled', false);
     this.physics.world.enable(enemy);
     levelEnemyReleased++;
-    if (levelEnemyReleased == levelEnemyAllowed) {
+    /*if (levelEnemyReleased == levelEnemiesList.length - 1) {
       if (enemyTimerEvent) {
         enemyTimerEvent.destroy();
       }
 
-    }
+    }*/
 
   }
   generateRandomPoints(numPoints) {
@@ -944,13 +1018,13 @@ export default class MainSceneRunner extends Phaser.Scene {
             this.player.x = playerPos.x;
             this.player.y = playerPos.y;
             this.player.setData('tackled', false);
-            levelEnemyReleased = 0;
+            /*levelEnemyReleased = 0;
             enemyTimerEvent = this.time.addEvent({
               delay: 1000,
               callback: this.spawnEnemy,
               callbackScope: this,
               loop: true,
-            });
+            });*/
 
           }, this);
 
