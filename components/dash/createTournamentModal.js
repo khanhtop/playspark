@@ -21,6 +21,7 @@ import Text from "../ui/text";
 import ImagePicker from "../forms/imagePicker";
 import VideoPicker from "../forms/videoPicker";
 import { mockVideos } from "@/helpers/mocks";
+import SurveyInput from "../forms/surveyInput";
 
 export default function CreateTournamentModal({ data, hide }) {
   const context = useAppContext();
@@ -117,7 +118,7 @@ export default function CreateTournamentModal({ data, hide }) {
           </div>
         )}
         {stage === 2 && (
-          <div className="flex-1 overflow-y-scroll pb-4 flex">
+          <div className="flex-1 overflow-y-scroll mb-4 flex">
             <div className="flex-1">
               <p className="text-white mt-1 mb-4">Tournament Branding</p>
               <ImagePicker
@@ -132,6 +133,12 @@ export default function CreateTournamentModal({ data, hide }) {
                 video={tournament.sponsoredVideo}
                 onChange={(id) => {
                   setTournament({ ...tournament, sponsoredVideo: id });
+                }}
+              />
+              <SurveyInput
+                survey={tournament.survey}
+                onChange={(survey) => {
+                  setTournament({ ...tournament, survey: survey });
                 }}
               />
             </div>

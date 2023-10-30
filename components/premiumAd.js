@@ -10,6 +10,7 @@ import { mockVideos } from "@/helpers/mocks";
 import { tryGetGame } from "@/helpers/premiumGames";
 import { Unity, useUnityContext } from "react-unity-webgl";
 import UnityGame from "./games/unityGame";
+import Survey from "./survey";
 
 // UNITY
 
@@ -116,6 +117,15 @@ export default function PremiumAdvert({ data }) {
           }
           data={data}
           onSkip={() => setStage(1)}
+        />
+      )}
+      {stage === 4 && (
+        <Survey
+          data={data}
+          onComplete={(response) => {
+            console.log("Submitting", response);
+            setStage(1);
+          }}
         />
       )}
     </div>

@@ -15,6 +15,14 @@ import UIButton from "./ui/button";
 export default function Outro({ score, setStage, data, leaderboard }) {
   const context = useAppContext();
 
+  const selectStage = () => {
+    if (data.demo) return 3;
+    if (!data.sponsoredVideo && !data.survey) return 1;
+    if (data.sponsoredVideo && !data.survey) return 3;
+    if (!data.sponsoredVideo && data.survey) return 4;
+    return [3, 4][Math.random() < 0.5 ? 1 : 0];
+  };
+
   return (
     <div className="bg-white text-black font-light pt-4 h-full w-full relative flex items-center justify-start flex-col">
       <Text {...data} className="text-2xl mb-4">
@@ -53,9 +61,7 @@ export default function Outro({ score, setStage, data, leaderboard }) {
         <UIButton
           text="Play Again"
           {...data}
-          onClick={() =>
-            data.demo || data.sponsoredVideo ? setStage(3) : setStage(1)
-          }
+          onClick={() => setStage(selectStage())}
           className="h-12 mb-48 rounded-full mt-4"
         ></UIButton>
         <BannerAd size="small" position="bottom" delay={1000} />

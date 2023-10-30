@@ -7,6 +7,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
+import Survey from "./survey";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -102,6 +103,15 @@ export default function Advert({ data, theme }) {
           }
           data={data}
           onSkip={() => setStage(1)}
+        />
+      )}
+      {stage === 4 && (
+        <Survey
+          data={data}
+          onComplete={(response) => {
+            console.log("Submitting", response);
+            setStage(1);
+          }}
         />
       )}
     </div>
