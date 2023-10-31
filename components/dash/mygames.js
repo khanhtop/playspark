@@ -5,11 +5,13 @@ import { useAppContext } from "@/helpers/store";
 import { deleteDoc, doc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import Embed from "./embed";
+import AnalyticsModal from "./analyticsModal";
 
 export default function MyGames({}) {
   const context = useAppContext();
   const [demo, setDemo] = useState();
   const [showEmbed, setShowEmbed] = useState();
+  const [showAnalytics, setShowAnalytics] = useState();
 
   const deleteGame = async (item) => {
     if (
@@ -29,8 +31,22 @@ export default function MyGames({}) {
           onAdd={() => setShowEmbed(item.tournamentId)}
           buttonText="Get Embed Code"
           game={item}
-          onDemo={() => setDemo(item.tournamentId)}
+          // onDemo={() => setDemo(item.tournamentId)}
           onDelete={() => deleteGame(item)}
+          onShowInfo={[
+            {
+              text: "Edit Tournament",
+              action: () => null,
+            },
+            {
+              text: "View Analytics",
+              action: () => setShowAnalytics(item),
+            },
+            {
+              text: "Play Demo",
+              action: () => setDemo(item.tournamentId),
+            },
+          ]}
         />
       ))}
       {demo && (
@@ -42,6 +58,12 @@ export default function MyGames({}) {
         </div>
       )}
       {showEmbed && <Embed id={showEmbed} setShowEmbed={setShowEmbed} />}
+      {showAnalytics && (
+        <AnalyticsModal
+          item={showAnalytics}
+          setShowAnalytics={setShowAnalytics}
+        />
+      )}
     </div>
   );
 }

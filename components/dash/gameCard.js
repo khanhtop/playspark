@@ -1,5 +1,10 @@
 import { getMuxAsset } from "@/helpers/mux";
-import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowPathIcon,
+  ChevronRightIcon,
+  EllipsisVerticalIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 
 export default function GameCard({
@@ -10,11 +15,13 @@ export default function GameCard({
   buttonText,
   saving,
   onDelete,
+  onShowInfo,
 }) {
   const [staticImageUrl, setStaticImageUrl] = useState();
   const [animatedImageUrl, setAnimatedImageUrl] = useState();
   const [imageUrl, setImageUrl] = useState();
   const [loading, setLoading] = useState();
+  const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -98,12 +105,45 @@ export default function GameCard({
             buttonText
           )}
         </button>
-        <button
-          onClick={() => onDemo()}
-          className="w-[100px] bg-cyan-400 text-white rounded-md mt-4 py-3  hover:bg-cyan-600 transition"
-        >
-          Demo
-        </button>
+        {onDemo && (
+          <button
+            onClick={() => onDemo()}
+            className="w-[100px] bg-cyan-400 text-white rounded-md mt-4 py-3  hover:bg-cyan-600 transition"
+          >
+            Demo
+          </button>
+        )}
+        {onShowInfo && (
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu(showMenu ? false : onShowInfo)}
+              className={`h-[50px] mt-4 ${
+                !showMenu ? "bg-[#222]" : "bg-cyan-500"
+              } rounded-lg transition`}
+            >
+              <EllipsisVerticalIcon className={`text-white w-8`} />
+            </button>
+            {showMenu && (
+              <div className="absolute w-48 bg-[#222] bottom-14 right-0 rounded-xl border-2 border-cyan-500 px-2 py-2 flex flex-col gap-1">
+                {onShowInfo.map((item, key) => (
+                  <div
+                    key={key}
+                    onClick={() => {
+                      setShowMenu(false);
+                      item.action();
+                    }}
+                    className="flex gap-2"
+                  >
+                    <ChevronRightIcon className="h-4 w-4" />
+                    <p className="text-sm text-white/60 hover:text-white/100 transition cursor-pointer">
+                      {item.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

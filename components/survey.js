@@ -1,11 +1,50 @@
+import { firestore } from "@/helpers/firebase";
+import { useAppContext } from "@/helpers/store";
+import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 
 export default function Survey({ data, onComplete }) {
+  const context = useAppContext();
   const [questionIndex, setQuestionIndex] = useState(0);
   const [responses, setResponses] = useState([]);
 
-  const submitResponse = (resp) => {
-    onComplete(resp);
+  const submitResponse = async (resp) => {
+    const currentSurvey = await getDoc(
+      doc(firestore, "surveys", data.surveyId)
+    );
+    const surveyData = currentSurvey.exists()
+      ? currentSurvey.data()?.survey
+      : data?.survey;
+    const respondents = currentSurvey.exists()
+      ? currentSurvey.data()?.respondents || []
+      : [];
+    if (context?.loggedIn?.uid) {
+      if (!respondents.includes(context?.loggedIn?.uid))
+        respondents.push(context.loggedIn?.uid);
+    }
+
+    for (let r of resp) {
+      const qIndex = surveyData.findIndex((a) => a.question === r.question);
+      const rIndex = surveyData[qIndex].responses.findIndex(
+        (a) => a.value === r.response
+      );
+      surveyData[qIndex].responses[rIndex].chosenBy =
+        (surveyData[qIndex].responses[rIndex].chosenBy || 0) + 1;
+    }
+
+    await setDoc(doc(firestore, "surveys", data?.surveyId), {
+      id: data.surveyId,
+      survey: surveyData,
+      respondents: respondents,
+    });
+    console.log(data?.tournamentId);
+    await updateDoc(
+      doc(firestore, "tournaments", data.tournamentId.toString()),
+      {
+        surveyCompletions: increment(1),
+      }
+    );
+    onComplete();
   };
 
   return (

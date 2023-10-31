@@ -3,7 +3,7 @@ import { getGame, incrementPlayCount } from "@/helpers/api";
 import dynamic from "next/dynamic";
 import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, increment, setDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
@@ -102,14 +102,22 @@ export default function Advert({ data, theme }) {
             mockVideos[Math.floor(Math.random() * mockVideos.length)]
           }
           data={data}
-          onSkip={() => setStage(1)}
+          onSkip={() => {
+            updateDoc(
+              doc(firestore, "tournaments", data.tournamentId.toString()),
+              {
+                videoViews: increment(1),
+              }
+            ).then(() => {
+              setStage(1);
+            });
+          }}
         />
       )}
       {stage === 4 && (
         <Survey
           data={data}
           onComplete={(response) => {
-            console.log("Submitting", response);
             setStage(1);
           }}
         />

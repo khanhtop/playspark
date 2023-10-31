@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Input from "../forms/input";
 import {
   ChromePicker,
@@ -42,6 +42,10 @@ export default function CreateTournamentModal({ data, hide }) {
     setAdding(false);
     hide();
   };
+
+  const surveyId = useRef(Date.now().toString());
+
+  console.log(tournament);
 
   return (
     <div
@@ -138,7 +142,11 @@ export default function CreateTournamentModal({ data, hide }) {
               <SurveyInput
                 survey={tournament.survey}
                 onChange={(survey) => {
-                  setTournament({ ...tournament, survey: survey });
+                  setTournament({
+                    ...tournament,
+                    survey: survey,
+                    surveyId: surveyId.current,
+                  });
                 }}
               />
             </div>
