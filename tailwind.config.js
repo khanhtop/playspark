@@ -11,6 +11,9 @@ module.exports = {
         titan: ["var(--font-titan)"],
         roboto: ["var(--font-roboto)"],
         pixel: ["var(--font-pixel)"],
+        anton: ["var(--font-anton)"],
+        octo: ["var(--font-octo)"],
+        octolight: ["var(--font-octolight)"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

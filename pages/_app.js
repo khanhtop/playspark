@@ -13,6 +13,36 @@ const titan = localFont({
   variable: "--font-titan",
 });
 
+const anton = localFont({
+  src: [
+    {
+      path: "../public/fonts/anton.ttf",
+      weight: "400",
+    },
+  ],
+  variable: "--font-anton",
+});
+
+const octomed = localFont({
+  src: [
+    {
+      path: "../public/fonts/octomed.ttf",
+      weight: "400",
+    },
+  ],
+  variable: "--font-octo",
+});
+
+const octolight = localFont({
+  src: [
+    {
+      path: "../public/fonts/octolight.ttf",
+      weight: "400",
+    },
+  ],
+  variable: "--font-octolight",
+});
+
 const pixel = localFont({
   src: [
     {
@@ -33,7 +63,7 @@ const roboto = Roboto({
 export default function App({ Component, pageProps }) {
   return (
     <main
-      className={`${titan.variable} ${roboto.variable} ${pixel.variable} font-sans font-roboto`}
+      className={`${titan.variable} ${roboto.variable} ${pixel.variable} ${anton.variable} ${octomed.variable} ${octolight.variable} font-sans font-roboto`}
     >
       <AppWrapper>
         <Component {...pageProps} />
