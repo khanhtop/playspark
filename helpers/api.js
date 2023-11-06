@@ -59,11 +59,11 @@ export function getGame(id, data, callback) {
     return <Runner data={data} gameType="runner" callback={callback} />;
   }
   if (id === 8)
-  return <Pong data={data} gameType="basketballFall" callback={callback} />;
+    return <Pong data={data} gameType="basketballFall" callback={callback} />;
   if (id === 9)
-  return <Pong data={data} gameType="cricketFall" callback={callback} />;
+    return <Pong data={data} gameType="cricketFall" callback={callback} />;
   if (id === 10)
-  return <Pong data={data} gameType="wheelspin" callback={callback} />;
+    return <Pong data={data} gameType="wheelspin" callback={callback} />;
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {
@@ -71,5 +71,25 @@ export function incrementPlayCount(tournamentId, gameType = "freemium") {
     gameType === "freemium" ? "freemiumPlayCount" : "premiumPlayCount";
   updateDoc(doc(firestore, "tournaments", tournamentId), {
     [key]: increment(1),
+    playCount: increment(1),
+  });
+}
+
+export function incrementImpressions(tournamentId) {
+  updateDoc(doc(firestore, "tournaments", tournamentId), {
+    impressions: increment(1),
+  });
+}
+
+export function incrementPlayCountWithImpressions(
+  tournamentId,
+  gameType = "freemium"
+) {
+  const key =
+    gameType === "freemium" ? "freemiumPlayCount" : "premiumPlayCount";
+  updateDoc(doc(firestore, "tournaments", tournamentId), {
+    [key]: increment(1),
+    playCount: increment(1),
+    impressions: increment(1),
   });
 }

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getGame, incrementPlayCount } from "@/helpers/api";
+import {
+  getGame,
+  incrementImpressions,
+  incrementPlayCount,
+  incrementPlayCountWithImpressions,
+} from "@/helpers/api";
 import dynamic from "next/dynamic";
 import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
@@ -22,10 +27,6 @@ export default function Advert({ data, theme }) {
 
   const callback = (score) => {
     setScore(score);
-    if (!data.demo) {
-      console.log("Incrementing Plays");
-      incrementPlayCount(data.tournamentId.toString(), "freemium");
-    }
     setStage(2);
   };
 
@@ -77,6 +78,15 @@ export default function Advert({ data, theme }) {
     setDimensions({ x: width, y: height });
   }, []);
 
+  const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
+
+  useEffect(() => {
+    if (data.tournamentId && !hasLoggedImpression) {
+      setHasLoggedImpression(true);
+      incrementImpressions(data.tournamentId.toString());
+    }
+  }, [data?.tournamentId]);
+
   return (
     <div
       style={{
@@ -85,7 +95,18 @@ export default function Advert({ data, theme }) {
         overflow: "hidden",
       }}
     >
-      {stage === 0 && <Intro data={data} setStage={setStage} />}
+      {stage === 0 && (
+        <Intro
+          data={data}
+          setStage={(a) => {
+            setStage(a);
+            if (!data.demo) {
+              incrementPlayCount(data.tournamentId.toString(), "freemium");
+            }
+          }}
+        />
+      )}
+
       {stage === 1 && getGame(data.id, data, callback)}
       {stage === 2 && (
         <Outro
@@ -109,6 +130,12 @@ export default function Advert({ data, theme }) {
                 videoViews: increment(1),
               }
             ).then(() => {
+              if (!data.demo) {
+                incrementPlayCountWithImpressions(
+                  data.tournamentId.toString(),
+                  "freemium"
+                );
+              }
               setStage(1);
             });
           }}
@@ -118,6 +145,12 @@ export default function Advert({ data, theme }) {
         <Survey
           data={data}
           onComplete={(response) => {
+            if (!data.demo) {
+              incrementPlayCountWithImpressions(
+                data.tournamentId.toString(),
+                "freemium"
+              );
+            }
             setStage(1);
           }}
         />

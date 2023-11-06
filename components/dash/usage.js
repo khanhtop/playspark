@@ -79,13 +79,20 @@ export default function Usage({}) {
 
 function UsageGameRow({ item, freemiumPrice, premiumPrice, billable }) {
   const nPlays = (item.freemiumPlayCount ?? 0) + (item.premiumPlayCount ?? 0);
+  const ctr =
+    nPlays === 0 || item.impressions === 0 || !nPlays || !item.impressions
+      ? (0).toFixed(2)
+      : ((nPlays / item.impressions) * 100).toFixed(2);
   return (
     <div className="flex">
       <div className="flex-1">
         <h3>{item.name}</h3>
       </div>
       <div className="flex-1">
-        <h3>{item.tournamentId}</h3>
+        <h3>{item?.impressions ?? 0}</h3>
+      </div>
+      <div className="flex-1">
+        <h3>{ctr}%</h3>
       </div>
       <div className="flex-1">
         <h3>{nPlays}</h3>
@@ -101,7 +108,8 @@ function UsageHeaderRow() {
   return (
     <div className="flex font-bold mt-2">
       <div className="flex-1">Game Name</div>
-      <div className="flex-1">Game ID</div>
+      <div className="flex-1">Impressions</div>
+      <div className="flex-1">CTR</div>
       <div className="flex-1">Number Of Plays</div>
       <div className="flex-1">Charges</div>
     </div>

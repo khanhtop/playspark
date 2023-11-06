@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getGame, incrementPlayCount } from "@/helpers/api";
+import {
+  getGame,
+  incrementImpressions,
+  incrementPlayCount,
+  incrementPlayCountWithImpressions,
+} from "@/helpers/api";
 import dynamic from "next/dynamic";
 import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
@@ -74,6 +79,15 @@ export default function PremiumAdvert({ data }) {
     setDimensions({ x: width, y: height });
   }, []);
 
+  const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
+
+  useEffect(() => {
+    if (data.tournamentId && !hasLoggedImpression) {
+      setHasLoggedImpression(true);
+      incrementImpressions(data.tournamentId.toString());
+    }
+  }, [data?.tournamentId]);
+
   return (
     <div
       style={{
@@ -90,16 +104,22 @@ export default function PremiumAdvert({ data }) {
           onLoad={() => setIsLoaded(true)}
           onFinish={(score) => {
             setScore(score);
-            if (!data.demo) {
-              console.log("Incrementing Plays");
-              incrementPlayCount(data.tournamentId.toString(), "freemium");
-            }
             setStage(2);
           }}
         />
       )}
       {stage === 0 && (
-        <Intro data={data} setStage={setStage} premium ready={isLoaded} />
+        <Intro
+          data={data}
+          setStage={(a) => {
+            setStage(a);
+            if (!data.demo) {
+              incrementPlayCount(data.tournamentId.toString(), "premium");
+            }
+          }}
+          premium
+          ready={isLoaded}
+        />
       )}
       {stage === 2 && (
         <Outro
@@ -123,6 +143,12 @@ export default function PremiumAdvert({ data }) {
                 videoViews: increment(1),
               }
             ).then(() => {
+              if (!data.demo) {
+                incrementPlayCountWithImpressions(
+                  data.tournamentId.toString(),
+                  "premium"
+                );
+              }
               setStage(1);
             });
           }}
@@ -132,6 +158,12 @@ export default function PremiumAdvert({ data }) {
         <Survey
           data={data}
           onComplete={(response) => {
+            if (!data.demo) {
+              incrementPlayCountWithImpressions(
+                data.tournamentId.toString(),
+                "premium"
+              );
+            }
             setStage(1);
           }}
         />
