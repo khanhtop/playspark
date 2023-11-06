@@ -124,4 +124,14 @@ export const games = [
     unityGameType: 1,
     muxId: "3Sai2FJp1csTqGeqdq100GaKLmwnSUPH4nH2B3aIR3EA",
   },
+  {
+    name: "Wheel Spin",
+    description:
+      "Quick avoid cricketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/cricket-fall.jpg",
+    screenshot: "cricket-fall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 10,
+  },
 ];
