@@ -2,9 +2,9 @@ import { ArrowDownIcon } from "@heroicons/react/24/solid";
 
 export default function TextSection() {
   return (
-    <div className="w-full min-h-screen flex flex-col items-center py-16 md:py-0">
-      <div className="max-w-[1200px] flex-1 w-full text-left px-12 md:py-24">
-        <h1 className="font-anton text-[36px] leading-[44px] md:text-[100px] md:leading-[110px] max-w-[50%] mb-8">
+    <div className="w-full min-h-screen flex flex-col items-center  py-16 md:py-0">
+      <div className="max-w-[1200px] flex-1 flex flex-col items-center md:items-start justify-center md:justify-start w-full text-center md:text-left px-12 md:py-24">
+        <h1 className="font-anton text-[36px] leading-[44px] md:text-[60px] md:leading-[70px] lg:text-[100px] lg:leading-[110px] max-w-[50%] mb-8">
           Unleash The Power Of {` `}
           <span className="text-cyan-500">Mobile Gaming</span>
         </h1>

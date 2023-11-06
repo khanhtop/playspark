@@ -45,12 +45,12 @@ export default function MarketPlace({}) {
           },
           {
             value: "free",
-            text: "Free Games",
+            text: "Basic",
             onSelected: () => null,
           },
           {
             value: "premium",
-            text: "Premium Games",
+            text: "Premium",
             onSelected: () => null,
           },
         ]}

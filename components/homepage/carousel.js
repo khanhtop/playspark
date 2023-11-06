@@ -43,7 +43,7 @@ export default function Carousel() {
         >
           <SwiperSlide>
             <Slide
-              img="/homepage/carousel4.png"
+              img="/homepage/carousel5.png"
               heading="HOOK IN YOUR AUDIENCE"
               subtext="Immerse your fans in captivating gaming experiences themed your brand.
           Our custom-branded rewarded mobile games create an unparalleled
@@ -52,7 +52,7 @@ export default function Carousel() {
           </SwiperSlide>
           <SwiperSlide>
             <Slide
-              img="/homepage/carousel2.png"
+              img="/homepage/carousel6.png"
               heading="DRIVE USER GROWTH"
               subtext="Use our in-built reward modules to
 incentivise positive user behaviour
@@ -68,7 +68,7 @@ brand recall."
           </SwiperSlide>
           <SwiperSlide>
             <Slide
-              img="/homepage/carousel3.png"
+              img="/homepage/carousel7.png"
               heading="AMPLIFY LOYALTY"
               subtext="With consumers 4.7X more likely to
 purchase a product when being
@@ -92,7 +92,7 @@ function Slide({ heading, subtext, img }) {
     <div className="w-screen px-8 md:py-8 pb-4 md:pb-12">
       <div className="w-full md:h-[calc(100vh/1.4)] max-h-[800px] rounded-xl bg-cyan-100/5 flex flex-col md:flex-row gap-8 justify-center items-center px-[5%]">
         <div className="md:flex-1 h-auto md:h-full max-h-full flex items-center justify-center">
-          <img src={img} className="h-60 md:h-2/3" />
+          <img src={img} className="h-60 md:h-2/3 object-contain" />
         </div>
         <div className="md:flex-1 mb-8">
           <h1 className="font-octo text-cyan-400 md:text-[40px] md:text-left mb-2">

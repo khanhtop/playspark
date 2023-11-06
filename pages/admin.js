@@ -17,21 +17,21 @@ export default function Application() {
   return (
     <AuthWrapper>
       <OnboardWrapper>
-        <div className="h-screen w-screen flex bg-white">
+        <div className="h-screen w-screen flex bg-[#1A202C]">
           <Sidebar
             selectedPane={selectedPane}
             setSelectedPane={setSelectedPane}
           />
           {selectedPane === 1 ? (
-            <Pane>
+            <Pane title="My Games">
               <MyGames />
             </Pane>
           ) : selectedPane === 0 ? (
-            <Pane>
+            <Pane title="Marketplace">
               <MarketPlace />
             </Pane>
           ) : selectedPane === 2 ? (
-            <Pane>
+            <Pane title="Usage">
               <Usage />
             </Pane>
           ) : (

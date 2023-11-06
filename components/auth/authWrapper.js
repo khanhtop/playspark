@@ -71,35 +71,18 @@ export default function AuthWrapper({ children, action }) {
     return (
       <>
         <div className="absolute top-0 h-screen w-screen text-gray-600 flex items-center justify-center flex-col gap-2">
-          <div className="flex flex-row h-full w-full">
+          <div className="flex flex-row-reverse h-full w-full">
             <div className="flex-1 hidden lg:block ">
-              <div className="bg-gradient-to-b from-black/95 to-black/80 h-full w-full flex items-center justify-center text-white flex-col">
-                <img src="/branding/logo2.png" className="h-24" />
-                <p className="text-2xl font-slab max-w-[60%] text-center font-light leading-[25px]">
-                  Enter your email address and password to create an account or
-                  sign in.
-                </p>
+              <div className="bg-[#1A202C] h-full px-24 w-full flex items-center justify-center text-white flex-col">
+                <img src="/homepage/carousel1.png" className="w-full" />
               </div>
             </div>
-            <div className="flex flex-col flex-1 items-center gap-2 lg:px-8 bg-black/100 h-full justify-center">
-              <div className="xs:text-xl lg:text-3xl flex gap-8 w-full px-8 lg:px-12 font-slab">
-                <p
-                  className={`${
-                    authState === "register" ? "text-cyan-300" : "text-white/50"
-                  } cursor-pointer hover:text-white transition`}
-                  onClick={() => setAuthState("register")}
-                >
-                  Sign Up
-                </p>
-                <p
-                  className={`${
-                    authState === "login" ? "text-cyan-300" : "text-white/30"
-                  } cursor-pointer hover:text-white transition`}
-                  onClick={() => setAuthState("login")}
-                >
-                  Log In
-                </p>
-              </div>
+            <div className="flex flex-col flex-1 max-w-[500px] items-center gap-2 lg:px-8 bg-[#364153] h-full justify-center">
+              <img className="h-[120px]" src="/branding/block-color.png" />
+              <h1 className="text-xl text-white">
+                {authState === "login" ? "Login" : "Sign Up"}
+              </h1>
+
               <div className="flex flex-col h-[400px] w-full px-8 lg:px-12">
                 <LabeledInput
                   label="Email Address"
@@ -138,6 +121,21 @@ export default function AuthWrapper({ children, action }) {
                   </StyledButton>
                 )}
               </div>
+              <div className="text-white flex gap-2">
+                <p>
+                  {authState === "register"
+                    ? "Already have an account?"
+                    : "Don't have an account"}
+                </p>
+                <p
+                  onClick={() =>
+                    setAuthState(authState === "login" ? "register" : "login")
+                  }
+                  className="text-cyan-400 cursor-pointer"
+                >
+                  {authState === "register" ? "Login" : "Sign Up"}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -148,12 +146,12 @@ export default function AuthWrapper({ children, action }) {
 
 function LabeledInput({ onChange, secure, label, placeholder }) {
   return (
-    <div className="mt-8">
-      <p className="ml-3 font-slab text-white font-extralight text-xs uppercase">
+    <div className="mt-4">
+      <p className="ml-1 mb-2 font-slab text-white font-extralight text-xs uppercase">
         {label}
       </p>
       <input
-        className="font-slab w-full bg-transparent border-b-[1px] border-b-white/30 pb-3 pt-3 text-white px-4"
+        className="font-slab w-full bg-transparent bg-black/40 rounded-lg pb-3 pt-3 text-white px-4"
         type={secure ? "password" : "text"}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
@@ -169,8 +167,8 @@ function StyledButton({ onClick, children, isLoading }) {
       className={`${
         isLoading
           ? "bg-cyan-300/50 cursor-wait text-black/30"
-          : "bg-cyan-300 hover:bg-sky-900 hover:text-white text-black hover:opacity-90 transition"
-      }   font-extrabold text-xl font-slab py-4 mt-12 gap-2 flex items-center justify-center`}
+          : "bg-[#38DBFF] hover:opacity-70 hover:text-white text-white hover:opacity-90 transition"
+      }   rounded-xl text-xl font-slab py-4 mt-12 gap-2 flex items-center justify-center`}
       onClick={onClick}
     >
       {isLoading && (

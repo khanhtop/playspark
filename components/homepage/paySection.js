@@ -6,7 +6,7 @@ export default function PaySection() {
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
       <div className="max-w-[1200px] flex-1 w-full flex flex-col items-center justify-center text-center px-12 py-24">
-        <h1 className="font-anton md:text-[80px] md:leading-[90px] max-w-[50%] mb-8">
+        <h1 className="font-anton text-[30px] leading-[35px] md:text-[80px] md:leading-[90px] max-w-[50%] mb-8">
           Pay As {` `}
           <span className="text-cyan-400">You Grow</span>
         </h1>

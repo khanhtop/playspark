@@ -8,6 +8,7 @@ import TextSection from "@/components/homepage/textSection";
 import PaySection from "@/components/homepage/paySection";
 import Carousel from "@/components/homepage/carousel";
 import GamifySection from "@/components/homepage/gamifySection";
+import VideoSection from "@/components/homepage/videoSection";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
@@ -49,6 +50,9 @@ export default function Home() {
       </Section>
       <Section>
         <TextSection />
+      </Section>
+      <Section>
+        <VideoSection />
       </Section>
       <Section>
         <Carousel />

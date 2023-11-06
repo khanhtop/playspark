@@ -47,9 +47,9 @@ export default function Usage({}) {
   }, [myTournaments]);
 
   return (
-    <div className="flex flex-wrap flex-col">
+    <div className="flex flex-wrap text-white flex-col">
       <h1 className="text-2xl">Usage</h1>
-      <h3 className="text-xl text-black/70  mt-4">Breakdown</h3>
+      <h3 className="text-xl text-white  mt-4">Breakdown</h3>
       <UsageHeaderRow />
       <div className="flex flex-1 flex-col gap-2">
         {myTournaments?.map((item, key) => {
@@ -71,7 +71,7 @@ export default function Usage({}) {
           );
         })}
       </div>
-      <h3 className="text-xl text-black/70">Total Charges</h3>
+      <h3 className="text-xl text-white/70">Total Charges</h3>
       <p className="text-2xl">${totalBillable.current?.toFixed(2)}</p>
     </div>
   );

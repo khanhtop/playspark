@@ -57,7 +57,7 @@ export default function GameCard({
       className={`${
         game.isPremium
           ? "bg-gradient-to-b from-amber-400 to-amber-600 text-black"
-          : "bg-[#000] text-white"
+          : "bg-[#364153] text-white"
       } rounded-lg  basis-[350px] p-4`}
     >
       <div className="flex justify-between items-center mb-2">

@@ -32,7 +32,6 @@ export default function Hero() {
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[url('/homepage/hero.png')] bg-cover">
       <div className="w-full min-h-screen flex flex-col items-center justify-center bg-[#000123]/90">
-        <img className="lg:-my-12 h-24 lg:h-72" src="/branding/logo2.png" />
         <div className="max-w-[50%] relative z-0">
           <img
             src="/homepage/star.png"
@@ -48,7 +47,7 @@ export default function Hero() {
           </h1>
         </div>
 
-        <h3 className="max-w-[60%] font-octolight text-sm md:text-2xl">
+        <h3 className="max-w-[60%] font-octolight text-sm md:text-3xl">
           Plug and play rewarded mobile games that generate higher acquisition,
           retention and advertising revenue for sports media, sports team and
           athlete platforms.
@@ -77,7 +76,7 @@ export default function Hero() {
         ) : (
           <button
             onClick={() => setReveal(true)}
-            className="bg-cyan-500 px-8 py-2 rounded-full flex items-center gap-4 mt-8"
+            className="font-anton text-xl bg-cyan-500 px-8 py-2 rounded-full flex items-center justify-center gap-4 mt-8"
           >
             Join The Waitlist
             <ArrowRightCircleIcon className="h-8 w-8" />
