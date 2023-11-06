@@ -7,7 +7,7 @@ export default function GamifySection() {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 px-12">
         <GamifyCard
-          image="/homepage/embed.png"
+          image="/homepage/feat1.png"
           heading="SETUP YOUR GAME"
           subtext="Select your game, apply your
 branding, set your rewards and
@@ -15,7 +15,7 @@ voila!"
         />
         <GamifyCard
           heading="EMBED AND SHARE"
-          image="/homepage/create.png"
+          image="/homepage/feat2.png"
           subtext="Plug your game into your own
 website, app, email or social media
 post and expose your game across
@@ -23,7 +23,7 @@ multiple touchpoints."
         />
         <GamifyCard
           heading="GROW REVENUE"
-          image="/homepage/grow.png"
+          image="/homepage/feat3.png"
           subtext="Integrate advertising into your game
 like rewarded video, banner ads and
 sponsored surveys. Insert direct call to

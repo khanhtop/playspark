@@ -43,7 +43,7 @@ export default function Carousel() {
         >
           <SwiperSlide>
             <Slide
-              img="/homepage/carousel5.png"
+              img="/homepage/carousel10.png"
               heading="HOOK IN YOUR AUDIENCE"
               subtext="Immerse your fans in captivating gaming experiences themed your brand.
           Our custom-branded rewarded mobile games create an unparalleled
@@ -52,7 +52,7 @@ export default function Carousel() {
           </SwiperSlide>
           <SwiperSlide>
             <Slide
-              img="/homepage/carousel6.png"
+              img="/homepage/carousel11.png"
               heading="DRIVE USER GROWTH"
               subtext="Use our in-built reward modules to
 incentivise positive user behaviour
@@ -68,7 +68,7 @@ brand recall."
           </SwiperSlide>
           <SwiperSlide>
             <Slide
-              img="/homepage/carousel7.png"
+              img="/homepage/carousel12.png"
               heading="AMPLIFY LOYALTY"
               subtext="With consumers 4.7X more likely to
 purchase a product when being
