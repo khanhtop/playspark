@@ -47,11 +47,18 @@ export default function Usage({}) {
   }, [myTournaments]);
 
   return (
-    <div className="flex flex-wrap text-white flex-col">
-      <h1 className="text-2xl">Usage</h1>
+    <div className="flex flex-wrap text-white flex-col overflow-x-hidden">
+      <h1 className="text-2xl">Billing & Usage</h1>
+      <h1 className="mt-4">
+        Current Plan:{" "}
+        <span className="text-cyan-400 cursor-pointer hover:text-cyan-200 transition">
+          {context?.profile?.subscription?.name}
+        </span>
+      </h1>
       <h3 className="text-xl text-white  mt-4">Breakdown</h3>
-      <UsageHeaderRow />
-      <div className="flex flex-1 flex-col gap-2">
+
+      <div className="flex flex-1 flex-col gap-2 w-screen overflow-x-scroll">
+        <UsageHeaderRow />
         {myTournaments?.map((item, key) => {
           const billable =
             item?.freemiumPlayCount > 0
@@ -84,20 +91,20 @@ function UsageGameRow({ item, freemiumPrice, premiumPrice, billable }) {
       ? (0).toFixed(2)
       : ((nPlays / item.impressions) * 100).toFixed(2);
   return (
-    <div className="flex">
-      <div className="flex-1">
+    <div className="flex w-[1800px]">
+      <div className="w-[300px]">
         <h3>{item.name}</h3>
       </div>
-      <div className="flex-1">
+      <div className="w-[300px]">
         <h3>{item?.impressions ?? 0}</h3>
       </div>
-      <div className="flex-1">
+      <div className="w-[300px]">
         <h3>{ctr}%</h3>
       </div>
-      <div className="flex-1">
+      <div className="w-[300px]">
         <h3>{nPlays}</h3>
       </div>
-      <div className="flex-1">
+      <div className="w-[300px]">
         <h3>${billable}</h3>
       </div>
     </div>
@@ -106,12 +113,12 @@ function UsageGameRow({ item, freemiumPrice, premiumPrice, billable }) {
 
 function UsageHeaderRow() {
   return (
-    <div className="flex font-bold mt-2">
-      <div className="flex-1">Game Name</div>
-      <div className="flex-1">Impressions</div>
-      <div className="flex-1">CTR</div>
-      <div className="flex-1">Number Of Plays</div>
-      <div className="flex-1">Charges</div>
+    <div className="flex w-[1800px] font-bold mt-2">
+      <div className="w-[300px]">Game Name</div>
+      <div className="w-[300px]">Impressions</div>
+      <div className="w-[300px]">CTR</div>
+      <div className="w-[300px]">Number Of Plays</div>
+      <div className="w-[300px]">Charges</div>
     </div>
   );
 }

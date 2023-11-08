@@ -13,6 +13,7 @@ import { firestore } from "@/helpers/firebase";
 import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
 import Survey from "./survey";
+import Pong from "./games/pong";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -154,6 +155,9 @@ export default function Advert({ data, theme }) {
             setStage(1);
           }}
         />
+      )}
+      {stage === 5 && (
+        <Pong gameType="wheelspin" callback={(a) => console.log(a)} />
       )}
     </div>
   );

@@ -10,6 +10,7 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { isIOS, isAndroid, isSafari } from "react-device-detect";
+import { getSubscriptionType } from "./tiers";
 
 export const AppContext = createContext();
 
@@ -52,8 +53,11 @@ export function AppWrapper({ children }) {
         doc(firestore, "users", loggedIn.uid),
         (doc) => {
           const data = doc.data();
-          console.log(data);
-          setProfile(doc.data() || {});
+          setProfile(
+            { ...data, subscription: getSubscriptionType(data?.tier ?? 0) } || {
+              subscription: getSubscriptionType(data?.tier ?? 0),
+            }
+          );
         }
       );
     }
