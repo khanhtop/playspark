@@ -1,4 +1,5 @@
 import { getMuxAsset } from "@/helpers/mux";
+import { useAppContext } from "@/helpers/store";
 import {
   ArrowPathIcon,
   ChevronRightIcon,
@@ -17,6 +18,7 @@ export default function GameCard({
   onDelete,
   onShowInfo,
 }) {
+  const context = useAppContext();
   const [staticImageUrl, setStaticImageUrl] = useState();
   const [animatedImageUrl, setAnimatedImageUrl] = useState();
   const [imageUrl, setImageUrl] = useState();
@@ -91,7 +93,13 @@ export default function GameCard({
 
       <div className="flex gap-2 text-md font-bold">
         <button
-          onClick={() => onAdd()}
+          onClick={() =>
+            context?.profile?.subscription?.tier === 0
+              ? alert(
+                  "You are currently on the free tier.  You are able to play demo games and explore PlaySpark, but will need to upgrade to a paid plan to create and embed games."
+                )
+              : onAdd()
+          }
           disabled={added || saving}
           className={`w-full ${
             added || saving ? "bg-gray-500" : "bg-cyan-400 hover:bg-cyan-600"

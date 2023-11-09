@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/solid";
 import Button from "../forms/button";
 import { logout } from "@/helpers/firebase";
+import { switchTier } from "@/helpers/api";
 
 export default function Sidebar({ selectedPane, setSelectedPane }) {
   const context = useAppContext();
@@ -56,6 +57,22 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           setSelectedPane={() => setSelectedPane(2)}
           icon={<ScaleIcon className="h-5" />}
         />
+      </div>
+      <div className="mb-4 flex flex-col items-center">
+        <p>{context?.profile?.subscription?.name} Plan</p>
+        <button
+          className="text-xs bg-white/20 py-1 px-4 rounded-full mt-1"
+          onClick={() =>
+            switchTier(
+              context?.loggedIn?.uid,
+              context?.profile?.subscription?.tier < 4
+                ? context?.profile?.subscription?.tier + 1
+                : 0
+            )
+          }
+        >
+          CHANGE
+        </button>
       </div>
       <Button onClick={() => logout()} className="w-full">
         Logout

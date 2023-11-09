@@ -93,3 +93,11 @@ export function incrementPlayCountWithImpressions(
     impressions: increment(1),
   });
 }
+
+// Subscriptions
+
+export function switchTier(uid, tier) {
+  updateDoc(doc(firestore, "users", uid), {
+    tier: tier,
+  });
+}

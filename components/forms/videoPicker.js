@@ -1,6 +1,7 @@
 import { uploadImage } from "@/helpers/images";
 import { mockVideos } from "@/helpers/mocks";
 import { getMuxAssetID, getMuxAssetURL, getMuxUploadID } from "@/helpers/mux";
+import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import MuxPlayer from "@mux/mux-player-react";
 import { UpChunk } from "@mux/upchunk";
@@ -13,6 +14,7 @@ export default function VideoPicker({ video, onChange, label }) {
   const [lastVideo, setLastVideo] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [uploadState, setUploadState] = useState(0);
+  const context = useAppContext();
 
   useEffect(() => {
     if (video) {
@@ -59,12 +61,16 @@ export default function VideoPicker({ video, onChange, label }) {
     <div>
       <div className="flex flex-row mt-4 mt-4 mb-1">
         <p className="text-white mr-2">Sponsored Video</p>
+
         <Toggle
           checked={video}
           onChange={() => onChange(video ? null : lastVideo)}
           style={{ display: "inline-block" }}
         />
       </div>
+      {context?.profile?.subscription?.tier == 4 && (
+        <p className="text-white text-xs mb-2 font-bold">Charged at $15</p>
+      )}
       {(video || uploading) && (
         <p className="text-white/80 text-xs mb-4">
           Select a video (ideally 9:16) to show users during gameplay.

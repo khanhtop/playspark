@@ -22,6 +22,11 @@ import ImagePicker from "../forms/imagePicker";
 import VideoPicker from "../forms/videoPicker";
 import { mockVideos } from "@/helpers/mocks";
 import SurveyInput from "../forms/surveyInput";
+import {
+  BrandingComponent,
+  PAYGSummary,
+  RewardedComponent,
+} from "./unlocksWithTier";
 
 export default function CreateTournamentModal({ data, hide }) {
   const context = useAppContext();
@@ -124,31 +129,43 @@ export default function CreateTournamentModal({ data, hide }) {
         {stage === 2 && (
           <div className="flex-1 overflow-y-scroll mb-4 flex">
             <div className="flex-1">
-              <p className="text-white mt-1 mb-4">Tournament Branding</p>
-              <ImagePicker
-                label="Replace Background Image (Aim for 800px x 1600px)"
-                image={tournament.backgroundImage}
-                onChange={(url) => {
-                  setTournament({ ...tournament, backgroundImage: url });
-                }}
-              />
+              <BrandingComponent>
+                <>
+                  <p className="text-white mt-1 mb-4">Tournament Branding</p>
+                  <ImagePicker
+                    label="Replace Background Image (Aim for 800px x 1600px)"
+                    image={tournament.backgroundImage}
+                    onChange={(url) => {
+                      setTournament({ ...tournament, backgroundImage: url });
+                    }}
+                  />
+                </>
+              </BrandingComponent>
 
-              <VideoPicker
-                video={tournament.sponsoredVideo}
-                onChange={(id) => {
-                  setTournament({ ...tournament, sponsoredVideo: id });
-                }}
-              />
-              <SurveyInput
-                survey={tournament.survey}
-                onChange={(survey) => {
-                  setTournament({
-                    ...tournament,
-                    survey: survey,
-                    surveyId: surveyId.current,
-                  });
-                }}
-              />
+              <RewardedComponent>
+                <>
+                  <VideoPicker
+                    video={tournament.sponsoredVideo}
+                    onChange={(id) => {
+                      setTournament({ ...tournament, sponsoredVideo: id });
+                    }}
+                  />
+                </>
+              </RewardedComponent>
+              <RewardedComponent>
+                <>
+                  <SurveyInput
+                    survey={tournament.survey}
+                    onChange={(survey) => {
+                      setTournament({
+                        ...tournament,
+                        survey: survey,
+                        surveyId: surveyId.current,
+                      });
+                    }}
+                  />
+                </>
+              </RewardedComponent>
             </div>
 
             <div className="flex flex-col items-center text-white p-2">
@@ -166,6 +183,7 @@ export default function CreateTournamentModal({ data, hide }) {
               look. If you are happy, click "Finish" to add the game to your
               library.
             </p>
+            <PAYGSummary data={tournament} />
             <Preview tournament={tournament} />
           </div>
         )}

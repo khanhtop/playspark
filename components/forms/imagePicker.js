@@ -1,8 +1,10 @@
 import { uploadImage } from "@/helpers/images";
+import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 
 export default function ImagePicker({ image, onChange, label }) {
+  const context = useAppContext();
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploading, setUploading] = useState(false);
 

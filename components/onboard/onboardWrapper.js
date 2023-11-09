@@ -22,6 +22,7 @@ export default function OnboardWrapper({ children }) {
 
   const saveProfile = async () => {
     await setDoc(doc(firestore, "users", context.loggedIn?.uid), {
+      tier: 0,
       companyName: companyName,
       purpose: purpose,
       hasOnboarded: true,

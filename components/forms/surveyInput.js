@@ -2,8 +2,10 @@ import { useState } from "react";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 import Input from "./input";
+import { useAppContext } from "@/helpers/store";
 
 export default function SurveyInput({ survey, onChange }) {
+  const context = useAppContext();
   const [lastSurvey, setLastSurvey] = useState([
     {
       question: "",
@@ -29,6 +31,9 @@ export default function SurveyInput({ survey, onChange }) {
           onChange={() => onChange(survey ? null : lastSurvey)}
         />
       </div>
+      {context?.profile?.subscription?.tier == 4 && (
+        <p className="text-white text-xs mb-2 font-bold">Charged at $15</p>
+      )}
       {survey?.map((item, key) => {
         return (
           <SurveyElement
