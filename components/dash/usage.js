@@ -57,7 +57,7 @@ export default function Usage({}) {
       </h1>
       <h3 className="text-xl text-white  mt-4">Breakdown</h3>
 
-      <div className="flex flex-1 flex-col gap-2 w-screen overflow-x-scroll">
+      <div className="flex flex-1 flex-col gap-2 w-screen overflow-x-scroll mb-4">
         <UsageHeaderRow />
         {myTournaments?.map((item, key) => {
           const billable =

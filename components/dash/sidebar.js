@@ -11,32 +11,31 @@ import {
 import Button from "../forms/button";
 import { logout } from "@/helpers/firebase";
 import { switchTier } from "@/helpers/api";
+import Avatar from "./avatar";
 
 export default function Sidebar({ selectedPane, setSelectedPane }) {
   const context = useAppContext();
   return (
     <div className="w-[300px] h-full bg-[#364153] flex flex-col items-center px-8 pb-8 text-white">
-      <img src="/branding/logo2.png" className="-mb-6" />
-      <h3 className="text-sm mb-8 font-roboto">
-        {context.profile?.companyName}
-      </h3>
+      <img src="/branding/logo2.png" className="-mb-2" />
+
       <div className="flex-1 w-full overflow-y-scroll">
         <Row
           text="Dashboard"
-          selected={false}
-          setSelectedPane={() => null}
+          selected={selectedPane === 4}
+          setSelectedPane={() => setSelectedPane(4)}
           icon={<Squares2X2Icon className="h-5" />}
         />
         <Row
           text="Analytics"
-          selected={false}
-          setSelectedPane={() => null}
+          selected={selectedPane === 5}
+          setSelectedPane={() => setSelectedPane(5)}
           icon={<ChartBarIcon className="h-5" />}
         />
         <Row
           text="Users"
-          selected={false}
-          setSelectedPane={() => null}
+          selected={selectedPane === 6}
+          setSelectedPane={() => setSelectedPane(6)}
           icon={<UsersIcon className="h-5" />}
         />
         <Row
@@ -58,7 +57,7 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           icon={<ScaleIcon className="h-5" />}
         />
       </div>
-      <div className="mb-4 flex flex-col items-center">
+      {/* <div className="mb-4 flex flex-col items-center">
         <p>{context?.profile?.subscription?.name} Plan</p>
         <button
           className="text-xs bg-white/20 py-1 px-4 rounded-full mt-1"
@@ -76,7 +75,31 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
       </div>
       <Button onClick={() => logout()} className="w-full">
         Logout
-      </Button>
+      </Button> */}
+      <div
+        onClick={() => setSelectedPane(3)}
+        className="flex items-center gap-4 "
+      >
+        <Avatar />
+        <div>
+          <h3 className="text-sm mb-0 font-roboto">
+            {context.profile?.companyName}
+          </h3>
+          <p
+            onClick={() =>
+              switchTier(
+                context?.loggedIn?.uid,
+                context?.profile?.subscription?.tier < 4
+                  ? context?.profile?.subscription?.tier + 1
+                  : 0
+              )
+            }
+            className="text-sm mb-0 font-roboto"
+          >
+            {context?.profile?.subscription?.name} Plan
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

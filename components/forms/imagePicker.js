@@ -3,7 +3,7 @@ import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 
-export default function ImagePicker({ image, onChange, label }) {
+export default function ImagePicker({ image, onChange, label, width, height }) {
   const context = useAppContext();
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -44,8 +44,8 @@ export default function ImagePicker({ image, onChange, label }) {
           <div
             className="flex items-center justify-center"
             style={{
-              width: "200px",
-              height: "400px",
+              width: width ?? "200px",
+              height: height ?? "400px",
               objectFit: "contain",
               borderWidth: 1,
               borderColor: "white",
@@ -59,8 +59,8 @@ export default function ImagePicker({ image, onChange, label }) {
             src={selectedImage ?? image}
             alt="Selected"
             style={{
-              width: "200px",
-              height: "400px",
+              width: width ?? "200px",
+              height: height ?? "400px",
               objectFit: "contain",
               borderWidth: 1,
               borderColor: "white",
@@ -70,13 +70,15 @@ export default function ImagePicker({ image, onChange, label }) {
         ) : (
           <div
             style={{
-              width: "200px",
-              height: "400px",
+              width: width ?? "200px",
+              height: height ?? "400px",
               border: "2px dashed #ccc",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               cursor: "pointer",
+              fontSize: 12,
+              textAlign: "center",
             }}
           >
             Click to Select Image
