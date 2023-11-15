@@ -11,20 +11,28 @@ import {
 import BannerAd from "./advertising/bannerAd";
 import Text from "./ui/text";
 import UIButton from "./ui/button";
+import EmailSlide from "./forms/emailSlide";
 
 export default function Outro({ score, setStage, data, leaderboard }) {
   const context = useAppContext();
 
   const selectStage = () => {
-    if (data.demo) return 3;
-    if (!data.sponsoredVideo && !data.survey) return 1;
-    if (data.sponsoredVideo && !data.survey) return 3;
-    if (!data.sponsoredVideo && data.survey) return 4;
-    return [3, 4][Math.random() < 0.5 ? 1 : 0];
+    const possibleRouting = [];
+    if (data.demo) return 1;
+    if (data.sponsoredVideo && !context.hasSeenVideo) possibleRouting.push(3);
+    if (data.survey && !context.hasSeenSurvey) possibleRouting.push(4);
+    if (possibleRouting.length > 0) {
+      const randomIndex = Math.floor(Math.random() * possibleRouting.length);
+      return possibleRouting[randomIndex];
+    } else {
+      return 1;
+    }
   };
 
   return (
     <div className="bg-white text-black font-light pt-4 h-full w-full relative flex items-center justify-start flex-col">
+      {!context.hasSubscribedToList && <EmailSlide data={data} />}
+
       <Text {...data} className="text-2xl mb-4">
         Game Over
       </Text>
@@ -64,7 +72,7 @@ export default function Outro({ score, setStage, data, leaderboard }) {
           onClick={() => setStage(selectStage())}
           className="h-12 mb-48 rounded-full mt-4"
         ></UIButton>
-        <BannerAd size="small" position="bottom" delay={1000} />
+        {/* <BannerAd size="small" position="bottom" delay={1000} /> */}
       </div>
     </div>
   );

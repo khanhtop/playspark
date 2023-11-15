@@ -27,6 +27,7 @@ import {
   PAYGSummary,
   RewardedComponent,
 } from "./unlocksWithTier";
+import Toggle from "react-toggle";
 
 export default function CreateTournamentModal({ data, hide }) {
   const context = useAppContext();
@@ -43,6 +44,7 @@ export default function CreateTournamentModal({ data, hide }) {
       ...tournament,
       tournamentId: _uid,
       ownerId: context.loggedIn?.uid,
+      ownerCompanyName: context?.profile?.companyName,
     });
     setAdding(false);
     hide();
@@ -141,7 +143,24 @@ export default function CreateTournamentModal({ data, hide }) {
                   />
                 </>
               </BrandingComponent>
-
+              <BrandingComponent>
+                <>
+                  <div className="flex items-center gap-2 mt-6">
+                    <p className="text-white">
+                      Capture Players Email Addresses
+                    </p>
+                    <Toggle
+                      checked={tournament?.captureEmail}
+                      onChange={() =>
+                        setTournament({
+                          ...tournament,
+                          captureEmail: tournament?.captureEmail ? false : true,
+                        })
+                      }
+                    />
+                  </div>
+                </>
+              </BrandingComponent>
               <RewardedComponent>
                 <>
                   <VideoPicker
@@ -149,7 +168,22 @@ export default function CreateTournamentModal({ data, hide }) {
                     onChange={(id) => {
                       setTournament({ ...tournament, sponsoredVideo: id });
                     }}
-                  />
+                  >
+                    <div className="mb-5">
+                      <p className="text-xs text-white/80 mb-1">
+                        Enter URL for Call To Action (Leave blank for none)
+                      </p>
+                      <Input
+                        placeHolder="https://"
+                        onChange={(url) => {
+                          setTournament({
+                            ...tournament,
+                            sponsoredVideoCtaUrl: url.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                  </VideoPicker>
                 </>
               </RewardedComponent>
               <RewardedComponent>

@@ -1,6 +1,6 @@
 export default function Input(props) {
   return (
-    <div className="">
+    <div className={props.containerClassName}>
       {props.label && (
         <div className="flex items-center  mb-1">
           <p className={`text-xs ${props.labelColor ?? "text-black/70"}`}>

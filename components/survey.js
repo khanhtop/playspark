@@ -44,6 +44,7 @@ export default function Survey({ data, onComplete }) {
         surveyCompletions: increment(1),
       }
     );
+    context.setHasSeenSurvey(true);
     onComplete();
   };
 

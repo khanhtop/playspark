@@ -2,12 +2,14 @@ import { mockVideos } from "@/helpers/mocks";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import UIButton from "./ui/button";
+import { useAppContext } from "@/helpers/store";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
 });
 
 export default function VideoAd({ data, onSkip, video }) {
+  const context = useAppContext();
   const [totalLength, setTotalLength] = useState();
   const [remainingTime, setRemainingTime] = useState();
   const [showClaim, setShowClaim] = useState(false);
@@ -26,7 +28,7 @@ export default function VideoAd({ data, onSkip, video }) {
         playbackId={video}
         onLoadedMetadata={(a) => setTotalLength(a.currentTarget.duration)}
         onTimeUpdate={(a) => shouldClaim(a.target.currentTime)}
-        className="h-full w-full"
+        className="w-full"
         style={{
           "--controls": "none",
         }}
@@ -41,7 +43,10 @@ export default function VideoAd({ data, onSkip, video }) {
       <div className="px-4 absolute bg-[#222] w-full bottom-0 left-0 h-16 flex items-center">
         <button
           disabled={!showClaim}
-          onClick={onSkip}
+          onClick={() => {
+            context.setHasSeenVideo(true);
+            onSkip();
+          }}
           className={`${
             showClaim ? "opacity-100 underline" : "opacity-50"
           } flex-1 text-left`}
@@ -52,9 +57,14 @@ export default function VideoAd({ data, onSkip, video }) {
             ? "Claim Extra Life"
             : `Claim In ${remainingTime}`}
         </button>
-        <button className="text-black bg-white/50 px-6 rounded-full py-2">
-          Learn More
-        </button>
+        {data?.sponsoredVideoCtaUrl && (
+          <button
+            onClick={() => window.open(data.sponsoredVideoCtaUrl)}
+            className="text-black bg-white/50 px-6 rounded-full py-2"
+          >
+            Learn More
+          </button>
+        )}
       </div>
       {/* <div
         onClick={onSkip}
