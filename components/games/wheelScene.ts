@@ -14,10 +14,14 @@ let btnW = 0;
 let btnH = 0;
 let spinTimes = 5;
 let bonus = {};
+let win_bone = [];
+let lose_bone = [];
+let win_probability = 0;
 
 export default class WheelScene extends Phaser.Scene {
   public static instance: WheelScene;
   private bg : any;
+  private logo : any;
   private base : any;
   private wheel : any;
   private wheelGroup : any;
@@ -63,6 +67,7 @@ export default class WheelScene extends Phaser.Scene {
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
 
     console.log("Preload");
+    this.load.image('logo', "/pong/" + gameType + '/back31.jpg');
     this.load.image('background', "/pong/" + gameType + '/back3.jpg');
     this.load.image('ui-center', "/pong/" + gameType + '/out-circle.png');
     this.load.image('ui-btn-top', "/pong/" + gameType + '/ui-top.png');
@@ -109,23 +114,26 @@ export default class WheelScene extends Phaser.Scene {
   create() {
     // this.sound.add("bg").setVolume(0.3).setLoop(true).play();
 
+
     this.bg=this.add.sprite(0, 0,'background').setOrigin(0).setDisplaySize(w, h);
     // this.bg.setScale(1);
+    this.logo=this.add.sprite(w / 2, 30,'logo').setOrigin(0.5, 0).setDisplaySize(w * 0.5, 70);
     
     //this.add.sprite(centerX, centerY, 'ui-center').setOrigin(0.5, 0).setDisplaySize(centerW, centerH);
     
 
     
     // this.wheel.setScale(0.65);
-    this.base=this.add.sprite(w / 2, h / 2 - wheelR / 2 - 10, 'ui-btn-top').setDisplaySize(w / 2, w / 2 * 513 / 982);
-    this.add.sprite(w / 2, h / 2 + wheelR / 2, 'ui-btn-down').setDisplaySize(w / 4, w / 4 * 389 / 514);
-    this.outCircle = this.add.sprite(w / 2, h / 2, 'out-circle').setDisplaySize(wheelR, wheelR);
+    let offsetY = 50;
+    this.base=this.add.sprite(w / 2, h / 2 - wheelR / 2 - 10 + offsetY, 'ui-btn-top').setDisplaySize(w / 2, w / 2 * 513 / 982);
+    this.add.sprite(w / 2, h / 2 + wheelR / 2 + offsetY, 'ui-btn-down').setDisplaySize(w / 4, w / 4 * 389 / 514);
+    this.outCircle = this.add.sprite(w / 2, h / 2 + offsetY, 'out-circle').setDisplaySize(wheelR, wheelR);
 
-    this.wheel=this.add.sprite(w/2, h/2,'wheel').setDisplaySize(wheelR * 0.8, wheelR * 0.8);
+    this.wheel=this.add.sprite(w/2, h/2 + offsetY,'wheel').setDisplaySize(wheelR * 0.8, wheelR * 0.8);
 
-    this.arrow = this.add.sprite(w / 2, h / 2 - 15, 'center-arrow').setDisplaySize(w / 10, w / 10 * 281 / 155);
+    this.arrow = this.add.sprite(w / 2, h / 2 - 15 + offsetY, 'center-arrow').setDisplaySize(w / 10, w / 10 * 281 / 155);
     
-    this.item = this.add.sprite(w/2, h/2, 'item').setDisplaySize(wheelR * 0.7, wheelR * 0.7 * 927 / 1022);
+    this.item = this.add.sprite(w/2, h/2 + offsetY, 'item').setDisplaySize(wheelR * 0.7, wheelR * 0.7 * 927 / 1022);
 
     // this.pin=this.add.sprite(w/2,h/2-170,'pin');
     // this.pin.setScale(0.25);
@@ -140,7 +148,7 @@ export default class WheelScene extends Phaser.Scene {
    
 
     this.prizeAnim = this.add
-    .sprite(w / 2, h / 2 - 80, "prize-anim")
+    .sprite(w / 2, h / 2 - 80 + offsetY, "prize-anim")
     .setDisplaySize(w * 0.8, w * 1.6)
     .setOrigin(0.5, 0.5)
 
@@ -164,23 +172,23 @@ export default class WheelScene extends Phaser.Scene {
       fill: '#ffffff' 
     }
     
-    this.game_text=this.add.text(10,10,"Tap to Spin",this.font_style).setVisible(false);
+    this.game_text=this.add.text(10,10 + offsetY,"Tap to Spin",this.font_style).setVisible(false);
     // this.game_text=this.add.text(10,10,"Welcome to Spin & Win",this.font_style);
 
-    this.score_text = this.add.text(w - 70, 10,"Score : 0",  this.font_score).setVisible(false);
+    this.score_text = this.add.text(w - 70, 10 + offsetY,"Score : 0",  this.font_score).setVisible(false);
 
-    this.result_text = this.add.text(w / 2, h / 2, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0);
+    this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0);
 
     // BONUS TEXT PART
-    this.bonus_top = this.add.sprite(w/2 + 10, h / 2 - wheelR / 2 - 90, 'bonus').setDisplaySize(wheelR * 0.15, wheelR * 0.15);
-    this.add.text(w / 2 - 70, h / 2 - wheelR / 2 - 90, "WIN", {...this.font_text_style, fontSize: '45px'}).setOrigin(0.5, 0.5);
-    this.add.text(w / 2 + 45, h / 2 - wheelR / 2 - 90, "800", {...this.font_text_style, fontSize: '45px'}).setOrigin(0, 0.5);
+    this.bonus_top = this.add.sprite(w/2 + 10, h / 2 - wheelR / 2 - 90 + offsetY, 'bonus').setDisplaySize(wheelR * 0.15, wheelR * 0.15);
+    this.add.text(w / 2 - 70, h / 2 - wheelR / 2 - 90 + offsetY, "WIN", {...this.font_text_style, fontSize: '45px'}).setOrigin(0.5, 0.5);
+    this.add.text(w / 2 + 45, h / 2 - wheelR / 2 - 90 + offsetY, "800", {...this.font_text_style, fontSize: '45px'}).setOrigin(0, 0.5);
 
     // var but = this.add.image(w / 2,50,'button').setInteractive();
     // but.on('pointerup', this.spinwheel, this);
     // but.setScale(0.6);
 
-    var but = this.add.image(w / 2, h / 2 + wheelR / 2 + 35, 'ui-btn').setDisplaySize(w / 2.5, w / 2.5 * 0.4).setOrigin(0.5, 0).setInteractive();
+    var but = this.add.image(w / 2, h / 2 + wheelR / 2 + 35 + offsetY, 'ui-btn').setDisplaySize(w / 2.5, w / 2.5 * 0.4).setOrigin(0.5, 0).setInteractive();
     but.on('pointerup', this.spinwheel, this);
     // but.setScale(0.6);
 
@@ -246,6 +254,9 @@ export default class WheelScene extends Phaser.Scene {
       },
 
     }
+
+    win_bone = [0, 3, 5, 8]
+    lose_bone = [1, 4, 6, 9]
   }
 
   private scoreHandler;
@@ -263,19 +274,30 @@ export default class WheelScene extends Phaser.Scene {
 
   public spinwheel(){
 
+    win_probability = 0;
+
 
     if(spinTimes <= 0) {
       this.endRound();
     }
-    spinTimes--;
+    // spinTimes--;
 
     this.music.setLoop(true).play();
     let deltaAmount = 10;
     let deltaDegree = 360 / deltaAmount
     let rounds = Phaser.Math.Between(5, 8);
     var degree=Phaser.Math.Between(0, deltaAmount - 1) * deltaDegree;
-    let total = rounds * 360 + degree;
     
+    if(win_probability != 1) {
+      degree = 9 - win_bone[Math.round(100 * Math.random()) % win_bone.length];
+    } else {
+      degree = 9 - lose_bone[Math.round(100 * Math.random()) % lose_bone.length];
+    }
+    console.log(degree, "--------------selelct", bonus[degree])
+
+    degree = degree * deltaDegree;
+    let total = rounds * 360 + degree;
+
     let tween = this.tweens.add({
         targets:this.wheel,
         angle:total,
@@ -360,6 +382,11 @@ export default class WheelScene extends Phaser.Scene {
       }
     }, 2000);
 
+    if(type == 'bonus') {
+      setTimeout(() => {
+       this.endRound();
+      }, 4000);
+    }
   }
 
   endRound() {
