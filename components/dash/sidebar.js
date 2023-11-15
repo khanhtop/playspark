@@ -57,12 +57,12 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           setSelectedPane={() => setSelectedPane(2)}
           icon={<ScaleIcon className="h-5" />}
         />
-        <Row
+        {/* <Row
           text="Account"
           selected={selectedPane === 7}
           setSelectedPane={() => setSelectedPane(7)}
           icon={<Cog6ToothIcon className="h-5" />}
-        />
+        /> */}
       </div>
       <div
         onClick={() => setSelectedPane(3)}
