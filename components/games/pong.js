@@ -6,7 +6,7 @@ const MiddlePong = dynamic(() => import("./pongGame"), {
   ssr: false,
 });
 
-export default function Pong({ data, gameType, callback }) {
+export default function Pong({ data, gameType, callback, params }) {
   const childRef = useRef();
 
   return (
@@ -47,6 +47,7 @@ export default function Pong({ data, gameType, callback }) {
         pongRef={childRef}
         handleScore={callback}
         gameType={gameType}
+        params={params}
       />
     </div>
   );

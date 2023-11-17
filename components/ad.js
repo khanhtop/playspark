@@ -157,7 +157,11 @@ export default function Advert({ data, theme }) {
         />
       )}
       {stage === 5 && (
-        <Pong gameType="wheelspin" callback={(a) => console.log(a)} />
+        <Pong
+          gameType="wheelspin"
+          callback={(a) => setStage(1)}
+          params={{ logo: "/branding/logo.png", winProbability: 0.9 }}
+        />
       )}
     </div>
   );

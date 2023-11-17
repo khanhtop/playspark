@@ -21,6 +21,7 @@ export default function Outro({ score, setStage, data, leaderboard }) {
     if (data.demo) return 1;
     if (data.sponsoredVideo && !context.hasSeenVideo) possibleRouting.push(3);
     if (data.survey && !context.hasSeenSurvey) possibleRouting.push(4);
+    if (data.playableAd) possibleRouting.push(5);
     if (possibleRouting.length > 0) {
       const randomIndex = Math.floor(Math.random() * possibleRouting.length);
       return possibleRouting[randomIndex];

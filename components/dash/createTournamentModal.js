@@ -200,6 +200,27 @@ export default function CreateTournamentModal({ data, hide }) {
                   />
                 </>
               </RewardedComponent>
+              <BrandingComponent>
+                <>
+                  <div className="flex items-center gap-2 mt-6">
+                    <p className="text-white">Playable Ad</p>
+                    <Toggle
+                      checked={tournament?.playableAd}
+                      onChange={() =>
+                        setTournament({
+                          ...tournament,
+                          playableAd: tournament?.playableAd
+                            ? false
+                            : {
+                                winProbability: 0.5,
+                                logo: "/branding/logo.png",
+                              },
+                        })
+                      }
+                    />
+                  </div>
+                </>
+              </BrandingComponent>
             </div>
 
             <div className="flex flex-col items-center text-white p-2">
