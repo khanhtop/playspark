@@ -52,7 +52,7 @@ export default function EmailSlide({ data }) {
           send you updates and information through email, would you like to be
           included?
         </h3>
-        {!email && (
+        {!context?.loggedIn?.email && (
           <div className="w-full max-w-[360px] flex flex-col items-center mt-6">
             <p className="w-full text-xs ml-8 mb-1">Enter Email Address</p>
             <input

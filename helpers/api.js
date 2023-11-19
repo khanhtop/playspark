@@ -43,27 +43,88 @@ export async function getDemo(id) {
   };
 }
 
-export function getGame(id, data, callback) {
+export function getGame(id, data, callback, params) {
   if (id === 1)
-    return <Pong data={data} gameType="football" callback={callback} />;
+    return (
+      <Pong
+        data={data}
+        gameType="football"
+        callback={callback}
+        params={params}
+      />
+    );
   if (id === 2)
-    return <Pong data={data} gameType="hockey" callback={callback} />;
+    return (
+      <Pong data={data} gameType="hockey" callback={callback} params={params} />
+    );
   if (id === 3)
-    return <Pong data={data} gameType="baseball" callback={callback} />;
-  if (id === 4) return <Pong data={data} gameType="nfl" callback={callback} />;
+    return (
+      <Pong
+        data={data}
+        gameType="baseball"
+        callback={callback}
+        params={params}
+      />
+    );
+  if (id === 4)
+    return (
+      <Pong data={data} gameType="nfl" callback={callback} params={params} />
+    );
   if (id === 5)
-    return <Pong data={data} gameType="basketball" callback={callback} />;
+    return (
+      <Pong
+        data={data}
+        gameType="basketball"
+        callback={callback}
+        params={params}
+      />
+    );
   if (id === 6)
-    return <Pong data={data} gameType="baseballFall" callback={callback} />;
+    return (
+      <Pong
+        data={data}
+        gameType="baseballFall"
+        callback={callback}
+        params={params}
+      />
+    );
   if (id === 7) {
-    return <Runner data={data} gameType="runner" callback={callback} />;
+    return (
+      <Runner
+        data={data}
+        gameType="runner"
+        callback={callback}
+        params={params}
+      />
+    );
   }
   if (id === 8)
-    return <Pong data={data} gameType="basketballFall" callback={callback} />;
+    return (
+      <Pong
+        data={data}
+        gameType="basketballFall"
+        callback={callback}
+        params={params}
+      />
+    );
   if (id === 9)
-    return <Pong data={data} gameType="cricketFall" callback={callback} />;
+    return (
+      <Pong
+        data={data}
+        gameType="cricketFall"
+        callback={callback}
+        params={params}
+      />
+    );
   if (id === 10)
-    return <Pong data={data} gameType="wheelspin" callback={callback} />;
+    return (
+      <Pong
+        data={data}
+        gameType="wheelspin"
+        callback={callback}
+        params={params}
+      />
+    );
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {

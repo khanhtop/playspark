@@ -26,7 +26,11 @@ export default function Advert({ data, theme }) {
     data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
   );
 
+  // Lives & Restarts
+  const [lives, setLives] = useState(3);
+
   const callback = (score) => {
+    setLives(1);
     setScore(score);
     setStage(2);
   };
@@ -108,7 +112,8 @@ export default function Advert({ data, theme }) {
         />
       )}
 
-      {stage === 1 && getGame(data.id, data, callback)}
+      {stage === 1 &&
+        getGame(data.id, data, callback, { lives: lives, score: score })}
       {stage === 2 && (
         <Outro
           data={data}

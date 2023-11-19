@@ -26,13 +26,15 @@ export default class MainScene extends Phaser.Scene {
   public static instance: MainScene;
   private ball!: Phaser.Physics.Arcade.Image;
   private player!: Phaser.Physics.Arcade.Image;
+  private params: any;
   private ai!: Phaser.Physics.Arcade.Image;
   lifeNumText: any;
 
-  constructor(newGameType: string) {
+  constructor(newGameType: string, newParams: any) {
     super();
     MainScene.instance = this;
     gameType = newGameType;
+    this.params = newParams;
   }
 
   preload() {
@@ -70,7 +72,7 @@ export default class MainScene extends Phaser.Scene {
     scrW = w * 0.375;
     scrH = w * 0.175 / 1.614;
     heartR = w * 0.0625;
-    heartNum = 3;
+    heartNum = this.params.lives
   }
 
   // 400 800
@@ -241,7 +243,7 @@ export default class MainScene extends Phaser.Scene {
     );
 
     this.scoreText = this.add
-      .text(mW + 2, 36, "0000", {
+      .text(mW + 2, 36, this.params.score.toString()?.padStart(4, "0"), {
         fontFamily: "enhanced_led_board-7",
         fontSize: "26px",
         color: "#ffffff",
@@ -378,9 +380,9 @@ export default class MainScene extends Phaser.Scene {
     this.goalXPos = mW;
     this.goalYPos = h - goalH - playerR / 2;
 
-    this.scoreNum = 0;
+    this.scoreNum = this.params.score;
     this.ballDir = 1;
-    this.scoreText.text = "0000";
+    this.scoreText.text = this.params.score.toString()?.padStart(4, "0");
     this.hearts.forEach((h) => h.destroy);
     this.hearts.length = 0;
     for (let i = 0; i < 1; i++) {

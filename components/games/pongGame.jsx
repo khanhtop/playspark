@@ -32,11 +32,11 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
       setHasRendered(true);
       let scene;
       if(gameType == 'baseballFall' || gameType == 'basketballFall' || gameType == 'cricketFall') {
-        scene = new FallScene(gameType);
+        scene = new FallScene(gameType, params);
       } else if(gameType == 'wheelspin') {
         scene = new WheelScene(gameType, params);
       } else {
-        scene = new MainScene(gameType);
+        scene = new MainScene(gameType, params);
       }
 
       const config = {
@@ -58,7 +58,6 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
         mainScene = gameRef.current.scene.scenes[0];
         mainScene.setScoreHandle(handleScore);
       });
-
       console.log("game setup");
 
 

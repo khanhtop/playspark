@@ -38,6 +38,7 @@ export default class FallScene extends Phaser.Scene {
   public static instance: FallScene;
   private ball!: Phaser.Physics.Arcade.Image;
   private player!: Phaser.Physics.Arcade.Sprite;
+  private params: any;
   private ai!: Phaser.Physics.Arcade.Image;
   private lastBall!: Phaser.Physics.Arcade.Image;
   load: any;
@@ -60,10 +61,11 @@ export default class FallScene extends Phaser.Scene {
   powerup: any;
   timer: NodeJS.Timeout;
 
-  constructor(newGameType: string) {
+  constructor(newGameType: string, newParams: any) {
     super();
     FallScene.instance = this;
     gameType = newGameType;
+    this.params = newParams;
   }
 
   preload() {
@@ -126,7 +128,7 @@ export default class FallScene extends Phaser.Scene {
     boosterNum = 0;
     boosterBat = 0;
     throwSpeed = 500;
-    heartNum = 3;
+    heartNum = this.params.lives;
     comboNum = 0;
   }
 
@@ -441,9 +443,9 @@ export default class FallScene extends Phaser.Scene {
     this.goalXPos = mW;
     this.goalYPos = h - goalH - playerR / 2;
 
-    heartNum = 3;
-    this.scoreNum = 0;
-    this.scoreText.text = "0000";
+    heartNum = this.params.lives;
+    this.scoreNum = this.params.score;
+    this.scoreText.text = this.params.score.toString()?.padStart(4, "0");
     this.hearts.forEach((h) => h.destroy);
     this.hearts.length = 0;
     for (let i = 0; i < 1; i++) {
