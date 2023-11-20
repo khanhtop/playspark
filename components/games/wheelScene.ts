@@ -289,7 +289,7 @@ export default class WheelScene extends Phaser.Scene {
     let rounds = Phaser.Math.Between(5, 8);
     var degree=Phaser.Math.Between(0, deltaAmount - 1) * deltaDegree;
     
-    if(Math.random() < win_probability) {
+    if(Math.random() > win_probability) {
       degree = 9 - win_bone[Math.round(100 * Math.random()) % win_bone.length];
     } else {
       degree = 9 - lose_bone[Math.round(100 * Math.random()) % lose_bone.length];

@@ -19,7 +19,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 
 export default function Advert({ data, theme }) {
   const context = useAppContext();
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(5);
   const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
   const [score, setScore] = useState(0);
   const [leaderboard, setLeaderboard] = useState(
@@ -170,7 +170,10 @@ export default function Advert({ data, theme }) {
         <Pong
           gameType="wheelspin"
           callback={(a) => setStage(1)}
-          params={{ logo: "/branding/logo.png", winProbability: 0.9 }}
+          params={{
+            logo: "/branding/logo.png",
+            winProbability: data?.playableAd?.winProbability ?? 0.5,
+          }}
         />
       )}
     </div>

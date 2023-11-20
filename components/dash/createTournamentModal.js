@@ -207,8 +207,8 @@ export default function CreateTournamentModal({ data, hide }) {
                 </>
               </RewardedComponent>
               <BrandingComponent>
-                <>
-                  <div className="flex items-center gap-2 mt-6">
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2 mt-4">
                     <p className="text-white">Playable Ad</p>
                     <Toggle
                       checked={tournament?.playableAd}
@@ -225,7 +225,33 @@ export default function CreateTournamentModal({ data, hide }) {
                       }
                     />
                   </div>
-                </>
+                  {tournament?.playableAd && (
+                    <div className="text-white">
+                      <p className="text-xs mb-2 mt-4">
+                        Win Probability (
+                        {tournament?.playableAd?.winProbability})
+                      </p>
+                      <input
+                        className="w-[300px] appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-cyan-400/95 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black"
+                        type="range"
+                        id="slider"
+                        min={0}
+                        max={1}
+                        step={0.01} // You can adjust the step size based on your preference
+                        value={tournament?.playableAd?.winProbability}
+                        onChange={(e) =>
+                          setTournament({
+                            ...tournament,
+                            playableAd: {
+                              winProbability: e.target.value,
+                              logo: "/branding/logo.png",
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
               </BrandingComponent>
             </div>
 
