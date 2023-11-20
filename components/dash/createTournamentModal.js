@@ -45,6 +45,12 @@ export default function CreateTournamentModal({ data, hide }) {
       tournamentId: _uid,
       ownerId: context.loggedIn?.uid,
       ownerCompanyName: context?.profile?.companyName,
+      ...(context?.profile?.sponsorLogo && {
+        sponsorLogo: context.profile.sponsorLogo,
+      }),
+      ...(context?.profile?.brandLogo && {
+        brandLogo: context.profile.brandLogo,
+      }),
     });
     setAdding(false);
     hide();

@@ -3,7 +3,14 @@ import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import React, { useState } from "react";
 
-export default function ImagePicker({ image, onChange, label, width, height }) {
+export default function ImagePicker({
+  id,
+  image,
+  onChange,
+  label,
+  width,
+  height,
+}) {
   const context = useAppContext();
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -39,7 +46,7 @@ export default function ImagePicker({ image, onChange, label, width, height }) {
           {` `}Remove
         </a>
       </p>
-      <label htmlFor="file-input">
+      <label htmlFor={id ? id : "file-input"}>
         {uploading ? (
           <div
             className="flex items-center justify-center"
@@ -87,7 +94,7 @@ export default function ImagePicker({ image, onChange, label, width, height }) {
       </label>
       <input
         type="file"
-        id="file-input"
+        id={id ? id : "file-input"}
         accept="image/*"
         style={{ display: "none" }}
         onChange={handleImageChange}

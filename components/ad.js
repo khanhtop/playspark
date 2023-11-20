@@ -113,7 +113,12 @@ export default function Advert({ data, theme }) {
       )}
 
       {stage === 1 &&
-        getGame(data.id, data, callback, { lives: lives, score: score })}
+        getGame(data.id, data, callback, {
+          lives: lives,
+          score: score,
+          brandLogo: data?.brandLogo,
+          sponsorLogo: data?.sponsorLogo,
+        })}
       {stage === 2 && (
         <Outro
           data={data}

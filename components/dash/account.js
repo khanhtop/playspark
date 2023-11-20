@@ -39,7 +39,7 @@ export default function Account() {
       setBrandLogo(context?.profile?.brandLogo);
     }
     if (context?.profile?.sponsorLogo) {
-      setBrandLogo(context?.profile?.sponsorLogo);
+      setSponsorLogo(context?.profile?.sponsorLogo);
     }
   }, [context.profile]);
 
@@ -84,6 +84,7 @@ export default function Account() {
             the game looks as good as possible.
           </p>
           <ImagePicker
+            id="brand-logo"
             width={400}
             height={200}
             label="Brand Logo"
@@ -93,6 +94,7 @@ export default function Account() {
             }}
           />
           <ImagePicker
+            id="sponsor-logo"
             width={400}
             height={200}
             label="Sponsor Logo"
