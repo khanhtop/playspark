@@ -2,8 +2,11 @@ import ColoredButton from "@/components/forms/colors";
 import BannerAd from "./advertising/bannerAd";
 import UIButton from "./ui/button";
 import Text from "./ui/text";
+import { useAppContext } from "@/helpers/store";
+import ModalPrototyper from "./ui/modalPrototyper";
 
 export default function Intro({ data, setStage, premium, ready }) {
+  const context = useAppContext();
   return (
     <div
       style={{ width: "100%" }}
@@ -27,6 +30,7 @@ export default function Intro({ data, setStage, premium, ready }) {
         >
           {data?.name}
         </Text>
+        {/* <ModalPrototyper /> */}
         {(!premium || ready) && (
           <UIButton {...data} onClick={() => setStage(1)} text="START" />
         )}

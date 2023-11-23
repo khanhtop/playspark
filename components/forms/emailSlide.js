@@ -34,13 +34,15 @@ export default function EmailSlide({ data }) {
     setLoading(false);
   };
 
+  if (!data.captureEmail) return <div />;
+
   return (
     <div
       style={{
         opacity: opacity,
         transition: "0.5s opacity",
       }}
-      className="absolute top-0 left-0 bg-black/95 h-full w-full z-10"
+      className="fixed top-0 left-0 bg-black/95 h-screen w-screen z-10"
     >
       <div
         style={{ bottom: height ? 0 : "-75vh", transition: "0.5s bottom" }}

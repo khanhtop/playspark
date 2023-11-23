@@ -2,6 +2,7 @@ import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
+import { WinModal } from "./ui/modalTypes";
 
 export default function Survey({ data, onComplete }) {
   const context = useAppContext();
@@ -44,8 +45,18 @@ export default function Survey({ data, onComplete }) {
         surveyCompletions: increment(1),
       }
     );
-    context.setHasSeenSurvey(true);
-    onComplete();
+    context.setModal({
+      title: "You Win",
+      contents: (
+        <WinModal
+          onClaim={() => {
+            context.setModal();
+            context.setHasSeenSurvey(true);
+            onComplete();
+          }}
+        />
+      ),
+    });
   };
 
   return (

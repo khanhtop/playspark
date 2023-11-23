@@ -12,6 +12,7 @@ import BannerAd from "./advertising/bannerAd";
 import Text from "./ui/text";
 import UIButton from "./ui/button";
 import EmailSlide from "./forms/emailSlide";
+import { WinModal } from "./ui/modalTypes";
 
 export default function Outro({ score, setStage, data, leaderboard }) {
   const context = useAppContext();
@@ -31,49 +32,75 @@ export default function Outro({ score, setStage, data, leaderboard }) {
   };
 
   return (
-    <div className="bg-white text-black font-light pt-4 h-full w-full relative flex items-center justify-start flex-col">
-      {!context.hasSubscribedToList && <EmailSlide data={data} />}
-
-      <Text {...data} className="text-2xl mb-4">
-        Game Over
-      </Text>
-      <Text {...data} className="font-bold text-sm">
-        Your Score
-      </Text>
-      <Text
-        {...data}
-        style={{ color: data.primaryColor }}
-        className="text-4xl mb-4 font-light"
-      >
-        {score}
-      </Text>
-      <Ranking
-        pos={leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) + 1}
-        best={leaderboard.length}
-        uid={context?.loggedIn?.uid}
-        data={data}
-      />
-      {!context?.loggedIn?.uid && <SignUp data={data} />}
-      {context?.loggedIn?.uid && (
-        <Leaderboard
-          gameData={data}
-          data={leaderboard}
-          primaryColor={data.primaryColor}
-          textColor={data.textColor}
-        />
-      )}
-      <div className="text-white mt-4">
-        {!context?.loggedIn?.uid && (
-          <p className="text-black/60 text-center">OR</p>
-        )}
-
-        <UIButton
-          text="Play Again"
+    <div className="bg-[#222] h-full w-full flex items-center justify-center">
+      <div className="relative bg-white rounded-2xl text-black font-light h-[90%] w-[90%] relative flex items-center justify-start flex-col">
+        {!context.hasSubscribedToList && <EmailSlide data={data} />}
+        <div
+          style={{ backgroundColor: data.primaryColor }}
+          className="text-white absolute w-[80%] h-12 border-2 border-white left-[10%] -mt-4 rounded-full flex items-center justify-center"
+        >
+          <p className="font-octo text-2xl">Game Over</p>
+        </div>
+        <Text {...data} className="font-bold text-sm mt-12">
+          Your Score
+        </Text>
+        <Text
           {...data}
-          onClick={() => setStage(selectStage())}
-          className="h-12 mb-48 rounded-full mt-4"
-        ></UIButton>
-        {/* <BannerAd size="small" position="bottom" delay={1000} /> */}
+          style={{ color: data.primaryColor }}
+          className="text-4xl mb-4 font-light"
+        >
+          {score}
+        </Text>
+        <Ranking
+          pos={
+            leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) + 1
+          }
+          best={leaderboard.length}
+          uid={context?.loggedIn?.uid}
+          data={data}
+        />
+        <button
+          onClick={() => {
+            context.setModal({
+              title: "Leaderboard",
+              onClose: () => {
+                context.setModal();
+              },
+              contents: (
+                <Leaderboard
+                  gameData={data}
+                  data={leaderboard}
+                  primaryColor={data.primaryColor}
+                  textColor={data.textColor}
+                />
+              ),
+            });
+          }}
+        >
+          View Leaderboard
+        </button>
+        {!context?.loggedIn?.uid && <SignUp data={data} />}
+        {/* {context?.loggedIn?.uid && (
+          <Leaderboard
+            gameData={data}
+            data={leaderboard}
+            primaryColor={data.primaryColor}
+            textColor={data.textColor}
+          />
+        )} */}
+        <div className="text-white mt-4">
+          {!context?.loggedIn?.uid && (
+            <p className="text-black/60 text-center">OR</p>
+          )}
+
+          <UIButton
+            text="Play Again"
+            {...data}
+            onClick={() => setStage(selectStage())}
+            className="h-12 mb-48 rounded-full mt-4"
+          ></UIButton>
+          {/* <BannerAd size="small" position="bottom" delay={1000} /> */}
+        </div>
       </div>
     </div>
   );

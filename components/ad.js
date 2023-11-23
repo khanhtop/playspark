@@ -14,6 +14,8 @@ import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
 import Survey from "./survey";
 import Pong from "./games/pong";
+import { ModalButton, ModalText } from "./ui/modalElements";
+import { WinModal } from "./ui/modalTypes";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -169,7 +171,19 @@ export default function Advert({ data, theme }) {
       {stage === 5 && (
         <Pong
           gameType="wheelspin"
-          callback={(a) => setStage(1)}
+          callback={() => {
+            context.setModal({
+              title: "You Win",
+              contents: (
+                <WinModal
+                  onClaim={() => {
+                    context.setModal();
+                    setStage(1);
+                  }}
+                />
+              ),
+            });
+          }}
           params={{
             logo: "/branding/logo.png",
             winProbability: data?.playableAd?.winProbability ?? 0.5,

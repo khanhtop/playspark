@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import UIButton from "./ui/button";
 import { useAppContext } from "@/helpers/store";
+import { WinModal } from "./ui/modalTypes";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
@@ -22,6 +23,22 @@ export default function VideoAd({ data, onSkip, video }) {
       setShowClaim(true);
     }
   };
+
+  const claimReward = () => {
+    context.setModal({
+      title: "You Win",
+      contents: (
+        <WinModal
+          onClaim={() => {
+            context.setModal();
+            context.setHasSeenVideo(true);
+            onSkip();
+          }}
+        />
+      ),
+    });
+  };
+
   return (
     <div className="bg-black h-full w-full relative">
       <MuxPlayer
@@ -43,10 +60,7 @@ export default function VideoAd({ data, onSkip, video }) {
       <div className="px-4 absolute bg-[#222] w-full bottom-0 left-0 h-16 flex items-center">
         <button
           disabled={!showClaim}
-          onClick={() => {
-            context.setHasSeenVideo(true);
-            onSkip();
-          }}
+          onClick={() => claimReward()}
           className={`${
             showClaim ? "opacity-100 underline" : "opacity-50"
           } flex-1 text-left`}

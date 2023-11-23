@@ -20,6 +20,7 @@ export function AppWrapper({ children }) {
   const [profile, setProfile] = useState();
   const [myGames, setMyGames] = useState();
   const [device, setDevice] = useState("desktop");
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     if (isIOS && isSafari) {
@@ -99,6 +100,8 @@ export function AppWrapper({ children }) {
     setHasSeenVideo,
     hasSubscribedToList,
     setHasSubscribedToList,
+    modal,
+    setModal,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>
