@@ -11,7 +11,7 @@ import MainScene from "./mainScene";
 import FallScene from "./fallScene";
 import WheelScene from "./wheelScene";
 
-const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
+const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) => {
   const [hasRendered, setHasRendered] = useState(false);
   const memoizedHasRendered = useMemo(() => hasRendered, [hasRendered]);
   const gameRef = useRef()
@@ -32,11 +32,11 @@ const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
       setHasRendered(true);
       let scene;
       if(gameType == 'baseballFall' || gameType == 'basketballFall' || gameType == 'cricketFall') {
-        scene = new FallScene(gameType);
+        scene = new FallScene(gameType, params);
       } else if(gameType == 'wheelspin') {
-        scene = new WheelScene(gameType);
+        scene = new WheelScene(gameType, params);
       } else {
-        scene = new MainScene(gameType);
+        scene = new MainScene(gameType, params);
       }
 
       const config = {
@@ -58,7 +58,6 @@ const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
         mainScene = gameRef.current.scene.scenes[0];
         mainScene.setScoreHandle(handleScore);
       });
-
       console.log("game setup");
 
 
@@ -78,12 +77,13 @@ const PongClientComponent = forwardRef(({ handleScore, gameType }, ref) => {
   );
 });
 
-export default function MiddlePong({ handleScore, pongRef, gameType }) {
+export default function MiddlePong({ handleScore, pongRef, gameType, params }) {
   return (
     <PongClientComponent
       handleScore={handleScore}
       ref={pongRef}
       gameType={gameType}
+      params={params}
     />
   );
 }

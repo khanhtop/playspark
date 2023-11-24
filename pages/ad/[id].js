@@ -1,5 +1,6 @@
 import Advert from "@/components/ad";
 import PremiumAdvert from "@/components/premiumAd";
+import Modal from "@/components/ui/modal";
 import { getAd } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 import Head from "next/head";
@@ -7,6 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function Ad({ ad, id }) {
   const context = useAppContext();
+
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
     return "https://playspark.co" + url;
@@ -57,6 +59,7 @@ export default function Ad({ ad, id }) {
         ) : (
           <p>{id} - AD NOT FOUND</p>
         )}
+        <Modal primaryColor={ad?.primaryColor} />
       </div>
     </>
   );

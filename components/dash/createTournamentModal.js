@@ -27,6 +27,7 @@ import {
   PAYGSummary,
   RewardedComponent,
 } from "./unlocksWithTier";
+import Toggle from "react-toggle";
 
 export default function CreateTournamentModal({ data, hide }) {
   const context = useAppContext();
@@ -43,6 +44,13 @@ export default function CreateTournamentModal({ data, hide }) {
       ...tournament,
       tournamentId: _uid,
       ownerId: context.loggedIn?.uid,
+      ownerCompanyName: context?.profile?.companyName,
+      ...(context?.profile?.sponsorLogo && {
+        sponsorLogo: context.profile.sponsorLogo,
+      }),
+      ...(context?.profile?.brandLogo && {
+        brandLogo: context.profile.brandLogo,
+      }),
     });
     setAdding(false);
     hide();
@@ -141,7 +149,24 @@ export default function CreateTournamentModal({ data, hide }) {
                   />
                 </>
               </BrandingComponent>
-
+              <BrandingComponent>
+                <>
+                  <div className="flex items-center gap-2 mt-6">
+                    <p className="text-white">
+                      Capture Players Email Addresses
+                    </p>
+                    <Toggle
+                      checked={tournament?.captureEmail}
+                      onChange={() =>
+                        setTournament({
+                          ...tournament,
+                          captureEmail: tournament?.captureEmail ? false : true,
+                        })
+                      }
+                    />
+                  </div>
+                </>
+              </BrandingComponent>
               <RewardedComponent>
                 <>
                   <VideoPicker
@@ -149,7 +174,22 @@ export default function CreateTournamentModal({ data, hide }) {
                     onChange={(id) => {
                       setTournament({ ...tournament, sponsoredVideo: id });
                     }}
-                  />
+                  >
+                    <div className="mb-5">
+                      <p className="text-xs text-white/80 mb-1">
+                        Enter URL for Call To Action (Leave blank for none)
+                      </p>
+                      <Input
+                        placeHolder="https://"
+                        onChange={(url) => {
+                          setTournament({
+                            ...tournament,
+                            sponsoredVideoCtaUrl: url.target.value,
+                          });
+                        }}
+                      />
+                    </div>
+                  </VideoPicker>
                 </>
               </RewardedComponent>
               <RewardedComponent>
@@ -166,6 +206,53 @@ export default function CreateTournamentModal({ data, hide }) {
                   />
                 </>
               </RewardedComponent>
+              <BrandingComponent>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2 mt-4">
+                    <p className="text-white">Playable Ad</p>
+                    <Toggle
+                      checked={tournament?.playableAd}
+                      onChange={() =>
+                        setTournament({
+                          ...tournament,
+                          playableAd: tournament?.playableAd
+                            ? false
+                            : {
+                                winProbability: 0.5,
+                                logo: "/branding/logo.png",
+                              },
+                        })
+                      }
+                    />
+                  </div>
+                  {tournament?.playableAd && (
+                    <div className="text-white">
+                      <p className="text-xs mb-2 mt-4">
+                        Win Probability (
+                        {tournament?.playableAd?.winProbability})
+                      </p>
+                      <input
+                        className="w-[300px] appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-cyan-400/95 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black"
+                        type="range"
+                        id="slider"
+                        min={0}
+                        max={1}
+                        step={0.01} // You can adjust the step size based on your preference
+                        value={tournament?.playableAd?.winProbability}
+                        onChange={(e) =>
+                          setTournament({
+                            ...tournament,
+                            playableAd: {
+                              winProbability: e.target.value,
+                              logo: "/branding/logo.png",
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
+              </BrandingComponent>
             </div>
 
             <div className="flex flex-col items-center text-white p-2">

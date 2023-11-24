@@ -20,6 +20,7 @@ export function AppWrapper({ children }) {
   const [profile, setProfile] = useState();
   const [myGames, setMyGames] = useState();
   const [device, setDevice] = useState("desktop");
+  const [modal, setModal] = useState(false);
 
   useEffect(() => {
     if (isIOS && isSafari) {
@@ -82,7 +83,10 @@ export function AppWrapper({ children }) {
     };
   }, [loggedIn]);
 
-  // My Games
+  // Track content that has been seen
+  const [hasSeenSurvey, setHasSeenSurvey] = useState(false);
+  const [hasSeenVideo, setHasSeenVideo] = useState(false);
+  const [hasSubscribedToList, setHasSubscribedToList] = useState(false);
 
   const sharedState = {
     isAuthed,
@@ -90,6 +94,14 @@ export function AppWrapper({ children }) {
     profile,
     myGames,
     device,
+    hasSeenSurvey,
+    setHasSeenSurvey,
+    hasSeenVideo,
+    setHasSeenVideo,
+    hasSubscribedToList,
+    setHasSubscribedToList,
+    modal,
+    setModal,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

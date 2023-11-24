@@ -14,6 +14,8 @@ import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
 import Survey from "./survey";
 import Pong from "./games/pong";
+import { ModalButton, ModalText } from "./ui/modalElements";
+import { WinModal } from "./ui/modalTypes";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -26,7 +28,11 @@ export default function Advert({ data, theme }) {
     data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
   );
 
+  // Lives & Restarts
+  const [lives, setLives] = useState(3);
+
   const callback = (score) => {
+    setLives(1);
     setScore(score);
     setStage(2);
   };
@@ -108,7 +114,13 @@ export default function Advert({ data, theme }) {
         />
       )}
 
-      {stage === 1 && getGame(data.id, data, callback)}
+      {stage === 1 &&
+        getGame(data.id, data, callback, {
+          lives: lives,
+          score: score,
+          brandLogo: data?.brandLogo,
+          sponsorLogo: data?.sponsorLogo,
+        })}
       {stage === 2 && (
         <Outro
           data={data}
@@ -157,7 +169,26 @@ export default function Advert({ data, theme }) {
         />
       )}
       {stage === 5 && (
-        <Pong gameType="wheelspin" callback={(a) => console.log(a)} />
+        <Pong
+          gameType="wheelspin"
+          callback={() => {
+            context.setModal({
+              title: "You Win",
+              contents: (
+                <WinModal
+                  onClaim={() => {
+                    context.setModal();
+                    setStage(1);
+                  }}
+                />
+              ),
+            });
+          }}
+          params={{
+            logo: "/branding/logo.png",
+            winProbability: data?.playableAd?.winProbability ?? 0.5,
+          }}
+        />
       )}
     </div>
   );

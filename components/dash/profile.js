@@ -2,7 +2,7 @@ import { useState } from "react";
 import ImagePicker from "../forms/imagePicker";
 import { useAppContext } from "@/helpers/store";
 import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
+import { firestore, logout } from "@/helpers/firebase";
 import Button from "../forms/button";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import Input from "../forms/input";
@@ -47,6 +47,12 @@ export default function Profile() {
         ) : (
           "Save Changes"
         )}
+      </button>
+      <button
+        onClick={() => logout()}
+        className="cursor-pointer w-[200px] h-12 rounded-lg bg-cyan-400 mt-0 flex items-center justify-center"
+      >
+        Logout
       </button>
     </div>
   );

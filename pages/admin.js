@@ -1,4 +1,5 @@
 import AuthWrapper from "@/components/auth/authWrapper";
+import Account from "@/components/dash/account";
 import Avatar from "@/components/dash/avatar";
 import MarketPlace from "@/components/dash/marketplace";
 import MyGames from "@/components/dash/mygames";
@@ -45,6 +46,10 @@ export default function Application() {
             <Pane title="Analytics"></Pane>
           ) : selectedPane === 6 ? (
             <Pane title="Users"></Pane>
+          ) : selectedPane === 7 ? (
+            <Pane title="Account">
+              <Account />
+            </Pane>
           ) : (
             <Pane />
           )}

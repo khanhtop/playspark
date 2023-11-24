@@ -1,10 +1,12 @@
 import Advert from "@/components/ad";
 import PremiumAdvert from "@/components/premiumAd";
+import Modal from "@/components/ui/modal";
 import { getDemo } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 
 export default function Demo({ ad, id }) {
   const context = useAppContext();
+
   return (
     <div
       className={`text-white font-bold w-screen ${
@@ -20,6 +22,7 @@ export default function Demo({ ad, id }) {
       ) : (
         <p>{id} - AD NOT FOUND</p>
       )}
+      <Modal title="Leaderboard" />
     </div>
   );
 }

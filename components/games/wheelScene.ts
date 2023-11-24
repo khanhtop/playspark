@@ -40,7 +40,7 @@ export default class WheelScene extends Phaser.Scene {
   private lose : any;
   private bonus : any;
   private prizeAnim : any;
-
+  private params: any;
   private outCircle : any;
   private topUI : any;
   private downUI : any;
@@ -48,10 +48,11 @@ export default class WheelScene extends Phaser.Scene {
   private item : any;
 
 
-  constructor(newGameType: string) {
+  constructor(newGameType: string, newParams: any) {
     super();
     WheelScene.instance = this;
     gameType = newGameType;
+    this.params = newParams
   }
 
   preload() {
@@ -68,7 +69,7 @@ export default class WheelScene extends Phaser.Scene {
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
 
     console.log("Preload");
-    this.load.image('logo', "/pong/" + gameType + '/back31.jpg');
+    this.load.image('logo', this.params.logo);
     this.load.image('background', "/pong/" + gameType + '/back3.jpg');
     this.load.image('ui-center', "/pong/" + gameType + '/out-circle.png');
     this.load.image('ui-btn-top', "/pong/" + gameType + '/ui-top.png');
@@ -274,13 +275,11 @@ export default class WheelScene extends Phaser.Scene {
   }
 
   public spinwheel(){
-
     if(isSpinBtn) return;
-
     isSpinBtn = true;
 
-    win_probability = 0;
-
+    win_probability = this.params.winProbability;
+    console.log(this.params.winProbability)
 
     if(spinTimes <= 0) {
       this.endRound();
@@ -293,7 +292,7 @@ export default class WheelScene extends Phaser.Scene {
     let rounds = Phaser.Math.Between(5, 8);
     var degree=Phaser.Math.Between(0, deltaAmount - 1) * deltaDegree;
     
-    if(win_probability != 1) {
+    if(Math.random() > win_probability) {
       degree = 9 - win_bone[Math.round(100 * Math.random()) % win_bone.length];
     } else {
       degree = 9 - lose_bone[Math.round(100 * Math.random()) % lose_bone.length];

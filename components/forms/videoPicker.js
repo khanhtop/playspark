@@ -9,7 +9,7 @@ import React, { useEffect, useState } from "react";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 
-export default function VideoPicker({ video, onChange, label }) {
+export default function VideoPicker({ children, video, onChange, label }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [lastVideo, setLastVideo] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -76,6 +76,7 @@ export default function VideoPicker({ video, onChange, label }) {
           Select a video (ideally 9:16) to show users during gameplay.
         </p>
       )}
+      {video && children}
       <label htmlFor="video-input">
         {uploading ? (
           <div

@@ -2,6 +2,7 @@ import { useAppContext } from "@/helpers/store";
 import {
   ChartBarIcon,
   ChevronRightIcon,
+  Cog6ToothIcon,
   ScaleIcon,
   ShoppingCartIcon,
   Squares2X2Icon,
@@ -56,26 +57,13 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           setSelectedPane={() => setSelectedPane(2)}
           icon={<ScaleIcon className="h-5" />}
         />
+        <Row
+          text="Account"
+          selected={selectedPane === 7}
+          setSelectedPane={() => setSelectedPane(7)}
+          icon={<Cog6ToothIcon className="h-5" />}
+        />
       </div>
-      {/* <div className="mb-4 flex flex-col items-center">
-        <p>{context?.profile?.subscription?.name} Plan</p>
-        <button
-          className="text-xs bg-white/20 py-1 px-4 rounded-full mt-1"
-          onClick={() =>
-            switchTier(
-              context?.loggedIn?.uid,
-              context?.profile?.subscription?.tier < 4
-                ? context?.profile?.subscription?.tier + 1
-                : 0
-            )
-          }
-        >
-          CHANGE
-        </button>
-      </div>
-      <Button onClick={() => logout()} className="w-full">
-        Logout
-      </Button> */}
       <div
         onClick={() => setSelectedPane(3)}
         className="flex items-center gap-4 "
