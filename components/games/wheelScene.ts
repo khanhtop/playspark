@@ -17,6 +17,7 @@ let bonus = {};
 let win_bone = [];
 let lose_bone = [];
 let win_probability = 0;
+let isSpinBtn = false;
 
 export default class WheelScene extends Phaser.Scene {
   public static instance: WheelScene;
@@ -181,9 +182,9 @@ export default class WheelScene extends Phaser.Scene {
     this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0);
 
     // BONUS TEXT PART
-    this.bonus_top = this.add.sprite(w/2 + 10, h / 2 - wheelR / 2 - 90 + offsetY, 'bonus').setDisplaySize(wheelR * 0.15, wheelR * 0.15);
-    this.add.text(w / 2 - 70, h / 2 - wheelR / 2 - 90 + offsetY, "WIN", {...this.font_text_style, fontSize: '45px'}).setOrigin(0.5, 0.5);
-    this.add.text(w / 2 + 45, h / 2 - wheelR / 2 - 90 + offsetY, "800", {...this.font_text_style, fontSize: '45px'}).setOrigin(0, 0.5);
+    this.bonus_top = this.add.sprite(w/2 + 10, h / 2 - wheelR / 2 - 100 + offsetY, 'bonus').setDisplaySize(wheelR * 0.15, wheelR * 0.15);
+    this.add.text(w / 2 - 70, h / 2 - wheelR / 2 - 100 + offsetY, "WIN", {...this.font_text_style, fontSize: '45px'}).setOrigin(0.5, 0.5);
+    this.add.text(w / 2 + 45, h / 2 - wheelR / 2 - 100 + offsetY, "800", {...this.font_text_style, fontSize: '45px'}).setOrigin(0, 0.5);
 
     // var but = this.add.image(w / 2,50,'button').setInteractive();
     // but.on('pointerup', this.spinwheel, this);
@@ -274,6 +275,8 @@ export default class WheelScene extends Phaser.Scene {
   }
 
   public spinwheel(){
+    if(isSpinBtn) return;
+    isSpinBtn = true;
 
     win_probability = this.params.winProbability;
     console.log(this.params.winProbability)
@@ -313,6 +316,7 @@ export default class WheelScene extends Phaser.Scene {
             this.score(status)
 
             console.log(status, index);
+            isSpinBtn = false;
         },
         onUpdate: function(tween, target) {
           this.item.setAngle(target.angle);
