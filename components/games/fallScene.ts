@@ -670,34 +670,29 @@ export default class FallScene extends Phaser.Scene {
     this.physics.add.overlap(
       this.player,
       bball,
-      () => {
-        console.log("-------type : ", bball.type);
+      (p, bb) => {
+        console.log("-------type : ", bb.type);
 
-        switch(bball.type) {
-          case 'ball':
-            // this.player.play('playerStatic')
-            this.ballHit.play();
-            comboNum++;
-            if(comboNum % 10 == 0) {
-              this.lifeup.play();
-              heartNum++;
-              this.lifeNumText.setText(heartNum);
-            }
-            this.score1();
-            break;
-          case 'bomb':
-            this.bomb.play();
-            this.playBombEffect(bball.x, bball.y)
-            this.score1(1);
-            break;
-          case 'boosterBall':
-            console.log('boosterBall hit')
-            this.setBooster();
-            break;
-            default:
+        if(bb.type == 'ball') {
+          // this.player.play('playerStatic')
+          this.ballHit.play();
+          comboNum++;
+          if(comboNum % 10 == 0) {
+            this.lifeup.play();
+            heartNum++;
+            this.lifeNumText.setText(heartNum);
+          }
+          this.score1();
+        } else if(bb.type == 'bomb') {
+          this.bomb.play();
+          this.playBombEffect(bb.x, bb.y)
+          this.score1(1);
+        } else if(bb.type == 'boosterBall') {
+          console.log('boosterBall hit')
+          this.setBooster();
         }
 
-        this.randomBallPos(bball)
+        this.randomBallPos(bb)
 
         // if (!this.ballHit.isPlaying) this.ballHit.play();
       },
