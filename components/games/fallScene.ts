@@ -9,7 +9,7 @@ let w: number,
   playerW: number,
   playerH: number,
   playerColliderR: number,
-  aiR: number,
+  isStatic: boolean,
   scr: number,
   goalH: number,
   sideW: number,
@@ -107,7 +107,6 @@ export default class FallScene extends Phaser.Scene {
     playerW = w * 0.3 * 0.6;
     playerH = w * 0.3
     playerColliderR = playerR / 2;
-    aiR = w * 0.175;
     scr = h * 0.08;
     mW = w / 2;
     mH = (h - scr) / 2 + scr;
@@ -131,6 +130,7 @@ export default class FallScene extends Phaser.Scene {
     throwSpeed = 500;
     heartNum = this.params.lives;
     comboNum = 0;
+    isStatic = false;
   }
 
   // 400 800
@@ -737,7 +737,7 @@ export default class FallScene extends Phaser.Scene {
     // bb.setPosition( 0, y - distance);
     distance -= deltaDistance;
     speed += deltaSpeed;
-    deltaBomb += 0.1;
+    deltaBomb += this.scoreNum < 6000 ? 0.1 : 0.5;
 
 
     distance = Math.max(100, distance);
@@ -749,7 +749,7 @@ export default class FallScene extends Phaser.Scene {
     if(rate < 0.55) {
       bb.setTexture('bomb');
       bb.type = 'bomb';
-      bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 1.4), Math.min(ballR + deltaBomb, ballR * 1.4))
+      bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 2), Math.min(ballR + deltaBomb, ballR * 2))
     } else if(rate < 0.8 && rate >= 0.55) {
       bb.setTexture('ball');
       bb.type = 'ball';
@@ -772,13 +772,16 @@ export default class FallScene extends Phaser.Scene {
       boosterBat += 10;
       this.boostNumText.setText(boosterBat.toString());
 
-      this.staticBonusScreen.setVisible(true);
+      if(!isStatic) {
+        isStatic = true;
+        this.staticBonusScreen.setVisible(true);
 
-      setTimeout(() => {
-        if(this.staticBonusScreen != null) {
-          this.staticBonusScreen.setVisible(false);
-        }
-      }, 3000);
+        setTimeout(() => {
+          if(this.staticBonusScreen != null) {
+            this.staticBonusScreen.setVisible(false);
+          }
+        }, 3000);
+      }
 
     }
   }
