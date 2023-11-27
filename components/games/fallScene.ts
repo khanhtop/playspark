@@ -737,7 +737,17 @@ export default class FallScene extends Phaser.Scene {
     // bb.setPosition( 0, y - distance);
     distance -= deltaDistance;
     speed += deltaSpeed;
-    deltaBomb += this.scoreNum < 6000 ? 0.1 : 0.5;
+
+    if(this.scoreNum < 6000) {
+      deltaBomb += 0.5;
+
+    } else if(this.scoreNum < 10000) {
+      deltaBomb = ballR * 0.2;
+    } else if(this.scoreNum < 15000) {
+      deltaBomb = ballR * 0.5;
+    } else {
+      deltaBomb = ballR * 1.3;
+    }
 
 
     distance = Math.max(100, distance);
@@ -749,7 +759,7 @@ export default class FallScene extends Phaser.Scene {
     if(rate < 0.55) {
       bb.setTexture('bomb');
       bb.type = 'bomb';
-      bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 2), Math.min(ballR + deltaBomb, ballR * 2))
+      bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 2.3), Math.min(ballR + deltaBomb, ballR * 2.3))
     } else if(rate < 0.8 && rate >= 0.55) {
       bb.setTexture('ball');
       bb.type = 'ball';
