@@ -16,6 +16,7 @@ import Survey from "./survey";
 import Pong from "./games/pong";
 import { ModalButton, ModalText } from "./ui/modalElements";
 import { WinModal } from "./ui/modalTypes";
+import { computeLeaderboard } from "@/helpers/leaderboard";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -27,6 +28,7 @@ export default function Advert({ data, theme }) {
   const [leaderboard, setLeaderboard] = useState(
     data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
   );
+  const [prevBest, setPrevBest] = useState();
 
   // Lives & Restarts
   const [lives, setLives] = useState(3);
@@ -38,44 +40,59 @@ export default function Advert({ data, theme }) {
   };
 
   useEffect(() => {
-    const _leaderboard = [...leaderboard];
-    if (score > 0 && context?.loggedIn?.uid && context?.profile?.companyName) {
-      const position = _leaderboard.findIndex(
-        (a) => a.uid === context?.loggedIn?.uid
-      );
-      if (position === -1) {
-        _leaderboard.push({
-          email: context?.loggedIn?.email,
-          score: score,
-          uid: context?.loggedIn?.uid,
-          name: context?.profile?.companyName,
-        });
-        const sorted = _leaderboard.sort((a, b) => b.score > a.score);
-        setLeaderboard(sorted);
-      } else {
-        if (_leaderboard[position].score < score) {
-          _leaderboard[position] = {
-            ..._leaderboard[position],
-            score: score,
-          };
-        }
-      }
-      if (!data.demo) {
-        console.log(_leaderboard);
-        setDoc(
-          doc(firestore, "tournaments", data.tournamentId.toString()),
-          {
-            ...data,
-            leaderboard: _leaderboard,
-          },
-          { merge: true }
-        );
-      }
-      const sorted = _leaderboard.sort((a, b) => b.score > a.score);
-      setLeaderboard(sorted);
-    } else {
-      console.log("Score zero or not logged in");
+    const _lb = computeLeaderboard(
+      leaderboard,
+      score,
+      context?.loggedIn?.uid,
+      context?.profile,
+      context?.loggedIn?.email,
+      data?.demo,
+      data.tournamentId.toString(),
+      data
+    );
+    if (_lb?.leaderboard) {
+      setLeaderboard(_lb?.leaderboard);
+      setPrevBest(_lb?.prevBest);
     }
+
+    // const _leaderboard = [...leaderboard];
+    // if (score > 0 && context?.loggedIn?.uid && context?.profile?.companyName) {
+    //   const position = _leaderboard.findIndex(
+    //     (a) => a.uid === context?.loggedIn?.uid
+    //   );
+    //   if (position === -1) {
+    //     _leaderboard.push({
+    //       email: context?.loggedIn?.email,
+    //       score: score,
+    //       uid: context?.loggedIn?.uid,
+    //       name: context?.profile?.companyName,
+    //     });
+    //     const sorted = _leaderboard.sort((a, b) => b.score > a.score);
+    //     setLeaderboard(sorted);
+    //   } else {
+    //     if (_leaderboard[position].score < score) {
+    //       _leaderboard[position] = {
+    //         ..._leaderboard[position],
+    //         score: score,
+    //       };
+    //     }
+    //   }
+    //   if (!data.demo) {
+    //     console.log(_leaderboard);
+    //     setDoc(
+    //       doc(firestore, "tournaments", data.tournamentId.toString()),
+    //       {
+    //         ...data,
+    //         leaderboard: _leaderboard,
+    //       },
+    //       { merge: true }
+    //     );
+    //   }
+    //   const sorted = _leaderboard.sort((a, b) => b.score > a.score);
+    //   setLeaderboard(sorted);
+    // } else {
+    //   console.log("Score zero or not logged in");
+    // }
   }, [score, context.loggedIn, context.profile]);
 
   useEffect(() => {
@@ -127,6 +144,7 @@ export default function Advert({ data, theme }) {
           setStage={setStage}
           score={score}
           leaderboard={leaderboard}
+          prevBest={prevBest}
         />
       )}
       {stage === 3 && (
