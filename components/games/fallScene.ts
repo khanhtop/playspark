@@ -59,6 +59,7 @@ export default class FallScene extends Phaser.Scene {
   booster: any;
   bomb: any;
   powerup: any;
+  staticBonusScreen: any;
   timer: NodeJS.Timeout;
 
   constructor(newGameType: string, newParams: any) {
@@ -409,6 +410,56 @@ export default class FallScene extends Phaser.Scene {
       })
       .setOrigin(0.5, 0.5);
 
+    this.staticBonusScreen = this.add.group();
+
+    const offsetYY = -80;
+    // Inside a scene or game object
+    this.staticBonusScreen.add(
+      this.add.graphics()
+      .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+      .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height)
+    );
+
+    this.staticBonusScreen.add(
+      this.add.text(mW, mH - 120 + offsetYY, "Booster Unloaded!", {
+        fontFamily: "TitanOne-Regular",
+        fontSize: "25px",
+        color: "#ffffff",
+        stroke: "#345e8e",
+      }).setOrigin(0.5, 0.5)
+    )
+
+    this.staticBonusScreen.add(
+      this.add.sprite(mW - 60, mH + offsetYY, 'boosterBall')
+      .setDisplaySize(80, 80)
+    )
+
+    this.staticBonusScreen.add(
+      this.add.text(mW, mH + offsetYY, "+", {
+        fontFamily: "TitanOne-Regular",
+        fontSize: "45px",
+        color: "#ffffff",
+        stroke: "#345e8e",
+      }).setOrigin(0.5, 0.5)
+    )
+
+    this.staticBonusScreen.add(
+      this.add.sprite(mW + 60, mH + offsetYY,'boosterBat')
+      .setDisplaySize(80, 80)
+    )
+
+    this.staticBonusScreen.add(
+      this.add.text(mW, mH + 110 + offsetYY, "Tap your player to\n lanch items at the\n bombs to make them\n explode.", {
+        fontFamily: "TitanOne-Regular",
+        fontSize: "20px",
+        color: "#ffffff",
+        stroke: "#345e8e",
+        align: "center"
+      }).setOrigin(0.5, 0.5)
+    )
+
+    this.staticBonusScreen.setVisible(false);
+
     this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
     this.cameras.main.postFX
       .addColorMatrix()
@@ -715,6 +766,15 @@ export default class FallScene extends Phaser.Scene {
       boosterNum = 0;
       boosterBat += 10;
       this.boostNumText.setText(boosterBat.toString());
+
+      this.staticBonusScreen.setVisible(true);
+
+      setTimeout(() => {
+        if(this.staticBonusScreen != null) {
+          this.staticBonusScreen.setVisible(false);
+        }
+      }, 3000);
+
     }
   }
 

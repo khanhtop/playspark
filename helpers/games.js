@@ -134,4 +134,25 @@ export const games = [
     textColor: "#FFF",
     id: 10,
   },
+  {
+    name: "Cricket Ball",
+    description:
+      "This is cricket ball game.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/cricket-ball.jpg",
+    screenshot: "cricket-ball.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 11,
+    muxId: "3Sai2FJp1csTqGeqdq100GaKLmwnSUPH4nH2B3aIR3EA",
+  },
+  {
+    name: "Soccer Ball",
+    description:
+      "This is soccer ball game.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/flick-stars.jpg",
+    screenshot: "flick-stars.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 12,
+  },
 ];

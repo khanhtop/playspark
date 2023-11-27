@@ -125,6 +125,24 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
+  if (id === 11)
+    return (
+      <Pong
+        data={data}
+        gameType="cricket"
+        callback={callback}
+        params={params}
+      />
+    );
+  if (id === 12)
+    return (
+      <Pong
+        data={data}
+        gameType="soccerFall"
+        callback={callback}
+        params={params}
+      />
+    );
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {
