@@ -81,7 +81,9 @@ export default function MarketPlace({}) {
             onClick={() => setDemo()}
             className="absolute top-0 left-0 h-screen w-screen bg-black/95 z-10 flex items-center justify-center"
           >
-            <iframe src={`/demo/${demo}`} className="h-[663px] w-[375px]" />
+            {
+            demo == 11 ? <iframe src={`/demo/${demo}`} className="h-[688px] w-[1248px]" /> :
+            <iframe src={`/demo/${demo}`} className="h-[663px] w-[375px]" />}
           </div>
         )}
         {showAddTournamentModal && (
