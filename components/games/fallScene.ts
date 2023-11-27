@@ -673,7 +673,7 @@ export default class FallScene extends Phaser.Scene {
       (p, bb) => {
         console.log("-------type : ", bb.type);
 
-        if(bb.type == 'ball') {
+        if(bb.type == "ball") {
           // this.player.play('playerStatic')
           this.ballHit.play();
           comboNum++;
@@ -683,11 +683,11 @@ export default class FallScene extends Phaser.Scene {
             this.lifeNumText.setText(heartNum);
           }
           this.score1();
-        } else if(bb.type == 'bomb') {
+        } else if(bb.type == "bomb") {
           this.bomb.play();
           this.playBombEffect(bb.x, bb.y)
           this.score1(1);
-        } else if(bb.type == 'boosterBall') {
+        } else if(bb.type == "boosterBall") {
           console.log('boosterBall hit')
           this.setBooster();
         }
