@@ -171,8 +171,9 @@ export default class FallScene extends Phaser.Scene {
     );
     this.bg = this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
     this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
-
-    this.add.image(30, 30, "boosterBatNum").setDisplaySize(30, 30);
+    this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, 75)
 
     this.fallBallList = [];
 
@@ -366,6 +367,7 @@ export default class FallScene extends Phaser.Scene {
       }
     });
 
+    // this.add.image(w - 90, 30, "score").setDisplaySize(80, scrH).setOrigin(0, 0.5);
     this.lifeNumText = this.add
     .text(w - 70, 30, heartNum, {
       fontFamily: "enhanced_led_board-7",
@@ -374,6 +376,8 @@ export default class FallScene extends Phaser.Scene {
     })
     .setOrigin(0.5, 0.5);
 
+    // this.add.image(10, 30, "score").setDisplaySize(80, scrH).setOrigin(0, 0.5);
+    this.add.image(30, 30, "boosterBatNum").setDisplaySize(30, 30);
     this.boostNumText = this.add
     .text(70, 30, "0", {
       fontFamily: "enhanced_led_board-7",
@@ -421,7 +425,7 @@ export default class FallScene extends Phaser.Scene {
     );
 
     this.staticBonusScreen.add(
-      this.add.text(mW, mH - 120 + offsetYY, "Booster Unloaded!", {
+      this.add.text(mW, mH - 120 + offsetYY, "Booster Unlocked!", {
         fontFamily: "TitanOne-Regular",
         fontSize: "25px",
         color: "#ffffff",
@@ -449,7 +453,7 @@ export default class FallScene extends Phaser.Scene {
     )
 
     this.staticBonusScreen.add(
-      this.add.text(mW, mH + 110 + offsetYY, "Tap your player to\n lanch items at the\n bombs to make them\n explode.", {
+      this.add.text(mW, mH + 110 + offsetYY, "Tap your player to\n launch items at the\n bombs to make them\n explode.", {
         fontFamily: "TitanOne-Regular",
         fontSize: "20px",
         color: "#ffffff",
@@ -642,7 +646,7 @@ export default class FallScene extends Phaser.Scene {
   }
 
   initFallBall() {
-    for(let i = 0; i < 5; i ++) {
+    for(let i = 0; i < 10; i ++) {
       this.fallBallList.push(this.addFallBall('ball'));
     }
   }
@@ -731,7 +735,6 @@ export default class FallScene extends Phaser.Scene {
 
     bb.setPosition( w / 2 + (0.5 - Math.random()) * w, y - distance);
     // bb.setPosition( 0, y - distance);
-    bb.setVelocity(0, speed)
     distance -= deltaDistance;
     speed += deltaSpeed;
     deltaBomb += 0.1;
@@ -756,6 +759,8 @@ export default class FallScene extends Phaser.Scene {
     }
 
     this.lastBall = bb;
+    bb.setVelocity(0, speed)
+
   }
 
   setBooster() {
