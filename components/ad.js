@@ -24,6 +24,7 @@ export default function Advert({ data, theme }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
   const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
+  const [shouldRotate, setShouldRotate] = useState(false);
   const [score, setScore] = useState(0);
   const [leaderboard, setLeaderboard] = useState(
     data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
@@ -54,53 +55,63 @@ export default function Advert({ data, theme }) {
       setLeaderboard(_lb?.leaderboard);
       setPrevBest(_lb?.prevBest);
     }
-
-    // const _leaderboard = [...leaderboard];
-    // if (score > 0 && context?.loggedIn?.uid && context?.profile?.companyName) {
-    //   const position = _leaderboard.findIndex(
-    //     (a) => a.uid === context?.loggedIn?.uid
-    //   );
-    //   if (position === -1) {
-    //     _leaderboard.push({
-    //       email: context?.loggedIn?.email,
-    //       score: score,
-    //       uid: context?.loggedIn?.uid,
-    //       name: context?.profile?.companyName,
-    //     });
-    //     const sorted = _leaderboard.sort((a, b) => b.score > a.score);
-    //     setLeaderboard(sorted);
-    //   } else {
-    //     if (_leaderboard[position].score < score) {
-    //       _leaderboard[position] = {
-    //         ..._leaderboard[position],
-    //         score: score,
-    //       };
-    //     }
-    //   }
-    //   if (!data.demo) {
-    //     console.log(_leaderboard);
-    //     setDoc(
-    //       doc(firestore, "tournaments", data.tournamentId.toString()),
-    //       {
-    //         ...data,
-    //         leaderboard: _leaderboard,
-    //       },
-    //       { merge: true }
-    //     );
-    //   }
-    //   const sorted = _leaderboard.sort((a, b) => b.score > a.score);
-    //   setLeaderboard(sorted);
-    // } else {
-    //   console.log("Score zero or not logged in");
-    // }
   }, [score, context.loggedIn, context.profile]);
 
-  useEffect(() => {
+  const getFrameDimensions = () => {
+    return {
+      width: window?.frameElement?.offsetWidth || window?.innerWidth,
+      height: window?.frameElement?.offsetHeight || window?.innerHeight,
+    };
+  };
+
+  const handleOrientationChange = (event) => {
+    if (window?.frameElement?.offsetWidth) return;
     const width =
-      window?.frameElement?.offsetWidth || window?.innerHeight * 0.58;
-    const height = window?.frameElement?.offsetHeight || window?.innerHeight;
+      Math.abs(event.target.screen.orientation.angle) == 90
+        ? event.target.screen.width
+        : event.target.screen.height;
+    const height =
+      Math.abs(event.target.screen.orientation.angle) == 90
+        ? event.target.screen.height
+        : event.target.screen.width;
+    if (
+      (data.landscape && height > width) ||
+      (!data.landscape && width > height)
+    ) {
+      setShouldRotate(true);
+    } else {
+      setShouldRotate(false);
+    }
+    setDimensions({ x: width, y: height });
+  };
+
+  useEffect(() => {
+    const { width, height } = getFrameDimensions();
+    if (
+      (data.landscape && height > width) ||
+      (!data.landscape && width > height)
+    ) {
+      setShouldRotate(true);
+    } else {
+      setShouldRotate(false);
+    }
     setDimensions({ x: width, y: height });
   }, []);
+
+  useEffect(() => {
+    // Check if window is defined (not in SSR) and add event listener
+    if (typeof window !== "undefined") {
+      window.addEventListener("orientationchange", handleOrientationChange);
+
+      // Clean up the event listener when the component unmounts
+      return () => {
+        window.removeEventListener(
+          "orientationchange",
+          handleOrientationChange
+        );
+      };
+    }
+  }, [data]);
 
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 
@@ -119,6 +130,11 @@ export default function Advert({ data, theme }) {
         overflow: "hidden",
       }}
     >
+      {shouldRotate && (
+        <div className="absolute h-full w-full top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
+          <p>Rotate Your Device</p>
+        </div>
+      )}
       {stage === 0 && (
         <Intro
           data={data}
