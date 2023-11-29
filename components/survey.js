@@ -60,34 +60,51 @@ export default function Survey({ data, onComplete }) {
   };
 
   return (
-    <div className="bg-white flex-1 h-full text-black flex flex-col py-8 px-4 items-center justify-center">
-      <div className="flex-1 flex flex-col items-center justify-center w-full">
-        <p className="mb-8 text-xl text-center">
-          {data?.survey?.[questionIndex]?.question}
-        </p>
-        <div className="flex flex-col gap-4 w-full items-center">
-          {data?.survey?.[questionIndex]?.responses?.map((item, key) => (
-            <SurveyResponse
-              data={data}
-              item={item}
-              key={key}
-              onRespond={(response) => {
-                const r = [
-                  ...responses,
-                  {
-                    question: data?.survey?.[questionIndex]?.question,
-                    response: response,
-                  },
-                ];
-                setResponses(r);
-                if (questionIndex < data?.survey?.length - 1) {
-                  setQuestionIndex(questionIndex + 1);
-                } else {
-                  submitResponse(r);
-                }
-              }}
-            />
-          ))}
+    <div className="bg-[#222] flex-1 h-full w-full flex items-center justify-center">
+      <div className="relative bg-white rounded-lg h-[80%] w-[90%] bg-white mb-[15%] text-black flex flex-col py-8 px-4 items-center justify-center">
+        <div
+          style={{ backgroundColor: data.primaryColor }}
+          className="text-white absolute w-[80%] h-12  border-2 border-white left-[10%] -top-4 rounded-full flex items-center justify-center"
+        >
+          <p className="font-octo text-2xl">Play & Win</p>
+        </div>
+        <div
+          style={{ backgroundColor: data.primaryColor }}
+          className="text-white absolute w-36 h-12  border-2 border-white  -bottom-4 rounded-full flex items-center justify-center"
+        >
+          <p className="font-octo text-2xl">
+            {questionIndex + 1} / {data?.survey?.length}
+          </p>
+        </div>
+        <div className="flex-1 flex flex-col items-center justify-center w-full">
+          <img src={data?.brandLogo} className="h-16 mb-4" />
+          <p className="mb-4 text-center font-octo text-3xl">
+            {data?.survey?.[questionIndex]?.question}
+          </p>
+          <div className="flex flex-col gap-4 w-full items-center">
+            {data?.survey?.[questionIndex]?.responses?.map((item, key) => (
+              <SurveyResponse
+                data={data}
+                item={item}
+                key={key}
+                onRespond={(response) => {
+                  const r = [
+                    ...responses,
+                    {
+                      question: data?.survey?.[questionIndex]?.question,
+                      response: response,
+                    },
+                  ];
+                  setResponses(r);
+                  if (questionIndex < data?.survey?.length - 1) {
+                    setQuestionIndex(questionIndex + 1);
+                  } else {
+                    submitResponse(r);
+                  }
+                }}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -110,11 +127,11 @@ function SurveyResponse({ data, item, onRespond }) {
       disabled={isClicked}
       onClick={() => clickButton()}
       style={{
-        backgroundColor: isClicked ? data.primaryColor : "#EEE",
-        color: isClicked ? data.textColor : "#222",
+        backgroundColor: isClicked ? data.primaryColor : "#2196F3",
+        color: isClicked ? data.textColor : "#FFF",
         transition: "1s all",
       }}
-      className="bg-gray-200 w-full max-w-[300px] h-20 rounded-full hover:bg-cyan-500 border-[#999] border-[1px]"
+      className="shadow-lg shadow-[#444]/50 bg-gray-200 w-full max-w-[300px] h-12 rounded-full hover:bg-cyan-500 border-[#999] border-[1px]"
     >
       <p>{item.value}</p>
     </button>

@@ -16,6 +16,7 @@ import Survey from "./survey";
 import Pong from "./games/pong";
 import { ModalButton, ModalText } from "./ui/modalElements";
 import { WinModal } from "./ui/modalTypes";
+import { computeLeaderboard } from "@/helpers/leaderboard";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -23,10 +24,12 @@ export default function Advert({ data, theme }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
   const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
+  const [shouldRotate, setShouldRotate] = useState(false);
   const [score, setScore] = useState(0);
   const [leaderboard, setLeaderboard] = useState(
     data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
   );
+  const [prevBest, setPrevBest] = useState();
 
   // Lives & Restarts
   const [lives, setLives] = useState(3);
@@ -38,59 +41,79 @@ export default function Advert({ data, theme }) {
   };
 
   useEffect(() => {
-    const _leaderboard = [...leaderboard];
-    if (score > 0 && context?.loggedIn?.uid && context?.profile?.companyName) {
-      const position = _leaderboard.findIndex(
-        (a) => a.uid === context?.loggedIn?.uid
-      );
-      if (position === -1) {
-        _leaderboard.push({
-          email: context?.loggedIn?.email,
-          score: score,
-          uid: context?.loggedIn?.uid,
-          name: context?.profile?.companyName,
-        });
-        const sorted = _leaderboard.sort((a, b) => b.score > a.score);
-        setLeaderboard(sorted);
-      } else {
-        if (_leaderboard[position].score < score) {
-          _leaderboard[position] = {
-            ..._leaderboard[position],
-            score: score,
-          };
-        }
-      }
-      if (!data.demo) {
-        console.log(_leaderboard);
-        setDoc(
-          doc(firestore, "tournaments", data.tournamentId.toString()),
-          {
-            ...data,
-            leaderboard: _leaderboard,
-          },
-          { merge: true }
-        );
-      }
-      const sorted = _leaderboard.sort((a, b) => b.score > a.score);
-      setLeaderboard(sorted);
-    } else {
-      console.log("Score zero or not logged in");
+    const _lb = computeLeaderboard(
+      leaderboard,
+      score,
+      context?.loggedIn?.uid,
+      context?.profile,
+      context?.loggedIn?.email,
+      data?.demo,
+      data?.tournamentId?.toString(),
+      data
+    );
+    if (_lb?.leaderboard) {
+      setLeaderboard(_lb?.leaderboard);
+      setPrevBest(_lb?.prevBest);
     }
   }, [score, context.loggedIn, context.profile]);
 
+  const getFrameDimensions = () => {
+    return {
+      width: window?.frameElement?.offsetWidth || window?.innerWidth,
+      height: window?.frameElement?.offsetHeight || window?.innerHeight,
+    };
+  };
+
+  const handleOrientationChange = (event) => {
+    if (window?.frameElement?.offsetWidth) return;
+    setTimeout(() => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      if (
+        (data.landscape && height > width) ||
+        (!data.landscape && width > height)
+      ) {
+        setShouldRotate(true);
+      } else {
+        setShouldRotate(false);
+      }
+      setDimensions({ x: width, y: height });
+    }, 100);
+  };
+
   useEffect(() => {
-    const width =
-      window?.frameElement?.offsetWidth || window?.innerHeight * 0.58;
-    const height = window?.frameElement?.offsetHeight || window?.innerHeight;
+    // Check if window is defined (not in SSR) and add event listener
+    if (typeof window !== "undefined") {
+      window.addEventListener("orientationchange", handleOrientationChange);
+      // Clean up the event listener when the component unmounts
+      return () => {
+        window.removeEventListener(
+          "orientationchange",
+          handleOrientationChange
+        );
+      };
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const { width, height } = getFrameDimensions();
+    if (
+      (data.landscape && height > width) ||
+      (!data.landscape && width > height)
+    ) {
+      setShouldRotate(true);
+    } else {
+      setShouldRotate(false);
+    }
     setDimensions({ x: width, y: height });
   }, []);
 
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 
   useEffect(() => {
-    if (data.tournamentId && !hasLoggedImpression) {
+    if (data?.tournamentId && !hasLoggedImpression) {
       setHasLoggedImpression(true);
-      incrementImpressions(data.tournamentId.toString());
+      incrementImpressions(data?.tournamentId?.toString());
     }
   }, [data?.tournamentId]);
 
@@ -102,13 +125,18 @@ export default function Advert({ data, theme }) {
         overflow: "hidden",
       }}
     >
+      {shouldRotate && (
+        <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
+          <p>Rotate Your Device</p>
+        </div>
+      )}
       {stage === 0 && (
         <Intro
           data={data}
           setStage={(a) => {
             setStage(a);
             if (!data.demo) {
-              incrementPlayCount(data.tournamentId.toString(), "freemium");
+              incrementPlayCount(data?.tournamentId?.toString(), "freemium");
             }
           }}
         />
@@ -127,6 +155,7 @@ export default function Advert({ data, theme }) {
           setStage={setStage}
           score={score}
           leaderboard={leaderboard}
+          prevBest={prevBest}
         />
       )}
       {stage === 3 && (
@@ -138,14 +167,14 @@ export default function Advert({ data, theme }) {
           data={data}
           onSkip={() => {
             updateDoc(
-              doc(firestore, "tournaments", data.tournamentId.toString()),
+              doc(firestore, "tournaments", data?.tournamentId?.toString()),
               {
                 videoViews: increment(1),
               }
             ).then(() => {
               if (!data.demo) {
                 incrementPlayCountWithImpressions(
-                  data.tournamentId.toString(),
+                  data?.tournamentId?.toString(),
                   "freemium"
                 );
               }
@@ -160,7 +189,7 @@ export default function Advert({ data, theme }) {
           onComplete={(response) => {
             if (!data.demo) {
               incrementPlayCountWithImpressions(
-                data.tournamentId.toString(),
+                data?.tournamentId?.toString(),
                 "freemium"
               );
             }

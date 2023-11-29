@@ -144,6 +144,7 @@ export const games = [
     textColor: "#FFF",
     id: 11,
     muxId: "3Sai2FJp1csTqGeqdq100GaKLmwnSUPH4nH2B3aIR3EA",
+    landscape: true,
   },
   {
     name: "Soccer Ball",

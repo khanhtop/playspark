@@ -14,8 +14,15 @@ import UIButton from "./ui/button";
 import EmailSlide from "./forms/emailSlide";
 import { WinModal } from "./ui/modalTypes";
 
-export default function Outro({ score, setStage, data, leaderboard }) {
+export default function Outro({
+  score,
+  setStage,
+  data,
+  leaderboard,
+  prevBest,
+}) {
   const context = useAppContext();
+  console.log("PREV", prevBest);
 
   const selectStage = () => {
     const possibleRouting = [];
@@ -47,19 +54,30 @@ export default function Outro({ score, setStage, data, leaderboard }) {
         <Text
           {...data}
           style={{ color: data.primaryColor }}
-          className="text-4xl mb-4 font-light"
+          className="text-4xl mb-1 font-light"
         >
           {score}
         </Text>
-        <Ranking
-          pos={
-            leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) + 1
-          }
-          best={leaderboard.length}
-          uid={context?.loggedIn?.uid}
-          data={data}
-        />
+        {prevBest && (
+          <p className="font-octo">
+            Personal Best: {score > prevBest ? score : prevBest} ( Rank{" "}
+            {leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) + 1}{" "}
+            / {leaderboard.length})
+          </p>
+        )}
+        {score > 0 && score > prevBest && (
+          <Ranking
+            pos={
+              leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) + 1
+            }
+            best={leaderboard.length}
+            uid={context?.loggedIn?.uid}
+            data={data}
+          />
+        )}
+
         <button
+          className="font-octo text-2xl"
           onClick={() => {
             context.setModal({
               title: "Leaderboard",
@@ -79,6 +97,7 @@ export default function Outro({ score, setStage, data, leaderboard }) {
         >
           View Leaderboard
         </button>
+        <div className="h-4" />
         {!context?.loggedIn?.uid && <SignUp data={data} />}
         {/* {context?.loggedIn?.uid && (
           <Leaderboard
@@ -108,7 +127,7 @@ export default function Outro({ score, setStage, data, leaderboard }) {
 
 function Ranking({ pos, best, uid, data }) {
   return (
-    <div className="flex mb-4 items-center">
+    <div className="flex mb-4 mt-2 items-center">
       <p className="text-center flex-1 text-xs">
         {uid ? "You Ranked" : "You Could Be Ranked"}
       </p>
@@ -134,26 +153,36 @@ function SignUp({ data }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState();
 
   const signIn = () => {
-    signInWithEmailAndPassword(auth, email, password);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => null)
+      .catch((error) => {
+        setError(error.message);
+      });
   };
 
   const signUp = async () => {
-    const user = await createUserWithEmailAndPassword(auth, email, password);
-    setDoc(
-      doc(firestore, "users", user.user.uid),
-      {
-        email: email,
-        uid: user.user.uid,
-        companyName: name,
-      },
-      { merge: true }
-    );
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((user) => {
+        setDoc(
+          doc(firestore, "users", user.user.uid),
+          {
+            email: email,
+            uid: user.user.uid,
+            companyName: name,
+          },
+          { merge: true }
+        );
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   };
 
   return (
-    <div className="border-2 h-[280px] w-[80%] border-black/30 flex rounded-2xl mx-4 bg-white flex-col items-center justify-center relative ">
+    <div className="border-2 h-[300px] w-[80%] border-black/30 flex rounded-2xl mx-4 bg-white flex-col items-center justify-center relative ">
       {stage === 0 && (
         <div className=" px-4 text-white top-0 left-0 w-full h-full flex flex-col items-center justify-center">
           <div className="flex text-black items-center justify-center gap-4">
@@ -166,6 +195,7 @@ function SignUp({ data }) {
               prizes.
             </p>
           </div>
+
           <UIButton
             {...data}
             text="Start"
@@ -187,7 +217,7 @@ function SignUp({ data }) {
               onClick={() => setPhase("signup")}
               className={`${
                 phase === "signup" ? "text-black" : "text-black/30"
-              } flex-1 text-center cursor-pointer`}
+              } flex-1 text-center cursor-pointer font-octo text-xl`}
             >
               Sign Up
             </p>
@@ -195,29 +225,33 @@ function SignUp({ data }) {
               onClick={() => setPhase("login")}
               className={`${
                 phase === "login" ? "text-black" : "text-black/30"
-              } flex-1 text-center cursor-pointer`}
+              } flex-1 text-center cursor-pointer font-octo text-xl`}
             >
               Login
             </p>
           </div>
           {phase === "signup" && (
             <input
-              className="bg-gray-200 px-2 py-2 mt-2 font-sans rounded-lg"
+              className="bg-gray-200 px-2 py-2 mt-2 font-sans rounded-lg w-[80%]"
               placeholder="User Name"
               onChange={(e) => setName(e.target.value)}
             />
           )}
           <input
-            className="bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg"
+            className="bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[80%]"
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            className="bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg"
+            className="bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[80%]"
             placeholder="Password"
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error && (
+            <p className="text-[10px] mt-2 text-red-500 font-bold">{error}</p>
+          )}
+
           <UIButton
             {...data}
             text={phase === "signup" ? "Sign Up" : "Login"}

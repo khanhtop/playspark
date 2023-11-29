@@ -4,21 +4,21 @@ import { useEffect, useState } from "react";
 
 export default function Modal({ primaryColor }) {
   const context = useAppContext();
-  const [show, setShow] = useState(false);
-  //   useEffect(() => {
-  //     if (context.modal) {
-  //       setTimeout(() => {
-  //         setShow(true);
-  //       }, 250);
-  //     }
-  //   }, [context.modal]);
+  const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const width =
+      window?.frameElement?.offsetWidth || window?.innerHeight * 0.58;
+    const height = window?.frameElement?.offsetHeight || window?.innerHeight;
+    setDimensions({ x: width, y: height });
+  }, []);
 
   if (!context.modal) return <div />;
   return (
-    <div className="absolute top-0 left-0 h-full w-full bg-black/70 backdrop-blur flex items-center justify-center">
+    <div className="absolute top-0 left-0 h-full w-screen bg-black/70 backdrop-blur flex items-center justify-center">
       <div
-        style={{ top: 0, transition: "0.25s all" }}
-        className="relative h-[70%] w-[90%] bg-white mb-[20%] rounded-2xl top-[100%]"
+        style={{ top: 0, transition: "0.25s all", width: dimensions.x * 0.9 }}
+        className="relative h-[70%] bg-white mb-[20%] rounded-2xl top-[100%]"
       >
         <div
           style={{ backgroundColor: primaryColor }}

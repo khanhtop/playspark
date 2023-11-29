@@ -46,7 +46,6 @@ export default class MainScene extends Phaser.Scene {
     this.load.image("score", "/pong/" + gameType + "/score.png");
 
     this.load.image("middleAd", this.params.sponsorLogo);
-    console.log(this.params.sponsorLogo)
 
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
@@ -105,7 +104,7 @@ export default class MainScene extends Phaser.Scene {
       false
     );
     this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
-    this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
+    this.add.image(mW, mH, "middleAd").setDisplaySize(80, 50).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
     //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
 
     this.add.image(mW, 37, "score").setDisplaySize(scrW, scrH);
