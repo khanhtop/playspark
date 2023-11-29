@@ -14,7 +14,7 @@ import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
 import Survey from "./survey";
 import Pong from "./games/pong";
-import { ModalButton, ModalText } from "./ui/modalElements";
+import { isIOS, isAndroid, isSafari } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
 import { computeLeaderboard } from "@/helpers/leaderboard";
 
@@ -58,10 +58,17 @@ export default function Advert({ data, theme }) {
   }, [score, context.loggedIn, context.profile]);
 
   const getFrameDimensions = () => {
-    return {
-      width: window?.frameElement?.offsetWidth || window?.innerWidth,
-      height: window?.frameElement?.offsetHeight || window?.innerHeight,
-    };
+    if (!isIOS && !isAndroid) {
+      return {
+        width: window?.frameElement?.offsetWidth || window?.innerHeight * 0.58,
+        height: window?.frameElement?.offsetHeight || window?.innerHeight,
+      };
+    } else {
+      return {
+        width: window?.frameElement?.offsetWidth || window?.innerWidth,
+        height: window?.frameElement?.offsetHeight || window?.innerHeight,
+      };
+    }
   };
 
   const handleOrientationChange = (event) => {
@@ -82,10 +89,8 @@ export default function Advert({ data, theme }) {
   };
 
   useEffect(() => {
-    // Check if window is defined (not in SSR) and add event listener
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && (isIOS || isAndroid)) {
       window.addEventListener("orientationchange", handleOrientationChange);
-      // Clean up the event listener when the component unmounts
       return () => {
         window.removeEventListener(
           "orientationchange",
@@ -127,7 +132,7 @@ export default function Advert({ data, theme }) {
     >
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
-          <p>Rotate Your Device</p>
+          <img src="/branding/rotate.png" className="h-[80%]" />
         </div>
       )}
       {stage === 0 && (
