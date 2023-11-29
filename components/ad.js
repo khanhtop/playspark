@@ -66,24 +66,34 @@ export default function Advert({ data, theme }) {
 
   const handleOrientationChange = (event) => {
     if (window?.frameElement?.offsetWidth) return;
-    const width =
-      Math.abs(event.target.screen.orientation.angle) == 90
-        ? event.target.screen.width
-        : event.target.screen.height;
-    const height =
-      Math.abs(event.target.screen.orientation.angle) == 90
-        ? event.target.screen.height
-        : event.target.screen.width;
-    if (
-      (data.landscape && height > width) ||
-      (!data.landscape && width > height)
-    ) {
-      setShouldRotate(true);
-    } else {
-      setShouldRotate(false);
-    }
-    setDimensions({ x: width, y: height });
+    setTimeout(() => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      if (
+        (data.landscape && height > width) ||
+        (!data.landscape && width > height)
+      ) {
+        setShouldRotate(true);
+      } else {
+        setShouldRotate(false);
+      }
+      setDimensions({ x: width, y: height });
+    }, 100);
   };
+
+  useEffect(() => {
+    // Check if window is defined (not in SSR) and add event listener
+    if (typeof window !== "undefined") {
+      window.addEventListener("orientationchange", handleOrientationChange);
+      // Clean up the event listener when the component unmounts
+      return () => {
+        window.removeEventListener(
+          "orientationchange",
+          handleOrientationChange
+        );
+      };
+    }
+  }, [data]);
 
   useEffect(() => {
     const { width, height } = getFrameDimensions();
@@ -97,21 +107,6 @@ export default function Advert({ data, theme }) {
     }
     setDimensions({ x: width, y: height });
   }, []);
-
-  useEffect(() => {
-    // Check if window is defined (not in SSR) and add event listener
-    if (typeof window !== "undefined") {
-      window.addEventListener("orientationchange", handleOrientationChange);
-
-      // Clean up the event listener when the component unmounts
-      return () => {
-        window.removeEventListener(
-          "orientationchange",
-          handleOrientationChange
-        );
-      };
-    }
-  }, [data]);
 
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 
@@ -131,7 +126,7 @@ export default function Advert({ data, theme }) {
       }}
     >
       {shouldRotate && (
-        <div className="absolute h-full w-full top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
+        <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
           <p>Rotate Your Device</p>
         </div>
       )}
