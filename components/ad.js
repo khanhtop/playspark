@@ -48,7 +48,7 @@ export default function Advert({ data, theme }) {
       context?.profile,
       context?.loggedIn?.email,
       data?.demo,
-      data.tournamentId.toString(),
+      data?.tournamentId?.toString(),
       data
     );
     if (_lb?.leaderboard) {
@@ -116,9 +116,9 @@ export default function Advert({ data, theme }) {
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 
   useEffect(() => {
-    if (data.tournamentId && !hasLoggedImpression) {
+    if (data?.tournamentId && !hasLoggedImpression) {
       setHasLoggedImpression(true);
-      incrementImpressions(data.tournamentId.toString());
+      incrementImpressions(data?.tournamentId?.toString());
     }
   }, [data?.tournamentId]);
 
@@ -141,7 +141,7 @@ export default function Advert({ data, theme }) {
           setStage={(a) => {
             setStage(a);
             if (!data.demo) {
-              incrementPlayCount(data.tournamentId.toString(), "freemium");
+              incrementPlayCount(data?.tournamentId?.toString(), "freemium");
             }
           }}
         />
@@ -172,14 +172,14 @@ export default function Advert({ data, theme }) {
           data={data}
           onSkip={() => {
             updateDoc(
-              doc(firestore, "tournaments", data.tournamentId.toString()),
+              doc(firestore, "tournaments", data?.tournamentId?.toString()),
               {
                 videoViews: increment(1),
               }
             ).then(() => {
               if (!data.demo) {
                 incrementPlayCountWithImpressions(
-                  data.tournamentId.toString(),
+                  data?.tournamentId?.toString(),
                   "freemium"
                 );
               }
@@ -194,7 +194,7 @@ export default function Advert({ data, theme }) {
           onComplete={(response) => {
             if (!data.demo) {
               incrementPlayCountWithImpressions(
-                data.tournamentId.toString(),
+                data?.tournamentId?.toString(),
                 "freemium"
               );
             }
