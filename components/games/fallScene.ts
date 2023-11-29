@@ -582,19 +582,19 @@ export default class FallScene extends Phaser.Scene {
     this.addedScrTxt.setVisible(false);
   }
 
-  score1(which = 0) {
+  score1(which: number) {
     this.scored = true;
 
     //this.cameras.main.fadeIn(1000);
 
 
     let lost = false;
-    if (which === 1) {
+    if (which == 1) {
       lost = this.loseLife();
       // this.lost.play();
       //this.cameras.main.flash(50);
       this.cameras.main.shake(30, 0.01);
-    } else if (which === 0 || which === 2) {
+    } else if (which == 0 || which == 2) {
       this.goalTxt.setScale(0)
       .setAlpha(0)
       this.addedScrTxt.setScale(0)
@@ -682,7 +682,7 @@ export default class FallScene extends Phaser.Scene {
             heartNum++;
             this.lifeNumText.setText(heartNum);
           }
-          this.score1();
+          this.score1(0);
         } else if(bb.type == "bomb") {
           this.bomb.play();
           this.playBombEffect(bb.x, bb.y)
