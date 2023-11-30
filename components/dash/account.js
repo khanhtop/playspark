@@ -85,9 +85,10 @@ export default function Account() {
           </p>
           <ImagePicker
             id="brand-logo"
-            width={400}
+            constrain
+            width={320}
             height={200}
-            label="Brand Logo"
+            label="Brand Logo (Rectangle Shape / 1.6:1)"
             image={brandLogo}
             onChange={(url) => {
               setBrandLogo(url);
@@ -95,9 +96,10 @@ export default function Account() {
           />
           <ImagePicker
             id="sponsor-logo"
-            width={400}
+            constrain
+            width={200}
             height={200}
-            label="Sponsor Logo"
+            label="Sponsor Logo (Square Shape / 1:1)"
             image={sponsorLogo}
             onChange={(url) => {
               setSponsorLogo(url);
