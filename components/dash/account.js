@@ -53,7 +53,7 @@ export default function Account() {
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-4">
       <SubNav
         selected={nav}
         onSelect={(item) => setNav(item.value)}
@@ -79,16 +79,15 @@ export default function Account() {
       {nav === "branding" && (
         <>
           <p className="text-white/70 text-sm">
-            Tip: For logos, use PNG images of approximately 400px x 200px, and
-            ensure that the background is transparent in order to ensure that
-            the game looks as good as possible.
+            Rectangular images will generally appear on scoreboards and around
+            stadiums, whereas square logos may appear within pitches.
           </p>
           <ImagePicker
             id="brand-logo"
             constrain
-            width={320}
-            height={200}
-            label="Brand Logo (Rectangle Shape / 1.6:1)"
+            width={500}
+            height={100}
+            label="Rectangular Logo (5:1)"
             image={brandLogo}
             onChange={(url) => {
               setBrandLogo(url);
@@ -99,7 +98,7 @@ export default function Account() {
             constrain
             width={200}
             height={200}
-            label="Sponsor Logo (Square Shape / 1:1)"
+            label="Square Logo (1:1)"
             image={sponsorLogo}
             onChange={(url) => {
               setSponsorLogo(url);
