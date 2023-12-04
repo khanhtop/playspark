@@ -51,7 +51,9 @@ export default function Ad({ ad, id }) {
         } flex items-center bg-black justify-center`}
       >
         {ad ? (
-          ad.isPremium ? (
+          !ad.isActive ? (
+            <p>This tournament is not currently running.</p>
+          ) : ad.isPremium ? (
             <PremiumAdvert data={ad} />
           ) : (
             <Advert data={ad} />

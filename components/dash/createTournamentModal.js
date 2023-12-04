@@ -42,6 +42,7 @@ export default function CreateTournamentModal({ data, hide }) {
     _myGames.push(_uid);
     await setDoc(doc(firestore, "tournaments", _uid.toString()), {
       ...tournament,
+      isActive: true,
       tournamentId: _uid,
       ownerId: context.loggedIn?.uid,
       ownerCompanyName: context?.profile?.companyName,

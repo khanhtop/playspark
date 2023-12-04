@@ -7,6 +7,7 @@ import Button from "../forms/button";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import Input from "../forms/input";
 import SubNav from "../nav/subnav";
+import Usage from "./usage";
 
 export default function Account() {
   const context = useAppContext();
@@ -69,6 +70,10 @@ export default function Account() {
           {
             text: "Email",
             value: "email",
+          },
+          {
+            text: "Usage",
+            value: "usage",
           },
           {
             text: "Billing",
@@ -136,6 +141,11 @@ export default function Account() {
               </div>
             ))}
           </div>
+        </>
+      )}
+      {nav === "usage" && (
+        <>
+          <Usage />
         </>
       )}
       {nav === "billing" && (

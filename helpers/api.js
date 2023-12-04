@@ -180,3 +180,10 @@ export function switchTier(uid, tier) {
     tier: tier,
   });
 }
+
+export function switchActive(tournamentId, state) {
+  console.log(tournamentId, state);
+  updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+    isActive: !state,
+  });
+}

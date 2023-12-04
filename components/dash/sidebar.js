@@ -52,12 +52,6 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           icon={<TrophyIcon className="h-5" />}
         />
         <Row
-          text="Usage"
-          selected={selectedPane === 2}
-          setSelectedPane={() => setSelectedPane(2)}
-          icon={<ScaleIcon className="h-5" />}
-        />
-        <Row
           text="Account"
           selected={selectedPane === 7}
           setSelectedPane={() => setSelectedPane(7)}

@@ -157,7 +157,9 @@ function SignUp({ data }) {
 
   const signIn = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => null)
+      .then((user) => {
+        verifyUserTracked(user.user.uid);
+      })
       .catch((error) => {
         setError(error.message);
       });
@@ -175,10 +177,34 @@ function SignUp({ data }) {
           },
           { merge: true }
         );
+        verifyUserTracked(user.user.id, true);
       })
       .catch((error) => {
         setError(error.message);
       });
+  };
+
+  const verifyUserTracked = async (id, withName) => {
+    if (withName) {
+      setDoc(
+        doc(firestore, "users", data.ownerId, "users", email),
+        {
+          active: true,
+          name: name,
+          id: id ?? "",
+        },
+        { merge: true }
+      );
+    } else {
+      setDoc(
+        doc(firestore, "users", data.ownerId, "users", email),
+        {
+          active: true,
+          id: id ?? "",
+        },
+        { merge: true }
+      );
+    }
   };
 
   return (
