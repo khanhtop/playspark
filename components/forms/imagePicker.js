@@ -10,6 +10,7 @@ export default function ImagePicker({
   label,
   width,
   height,
+  constrain,
 }) {
   const context = useAppContext();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -68,7 +69,7 @@ export default function ImagePicker({
             style={{
               width: width ?? "200px",
               height: height ?? "400px",
-              objectFit: "contain",
+              objectFit: constrain ? "fill" : "contain",
               borderWidth: 1,
               borderColor: "white",
               borderRadius: 20,
