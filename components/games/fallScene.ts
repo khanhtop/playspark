@@ -667,38 +667,38 @@ export default class FallScene extends Phaser.Scene {
       repeat: -1,
     })
 
-    this.physics.add.overlap(
-      this.player,
-      bball,
-      (p, bb) => {
-        console.log("-------type : ", bb.type);
+    // this.physics.add.overlap(
+    //   this.player,
+    //   bball,
+    //   (p, bb) => {
+    //     console.log("-------type : ", bb.type);
 
-        if(bb.type == "ball") {
-          // this.player.play('playerStatic')
-          this.ballHit.play();
-          comboNum++;
-          if(comboNum % 10 == 0) {
-            this.lifeup.play();
-            heartNum++;
-            this.lifeNumText.setText(heartNum);
-          }
-          this.score1(0);
-        } else if(bb.type == "bomb") {
-          this.bomb.play();
-          this.playBombEffect(bb.x, bb.y)
-          this.score1(1);
-        } else if(bb.type == "boosterBall") {
-          console.log('boosterBall hit')
-          this.setBooster();
-        }
+    //     if(bb.type == "ball") {
+    //       // this.player.play('playerStatic')
+    //       this.ballHit.play();
+    //       comboNum++;
+    //       if(comboNum % 10 == 0) {
+    //         this.lifeup.play();
+    //         heartNum++;
+    //         this.lifeNumText.setText(heartNum);
+    //       }
+    //       this.score1(0);
+    //     } else if(bb.type == "bomb") {
+    //       this.bomb.play();
+    //       this.playBombEffect(bb.x, bb.y)
+    //       this.score1(1);
+    //     } else if(bb.type == "boosterBall") {
+    //       console.log('boosterBall hit')
+    //       this.setBooster();
+    //     }
 
-        this.randomBallPos(bb)
+    //     this.randomBallPos(bb)
 
-        // if (!this.ballHit.isPlaying) this.ballHit.play();
-      },
-      null,
-      this
-    );
+    //     // if (!this.ballHit.isPlaying) this.ballHit.play();
+    //   },
+    //   null,
+    //   this
+    // );
 
     this.physics.add.overlap(
       this.boosterGroup,
@@ -781,9 +781,16 @@ export default class FallScene extends Phaser.Scene {
         isStatic = true;
         this.staticBonusScreen.setVisible(true);
 
+        this.fallBallList.forEach(fb => {
+          fb.setVelocity(0, 0);
+        });
+
         setTimeout(() => {
           if(this.staticBonusScreen != null) {
             this.staticBonusScreen.setVisible(false);
+            this.fallBallList.forEach(fb => {
+              fb.setVelocity(0, speed);
+            });
           }
         }, 3000);
       }
@@ -885,6 +892,8 @@ export default class FallScene extends Phaser.Scene {
       this.player.setVelocity(vx, 0);
     }
 
+    if(this.staticBonusScreen.visible) return;
+
     this.fallBallList.forEach(fb => {
       if(fb.y >= h - goalH + ballR / 2) {
         if(fb.type == 'ball') {
@@ -892,6 +901,36 @@ export default class FallScene extends Phaser.Scene {
         }
         this.randomBallPos(fb);
       }
+
+      if(this.check_collider(fb, this.player)){
+        console.log("hit ball & player")
+        console.log("-------type : ", fb.type);
+
+        if(fb.type == "ball") {
+          // this.player.play('playerStatic')
+          this.ballHit.play();
+          comboNum++;
+          if(comboNum % 10 == 0) {
+            this.lifeup.play();
+            heartNum++;
+            this.lifeNumText.setText(heartNum);
+          }
+          this.score1(0);
+        } else if(fb.type == "bomb") {
+          this.bomb.play();
+          this.playBombEffect(fb.x, fb.y)
+          this.score1(1);
+        } else if(fb.type == "boosterBall") {
+          console.log('boosterBall hit')
+          this.setBooster();
+        }
+
+        this.randomBallPos(fb)
+    
+      }
+
+      this.check_collider(fb, this.setBooster)
+
     });
 
     const items = this.boosterGroup.getChildren();
@@ -904,5 +943,11 @@ export default class FallScene extends Phaser.Scene {
     })
 
     if (this.scored) return;
+  }
+
+  check_collider(obj1, obj2) {
+    const distance = Phaser.Math.Distance.Between(obj1.x + obj1.displayWidth / 2, obj1.y + obj1.displayHeight / 2, obj2.x + obj2.displayWidth / 2, obj2.y + obj2.displayHeight / 2);
+    // console.log("distance: ", distance, obj1.displayWidth + obj2.displayWidth)
+    return distance < (obj1.displayWidth + obj2.displayWidth) / 2
   }
 }
