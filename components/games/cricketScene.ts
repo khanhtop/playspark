@@ -350,6 +350,7 @@ export default class CricketScene extends Phaser.Scene {
 
     this.load.image('score_pan', '/pong/' + gameType + '/score_pan.png');
     this.load.image('fence', '/pong/' + gameType + '/fence.png');
+    this.load.image('middle-logo', '/pong/' + gameType + '/middle-logo.png');
     this.load.image('wicket_icon', '/pong/' + gameType + '/wicket_icon.png');
     this.load.image(
       'auth_select_bg',
@@ -447,7 +448,7 @@ export default class CricketScene extends Phaser.Scene {
     this.load.spritesheet(
       'power_effect',
       '/pong/' + gameType + '/power_effect.png',
-      { frameWidth: 421, frameHeight: 50 }
+      { frameWidth: 421, frameHeight: 68 }
     );
 
     //load audios
@@ -524,6 +525,9 @@ export default class CricketScene extends Phaser.Scene {
   }
 
   create() {
+    w = this.game.canvas.clientWidth;
+    h = this.game.canvas.clientHeight;
+
     this.game_pause = false;
     this.scorePanel = {
       fire_count: 0,
@@ -655,12 +659,23 @@ export default class CricketScene extends Phaser.Scene {
 
     const aus_fire_frame = this.anims.generateFrameNames(
       'australia_player_fire',
-      { start: 0, end: 14 }
+      { start: 6, end: 14 }
+    );
+    const aus_fire_ready_frame = this.anims.generateFrameNames(
+      'australia_player_fire',
+      { start: 0, end: 6 }
     );
     this.anims.create({
       key: 'aus_fire_animation',
       frames: aus_fire_frame,
-      frameRate: 100,
+      frameRate: 40,
+      repeat: 0,
+    });
+
+    this.anims.create({
+      key: 'aus_fire_ready_animation',
+      frames: aus_fire_ready_frame,
+      frameRate: 12,
       repeat: 0,
     });
 
@@ -677,12 +692,22 @@ export default class CricketScene extends Phaser.Scene {
 
     const paki_fire_frame = this.anims.generateFrameNames(
       'pakistan_player_fire',
-      { start: 0, end: 14 }
+      { start: 6, end: 14 }
+    );
+    const paki_fire_ready_frame = this.anims.generateFrameNames(
+      'pakistan_player_fire',
+      { start: 0, end: 6 }
     );
     this.anims.create({
       key: 'paki_fire_animation',
       frames: paki_fire_frame,
       frameRate: 24,
+      repeat: 0,
+    });
+    this.anims.create({
+      key: 'paki_fire_ready_animation',
+      frames: paki_fire_frame,
+      frameRate: 12,
       repeat: 0,
     });
 
@@ -717,18 +742,25 @@ export default class CricketScene extends Phaser.Scene {
     // .sprite(200, h * 0.69, 'fence')
     // .setDisplaySize(50, 50)
     // .setAlpha(0.6);
-    for (let i = 1; i < 10; i++) {
+    // LOGO FENSE PART
+    for (let i = 1; i < 6; i++) {
       this.add
-        .sprite(-80 + 120 * i, h * 0.69, 'fence')
-        .setDisplaySize(50, 50)
-        .setAlpha(0.6);
+        .sprite(-80 + 220 * i, h * 0.69, 'fence')
+        .setDisplaySize(150, 30)
+        .setAlpha(1);
     }
+
+    // MIDDLE LOGO PART
+    this.add
+    .sprite(w / 2, h / 2, 'middle-logo')
+    .setDisplaySize(70, 70)
+    .setAlpha(1);
     // this.player = this.add.sprite(w/6-20, h/2+80, 'australia_player_ready').setDisplaySize(140, 220)
     // this.player.play('aus_ready_animation')
 
     this.power_effect = this.physics.add
-      .sprite(30, h / 2 - 100, 'power_effect')
-      .setDisplaySize(190, 50)
+      .sprite(30, h / 2, 'power_effect')
+      .setDisplaySize(190, 30)
       .setOrigin(0)
       .setAlpha(1);
 
@@ -1046,6 +1078,13 @@ export default class CricketScene extends Phaser.Scene {
       'pointerdown',
       () => {
         this.power_flag = true;
+        if(isClicked) {
+          if (author_id == 1) {
+            this.player.play('aus_fire_ready_animation');
+          } else {
+            this.player.play('paki_fire_ready_animation');
+          }
+        }
       },
       this
     );
@@ -1055,24 +1094,29 @@ export default class CricketScene extends Phaser.Scene {
       () => {
         this.power_flag = false;
         // let speed_scale = Phaser.Math.FloatBetween(1, 2.5)
-        if (author_id == 1) {
-          this.player.play('aus_fire_animation');
-          console.log('australllll');
-        } else {
-          this.player.play('paki_fire_animation');
-          console.log('pakiiiiiiiii');
+
+        if(isClicked) {
+          if (author_id == 1) {
+            this.player.play('aus_fire_animation');
+            console.log('australllll');
+          } else {
+            this.player.play('paki_fire_animation');
+            console.log('pakiiiiiiiii');
+          }
+          this.player.on(
+            'animationcomplete',
+            (anim) => {
+              if(anim.key == 'aus_fire_ready_animation' || anim.key == 'paki_fire_ready_animation') return;
+              if (author_id == 1) {
+                this.player.play('aus_ready_animation');
+              } else {
+                this.player.play('paki_ready_animation');
+              }
+            },
+            this
+          );
         }
-        this.player.on(
-          'animationcomplete',
-          () => {
-            if (author_id == 1) {
-              this.player.play('aus_ready_animation');
-            } else {
-              this.player.play('paki_ready_animation');
-            }
-          },
-          this
-        );
+
 
         // this.overs_right.setText(over_cnt)
         if (this.flag && isClicked) {
