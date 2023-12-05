@@ -866,7 +866,7 @@ export default class CricketScene extends Phaser.Scene {
 
     this.power_effect = this.physics.add
       .sprite(30, h / 2, 'power_effect')
-      .setDisplaySize(190, 30)
+      .setDisplaySize(190 * w / 1248, 30 * h / 688)
       .setOrigin(0)
       .setAlpha(1);
 
