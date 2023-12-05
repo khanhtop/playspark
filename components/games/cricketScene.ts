@@ -2307,7 +2307,26 @@ export default class CricketScene extends Phaser.Scene {
             this
           );
           this.audioSystem.POWER_SIX_SMASH[this.getRandomNumbers(0, this.audioSystem.POWER_SIX_SMASH.length - 1, 1)].play();
-          this.fire_ball();
+          this.is_red_powerup = true
+          this.ball.setPosition(w + 50, 0);
+          this.ball.setVelocity(0, 0);
+          this.gray_bg.setAlpha(0.45);
+          this.physics.world.disable(this.ball);
+
+          this.red_text_group.setVisible(true);
+          this.game_pause = true;
+          this.time.delayedCall(
+            3000,
+            () => {
+              this.game_pause = false;
+              this.gray_bg.setAlpha(0);
+              this.red_text_group.setVisible(false);
+              this.red_powerup_group.setVisible(true);
+              this.fire_ball();
+            },
+            null,
+            this
+          );
           // if(scoreFire_cnt>2){
           //   console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
           // }
@@ -2590,17 +2609,6 @@ export default class CricketScene extends Phaser.Scene {
             null,
             this
           );
-          // this.fire_ball()
-          // this.updateRunsShow('Out')
-          // this.runs_show.setScale(0)
-          // this.tweens.add({
-          // targets: this.runs_show,
-          // scaleX: 1,
-          // scaleY: 1,
-          // alpha: 1,
-          // duration: 800,
-          // ease: 'Bounce',
-          // })
           if (this.is_green_powerup == false && this.is_red_powerup == false) {
             this.is_red_powerup = true;
             // this.ball.play('redball_animation');
