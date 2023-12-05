@@ -111,7 +111,6 @@ export default class CricketScene extends Phaser.Scene {
   private flag: boolean;
   private power_flag: boolean;
   private count_flag: boolean;
-  private wicket_line: any;
   private scorePanel: any;
   private overlapScore1: any;
   private overlapScore2: any;
@@ -285,7 +284,7 @@ export default class CricketScene extends Phaser.Scene {
     );
     this.load.audio(
       'Crowd_Loop_v1_wav',
-      '/pong/' + gameType + '/Crowd_Loop_v1_wav.wav'
+      '/pong/' + gameType + '/background.wav'
     );
     this.load.audio(
       'Crowd_v1_Booing_wav',
@@ -651,6 +650,12 @@ export default class CricketScene extends Phaser.Scene {
       ]
     }
 
+    Object.keys(this.audioSystem).forEach(key => {
+      this.audioSystem[key].forEach(audio => {
+        audio.setVolume(2.5)
+      });
+    })
+
     this.levelDesign = {
       LEVEL1: {
         heigh: h * 0.58,
@@ -963,10 +968,10 @@ export default class CricketScene extends Phaser.Scene {
     );
 
     this.auth_select_btn.setInteractive({ cursor: 'pointer' });
-
+      console.log(w, "------")
     this.player = this.physics.add
       .sprite(-200, -200, 'australia_player_ready')
-      .setDisplaySize(300, 364)
+      .setDisplaySize(300 * w  / 1248, 364 * w  / 1248)
       .setCollideWorldBounds(true)
       .setPushable(false)
       .setOrigin(0, 0)
@@ -979,14 +984,14 @@ export default class CricketScene extends Phaser.Scene {
       if (author_id == 1) {
         this.player
           .setTexture('australia_player_ready')
-          .setPosition(160, 350)
+          .setPosition(160 * w  / 1248, 350 * w  / 1248)
           .setVisible(true);
         this.auth_country.setText('Australia');
         this.player.play('aus_ready_animation');
       } else {
         this.player
           .setTexture('pakistan_player_ready')
-          .setPosition(160, 350)
+          .setPosition(160 * w  / 1248, 350 * w  / 1248)
           .setVisible(true);
         this.auth_country.setText('Pakistan');
         this.player.play('paki_ready_animation');
@@ -1024,13 +1029,13 @@ export default class CricketScene extends Phaser.Scene {
 
     this.ball = this.physics.add
       .sprite(w + 50, h * Phaser.Math.FloatBetween(0.35, 0.65), 'ball')
-      .setDisplaySize(50, 50)
+      .setDisplaySize(50 * w  / 1248, 50 * w  / 1248)
       .setPushable(false)
       .setOrigin(0, 0)
       .setAlpha(1)
       .setInteractive({ cursor: 'pointer' });
     
-    this.ballEffect = this.add.sprite(0, 0, 'ball').setAlpha(0).setDisplaySize(266 * 1.3, 200 * 1.3);
+    this.ballEffect = this.add.sprite(0, 0, 'ball').setAlpha(0).setDisplaySize(266 * 1.3 * w  / 1248, 200 * 1.3 * w  / 1248);
 
     this.pause_group = this.add.group();
 
@@ -1194,11 +1199,7 @@ export default class CricketScene extends Phaser.Scene {
       .sprite(w + 200, h / 2, 'fall')
       .setDisplaySize(10, 6 * h)
       .setOrigin(0.5, 0.5);
-    this.wicket_line = this.physics.add
-      .sprite(110, 505, 'fall')
-      .setDisplaySize(0.1, 130)
-      .setOrigin(0, 0)
-      .setDepth(1);
+
     this.cricket_bar = this.physics.add
       .sprite(210, 585, 'cricket_bar')
       .setDisplaySize(10, 60)
@@ -1429,9 +1430,9 @@ export default class CricketScene extends Phaser.Scene {
       .setDisplaySize(w, h)
       .setAlpha(0);
 
-    this.wicketbar = this.add
+    this.wicketbar = this.physics.add
       .sprite(0.09 * w, 0.8 * h, 'wicketbar')
-      .setDisplaySize(120, 120);
+      .setDisplaySize(120, 120).setInteractive();
 
     // this.wicket
     // this.unlock_red = this..
@@ -1720,10 +1721,10 @@ export default class CricketScene extends Phaser.Scene {
 
     this.green_powerup_anim = this.add
       .sprite(w / 9, h * 0.36 + 5, 'redEffect')
-      .setDisplaySize(105, 105);
+      .setDisplaySize(105 * h / 688, 105* h / 688);
     this.green_powerup_img = this.add
       .sprite(w / 9, h * 0.36, 'green')
-      .setDisplaySize(100, 100);
+      .setDisplaySize(100* h / 688, 100* h / 688);
     this.green_powerup_anim.play('greenAnimation');
 
     this.green_powerup_group.add(this.green_powerup_anim);
@@ -1736,10 +1737,10 @@ export default class CricketScene extends Phaser.Scene {
 
     this.red_powerup_anim = this.add
       .sprite(w / 9 + 3.5, h * 0.36 + 4, 'redEffect')
-      .setDisplaySize(105, 105);
+      .setDisplaySize(105* h / 688, 105* h / 688);
     this.red_powerup_img = this.add
       .sprite(w / 9, h * 0.36, 'red')
-      .setDisplaySize(100, 100);
+      .setDisplaySize(100* h / 688, 100* h / 688);
     this.red_powerup_anim.play('redAnimation');
 
     this.red_powerup_group.add(this.red_powerup_anim);
@@ -2911,11 +2912,11 @@ export default class CricketScene extends Phaser.Scene {
     this.ballEffect.setPosition(this.ball.x + this.ball.displayWidth / 2, this.ball.y + this.ball.displayHeight / 2);
     this.ballEffect.setAngle(angle * 180 / Math.PI + 180);
 
-    if (this.ball.y >= h / 2 + 250 && this.ball.type == 'new') {
+    if (this.ball.y >= h / 2 + 250 * h / 688 && this.ball.type == 'new') {
       let speed_scale = Phaser.Math.FloatBetween(1.5, 1.75);
       this.ball.setVelocity(-405 * speed_scale, -180 * speed_scale);
     }
-    if (this.ball.y >= h / 2 + 280 && this.ball.type == 'old') {
+    if (this.ball.y >= h / 2 + 280 * h / 688 && this.ball.type == 'old') {
       this.ball.setVisible(false);
       this.fire_ball();
       // over_cnt++
@@ -2927,7 +2928,7 @@ export default class CricketScene extends Phaser.Scene {
       this.flag = false;
     }
 
-    if (!this.count_flag && this.physics.overlap(this.wicket_line, this.ball)) {
+    if (!this.count_flag && this.physics.overlap(this.wicketbar, this.ball)) {
       console.log('--------------');
       this.count_flag = true;
       if (this.is_battery) {
