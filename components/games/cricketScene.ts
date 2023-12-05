@@ -865,14 +865,14 @@ export default class CricketScene extends Phaser.Scene {
     // this.player.play('aus_ready_animation')
 
     this.power_effect = this.physics.add
-      .sprite(170 * w / 1248, h / 2 - 50 * w / 1248, 'power_effect')
+      .sprite(170 * w / 1248, h / 2 - 100 * h / 688, 'power_effect')
       .setDisplaySize(190 * w / 1248, 30 * w / 1248)
       .setOrigin(0)
       .setAlpha(1);
 
     this.auth_select_bg = this.add
       .sprite(w / 2, h / 2, 'auth_select_bg')
-      .setDisplaySize(w * 0.4, h * 0.6)
+      .setDisplaySize(w * 0.4, h * 0.7)
       .setOrigin(0.5, 0.5)
       .setDepth(1);
 
@@ -984,14 +984,14 @@ export default class CricketScene extends Phaser.Scene {
       if (author_id == 1) {
         this.player
           .setTexture('australia_player_ready')
-          .setPosition(160 * w  / 1248, 350 * w  / 1248)
+          .setPosition(160 * w  / 1248, h / 2 + 100 * w  / 1248)
           .setVisible(true);
         this.auth_country.setText('Australia');
         this.player.play('aus_ready_animation');
       } else {
         this.player
           .setTexture('pakistan_player_ready')
-          .setPosition(160 * w  / 1248, 350 * w  / 1248)
+          .setPosition(160 * w  / 1248, h / 2 + 100 * h  / 688)
           .setVisible(true);
         this.auth_country.setText('Pakistan');
         this.player.play('paki_ready_animation');
@@ -1041,7 +1041,7 @@ export default class CricketScene extends Phaser.Scene {
 
     this.pause_pan = this.add
       .sprite(w / 2, h / 2, 'auth_select_bg')
-      .setDisplaySize(w * 0.4, h * 0.6)
+      .setDisplaySize(w * 0.4, h * 0.7)
       .setOrigin(0.5, 0.5)
       .setDepth(1);
     this.pause_player = this.add
@@ -2306,6 +2306,7 @@ export default class CricketScene extends Phaser.Scene {
             null,
             this
           );
+          this.audioSystem.POWER_SIX_SMASH[this.getRandomNumbers(0, this.audioSystem.POWER_SIX_SMASH.length - 1, 1)].play();
           this.fire_ball();
           // if(scoreFire_cnt>2){
           //   console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaa")
@@ -2661,7 +2662,7 @@ export default class CricketScene extends Phaser.Scene {
           double4_cnt = 0;
           double6_cnt = 0;
           console.log('wickettttttttttttt');
-          this.audioSystem.WICKET[this.getRandomNumbers(0, this.audioSystem.WICKET.length - 1, 1)].play();
+          this.audioSystem.POWER_SIX_SMASH[this.getRandomNumbers(0, this.audioSystem.POWER_SIX_SMASH.length - 1, 1)].play();
           multi_4_6_cnt = 0;
           this.hitball_effect.setPosition(
             this.score_wicket.x,
@@ -2778,7 +2779,13 @@ export default class CricketScene extends Phaser.Scene {
     this.ball.type = 'new';
     this.count_flag = false;
     this.scorePanel.fire_count++;
+    console.log("--------this.scorePanel.fire_count----", this.scorePanel.fire_count)
+    if(Math.ceil(this.scorePanel.fire_count / 6) != this.level) {
+      this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
+    }
     this.level = Math.ceil(this.scorePanel.fire_count / 6);
+
+    this.overs_right.setText(this.level.toString().padStart(4, '0'));
 
     if (this.is_red_powerup == true) {
       console.log('111111sdfssss11111111111');
@@ -3004,12 +3011,12 @@ export default class CricketScene extends Phaser.Scene {
       this.ball.x > this.right_fall.x
     ) {
       // this.Crowd_v1_Booing_wav.play();
-      this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
+      this.audioSystem.WICKET[this.getRandomNumbers(0, this.audioSystem.WICKET.length - 1, 1)].play();
       
       console.log('hereeeeeeeeeeeeeeeeeee');
       this.fire_ball();
       over_cnt++;
-      this.overs_right.setText(over_cnt.toString().padStart(4, '0'));
+      // this.overs_right.setText(over_cnt.toString().padStart(4, '0'));
     }
     // this.overs_left.setText(this.scorePanel.fire_count)
     this.runs_left.setText(
