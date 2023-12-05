@@ -517,7 +517,7 @@ export default class CricketScene extends Phaser.Scene {
     };
     this.runs_text_style = {
       fontFamily: 'customFont',
-      fontSize: '32px',
+      fontSize: Math.round(32 * h / 688) + 'px',
       fill: '#ffffff',
     };
     this.fence_text_style = {
@@ -527,12 +527,12 @@ export default class CricketScene extends Phaser.Scene {
     };
     this.wicket_font = {
       fontFamily: 'scoreFont',
-      fontSize: '40px',
+      fontSize: Math.round(40 * h / 688) + 'px',
       fill: '#96e1f2',
     };
     this.runs_font = {
       fontFamily: 'scoreFont',
-      fontSize: '62px',
+      fontSize: Math.round(62 * h / 688) + 'px',
       fill: '#96e1f2',
     };
     this.country_text_style = {
