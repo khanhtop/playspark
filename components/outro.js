@@ -13,6 +13,7 @@ import Text from "./ui/text";
 import UIButton from "./ui/button";
 import EmailSlide from "./forms/emailSlide";
 import { WinModal } from "./ui/modalTypes";
+import ShareButton from "./ui/shareButton";
 
 export default function Outro({
   score,
@@ -20,6 +21,7 @@ export default function Outro({
   data,
   leaderboard,
   prevBest,
+  onReset,
 }) {
   const context = useAppContext();
   console.log("PREV", prevBest);
@@ -51,6 +53,7 @@ export default function Outro({
         <Text {...data} className="font-bold text-sm mt-12">
           Your Score
         </Text>
+
         <Text
           {...data}
           style={{ color: data.primaryColor }}
@@ -58,6 +61,7 @@ export default function Outro({
         >
           {score}
         </Text>
+        <ShareButton data={data} score={score} />
         {prevBest && (
           <p className="font-octo">
             Personal Best: {score > prevBest ? score : prevBest} ( Rank{" "}
@@ -111,13 +115,21 @@ export default function Outro({
           {!context?.loggedIn?.uid && (
             <p className="text-black/60 text-center">OR</p>
           )}
+          <div className="flex flex-col">
+            <UIButton
+              text="Revive"
+              {...data}
+              onClick={() => setStage(selectStage())}
+              className="h-12  rounded-full mt-4"
+            />
+            {/* <UIButton
+              text="Restart"
+              {...data}
+              onClick={() => onReset()}
+              className="h-12 rounded-full mt-4"
+            /> */}
+          </div>
 
-          <UIButton
-            text="Play Again"
-            {...data}
-            onClick={() => setStage(selectStage())}
-            className="h-12 mb-48 rounded-full mt-4"
-          ></UIButton>
           {/* <BannerAd size="small" position="bottom" delay={1000} /> */}
         </div>
       </div>

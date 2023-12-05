@@ -22,7 +22,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 
 export default function Advert({ data, theme }) {
   const context = useAppContext();
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(2);
   const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
   const [shouldRotate, setShouldRotate] = useState(false);
   const [score, setScore] = useState(0);
@@ -38,6 +38,12 @@ export default function Advert({ data, theme }) {
     setLives(1);
     setScore(score);
     setStage(2);
+  };
+
+  const reset = () => {
+    setLives(3);
+    setScore(0);
+    setStage(1);
   };
 
   useEffect(() => {
@@ -161,6 +167,7 @@ export default function Advert({ data, theme }) {
           score={score}
           leaderboard={leaderboard}
           prevBest={prevBest}
+          onReset={() => reset()}
         />
       )}
       {stage === 3 && (

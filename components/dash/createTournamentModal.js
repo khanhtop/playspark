@@ -151,7 +151,7 @@ export default function CreateTournamentModal({ data, hide }) {
                 </>
               </BrandingComponent>
               <BrandingComponent>
-                <>
+                <div className="flex flex-col">
                   <div className="flex items-center gap-2 mt-6">
                     <p className="text-white">
                       Capture Players Email Addresses
@@ -166,8 +166,55 @@ export default function CreateTournamentModal({ data, hide }) {
                       }
                     />
                   </div>
-                </>
+                  {/* {tournament.captureEmail && (
+                    <Input
+                      label="Guidance Text"
+                      labelColor="text-white"
+                      className="w-full"
+                      defaultValue={`${
+                        context?.profile?.companyName
+                          ? context?.profile?.companyName
+                          : "The sponsor"
+                      } would like to send you updates and information through email, would you like to be included?`}
+                      onChange={(e) => {
+                        setTournament({
+                          ...tournament,
+                          customEmailText: e.target.value,
+                        });
+                      }}
+                    />
+                  )} */}
+                </div>
               </BrandingComponent>
+              {/* <BrandingComponent>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2 mt-6">
+                    <p className="text-white">Allow Players To Share Game</p>
+                    <Toggle
+                      checked={tournament?.canShare}
+                      onChange={() =>
+                        setTournament({
+                          ...tournament,
+                          canShare: tournament?.canShare ? false : true,
+                        })
+                      }
+                    />
+                  </div>
+                  {tournament.canShare && (
+                    <Input
+                      label="Custom URL To Share (Leave Blank For Default)"
+                      labelColor="text-white"
+                      placeHolder="https://"
+                      onChange={(e) => {
+                        setTournament({
+                          ...tournament,
+                          canShareURL: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                </div>
+              </BrandingComponent> */}
               <RewardedComponent>
                 <>
                   <VideoPicker

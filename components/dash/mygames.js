@@ -57,6 +57,7 @@ export default function MyGames({}) {
           )
           ?.map((item, key) => (
             <GameCard
+              key={item.id}
               onAdd={() => setShowEmbed(item.tournamentId)}
               showActiveState={item?.isActive ?? false}
               buttonText="Get Embed Code"
