@@ -511,7 +511,7 @@ export default class CricketScene extends Phaser.Scene {
     //text_styles
     this.score_text_style = {
       fontFamily: 'customFont',
-      fontSize: '24px',
+      fontSize: Math.round(24 * h / 688) + 'px',
       align: 'center',
       fill: '#ffffff',
     };
@@ -537,7 +537,7 @@ export default class CricketScene extends Phaser.Scene {
     };
     this.country_text_style = {
       fontFamily: 'customFont',
-      fontSize: '48px',
+      fontSize: Math.round(48 * h / 688) + 'px',
       fill: '#ffffff',
     };
     this.pause_text_style = {
@@ -547,28 +547,28 @@ export default class CricketScene extends Phaser.Scene {
     };
     this.runs_6_font = {
       fontFamily: 'customFont',
-      fontSize: '120px',
+      fontSize: Math.round(120 * h / 688) + 'px',
       fill: '#ffffff',
     };
     this.unlockHeaderStyle = {
       fontFamily: 'customFont',
-      fontSize: '60px',
+      fontSize: Math.round(60 * h / 688) + 'px',
       fill: '#ffffff',
     };
     this.unlockHeaderStyle_g = {
       fontFamily: 'customFont',
-      fontSize: '60px',
+      fontSize: Math.round(60 * h / 688) + 'px',
       fill: '#C1FF72',
     };
     this.unlockBodyStyle = {
       fontFamily: 'customFont',
-      fontSize: '38px',
+      fontSize: Math.round(38 * h / 688) + 'px',
       fill: '#ffffff',
     };
 
     this.unlockBodyStyle_g = {
       fontFamily: 'customFont',
-      fontSize: '38px',
+      fontSize: Math.round(38 * h / 688) + 'px',
       fill: '#C1FF72',
     };
   }
@@ -1274,7 +1274,7 @@ export default class CricketScene extends Phaser.Scene {
           } else if (power <= 6 && power > 1) {
             target_y = h * Phaser.Math.FloatBetween(0.45, 0.8);
           } else if (power > 6) {
-            target_y = h * Phaser.Math.FloatBetween(-0.1, 0.35);
+            target_y = h * Phaser.Math.FloatBetween(-0.2, 0.35);
           }
           power / 10;
           let speed_scale = 0.8 + power / 8;
@@ -2811,9 +2811,9 @@ export default class CricketScene extends Phaser.Scene {
 
       this.scoreList1[randomNumbers1[0]].setPosition(w * 0.9, h * 0.9);
       this.scoreList1[randomNumbers1[1]].setPosition(w * 0.918, h * 0.715);
-      this.scoreList1[randomNumbers1[2]].setPosition(w * 0.92, h * 0.525);
+      this.scoreList1[randomNumbers1[2]].setPosition(w * 0.89, h * 0.15);
       this.scoreList1[randomNumbers1[3]].setPosition(w * 0.918, h * 0.34);
-      this.scoreList2[randomNumbers2[0]].setPosition(w * 0.89, h * 0.15);
+      this.scoreList2[randomNumbers2[0]].setPosition(w * 0.92, h * 0.525);
 
       score6effect_x = this.score6.x;
       score6effect_y = this.score6.y;
@@ -2830,9 +2830,9 @@ export default class CricketScene extends Phaser.Scene {
 
       this.scoreList1[randomNumbers1[0]].setPosition(w * 0.9, h * 0.9);
       this.scoreList1[randomNumbers1[1]].setPosition(w * 0.918, h * 0.715);
-      this.scoreList1[randomNumbers1[2]].setPosition(w * 0.92, h * 0.525);
+      this.scoreList1[randomNumbers1[2]].setPosition(w * 0.89, h * 0.15);
       this.scoreList1[randomNumbers1[3]].setPosition(w * 0.918, h * 0.34);
-      this.scoreList2[randomNumbers2[0]].setPosition(w * 0.89, h * 0.15);
+      this.scoreList2[randomNumbers2[0]].setPosition(w * 0.92, h * 0.525);
 
       score6effect_x = this.score6.x;
       score6effect_y = this.score6.y;
@@ -2883,7 +2883,7 @@ export default class CricketScene extends Phaser.Scene {
     );
 
     // Add gravity to the ball
-    this.ball.body.setGravityY(650);
+    this.ball.body.setGravityY(650 * 688 / h);
 
     // Destroy the ball after a certain time (adjust as needed)
   }
