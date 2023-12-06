@@ -5,6 +5,7 @@ import { getAd } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { isIOS, isAndroid, isSafari } from "react-device-detect";
 
 export default function Ad({ ad, id }) {
   const context = useAppContext();
@@ -46,9 +47,7 @@ export default function Ad({ ad, id }) {
         <meta name="twitter:image" content={getImageURL(ad.backgroundImage)} />
       </Head>
       <div
-        className={`text-white font-bold w-screen ${
-          context.device === "ios" ? "h-[calc(100vh-80px)]" : "h-screen"
-        } flex items-center bg-black justify-center`}
+        className={`text-white font-bold w-[calc(100dvw)] h-[calc(100dvh)] flex items-center bg-black justify-center`}
       >
         {ad ? (
           !ad.isActive ? (
