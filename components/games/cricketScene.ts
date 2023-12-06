@@ -1576,7 +1576,7 @@ export default class CricketScene extends Phaser.Scene {
     this.red_text_group = this.add.group();
 
     this.red_text_header = this.add
-      .text(w / 2 - 120, h / 2.5, 'SXI SMASH', this.unlockHeaderStyle)
+      .text(w / 2 - 120, h / 2.5, 'SIX SMASH', this.unlockHeaderStyle)
       .setOrigin(0.5);
     this.red_text_header_g = this.add
       .text(
