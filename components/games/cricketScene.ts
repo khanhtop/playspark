@@ -345,11 +345,13 @@ export default class CricketScene extends Phaser.Scene {
     this.load.audio('hit4music5', '/pong/' + gameType + '/audio/hit4music/5.mp3');
 
     // LOAD hit6music
-    this.load.audio('hit6music1', '/pong/' + gameType + '/audio/hit4music/1.mp3');
-    this.load.audio('hit6music2', '/pong/' + gameType + '/audio/hit4music/2.mp3');
-    this.load.audio('hit6music3', '/pong/' + gameType + '/audio/hit4music/3.mp3');
-    this.load.audio('hit6music4', '/pong/' + gameType + '/audio/hit4music/4.mp3');
-    this.load.audio('hit6music5', '/pong/' + gameType + '/audio/hit4music/5.mp3');
+    this.load.audio('hit6music1', '/pong/' + gameType + '/audio/hit6music/1.mp3');
+    this.load.audio('hit6music2', '/pong/' + gameType + '/audio/hit6music/2.mp3');
+    this.load.audio('hit6music3', '/pong/' + gameType + '/audio/hit6music/3.mp3');
+    this.load.audio('hit6music4', '/pong/' + gameType + '/audio/hit6music/4.mp3');
+    this.load.audio('hit6music5', '/pong/' + gameType + '/audio/hit6music/5.mp3');
+    this.load.audio('hit6music6', '/pong/' + gameType + '/audio/hit6music/6.mp3');
+    this.load.audio('hit6music7', '/pong/' + gameType + '/audio/hit6music/7.mp3');
 
     // LOAD out
     this.load.audio('out1', '/pong/' + gameType + '/audio/out/1 (1).mp3');
@@ -414,12 +416,12 @@ export default class CricketScene extends Phaser.Scene {
     this.load.spritesheet(
       'australia_player_ready',
       '/pong/' + gameType + '/australia_player_ready.png',
-      { frameWidth: 113.8, frameHeight: 150 }
+      { frameWidth: 227.4, frameHeight: 300 }
     );
     this.load.spritesheet(
       'australia_player_fire',
       '/pong/' + gameType + '/australia_player_fire.png',
-      { frameWidth: 113.6, frameHeight: 150 }
+      { frameWidth: 227.2, frameHeight: 300 }
     );
     this.load.image(
       'pakistan_auth',
@@ -625,7 +627,8 @@ export default class CricketScene extends Phaser.Scene {
         this.sound.add('hit6music3'),
         this.sound.add('hit6music4'),
         this.sound.add('hit6music5'),
-
+        this.sound.add('hit6music6'),
+        this.sound.add('hit6music7'),
       ],
       OUT: [
         this.sound.add('out1'),
@@ -754,7 +757,7 @@ export default class CricketScene extends Phaser.Scene {
 
     const aus_ready_frame = this.anims.generateFrameNames(
       'australia_player_ready',
-      { start: 0, end: 14 }
+      { start: 0, end: 13 }
     );
     this.anims.create({
       key: 'aus_ready_animation',
@@ -1352,7 +1355,6 @@ export default class CricketScene extends Phaser.Scene {
     this.scoreList2 = [
       this.score_battery,
       this.score_green,
-      this.score_red,
       this.score_wicket,
       this.score_fire,
     ];
@@ -1708,7 +1710,7 @@ export default class CricketScene extends Phaser.Scene {
 
     //show spritesheet
     this.fireSprite = this.add
-      .sprite(w / 9, h * 0.36, 'fireEffect')
+      .sprite(w / 9 - 30 * w / 1248, h * 0.36, 'fireEffect')
       .setDisplaySize(100 * w / 1248, 100 * w / 1248)
       .setVisible(false);
 
@@ -1736,16 +1738,15 @@ export default class CricketScene extends Phaser.Scene {
     this.red_powerup_group = this.add.group();
 
     this.red_powerup_anim = this.add
-      .sprite(w / 9 + 3.5, h * 0.36 + 4, 'redEffect')
+      .sprite(w / 9.5 + 3.5, h * 0.36 + 4, 'redEffect')
       .setDisplaySize(105* w / 1248, 105* w / 1248);
     this.red_powerup_img = this.add
-      .sprite(w / 9, h * 0.36, 'red')
+      .sprite(w / 9.5, h * 0.36, 'red')
       .setDisplaySize(100* w / 1248, 100* w / 1248);
     this.red_powerup_anim.play('redAnimation');
 
     this.red_powerup_group.add(this.red_powerup_anim);
     this.red_powerup_group.add(this.red_powerup_img);
-    this.red_powerup_group.add(this.red_powerup_anim);
 
     this.red_powerup_group.setVisible(false);
 
@@ -1843,6 +1844,7 @@ export default class CricketScene extends Phaser.Scene {
           this.hitball_effect.setVisible(true).play('hitball_animation');
           // this.hitball_effect.setPosition(this.ball.x, this.ball.y);
           // this.hitball_effect.play('hitball_effect');
+          this.Crowd_Cheers_v1_wav.play();
 
           if (this.is_green_powerup) {
             overlapCallback(10);
@@ -2332,15 +2334,15 @@ export default class CricketScene extends Phaser.Scene {
           // }
           this.ball.type = 'new';
           if (this.is_green_powerup == false) {
-            this.fireSprite.setVisible(true).play('fireAnimation');
-            this.time.delayedCall(
-              3000,
-              () => {
-                this.fireSprite.setVisible(false);
-              },
-              null,
-              this
-            );
+            // this.fireSprite.setVisible(true).play('fireAnimation');
+            // this.time.delayedCall(
+            //   3000,
+            //   () => {
+            //     this.fireSprite.setVisible(false);
+            //   },
+            //   null,
+            //   this
+            // );
           } else {
             green_powerup_cnt++;
             if (green_powerup_cnt == 3) {
@@ -2389,6 +2391,7 @@ export default class CricketScene extends Phaser.Scene {
               battery_cnt = 0;
             }
           } else {
+            this.wicket.setText(--wickets);
             this.updateRunsShow('Out');
             this.runs_show.setScale(0);
             this.tweens.add({
@@ -2822,7 +2825,7 @@ export default class CricketScene extends Phaser.Scene {
         this.scoreList2[j].setPosition(-200, -200);
       }
       const randomNumbers1 = this.getRandomNumbers(0, 4, 4);
-      const randomNumbers2 = this.getRandomNumbers(0, 4, 1);
+      const randomNumbers2 = this.getRandomNumbers(0, 3, 1);
 
       this.scoreList1[randomNumbers1[0]].setPosition(w * 0.9, h * 0.9);
       this.scoreList1[randomNumbers1[1]].setPosition(w * 0.918, h * 0.715);
@@ -2841,7 +2844,7 @@ export default class CricketScene extends Phaser.Scene {
         this.scoreList2[i].setPosition(-200, -200);
       }
       const randomNumbers1 = this.getRandomNumbers(0, 4, 4);
-      const randomNumbers2 = this.getRandomNumbers(0, 4, 1);
+      const randomNumbers2 = this.getRandomNumbers(0, 3, 1);
 
       this.scoreList1[randomNumbers1[0]].setPosition(w * 0.9, h * 0.9);
       this.scoreList1[randomNumbers1[1]].setPosition(w * 0.918, h * 0.715);
@@ -2857,9 +2860,9 @@ export default class CricketScene extends Phaser.Scene {
     this.ball.setVelocity(0, 0);
     this.ball.body.setGravityY(0);
 
-    if (this.level > 10) {
-      this.endRound();
-    } else {
+    // if (this.level > 10) {
+      // this.endRound();
+    // } else {
       // pos_x = w + 100;
       // pos_y = h*(Phaser.Math.FloatBetween(0.55, 0.8));
       if (this.level < 3) {
@@ -2878,7 +2881,7 @@ export default class CricketScene extends Phaser.Scene {
         console.log('fireballllllllllll');
         this.throwBall(this.level);
       }, 2000 * this.levelDesign['LEVEL' + this.level].delay_scale);
-    }
+    // }
   }
   public throwBall(level) {
     this.physics.world.enable(this.ball);
@@ -3030,7 +3033,7 @@ export default class CricketScene extends Phaser.Scene {
     this.runs_left.setText(
       this.scorePanel.totalScore.toString().padStart(4, '0')
     );
-    if (this.level == 10 || wickets == 0) {
+    if (wickets == 0) {
       this.endRound();
     }
   }
