@@ -240,6 +240,7 @@ export default class CricketScene extends Phaser.Scene {
 
   private hit6_sounds: any;
   backgroundAudio: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
+  score_out1: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
   constructor(newGameType: string) {
     super();
@@ -1026,14 +1027,14 @@ export default class CricketScene extends Phaser.Scene {
       if (author_id == 1) {
         this.player
           .setTexture('australia_player_ready')
-          .setPosition(160 * w  / 1248, h / 2 - 50 * h  / 688)
+          .setPosition(160 * w  / 1248, h / 2 - 90 * h  / 688)
           .setVisible(true);
         this.auth_country.setText('Australia');
         this.player.play('aus_ready_animation');
       } else {
         this.player
           .setTexture('pakistan_player_ready')
-          .setPosition(160 * w  / 1248, h / 2 - 50 * h  / 688)
+          .setPosition(160 * w  / 1248, h / 2 - 90 * h  / 688)
           .setVisible(true);
         this.auth_country.setText('Pakistan');
         this.player.play('paki_ready_animation');
@@ -1366,6 +1367,9 @@ export default class CricketScene extends Phaser.Scene {
     this.score_out = this.physics.add
       .sprite(w * 0.918, h * 0.34, 'score_out')
       .setDisplaySize(w * 0.09, w * 0.09);
+    this.score_out1 = this.physics.add
+      .sprite(w * 3, h * 0.34, 'score_out')
+      .setDisplaySize(w * 0.09, w * 0.09);  
     this.score6 = this.physics.add
       .sprite(w * 0.89, h * 0.15, 'score6')
       .setDisplaySize(w * 0.09, w * 0.09);
@@ -1389,6 +1393,7 @@ export default class CricketScene extends Phaser.Scene {
       this.score4,
       this.score6,
       this.score_out,
+      this.score_out1,
     ];
 
     this.scoreList2 = [
@@ -2481,6 +2486,76 @@ export default class CricketScene extends Phaser.Scene {
       null,
       this
     );
+
+    this.physics.add.overlap(
+      this.score_out1,
+      this.ball,
+
+      () => {
+        if (!isClicked && this.ball.type == 'old') {
+          this.ball.type = 'new';
+
+          console.log('outttttttttttttttt');
+          multi_4_6_cnt = 0;
+          double4_cnt = 0;
+          double6_cnt = 0;
+          this.audioSystem.OUT[this.getRandomNumbers(0, this.audioSystem.OUT.length - 1, 1)].play();
+
+          this.hitball_effect.setPosition(this.score_out1.x, this.score_out1.y);
+          this.score_out1.setVisible(false);
+          this.hitball_effect.setVisible(true).play('hitball_animation');
+          this.time.delayedCall(
+            1000,
+            () => {
+              this.score_out1.setVisible(true);
+            },
+            null,
+            this
+          );
+          this.fire_ball();
+          if (this.is_battery) {
+            // battery_cnt++;
+            // if (battery_cnt == 3) {
+            //   this.is_battery = false;
+            //   battery_cnt = 0;
+            // }
+          } else {
+            this.wicket.setText(--wickets);
+            this.updateRunsShow('Out');
+            this.runs_show.setScale(0);
+            this.tweens.add({
+              targets: this.runs_show,
+              scaleX: 1,
+              scaleY: 1,
+              alpha: 1,
+              duration: 800,
+              ease: 'Bounce',
+            });
+            this.time.delayedCall(
+              1000,
+              () => {
+                this.runs_show.setAlpha(0);
+              },
+              null,
+              this
+            );
+          }
+          if (this.is_green_powerup == true) {
+            green_powerup_cnt++;
+            if (green_powerup_cnt == 3) {
+              green_powerup_cnt = 0;
+              this.ball.setDisplaySize(50 * w / 1248, 50 * w / 1248);
+              this.ball.state = 'ball';
+              this.is_green_powerup = false;
+              this.green_powerup_group.setVisible(false);
+            }
+          }
+        }
+      },
+      null,
+      this
+    );
+
     this.physics.add.overlap(
       this.score_battery,
       this.ball,
@@ -2871,6 +2946,8 @@ export default class CricketScene extends Phaser.Scene {
         this.scoreList1[i].setPosition(-200, -200);
         this.scoreList2[i].setPosition(-200, -200);
       }
+      this.scoreList1[5].setPosition(-200, -200);
+
       this.score6_1.setPosition(w * 0.9, h * 0.9);
       this.score6_2.setPosition(w * 0.918, h * 0.715);
       this.score6_3.setPosition(w * 0.92, h * 0.525);
@@ -2890,8 +2967,20 @@ export default class CricketScene extends Phaser.Scene {
         this.scoreList1[j].setPosition(-200, -200);
         this.scoreList2[j].setPosition(-200, -200);
       }
-      const randomNumbers1 = this.getRandomNumbers(0, 4, 4);
+      this.scoreList1[5].setPosition(-200, -200);
+
+      const randomNumbers1 = this.getRandomNumbers(0, 3, this.level < 6? 3 : 2);
       const randomNumbers2 = this.getRandomNumbers(0, 4, 1);
+
+      let randomIndex = Math.floor(Math.random() * (randomNumbers1.length + 1));
+      randomNumbers1.splice(randomIndex, 0, 4);
+
+      if(this.level >= 6) {
+        randomIndex = Math.floor(Math.random() * (randomNumbers1.length + 1));
+        randomNumbers1.splice(randomIndex, 0, 5);
+      }
+
+
 
       this.scoreList1[randomNumbers1[0]].setPosition(w * 0.9, h * 0.9);
       this.scoreList1[randomNumbers1[1]].setPosition(w * 0.918, h * 0.715);
@@ -2909,8 +2998,17 @@ export default class CricketScene extends Phaser.Scene {
         this.scoreList1[i].setPosition(-200, -200);
         this.scoreList2[i].setPosition(-200, -200);
       }
-      const randomNumbers1 = this.getRandomNumbers(0, 4, 4);
+      this.scoreList1[5].setPosition(-200, -200);
+
+      const randomNumbers1 = this.getRandomNumbers(0, 3, this.level < 6? 3 : 2);
       const randomNumbers2 = this.getRandomNumbers(0, 4, 1);
+      let randomIndex = Math.floor(Math.random() * (randomNumbers1.length + 1));
+      randomNumbers1.splice(randomIndex, 0, 4);
+
+      if(this.level >= 6) {
+        randomIndex = Math.floor(Math.random() * (randomNumbers1.length + 1));
+        randomNumbers1.splice(randomIndex, 0, 5);
+      }
 
       this.scoreList1[randomNumbers1[0]].setPosition(w * 0.9, h * 0.9);
       this.scoreList1[randomNumbers1[1]].setPosition(w * 0.918, h * 0.715);
