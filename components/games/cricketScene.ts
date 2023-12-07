@@ -1357,6 +1357,7 @@ export default class CricketScene extends Phaser.Scene {
       this.score_green,
       this.score_wicket,
       this.score_fire,
+      this.score_fire,
     ];
 
     this.getRandomNumbers = (min, max, count) => {
@@ -2825,7 +2826,7 @@ export default class CricketScene extends Phaser.Scene {
         this.scoreList2[j].setPosition(-200, -200);
       }
       const randomNumbers1 = this.getRandomNumbers(0, 4, 4);
-      const randomNumbers2 = this.getRandomNumbers(0, 3, 1);
+      const randomNumbers2 = this.getRandomNumbers(0, 4, 1);
 
       this.scoreList1[randomNumbers1[0]].setPosition(w * 0.9, h * 0.9);
       this.scoreList1[randomNumbers1[1]].setPosition(w * 0.918, h * 0.715);
@@ -2844,7 +2845,7 @@ export default class CricketScene extends Phaser.Scene {
         this.scoreList2[i].setPosition(-200, -200);
       }
       const randomNumbers1 = this.getRandomNumbers(0, 4, 4);
-      const randomNumbers2 = this.getRandomNumbers(0, 3, 1);
+      const randomNumbers2 = this.getRandomNumbers(0, 4, 1);
 
       this.scoreList1[randomNumbers1[0]].setPosition(w * 0.9, h * 0.9);
       this.scoreList1[randomNumbers1[1]].setPosition(w * 0.918, h * 0.715);
