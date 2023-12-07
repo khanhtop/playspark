@@ -122,12 +122,12 @@ export default function Outro({
               onClick={() => setStage(selectStage())}
               className="h-12  rounded-full mt-4"
             />
-            {/* <UIButton
+            <UIButton
               text="Restart"
               {...data}
               onClick={() => onReset()}
               className="h-12 rounded-full mt-4"
-            /> */}
+            />
           </div>
 
           {/* <BannerAd size="small" position="bottom" delay={1000} /> */}

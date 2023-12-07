@@ -166,7 +166,7 @@ export default function CreateTournamentModal({ data, hide }) {
                       }
                     />
                   </div>
-                  {/* {tournament.captureEmail && (
+                  {tournament.captureEmail && (
                     <Input
                       label="Guidance Text"
                       labelColor="text-white"
@@ -183,7 +183,7 @@ export default function CreateTournamentModal({ data, hide }) {
                         });
                       }}
                     />
-                  )} */}
+                  )}
                 </div>
               </BrandingComponent>
               {/* <BrandingComponent>
