@@ -12,7 +12,7 @@ export default function ShareButton({ data, score }) {
       }}
       onClick={() => null}
     >
-      <div className="cursor-pointer flex items-center gap-2 font-octo bg-black/20 px-4 py-0 rounded-full">
+      <div className="cursor-pointer flex items-center gap-2 font-octo bg-black/20 px-4 py-0 rounded-full mb-1">
         <p>Share My Score</p>
         <ShareIcon className="h-3 w-3 mb-[1px]" />
       </div>

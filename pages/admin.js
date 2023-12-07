@@ -43,7 +43,9 @@ export default function Application() {
               <Profile />
             </Pane>
           ) : selectedPane === 4 ? (
-            <Pane title="Dashboard">{/* <Dashboard /> */}</Pane>
+            <Pane title="Dashboard">
+              <Dashboard />
+            </Pane>
           ) : selectedPane === 5 ? (
             <Pane title="Analytics">{/* <Dashboard /> */}</Pane>
           ) : selectedPane === 6 ? (

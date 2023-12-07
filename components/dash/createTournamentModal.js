@@ -186,7 +186,7 @@ export default function CreateTournamentModal({ data, hide }) {
                   )}
                 </div>
               </BrandingComponent>
-              {/* <BrandingComponent>
+              <BrandingComponent>
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2 mt-6">
                     <p className="text-white">Allow Players To Share Game</p>
@@ -214,7 +214,7 @@ export default function CreateTournamentModal({ data, hide }) {
                     />
                   )}
                 </div>
-              </BrandingComponent> */}
+              </BrandingComponent>
               <RewardedComponent>
                 <>
                   <VideoPicker
