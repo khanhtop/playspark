@@ -207,6 +207,7 @@ export default class CricketScene extends Phaser.Scene {
   private green_powerup_img: any;
 
   private red_powerup_group: any;
+  private battery_powerup_group: any;
   private is_red_powerup: any;
   private red_powerup_anim: any;
   private red_powerup_img: any;
@@ -230,6 +231,7 @@ export default class CricketScene extends Phaser.Scene {
 
   private is_random: any;
   private power_effect: any;
+  private progress_effect: any;
 
   private is_audio_setting: any;
   private audioSystem: any;
@@ -246,6 +248,43 @@ export default class CricketScene extends Phaser.Scene {
   }
 
   preload() {
+    
+    // Display a loading progress bar
+    const progressBar = this.add.graphics();
+    const progressBox = this.add.graphics();
+    const width = this.cameras.main.width;
+    const height = this.cameras.main.height;
+    const loadingText = this.make.text({
+      x: width / 2,
+      y: height / 2 - 50,
+      text: 'Loading...',
+      style: {
+        font: '20px monospace',
+        fill: '#ffffff',
+      },
+    });
+    loadingText.setOrigin(0.5, 0.5);
+
+    progressBox.fillStyle(0x222222, 0.8);
+    progressBox.fillRect(width / 2 - 160, height / 2 - 30, 320, 50);
+
+    const loadingBar = this.add.graphics();
+
+    this.load.on('progress', (value) => {
+      loadingBar.clear();
+      loadingBar.fillStyle(0xffffff, 1);
+      loadingBar.fillRect(width / 2 - 150, height / 2 - 20, 300 * value, 30);
+    });
+
+    this.load.on('complete', () => {
+      loadingBar.destroy();
+      progressBox.destroy();
+      loadingText.destroy();
+    });
+
+
+
+
     let fontUrl = '/pong/' + gameType + '/Bangers-Regular.ttf';
     const font = new FontFace('customFont', `url(${fontUrl})`);
 
@@ -430,7 +469,7 @@ export default class CricketScene extends Phaser.Scene {
     this.load.spritesheet(
       'pakistan_player_ready',
       '/pong/' + gameType + '/pakistan_player_ready.png',
-      { frameWidth: 234.83, frameHeight: 150 }
+      { frameWidth: 227.4, frameHeight: 300 }
     );
     this.load.spritesheet(
       'pakistan_player_fire',
@@ -575,7 +614,7 @@ export default class CricketScene extends Phaser.Scene {
     };
   }
 
-  create() {
+  create() { 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
 
@@ -790,7 +829,7 @@ export default class CricketScene extends Phaser.Scene {
 
     const paki_ready_frame = this.anims.generateFrameNames(
       'pakistan_player_ready',
-      { start: 0, end: 5 }
+      { start: 0, end: 13 }
     );
     this.anims.create({
       key: 'paki_ready_animation',
@@ -852,7 +891,7 @@ export default class CricketScene extends Phaser.Scene {
     // .setDisplaySize(50, 50)
     // .setAlpha(0.6);
     // LOGO FENSE PART
-    for (let i = 1; i < 6; i++) {
+    for (let i = 1; i < 20; i++) {
       this.add
         .sprite(-80 + 220 * i, h * 0.69, 'fence')
         .setDisplaySize(150, 30)
@@ -916,12 +955,12 @@ export default class CricketScene extends Phaser.Scene {
     this.updateAuthorImage = (id) => {
       switch (id) {
         case 1:
-          this.auths.setDisplaySize(250 * w / 1248, 180 * w / 1248).play('aus_ready_animation');
+          this.auths.play('aus_ready_animation');
           console.log('austaaaaaaaaaaaaaaaaa');
           this.auth_country.setText('AUSTRALIA');
           break;
         case 2:
-          this.auths.setDisplaySize(100 * w / 1248, 100 * w / 1248).play('paki_ready_animation');
+          this.auths.play('paki_ready_animation');
           this.auth_country.setText('PAKISTAN');
           console.log('pakissssssssssssssssssssss');
           break;
@@ -987,14 +1026,14 @@ export default class CricketScene extends Phaser.Scene {
       if (author_id == 1) {
         this.player
           .setTexture('australia_player_ready')
-          .setPosition(160 * w  / 1248, h / 2 + 100 * w  / 1248)
+          .setPosition(160 * w  / 1248, h / 2 - 50 * h  / 688)
           .setVisible(true);
         this.auth_country.setText('Australia');
         this.player.play('aus_ready_animation');
       } else {
         this.player
           .setTexture('pakistan_player_ready')
-          .setPosition(160 * w  / 1248, h / 2 + 100 * h  / 688)
+          .setPosition(160 * w  / 1248, h / 2 - 50 * h  / 688)
           .setVisible(true);
         this.auth_country.setText('Pakistan');
         this.player.play('paki_ready_animation');
@@ -1723,16 +1762,15 @@ export default class CricketScene extends Phaser.Scene {
     this.green_powerup_group = this.add.group();
 
     this.green_powerup_anim = this.add
-      .sprite(w / 9, h * 0.36 + 5, 'redEffect')
+      .sprite(w / 9.5, h * 0.36 + 5, 'redEffect')
       .setDisplaySize(105 * w / 1248, 105* w / 1248);
     this.green_powerup_img = this.add
-      .sprite(w / 9, h * 0.36, 'green')
+      .sprite(w / 9.5, h * 0.36, 'green')
       .setDisplaySize(100* w / 1248, 100* w / 1248);
     this.green_powerup_anim.play('greenAnimation');
 
     this.green_powerup_group.add(this.green_powerup_anim);
     this.green_powerup_group.add(this.green_powerup_img);
-    this.green_powerup_group.add(this.green_powerup_anim);
 
     this.green_powerup_group.setVisible(false);
 
@@ -1742,7 +1780,7 @@ export default class CricketScene extends Phaser.Scene {
       .sprite(w / 9.5 + 3.5, h * 0.36 + 4, 'redEffect')
       .setDisplaySize(105* w / 1248, 105* w / 1248);
     this.red_powerup_img = this.add
-      .sprite(w / 9.5, h * 0.36, 'red')
+      .sprite(w / 9.5, h * 0.36, 'fire')
       .setDisplaySize(100* w / 1248, 100* w / 1248);
     this.red_powerup_anim.play('redAnimation');
 
@@ -1750,6 +1788,22 @@ export default class CricketScene extends Phaser.Scene {
     this.red_powerup_group.add(this.red_powerup_img);
 
     this.red_powerup_group.setVisible(false);
+
+
+    this.battery_powerup_group = this.add.group();
+    this.battery_powerup_group.add(
+      this.add
+      .sprite(w / 9.5, h * 0.36, 'battery')
+      .setDisplaySize(100* w / 1248, 100* w / 1248)
+    )
+    const anim_b = this.add
+    .sprite(w / 9.5 + 3.5, h * 0.36 + 4, 'redEffect')
+    .setDisplaySize(105* w / 1248, 105* w / 1248);
+    anim_b.play('redAnimation');
+    this.battery_powerup_group.add(anim_b);
+
+    this.battery_powerup_group.setVisible(false);
+
 
     const overlapCallback = (num) => {
       if (this.ball.type == 'old') {
@@ -2386,11 +2440,11 @@ export default class CricketScene extends Phaser.Scene {
           );
           this.fire_ball();
           if (this.is_battery) {
-            battery_cnt++;
-            if (battery_cnt == 3) {
-              this.is_battery = false;
-              battery_cnt = 0;
-            }
+            // battery_cnt++;
+            // if (battery_cnt == 3) {
+            //   this.is_battery = false;
+            //   battery_cnt = 0;
+            // }
           } else {
             this.wicket.setText(--wickets);
             this.updateRunsShow('Out');
@@ -2482,6 +2536,7 @@ export default class CricketScene extends Phaser.Scene {
                 this.battery_text_group.setVisible(false);
                 this.is_battery = true;
                 this.fire_ball();
+                this.battery_powerup_group.setVisible(true);
               },
               null,
               this
@@ -2762,6 +2817,16 @@ export default class CricketScene extends Phaser.Scene {
     console.log('aaaaaaaaaaaaa');
     if (this.game_pause) return;
 
+    if (this.is_battery) {
+      battery_cnt++;
+      if (battery_cnt == 3) {
+        this.is_battery = false;
+        battery_cnt = 0;
+        this.battery_powerup_group.setVisible(false);
+        
+      }
+    }
+
     this.ball.setVisible(true);
     // this.ball.play('redball_animation');
     // this.ball.state = 'ball';
@@ -2792,7 +2857,7 @@ export default class CricketScene extends Phaser.Scene {
     this.count_flag = false;
     this.scorePanel.fire_count++;
     console.log("--------this.scorePanel.fire_count----", this.scorePanel.fire_count)
-    if(Math.ceil(this.scorePanel.fire_count / 6) != this.level) {
+    if(Math.ceil(this.scorePanel.fire_count / 6) != this.level && this.level != 0) {
       this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
     }
     this.level = Math.ceil(this.scorePanel.fire_count / 6);
@@ -2930,7 +2995,7 @@ export default class CricketScene extends Phaser.Scene {
     this.ballEffect.setPosition(this.ball.x + this.ball.displayWidth / 2, this.ball.y + this.ball.displayHeight / 2);
     this.ballEffect.setAngle(angle * 180 / Math.PI + 180);
 
-    if (this.ball.y >= h / 2 + 250 * w / 1248 && this.ball.type == 'new') {
+    if (this.ball.y >= h / 2 + 200 * h / 688 && this.ball.type == 'new') {
       let speed_scale = Phaser.Math.FloatBetween(1.5, 1.75);
       this.ball.setVelocity(-405 * speed_scale, -180 * speed_scale);
     }
@@ -2950,11 +3015,11 @@ export default class CricketScene extends Phaser.Scene {
       console.log('--------------');
       this.count_flag = true;
       if (this.is_battery) {
-        battery_cnt++;
-        if (battery_cnt == 3) {
-          battery_cnt = 0;
-          this.is_battery = false;
-        }
+        // battery_cnt++;
+        // if (battery_cnt == 3) {
+        //   battery_cnt = 0;
+        //   this.is_battery = false;
+        // }
       } else {
         this.wicket.setText(--wickets);
         this.updateRunsShow('Out');
