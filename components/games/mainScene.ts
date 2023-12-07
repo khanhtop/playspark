@@ -566,7 +566,7 @@ export default class MainScene extends Phaser.Scene {
     // Set the AI's velocity
     this.ai.setVelocity(vx, vy);
     if(this.ai.y < 0 || this.ai.x < 0 || this.ai.x > w + 20) {
-      this.ai.setVelocity(-vx, -vy);
+      this.ai.setPosition(x, 20);
     }
   }
 
