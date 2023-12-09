@@ -3048,6 +3048,7 @@ export default class CricketScene extends Phaser.Scene {
     // }
   }
   public throwBall(level) {
+    if(this.ball == null || this.physics == null) return;
     this.physics.world.enable(this.ball);
 
     // Set the velocity of the ball to simulate a throw
@@ -3078,6 +3079,7 @@ export default class CricketScene extends Phaser.Scene {
   public initGame(lives = 3) {
     this.cameras.main.fadeIn(1200);
     spinTimes = 1;
+    wickets = 10;
     setTimeout(() => this.startRound(), 2500);
   }
 
@@ -3112,6 +3114,8 @@ export default class CricketScene extends Phaser.Scene {
     if (!this.count_flag && this.physics.overlap(this.wicketbar, this.ball)) {
       console.log('--------------');
       this.count_flag = true;
+      isClicked = false;
+
       if (this.is_battery) {
         // battery_cnt++;
         // if (battery_cnt == 3) {
