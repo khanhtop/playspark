@@ -476,7 +476,7 @@ export default class CricketScene extends Phaser.Scene {
     this.load.spritesheet(
       'pakistan_player_fire',
       '/pong/' + gameType + '/pakistan_player_fire.png',
-      { frameWidth: 117.35, frameHeight: 150 }
+      { frameWidth: 227.2, frameHeight: 300 }
     );
     this.load.spritesheet(
       'ball_effect',
@@ -851,12 +851,12 @@ export default class CricketScene extends Phaser.Scene {
     this.anims.create({
       key: 'paki_fire_animation',
       frames: paki_fire_frame,
-      frameRate: 24,
+      frameRate: 40,
       repeat: 0,
     });
     this.anims.create({
       key: 'paki_fire_ready_animation',
-      frames: paki_fire_frame,
+      frames: paki_fire_ready_frame,
       frameRate: 12,
       repeat: 0,
     });
