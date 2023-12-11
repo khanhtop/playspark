@@ -44,6 +44,7 @@ let score6_array = [];
 let double6_cnt = 0;
 let double4_cnt = 0;
 let battery_cnt = 0;
+let isFireballRunnig = false;
 
 let n = 1;
 
@@ -475,7 +476,7 @@ export default class CricketScene extends Phaser.Scene {
     this.load.spritesheet(
       'pakistan_player_fire',
       '/pong/' + gameType + '/pakistan_player_fire.png',
-      { frameWidth: 117.35, frameHeight: 150 }
+      { frameWidth: 227.2, frameHeight: 300 }
     );
     this.load.spritesheet(
       'ball_effect',
@@ -702,63 +703,63 @@ export default class CricketScene extends Phaser.Scene {
     this.levelDesign = {
       LEVEL1: {
         heigh: h * 0.58,
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: 1,
         velocity_scale: 1,
         delay_scale: 1,
       },
       LEVEL2: {
         heigh: h * 0.58,
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1,
         delay_scale: 0.9,
       },
       LEVEL3: {
         height: h * Phaser.Math.FloatBetween(0.58, 0.8),
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1.1,
         delay_scale: 0.9,
       },
       LEVEL4: {
         height: h * Phaser.Math.FloatBetween(0.58, 0.8),
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1.1,
         delay_scale: 0.9,
       },
       LEVEL5: {
         height: h * Phaser.Math.FloatBetween(0.58, 0.8),
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1.2,
         delay_scale: 0.9,
       },
       LEVEL6: {
         height: h * Phaser.Math.FloatBetween(0.58, 0.8),
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1.2,
         delay_scale: 0.9,
       },
       LEVEL7: {
         height: h * Phaser.Math.FloatBetween(0.58, 0.8),
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1.25,
         delay_scale: 0.9,
       },
       LEVEL8: {
         height: h * Phaser.Math.FloatBetween(0.25, 0.7),
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1.25,
         delay_scale: 0.9,
       },
       LEVEL9: {
         height: h * Phaser.Math.FloatBetween(0.25, 0.7),
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1.25,
         delay_scale: 0.9,
@@ -766,7 +767,7 @@ export default class CricketScene extends Phaser.Scene {
       },
       LEVEL10: {
         height: h * Phaser.Math.FloatBetween(0.25, 0.7),
-        width: w + 100,
+        width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1.25,
         delay_scale: 0.9,
@@ -850,12 +851,12 @@ export default class CricketScene extends Phaser.Scene {
     this.anims.create({
       key: 'paki_fire_animation',
       frames: paki_fire_frame,
-      frameRate: 24,
+      frameRate: 40,
       repeat: 0,
     });
     this.anims.create({
       key: 'paki_fire_ready_animation',
-      frames: paki_fire_frame,
+      frames: paki_fire_ready_frame,
       frameRate: 12,
       repeat: 0,
     });
@@ -2887,10 +2888,11 @@ export default class CricketScene extends Phaser.Scene {
 
     this.initGame();
   }
-
   public fire_ball() {
     console.log('aaaaaaaaaaaaa');
-    if (this.game_pause) return;
+    if (this.game_pause || isFireballRunnig) return;
+
+    isFireballRunnig = true;
 
     if (this.is_battery) {
       battery_cnt++;
@@ -2935,9 +2937,9 @@ export default class CricketScene extends Phaser.Scene {
     if(Math.ceil(this.scorePanel.fire_count / 6) != this.level && this.level != 0) {
       this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
     }
-    this.level = Math.ceil(this.scorePanel.fire_count / 6);
+    this.level = Math.min(Math.ceil(this.scorePanel.fire_count / 6), 10);
 
-    this.overs_right.setText(this.level.toString().padStart(4, '0'));
+    this.overs_right.setText(Math.ceil(this.scorePanel.fire_count / 6).toString().padStart(4, '0'));
 
     if (this.is_red_powerup == true) {
       console.log('111111sdfssss11111111111');
@@ -3044,11 +3046,12 @@ export default class CricketScene extends Phaser.Scene {
       setTimeout(() => {
         console.log('fireballllllllllll');
         this.throwBall(this.level);
+        isFireballRunnig = false;
       }, 2000 * this.levelDesign['LEVEL' + this.level].delay_scale);
     // }
   }
   public throwBall(level) {
-    if(this.ball == null || this.physics == null) return;
+    if(this.ball == null || this.physics == null || this.physics.world == null) return;
     this.physics.world.enable(this.ball);
 
     // Set the velocity of the ball to simulate a throw
@@ -3096,10 +3099,12 @@ export default class CricketScene extends Phaser.Scene {
     this.ballEffect.setAngle(angle * 180 / Math.PI + 180);
 
     if (this.ball.y >= h / 2 + 200 * h / 688 && this.ball.type == 'new') {
+      console.log("+++++++++++++++++++ball_________new")
       let speed_scale = Phaser.Math.FloatBetween(1.5, 1.75);
       this.ball.setVelocity(-405 * speed_scale, -180 * speed_scale);
     }
     if (this.ball.y >= h / 2 + 280 * w / 1248 && this.ball.type == 'old') {
+      console.log("+++++++++++++++++++ball_________old__________")
       this.ball.setVisible(false);
       this.fire_ball();
       // over_cnt++
