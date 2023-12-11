@@ -46,6 +46,16 @@ let double4_cnt = 0;
 let battery_cnt = 0;
 let isFireballRunnig = false;
 
+let player_name = [
+  "Australian",
+  "Pakistan",
+  "Merv HowzatHughes",
+  "Mark ThirdMan",
+  "Mitch Bowlstotheleft",
+  "Gus Wicketland",
+  "James Bouncer",
+]
+
 let n = 1;
 
 export default class CricketScene extends Phaser.Scene {
@@ -478,6 +488,21 @@ export default class CricketScene extends Phaser.Scene {
       '/pong/' + gameType + '/pakistan_player_fire.png',
       { frameWidth: 227.2, frameHeight: 300 }
     );
+
+      for(let i = 3; i < 8; i++) {
+        this.load.spritesheet(
+          `p${i}_player_ready`,
+          '/pong/' + gameType + `/p${i}_player_ready.png`,
+          { frameWidth: 227.4, frameHeight: 300 }
+        );
+        this.load.spritesheet(
+          `p${i}_player_fire`,
+          '/pong/' + gameType + `/p${i}_player_fire.png`,
+          { frameWidth: 227.2, frameHeight: 300 }
+        );
+      }
+
+
     this.load.spritesheet(
       'ball_effect',
       '/pong/' + gameType + '/ball_effect.png',
@@ -861,6 +886,40 @@ export default class CricketScene extends Phaser.Scene {
       repeat: 0,
     });
 
+    for(let i = 3; i < 8; i++) {
+      const ready_frame = this.anims.generateFrameNames(
+        `p${i}_player_ready`,
+        { start: 0, end: 13 }
+      );
+      this.anims.create({
+        key: `p${i}_ready_animation`,
+        frames: ready_frame,
+        frameRate: 6,
+        repeat: -1,
+      });
+  
+      const fire_frame = this.anims.generateFrameNames(
+        `p${i}_player_fire`,
+        { start: 6, end: 14 }
+      );
+      const fire_ready_frame = this.anims.generateFrameNames(
+        `p${i}_player_fire`,
+        { start: 0, end: 6 }
+      );
+      this.anims.create({
+        key: `p${i}_fire_animation`,
+        frames: fire_frame,
+        frameRate: 40,
+        repeat: 0,
+      });
+      this.anims.create({
+        key: `p${i}_fire_ready_animation`,
+        frames: fire_ready_frame,
+        frameRate: 12,
+        repeat: 0,
+      });
+    }
+
     const ball_frame = this.anims.generateFrameNames('ball_effect', {
       start: 0,
       end: 4,
@@ -930,7 +989,7 @@ export default class CricketScene extends Phaser.Scene {
       'pointerdown',
       () => {
         author_id--;
-        if (author_id < 1) author_id = 2;
+        if (author_id < 1) author_id = player_name.length;
         this.updateAuthorImage(author_id);
         console.log('leftttttttttt');
       },
@@ -947,7 +1006,7 @@ export default class CricketScene extends Phaser.Scene {
       'pointerdown',
       () => {
         author_id++;
-        if (author_id > 2) author_id = 1;
+        if (author_id > player_name.length) author_id = 1;
         this.updateAuthorImage(author_id);
         console.log('rightttttttttt');
       },
@@ -968,12 +1027,18 @@ export default class CricketScene extends Phaser.Scene {
           break;
         // Add more cases if you have additional author IDs
         default:
+          this.auths.play(`p${author_id}_ready_animation`);
+          this.auth_country.setText(player_name[author_id - 1]);
           break;
       }
     };
 
     this.auth_country = this.add
-      .text(w / 2, h / 2 - 100 * w / 1248, 'AUSTRALIA', this.country_text_style)
+      .text(w / 2, h / 2 - 100 * w / 1248, 'AUSTRALIA', {
+        ...this.country_text_style,
+        wordWrap: { width: 50 },
+        align: "center",
+      })
       .setOrigin(0.5, 0.5)
       .setAlpha(1)
       .setDepth(1);
@@ -1032,13 +1097,20 @@ export default class CricketScene extends Phaser.Scene {
           .setVisible(true);
         this.auth_country.setText('Australia');
         this.player.play('aus_ready_animation');
-      } else {
+      } else if(author_id == 2) {
         this.player
           .setTexture('pakistan_player_ready')
           .setPosition(160 * w  / 1248, h / 2 - 90 * h  / 688)
           .setVisible(true);
         this.auth_country.setText('Pakistan');
         this.player.play('paki_ready_animation');
+      } else {
+        this.player
+          .setTexture(`p${author_id}_player_ready`)
+          .setPosition(160 * w  / 1248, h / 2 - 90 * h  / 688)
+          .setVisible(true);
+        this.auth_country.setText(player_name[author_id - 1]);
+        this.player.play(`p${author_id}_ready_animation`);
       }
       this.time.delayedCall(1000, this.fire_ball, [], this);
     });
@@ -1099,7 +1171,11 @@ export default class CricketScene extends Phaser.Scene {
       .setAlpha(1)
       .setDepth(1);
     this.player_country = this.add
-      .text(w / 2 + 80 * w / 1248, h / 2 - 50 * w / 1248, 'AUSTRALIA', this.pause_text_style)
+      .text(w / 2 + 80 * w / 1248, h / 2 - 50 * w / 1248, 'AUSTRALIA', {
+        ...this.pause_text_style,
+        wordWrap: { width: 50 },
+        align: "center",
+      })
       .setOrigin(0.5, 0.5)
       .setAlpha(1)
       .setDepth(1);
@@ -1195,24 +1271,26 @@ export default class CricketScene extends Phaser.Scene {
 
       this.pause_group.setVisible(true);
       if (author_id == 1) {
-        this.pause_player.setTexture('australia_auth');
+        this.pause_player.setTexture('australia_auth').setDisplaySize(140 * w / 1248, 180 * w / 1248);
         this.player_country.setText('AUSTRALIA');
         this.current_score.setText(
           'SCORE : ' + this.scorePanel.totalScore.toString()
         );
-        this.current_over.setText('OVER : ' + this.level);
+        this.current_over.setText('OVER : ' + Math.ceil(this.scorePanel.fire_count / 6).toString().padStart(4, '0'));
       } else if (author_id == 2) {
-        this.pause_player.setTexture('america_auth');
+        this.pause_player.setTexture('america_auth').setDisplaySize(140 * w / 1248, 180 * w / 1248);
         this.player_country.setText('AMERICA');
         this.current_score.setText(
           'SCORE : ' + this.scorePanel.totalScore.toString()
         );
-        this.current_over.setText(
-          'OVER: ' +
-            (
-              this.scorePanel.fire_count - this.scorePanel.score_count
-            ).toString()
+        this.current_over.setText('OVER: ' + Math.ceil(this.scorePanel.fire_count / 6).toString().padStart(4, '0'));
+      } else {
+        this.pause_player.setTexture(`p${author_id}_player_ready`).setDisplaySize(140 * w / 1248, 180 * w / 1248);
+        this.player_country.setText(player_name[author_id - 1]);
+        this.current_score.setText(
+          'SCORE : ' + this.scorePanel.totalScore.toString()
         );
+        this.current_over.setText('OVER : ' + Math.ceil(this.scorePanel.fire_count / 6).toString().padStart(4, '0'));
       }
     });
     this.resume_btn.on('pointerup', () => {
@@ -1267,8 +1345,10 @@ export default class CricketScene extends Phaser.Scene {
         if(isClicked) {
           if (author_id == 1) {
             this.player.play('aus_fire_ready_animation');
-          } else {
+          } else if(author_id == 2) {
             this.player.play('paki_fire_ready_animation');
+          } else {
+            this.player.play(`p${author_id}_fire_ready_animation`);
           }
         }
       },
@@ -1284,19 +1364,21 @@ export default class CricketScene extends Phaser.Scene {
         if(isClicked) {
           if (author_id == 1) {
             this.player.play('aus_fire_animation');
-            console.log('australllll');
-          } else {
+          } else if(author_id == 2) {
             this.player.play('paki_fire_animation');
-            console.log('pakiiiiiiiii');
+          } else {
+            this.player.play(`p${author_id}_fire_animation`);
           }
           this.player.on(
             'animationcomplete',
             (anim) => {
-              if(anim.key == 'aus_fire_ready_animation' || anim.key == 'paki_fire_ready_animation') return;
+              if(anim.key.includes('fire_ready_animation')) return;
               if (author_id == 1) {
                 this.player.play('aus_ready_animation');
-              } else {
+              } else if(author_id == 2) {
                 this.player.play('paki_ready_animation');
+              } else {
+                this.player.play(`p${author_id}_ready_animation`);
               }
             },
             this
