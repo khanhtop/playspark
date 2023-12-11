@@ -3051,7 +3051,7 @@ export default class CricketScene extends Phaser.Scene {
     // }
   }
   public throwBall(level) {
-    if(this.ball == null || this.physics == null) return;
+    if(this.ball == null || this.physics == null || this.physics.world == null) return;
     this.physics.world.enable(this.ball);
 
     // Set the velocity of the ball to simulate a throw
