@@ -65,7 +65,7 @@ export default function GameCard({
     >
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-titan uppercase">{game.name}</h3>
-        {game.isActive && onDelete && (
+        {!game.isActive && onDelete && (
           <XMarkIcon
             onClick={() => onDelete()}
             className="h-8 w-8 hover:text-sky-400 transition"

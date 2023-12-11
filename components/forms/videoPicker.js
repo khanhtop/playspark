@@ -9,7 +9,13 @@ import React, { useEffect, useState } from "react";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 
-export default function VideoPicker({ children, video, onChange, label }) {
+export default function VideoPicker({
+  children,
+  video,
+  onChange,
+  label,
+  landscape,
+}) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [lastVideo, setLastVideo] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -101,8 +107,8 @@ export default function VideoPicker({ children, video, onChange, label }) {
         ) : video ? (
           <MuxPlayer
             style={{
-              width: "200px",
-              height: "400px",
+              width: landscape ? "400px" : "200px",
+              height: landscape ? "200px" : "400px",
               objectFit: "contain",
               borderWidth: 1,
               borderColor: "white",

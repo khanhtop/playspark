@@ -57,12 +57,13 @@ export default function MyGames({}) {
           )
           ?.map((item, key) => (
             <GameCard
-              key={item.id}
+              key={item.tournamentId}
               onAdd={() => setShowEmbed(item.tournamentId)}
               showActiveState={item?.isActive ?? false}
               buttonText="Get Embed Code"
               game={item}
-              onDelete={() => switchActive(item.tournamentId, true)}
+              onDelete={() => deleteGame(item)}
+              // onToggleActive={() => switchActive(item.tournamentId, true)}
               onShowInfo={[
                 {
                   text: "Edit Tournament",

@@ -1,13 +1,6 @@
 import { useRef, useState } from "react";
 import Input from "../forms/input";
-import {
-  ChromePicker,
-  CompactPicker,
-  PhotoshopPicker,
-  SketchPicker,
-  SwatchesPicker,
-  TwitterPicker,
-} from "react-color";
+import { TwitterPicker } from "react-color";
 import { useAppContext } from "@/helpers/store";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
@@ -20,7 +13,6 @@ import UIButton from "../ui/button";
 import Text from "../ui/text";
 import ImagePicker from "../forms/imagePicker";
 import VideoPicker from "../forms/videoPicker";
-import { mockVideos } from "@/helpers/mocks";
 import SurveyInput from "../forms/surveyInput";
 import {
   BrandingComponent,
@@ -142,6 +134,9 @@ export default function CreateTournamentModal({ data, hide }) {
                 <>
                   <p className="text-white mt-1 mb-4">Tournament Branding</p>
                   <ImagePicker
+                    cover
+                    width={tournament.landscape ? 400 : 200}
+                    height={tournament.landscape ? 200 : 400}
                     label="Replace Background Image (Aim for 800px x 1600px)"
                     image={tournament.backgroundImage}
                     onChange={(url) => {
@@ -218,6 +213,7 @@ export default function CreateTournamentModal({ data, hide }) {
               <RewardedComponent>
                 <>
                   <VideoPicker
+                    landscape={tournament.landscape}
                     video={tournament.sponsoredVideo}
                     onChange={(id) => {
                       setTournament({ ...tournament, sponsoredVideo: id });
@@ -331,24 +327,17 @@ function Preview({ tournament }) {
   return (
     <div
       style={{ backgroundColor: tournament.primaryColor }}
-      className={`mt-4 w-[200px] h-[400px] rounded-lg overflow-hidden relative flex flex-col items-center justify-end`}
+      className={`mt-4 ${
+        tournament.landscape ? "w-[400px] h-[200px]" : "w-[200px] h-[400px]"
+      }  rounded-lg overflow-hidden relative flex flex-col items-center justify-end`}
     >
       <img
         src={tournament.backgroundImage}
         className="object-cover absolute h-full w-full"
       />
       <div className="text-white z-20 flex flex-col items-center mb-12">
-        {/* <h1 className="text-lg" style={{ color: tournament.textColor }}>
-          {tournament.name}
-        </h1> */}
         <Text {...tournament}>{tournament.name}</Text>
         <UIButton {...tournament} className="mt-2" text="Start" />
-        {/* <div
-          style={{ backgroundColor: tournament.primaryColor }}
-          className="rounded-lg h-10 w-40 flex items-center justify-center mt-4"
-        >
-          <p style={{ color: tournament.textColor }}>Start</p>
-        </div> */}
       </div>
     </div>
   );
