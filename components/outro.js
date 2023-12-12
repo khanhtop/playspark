@@ -13,6 +13,7 @@ import Text from "./ui/text";
 import UIButton from "./ui/button";
 import EmailSlide from "./forms/emailSlide";
 import { WinModal } from "./ui/modalTypes";
+import ShareButton from "./ui/shareButton";
 
 export default function Outro({
   score,
@@ -20,6 +21,7 @@ export default function Outro({
   data,
   leaderboard,
   prevBest,
+  onReset,
 }) {
   const context = useAppContext();
   console.log("PREV", prevBest);
@@ -40,7 +42,7 @@ export default function Outro({
 
   return (
     <div className="bg-[#222] h-full w-full flex items-center justify-center">
-      <div className="relative bg-white rounded-2xl text-black font-light h-[90%] w-[90%] relative flex items-center justify-start flex-col">
+      <div className="relative bg-white rounded-2xl text-black font-light h-[80%] portrait:h-[90%] w-[90%] relative flex items-center justify-start flex-col">
         {!context.hasSubscribedToList && <EmailSlide data={data} />}
         <div
           style={{ backgroundColor: data.primaryColor }}
@@ -48,58 +50,63 @@ export default function Outro({
         >
           <p className="font-octo text-2xl">Game Over</p>
         </div>
-        <Text {...data} className="font-bold text-sm mt-12">
-          Your Score
-        </Text>
-        <Text
-          {...data}
-          style={{ color: data.primaryColor }}
-          className="text-4xl mb-1 font-light"
-        >
-          {score}
-        </Text>
-        {prevBest && (
-          <p className="font-octo">
-            Personal Best: {score > prevBest ? score : prevBest} ( Rank{" "}
-            {leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) + 1}{" "}
-            / {leaderboard.length})
-          </p>
-        )}
-        {score > 0 && score > prevBest && (
-          <Ranking
-            pos={
-              leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) + 1
-            }
-            best={leaderboard.length}
-            uid={context?.loggedIn?.uid}
-            data={data}
-          />
-        )}
+        <div className="overflow-y-scroll h-full flex flex-col items-center">
+          <Text {...data} className="font-bold text-sm mt-12">
+            Your Score
+          </Text>
 
-        <button
-          className="font-octo text-2xl"
-          onClick={() => {
-            context.setModal({
-              title: "Leaderboard",
-              onClose: () => {
-                context.setModal();
-              },
-              contents: (
-                <Leaderboard
-                  gameData={data}
-                  data={leaderboard}
-                  primaryColor={data.primaryColor}
-                  textColor={data.textColor}
-                />
-              ),
-            });
-          }}
-        >
-          View Leaderboard
-        </button>
-        <div className="h-4" />
-        {!context?.loggedIn?.uid && <SignUp data={data} />}
-        {/* {context?.loggedIn?.uid && (
+          <Text
+            {...data}
+            style={{ color: data.primaryColor }}
+            className="text-4xl mb-1 font-light"
+          >
+            {score}
+          </Text>
+          <ShareButton data={data} score={score} />
+          {prevBest && (
+            <p className="font-octo">
+              Personal Best: {score > prevBest ? score : prevBest} ( Rank{" "}
+              {leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) +
+                1}{" "}
+              / {leaderboard.length})
+            </p>
+          )}
+          {score > 0 && score > prevBest && (
+            <Ranking
+              pos={
+                leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) +
+                1
+              }
+              best={leaderboard.length}
+              uid={context?.loggedIn?.uid}
+              data={data}
+            />
+          )}
+
+          <button
+            className="font-octo text-2xl"
+            onClick={() => {
+              context.setModal({
+                title: "Leaderboard",
+                onClose: () => {
+                  context.setModal();
+                },
+                contents: (
+                  <Leaderboard
+                    gameData={data}
+                    data={leaderboard}
+                    primaryColor={data.primaryColor}
+                    textColor={data.textColor}
+                  />
+                ),
+              });
+            }}
+          >
+            View Leaderboard
+          </button>
+          <div className="h-4" />
+          {!context?.loggedIn?.uid && <SignUp data={data} />}
+          {/* {context?.loggedIn?.uid && (
           <Leaderboard
             gameData={data}
             data={leaderboard}
@@ -107,17 +114,25 @@ export default function Outro({
             textColor={data.textColor}
           />
         )} */}
-        <div className="text-white mt-4">
-          {!context?.loggedIn?.uid && (
-            <p className="text-black/60 text-center">OR</p>
-          )}
-
-          <UIButton
-            text="Play Again"
-            {...data}
-            onClick={() => setStage(selectStage())}
-            className="h-12 mb-48 rounded-full mt-4"
-          ></UIButton>
+          <div className="text-white mt-4">
+            {!context?.loggedIn?.uid && (
+              <p className="text-black/60 text-center">OR</p>
+            )}
+            <div className="flex flex-col">
+              <UIButton
+                text="Revive"
+                {...data}
+                onClick={() => setStage(selectStage())}
+                className="h-12  rounded-full mt-4"
+              />
+              <UIButton
+                text="Restart"
+                {...data}
+                onClick={() => onReset()}
+                className="h-12 rounded-full mt-4"
+              />
+            </div>
+          </div>
           {/* <BannerAd size="small" position="bottom" delay={1000} /> */}
         </div>
       </div>
@@ -157,7 +172,9 @@ function SignUp({ data }) {
 
   const signIn = () => {
     signInWithEmailAndPassword(auth, email, password)
-      .then(() => null)
+      .then((user) => {
+        verifyUserTracked(user.user.uid);
+      })
       .catch((error) => {
         setError(error.message);
       });
@@ -175,10 +192,34 @@ function SignUp({ data }) {
           },
           { merge: true }
         );
+        verifyUserTracked(user.user.id, true);
       })
       .catch((error) => {
         setError(error.message);
       });
+  };
+
+  const verifyUserTracked = async (id, withName) => {
+    if (withName) {
+      setDoc(
+        doc(firestore, "users", data.ownerId, "users", email),
+        {
+          active: true,
+          name: name,
+          id: id ?? "",
+        },
+        { merge: true }
+      );
+    } else {
+      setDoc(
+        doc(firestore, "users", data.ownerId, "users", email),
+        {
+          active: true,
+          id: id ?? "",
+        },
+        { merge: true }
+      );
+    }
   };
 
   return (

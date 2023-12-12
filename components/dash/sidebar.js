@@ -27,12 +27,12 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           setSelectedPane={() => setSelectedPane(4)}
           icon={<Squares2X2Icon className="h-5" />}
         />
-        <Row
+        {/* <Row
           text="Analytics"
           selected={selectedPane === 5}
           setSelectedPane={() => setSelectedPane(5)}
           icon={<ChartBarIcon className="h-5" />}
-        />
+        /> */}
         <Row
           text="Users"
           selected={selectedPane === 6}
@@ -50,12 +50,6 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           selected={selectedPane === 1}
           setSelectedPane={() => setSelectedPane(1)}
           icon={<TrophyIcon className="h-5" />}
-        />
-        <Row
-          text="Usage"
-          selected={selectedPane === 2}
-          setSelectedPane={() => setSelectedPane(2)}
-          icon={<ScaleIcon className="h-5" />}
         />
         <Row
           text="Account"

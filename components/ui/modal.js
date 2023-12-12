@@ -17,8 +17,8 @@ export default function Modal({ primaryColor }) {
   return (
     <div className="absolute top-0 left-0 h-full w-screen bg-black/70 backdrop-blur flex items-center justify-center">
       <div
-        style={{ top: 0, transition: "0.25s all", width: dimensions.x * 0.9 }}
-        className="relative h-[70%] bg-white mb-[20%] rounded-2xl top-[100%]"
+        style={{ top: 0, transition: "0.25s all" }}
+        className="relative h-[70%] w-[90%] bg-white  rounded-2xl top-[100%]"
       >
         <div
           style={{ backgroundColor: primaryColor }}

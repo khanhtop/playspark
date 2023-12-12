@@ -17,6 +17,7 @@ export default function GameCard({
   saving,
   onDelete,
   onShowInfo,
+  showActiveState,
 }) {
   const context = useAppContext();
   const [staticImageUrl, setStaticImageUrl] = useState();
@@ -64,7 +65,7 @@ export default function GameCard({
     >
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-lg font-titan uppercase">{game.name}</h3>
-        {onDelete && (
+        {!game.isActive && onDelete && (
           <XMarkIcon
             onClick={() => onDelete()}
             className="h-8 w-8 hover:text-sky-400 transition"
@@ -78,7 +79,7 @@ export default function GameCard({
       <h5 className="font-roboto text-md mb-4 opacity-100 h-[92px] overflow-hidden">
         {game.description}
       </h5>
-      <div className="h-[540px] mt-6">
+      <div className="relative h-[540px] mt-6">
         {loading ? (
           <div className="h-full w-full flex items-center justify-center">
             <ArrowPathIcon className="h-8 w-8 animate-spin" />
@@ -88,6 +89,11 @@ export default function GameCard({
             src={imageUrl}
             className="rounded-md h-full w-full object-cover"
           />
+        )}
+        {typeof showActiveState !== "undefined" && (
+          <div className="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-4 py-1 rounded-full">
+            <p>{showActiveState ? "Active" : "Inactive"}</p>
+          </div>
         )}
       </div>
 
@@ -132,7 +138,7 @@ export default function GameCard({
               <EllipsisVerticalIcon className={`text-white w-8`} />
             </button>
             {showMenu && (
-              <div className="absolute w-48 bg-[#222] bottom-14 right-0 rounded-xl border-2 border-cyan-500 px-2 py-2 flex flex-col gap-1">
+              <div className="absolute w-[200px] bg-[#222] bottom-14 right-0 rounded-xl border-2 border-cyan-500 px-2 py-2 flex flex-col gap-1">
                 {onShowInfo.map((item, key) => (
                   <div
                     key={key}

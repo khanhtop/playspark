@@ -23,7 +23,9 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 export default function Advert({ data, theme }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
-  const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
+  const [lockX, setLockX] = useState();
+  const [lockY, setLockY] = useState();
+  const [dimensions, setDimensions] = useState({ x: undefined, y: undefined });
   const [shouldRotate, setShouldRotate] = useState(false);
   const [score, setScore] = useState(0);
   const [leaderboard, setLeaderboard] = useState(
@@ -38,6 +40,12 @@ export default function Advert({ data, theme }) {
     setLives(1);
     setScore(score);
     setStage(2);
+  };
+
+  const reset = () => {
+    setLives(3);
+    setScore(0);
+    setStage(1);
   };
 
   useEffect(() => {
@@ -57,6 +65,36 @@ export default function Advert({ data, theme }) {
     }
   }, [score, context.loggedIn, context.profile]);
 
+  const determineConstraints = () => {
+    if (isIOS || isAndroid) {
+      setLockX(undefined);
+      setLockY(undefined);
+      return;
+    }
+    if (window?.frameElement?.offsetHeight) {
+      console.log("IN FRAME");
+      setLockX(window.frameElement?.offsetWidth);
+      setLockY(window.frameElement?.offsetHeight);
+      return;
+    }
+    if (data.landscape) {
+      console.log("NOT IN FRAME");
+      setLockY(window.innerWidth * 0.58);
+      return;
+    }
+    setLockX(window.innerHeight * 0.58);
+    setLockY(undefined);
+  };
+
+  const constrainToFrame = () => {
+    if (window?.frameElement) {
+      setDimensions({
+        x: window.frameElement?.offsetWidth,
+        y: window.frameElement?.offsetHeight,
+      });
+    }
+  };
+
   const getFrameDimensions = () => {
     if (!isIOS && !isAndroid) {
       return {
@@ -74,18 +112,15 @@ export default function Advert({ data, theme }) {
   const handleOrientationChange = (event) => {
     if (window?.frameElement?.offsetWidth) return;
     setTimeout(() => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
       if (
-        (data.landscape && height > width) ||
-        (!data.landscape && width > height)
+        (data.landscape && window.innerHeight > window.innerWidth) ||
+        (!data.landscape && window.innerWidth > window.innerHeight)
       ) {
         setShouldRotate(true);
       } else {
         setShouldRotate(false);
       }
-      setDimensions({ x: width, y: height });
-    }, 100);
+    }, 500);
   };
 
   useEffect(() => {
@@ -101,16 +136,16 @@ export default function Advert({ data, theme }) {
   }, [data]);
 
   useEffect(() => {
-    const { width, height } = getFrameDimensions();
     if (
-      (data.landscape && height > width) ||
-      (!data.landscape && width > height)
+      (isIOS || isAndroid) &&
+      ((data.landscape && window.innerHeight > window.innerWidth) ||
+        (!data.landscape && window.innerWidth > window.innerHeight))
     ) {
       setShouldRotate(true);
     } else {
       setShouldRotate(false);
     }
-    setDimensions({ x: width, y: height });
+    determineConstraints();
   }, []);
 
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
@@ -125,8 +160,8 @@ export default function Advert({ data, theme }) {
   return (
     <div
       style={{
-        width: dimensions.x,
-        height: dimensions.y,
+        width: lockX ?? "100%",
+        height: lockY ?? "100%",
         overflow: "hidden",
       }}
     >
@@ -161,6 +196,7 @@ export default function Advert({ data, theme }) {
           score={score}
           leaderboard={leaderboard}
           prevBest={prevBest}
+          onReset={() => reset()}
         />
       )}
       {stage === 3 && (
