@@ -56,6 +56,20 @@ let player_name = [
   "James Bouncer",
 ]
 
+let player_sprite_names = [
+  "australia_player_ready",
+  "pakistan_player_ready",
+  "p3_player_ready",
+  "p4_player_ready",
+  "p5_player_ready",
+  "p6_player_ready",
+  "p7_player_ready",
+]
+
+let player_socre = [
+  0, 0, 50, 100, 200, 300, 400, 
+]
+
 let n = 1;
 
 export default class CricketScene extends Phaser.Scene {
@@ -112,6 +126,7 @@ export default class CricketScene extends Phaser.Scene {
   private auths_right: any;
   private auth_select_btn: any;
   private auth_select_group: Phaser.GameObjects.Group;
+  private ui_item: any;
   private player: any;
   private is_battery: any;
   // private ball: Phaser.GameObjects.Image;
@@ -209,6 +224,8 @@ export default class CricketScene extends Phaser.Scene {
   private gray_bg: any;
   private game_pause: any;
 
+  private unlock_player_group: any;
+
   private wicketbar: any;
   private wicketbar_effect: any;
 
@@ -247,16 +264,22 @@ export default class CricketScene extends Phaser.Scene {
   private is_audio_setting: any;
   private audioSystem: any;
 
+  private params: any;
   private mark: any;
 
   private hit6_sounds: any;
   backgroundAudio: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
   score_out1: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
-  constructor(newGameType: string) {
+  constructor(newGameType: string, newParams: any) {
     super();
     CricketScene.instance = this;
     gameType = newGameType;
+    this.params = newParams;
+
+    this.params.fenceLogo = '/pong/' + gameType + '/fence.png';
+    this.params.sponsorLogo = '/pong/' + gameType + '/middle-logo.png';
+    this.params.maxScore = this.params.score
   }
 
   preload() {
@@ -449,10 +472,11 @@ export default class CricketScene extends Phaser.Scene {
     this.load.image('green', '/pong/' + gameType + '/green.png');
     this.load.image('battery', '/pong/' + gameType + '/battery.png');
     this.load.image('wicket', '/pong/' + gameType + '/wicket.png');
+    this.load.image('lock-player', '/pong/' + gameType + '/lock-player.png');
 
     this.load.image('score_pan', '/pong/' + gameType + '/score_pan.png');
-    this.load.image('fence', '/pong/' + gameType + '/fence.png');
-    this.load.image('middle-logo', '/pong/' + gameType + '/middle-logo.png');
+    this.load.image('fence', this.params.fenceLogo);
+    this.load.image('middle-logo',  this.params.sponsorLogo);
     this.load.image('wicket_icon', '/pong/' + gameType + '/wicket_icon.png');
     this.load.image(
       'auth_select_bg',
@@ -650,12 +674,14 @@ export default class CricketScene extends Phaser.Scene {
       fire_count: 0,
       score_count: 0,
       missFire: 0,
-      totalScore: 0,
+      totalScore: this.params.score,
+      maxScore: this.params.maxScore,
       itemCount: {
         FIRE: 0,
         BOOSTER: 0,
       },
     };
+    this.ui_item = {};
     this.level = 0;
     this.flag = false;
     this.is_audio_setting = true;
@@ -861,7 +887,7 @@ export default class CricketScene extends Phaser.Scene {
     this.anims.create({
       key: 'paki_ready_animation',
       frames: paki_ready_frame,
-      frameRate: 6,
+      frameRate: 10,
       repeat: -1,
     });
 
@@ -894,7 +920,7 @@ export default class CricketScene extends Phaser.Scene {
       this.anims.create({
         key: `p${i}_ready_animation`,
         frames: ready_frame,
-        frameRate: 6,
+        frameRate: 10,
         repeat: -1,
       });
   
@@ -1031,6 +1057,24 @@ export default class CricketScene extends Phaser.Scene {
           this.auth_country.setText(player_name[author_id - 1]);
           break;
       }
+
+      if(this.scorePanel.maxScore < player_socre[author_id - 1]) {
+        this.ui_item['lock_player'].setVisible(true);
+        this.auths.setAlpha(0.8);
+        this.ui_item['lock_player_info'].setAlpha(1);
+        this.ui_item['lock_player_info'].setText(`SCORE ${player_socre[author_id - 1]} TO UNLOCK`);
+
+        this.auth_select_btn.setVisible(false);
+        this.ui_item['auth_btn_info'].setVisible(false);
+      } else {
+        this.ui_item['lock_player'].setVisible(false);
+        this.auths.setAlpha(1);
+        this.ui_item['lock_player_info'].setAlpha(0)
+
+        this.auth_select_btn.setVisible(true);
+        this.ui_item['auth_btn_info'].setVisible(true);
+      }
+
     };
 
     this.auth_country = this.add
@@ -1057,7 +1101,25 @@ export default class CricketScene extends Phaser.Scene {
       .setInteractive()
       .setDepth(1);
     this.auths.play('aus_ready_animation');
-    console.log(this.auths.width, 'hhhhhhhhhhhh', this.auths.height);
+
+    this.ui_item['lock_player'] = this.add.sprite(this.auths.x, this.auths.y, 'lock-player').setDisplaySize(50 * w / 1248, 50 * w / 1248).setVisible(false).setDepth(1);
+    this.ui_item['lock_player_info'] = this.add
+    .text(w / 2, h / 2 + 135 * w / 1248, 'SCORE 50 TO UNLOCK', {...this.country_text_style, 
+      fill: '#fff',
+      fontSize: 25 * w / 1248 + 'px',
+    })
+    .setOrigin(0.5, 0.5)
+    .setAlpha(0)
+    .setDepth(1)
+
+    this.ui_item['auth_btn_info'] = this.add
+    .text(w / 2, h / 2 + 135 * w / 1248, 'SELECT', {...this.country_text_style, 
+      fill: '#222',
+      fontSize: 28 * w / 1248 + 'px',
+    })
+    .setOrigin(0.5, 0.5)
+    .setAlpha(1)
+    .setDepth(1)
 
     this.auth_select_group.add(this.auth_select_bg);
     this.auth_select_group.add(this.auth_country);
@@ -1065,16 +1127,9 @@ export default class CricketScene extends Phaser.Scene {
     this.auth_select_group.add(this.auths_right);
     this.auth_select_group.add(this.auths);
     this.auth_select_group.add(this.auth_select_btn);
-    this.auth_select_group.add(
-      this.add
-      .text(w / 2, h / 2 + 135 * w / 1248, 'SELECT', {...this.country_text_style, 
-        fill: '#222',
-        fontSize: 28 * w / 1248 + 'px',
-      })
-      .setOrigin(0.5, 0.5)
-      .setAlpha(1)
-      .setDepth(1)
-    );
+    this.auth_select_group.add(this.ui_item['auth_btn_info']);
+
+    this.auth_select_group.add(this.ui_item['lock_player']);
 
     this.auth_select_btn.setInteractive({ cursor: 'pointer' });
       console.log(w, "------")
@@ -1355,6 +1410,11 @@ export default class CricketScene extends Phaser.Scene {
       this
     );
 
+    this.player.on('pointerout', () => {
+      // Handle the mouse exit event here
+      this.initReadyPlayer();
+    }, this);
+
     this.player.on(
       'pointerup',
       () => {
@@ -1373,13 +1433,7 @@ export default class CricketScene extends Phaser.Scene {
             'animationcomplete',
             (anim) => {
               if(anim.key.includes('fire_ready_animation')) return;
-              if (author_id == 1) {
-                this.player.play('aus_ready_animation');
-              } else if(author_id == 2) {
-                this.player.play('paki_ready_animation');
-              } else {
-                this.player.play(`p${author_id}_ready_animation`);
-              }
+              this.initReadyPlayer();
             },
             this
           );
@@ -1836,6 +1890,35 @@ export default class CricketScene extends Phaser.Scene {
 
     this.wicket_text_group.setVisible(false);
 
+
+    this.unlockBodyStyle = {
+      fontFamily: 'customFont',
+      fontSize: Math.round(38 * w / 1248) + 'px',
+      fill: '#ffffff',
+    };
+
+    // UNLOCK PLAYER PART
+    this.unlock_player_group = this.add.group();
+
+    this.ui_item['unlock_player'] = this.add.sprite(w / 2, h / 2 - 150 * h / 688, player_sprite_names[2]);
+    this.ui_item['unlock_under_text'] = this.add.text(w / 2, h / 2, 'PLAYER UNLOCKED!', {
+      ...this.unlockBodyStyle,
+      align: 'center',
+    }).setOrigin(0.5, 0.5);
+    this.ui_item['unlock_under_info_text'] = this.add.text(w / 2, h / 2 + 60 * h / 688, `YOU UNLOCKED ${player_name[4]}`, {
+      ...this.unlockBodyStyle,
+      align: 'center'
+    }).setOrigin(0.5, 0.5);
+
+    // this.ui_item['unlock_under_info_text'].addColor('#ff0000', this.ui_item['unlock_under_info_text'].text.indexOf('UNLOCKED'), 'UNLOCKED'.length);
+
+    this.unlock_player_group.add(this.ui_item['unlock_player']);
+    this.unlock_player_group.add(this.ui_item['unlock_under_text']);
+    this.unlock_player_group.add(this.ui_item['unlock_under_info_text']);
+
+    this.unlock_player_group.setVisible(false);
+
+
     //show spritesheet
     this.fireSprite = this.add
       .sprite(w / 9 - 30 * w / 1248, h * 0.36, 'fireEffect')
@@ -1895,7 +1978,17 @@ export default class CricketScene extends Phaser.Scene {
 
     const overlapCallback = (num) => {
       if (this.ball.type == 'old') {
+
+        const playerIdx = this.getUnlockPlayerId();
+
         this.scorePanel.totalScore += num;
+
+        const newPlayerIdx = this.getUnlockPlayerId();
+
+        if(playerIdx != newPlayerIdx) {
+          this.unlockPlayer();
+        }
+
         switch (num) {
           case 2:
             score2_cnt++;
@@ -3175,6 +3268,64 @@ export default class CricketScene extends Phaser.Scene {
 
   startRound() {}
 
+  initReadyPlayer() {
+    this.power_flag = false;
+
+    if (author_id == 1) {
+      this.player.play('aus_ready_animation');
+    } else if(author_id == 2) {
+      this.player.play('paki_ready_animation');
+    } else {
+      this.player.play(`p${author_id}_ready_animation`);
+    }
+    power = 0;
+  }
+
+  unlockPlayer() {
+
+    const index = this.getUnlockPlayerId();
+
+    this.ball.type = 'new';
+    this.audioSystem.POWER_SIX_SMASH[this.getRandomNumbers(0, this.audioSystem.POWER_SIX_SMASH.length - 1, 1)].play();
+
+    // this.ui_item['unlock_under_info_text'].addColor('#ff0000', this.ui_item['unlock_under_info_text'].text.indexOf('UNLOCKED'), 'UNLOCKED'.length);
+
+    this.ui_item['unlock_under_info_text'].setText(`YOU UNLOCKED ${player_name[4]}`);
+    this.ui_item['unlock_player'].setTexture(player_sprite_names[index]);
+
+    this.ball.setPosition(w + 50, 0);
+    this.ball.setVelocity(0, 0);
+    this.gray_bg.setAlpha(0.45);
+    this.physics.world.disable(this.ball);
+
+    this.unlock_player_group.setVisible(true);
+    this.game_pause = true;
+    this.time.delayedCall(
+      3000,
+      () => {
+        this.game_pause = false;
+        this.gray_bg.setAlpha(0);
+        this.unlock_player_group.setVisible(false);
+        this.fire_ball();
+      },
+      null,
+      this
+    );
+
+  }
+
+  getUnlockPlayerId() {
+    const score = this.scorePanel.totalScore
+    let index = 0
+    player_socre.forEach((ps, i) => {
+      if(score >= ps) {
+        index = i;
+      }
+    })
+
+    return index;
+  }
+
   update(time, delta) {
     const angle = Phaser.Math.Angle.Between(this.ball.x + this.ball.displayWidth / 2, this.ball.y + this.ball.displayHeight / 2, this.ballEffect.x, this.ballEffect.y);
     this.ballEffect.setPosition(this.ball.x + this.ball.displayWidth / 2, this.ball.y + this.ball.displayHeight / 2);
@@ -3215,6 +3366,7 @@ export default class CricketScene extends Phaser.Scene {
         this.runs_show.setScale(0);
         this.wicketbar.setVisible(true);
         this.wicketbar.play('wicketbar_animation');
+        this.audioSystem.OUT[this.getRandomNumbers(0, this.audioSystem.OUT.length - 1, 1)].play();
       }
       if (this.is_green_powerup == true) {
         green_powerup_cnt++;
@@ -3277,8 +3429,8 @@ export default class CricketScene extends Phaser.Scene {
       this.ball.x > this.right_fall.x
     ) {
       // this.Crowd_v1_Booing_wav.play();
-      this.audioSystem.WICKET[this.getRandomNumbers(0, this.audioSystem.WICKET.length - 1, 1)].play();
-      
+      // this.audioSystem.WICKET[this.getRandomNumbers(0, this.audioSystem.WICKET.length - 1, 1)].play();
+      this.initReadyPlayer();
       console.log('hereeeeeeeeeeeeeeeeeee');
       this.fire_ball();
       over_cnt++;
