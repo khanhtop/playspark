@@ -188,6 +188,7 @@ export default function Advert({ data, theme }) {
           score: score,
           brandLogo: data?.brandLogo,
           sponsorLogo: data?.sponsorLogo,
+          maxscore: prevBest ?? 0,
         })}
       {stage === 2 && (
         <Outro
