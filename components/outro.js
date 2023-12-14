@@ -124,7 +124,20 @@ export default function Outro({
               />
             </div>
           </div>
-
+          <button
+            className="font-octo text-2xl"
+            onClick={() => {
+              context.setModal({
+                title: "Leaderboard",
+                onClose: () => {
+                  context.setModal();
+                },
+                contents: <SignUp data={data} />,
+              });
+            }}
+          >
+            View O
+          </button>
           <div className="h-4" />
           {!context?.loggedIn?.uid && <SignUp data={data} />}
           <div className="text-white mt-4 landscape:hidden">
