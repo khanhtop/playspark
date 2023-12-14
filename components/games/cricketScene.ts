@@ -49,11 +49,11 @@ let isFireballRunnig = false;
 let player_name = [
   "Australian",
   "Pakistan",
-  "Merv HowzatHughes",
-  "Mark ThirdMan",
-  "Mitch Bowlstotheleft",
   "Gus Wicketland",
   "James Bouncer",
+  "Mitch Bowlstotheleft",
+  "Merv HowzatHughes",
+  "Mark ThirdMan",
 ]
 
 let player_sprite_names = [
@@ -994,14 +994,14 @@ export default class CricketScene extends Phaser.Scene {
     // this.player.play('aus_ready_animation')
 
     this.power_effect = this.physics.add
-      .sprite(170 * w / 1248, h / 2 - 100 * h / 688, 'power_effect')
+      .sprite(20 * w / 1248, h / 2 - 10 * h / 688, 'power_effect')
       .setDisplaySize(190 * w / 1248, 30 * w / 1248)
       .setOrigin(0)
       .setAlpha(1);
 
     this.auth_select_bg = this.add
       .sprite(w / 2, h / 2, 'auth_select_bg')
-      .setDisplaySize(w * 0.4, h * 0.7)
+      .setDisplaySize(w * 0.4, h * 0.75)
       .setOrigin(0.5, 0.5)
       .setDepth(1);
 
@@ -1410,10 +1410,10 @@ export default class CricketScene extends Phaser.Scene {
       this
     );
 
-    this.player.on('pointerout', () => {
-      // Handle the mouse exit event here
-      this.initReadyPlayer();
-    }, this);
+    // this.player.on('pointerout', () => {
+    //   // Handle the mouse exit event here
+    //   this.initReadyPlayer();
+    // }, this);
 
     this.player.on(
       'pointerup',
@@ -1601,7 +1601,7 @@ export default class CricketScene extends Phaser.Scene {
 
     this.runs_show = this.add
       .text(w / 2, h / 2, '6 RUNS!', this.runs_6_font)
-      .setDisplaySize(350, 160)
+      .setDisplaySize(350* w / 1266, 160* w / 1266)
       .setAlpha(1)
       .setDepth(1)
       .setScale(0)
@@ -1690,11 +1690,11 @@ export default class CricketScene extends Phaser.Scene {
     this.green_text_group = this.add.group();
 
     this.green_text_header = this.add
-      .text(w / 2 - 120, h / 2.5, 'POWER BALL', this.unlockHeaderStyle)
+      .text(w / 2 - 120* w / 1266, h / 2.5, 'POWER BALL', this.unlockHeaderStyle)
       .setOrigin(0.5);
     this.green_text_header_g = this.add
       .text(
-        w / 2 - 120 + this.green_text_header.width,
+        w / 2 - 120* w / 1266 + this.green_text_header.width,
         h / 2.5,
         'UNLOCKED',
         this.unlockHeaderStyle_g
@@ -1703,7 +1703,7 @@ export default class CricketScene extends Phaser.Scene {
     this.green_text_header_e = this.add
       .text(
         w / 2 -
-          195 +
+          255* w / 1266 +
           this.green_text_header.width +
           this.green_text_header_g.width,
         h / 2.5,
@@ -1712,11 +1712,11 @@ export default class CricketScene extends Phaser.Scene {
       )
       .setOrigin(0.5);
     this.green_text_body = this.add
-      .text(w / 2 - 160, h / 2, 'GET', this.unlockBodyStyle)
+      .text(w / 2 - 220* w / 1266, h / 2, 'GET', this.unlockBodyStyle)
       .setOrigin(0.5);
     this.green_text_body_g = this.add
       .text(
-        w / 2 - 85 + this.green_text_body.width,
+        w / 2 - 85* w / 1266 + this.green_text_body.width,
         h / 2,
         'X5 MULTIPLIER',
         this.unlockBodyStyle_g
@@ -1724,14 +1724,14 @@ export default class CricketScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.green_text_body_e = this.add
       .text(
-        w / 2 - 110 + this.green_text_body.width + this.green_text_body_g.width,
+        w / 2 - 110* w / 1266 + this.green_text_body.width + this.green_text_body_g.width,
         h / 2,
         'ON YOUR',
         this.unlockBodyStyle
       )
       .setOrigin(0.5);
     this.green_text_body2 = this.add
-      .text(w / 2, h / 1.8, 'NEXT 3 HITS.', this.unlockBodyStyle)
+      .text(w / 2, h / 2 + 60 * h / 688, 'NEXT 3 HITS.', this.unlockBodyStyle)
       .setOrigin(0.5);
 
     this.green_text_group.add(this.green_effect);
@@ -1760,11 +1760,11 @@ export default class CricketScene extends Phaser.Scene {
     this.red_text_group = this.add.group();
 
     this.red_text_header = this.add
-      .text(w / 2 - 120, h / 2.5, 'SIX SMASH', this.unlockHeaderStyle)
+      .text(w / 2 - 150* w / 1266, h / 2.5, 'SIX SMASH', this.unlockHeaderStyle)
       .setOrigin(0.5);
     this.red_text_header_g = this.add
       .text(
-        w / 2 - 120 + this.red_text_header.width,
+        w / 2 - 120* w / 1266 + this.red_text_header.width,
         h / 2.5,
         'UNLOCKED',
         this.unlockHeaderStyle_g
@@ -1772,25 +1772,25 @@ export default class CricketScene extends Phaser.Scene {
       .setOrigin(0.5);
     this.red_text_header_e = this.add
       .text(
-        w / 2 - 195 + this.red_text_header.width + this.red_text_header_g.width,
+        w / 2 - 235* w / 1266 + this.red_text_header.width + this.red_text_header_g.width,
         h / 2.5,
         '!',
         this.unlockHeaderStyle
       )
       .setOrigin(0.5);
     this.red_text_body = this.add
-      .text(w / 2 - 80, h / 2, 'ALL TARGETS ARE', this.unlockBodyStyle)
+      .text(w / 2 - 80* w / 1266, h / 2, 'ALL TARGETS ARE', this.unlockBodyStyle)
       .setOrigin(0.5);
     this.red_text_body_g = this.add
       .text(
-        w / 2 - 125 + this.red_text_body.width,
+        w / 2 - 125* w / 1266 + this.red_text_body.width,
         h / 2,
         '6 RUNS',
         this.unlockBodyStyle_g
       )
       .setOrigin(0.5);
     this.red_text_body2 = this.add
-      .text(w / 2, h / 1.8, 'NEXT 3 HITS.', this.unlockBodyStyle)
+      .text(w / 2, h / 2 + 60 * h / 688, 'NEXT 3 HITS.', this.unlockBodyStyle)
       .setOrigin(0.5);
 
     this.red_text_group.add(this.unlock_red);
@@ -1812,12 +1812,12 @@ export default class CricketScene extends Phaser.Scene {
     this.battery_text_group = this.add.group();
 
     this.battery_text_header = this.add
-      .text(w / 2 - 110, h / 2.5, 'FREE HIT', this.unlockHeaderStyle)
+      .text(w / 2 - 140 * w / 1266, h / 2 - 60 * h / 688, 'FREE HIT', this.unlockHeaderStyle)
       .setOrigin(0.5);
     this.battery_text_header_g = this.add
       .text(
-        w / 2 - 85 + this.battery_text_header.width,
-        h / 2.5,
+        w / 2 - 85* w / 1266 + this.battery_text_header.width,
+        h / 2 - 60 * h / 688,
         'UNLOCKED',
         this.unlockHeaderStyle_g
       )
@@ -1825,10 +1825,10 @@ export default class CricketScene extends Phaser.Scene {
     this.battery_text_header_e = this.add
       .text(
         w / 2 -
-          165 +
+          220 * w / 1266 +
           this.battery_text_header.width +
           this.battery_text_header_g.width,
-        h / 2.5,
+        h / 2 - 60 * h / 688,
         '!',
         this.unlockHeaderStyle
       )
@@ -1837,7 +1837,7 @@ export default class CricketScene extends Phaser.Scene {
       .text(w / 2, h / 2, 'YOU CAN NOT GO OUT', this.unlockBodyStyle)
       .setOrigin(0.5);
     this.battery_text_body2 = this.add
-      .text(w / 2, h / 1.8, 'ON YOUR NEXT 3 HITS.', this.unlockBodyStyle)
+      .text(w / 2, h / 2 + 60 * h / 688, 'ON YOUR NEXT 3 HITS.', this.unlockBodyStyle)
       .setOrigin(0.5);
 
     this.battery_text_group.add(this.unlock_battery);
@@ -1857,11 +1857,11 @@ export default class CricketScene extends Phaser.Scene {
       .setDisplaySize(0.1 * w, 0.1 * w);
 
     this.wicket_text_header = this.add
-      .text(w / 2 - 100, h / 2.5, 'WILD WICKET', this.unlockHeaderStyle)
+      .text(w / 2 - 150* w / 1266, h / 2.5, 'WILD WICKET', this.unlockHeaderStyle)
       .setOrigin(0.5);
     this.wicket_text_header_g = this.add
       .text(
-        w / 2 - 110 + this.wicket_text_header.width,
+        w / 2 - 130* w / 1266 + this.wicket_text_header.width,
         h / 2.5,
         'UNLOCKED',
         this.unlockHeaderStyle_g
@@ -1870,7 +1870,7 @@ export default class CricketScene extends Phaser.Scene {
     this.wicket_text_header_e = this.add
       .text(
         w / 2 -
-          195 +
+          255* w / 1266 +
           this.wicket_text_header.width +
           this.wicket_text_header_g.width,
         h / 2.5,
@@ -1900,7 +1900,7 @@ export default class CricketScene extends Phaser.Scene {
     // UNLOCK PLAYER PART
     this.unlock_player_group = this.add.group();
 
-    this.ui_item['unlock_player'] = this.add.sprite(w / 2, h / 2 - 150 * h / 688, player_sprite_names[2]);
+    this.ui_item['unlock_player'] = this.add.sprite(w / 2, h / 2 - 150 * h / 688, player_sprite_names[2]).setDisplaySize(144 * w / 1248, 180 * w / 1248);
     this.ui_item['unlock_under_text'] = this.add.text(w / 2, h / 2, 'PLAYER UNLOCKED!', {
       ...this.unlockBodyStyle,
       align: 'center',
@@ -1985,7 +1985,7 @@ export default class CricketScene extends Phaser.Scene {
 
         const newPlayerIdx = this.getUnlockPlayerId();
 
-        if(playerIdx != newPlayerIdx) {
+        if(playerIdx != newPlayerIdx && this.scorePanel.totalScore > this.scorePanel.maxScore) {
           this.unlockPlayer();
         }
 
@@ -2606,20 +2606,7 @@ export default class CricketScene extends Phaser.Scene {
           multi_4_6_cnt = 0;
           double4_cnt = 0;
           double6_cnt = 0;
-          this.audioSystem.OUT[this.getRandomNumbers(0, this.audioSystem.OUT.length - 1, 1)].play();
 
-          this.hitball_effect.setPosition(this.score_out.x, this.score_out.y);
-          this.score_out.setVisible(false);
-          this.hitball_effect.setVisible(true).play('hitball_animation');
-          this.time.delayedCall(
-            1000,
-            () => {
-              this.score_out.setVisible(true);
-            },
-            null,
-            this
-          );
-          this.fire_ball();
           if (this.is_battery) {
             // battery_cnt++;
             // if (battery_cnt == 3) {
@@ -2627,6 +2614,22 @@ export default class CricketScene extends Phaser.Scene {
             //   battery_cnt = 0;
             // }
           } else {
+
+            this.audioSystem.OUT[this.getRandomNumbers(0, this.audioSystem.OUT.length - 1, 1)].play();
+
+            this.hitball_effect.setPosition(this.score_out.x, this.score_out.y);
+            this.score_out.setVisible(false);
+            this.hitball_effect.setVisible(true).play('hitball_animation');
+            this.time.delayedCall(
+              1000,
+              () => {
+                this.score_out.setVisible(true);
+              },
+              null,
+              this
+            );
+
+            
             this.wicket.setText(--wickets);
             this.updateRunsShow('Out');
             this.runs_show.setScale(0);
@@ -2647,6 +2650,10 @@ export default class CricketScene extends Phaser.Scene {
               this
             );
           }
+
+          this.fire_ball();
+
+
           if (this.is_green_powerup == true) {
             green_powerup_cnt++;
             if (green_powerup_cnt == 3) {
@@ -2675,20 +2682,7 @@ export default class CricketScene extends Phaser.Scene {
           multi_4_6_cnt = 0;
           double4_cnt = 0;
           double6_cnt = 0;
-          this.audioSystem.OUT[this.getRandomNumbers(0, this.audioSystem.OUT.length - 1, 1)].play();
 
-          this.hitball_effect.setPosition(this.score_out1.x, this.score_out1.y);
-          this.score_out1.setVisible(false);
-          this.hitball_effect.setVisible(true).play('hitball_animation');
-          this.time.delayedCall(
-            1000,
-            () => {
-              this.score_out1.setVisible(true);
-            },
-            null,
-            this
-          );
-          this.fire_ball();
           if (this.is_battery) {
             // battery_cnt++;
             // if (battery_cnt == 3) {
@@ -2696,6 +2690,20 @@ export default class CricketScene extends Phaser.Scene {
             //   battery_cnt = 0;
             // }
           } else {
+            this.audioSystem.OUT[this.getRandomNumbers(0, this.audioSystem.OUT.length - 1, 1)].play();
+
+            this.hitball_effect.setPosition(this.score_out1.x, this.score_out1.y);
+            this.score_out1.setVisible(false);
+            this.hitball_effect.setVisible(true).play('hitball_animation');
+            this.time.delayedCall(
+              1000,
+              () => {
+                this.score_out1.setVisible(true);
+              },
+              null,
+              this
+            );
+
             this.wicket.setText(--wickets);
             this.updateRunsShow('Out');
             this.runs_show.setScale(0);
@@ -2716,6 +2724,10 @@ export default class CricketScene extends Phaser.Scene {
               this
             );
           }
+
+          this.fire_ball();
+
+
           if (this.is_green_powerup == true) {
             green_powerup_cnt++;
             if (green_powerup_cnt == 3) {
@@ -3050,7 +3062,7 @@ export default class CricketScene extends Phaser.Scene {
       if (num == 'Out') {
         this.runs_show.setText(num.toString());
       } else {
-        this.runs_show.setText(num.toString() + ' Runs');
+        this.runs_show.setText(num.toString() + (num == 1? ' Run' : ' Runs'));
       }
     };
 
@@ -3120,10 +3132,10 @@ export default class CricketScene extends Phaser.Scene {
       console.log('111111sdfssss11111111111');
 
       for (let i = 0; i < 5; i++) {
-        this.scoreList1[i].setPosition(-200, -200);
-        this.scoreList2[i].setPosition(-200, -200);
+        this.scoreList1[i].setPosition(-2000, -2000);
+        this.scoreList2[i].setPosition(-2000, -2000);
       }
-      this.scoreList1[5].setPosition(-200, -200);
+      this.scoreList1[5].setPosition(-2000, -2000);
 
       this.score6_1.setPosition(w * 0.9, h * 0.9);
       this.score6_2.setPosition(w * 0.918, h * 0.715);
@@ -3134,17 +3146,17 @@ export default class CricketScene extends Phaser.Scene {
       console.log('22222222afgasfdgadf2222222222222222222222222');
 
       this.is_random = true;
-      this.score6_1.setPosition(-200, -200);
-      this.score6_2.setPosition(-200, -200);
-      this.score6_3.setPosition(-200, -200);
-      this.score6_4.setPosition(-200, -200);
-      this.score6_5.setPosition(-200, -200);
+      this.score6_1.setPosition(-2000, -2000);
+      this.score6_2.setPosition(-2000, -2000);
+      this.score6_3.setPosition(-2000, -2000);
+      this.score6_4.setPosition(-2000, -2000);
+      this.score6_5.setPosition(-2000, -2000);
 
       for (let j = 0; j < 5; j++) {
-        this.scoreList1[j].setPosition(-200, -200);
-        this.scoreList2[j].setPosition(-200, -200);
+        this.scoreList1[j].setPosition(-2000, -2000);
+        this.scoreList2[j].setPosition(-2000, -2000);
       }
-      this.scoreList1[5].setPosition(-200, -200);
+      this.scoreList1[5].setPosition(-2000, -2000);
 
       const randomNumbers1 = this.getRandomNumbers(0, 3, this.level < 6? 3 : 2);
       const randomNumbers2 = this.getRandomNumbers(0, 4, 1);
@@ -3172,10 +3184,10 @@ export default class CricketScene extends Phaser.Scene {
       console.log('33333333fagfdgadfg33333333333333333333333');
       n = this.level;
       for (let i = 0; i < 5; i++) {
-        this.scoreList1[i].setPosition(-200, -200);
-        this.scoreList2[i].setPosition(-200, -200);
+        this.scoreList1[i].setPosition(-2000, -2000);
+        this.scoreList2[i].setPosition(-2000, -2000);
       }
-      this.scoreList1[5].setPosition(-200, -200);
+      this.scoreList1[5].setPosition(-2000, -2000);
 
       const randomNumbers1 = this.getRandomNumbers(0, 3, this.level < 6? 3 : 2);
       const randomNumbers2 = this.getRandomNumbers(0, 4, 1);
@@ -3291,7 +3303,7 @@ export default class CricketScene extends Phaser.Scene {
     // this.ui_item['unlock_under_info_text'].addColor('#ff0000', this.ui_item['unlock_under_info_text'].text.indexOf('UNLOCKED'), 'UNLOCKED'.length);
 
     this.ui_item['unlock_under_info_text'].setText(`YOU UNLOCKED ${player_name[4]}`);
-    this.ui_item['unlock_player'].setTexture(player_sprite_names[index]);
+    this.ui_item['unlock_player'].setTexture(player_sprite_names[index]).setDisplaySize(144 * w / 1248, 180 * w / 1248);
 
     this.ball.setPosition(w + 50, 0);
     this.ball.setVelocity(0, 0);
@@ -3354,20 +3366,22 @@ export default class CricketScene extends Phaser.Scene {
       this.count_flag = true;
       isClicked = false;
 
-      if (this.is_battery) {
+      if (!this.is_battery) {
         // battery_cnt++;
         // if (battery_cnt == 3) {
         //   battery_cnt = 0;
         //   this.is_battery = false;
         // }
-      } else {
+      // } else {
         this.wicket.setText(--wickets);
         this.updateRunsShow('Out');
         this.runs_show.setScale(0);
         this.wicketbar.setVisible(true);
         this.wicketbar.play('wicketbar_animation');
-        this.audioSystem.OUT[this.getRandomNumbers(0, this.audioSystem.OUT.length - 1, 1)].play();
+        // this.audioSystem.OUT[this.getRandomNumbers(0, this.audioSystem.OUT.length - 1, 1)].play();
+        this.audioSystem.WICKET[this.getRandomNumbers(0, this.audioSystem.WICKET.length - 1, 1)].play();
       }
+
       if (this.is_green_powerup == true) {
         green_powerup_cnt++;
         if (green_powerup_cnt == 3) {
@@ -3390,24 +3404,27 @@ export default class CricketScene extends Phaser.Scene {
           this.red_powerup_group.setVisible(false);
         }
       }
+      
+      if(!this.is_battery) {
+        this.tweens.add({
+          targets: this.runs_show,
+          scaleX: 1,
+          scaleY: 1,
+          alpha: 1,
+          duration: 800,
+          ease: 'Bounce',
+        });
+        this.time.delayedCall(
+          1000,
+          () => {
+            this.runs_show.setAlpha(0);
+            this.wicketbar.setVisible(false);
+          },
+          null,
+          this
+        );
+      }
 
-      this.tweens.add({
-        targets: this.runs_show,
-        scaleX: 1,
-        scaleY: 1,
-        alpha: 1,
-        duration: 800,
-        ease: 'Bounce',
-      });
-      this.time.delayedCall(
-        1000,
-        () => {
-          this.runs_show.setAlpha(0);
-          this.wicketbar.setVisible(false);
-        },
-        null,
-        this
-      );
     }
 
     if (this.power_flag == true && isClicked) {
