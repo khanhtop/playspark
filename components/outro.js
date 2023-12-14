@@ -44,77 +44,90 @@ export default function Outro({
     <div className="bg-[#222] h-full w-full flex items-center justify-center">
       <div className="relative bg-white rounded-2xl text-black font-light h-[80%] portrait:h-[90%] w-[90%] relative flex items-center justify-start flex-col">
         {!context.hasSubscribedToList && <EmailSlide data={data} />}
+
         <div
           style={{ backgroundColor: data.primaryColor }}
-          className="text-white absolute w-[80%] h-12 border-2 border-white left-[10%] -mt-4 rounded-full flex items-center justify-center"
+          className="text-white absolute w-[80%] h-12 border-2 border-white left-[10%] -mt-4 rounded-full flex items-center justify-center z-10"
         >
           <p className="font-octo text-2xl">Game Over</p>
         </div>
-        <div className="overflow-y-scroll h-full flex flex-col items-center">
-          <Text {...data} className="font-bold text-sm mt-12">
-            Your Score
-          </Text>
 
-          <Text
-            {...data}
-            style={{ color: data.primaryColor }}
-            className="text-4xl mb-1 font-light"
-          >
-            {score}
-          </Text>
-          <ShareButton data={data} score={score} />
-          {prevBest && (
-            <p className="font-octo">
-              Personal Best: {score > prevBest ? score : prevBest} ( Rank{" "}
-              {leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) +
-                1}{" "}
-              / {leaderboard.length})
-            </p>
-          )}
-          {score > 0 && score > prevBest && (
-            <Ranking
-              pos={
-                leaderboard.findIndex((a) => a.uid === context?.loggedIn?.uid) +
-                1
-              }
-              best={leaderboard.length}
-              uid={context?.loggedIn?.uid}
-              data={data}
-            />
-          )}
+        <div className="overflow-y-scroll h-full w-full flex portrait:flex-col portrait:items-center pt-12 pb-8">
+          <div className="min-w-[300px] flex flex-col items-center">
+            <Text {...data} className="font-bold text-sm w-full text-center">
+              Your Score
+            </Text>
 
-          <button
-            className="font-octo text-2xl"
-            onClick={() => {
-              context.setModal({
-                title: "Leaderboard",
-                onClose: () => {
-                  context.setModal();
-                },
-                contents: (
-                  <Leaderboard
-                    gameData={data}
-                    data={leaderboard}
-                    primaryColor={data.primaryColor}
-                    textColor={data.textColor}
-                  />
-                ),
-              });
-            }}
-          >
-            View Leaderboard
-          </button>
+            <Text
+              {...data}
+              style={{ color: data.primaryColor }}
+              className="text-4xl mb-1 font-light"
+            >
+              {score}
+            </Text>
+            <ShareButton data={data} score={score} />
+            {prevBest && (
+              <p className="font-octo">
+                Personal Best: {score > prevBest ? score : prevBest} ( Rank{" "}
+                {leaderboard.findIndex(
+                  (a) => a.uid === context?.loggedIn?.uid
+                ) + 1}{" "}
+                / {leaderboard.length})
+              </p>
+            )}
+            {score > 0 && score > prevBest && (
+              <Ranking
+                pos={
+                  leaderboard.findIndex(
+                    (a) => a.uid === context?.loggedIn?.uid
+                  ) + 1
+                }
+                best={leaderboard.length}
+                uid={context?.loggedIn?.uid}
+                data={data}
+              />
+            )}
+
+            <button
+              className="font-octo text-2xl"
+              onClick={() => {
+                context.setModal({
+                  title: "Leaderboard",
+                  onClose: () => {
+                    context.setModal();
+                  },
+                  contents: (
+                    <Leaderboard
+                      gameData={data}
+                      data={leaderboard}
+                      primaryColor={data.primaryColor}
+                      textColor={data.textColor}
+                    />
+                  ),
+                });
+              }}
+            >
+              View Leaderboard
+            </button>
+            <div className="flex w-[80%] flex-col portrait:hidden">
+              <UIButton
+                text="Revive"
+                {...data}
+                onClick={() => setStage(selectStage())}
+                className="h-8 text-xs rounded-full mt-0"
+              />
+              <UIButton
+                text="Restart"
+                {...data}
+                onClick={() => onReset()}
+                className="h-8 text-xs rounded-full mt-2"
+              />
+            </div>
+          </div>
+
           <div className="h-4" />
           {!context?.loggedIn?.uid && <SignUp data={data} />}
-          {/* {context?.loggedIn?.uid && (
-          <Leaderboard
-            gameData={data}
-            data={leaderboard}
-            primaryColor={data.primaryColor}
-            textColor={data.textColor}
-          />
-        )} */}
-          <div className="text-white mt-4">
+          <div className="text-white mt-4 landscape:hidden">
             {!context?.loggedIn?.uid && (
               <p className="text-black/60 text-center">OR</p>
             )}
@@ -133,7 +146,6 @@ export default function Outro({
               />
             </div>
           </div>
-          {/* <BannerAd size="small" position="bottom" delay={1000} /> */}
         </div>
       </div>
     </div>
@@ -223,7 +235,7 @@ function SignUp({ data }) {
   };
 
   return (
-    <div className="border-2 h-[300px] w-[80%] border-black/30 flex rounded-2xl mx-4 bg-white flex-col items-center justify-center relative ">
+    <div className="border-2 flex-1 pb-8 w-[80%] h-full overflow-y-scroll border-black/30 flex rounded-2xl mx-4 bg-white flex-col items-center justify-center relative ">
       {stage === 0 && (
         <div className=" px-4 text-white top-0 left-0 w-full h-full flex flex-col items-center justify-center">
           <div className="flex text-black items-center justify-center gap-4">
