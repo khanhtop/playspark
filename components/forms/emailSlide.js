@@ -42,7 +42,7 @@ export default function EmailSlide({ data }) {
         opacity: opacity,
         transition: "0.5s opacity",
       }}
-      className="fixed top-0 left-0 bg-black/95 h-screen w-screen z-10"
+      className="fixed top-0 left-0 bg-black/95 h-screen w-screen z-30"
     >
       <div
         style={{ bottom: height ? 0 : "-75vh", transition: "0.5s bottom" }}
@@ -50,19 +50,19 @@ export default function EmailSlide({ data }) {
       >
         <img
           src={data.brandLogo ?? "/branding/logo2.png"}
-          className="w-3/4 max-w-[300px] pt-8 pb-4"
+          className="w-3/4 max-w-[220px] pt-8 pb-4"
         />
-        <div className="flex portrait:flex-col lg:flex-col gap-4">
-          <h3 className="text-2xl text-center w-full max-w-[360px]">
-            {data.customEmailText ??
-              `
+        <h3 className="px-4 text-md text-center w-full">
+          {data.customEmailText ??
+            `
           ${data?.companyName ? data.companyName : "The sponsor"} would like to
           send you updates and information through email, would you like to be
           included?`}
-          </h3>
+        </h3>
+        <div className="flex w-full portrait:flex-col lg:flex-col gap-4 justify-center items-center">
           {!context?.loggedIn?.email && (
             <div className="w-full max-w-[360px] flex flex-col items-center mt-6">
-              <p className="w-full text-xs ml-8 mb-1">Enter Email Address</p>
+              {/* <p className="w-full text-xs ml-8 mb-1">Enter Email Address</p> */}
               <input
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="email@address.com"
@@ -70,7 +70,7 @@ export default function EmailSlide({ data }) {
               ></input>
             </div>
           )}
-          <div className="w-full max-w-[360px] flex flex-col gap-4 mt-8">
+          <div className="w-full max-w-[360px] flex portrait:flex-col gap-4 mt-6">
             <button
               disabled={loading}
               onClick={() => submitToList()}
