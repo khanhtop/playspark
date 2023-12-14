@@ -32,7 +32,7 @@ export default function Leaderboard({
 
 function RankTriangles({ data }) {
   return (
-    <div className="h-24 w-full flex mb-4 gap-1">
+    <div className="h-24 w-full flex mb-4 gap-1 max-w-[360px]">
       <Triangle data={data?.[1]} position={2} className="w-24 h-[80%]" />
       <Triangle data={data?.[0]} position={1} className="flex-1 h-full" />
       <Triangle data={data?.[2]} position={3} className="w-24 h-[80%]" />
