@@ -1040,6 +1040,7 @@ export default class CricketScene extends Phaser.Scene {
     );
 
     this.updateAuthorImage = (id) => {
+      console.log(id, " : --------------")
       switch (id) {
         case 1:
           this.auths.play('aus_ready_animation');
@@ -1319,6 +1320,7 @@ export default class CricketScene extends Phaser.Scene {
       .setDisplaySize(w * 0.07, w * 0.07)
       .setInteractive({ cursor: 'pointer' });
     this.stop_play.on('pointerup', () => {
+      console.log("------------ : ", author_id)
       this.game_pause = true;
       this.ball.setPosition(w + 50, 0);
       this.ball.setVelocity(0, 0);
@@ -1333,8 +1335,8 @@ export default class CricketScene extends Phaser.Scene {
         );
         this.current_over.setText('OVER : ' + Math.ceil(this.scorePanel.fire_count / 6).toString().padStart(4, '0'));
       } else if (author_id == 2) {
-        this.pause_player.setTexture('america_auth').setDisplaySize(140 * w / 1248, 180 * w / 1248);
-        this.player_country.setText('AMERICA');
+        this.pause_player.setTexture('pakistan_auth').setDisplaySize(140 * w / 1248, 180 * w / 1248);
+        this.player_country.setText('PAKISTAN');
         this.current_score.setText(
           'SCORE : ' + this.scorePanel.totalScore.toString()
         );
@@ -1901,19 +1903,35 @@ export default class CricketScene extends Phaser.Scene {
     this.unlock_player_group = this.add.group();
 
     this.ui_item['unlock_player'] = this.add.sprite(w / 2, h / 2 - 150 * h / 688, player_sprite_names[2]).setDisplaySize(144 * w / 1248, 180 * w / 1248);
-    this.ui_item['unlock_under_text'] = this.add.text(w / 2, h / 2, 'PLAYER UNLOCKED!', {
+    this.ui_item['unlock_under_text'] = this.add.text(w / 2, h / 2, 'PLAYER', {
       ...this.unlockBodyStyle,
-      align: 'center',
-    }).setOrigin(0.5, 0.5);
-    this.ui_item['unlock_under_info_text'] = this.add.text(w / 2, h / 2 + 60 * h / 688, `YOU UNLOCKED ${player_name[4]}`, {
+      fontSize: Math.round(42 * w / 1248) + 'px',
+      align: 'right',
+    }).setOrigin(1, 0.5);
+    this.ui_item['unlock_under_text_g'] = this.add.text(w / 2, h / 2, ' UNLOCKED!', {
       ...this.unlockBodyStyle,
-      align: 'center'
-    }).setOrigin(0.5, 0.5);
+      fontSize: Math.round(42 * w / 1248) + 'px',
+      fill: '#C1FF72',
+      align: 'left',
+    }).setOrigin(0, 0.5);
 
+
+    this.ui_item['unlock_under_info_text_g'] = this.add.text(w / 2, h / 2 + 60 * h / 688, `YOU UNLOCKED `, {
+      ...this.unlockBodyStyle,
+      align: 'right'
+    }).setOrigin(1, 0.5);
+
+    this.ui_item['unlock_under_info_text'] = this.add.text(w / 2, h / 2 + 60 * h / 688, `${player_name[4]}`, {
+      ...this.unlockBodyStyle,
+      fill: '#C1FF72',
+      align: 'left'
+    }).setOrigin(0, 0.5);
     // this.ui_item['unlock_under_info_text'].addColor('#ff0000', this.ui_item['unlock_under_info_text'].text.indexOf('UNLOCKED'), 'UNLOCKED'.length);
 
     this.unlock_player_group.add(this.ui_item['unlock_player']);
     this.unlock_player_group.add(this.ui_item['unlock_under_text']);
+    this.unlock_player_group.add(this.ui_item['unlock_under_text_g']);
+    this.unlock_player_group.add(this.ui_item['unlock_under_info_text_g']);
     this.unlock_player_group.add(this.ui_item['unlock_under_info_text']);
 
     this.unlock_player_group.setVisible(false);
@@ -3302,7 +3320,7 @@ export default class CricketScene extends Phaser.Scene {
 
     // this.ui_item['unlock_under_info_text'].addColor('#ff0000', this.ui_item['unlock_under_info_text'].text.indexOf('UNLOCKED'), 'UNLOCKED'.length);
 
-    this.ui_item['unlock_under_info_text'].setText(`YOU UNLOCKED ${player_name[4]}`);
+    this.ui_item['unlock_under_info_text'].setText(`${player_name[index]}`);
     this.ui_item['unlock_player'].setTexture(player_sprite_names[index]).setDisplaySize(144 * w / 1248, 180 * w / 1248);
 
     this.ball.setPosition(w + 50, 0);
