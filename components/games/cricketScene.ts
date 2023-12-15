@@ -282,7 +282,7 @@ export default class CricketScene extends Phaser.Scene {
     this.params.brandLogo = !!this.params.brandLogo? this.params.brandLogo : '/pong/' + gameType + '/fence.png';
     this.params.sponsorLogo = !!this.params.sponsorLogo? this.params.sponsorLogo : '/pong/' + gameType + '/middle-logo.png';
 
-    // this.params.maxScore = this.params.score
+    this.params.maxScore = !!this.params.maxScore? this.params.maxScore : 0
   }
 
   preload() {
@@ -1061,7 +1061,6 @@ export default class CricketScene extends Phaser.Scene {
           this.auth_country.setText(player_name[author_id - 1]);
           break;
       }
-
       if(this.scorePanel.maxScore < player_socre[author_id - 1]) {
         this.ui_item['lock_player'].setVisible(true);
         this.auths.setAlpha(0.8);
