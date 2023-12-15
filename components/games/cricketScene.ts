@@ -279,6 +279,9 @@ export default class CricketScene extends Phaser.Scene {
 
     // this.params.fenceLogo = '/pong/' + gameType + '/fence.png';
     // this.params.sponsorLogo = '/pong/' + gameType + '/middle-logo.png';
+    this.params.brandLogo = !!this.params.brandLogo? this.params.brandLogo : '/pong/' + gameType + '/middle-logo.png';
+    this.params.sponsorLogo = !!this.params.sponsorLogo? this.params.sponsorLogo : '/pong/' + gameType + '/fence.png';
+
     // this.params.maxScore = this.params.score
   }
 
@@ -475,7 +478,7 @@ export default class CricketScene extends Phaser.Scene {
     this.load.image('lock-player', '/pong/' + gameType + '/lock-player.png');
 
     this.load.image('score_pan', '/pong/' + gameType + '/score_pan.png');
-    this.load.image('fence', this.params.fenceLogo);
+    this.load.image('fence', this.params.brandLogo);
     this.load.image('middle-logo',  this.params.sponsorLogo);
     this.load.image('wicket_icon', '/pong/' + gameType + '/wicket_icon.png');
     this.load.image(
