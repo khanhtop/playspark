@@ -277,9 +277,9 @@ export default class CricketScene extends Phaser.Scene {
     gameType = newGameType;
     this.params = newParams;
 
-    this.params.fenceLogo = '/pong/' + gameType + '/fence.png';
-    this.params.sponsorLogo = '/pong/' + gameType + '/middle-logo.png';
-    this.params.maxScore = this.params.score
+    // this.params.fenceLogo = '/pong/' + gameType + '/fence.png';
+    // this.params.sponsorLogo = '/pong/' + gameType + '/middle-logo.png';
+    // this.params.maxScore = this.params.score
   }
 
   preload() {
@@ -3137,9 +3137,13 @@ export default class CricketScene extends Phaser.Scene {
 
     this.ball.type = 'new';
     this.count_flag = false;
+    
+    const oldT = Math.ceil(this.scorePanel.fire_count / 6);
     this.scorePanel.fire_count++;
-    console.log("--------this.scorePanel.fire_count----", this.scorePanel.fire_count)
-    if(Math.ceil(this.scorePanel.fire_count / 6) != this.level && this.level != 0) {
+    const newT = Math.ceil(this.scorePanel.fire_count / 6)
+
+    // console.log("--------this.scorePanel.fire_count----", this.scorePanel.fire_count)
+    if(oldT != newT && this.level != 0) {
       this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
     }
     this.level = Math.min(Math.ceil(this.scorePanel.fire_count / 6), 10);
@@ -3285,9 +3289,10 @@ export default class CricketScene extends Phaser.Scene {
   }
 
   public initGame(lives = 3) {
+    console.log(this.params)
     this.cameras.main.fadeIn(1200);
     spinTimes = 1;
-    wickets = 10;
+    wickets = this.params.lives;
     setTimeout(() => this.startRound(), 2500);
   }
 
