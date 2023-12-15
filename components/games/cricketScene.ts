@@ -3303,7 +3303,9 @@ export default class CricketScene extends Phaser.Scene {
     this.scoreHandler(this.scorePanel.totalScore);
   }
 
-  startRound() {}
+  startRound() {
+    this.wicket.setText(wickets);
+  }
 
   initReadyPlayer() {
     this.power_flag = false;
