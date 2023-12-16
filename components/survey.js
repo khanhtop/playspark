@@ -49,6 +49,7 @@ export default function Survey({ data, onComplete }) {
       title: "You Win",
       contents: (
         <WinModal
+          data={data}
           onClaim={() => {
             context.setModal();
             context.setHasSeenSurvey(true);
@@ -81,7 +82,7 @@ export default function Survey({ data, onComplete }) {
             data.landscape ? "flex-row" : "flex-col"
           } items-center justify-center w-full`}
         >
-          <div className="flex-1 px-4">
+          <div className="flex-1 flex flex-col px-4 items-center justify-center">
             <img src={data?.brandLogo} className="h-16 mb-4" />
             <p className="mb-4 text-center font-octo text-3xl">
               {data?.survey?.[questionIndex]?.question}

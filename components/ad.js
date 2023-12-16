@@ -32,6 +32,7 @@ export default function Advert({ data, theme }) {
     data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
   );
   const [prevBest, setPrevBest] = useState();
+  console.log(prevBest);
 
   // Lives & Restarts
   const [lives, setLives] = useState(3);
@@ -61,9 +62,18 @@ export default function Advert({ data, theme }) {
     );
     if (_lb?.leaderboard) {
       setLeaderboard(_lb?.leaderboard);
+      console.log(_lb?.prevBest);
       setPrevBest(_lb?.prevBest);
     }
   }, [score, context.loggedIn, context.profile]);
+
+  useEffect(() => {
+    if (leaderboard.find((a) => a.uid === context?.loggedIn?.uid)?.score) {
+      setPrevBest(
+        leaderboard.find((a) => a.uid === context?.loggedIn?.uid)?.score
+      );
+    }
+  }, [leaderboard]);
 
   const determineConstraints = () => {
     if (isIOS || isAndroid) {
@@ -156,6 +166,8 @@ export default function Advert({ data, theme }) {
       incrementImpressions(data?.tournamentId?.toString());
     }
   }, [data?.tournamentId]);
+
+  console.log(data?.tournamentId);
 
   return (
     <div

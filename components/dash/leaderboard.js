@@ -9,23 +9,27 @@ export default function Leaderboard({
   console.log(data);
   return (
     <div className="py-4 h-full w-full overflow-y-scroll text-black top-0 left-0 w-full h-full flex flex-col items-center gap-2">
-      <RankTriangles data={data?.slice(0, 3)} />
-      {data.map((item, key) => (
-        <div key={key} className="flex w-full px-8 gap-4 items-center">
-          <div
-            style={{ backgroundColor: primaryColor }}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-white"
-          >
-            <Text {...gameData} className="">
-              {key + 1}
+      {/* <RankTriangles data={data?.slice(0, 3)} /> */}
+      {data?.length > 0 ? (
+        data.map((item, key) => (
+          <div key={key} className="flex w-full px-8 gap-4 items-center">
+            <div
+              style={{ backgroundColor: primaryColor }}
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white"
+            >
+              <Text {...gameData} className="">
+                {key + 1}
+              </Text>
+            </div>
+            <p className="flex-1">{item.name}</p>
+            <Text {...gameData} className="font-bold">
+              {item.score}
             </Text>
           </div>
-          <p className="flex-1">{item.name}</p>
-          <Text {...gameData} className="font-bold">
-            {item.score}
-          </Text>
-        </div>
-      ))}
+        ))
+      ) : (
+        <p>The Leaderboard Is Empty!</p>
+      )}
     </div>
   );
 }

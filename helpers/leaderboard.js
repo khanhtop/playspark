@@ -37,7 +37,7 @@ export const computeLeaderboard = (
       }
     }
     if (!demo) {
-      console.log(_leaderboard);
+      console.log("LB", _leaderboard);
       setDoc(
         doc(firestore, "tournaments", tournamentId),
         {
