@@ -61,7 +61,7 @@ export default function Survey({ data, onComplete }) {
 
   return (
     <div className="bg-[#222] flex-1 h-full w-full flex items-center justify-center">
-      <div className="relative bg-white rounded-lg h-[80%] w-[90%] bg-white mb-[15%] text-black flex flex-col py-8 px-4 items-center justify-center">
+      <div className="relative bg-white rounded-lg h-[80%] w-[90%] bg-white  text-black flex flex-col py-8 px-4 items-center justify-center">
         <div
           style={{ backgroundColor: data.primaryColor }}
           className="text-white absolute w-[80%] h-12  border-2 border-white left-[10%] -top-4 rounded-full flex items-center justify-center"
@@ -76,12 +76,20 @@ export default function Survey({ data, onComplete }) {
             {questionIndex + 1} / {data?.survey?.length}
           </p>
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center w-full">
-          <img src={data?.brandLogo} className="h-16 mb-4" />
-          <p className="mb-4 text-center font-octo text-3xl">
-            {data?.survey?.[questionIndex]?.question}
-          </p>
-          <div className="flex flex-col gap-4 w-full items-center">
+        <div
+          className={`flex-1 flex ${
+            data.landscape ? "flex-row" : "flex-col"
+          } items-center justify-center w-full`}
+        >
+          <div className="flex-1 px-4">
+            <img src={data?.brandLogo} className="h-16 mb-4" />
+            <p className="mb-4 text-center font-octo text-3xl">
+              {data?.survey?.[questionIndex]?.question}
+              Question 1
+            </p>
+          </div>
+
+          <div className="flex flex-1 flex-col gap-4 w-full items-center">
             {data?.survey?.[questionIndex]?.responses?.map((item, key) => (
               <SurveyResponse
                 data={data}

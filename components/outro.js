@@ -30,7 +30,7 @@ export default function Outro({
   const selectStage = () => {
     const possibleRouting = [];
     if (data.demo) return 1;
-    if (data.sponsoredVideo && !context.hasSeenVideo) possibleRouting.push(3);
+    if (data.sponsoredVideo) possibleRouting.push(3);
     if (data.survey && !context.hasSeenSurvey) possibleRouting.push(4);
     if (data.playableAd) possibleRouting.push(5);
     if (possibleRouting.length > 0) {
@@ -53,8 +53,16 @@ export default function Outro({
           <p className="font-octo text-2xl">Game Over</p>
         </div>
         {/* Main Content */}
-        <div className="h-full w-full rounded-2xl flex portrait:flex-col landscape:flex-row min-h-[600px]:flex-col overflow-hidden mt-8">
-          <div className="landscape:flex-1 px-4 py-4 flex flex-col items-center">
+        <div
+          className={`h-full w-full rounded-2xl flex ${
+            data.landscape ? "flex-row" : "flex-col"
+          } overflow-hidden mt-8`}
+        >
+          <div
+            className={`${
+              data.landscape && "flex-1"
+            } px-4 py-4 flex flex-col items-center`}
+          >
             <div className="flex-1 flex flex-col w-full items-center">
               <Text {...data} className="text-lg w-full text-center">
                 Your Score
@@ -84,7 +92,11 @@ export default function Outro({
               className="h-12 rounded-full mt-2"
             />
           </div>
-          <div className="landscape:flex-1 px-4 py-4 flex flex-col items-center">
+          <div
+            className={`${
+              data.landscape && "flex-1"
+            } px-4 py-4 flex flex-col items-center`}
+          >
             {!context?.loggedIn?.uid ? (
               <>
                 <Text {...data} className="text-lg w-full text-center">

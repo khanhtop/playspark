@@ -42,7 +42,7 @@ export default function EmailSlide({ data }) {
         opacity: opacity,
         transition: "0.5s opacity",
       }}
-      className="fixed top-0 left-0 bg-black/95 h-screen w-screen z-30"
+      className="fixed top-0 left-0 bg-black/95 h-full w-full z-30"
     >
       <div
         style={{ bottom: height ? 0 : "-75vh", transition: "0.5s bottom" }}
