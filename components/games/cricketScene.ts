@@ -277,9 +277,13 @@ export default class CricketScene extends Phaser.Scene {
     gameType = newGameType;
     this.params = newParams;
 
-    this.params.fenceLogo = '/pong/' + gameType + '/fence.png';
-    this.params.sponsorLogo = '/pong/' + gameType + '/middle-logo.png';
-    this.params.maxScore = this.params.score
+    console.log(newParams, "----------")
+    // this.params.fenceLogo = '/pong/' + gameType + '/fence.png';
+    // this.params.sponsorLogo = '/pong/' + gameType + '/middle-logo.png';
+    this.params.brandLogo = !!this.params.brandLogo? this.params.brandLogo : '/pong/' + gameType + '/fence.png';
+    this.params.sponsorLogo = !!this.params.sponsorLogo? this.params.sponsorLogo : '/pong/' + gameType + '/middle-logo.png';
+
+    this.params.maxScore = !!this.params.maxScore? this.params.maxScore : 0
   }
 
   preload() {
@@ -475,7 +479,7 @@ export default class CricketScene extends Phaser.Scene {
     this.load.image('lock-player', '/pong/' + gameType + '/lock-player.png');
 
     this.load.image('score_pan', '/pong/' + gameType + '/score_pan.png');
-    this.load.image('fence', this.params.fenceLogo);
+    this.load.image('fence', this.params.brandLogo);
     this.load.image('middle-logo',  this.params.sponsorLogo);
     this.load.image('wicket_icon', '/pong/' + gameType + '/wicket_icon.png');
     this.load.image(
@@ -1058,7 +1062,6 @@ export default class CricketScene extends Phaser.Scene {
           this.auth_country.setText(player_name[author_id - 1]);
           break;
       }
-
       if(this.scorePanel.maxScore < player_socre[author_id - 1]) {
         this.ui_item['lock_player'].setVisible(true);
         this.auths.setAlpha(0.8);
@@ -3137,9 +3140,13 @@ export default class CricketScene extends Phaser.Scene {
 
     this.ball.type = 'new';
     this.count_flag = false;
+    
+    const oldT = Math.ceil(this.scorePanel.fire_count / 6);
     this.scorePanel.fire_count++;
-    console.log("--------this.scorePanel.fire_count----", this.scorePanel.fire_count)
-    if(Math.ceil(this.scorePanel.fire_count / 6) != this.level && this.level != 0) {
+    const newT = Math.ceil(this.scorePanel.fire_count / 6)
+
+    // console.log("--------this.scorePanel.fire_count----", this.scorePanel.fire_count)
+    if(oldT != newT && this.level != 0) {
       this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
     }
     this.level = Math.min(Math.ceil(this.scorePanel.fire_count / 6), 10);
@@ -3285,6 +3292,7 @@ export default class CricketScene extends Phaser.Scene {
   }
 
   public initGame(lives = 3) {
+    console.log(this.params)
     this.cameras.main.fadeIn(1200);
     spinTimes = 1;
     wickets = 10;
@@ -3296,7 +3304,9 @@ export default class CricketScene extends Phaser.Scene {
     this.scoreHandler(this.scorePanel.totalScore);
   }
 
-  startRound() {}
+  startRound() {
+    this.wicket.setText(wickets);
+  }
 
   initReadyPlayer() {
     this.power_flag = false;
