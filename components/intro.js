@@ -1,9 +1,6 @@
-import ColoredButton from "@/components/forms/colors";
-import BannerAd from "./advertising/bannerAd";
 import UIButton from "./ui/button";
 import Text from "./ui/text";
 import { useAppContext } from "@/helpers/store";
-import ModalPrototyper from "./ui/modalPrototyper";
 
 export default function Intro({ data, setStage, premium, ready }) {
   const context = useAppContext();
@@ -14,7 +11,6 @@ export default function Intro({ data, setStage, premium, ready }) {
         premium ? "absolute top-0 left-0" : "relative"
       }`}
     >
-      {/* <BannerAd size="small" position="top" delay={1000} /> */}
       <img
         src={data?.backgroundImage}
         className="absolute top-0 left-0 h-full w-full object-cover"
@@ -26,11 +22,10 @@ export default function Intro({ data, setStage, premium, ready }) {
             color: data?.textColor,
             fontSize: 24,
           }}
-          className="font-light animate-pulse mb-4 px-2 py-1 rounded-lg"
+          className="font-light mb-4 px-2 py-1 rounded-lg"
         >
           {data?.name}
         </Text>
-        {/* <ModalPrototyper /> */}
         {(!premium || ready) && (
           <UIButton {...data} onClick={() => setStage(1)} text="START" />
         )}

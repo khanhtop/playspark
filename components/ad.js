@@ -35,15 +35,25 @@ export default function Advert({ data, theme }) {
   console.log(prevBest);
 
   // Lives & Restarts
+  const MAX_REVIVES = 4;
   const [lives, setLives] = useState(3);
+  const [reviveCount, setReviveCount] = useState(0);
 
   const callback = (score) => {
-    setLives(1);
-    setScore(score);
-    setStage(2);
+    if (reviveCount - MAX_REVIVES) {
+      setLives(1);
+      setScore(score);
+      setStage(2);
+      setReviveCount(reviveCount + 1);
+    } else {
+      setLives(3);
+      setScore(0);
+      setStage(2);
+    }
   };
 
   const reset = () => {
+    setReviveCount(0);
     setLives(3);
     setScore(0);
     setStage(1);
@@ -210,6 +220,7 @@ export default function Advert({ data, theme }) {
           leaderboard={leaderboard}
           prevBest={prevBest}
           onReset={() => reset()}
+          reviveCount={MAX_REVIVES - reviveCount}
         />
       )}
       {stage === 3 && (

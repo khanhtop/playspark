@@ -5,11 +5,14 @@ export default function UIButton({
   theme,
   onClick,
   className,
+  disabled,
 }) {
   if (theme === "pixel") {
     return (
       <button
+        disabled={disabled}
         onClick={onClick}
+        style={{ opacity: disabled ? 0.2 : 1 }}
         className={`${className} relative font-pixel flex text-xl hover:contrast-125 transition bg-sky-200 pb-1`}
       >
         <div
@@ -38,9 +41,11 @@ export default function UIButton({
   return (
     <button
       onClick={onClick}
+      disabled={disabled}
       style={{
         backgroundColor: primaryColor,
         color: textColor,
+        opacity: disabled ? 0.2 : 1,
       }}
       className={`${className} font-titan text-xl rounded-full px-12 py-2 hover:contrast-125  transition`}
     >

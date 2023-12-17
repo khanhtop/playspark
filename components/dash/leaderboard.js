@@ -1,3 +1,4 @@
+import { useAppContext } from "@/helpers/store";
 import Text from "../ui/text";
 
 export default function Leaderboard({
@@ -6,54 +7,72 @@ export default function Leaderboard({
   primaryColor,
   textColor,
 }) {
-  console.log(data);
+  const context = useAppContext();
+  const position = data.findIndex((a) => a.uid === context?.loggedIn?.uid);
+  const myRank = data.find((a) => a.uid === context?.loggedIn?.uid);
+  const topSlice = data.slice(0, 3);
+
   return (
     <div className="py-4 h-full w-full overflow-y-scroll text-black top-0 left-0 w-full h-full flex flex-col items-center gap-2">
       {/* <RankTriangles data={data?.slice(0, 3)} /> */}
-      {data?.length > 0 ? (
-        data.map((item, key) => (
-          <div key={key} className="flex w-full px-8 gap-4 items-center">
-            <div
-              style={{ backgroundColor: primaryColor }}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-white"
-            >
-              <Text {...gameData} className="">
-                {key + 1}
-              </Text>
-            </div>
-            <p className="flex-1">{item.name}</p>
-            <Text {...gameData} className="font-bold">
-              {item.score}
-            </Text>
-          </div>
-        ))
-      ) : (
-        <p>The Leaderboard Is Empty!</p>
+      {topSlice.map((item, key) => (
+        <PositionRow
+          item={item}
+          key={key}
+          gameData={gameData}
+          index={key}
+          topSlice={topSlice}
+          isMine={item.uid === context.loggedIn?.uid}
+        />
+      ))}
+      {Array(3 - (topSlice?.length > 3 ? 0 : topSlice?.length))
+        .fill({
+          name: "Unclaimed",
+          score: "0",
+        })
+        ?.map((item, key) => (
+          <PositionRow
+            item={item}
+            key={key}
+            gameData={gameData}
+            index={key + topSlice?.length}
+            topSlice={topSlice}
+          />
+        ))}
+      {position > 2 && (
+        <PositionRow
+          item={myRank}
+          gameData={gameData}
+          index={position}
+          topSlice={topSlice}
+          isMine={true}
+        />
       )}
     </div>
   );
 }
 
-function RankTriangles({ data }) {
-  return (
-    <div className="h-24 w-full flex mb-4 gap-1 max-w-[360px]">
-      <Triangle data={data?.[1]} position={2} className="w-24 h-[80%]" />
-      <Triangle data={data?.[0]} position={1} className="flex-1 h-full" />
-      <Triangle data={data?.[2]} position={3} className="w-24 h-[80%]" />
-    </div>
-  );
-}
-
-function Triangle({ className, position, data }) {
+function PositionRow({ gameData, index, item, topSlice, isMine }) {
   return (
     <div
-      className={`relative ${className} font-octo text-lg bg-[#DDD] rounded-lg flex flex-col items-center justify-center`}
+      style={{ backgroundColor: isMine ? gameData.primaryColor : "#EEE" }}
+      className="flex w-full pl-2 pr-4 rounded-full py-1 gap-4 items-center"
     >
-      <div className="flex items-center justify-center font-octo text-white absolute -bottom-4 h-8 w-8 bg-cyan-500 rounded-full">
-        {position}
+      <div
+        style={{
+          backgroundColor: isMine ? gameData.textColor : gameData.primaryColor,
+          color: isMine ? gameData.primaryColor : gameData.textColor,
+        }}
+        className="w-12 h-6 rounded-full flex items-center justify-center"
+      >
+        <Text {...gameData} className="">
+          {index + 1}
+        </Text>
       </div>
-      <p>{data?.name ?? "?"}</p>
-      <p>{data?.score ?? "-"}</p>
+      <p className="flex-1 font-octo text-lg">{item?.name}</p>
+      <Text {...gameData} className="">
+        {item?.score}
+      </Text>
     </div>
   );
 }

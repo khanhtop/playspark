@@ -1,21 +1,11 @@
-import { InformationCircleIcon, ShareIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
 import { useAppContext } from "@/helpers/store";
 import Leaderboard from "./dash/leaderboard";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, firestore } from "@/helpers/firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import BannerAd from "./advertising/bannerAd";
 import Text from "./ui/text";
 import UIButton from "./ui/button";
 import EmailSlide from "./forms/emailSlide";
-import { WinModal } from "./ui/modalTypes";
 import ShareButton from "./ui/shareButton";
 import SignUp from "./forms/signUp";
-import Ranking from "./forms/ranking";
+// import Ranking from "./forms/ranking";
 
 export default function Outro({
   score,
@@ -23,6 +13,7 @@ export default function Outro({
   data,
   leaderboard,
   prevBest,
+  reviveCount,
   onReset,
 }) {
   const context = useAppContext();
@@ -81,9 +72,12 @@ export default function Outro({
             </div>
             <UIButton
               text="Revive"
+              disabled={reviveCount === 0}
               {...{ ...data, primaryColor: "green" }}
               onClick={() => setStage(selectStage())}
-              className="h-12 rounded-full mt-0"
+              className={`h-12 rounded-full mt-0 ${
+                reviveCount > 0 && "animate-pulse"
+              }`}
             />
             <UIButton
               text="Restart"
@@ -124,7 +118,7 @@ export default function Outro({
             ) : (
               <div className="w-full h-full overflow-y-scroll">
                 <Text {...data} className="text-lg w-full text-center">
-                  Rankings
+                  Top Players
                 </Text>
                 <Leaderboard
                   gameData={data}
