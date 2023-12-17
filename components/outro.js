@@ -109,7 +109,12 @@ export default function Outro({
                       onClose: () => {
                         context.setModal();
                       },
-                      contents: <SignUp data={data} />,
+                      contents: (
+                        <SignUp
+                          data={data}
+                          closeDialog={() => context.setModal()}
+                        />
+                      ),
                     });
                   }}
                   className="h-12 rounded-full mt-0"

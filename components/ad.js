@@ -22,7 +22,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 
 export default function Advert({ data, theme }) {
   const context = useAppContext();
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(2);
   const [lockX, setLockX] = useState();
   const [lockY, setLockY] = useState();
   const [dimensions, setDimensions] = useState({ x: undefined, y: undefined });
@@ -32,11 +32,10 @@ export default function Advert({ data, theme }) {
     data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
   );
   const [prevBest, setPrevBest] = useState();
-  console.log(prevBest);
 
   // Lives & Restarts
   const MAX_REVIVES = 4;
-  const [lives, setLives] = useState(3);
+  const [lives, setLives] = useState(data?.id === 11 ? 10 : 0);
   const [reviveCount, setReviveCount] = useState(0);
 
   const callback = (score) => {
@@ -54,7 +53,7 @@ export default function Advert({ data, theme }) {
 
   const reset = () => {
     setReviveCount(0);
-    setLives(3);
+    setLives(data.id === 11 ? 10 : 3);
     setScore(0);
     setStage(1);
   };
