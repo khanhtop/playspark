@@ -283,7 +283,7 @@ export default class CricketScene extends Phaser.Scene {
     this.params.brandLogo = !!this.params.brandLogo? this.params.brandLogo : '/pong/' + gameType + '/fence.png';
     this.params.sponsorLogo = !!this.params.sponsorLogo? this.params.sponsorLogo : '/pong/' + gameType + '/middle-logo.png';
 
-    this.params.maxScore = !!this.params.maxScore? this.params.maxScore : 0
+    this.params.maxscore = !!this.params.maxscore? this.params.maxscore : 0
   }
 
   preload() {
@@ -679,7 +679,7 @@ export default class CricketScene extends Phaser.Scene {
       score_count: 0,
       missFire: 0,
       totalScore: this.params.score,
-      maxScore: this.params.maxScore,
+      maxscore: this.params.maxscore,
       itemCount: {
         FIRE: 0,
         BOOSTER: 0,
@@ -1062,7 +1062,7 @@ export default class CricketScene extends Phaser.Scene {
           this.auth_country.setText(player_name[author_id - 1]);
           break;
       }
-      if(this.scorePanel.maxScore < player_socre[author_id - 1]) {
+      if(this.scorePanel.maxscore < player_socre[author_id - 1]) {
         this.ui_item['lock_player'].setVisible(true);
         this.auths.setAlpha(0.8);
         this.ui_item['lock_player_info'].setAlpha(1);
@@ -2006,7 +2006,7 @@ export default class CricketScene extends Phaser.Scene {
 
         const newPlayerIdx = this.getUnlockPlayerId();
 
-        if(playerIdx != newPlayerIdx && this.scorePanel.totalScore > this.scorePanel.maxScore) {
+        if(playerIdx != newPlayerIdx && this.scorePanel.totalScore > this.scorePanel.maxscore) {
           this.unlockPlayer();
         }
 
