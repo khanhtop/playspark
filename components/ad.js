@@ -98,7 +98,8 @@ export default function Advert({ data, theme }) {
     }
     if (data.landscape) {
       console.log("NOT IN FRAME");
-      setLockY(window.innerWidth * 0.58);
+      setLockY(window.innerWidth * 0.9 * 0.58);
+      setLockX(window.innerWidth * 0.9);
       return;
     }
     setLockX(window.innerHeight * 0.58);

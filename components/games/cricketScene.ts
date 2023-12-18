@@ -3294,7 +3294,6 @@ export default class CricketScene extends Phaser.Scene {
     console.log(this.params)
     this.cameras.main.fadeIn(1200);
     spinTimes = 1;
-    alert(this.params.lives)
     wickets = this.params.lives;
     this.wicket.setText(wickets);
     setTimeout(() => this.startRound(), 2500);

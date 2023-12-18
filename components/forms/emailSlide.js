@@ -46,13 +46,13 @@ export default function EmailSlide({ data }) {
     >
       <div
         style={{ bottom: height ? 0 : "-75vh", transition: "0.5s bottom" }}
-        className="absolute h-3/4 w-full bg-white rounded-tl-2xl rounded-tr-2xl flex flex-col items-center"
+        className="absolute h-3/4 px-4 w-full bg-white rounded-tl-2xl rounded-tr-2xl flex flex-col items-center"
       >
         <img
           src={data.brandLogo ?? "/branding/logo2.png"}
-          className="w-3/4 max-w-[220px] pt-8 pb-4"
+          className="w-3/4 max-w-[200px] pt-4 pb-4"
         />
-        <h3 className="px-4 text-md text-center w-full">
+        <h3 className="px-4 text-sm text-center w-full">
           {data.customEmailText ??
             `
           ${data?.companyName ? data.companyName : "The sponsor"} would like to
