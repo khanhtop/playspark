@@ -2,7 +2,7 @@ import { useAppContext } from "@/helpers/store";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 
-export default function Modal({ primaryColor }) {
+export default function Modal({ primaryColor, landscape }) {
   const context = useAppContext();
   const [dimensions, setDimensions] = useState({ x: 0, y: 0 });
 
@@ -26,7 +26,11 @@ export default function Modal({ primaryColor }) {
         >
           <p className="font-octo text-2xl">{context?.modal?.title}</p>
         </div>
-        <div className="h-full w-full pt-12 pb-12 px-4">
+        <div
+          className={`h-full w-full ${
+            landscape ? "pt-4 pb-0" : "pt-12 pb-12"
+          } px-4`}
+        >
           <div className="h-full w-full text-black flex flex-col items-center">
             {context?.modal?.contents}
           </div>
@@ -35,9 +39,9 @@ export default function Modal({ primaryColor }) {
           <div className="absolute w-full flex justify-center">
             <div
               onClick={() => context?.modal?.onClose()}
-              className="hover:opacity-80 border-4 border-white transition absolute h-20 w-20 p-4 bg-red-500 -bottom-10 rounded-full"
+              className="hover:opacity-80 border-4 flex items-center justify-center border-white transition absolute h-12 w-20 p-4 bg-red-500 -bottom-4 rounded-full"
             >
-              <XMarkIcon className="h-full w-full" />
+              <XMarkIcon className="h-6 w-6" />
             </div>
           </div>
         )}
