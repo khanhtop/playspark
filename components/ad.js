@@ -35,17 +35,17 @@ export default function Advert({ data, theme }) {
 
   // Lives & Restarts
   const MAX_REVIVES = 4;
-  const [lives, setLives] = useState(data?.id === 11 ? 10 : 0);
+  const [lives, setLives] = useState(data.id === 11 ? 10 : 3);
   const [reviveCount, setReviveCount] = useState(0);
 
   const callback = (score) => {
     if (reviveCount - MAX_REVIVES) {
-      setLives(1);
+      setLives(data.id === 11 ? 3 : 1);
       setScore(score);
       setStage(2);
       setReviveCount(reviveCount + 1);
     } else {
-      setLives(3);
+      setLives(data.id === 11 ? 10 : 3);
       setScore(0);
       setStage(2);
     }

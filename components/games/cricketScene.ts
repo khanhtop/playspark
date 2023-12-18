@@ -3290,11 +3290,13 @@ export default class CricketScene extends Phaser.Scene {
     this.scoreHandler = handleScore;
   }
 
-  public initGame(lives = 3) {
+  public initGame() {
     console.log(this.params)
     this.cameras.main.fadeIn(1200);
     spinTimes = 1;
-    wickets = 10;
+    alert(this.params.lives)
+    wickets = this.params.lives;
+    this.wicket.setText(wickets);
     setTimeout(() => this.startRound(), 2500);
   }
 
