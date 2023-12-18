@@ -3104,7 +3104,7 @@ export default class CricketScene extends Phaser.Scene {
 
     if (this.is_battery) {
       battery_cnt++;
-      if (battery_cnt == 3) {
+      if (battery_cnt == 4) {
         this.is_battery = false;
         battery_cnt = 0;
         this.battery_powerup_group.setVisible(false);
@@ -3141,12 +3141,11 @@ export default class CricketScene extends Phaser.Scene {
     this.ball.type = 'new';
     this.count_flag = false;
     
-    const oldT = Math.ceil(this.scorePanel.fire_count / 6);
+    const oldT = Math.ceil(this.scorePanel.fire_count % 6);
     this.scorePanel.fire_count++;
-    const newT = Math.ceil(this.scorePanel.fire_count / 6)
 
     // console.log("--------this.scorePanel.fire_count----", this.scorePanel.fire_count)
-    if(oldT != newT && this.level != 0) {
+    if(oldT == 0 && this.level != 0) {
       this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
     }
     this.level = Math.min(Math.ceil(this.scorePanel.fire_count / 6), 10);
