@@ -28,6 +28,14 @@ export default function Profile() {
         }
         label="Company Name"
       />
+      <Input
+        value={profile.sportzfanSlug}
+        labelColor="text-white"
+        onChange={(e) =>
+          setProfile({ ...profile, sportzfanSlug: e.target.value })
+        }
+        label="Sportzfan Platform URL (Lowercase and No Spaces)"
+      />
       <ImagePicker
         width={100}
         height={100}
