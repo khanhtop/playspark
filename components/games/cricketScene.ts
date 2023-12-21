@@ -2333,7 +2333,7 @@ export default class CricketScene extends Phaser.Scene {
             1000,
             () => {
               this.runs_show.setAlpha(0);
-              this.score6_2.setVisible(true);
+              this.score6_1.setVisible(true);
             },
             null,
             this
@@ -2963,8 +2963,8 @@ export default class CricketScene extends Phaser.Scene {
           multi_4_6_cnt = 0;
           this.audioSystem.POWER_SIX_SMASH[this.getRandomNumbers(0, this.audioSystem.POWER_SIX_SMASH.length - 1, 1)].play();
 
-          this.hitball_effect.setPosition(this.score_red.x, this.score6_4.y);
-          this.score6_4.setVisible(false);
+          this.hitball_effect.setPosition(this.score_red.x, this.score_red.y);
+          this.score_red.setVisible(false);
           this.hitball_effect.setVisible(true).play('hitball_animation');
           this.time.delayedCall(
             1000,
