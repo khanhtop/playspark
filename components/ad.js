@@ -210,6 +210,8 @@ export default function Advert({ data, theme }) {
           score: score,
           brandLogo: data?.brandLogo,
           sponsorLogo: data?.sponsorLogo,
+          backgroundSprite:
+            "https://firebasestorage.googleapis.com/v0/b/playspark-c6ad4.appspot.com/o/1703215359747?alt=media&token=0ef04bc7-02df-4465-a879-15dd16dd0967",
           maxscore: prevBest ?? 0,
         })}
       {stage === 2 && (
