@@ -143,6 +143,15 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
+  if (id === 13)
+    return (
+      <Pong
+        data={data}
+        gameType="newpongball"
+        callback={callback}
+        params={params}
+      />
+    );
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {
