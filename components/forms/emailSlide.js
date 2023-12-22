@@ -91,6 +91,18 @@ export default function EmailSlide({ data }) {
             </button>
           </div>
         </div>
+        <p className="text-xs mt-2">
+          By opting in, you are agreeing to our{" "}
+          <a
+            target="__blank"
+            className="text-cyan-500 underline"
+            href={`/terms?companyName=${
+              context?.profile?.companyName ?? "PlaySpark"
+            }`}
+          >
+            Terms and Conditions
+          </a>
+        </p>
       </div>
     </div>
   );
