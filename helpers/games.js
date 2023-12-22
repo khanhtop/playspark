@@ -155,4 +155,14 @@ export const games = [
     textColor: "#FFF",
     id: 12,
   },
+  {
+    name: "New Pong Ball",
+    description:
+      "This is new pong ball game.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/soccerfall.jpg",
+    screenshot: "soccerfall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 13,
+  },
 ];

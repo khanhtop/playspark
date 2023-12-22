@@ -11,6 +11,7 @@ import MainScene from "./mainScene";
 import FallScene from "./fallScene";
 import WheelScene from "./wheelScene";
 import CricketScene from "./cricketScene";
+import NewPongScene from "./newPongScene";
 
 const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) => {
   const [hasRendered, setHasRendered] = useState(false);
@@ -37,7 +38,9 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
       } else if(gameType == 'wheelspin') {
         scene = new WheelScene(gameType, params);
       } else if(gameType == 'cricket') {
-          scene = new CricketScene(gameType, params);
+        scene = new CricketScene(gameType, params);
+      } else if(gameType == 'newpongball') {
+        scene = new NewPongScene(gameType, params);
       } else {
         scene = new MainScene(gameType, params);
       }
