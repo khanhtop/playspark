@@ -8,9 +8,13 @@ export default function Leaderboard({
   textColor,
 }) {
   const context = useAppContext();
-  const position = data.findIndex((a) => a.uid === context?.loggedIn?.uid);
-  const myRank = data.find((a) => a.uid === context?.loggedIn?.uid);
-  const topSlice = data.slice(0, 3);
+  const position = data
+    ?.sort((a, b) => b.score - a.score)
+    ?.findIndex((a) => a.uid === context?.loggedIn?.uid);
+  const myRank = data
+    ?.sort((a, b) => b.score - a.score)
+    ?.find((a) => a.uid === context?.loggedIn?.uid);
+  const topSlice = data?.sort((a, b) => b.score - a.score)?.slice(0, 3);
 
   return (
     <div className="py-4 h-full w-full overflow-y-scroll text-black top-0 left-0 w-full h-full flex flex-col items-center gap-2">

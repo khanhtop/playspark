@@ -8,6 +8,7 @@ export default function Dashboard({}) {
   const [impressions, setImpressions] = useState();
   const [plays, setPlays] = useState();
   const [ctr, setCtr] = useState();
+  const [users, setUsers] = useState();
 
   useEffect(() => {
     if (context?.myGames) {
@@ -15,11 +16,13 @@ export default function Dashboard({}) {
       let _impressions = [];
       let _ctr = [];
       let _plays = [];
+      let _users = [];
       for (let game of context.myGames) {
         if (game.name) {
           _names.push(game.name);
           _impressions.push(game.impressions);
           _plays.push(game.playCount ?? 0);
+          _plays.push(game.users?.length ?? 0);
           _ctr.push((game.playCount ?? 0) / (game.impressions ?? 1));
         }
       }
@@ -45,6 +48,11 @@ export default function Dashboard({}) {
         line1Data: _ctr,
         line1Name: "CTR",
       });
+      setUsers({
+        labels: _names,
+        line1Data: _users,
+        line1Name: "User Volume",
+      });
     }
   }, [context?.myGames]);
 
@@ -58,6 +66,10 @@ export default function Dashboard({}) {
         <h2 className="mb-4">Plays Per Game</h2>
         {plays && <BarChart chartData={plays} />}
       </div>
+      {/* <div>
+        <h2 className="mb-4">User Volume</h2>
+        {ctr && <BarChart chartData={users} />}
+      </div> */}
       <div>
         <h2 className="mb-4">Click Through Rate (CTR)</h2>
         {ctr && <BarChart chartData={ctr} />}

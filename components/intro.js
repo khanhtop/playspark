@@ -16,7 +16,7 @@ export default function Intro({ data, setStage, premium, ready }) {
         className="absolute top-0 left-0 h-full w-full object-cover"
       />
       <div className="text-white items-center justify-end absolute top-0 left-0 h-full w-full  flex flex-col p-8">
-        <Text
+        {/* <Text
           {...data}
           style={{
             color: data?.textColor,
@@ -25,7 +25,7 @@ export default function Intro({ data, setStage, premium, ready }) {
           className="font-light mb-4 px-2 py-1 rounded-lg"
         >
           {data?.name}
-        </Text>
+        </Text> */}
         {(!premium || ready) && (
           <UIButton {...data} onClick={() => setStage(1)} text="START" />
         )}

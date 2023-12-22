@@ -169,6 +169,20 @@ export function incrementImpressions(tournamentId) {
   });
 }
 
+export async function incrementPlayableAdCount(tournamentId) {
+  updateDoc(doc(firestore, "tournaments", tournamentId), {
+    playableAdCount: increment(1),
+  });
+  return;
+}
+
+export async function incrementOptInCount(tournamentId) {
+  updateDoc(doc(firestore, "tournaments", tournamentId), {
+    optInCount: increment(1),
+  });
+  return;
+}
+
 export function incrementPlayCountWithImpressions(
   tournamentId,
   gameType = "freemium"

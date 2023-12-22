@@ -15,7 +15,11 @@ export default function Users() {
       ).then((res) => {
         let out = [];
         for (let doc of res.docs) {
-          out.push({ email: doc.id, ...doc.data() });
+          if (
+            doc?.id?.toLowerCase() !== context?.loggedIn?.email.toLowerCase()
+          ) {
+            out.push({ email: doc.id, ...doc.data() });
+          }
         }
         setUsers(out);
       });
@@ -34,8 +38,10 @@ export default function Users() {
       <h2 className="text-white/70 mb-4">
         List of users who have created accounts for any of your tournaments.
       </h2>
+      <h2 className="text-white/70 mb-4">Total: {users?.length || 0}</h2>
+
       {users.map((item, key) => (
-        <div className="text-white flex gap-2">
+        <div className="text-white flex gap-2 mb-2">
           <div className="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-xs">
             {key + 1}
           </div>

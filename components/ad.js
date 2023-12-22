@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getGame,
   incrementImpressions,
+  incrementOptInCount,
   incrementPlayCount,
   incrementPlayCountWithImpressions,
 } from "@/helpers/api";
@@ -22,7 +23,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 
 export default function Advert({ data, theme }) {
   const context = useAppContext();
-  const [stage, setStage] = useState(0);
+  const [stage, setStage] = useState(2);
   const [lockX, setLockX] = useState();
   const [lockY, setLockY] = useState();
   const [dimensions, setDimensions] = useState({ x: undefined, y: undefined });
@@ -268,6 +269,7 @@ export default function Advert({ data, theme }) {
         <Pong
           gameType="wheelspin"
           callback={() => {
+            incrementOptInCount(data.tournamentId);
             context.setModal({
               title: "You Win",
               contents: (
