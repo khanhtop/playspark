@@ -38,13 +38,14 @@ export default class NewPongScene extends Phaser.Scene {
     super();
     NewPongScene.instance = this;
     gameType = newGameType;
+    console.log(newParams)
     this.params = newParams;
   }
 
   preload() {
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
     this.load.image("peck", "/pong/" + gameType + "/peck.png");
-    this.load.image("bg", "/pong/" + gameType + "/bg.png");
+    this.load.image("bg", this.params.backgroundSprite);
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
