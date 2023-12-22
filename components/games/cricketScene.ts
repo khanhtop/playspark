@@ -171,6 +171,7 @@ export default class CricketScene extends Phaser.Scene {
   private level: any;
   private levelDesign: any;
   private scoreDesign: any;
+  private help_board_group: any;
   private updateRunsShow: any;
   private scoreList1: any;
   private scoreList2: any;
@@ -454,6 +455,7 @@ export default class CricketScene extends Phaser.Scene {
 
     this.load.image('background', '/pong/' + gameType + '/background.jpg');
     this.load.image('gray_bg', '/pong/' + gameType + '/gray_bg.jpg');
+    this.load.image('help-board', '/pong/' + gameType + '/help-board.png');
 
     this.load.image('score_fire', '/pong/' + gameType + '/score_fire.png');
     this.load.image('score1', '/pong/' + gameType + '/score1.png');
@@ -1171,7 +1173,13 @@ export default class CricketScene extends Phaser.Scene {
         this.auth_country.setText(player_name[author_id - 1]);
         this.player.play(`p${author_id}_ready_animation`);
       }
-      this.time.delayedCall(1000, this.fire_ball, [], this);
+
+      this.help_board_group.setVisible(true);
+
+      this.time.delayedCall(4000, () => {
+        this.help_board_group.setVisible(false);
+        this.time.delayedCall(1000, this.fire_ball, [], this);
+      }, [], this);
     });
 
     const redball_frame = this.anims.generateFrameNames('redball_effect', {
@@ -1939,6 +1947,20 @@ export default class CricketScene extends Phaser.Scene {
 
     this.unlock_player_group.setVisible(false);
 
+    this.help_board_group = this.add.group();
+    this.help_board_group.add(
+      this.add.image(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, 'help-board').setOrigin(0.5, 0.5).setDisplaySize(500 * w / 1268, 200 * h / 688)
+    )
+    this.help_board_group.add(
+      this.add.text(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, `TAP THE PLAYER TO HIT THE BALL.\nTAP, HOLD AND RELEASE TO ADJUST\nTHE POWER OF YOUR SHOT.`, {
+        ...this.runs_text_style,
+        fontSize: `${25 * w / 1268}px`,
+        lineSpacing: 2,
+        align: 'center'
+      }).setOrigin(0.5, 0.5)
+    )
+    
+    this.help_board_group.setVisible(false);
 
     //show spritesheet
     this.fireSprite = this.add
@@ -2311,7 +2333,7 @@ export default class CricketScene extends Phaser.Scene {
             1000,
             () => {
               this.runs_show.setAlpha(0);
-              this.score6_2.setVisible(true);
+              this.score6_1.setVisible(true);
             },
             null,
             this
@@ -2941,8 +2963,8 @@ export default class CricketScene extends Phaser.Scene {
           multi_4_6_cnt = 0;
           this.audioSystem.POWER_SIX_SMASH[this.getRandomNumbers(0, this.audioSystem.POWER_SIX_SMASH.length - 1, 1)].play();
 
-          this.hitball_effect.setPosition(this.score_red.x, this.score6_4.y);
-          this.score6_4.setVisible(false);
+          this.hitball_effect.setPosition(this.score_red.x, this.score_red.y);
+          this.score_red.setVisible(false);
           this.hitball_effect.setVisible(true).play('hitball_animation');
           this.time.delayedCall(
             1000,
