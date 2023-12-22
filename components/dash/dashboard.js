@@ -8,7 +8,8 @@ export default function Dashboard({}) {
   const [impressions, setImpressions] = useState();
   const [plays, setPlays] = useState();
   const [ctr, setCtr] = useState();
-  const [users, setUsers] = useState();
+  const [optins, setOptins] = useState();
+  const [playableAds, setPlayableAds] = useState();
 
   useEffect(() => {
     if (context?.myGames) {
@@ -16,23 +17,18 @@ export default function Dashboard({}) {
       let _impressions = [];
       let _ctr = [];
       let _plays = [];
-      let _users = [];
+      let _optins = [];
+      let _playableads = [];
       for (let game of context.myGames) {
         if (game.name) {
           _names.push(game.name);
           _impressions.push(game.impressions);
           _plays.push(game.playCount ?? 0);
-          _plays.push(game.users?.length ?? 0);
+          _playableads.push(game.playableAdCount ?? 0);
+          _optins.push(game.optInCount ?? 0);
           _ctr.push((game.playCount ?? 0) / (game.impressions ?? 1));
         }
       }
-      const chartData = {
-        labels: _names,
-        line1Data: _impressions,
-        line2Data: _plays,
-        line1Name: "Impressions",
-        line2Name: "Plays",
-      };
       setImpressions({
         labels: _names,
         line1Data: _impressions,
@@ -48,10 +44,15 @@ export default function Dashboard({}) {
         line1Data: _ctr,
         line1Name: "CTR",
       });
-      setUsers({
+      setOptins({
         labels: _names,
-        line1Data: _users,
-        line1Name: "User Volume",
+        line1Data: _optins,
+        line1Name: "Email Opt Ins",
+      });
+      setPlayableAds({
+        labels: _names,
+        line1Data: _playableads,
+        line1Name: "Playable Ad Views",
       });
     }
   }, [context?.myGames]);
@@ -66,13 +67,17 @@ export default function Dashboard({}) {
         <h2 className="mb-4">Plays Per Game</h2>
         {plays && <BarChart chartData={plays} />}
       </div>
-      {/* <div>
-        <h2 className="mb-4">User Volume</h2>
-        {ctr && <BarChart chartData={users} />}
-      </div> */}
       <div>
         <h2 className="mb-4">Click Through Rate (CTR)</h2>
         {ctr && <BarChart chartData={ctr} />}
+      </div>
+      <div>
+        <h2 className="mb-4">Email Opt Ins</h2>
+        {ctr && <BarChart chartData={optins} />}
+      </div>
+      <div>
+        <h2 className="mb-4">Playable Ad Views</h2>
+        {ctr && <BarChart chartData={playableAds} />}
       </div>
     </div>
   );
