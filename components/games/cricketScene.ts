@@ -46,14 +46,20 @@ let double4_cnt = 0;
 let battery_cnt = 0;
 let isFireballRunnig = false;
 
+const nAdditionalPlayers = 12;
+
 let player_name = [
   "Australian",
   "Pakistan",
   "Gus Wicketland",
   "James Bouncer",
   "Mitch Bowlstotheleft",
-  "Merv HowzatHughes",
+  "Merv HowzatHughes", 
   "Mark ThirdMan",
+  "Greg Batwett",
+  "Mark Overwaugh",
+  "Wicket Akram",
+  "Aaron Inswing"
 ]
 
 let player_sprite_names = [
@@ -64,10 +70,14 @@ let player_sprite_names = [
   "p5_player_ready",
   "p6_player_ready",
   "p7_player_ready",
+  "p8_player_ready",
+  "p9_player_ready",
+  "p10_player_ready",
+  "p11_player_ready"
 ]
 
 let player_socre = [
-  0, 0, 50, 100, 200, 300, 400, 
+  0, 0, 50, 100, 200, 300, 400, 450, 500, 600, 700
 ]
 
 let n = 1;
@@ -504,6 +514,16 @@ export default class CricketScene extends Phaser.Scene {
       '/pong/' + gameType + '/australia_player_fire.png',
       { frameWidth: 227.2, frameHeight: 300 }
     );
+    this.load.spritesheet(
+      'greg_ready',
+      '/pong/' + gameType + '/greg-blewett-idle.png',
+      { frameWidth: 227.4, frameHeight: 300 }
+    );
+    this.load.spritesheet(
+      'greg_fire',
+      '/pong/' + gameType + '/greg-belwett-fire.png',
+      { frameWidth: 227.2, frameHeight: 300 }
+    );
     this.load.image(
       'pakistan_auth',
       '/pong/' + gameType + '/pakistan_auth.png'
@@ -519,7 +539,7 @@ export default class CricketScene extends Phaser.Scene {
       { frameWidth: 227.2, frameHeight: 300 }
     );
 
-      for(let i = 3; i < 8; i++) {
+      for(let i = 3; i < nAdditionalPlayers; i++) {
         this.load.spritesheet(
           `p${i}_player_ready`,
           '/pong/' + gameType + `/p${i}_player_ready.png`,
@@ -918,7 +938,7 @@ export default class CricketScene extends Phaser.Scene {
       repeat: 0,
     });
 
-    for(let i = 3; i < 8; i++) {
+    for(let i = 3; i < nAdditionalPlayers; i++) {
       const ready_frame = this.anims.generateFrameNames(
         `p${i}_player_ready`,
         { start: 0, end: 13 }
