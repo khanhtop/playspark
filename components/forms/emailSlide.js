@@ -4,6 +4,7 @@ import Input from "./input";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
+import { incrementOptInCount } from "@/helpers/api";
 
 export default function EmailSlide({ data }) {
   const context = useAppContext();
@@ -30,6 +31,7 @@ export default function EmailSlide({ data }) {
       },
       { merge: true }
     );
+    await incrementOptInCount(data.tournamentId);
     context.setHasSubscribedToList(true);
     setLoading(false);
   };

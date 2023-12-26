@@ -47,7 +47,7 @@ export const computeLeaderboard = (
         { merge: true }
       );
     }
-    const sorted = _leaderboard.sort((a, b) => b.score > a.score);
+    const sorted = _leaderboard.sort((a, b) => b.score - a.score);
     return {
       leaderboard: sorted,
       prevBest: leaderboard[position].score,

@@ -10,8 +10,10 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import UIButton from "../ui/button";
+import { useAppContext } from "@/helpers/store";
 
 export default function SignUp({ data, closeDialog }) {
+  const context = useAppContext();
   const [phase, setPhase] = useState("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -181,6 +183,26 @@ export default function SignUp({ data, closeDialog }) {
             )}
           </div>
         </div>
+        <p className="text-xs mt-2">
+          By signing up, you are agreeing to our{" "}
+          <a
+            target="__blank"
+            className="text-cyan-500 underline"
+            href={`/terms?companyName=${
+              context?.profile?.companyName ?? "PlaySpark"
+            }`}
+          >
+            Terms and Conditions
+          </a>
+          <span className="mx-1">and</span>
+          <a
+            target="__blank"
+            className="text-cyan-500 underline"
+            href={`/privacy`}
+          >
+            Privacy Policy
+          </a>
+        </p>
       </div>
     </div>
   );

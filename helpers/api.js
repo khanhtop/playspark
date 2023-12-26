@@ -164,9 +164,24 @@ export function incrementPlayCount(tournamentId, gameType = "freemium") {
 }
 
 export function incrementImpressions(tournamentId) {
-  updateDoc(doc(firestore, "tournaments", tournamentId), {
+  updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
     impressions: increment(1),
   });
+}
+
+export async function incrementPlayableAdCount(tournamentId) {
+  updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+    playableAdCount: increment(1),
+  });
+  return;
+}
+
+export async function incrementOptInCount(tournamentId) {
+  console.log(tournamentId);
+  updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+    optInCount: increment(1),
+  });
+  return;
 }
 
 export function incrementPlayCountWithImpressions(

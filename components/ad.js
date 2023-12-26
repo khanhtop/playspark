@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getGame,
   incrementImpressions,
+  incrementOptInCount,
   incrementPlayCount,
   incrementPlayCountWithImpressions,
 } from "@/helpers/api";
@@ -268,6 +269,7 @@ export default function Advert({ data, theme }) {
         <Pong
           gameType="wheelspin"
           callback={() => {
+            incrementOptInCount(data.tournamentId);
             context.setModal({
               title: "You Win",
               contents: (
