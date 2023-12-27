@@ -46,7 +46,6 @@ let double4_cnt = 0;
 let battery_cnt = 0;
 let isFireballRunnig = false;
 
-const nAdditionalPlayers = 12;
 
 let player_name = [
   "Australian",
@@ -59,7 +58,11 @@ let player_name = [
   "Greg Batwett",
   "Mark Overwaugh",
   "Wicket Akram",
-  "Aaron Inswing"
+  "Callum Fieldson",
+  "Aaron Inswing",
+  "Darren Legspinmann",
+  "Sir Ian Boundaryham",
+  "Boundary Lara",
 ]
 
 let player_sprite_names = [
@@ -73,11 +76,17 @@ let player_sprite_names = [
   "p8_player_ready",
   "p9_player_ready",
   "p10_player_ready",
-  "p11_player_ready"
+  "p11_player_ready",
+  "p12_player_ready",
+  "p13_player_ready",
+  "p14_player_ready",
+  "p15_player_ready",
 ]
 
+const nAdditionalPlayers = player_name.length + 1;
+
 let player_socre = [
-  0, 0, 50, 100, 200, 300, 400, 450, 500, 600, 700
+  0, 0, 50, 100, 200, 300, 400, 450, 500, 600, 650, 700, 750, 800, 1000
 ]
 
 let n = 1;
