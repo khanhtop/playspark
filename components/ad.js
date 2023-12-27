@@ -213,6 +213,10 @@ export default function Advert({ data, theme }) {
           sponsorLogo: data?.sponsorLogo,
           backgroundSprite:
             "https://firebasestorage.googleapis.com/v0/b/playspark-c6ad4.appspot.com/o/1703215359747?alt=media&token=0ef04bc7-02df-4465-a879-15dd16dd0967",
+          objectSprite:
+            "https://firebasestorage.googleapis.com/v0/b/playspark-c6ad4.appspot.com/o/1703656162381?alt=media&token=34c6565a-2efe-4671-a4a6-3e3f5815613f",
+          playerSprite:
+            "https://firebasestorage.googleapis.com/v0/b/playspark-c6ad4.appspot.com/o/1703656237730?alt=media&token=1f265c94-2728-4174-9921-bdf2b11f7690",
           maxscore: prevBest ?? 0,
         })}
       {stage === 2 && (
