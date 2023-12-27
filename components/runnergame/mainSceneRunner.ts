@@ -82,7 +82,8 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   preload() {
     //console.log("runner game gameType", gameType);
-    this.load.image('cover', "/" + gameType + "/images/cover.jpg");
+    //this.load.image('cover', "/" + gameType + "/images/cover.jpg");
+	this.load.image('cover', "/" + gameType + "/images/touchdown-master.jpg");
     this.load.image('barFill', "/" + gameType + "/images/bar-fill.png");
     this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
     this.load.image('loading', "/" + gameType + "/images/loading.png");
