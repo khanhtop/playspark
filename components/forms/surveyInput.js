@@ -24,8 +24,8 @@ export default function SurveyInput({ survey, onChange }) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row mt-4 mt-4 mb-1 text-white">
-        <p className="text-white mr-2">Add A Survey</p>
+      <div className="flex flex-row mb-1 text-white">
+        <p className="text-white/70 mr-2">Add A Survey</p>
         <Toggle
           checked={survey}
           onChange={() => onChange(survey ? null : lastSurvey)}

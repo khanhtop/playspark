@@ -20,7 +20,12 @@ let w: number,
   heartNum: number,
   heartR: number,
   boosterNum: number;
-
+let powerups = [];
+let STATUS = {
+  FREEZE : false,
+  MAGNIFY : false,
+  SHRINK : false
+}
 let gameType = "football";
 
 export default class NewPongScene extends Phaser.Scene {
@@ -38,13 +43,14 @@ export default class NewPongScene extends Phaser.Scene {
     super();
     NewPongScene.instance = this;
     gameType = newGameType;
+    console.log(newParams)
     this.params = newParams;
   }
 
   preload() {
-    this.load.image("ball", "/pong/" + gameType + "/ball.png");
-    this.load.image("peck", "/pong/" + gameType + "/peck.png");
-    this.load.image("bg", "/pong/" + gameType + "/bg.png");
+    this.load.image("ball", this.params.objectSprite);
+    this.load.image("peck", this.params.playerSprite);
+    this.load.image("bg", this.params.backgroundSprite);
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
@@ -53,9 +59,9 @@ export default class NewPongScene extends Phaser.Scene {
 
     // PONG ASSETS
     this.load.image("booster", "/pong/pongassets/booster-ball.png");
-    this.load.image("freeze", "/pong/pongassets/freeze.png");
-    this.load.image("magnify", "/pong/pongassets/magnify.png");
-    this.load.image("shrink", "/pong/pongassets/shrink.png");
+    this.load.image("FREEZE", "/pong/pongassets/freeze.png");
+    this.load.image("MAGNIFY", "/pong/pongassets/magnify.png");
+    this.load.image("SHRINK", "/pong/pongassets/shrink.png");
     this.load.audio("boosterAudio", "/pong/pongassets/audio/booster.mp3");
 
 
@@ -169,6 +175,61 @@ export default class NewPongScene extends Phaser.Scene {
       .setOrigin(0.5, 0.5)
       .setDisplaySize(ballR, ballR)
       .setVisible(false);
+
+    powerups.push(
+      this.physics.add.image(sideW, goalH + 50, 'SHRINK')
+      .setOrigin(0, 0)
+      .setDisplaySize(ballR, ballR)
+      .setInteractive()
+    )
+
+    powerups.push(
+      this.physics.add.image(sideW, goalH + 100, 'MAGNIFY')
+      .setOrigin(0, 0)
+      .setDisplaySize(ballR, ballR)
+      .setInteractive()
+    )
+
+    powerups.push(
+      this.physics.add.image(sideW, goalH + 150, 'FREEZE')
+      .setOrigin(0, 0)
+      .setDisplaySize(ballR, ballR)
+      .setInteractive()
+    )
+
+    powerups.forEach(power => {
+      power.on("pointerup", function(pointer) {
+        console.log(power.texture.key)
+        const key = power.texture.key;
+        let isSelect = false;
+        console.log(STATUS.FREEZE, boosterNum)
+
+        if(key == "FREEZE" && !STATUS.FREEZE) {
+          if(boosterNum >= 3) {
+            boosterNum -= 3;
+            isSelect = true;
+          }
+        } else if((key == "SHRINK" && !STATUS.SHRINK) || (key == "MAGNIFY" && !STATUS.MAGNIFY)){
+          if(boosterNum >= 2) {
+            boosterNum -= 2;
+            isSelect = true;
+          }
+        }
+        this.boosterNumText.setText(boosterNum);
+
+        if(isSelect) {
+            STATUS[key] = true;
+            this.time.delayedCall(
+            5000,
+            () => {
+              STATUS[key] = false;
+            },
+            null,
+            this
+          );
+        }
+      }, this);
+    })
 
     this.gr = this.physics.add.staticGroup();
 
@@ -623,6 +684,22 @@ export default class NewPongScene extends Phaser.Scene {
     this.ai.setVelocity(vx, vy);
     if(this.ai.y < 0 || this.ai.x < 0 || this.ai.x > w + 20) {
       this.ai.setPosition(x, 20);
+    }
+
+    if(STATUS.FREEZE) {
+      this.ai.setVelocity(0, 0);
+    }
+
+    if(STATUS.SHRINK) {
+      this.ai.setDisplaySize(aiR * this.aiSize / 2, aiR * this.aiSize / 2)
+    } else {
+      this.ai.setDisplaySize(aiR * this.aiSize, aiR * this.aiSize)
+    }
+
+    if(STATUS.MAGNIFY) {
+      this.player.setDisplaySize(playerR * 2, playerR * 2);
+    } else {
+      this.player.setDisplaySize(playerR, playerR);
     }
   }
 

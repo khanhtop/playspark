@@ -1,0 +1,78 @@
+import { useState } from "react";
+import CreateWrapper from "./createWrapper";
+import CreateDesign from "./createDesign";
+import CreateMarketing from "./createMarketing";
+import CreateSummary from "./createSummary";
+import { useAppContext } from "@/helpers/store";
+import { doc, setDoc } from "firebase/firestore";
+import { firestore } from "@/helpers/firebase";
+
+export default function CreateModal({ data, hide }) {
+  const context = useAppContext();
+  const stages = ["Design", "Game Configuration", "Marketing", "Summary"];
+  const [stage, setStage] = useState(0);
+  const [tournament, setTournament] = useState({ ...data });
+  const [adding, setAdding] = useState(false);
+
+  const createTournament = async () => {
+    setAdding(true);
+    const _myGames = context.profile?.myGames || [];
+    const _uid = Date.now();
+    _myGames.push(_uid);
+    await setDoc(doc(firestore, "tournaments", _uid.toString()), {
+      ...tournament,
+      isActive: true,
+      tournamentId: _uid,
+      ownerId: context.loggedIn?.uid,
+      ownerCompanyName: context?.profile?.companyName,
+      ...(context?.profile?.sponsorLogo && {
+        sponsorLogo: context.profile.sponsorLogo,
+      }),
+      ...(context?.profile?.brandLogo && {
+        brandLogo: context.profile.brandLogo,
+      }),
+    });
+    setAdding(false);
+    hide();
+  };
+
+  return (
+    <div
+      onClick={() => hide()}
+      className="fixed backdrop-blur h-screen w-screen top-0 left-0 bg-black/80 z-20 flex items-center justify-center transition"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="overflow-hidden h-[80%] bg-[#111] w-[80%] border-2 border-cyan-400 rounded-2xl flex flex-col"
+      >
+        <CreateWrapper
+          stages={stages}
+          stage={stage}
+          tournament={tournament}
+          onNavigate={(step) => setStage(step)}
+          onComplete={() => createTournament()}
+          isAdding={adding}
+        >
+          {stage === 0 && (
+            <CreateDesign
+              tournament={tournament}
+              setTournament={setTournament}
+            />
+          )}
+          {stage === 2 && (
+            <CreateMarketing
+              tournament={tournament}
+              setTournament={setTournament}
+            />
+          )}
+          {stage === 3 && (
+            <CreateSummary
+              tournament={tournament}
+              setTournament={setTournament}
+            />
+          )}
+        </CreateWrapper>
+      </div>
+    </div>
+  );
+}
