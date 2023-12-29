@@ -1981,7 +1981,7 @@ export default class CricketScene extends Phaser.Scene {
       this.add.image(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, 'help-board').setOrigin(0.5, 0.5).setDisplaySize(500 * w / 1268, 200 * h / 688)
     )
     this.help_board_group.add(
-      this.add.text(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, `TAP THE PLAYER TO HIT THE BALL.\nTAP, HOLD AND RELEASE TO ADJUST\nTHE POWER OF YOUR SHOT.`, {
+      this.add.text(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, `Tap, hold and release when the ball\n is close to the player to hit the shot`, {
         ...this.runs_text_style,
         fontSize: `${25 * w / 1268}px`,
         lineSpacing: 2,
