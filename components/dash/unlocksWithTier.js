@@ -1,4 +1,5 @@
 import { useAppContext } from "@/helpers/store";
+import { LockClosedIcon } from "@heroicons/react/24/solid";
 
 export function RewardedComponent({ children }) {
   const context = useAppContext();
@@ -16,7 +17,15 @@ export function BrandingComponent({ children }) {
   if (context?.profile?.subscription?.brandedContent === true) {
     return <div>{children}</div>;
   } else {
-    return <div className="opacity-10 pointer-events-none">{children}</div>;
+    return (
+      <div className=" pointer-events-none text-white relative">
+        <div className="absolute h-full w-full top-0 text-xs flex justify-end gap-1">
+          <LockClosedIcon className="h-[13px] w-[13px]" />
+          <p>Upgrade Your Plan</p>
+        </div>
+        <div className="opacity-10">{children}</div>
+      </div>
+    );
   }
 }
 

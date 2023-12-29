@@ -7,6 +7,7 @@ import { firestore } from "@/helpers/firebase";
 import Advert from "../ad";
 import CreateTournamentModal from "./createTournamentModal";
 import FilterPills from "./filterPills";
+import CreateModal from "./createTournament/createModal";
 
 export default function MarketPlace({}) {
   const context = useAppContext();
@@ -81,17 +82,23 @@ export default function MarketPlace({}) {
             onClick={() => setDemo()}
             className="absolute top-0 left-0 h-screen w-screen bg-black/95 z-10 flex items-center justify-center"
           >
-            {
-            demo == 11 ? <iframe src={`/demo/${demo}`} className="h-[688px] w-[1248px]" /> :
-            <iframe src={`/demo/${demo}`} className="h-[663px] w-[375px]" />}
+            {demo == 11 ? (
+              <iframe src={`/demo/${demo}`} className="h-[688px] w-[1248px]" />
+            ) : (
+              <iframe src={`/demo/${demo}`} className="h-[663px] w-[375px]" />
+            )}
           </div>
         )}
         {showAddTournamentModal && (
-          <CreateTournamentModal
-            data={showAddTournamentModal}
+          <CreateModal
             hide={() => setShowAddTournamentModal(false)}
-            setAdding={setAdding}
+            data={showAddTournamentModal}
           />
+          // <CreateTournamentModal
+          //   data={showAddTournamentModal}
+          //   hide={() => setShowAddTournamentModal(false)}
+          //   setAdding={setAdding}
+          // />
         )}
       </div>
     </>

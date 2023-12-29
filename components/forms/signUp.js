@@ -23,7 +23,7 @@ export default function SignUp({ data, closeDialog }) {
 
   const signIn = async () => {
     setLoading(true);
-    await signInWithEmailAndPassword(auth, email, password)
+    await signInWithEmailAndPassword(auth, email.trim(), password)
       .then(async (user) => {
         await verifyUserTracked(user.user.uid);
         closeDialog();
@@ -36,12 +36,12 @@ export default function SignUp({ data, closeDialog }) {
 
   const signUp = async () => {
     setLoading(true);
-    await createUserWithEmailAndPassword(auth, email, password)
+    await createUserWithEmailAndPassword(auth, email.trim(), password)
       .then(async (user) => {
         await setDoc(
           doc(firestore, "users", user.user.uid),
           {
-            email: email,
+            email: email.trim(),
             uid: user.user.uid,
             companyName: name,
           },
@@ -59,7 +59,7 @@ export default function SignUp({ data, closeDialog }) {
   const verifyUserTracked = async (id, withName) => {
     if (withName) {
       await setDoc(
-        doc(firestore, "users", data.ownerId, "users", email),
+        doc(firestore, "users", data.ownerId, "users", email.trim()),
         {
           active: true,
           name: name,
@@ -70,7 +70,7 @@ export default function SignUp({ data, closeDialog }) {
       return;
     } else {
       await setDoc(
-        doc(firestore, "users", data.ownerId, "users", email),
+        doc(firestore, "users", data.ownerId, "users", email.trim()),
         {
           active: true,
           id: id ?? "",

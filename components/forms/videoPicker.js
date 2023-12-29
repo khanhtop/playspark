@@ -9,13 +9,7 @@ import React, { useEffect, useState } from "react";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 
-export default function VideoPicker({
-  children,
-  video,
-  onChange,
-  label,
-  landscape,
-}) {
+export default function VideoPicker({ children, video, onChange, landscape }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [lastVideo, setLastVideo] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -65,8 +59,8 @@ export default function VideoPicker({
 
   return (
     <div>
-      <div className="flex flex-row mt-4 mt-4 mb-1">
-        <p className="text-white mr-2">Sponsored Video</p>
+      <div className="flex flex-row mb-1">
+        <p className="text-white/70 mr-2">Sponsored Video</p>
 
         <Toggle
           checked={video}
@@ -75,14 +69,9 @@ export default function VideoPicker({
         />
       </div>
       {context?.profile?.subscription?.tier == 4 && (
-        <p className="text-white text-xs mb-2 font-bold">Charged at $15</p>
+        <p className="text-white text-xs mb-2 mt-6 font-bold">Charged at $15</p>
       )}
-      {(video || uploading) && (
-        <p className="text-white/80 text-xs mb-4">
-          Select a video (ideally 9:16) to show users during gameplay.
-        </p>
-      )}
-      {video && children}
+      <div className="h-4" />
       <label htmlFor="video-input">
         {uploading ? (
           <div
@@ -142,6 +131,7 @@ export default function VideoPicker({
         style={{ display: "none" }}
         onChange={handleImageChange}
       />
+      {video && children}
     </div>
   );
 }
