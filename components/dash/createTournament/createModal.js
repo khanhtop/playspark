@@ -1,23 +1,40 @@
-import {
-  ArrowRightCircleIcon,
-  ChevronRightIcon,
-} from "@heroicons/react/24/solid";
 import { useState } from "react";
 import CreateWrapper from "./createWrapper";
-import CreateNavigator from "./createNavigator";
-import CreateColorPicker from "./createColorPicker";
-import CreatePreview from "./createPreview";
-import Input from "@/components/forms/input";
 import CreateDesign from "./createDesign";
 import CreateMarketing from "./createMarketing";
 import CreateSummary from "./createSummary";
+import { useAppContext } from "@/helpers/store";
+import { doc, setDoc } from "firebase/firestore";
+import { firestore } from "@/helpers/firebase";
 
 export default function CreateModal({ data, hide }) {
+  const context = useAppContext();
   const stages = ["Design", "Game Configuration", "Marketing", "Summary"];
   const [stage, setStage] = useState(0);
   const [tournament, setTournament] = useState({ ...data });
+  const [adding, setAdding] = useState(false);
 
-  console.log(tournament);
+  const createTournament = async () => {
+    setAdding(true);
+    const _myGames = context.profile?.myGames || [];
+    const _uid = Date.now();
+    _myGames.push(_uid);
+    await setDoc(doc(firestore, "tournaments", _uid.toString()), {
+      ...tournament,
+      isActive: true,
+      tournamentId: _uid,
+      ownerId: context.loggedIn?.uid,
+      ownerCompanyName: context?.profile?.companyName,
+      ...(context?.profile?.sponsorLogo && {
+        sponsorLogo: context.profile.sponsorLogo,
+      }),
+      ...(context?.profile?.brandLogo && {
+        brandLogo: context.profile.brandLogo,
+      }),
+    });
+    setAdding(false);
+    hide();
+  };
 
   return (
     <div
@@ -33,6 +50,8 @@ export default function CreateModal({ data, hide }) {
           stage={stage}
           tournament={tournament}
           onNavigate={(step) => setStage(step)}
+          onComplete={() => createTournament()}
+          isAdding={adding}
         >
           {stage === 0 && (
             <CreateDesign

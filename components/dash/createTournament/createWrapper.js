@@ -7,6 +7,8 @@ export default function CreateWrapper({
   stages,
   stage,
   onNavigate,
+  isAdding,
+  onComplete,
 }) {
   return (
     <div className="h-full flex flex-col">
@@ -22,7 +24,13 @@ export default function CreateWrapper({
           <CreatePreview tournament={tournament} />
         )}
       </div>
-      <CreateNavigator stages={stages} stage={stage} onNavigate={onNavigate} />
+      <CreateNavigator
+        stages={stages}
+        stage={stage}
+        onNavigate={onNavigate}
+        isAdding={isAdding}
+        onComplete={onComplete}
+      />
     </div>
   );
 }

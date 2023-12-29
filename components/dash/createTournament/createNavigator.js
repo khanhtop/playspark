@@ -1,15 +1,22 @@
 import {
   ArrowLeftCircleIcon,
+  ArrowPathIcon,
   ArrowRightCircleIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
 
-export default function CreateNavigator({ stages, stage, onNavigate }) {
+export default function CreateNavigator({
+  stages,
+  stage,
+  onNavigate,
+  isAdding,
+  onComplete,
+}) {
   return (
     <div className="bg-[#151515] h-16 flex items-center pl-4 justify-between">
       {stage > 0 ? (
         <div
-          onClick={() => onNavigate(stage - 1)}
+          onClick={() => !isAdding && onNavigate(stage - 1)}
           className="flex gap-2 text-white pr-4 group cursor-pointer items-center"
         >
           <ArrowLeftCircleIcon className="h-7 w-6 text-white group-hover:text-cyan-400" />
@@ -22,7 +29,7 @@ export default function CreateNavigator({ stages, stage, onNavigate }) {
       )}
       {stage < stages.length - 1 ? (
         <div
-          onClick={() => onNavigate(stage + 1)}
+          onClick={() => !isAdding && onNavigate(stage + 1)}
           className="flex gap-2 text-white pr-4 group cursor-pointer items-center"
         >
           <h1 className="font-mono text-sm font-light">
@@ -32,11 +39,17 @@ export default function CreateNavigator({ stages, stage, onNavigate }) {
         </div>
       ) : (
         <div
-          onClick={() => onNavigate(stage + 1)}
+          onClick={() => onComplete()}
           className="flex gap-2 text-white pr-4 group cursor-pointer items-center"
         >
-          <h1 className="font-mono text-sm font-light">Approve</h1>
-          <CheckCircleIcon className="h-7 w-6 text-green-400 group-hover:text-green-500" />
+          <h1 className="font-mono text-sm font-light">
+            {isAdding ? "Approving" : "Approve"}
+          </h1>
+          {isAdding ? (
+            <ArrowPathIcon className="animate-spin h-7 w-6 text-green-400 group-hover:text-green-500" />
+          ) : (
+            <CheckCircleIcon className="h-7 w-6 text-green-400 group-hover:text-green-500" />
+          )}
         </div>
       )}
     </div>
