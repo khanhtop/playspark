@@ -50,19 +50,19 @@ let isFireballRunnig = false;
 let player_name = [
   "Australian",
   "Pakistan",
-  "Gus Wicketland",
-  "James Bouncer",
-  "Mitch Bowlstotheleft",
-  "Merv HowzatHughes", 
-  "Mark ThirdMan",
-  "Greg Batwett",
-  "Mark Overwaugh",
-  "Wicket Akram",
-  "Callum Fieldson",
-  "Aaron Inswing",
-  "Darren Legspinmann",
-  "Sir Ian Boundaryham",
-  "Boundary Lara",
+  "Gus\n Wicketland",
+  "James\n Bouncer",
+  "Mitch\n Bowlstotheleft",
+  "Merv\n HowzatHughes", 
+  "Mark\n ThirdMan",
+  "Greg\n Batwett",
+  "Mark\n Overwaugh",
+  "Wicket\n Akram",
+  "Callum\n Fieldson",
+  "Aaron\n Inswing",
+  "Darren\n Legspinmann",
+  "Sir Ian\n Boundaryham",
+  "Boundary\n Lara",
 ]
 
 let player_sprite_names = [
@@ -1115,7 +1115,7 @@ export default class CricketScene extends Phaser.Scene {
     this.auth_country = this.add
       .text(w / 2, h / 2 - 100 * w / 1248, 'AUSTRALIA', {
         ...this.country_text_style,
-        wordWrap: { width: 50 },
+        // wordWrap: { width: 100 },
         align: "center",
       })
       .setOrigin(0.5, 0.5)
@@ -1269,7 +1269,7 @@ export default class CricketScene extends Phaser.Scene {
     this.player_country = this.add
       .text(w / 2 + 80 * w / 1248, h / 2 - 50 * w / 1248, 'AUSTRALIA', {
         ...this.pause_text_style,
-        wordWrap: { width: 50 },
+        // wordWrap: { width: 50 },
         align: "center",
       })
       .setOrigin(0.5, 0.5)
@@ -1981,7 +1981,7 @@ export default class CricketScene extends Phaser.Scene {
       this.add.image(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, 'help-board').setOrigin(0.5, 0.5).setDisplaySize(500 * w / 1268, 200 * h / 688)
     )
     this.help_board_group.add(
-      this.add.text(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, `TAP THE PLAYER TO HIT THE BALL.\nTAP, HOLD AND RELEASE TO ADJUST\nTHE POWER OF YOUR SHOT.`, {
+      this.add.text(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, `Tap, hold and release when the ball\n is close to the player to hit the shot`, {
         ...this.runs_text_style,
         fontSize: `${25 * w / 1268}px`,
         lineSpacing: 2,
