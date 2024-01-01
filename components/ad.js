@@ -15,7 +15,7 @@ import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
 import Survey from "./survey";
 import Pong from "./games/pong";
-import { isIOS, isAndroid, isSafari } from "react-device-detect";
+import { isIOS, isAndroid } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
 import { computeLeaderboard } from "@/helpers/leaderboard";
 

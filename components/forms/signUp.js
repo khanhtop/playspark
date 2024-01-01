@@ -7,6 +7,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { auth, firestore } from "@/helpers/firebase";
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import UIButton from "../ui/button";
@@ -19,9 +20,87 @@ export default function SignUp({ data, closeDialog }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState();
+  const [errorSource, setErrorSource] = useState({
+    email: false,
+    password: false,
+    name: false,
+  });
   const [loading, setLoading] = useState(false);
 
+  const validateBasicPayload = () => {
+    let errors = [];
+
+    if (email.length < 6 || !email.includes("@")) {
+      setErrorSource((prevErrorSource) => ({
+        ...prevErrorSource,
+        email: true,
+      }));
+      errors.push("your email address is valid");
+    }
+
+    if (phase !== "forgot" && password.length < 6) {
+      setErrorSource((prevErrorSource) => ({
+        ...prevErrorSource,
+        password: true,
+      }));
+      errors.push("your password is at least 6 characters");
+    }
+
+    if (phase === "signup" && name.length < 3) {
+      setErrorSource((prevErrorSource) => ({ ...prevErrorSource, name: true }));
+      errors.push("you have entered your name");
+    }
+
+    if (errors.length > 0) {
+      let errorMessage = "Please ensure that ";
+      if (errors.length === 1) {
+        errorMessage += errors[0];
+      } else {
+        errorMessage +=
+          errors.slice(0, -1).join(", ") + " and " + errors[errors.length - 1];
+      }
+
+      alert(errorMessage);
+
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const translateFirebaseErrorCode = (errorCode) => {
+    switch (errorCode) {
+      case "auth/invalid-email":
+        return "Invalid email address";
+      case "auth/user-disabled":
+        return "User account is disabled";
+      case "auth/user-not-found":
+        return "User not found";
+      case "auth/wrong-password":
+        return "Incorrect password";
+      case "auth/email-already-in-use":
+        return "Email is already in use. Try another email or sign in.";
+      case "auth/weak-password":
+        return "Password is too weak. Choose a stronger password.";
+      case "auth/operation-not-allowed":
+        return "Operation not allowed. Please contact support.";
+      case "auth/missing-verification-code":
+        return "Missing verification code. Please check your email.";
+      case "auth/expired-action-code":
+        return "Expired action code. Please request a new one.";
+      case "auth/invalid-action-code":
+        return "Invalid action code. Please double-check the code.";
+      case "auth/invalid-verification-code":
+        return "Invalid verification code. Please double-check the code.";
+      case "auth/requires-recent-login":
+        return "Action requires recent login. Please sign in again.";
+      default:
+        return "An error occurred. Please try again.";
+    }
+  };
+
   const signIn = async () => {
+    if (!validateBasicPayload()) return;
     setLoading(true);
     await signInWithEmailAndPassword(auth, email.trim(), password)
       .then(async (user) => {
@@ -30,11 +109,12 @@ export default function SignUp({ data, closeDialog }) {
       })
       .catch((error) => {
         setLoading(false);
-        alert(error.message);
+        alert(translateFirebaseErrorCode(error.code));
       });
   };
 
   const signUp = async () => {
+    if (!validateBasicPayload()) return;
     setLoading(true);
     await createUserWithEmailAndPassword(auth, email.trim(), password)
       .then(async (user) => {
@@ -52,7 +132,7 @@ export default function SignUp({ data, closeDialog }) {
       })
       .catch((error) => {
         setLoading(false);
-        alert(error.message);
+        alert(translateFirebaseErrorCode(error.code));
       });
   };
 
@@ -81,6 +161,22 @@ export default function SignUp({ data, closeDialog }) {
     }
   };
 
+  const forgotPassword = async () => {
+    if (!validateBasicPayload()) return;
+    setLoading(true);
+    await sendPasswordResetEmail(auth, email.trim())
+      .then(async (user) => {
+        alert(
+          "Please check your inbox and spam folders for password reset instructions"
+        );
+        closeDialog();
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert(translateFirebaseErrorCode(error.code));
+      });
+  };
+
   return (
     <div className="flex-1 pb-8 w-full h-full flex rounded-2xl   flex-col items-center justify-center relative ">
       {loading && (
@@ -94,7 +190,14 @@ export default function SignUp({ data, closeDialog }) {
         {/* Tabs */}
         <div className="w-full flex px-8 mb-4">
           <p
-            onClick={() => setPhase("login")}
+            onClick={() => {
+              setErrorSource({
+                email: false,
+                password: false,
+                name: false,
+              });
+              setPhase("login");
+            }}
             className={`${
               phase === "login" ? "text-black" : "text-black/20"
             } flex-1 text-center cursor-pointer font-octo text-xl`}
@@ -102,7 +205,14 @@ export default function SignUp({ data, closeDialog }) {
             Login
           </p>
           <p
-            onClick={() => setPhase("signup")}
+            onClick={() => {
+              setErrorSource({
+                email: false,
+                password: false,
+                name: false,
+              });
+              setPhase("signup");
+            }}
             className={`${
               phase === "signup" ? "text-black" : "text-black/20"
             } flex-1 text-center cursor-pointer font-octo text-xl`}
@@ -122,25 +232,42 @@ export default function SignUp({ data, closeDialog }) {
             } flex flex-col items-center`}
           >
             <input
-              className="bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]"
+              className={`${
+                errorSource.email ? "border-red-500/50" : "border-transparent"
+              } border-2 bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]`}
               placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setErrorSource({ ...errorSource, email: false });
+                setEmail(e.target.value);
+              }}
             />
             {phase !== "forgot" && (
               <input
-                className="bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]"
+                className={`${
+                  errorSource.password
+                    ? "border-red-500/50"
+                    : "border-transparent"
+                } border-2 bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]`}
                 placeholder="Password"
                 type="password"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setErrorSource({ ...errorSource, password: false });
+                  setPassword(e.target.value);
+                }}
               />
             )}
           </div>
           <div className="flex-1  flex flex-col items-center">
             {phase === "signup" && (
               <input
-                className="bg-gray-200 px-2 py-2 mt-2 font-sans rounded-lg w-[90%]"
+                className={`${
+                  errorSource.name ? "border-red-500/50" : "border-transparent"
+                } border-2 bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]`}
                 placeholder="User Name"
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => {
+                  setErrorSource({ ...errorSource, name: false });
+                  setName(e.target.value);
+                }}
               />
             )}
             {/* {error && (
@@ -160,7 +287,7 @@ export default function SignUp({ data, closeDialog }) {
                 phase === "signup"
                   ? signUp()
                   : phase === "forgot"
-                  ? null
+                  ? forgotPassword()
                   : signIn()
               }
               className="mt-2 rounded-full text-white font-normal rounded-xl w-[90%] h-[40px] text-[15px]"
