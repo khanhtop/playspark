@@ -15,7 +15,7 @@ import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
 import Survey from "./survey";
 import Pong from "./games/pong";
-import { isIOS, isAndroid, isSafari } from "react-device-detect";
+import { isIOS, isAndroid } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
 import { computeLeaderboard } from "@/helpers/leaderboard";
 
@@ -23,7 +23,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 
 export default function Advert({ data, theme }) {
   const context = useAppContext();
-  const [stage, setStage] = useState(2);
+  const [stage, setStage] = useState(0);
   const [lockX, setLockX] = useState();
   const [lockY, setLockY] = useState();
   const [dimensions, setDimensions] = useState({ x: undefined, y: undefined });
@@ -213,6 +213,10 @@ export default function Advert({ data, theme }) {
           sponsorLogo: data?.sponsorLogo,
           backgroundSprite:
             "https://firebasestorage.googleapis.com/v0/b/playspark-c6ad4.appspot.com/o/1703215359747?alt=media&token=0ef04bc7-02df-4465-a879-15dd16dd0967",
+          objectSprite:
+            "https://res.cloudinary.com/dmj6utxgp/image/upload/v1703816046/jjdx95xvlapmccqg6oi4.png",
+          playerSprite:
+            "https://res.cloudinary.com/dmj6utxgp/image/upload/v1703816039/epxliucszsagxhntu8wv.png",
           maxscore: prevBest ?? 0,
         })}
       {stage === 2 && (

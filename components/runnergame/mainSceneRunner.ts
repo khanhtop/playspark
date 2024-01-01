@@ -29,6 +29,12 @@ let gameInProgress = false;
 let score = 0, maxLife = 3;
 let touchdownOccurred = false;
 let powerUpActive = false;
+let playerMaxSpeed = 5;
+let playerSpeed = playerMaxSpeed;
+let speed = 2; // grass and other elements speed
+let lastPointerX;
+let lastPointerY;
+let lastMoveTime;
 
 //let touchdownOccurred = false;
 //let touchdownOccurred = false;
@@ -82,7 +88,8 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   preload() {
     //console.log("runner game gameType", gameType);
-    this.load.image('cover', "/" + gameType + "/images/cover.jpg");
+    //this.load.image('cover', "/" + gameType + "/images/cover.jpg");
+	this.load.image('cover', "/" + gameType + "/images/touchdown-master.jpg");
     this.load.image('barFill', "/" + gameType + "/images/bar-fill.png");
     this.load.image('barFrame', "/" + gameType + "/images/bar-frame.png");
     this.load.image('loading', "/" + gameType + "/images/loading.png");
@@ -313,6 +320,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     this.player.setData('tackled', false);
     this.player.play("playerOneAnim");
     this.physics.world.enable(this.player);
+	this.player.body.setGravityY(0);
     this.player.setInteractive({ useHandCursor: true });
 
     const hitAreaWidth = 50;
@@ -739,7 +747,7 @@ export default class MainSceneRunner extends Phaser.Scene {
 		 currGameConfigLevel = touchDownCount; 
 	  }
 	  currGameConfigObj = gameLevelConfig[currGameConfigLevel];
-	  
+	  speed += speed * 0.05;
 	  if (coinTimerEvent) {
         coinTimerEvent.destroy();
       }	  
@@ -794,6 +802,21 @@ export default class MainSceneRunner extends Phaser.Scene {
     coin.setData('collected', false);
   }
   handleSwipe(pointer) {
+	  if (lastPointerX && lastPointerY) {
+		  let distanceX = Math.abs(pointer.x - lastPointerX);
+		  let distanceY = Math.abs(pointer.y - lastPointerY);
+		  let distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+		  let moveTime = pointer.eventTime - lastMoveTime;
+
+		  if (moveTime > 0) {
+			let moveSpeed = distance / moveTime;
+			playerSpeed = moveSpeed * 0.4; 
+		  }
+		}
+
+		lastPointerX = pointer.x;
+		lastPointerY = pointer.y;
+		lastMoveTime = pointer.eventTime;
     if (isSwiping) {
       let swipeEndPosition = new Phaser.Math.Vector2(pointer.x, pointer.y);
       let swipeVector = swipeEndPosition.subtract(swipeStartPosition);
@@ -870,7 +893,7 @@ export default class MainSceneRunner extends Phaser.Scene {
   }
   onRetry() {
     gameOver = false;
-
+	playerSpeed = playerMaxSpeed;
     this.scene.restart();
     this.player.setPosition(w / 2, h / 2 + 160);
 
@@ -1067,7 +1090,7 @@ export default class MainSceneRunner extends Phaser.Scene {
     if (gameOver) {
       return;
     }
-    let speed = 5;
+    //let speed = 5;
     let maxOffsetY = 2 * h + 100;
     if (this.boosters) {
       this.boosters.getChildren().forEach(function (booster) {
@@ -1143,8 +1166,18 @@ export default class MainSceneRunner extends Phaser.Scene {
       const pointer = this.input.activePointer;
       if (pointer.isDown) {
         if (playerClicked) {
-          this.player.x = pointer.x;
-          this.player.y = pointer.y;
+          //this.player.x = pointer.x;
+          //this.player.y = pointer.y;
+		  let angle = Phaser.Math.Angle.Between(this.player.x, this.player.y, pointer.x, pointer.y);
+		  let distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, pointer.x, pointer.y);
+		  
+		  if (distance > playerSpeed) {
+			this.player.x += Math.cos(angle) * playerSpeed;
+			this.player.y += Math.sin(angle) * playerSpeed;
+		  } else {
+			this.player.x = pointer.x;
+			this.player.y = pointer.y;
+		  }
           if (powerUpActive) {
             this.lightBoltCon.setPosition(this.player.x - 20, this.player.y + 2);
           }

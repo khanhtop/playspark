@@ -46,14 +46,23 @@ let double4_cnt = 0;
 let battery_cnt = 0;
 let isFireballRunnig = false;
 
+
 let player_name = [
   "Australian",
   "Pakistan",
-  "Gus Wicketland",
-  "James Bouncer",
-  "Mitch Bowlstotheleft",
-  "Merv HowzatHughes",
-  "Mark ThirdMan",
+  "Gus\n Wicketland",
+  "James\n Bouncer",
+  "Mitch\n Bowlstotheleft",
+  "Merv\n HowzatHughes", 
+  "Mark\n ThirdMan",
+  "Greg\n Batwett",
+  "Mark\n Overwaugh",
+  "Wicket\n Akram",
+  "Callum\n Fieldson",
+  "Aaron\n Inswing",
+  "Darren\n Legspinmann",
+  "Sir Ian\n Boundaryham",
+  "Boundary\n Lara",
 ]
 
 let player_sprite_names = [
@@ -64,10 +73,20 @@ let player_sprite_names = [
   "p5_player_ready",
   "p6_player_ready",
   "p7_player_ready",
+  "p8_player_ready",
+  "p9_player_ready",
+  "p10_player_ready",
+  "p11_player_ready",
+  "p12_player_ready",
+  "p13_player_ready",
+  "p14_player_ready",
+  "p15_player_ready",
 ]
 
+const nAdditionalPlayers = player_name.length + 1;
+
 let player_socre = [
-  0, 0, 50, 100, 200, 300, 400, 
+  0, 0, 50, 100, 200, 300, 400, 450, 500, 600, 650, 700, 750, 800, 1000
 ]
 
 let n = 1;
@@ -504,6 +523,16 @@ export default class CricketScene extends Phaser.Scene {
       '/pong/' + gameType + '/australia_player_fire.png',
       { frameWidth: 227.2, frameHeight: 300 }
     );
+    this.load.spritesheet(
+      'greg_ready',
+      '/pong/' + gameType + '/greg-blewett-idle.png',
+      { frameWidth: 227.4, frameHeight: 300 }
+    );
+    this.load.spritesheet(
+      'greg_fire',
+      '/pong/' + gameType + '/greg-belwett-fire.png',
+      { frameWidth: 227.2, frameHeight: 300 }
+    );
     this.load.image(
       'pakistan_auth',
       '/pong/' + gameType + '/pakistan_auth.png'
@@ -519,7 +548,7 @@ export default class CricketScene extends Phaser.Scene {
       { frameWidth: 227.2, frameHeight: 300 }
     );
 
-      for(let i = 3; i < 8; i++) {
+      for(let i = 3; i < nAdditionalPlayers; i++) {
         this.load.spritesheet(
           `p${i}_player_ready`,
           '/pong/' + gameType + `/p${i}_player_ready.png`,
@@ -918,7 +947,7 @@ export default class CricketScene extends Phaser.Scene {
       repeat: 0,
     });
 
-    for(let i = 3; i < 8; i++) {
+    for(let i = 3; i < nAdditionalPlayers; i++) {
       const ready_frame = this.anims.generateFrameNames(
         `p${i}_player_ready`,
         { start: 0, end: 13 }
@@ -1086,7 +1115,7 @@ export default class CricketScene extends Phaser.Scene {
     this.auth_country = this.add
       .text(w / 2, h / 2 - 100 * w / 1248, 'AUSTRALIA', {
         ...this.country_text_style,
-        wordWrap: { width: 50 },
+        // wordWrap: { width: 100 },
         align: "center",
       })
       .setOrigin(0.5, 0.5)
@@ -1240,7 +1269,7 @@ export default class CricketScene extends Phaser.Scene {
     this.player_country = this.add
       .text(w / 2 + 80 * w / 1248, h / 2 - 50 * w / 1248, 'AUSTRALIA', {
         ...this.pause_text_style,
-        wordWrap: { width: 50 },
+        // wordWrap: { width: 50 },
         align: "center",
       })
       .setOrigin(0.5, 0.5)
@@ -1952,7 +1981,7 @@ export default class CricketScene extends Phaser.Scene {
       this.add.image(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, 'help-board').setOrigin(0.5, 0.5).setDisplaySize(500 * w / 1268, 200 * h / 688)
     )
     this.help_board_group.add(
-      this.add.text(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, `TAP THE PLAYER TO HIT THE BALL.\nTAP, HOLD AND RELEASE TO ADJUST\nTHE POWER OF YOUR SHOT.`, {
+      this.add.text(w / 2 + 80 * w / 1268, h / 2 + 60 * h / 688, `Tap, hold and release when the ball\n is close to the player to hit the shot`, {
         ...this.runs_text_style,
         fontSize: `${25 * w / 1268}px`,
         lineSpacing: 2,
