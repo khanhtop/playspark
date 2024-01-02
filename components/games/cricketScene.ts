@@ -65,6 +65,25 @@ let player_name = [
   "Boundary\n Lara",
 ]
 
+let player_name1 = [
+  "Australian",
+  "Pakistan",
+  "Gus Wicketland",
+  "James Bouncer",
+  "Mitch Bowlstotheleft",
+  "Merv HowzatHughes", 
+  "Mark ThirdMan",
+  "Greg Batwett",
+  "Mark Overwaugh",
+  "Wicket Akram",
+  "Callum Fieldson",
+  "Aaron Inswing",
+  "Darren Legspinmann",
+  "Sir Ian Boundaryham",
+  "Boundary Lara",
+]
+
+
 let player_sprite_names = [
   "australia_player_ready",
   "pakistan_player_ready",
@@ -1961,7 +1980,7 @@ export default class CricketScene extends Phaser.Scene {
       align: 'right'
     }).setOrigin(1, 0.5);
 
-    this.ui_item['unlock_under_info_text'] = this.add.text(w / 2, h / 2 + 60 * h / 688, `${player_name[4]}`, {
+    this.ui_item['unlock_under_info_text'] = this.add.text(w / 2, h / 2 + 60 * h / 688, `${player_name1[4]}`, {
       ...this.unlockBodyStyle,
       fill: '#C1FF72',
       align: 'left'
@@ -3381,7 +3400,7 @@ export default class CricketScene extends Phaser.Scene {
 
     // this.ui_item['unlock_under_info_text'].addColor('#ff0000', this.ui_item['unlock_under_info_text'].text.indexOf('UNLOCKED'), 'UNLOCKED'.length);
 
-    this.ui_item['unlock_under_info_text'].setText(`${player_name[index]}`);
+    this.ui_item['unlock_under_info_text'].setText(`${player_name1[index]}`);
     this.ui_item['unlock_player'].setTexture(player_sprite_names[index]).setDisplaySize(144 * w / 1248, 180 * w / 1248);
 
     this.ball.setPosition(w + 50, 0);
