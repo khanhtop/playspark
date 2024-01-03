@@ -1,6 +1,5 @@
 import AuthWrapper from "@/components/auth/authWrapper";
 import Account from "@/components/dash/account";
-import Avatar from "@/components/dash/avatar";
 import Dashboard from "@/components/dash/dashboard";
 import MarketPlace from "@/components/dash/marketplace";
 import MyGames from "@/components/dash/mygames";
@@ -10,12 +9,10 @@ import Sidebar from "@/components/dash/sidebar";
 import Usage from "@/components/dash/usage";
 import Users from "@/components/dash/users";
 import OnboardWrapper from "@/components/onboard/onboardWrapper";
-import { logout } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Application() {
-  const context = useAppContext();
   const [selectedPane, setSelectedPane] = useState(4);
 
   return (
@@ -59,8 +56,6 @@ export default function Application() {
           ) : (
             <Pane />
           )}
-
-          {/* <Avatar character={context.profile?.companyName?.substring(0, 1)} /> */}
         </div>
       </OnboardWrapper>
     </AuthWrapper>
