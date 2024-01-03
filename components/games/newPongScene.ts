@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { scaleImageViaCloudinary } from "@/helpers/images";
 
 let w: number,
   h: number,
@@ -48,9 +49,30 @@ export default class NewPongScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("ball", this.params.objectSprite);
-    this.load.image("peck", this.params.playerSprite);
-    this.load.image("bg", this.params.backgroundSprite);
+
+    w = this.game.canvas.clientWidth;
+    h = this.game.canvas.clientHeight;
+    ballR = w * 0.1;
+    playerR = w * 0.175;
+    aiR = w * 0.175;
+    scr = h * 0.08;
+    mW = w / 2;
+    mH = (h - scr) / 2 + scr;
+    goalH = h * 0.09;
+    sideW = w * 0.08;
+    boundW = w - 2 * sideW;
+    boundH = h - scr - 2 * goalH;
+    ballVY = h * 0.5;
+    ballVX = w * 0.75;
+    collW = w * 0.24;
+    scrW = w * 0.375;
+    scrH = w * 0.175 / 1.614;
+    heartR = w * 0.0625;
+    heartNum = this.params.lives
+
+    this.load.image("ball", scaleImageViaCloudinary(this.params.objectSprite, ballR, ballR));
+    this.load.image("peck", scaleImageViaCloudinary(this.params.playerSprite, playerR, playerR));
+    this.load.image("bg", scaleImageViaCloudinary(this.params.backgroundSprite, w, h));
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
@@ -72,25 +94,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
     this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
 
-    w = this.game.canvas.clientWidth;
-    h = this.game.canvas.clientHeight;
-    ballR = w * 0.1;
-    playerR = w * 0.175;
-    aiR = w * 0.175;
-    scr = h * 0.08;
-    mW = w / 2;
-    mH = (h - scr) / 2 + scr;
-    goalH = h * 0.09;
-    sideW = w * 0.08;
-    boundW = w - 2 * sideW;
-    boundH = h - scr - 2 * goalH;
-    ballVY = h * 0.5;
-    ballVX = w * 0.75;
-    collW = w * 0.24;
-    scrW = w * 0.375;
-    scrH = w * 0.175 / 1.614;
-    heartR = w * 0.0625;
-    heartNum = this.params.lives
+
   }
 
   // 400 800
