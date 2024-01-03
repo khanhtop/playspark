@@ -62,10 +62,11 @@ export default function CreateModal({ data, hide }) {
             />
           )}
           {stage === 1 && (
-            <CreateConfiguration
-              tournament={tournament}
-              setTournament={setTournament}
-            />
+            <div />
+            // <CreateConfiguration
+            //   tournament={tournament}
+            //   setTournament={setTournament}
+            // />
           )}
           {stage === 2 && (
             <CreateMarketing
