@@ -8,10 +8,3 @@ export async function uploadImage(uri) {
   console.log(url);
   return url;
 }
-
-export function scaleImageViaCloudinary(url, height, width) {
-  const h = Math.round(height)
-  const w = Math.round(width)
-  const transformedUrl = url.replace('/upload/', `/upload/c_scale,h_${h},w_${w}/q_auto/f_auto/`);
-  return transformedUrl;
-}

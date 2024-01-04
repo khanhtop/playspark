@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { scaleImageViaCloudinary } from "@/helpers/images";
+import { getImageWithSize } from "@/helpers/cloudinary";
 
 let w: number,
   h: number,
@@ -70,9 +70,9 @@ export default class NewPongScene extends Phaser.Scene {
     heartR = w * 0.0625;
     heartNum = this.params.lives
 
-    this.load.image("ball", scaleImageViaCloudinary(this.params.objectSprite, ballR, ballR));
-    this.load.image("peck", scaleImageViaCloudinary(this.params.playerSprite, playerR, playerR));
-    this.load.image("bg", scaleImageViaCloudinary(this.params.backgroundSprite, w, h));
+    this.load.image("ball", getImageWithSize(this.params.objectSprite, ballR, ballR));
+    this.load.image("peck", getImageWithSize(this.params.playerSprite, playerR, playerR));
+    this.load.image("bg", this.params.backgroundSprite);
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
