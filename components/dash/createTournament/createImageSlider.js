@@ -8,12 +8,13 @@ export default function CreateImageSlider({
   title,
   selected,
   updateSprite,
+  gameTag,
 }) {
   const [stateImages, setStateImages] = useState();
 
   useEffect(() => {
     if (!stateImages) {
-      fetch(`/api/cloudinaryGet?aspectRatio=${aspectRatio}`)
+      fetch(`/api/cloudinaryGet?aspectRatio=${aspectRatio}&gameTag=${gameTag}`)
         .then((raw) => {
           return raw.json();
         })
@@ -48,8 +49,6 @@ export default function CreateImageSlider({
                 item={item}
                 key={key.toString() + item.url}
                 onSelect={() => updateSprite(item.url)}
-                // selected={selected === item.url}
-                // onSelect={setSelected}
               />
             ))}
           </div>
@@ -75,7 +74,6 @@ export default function CreateImageSlider({
             if (event === "success") {
               setTimeout(() => {
                 setStateImages([info, ...stateImages]);
-                setSelected(info.url);
               }, 2000);
             }
           }}

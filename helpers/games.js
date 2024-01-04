@@ -160,7 +160,19 @@ export const games = [
     description:
       "This is new pong ball game.  Try to score as many points as you can before you concede three goals!",
     backgroundImage: "/defaults/soccerfall.jpg",
+    screenshot: "soccerfall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 13,
+    //
+    // Configurable Parameters
+    //
+    cloudinaryGameTag: "pong",
     playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+    powerUpSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
     objectSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169546/kq9vyx4g4f9it6ct361b.png",
@@ -170,10 +182,8 @@ export const games = [
       playerSprite: "1.0",
       objectSprite: "1.0",
       backgroundSprite: "0.6",
+      enemySprite: "1.0",
+      powerUpSprite: "1.0",
     },
-    screenshot: "soccerfall.jpg",
-    primaryColor: "#F69B01",
-    textColor: "#FFF",
-    id: 13,
   },
 ];
