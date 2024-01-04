@@ -8,6 +8,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import Input from "../forms/input";
 import SubNav from "../nav/subnav";
 import Usage from "./usage";
+import API from "./api";
 
 export default function Account() {
   const context = useAppContext();
@@ -15,6 +16,7 @@ export default function Account() {
   const [loading, setLoading] = useState(false);
 
   // Image Assets
+  const [slug, setSlug] = useState();
   const [brandLogo, setBrandLogo] = useState();
   const [sponsorLogo, setSponsorLogo] = useState();
 
@@ -42,6 +44,9 @@ export default function Account() {
     if (context?.profile?.sponsorLogo) {
       setSponsorLogo(context?.profile?.sponsorLogo);
     }
+    if (context?.profile?.slug) {
+      setSlug(context?.profile?.slug);
+    }
   }, [context.profile]);
 
   const updateProfile = async () => {
@@ -49,6 +54,7 @@ export default function Account() {
     await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
       ...(brandLogo && { brandLogo: brandLogo }),
       ...(sponsorLogo && { sponsorLogo: sponsorLogo }),
+      ...(slug && { slug: slug }),
     });
     setLoading(false);
   };
@@ -60,7 +66,7 @@ export default function Account() {
         onSelect={(item) => setNav(item.value)}
         options={[
           {
-            text: "Logos & Images",
+            text: "Branding",
             value: "branding",
           },
           {
@@ -76,17 +82,36 @@ export default function Account() {
             value: "usage",
           },
           {
-            text: "Billing",
-            value: "billing",
+            text: "API",
+            value: "api",
           },
         ]}
       />
       {nav === "branding" && (
         <>
-          <p className="text-white/70 text-sm">
-            Rectangular images will generally appear on scoreboards and around
-            stadiums, whereas square logos may appear within pitches.
-          </p>
+          <div className="hidden">
+            <p className="my-0 text-white/70 text-xs mb-2">
+              Playspark Page URL
+            </p>
+            <div className="bg-white h-10 rounded-full font-mono flex items-center overflow-hidden pl-4 pr-2">
+              <p>https://playspark.co/go/</p>
+              <input
+                spellcheck="false"
+                autocomplete="off"
+                type="text"
+                value={slug}
+                onChange={(e) => {
+                  const sanitizedValue = e.target.value.replace(
+                    /[^a-z-_]/g,
+                    ""
+                  );
+                  setSlug(sanitizedValue?.toLowerCase());
+                }}
+                className="outline-none border-b-2 border-b-black/10 w-full mr-6"
+              />
+            </div>
+          </div>
+
           <ImagePicker
             id="brand-logo"
             constrain
@@ -134,7 +159,7 @@ export default function Account() {
             PlaySpark. We will soon be launching direct integration into your
             email marketing platforms, such as MailChimp and Klaviyo.
           </p>
-          <div>
+          <div className="flex gap-2">
             {emails.map((item, key) => (
               <div key={key} className="bg-white/10 px-4 py-1 rounded-full">
                 <p className="text-white/80">{item}</p>
@@ -148,11 +173,8 @@ export default function Account() {
           <Usage />
         </>
       )}
-      {nav === "billing" && (
-        <>
-          <p className="text-white/70 text-sm">Placeholder</p>
-        </>
-      )}
+      {/* {nav === "api" && <API />} */}
+      {nav === "api" && <p>Placeholder</p>}
     </div>
   );
 }

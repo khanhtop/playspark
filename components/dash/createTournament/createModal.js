@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreateWrapper from "./createWrapper";
 import CreateDesign from "./createDesign";
 import CreateMarketing from "./createMarketing";
@@ -6,6 +6,7 @@ import CreateSummary from "./createSummary";
 import { useAppContext } from "@/helpers/store";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
+import CreateConfiguration from "./createConfiguration";
 
 export default function CreateModal({ data, hide }) {
   const context = useAppContext();
@@ -13,6 +14,7 @@ export default function CreateModal({ data, hide }) {
   const [stage, setStage] = useState(0);
   const [tournament, setTournament] = useState({ ...data });
   const [adding, setAdding] = useState(false);
+  const [imageLibrary, setImageLibrary] = useState();
 
   const createTournament = async () => {
     setAdding(true);
@@ -58,6 +60,13 @@ export default function CreateModal({ data, hide }) {
               tournament={tournament}
               setTournament={setTournament}
             />
+          )}
+          {stage === 1 && (
+            <div />
+            // <CreateConfiguration
+            //   tournament={tournament}
+            //   setTournament={setTournament}
+            // />
           )}
           {stage === 2 && (
             <CreateMarketing
