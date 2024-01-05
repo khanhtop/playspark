@@ -33,7 +33,7 @@ export default function CreateImageSlider({
             <p>Current</p>
           </div>
           <div className="h-[85%] py-2 px-2">
-            <Img item={{ url: selected }} />
+            <Img item={{ secure_url: selected }} onSelect={() => null} />
           </div>
         </div>
 
@@ -93,7 +93,7 @@ function Img({ item, selected, onSelect }) {
     setImageError(false);
 
     const imgElement = new Image();
-    imgElement.src = item.url;
+    imgElement.src = item.secure_url;
 
     imgElement.onload = () => {
       setIsLoading(false);
@@ -115,7 +115,6 @@ function Img({ item, selected, onSelect }) {
   return (
     <div
       onClick={() => {
-        console.log(item.url);
         onSelect(item.url);
       }}
       className={`h-full flex-shrink-0 rounded-lg overflow-hidden border-2 ${
@@ -130,10 +129,9 @@ function Img({ item, selected, onSelect }) {
       {!isLoading && !imageError && (
         <img
           onError={(e) => {
-            console.error("Image failed to load:", e);
             setImageError(true);
           }}
-          src={item?.url}
+          src={item?.secure_url}
           className={`h-full ${imageError ? "hidden" : ""}`}
         />
       )}
