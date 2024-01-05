@@ -24,8 +24,6 @@ export default function CreateImageSlider({
     }
   }, []);
 
-  console.log(stateImages);
-
   return (
     <>
       <h1 className="text-white/70 mb-2 mt-2 text-sm">{title}</h1>
@@ -47,8 +45,8 @@ export default function CreateImageSlider({
             {stateImages?.map((item, key) => (
               <Img
                 item={item}
-                key={key.toString() + item.url}
-                onSelect={() => updateSprite(item.url)}
+                key={key.toString() + item.secure_url}
+                onSelect={() => updateSprite(item.secure_url)}
               />
             ))}
           </div>

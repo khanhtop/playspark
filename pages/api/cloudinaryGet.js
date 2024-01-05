@@ -27,7 +27,10 @@ export default async function handler(req, res) {
       .sort_by("public_id", "desc")
       .max_results(30)
       .execute()
-      .then((result) => res.status(200).json(result.resources));
+      .then((result) => {
+        console.log(result.resources);
+        res.status(200).json(result.resources);
+      });
   } catch (error) {
     console.error("Error fetching images:", error);
     res.status(500).json({ error: "Internal Server Error" });
