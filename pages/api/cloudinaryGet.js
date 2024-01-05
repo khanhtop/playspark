@@ -9,19 +9,28 @@ cloudinary.v2.config({
 
 export default async function handler(req, res) {
   try {
-    const { aspectRatio } = req.query;
+    const { aspectRatio, gameTag } = req.query;
+    console.log("QUERY", aspectRatio, gameTag);
 
     if (!aspectRatio) {
       return res.status(400).json({ error: "Missing aspectRatio parameter" });
     }
 
-    // Assuming 'aspectRatio' is the tag you want to query for
+    const expression = `resource_type:image AND tags=${aspectRatio}${
+      gameTag ? ` AND tags=${gameTag}` : ``
+    }`;
+
+    console.log(expression);
+
     cloudinary.v2.search
-      .expression("resource_type:image AND tags=" + aspectRatio)
+      .expression(expression)
       .sort_by("public_id", "desc")
       .max_results(30)
       .execute()
-      .then((result) => res.status(200).json(result.resources));
+      .then((result) => {
+        console.log(result.resources);
+        res.status(200).json(result.resources);
+      });
   } catch (error) {
     console.error("Error fetching images:", error);
     res.status(500).json({ error: "Internal Server Error" });
