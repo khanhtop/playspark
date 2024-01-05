@@ -16,6 +16,8 @@ export default function CreateModal({ data, hide }) {
   const [adding, setAdding] = useState(false);
   const [imageLibrary, setImageLibrary] = useState();
 
+  console.log(tournament);
+
   const createTournament = async () => {
     setAdding(true);
     const _myGames = context.profile?.myGames || [];

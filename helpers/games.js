@@ -177,7 +177,7 @@ export const games = [
     objectSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169546/kq9vyx4g4f9it6ct361b.png",
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
     aspectRatios: {
       playerSprite: "1.0",
       objectSprite: "1.0",

@@ -2,6 +2,7 @@ import Button from "@/components/forms/button";
 import UIButton from "@/components/ui/button";
 import { firestore } from "@/helpers/firebase";
 import { query, collection, where, getDocs } from "firebase/firestore";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function PageHandler({ user, tournaments }) {
@@ -17,7 +18,7 @@ export default function PageHandler({ user, tournaments }) {
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-3xl">Compete In Tournaments!</h1>
         </div>
-        <div className="w-screen grid grid-cols-3 gap-8 px-8 py-8 bg-black text-regular">
+        <div className="w-screen grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-8 py-8 bg-black text-regular">
           {tournaments
             ?.filter((a) => a.isActive)
             ?.map((item, key) => (
@@ -25,11 +26,13 @@ export default function PageHandler({ user, tournaments }) {
             ))}
         </div>
       </div>
+      <div className="h-72 bg-[#111]"></div>
     </div>
   );
 }
 
 function Game({ item }) {
+  const router = useRouter();
   const [hover, setHover] = useState(false);
   const highScorer = item.leaderboard?.sort((a, b) => a - b)?.[0];
   return (
@@ -61,6 +64,12 @@ function Game({ item }) {
           </p>
         )}
         <UIButton
+          onClick={() =>
+            window.open(
+              `https://playspark.co/ad/${item.tournamentId}`,
+              "__blank"
+            )
+          }
           theme="pixel"
           primaryColor={item.primaryColor}
           textColor={item.textColor}
