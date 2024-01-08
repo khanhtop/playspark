@@ -105,7 +105,7 @@ export default function Outro({
                   {...{ ...data, primaryColor: "red" }}
                   onClick={() => {
                     context.setModal({
-                      title: "Sign Up",
+                      title: "Record Your Score",
                       onClose: () => {
                         context.setModal();
                       },

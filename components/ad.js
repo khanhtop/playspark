@@ -214,6 +214,8 @@ export default function Advert({ data, theme }) {
           backgroundSprite: data?.backgroundSprite,
           objectSprite: data?.objectSprite,
           playerSprite: data?.playerSprite,
+          enemySprite: data?.enemySprite,
+          powerUpSprite: data?.powerUpSprite,
           maxscore: prevBest ?? 0,
         })}
       {stage === 2 && (

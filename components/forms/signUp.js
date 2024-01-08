@@ -15,7 +15,7 @@ import { useAppContext } from "@/helpers/store";
 
 export default function SignUp({ data, closeDialog }) {
   const context = useAppContext();
-  const [phase, setPhase] = useState("login");
+  const [phase, setPhase] = useState("signup");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -196,13 +196,13 @@ export default function SignUp({ data, closeDialog }) {
                 password: false,
                 name: false,
               });
-              setPhase("login");
+              setPhase("signup");
             }}
             className={`${
-              phase === "login" ? "text-black" : "text-black/20"
+              phase === "signup" ? "text-black" : "text-black/20"
             } flex-1 text-center cursor-pointer font-octo text-xl`}
           >
-            Login
+            Sign Up
           </p>
           <p
             onClick={() => {
@@ -211,13 +211,13 @@ export default function SignUp({ data, closeDialog }) {
                 password: false,
                 name: false,
               });
-              setPhase("signup");
+              setPhase("login");
             }}
             className={`${
-              phase === "signup" ? "text-black" : "text-black/20"
+              phase === "login" ? "text-black" : "text-black/20"
             } flex-1 text-center cursor-pointer font-octo text-xl`}
           >
-            Sign Up
+            Login
           </p>
         </div>
         {/* Form */}
