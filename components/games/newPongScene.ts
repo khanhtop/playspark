@@ -72,10 +72,11 @@ export default class NewPongScene extends Phaser.Scene {
 
     this.load.image("ball", getImageWithSize(this.params.objectSprite, ballR, ballR));
     this.load.image("peck", getImageWithSize(this.params.playerSprite, playerR, playerR));
-    this.load.image("bg", this.params.backgroundSprite);
+    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, w, h));
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
+    this.load.image("bar", "/pong/" + gameType + "/bar.png");
 
     this.load.image("middleAd", this.params.sponsorLogo);
 
@@ -202,9 +203,9 @@ export default class NewPongScene extends Phaser.Scene {
     )
 
     powerups.forEach(power => {
+      console.log(power.texture.key)
+      const key = power.texture.key;
       power.on("pointerup", function(pointer) {
-        console.log(power.texture.key)
-        const key = power.texture.key;
         let isSelect = false;
         console.log(STATUS.FREEZE, boosterNum)
 
@@ -221,6 +222,8 @@ export default class NewPongScene extends Phaser.Scene {
         }
         this.boosterNumText.setText(boosterNum);
 
+        this.setPowerUps();
+
         if(isSelect) {
             STATUS[key] = true;
             this.time.delayedCall(
@@ -233,6 +236,14 @@ export default class NewPongScene extends Phaser.Scene {
           );
         }
       }, this);
+      console.log(power.x, power.y, power.width)
+      this.add.sprite(power.x + ballR * 0.7 + 8, power.y + ballR * 0.9, 'bar').setOrigin(0.5, 0.5).setDisplaySize(25, 80)
+      this.add.sprite(power.x + ballR * 0.7 + 15, power.y + ballR * 0.9, 'booster').setOrigin(0.5, 0.5).setDisplaySize(15, 15)
+      this.add.text(power.x + ballR * 0.7 + 3, power.y + ballR * 0.9, key == "FREEZE"?'3':'2').setStyle({
+        fontFamily: "Robert",
+        fontSize: "10px",
+        color: "#ffffff",
+      }).setOrigin(0.5, 0.5)
     })
 
     this.gr = this.physics.add.staticGroup();
@@ -428,6 +439,8 @@ export default class NewPongScene extends Phaser.Scene {
       this.booster.setVisible(false);
       boosterNum++;
       this.boosterNumText.setText(boosterNum);
+      
+      this.setPowerUps();
       this.boosterAudio.play();
       this.randomBoosterPos();
     }, null, this);
@@ -449,6 +462,22 @@ export default class NewPongScene extends Phaser.Scene {
     this.ball.setMaxVelocity(ballVX * 3, ballVY * 3);
 
     this.initGame();
+  }
+
+  public setPowerUps() {
+    powerups.forEach(power => {
+      power.setAlpha(0.6);
+      const key = power.texture.key;
+      if(key == "SHRINK" || key == "MAGNIFY") {
+        if(boosterNum >= 2) {
+          power.setAlpha(1);
+        }
+      } else if(key == "FREEZE") {
+        if(boosterNum >= 3) {
+          power.setAlpha(1);
+        }
+      }
+    })
   }
 
   private ballDir: number = 1;
@@ -513,6 +542,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.aiMoveTime = 0;
 
     boosterNum = 0;
+    this.setPowerUps();
     this.randomBoosterPos();
     setTimeout(() => this.startRound(), 2500);
   }
