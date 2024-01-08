@@ -141,7 +141,7 @@ export default class NewPongScene extends Phaser.Scene {
       .setBounce(1, 1);
     this.player = this.physics.add
       .image(mW, h - goalH - playerR / 2, "peck")
-      .setTint(0x0000ff)
+      // .setTint(0x0000ff)
       .setAlpha(0.75)
       .setDisplaySize(playerR, playerR)
       .setCircle(this.textures.get("peck").getSourceImage().width / 2)
@@ -149,7 +149,7 @@ export default class NewPongScene extends Phaser.Scene {
       .setPushable(false);
     this.ai = this.physics.add
       .image(mW, scr + goalH + playerR / 2, "peck")
-      .setTint(0xff0000)
+      // .setTint(0xff0000)
       .setAlpha(0.75)
       .setDisplaySize(playerR, playerR)
       .setCircle(this.textures.get("peck").getSourceImage().width / 2)
