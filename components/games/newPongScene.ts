@@ -71,6 +71,7 @@ export default class NewPongScene extends Phaser.Scene {
     heartNum = this.params.lives
 
     this.load.image("ball", getImageWithSize(this.params.objectSprite, ballR, ballR));
+    this.load.image("enemy", getImageWithSize(this.params.enemySprite, playerR, playerR));
     this.load.image("peck", getImageWithSize(this.params.playerSprite, playerR, playerR));
     this.load.image("bg", getImageWithSize(this.params.backgroundSprite, w, h));
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
@@ -81,7 +82,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.image("middleAd", this.params.sponsorLogo);
 
     // PONG ASSETS
-    this.load.image("booster", "/pong/pongassets/booster-ball.png");
+    this.load.image("booster", getImageWithSize(this.params.powerUpSprite, 30, 30));
     this.load.image("FREEZE", "/pong/pongassets/freeze.png");
     this.load.image("MAGNIFY", "/pong/pongassets/magnify.png");
     this.load.image("SHRINK", "/pong/pongassets/shrink.png");
@@ -148,11 +149,11 @@ export default class NewPongScene extends Phaser.Scene {
       .setCollideWorldBounds(true)
       .setPushable(false);
     this.ai = this.physics.add
-      .image(mW, scr + goalH + playerR / 2, "peck")
+      .image(mW, scr + goalH + playerR / 2, "enemy")
       // .setTint(0xff0000)
       .setAlpha(0.75)
       .setDisplaySize(playerR, playerR)
-      .setCircle(this.textures.get("peck").getSourceImage().width / 2)
+      .setCircle(this.textures.get("enemy").getSourceImage().width / 2)
       .setCollideWorldBounds(true)
       .setPushable(false);
 
