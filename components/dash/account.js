@@ -89,12 +89,12 @@ export default function Account() {
       />
       {nav === "branding" && (
         <>
-          <div className="hidden">
+          <div className="">
             <p className="my-0 text-white/70 text-xs mb-2">
               Playspark Page URL
             </p>
             <div className="bg-white h-10 rounded-full font-mono flex items-center overflow-hidden pl-4 pr-2">
-              <p>https://playspark.co/go/</p>
+              <p>https://playspark.co/</p>
               <input
                 spellcheck="false"
                 autocomplete="off"
