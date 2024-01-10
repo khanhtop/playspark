@@ -173,8 +173,7 @@ export default function Account() {
           <Usage />
         </>
       )}
-      {/* {nav === "api" && <API />} */}
-      {nav === "api" && <p>Placeholder</p>}
+      {nav === "api" && <API />}
     </div>
   );
 }
