@@ -65,6 +65,7 @@ export default function CreateModal({ data, hide }) {
           )}
           {stage === 1 && (
             <CreateConfiguration
+              isAdmin={true}
               tournament={tournament}
               setTournament={setTournament}
             />

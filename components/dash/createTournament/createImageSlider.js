@@ -2,11 +2,13 @@ import { ArrowPathIcon, CloudArrowDownIcon } from "@heroicons/react/24/solid";
 import { WidgetLoader, Widget } from "react-cloudinary-upload-widget";
 import { useEffect } from "react";
 import { useState } from "react";
+import { configurableParameterTitles } from "@/helpers/configurability";
 
 export default function CreateImageSlider({
   aspectRatio,
   title,
   selected,
+  dimension,
   updateSprite,
   gameTag,
 }) {
@@ -26,7 +28,14 @@ export default function CreateImageSlider({
 
   return (
     <>
-      <h1 className="text-white/70 mb-2 mt-2 text-sm">{title}</h1>
+      <div className="text-white/70 mb-3 mt-2 text-sm flex gap-2">
+        <h1 className="">
+          {configurableParameterTitles?.[gameTag]?.[dimension]?.text ?? title}
+        </h1>
+        <Tag text={gameTag} />
+        <Tag text={aspectRatio} />
+      </div>
+
       <div className="flex gap-2">
         <div className="h-48 rounded-xl bg-white/10 overflow-hidden">
           <div className="h-[15%] flex items-center pl-2 bg-black/20 text-white/50 text-xs">
@@ -82,6 +91,14 @@ export default function CreateImageSlider({
         />
       </div>
     </>
+  );
+}
+
+function Tag({ text }) {
+  return (
+    <div className="bg-cyan-400 text-black px-4 rounded-full ">
+      <p>{text}</p>
+    </div>
   );
 }
 function Img({ item, selected, onSelect }) {

@@ -178,7 +178,7 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169546/kq9vyx4g4f9it6ct361b.png",
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
-    aspectRatios: {
+    tags: {
       playerSprite: "1.0",
       objectSprite: "1.0",
       backgroundSprite: "0.6",
@@ -198,23 +198,29 @@ export const games = [
     //
     // Configurable Parameters
     //
-    cloudinaryGameTag: "pong",
+    cloudinaryGameTag: "fall",
     playerSprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
     enemySprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870377/vxtjhmvs2qj11xlyxaug.png",
     powerUpSprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
     objectSprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169546/kq9vyx4g4f9it6ct361b.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169648/kjacp92e8wrlbbkdlksm.png",
     backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870197/g45zsfq8kr4gz4op7u1q.png",
+    additionalSpriteOne:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849184/Fall_-_head_-_basketball_yqri0q.png",
+    additionalSpriteTwo:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
-    aspectRatios: {
-      playerSprite: "1.0",
+    tags: {
+      playerSprite: "body",
       objectSprite: "1.0",
       backgroundSprite: "0.6",
       enemySprite: "1.0",
       powerUpSprite: "1.0",
+      additionalSpriteOne: "head",
+      additionalSpriteTwo: "weapon",
     },
   },
 ];

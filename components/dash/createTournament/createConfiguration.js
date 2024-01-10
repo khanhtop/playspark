@@ -1,60 +1,87 @@
 import CreateImageSlider from "./createImageSlider";
 
-export default function CreateConfiguration({ tournament, setTournament }) {
+export default function CreateConfiguration({
+  tournament,
+  setTournament,
+  isAdmin,
+}) {
   return (
     <div className="flex flex-col">
-      {tournament?.aspectRatios?.["backgroundSprite"] && (
+      {tournament?.tags?.["backgroundSprite"] && (
         <CreateImageSlider
-          aspectRatio={tournament?.aspectRatios?.["backgroundSprite"]}
+          isAdmin={isAdmin}
+          dimension="backgroundSprite"
+          aspectRatio={tournament?.tags?.["backgroundSprite"]}
           gameTag={tournament?.cloudinaryGameTag}
-          title={`Background Sprite (Aspect ${tournament?.aspectRatios?.["backgroundSprite"]})`}
+          title={`Background Sprite`}
           selected={tournament.backgroundSprite}
           updateSprite={(a) => {
             setTournament({ ...tournament, backgroundSprite: a });
           }}
         />
       )}
-      {tournament?.aspectRatios?.["playerSprite"] && (
+      {tournament?.tags?.["playerSprite"] && (
         <CreateImageSlider
-          aspectRatio={tournament?.aspectRatios?.["playerSprite"]}
+          isAdmin={isAdmin}
+          dimension="playerSprite"
+          aspectRatio={tournament?.tags?.["playerSprite"]}
           gameTag={tournament?.cloudinaryGameTag}
-          title={`Player Sprite (Aspect ${tournament?.aspectRatios?.["playerSprite"]})`}
+          title={`Player Sprite`}
           selected={tournament.playerSprite}
           updateSprite={(a) => {
             setTournament({ ...tournament, playerSprite: a });
           }}
         />
       )}
-      {tournament?.aspectRatios?.["enemySprite"] && (
+      {tournament?.tags?.["enemySprite"] && (
         <CreateImageSlider
-          aspectRatio={tournament?.aspectRatios?.["enemySprite"]}
+          isAdmin={isAdmin}
+          dimension="enemySprite"
+          aspectRatio={tournament?.tags?.["enemySprite"]}
           gameTag={tournament?.cloudinaryGameTag}
-          title={`Enemy Sprite (Aspect ${tournament?.aspectRatios?.["enemySprite"]})`}
+          title={`Enemy Sprite`}
           selected={tournament.enemySprite}
           updateSprite={(a) => {
             setTournament({ ...tournament, enemySprite: a });
           }}
         />
       )}
-      {tournament?.aspectRatios?.["objectSprite"] && (
+      {tournament?.tags?.["objectSprite"] && (
         <CreateImageSlider
-          aspectRatio={tournament?.aspectRatios?.["objectSprite"]}
+          isAdmin={isAdmin}
+          dimension="objectSprite"
+          aspectRatio={tournament?.tags?.["objectSprite"]}
           gameTag={tournament?.cloudinaryGameTag}
-          title={`Object Sprite (Aspect ${tournament?.aspectRatios?.["objectSprite"]})`}
+          title={`Object Sprite`}
           selected={tournament.objectSprite}
           updateSprite={(a) => {
             setTournament({ ...tournament, objectSprite: a });
           }}
         />
       )}
-      {tournament?.aspectRatios?.["powerUpSprite"] && (
+      {tournament?.tags?.["powerUpSprite"] && (
         <CreateImageSlider
-          aspectRatio={tournament?.aspectRatios?.["powerUpSprite"]}
+          isAdmin={isAdmin}
+          dimension="powerUpSprite"
+          aspectRatio={tournament?.tags?.["powerUpSprite"]}
           gameTag={tournament?.cloudinaryGameTag}
-          title={`Power Up Sprite (Aspect ${tournament?.aspectRatios?.["powerUpSprite"]})`}
+          title={`Power Up Sprite`}
           selected={tournament.powerUpSprite}
           updateSprite={(a) => {
             setTournament({ ...tournament, powerUpSprite: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["additionalSpriteOne"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteOne"
+          aspectRatio={tournament?.tags?.["additionalSpriteOne"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 1`}
+          selected={tournament.additionalSpriteOne}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteOne: a });
           }}
         />
       )}
