@@ -186,4 +186,35 @@ export const games = [
       powerUpSprite: "1.0",
     },
   },
+  {
+    name: "New Fall Ball",
+    description:
+      "This is new pong ball game.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/basketball-fall.jpg",
+    screenshot: "basketball-fall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 14,
+    //
+    // Configurable Parameters
+    //
+    cloudinaryGameTag: "pong",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+    powerUpSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+    objectSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169546/kq9vyx4g4f9it6ct361b.png",
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
+    aspectRatios: {
+      playerSprite: "1.0",
+      objectSprite: "1.0",
+      backgroundSprite: "0.6",
+      enemySprite: "1.0",
+      powerUpSprite: "1.0",
+    },
+  },
 ];
