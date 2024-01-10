@@ -543,6 +543,11 @@ export default class NewPongScene extends Phaser.Scene {
     this.aiMoveTime = 0;
 
     boosterNum = 0;
+    STATUS = {
+      FREEZE : false,
+      MAGNIFY : false,
+      SHRINK : false
+    }
     this.setPowerUps();
     this.randomBoosterPos();
     setTimeout(() => this.startRound(), 2500);
