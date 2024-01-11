@@ -182,22 +182,24 @@ export default class NewPongScene extends Phaser.Scene {
       .setDisplaySize(ballR, ballR)
       .setVisible(false);
 
+    console.log(h)
+
     powerups.push(
-      this.physics.add.image(sideW, goalH + 50, 'SHRINK')
+      this.physics.add.image(sideW, goalH + 50 * h / 663, 'SHRINK')
       .setOrigin(0, 0)
       .setDisplaySize(ballR, ballR)
       .setInteractive()
     )
 
     powerups.push(
-      this.physics.add.image(sideW, goalH + 100, 'MAGNIFY')
+      this.physics.add.image(sideW, goalH + 100 * h / 663, 'MAGNIFY')
       .setOrigin(0, 0)
       .setDisplaySize(ballR, ballR)
       .setInteractive()
     )
 
     powerups.push(
-      this.physics.add.image(sideW, goalH + 150, 'FREEZE')
+      this.physics.add.image(sideW, goalH + 150 * h / 663, 'FREEZE')
       .setOrigin(0, 0)
       .setDisplaySize(ballR, ballR)
       .setInteractive()
@@ -238,11 +240,10 @@ export default class NewPongScene extends Phaser.Scene {
         }
       }, this);
       console.log(power.x, power.y, power.width)
-      this.add.sprite(power.x + ballR * 0.7 + 8, power.y + ballR * 0.9, 'bar').setOrigin(0.5, 0.5).setDisplaySize(25, 80)
-      this.add.sprite(power.x + ballR * 0.7 + 15, power.y + ballR * 0.9, 'booster').setOrigin(0.5, 0.5).setDisplaySize(15, 15)
+      this.add.sprite(power.x + ballR * 0.7 + 8, power.y + ballR * 0.9, 'bar').setOrigin(0.5, 0.5).setDisplaySize(34, 80)
+      this.add.sprite(power.x + ballR * 0.7 + 19, power.y + ballR * 0.9, 'booster').setOrigin(0.5, 0.5).setDisplaySize(15, 15)
       this.add.text(power.x + ballR * 0.7 + 3, power.y + ballR * 0.9, key == "FREEZE"?'3':'2').setStyle({
-        fontFamily: "Robert",
-        fontSize: "10px",
+        fontSize: "15px",
         color: "#ffffff",
       }).setOrigin(0.5, 0.5)
     })
@@ -606,8 +607,10 @@ export default class NewPongScene extends Phaser.Scene {
     //this.cameras.main.fadeIn(1000);
     this.ball.setVelocity(0, 0);
     setTimeout(() => {
-      this.ball.setPosition(mW, mH);
-      this.ball.setImmovable(true);
+      if(!!this.ball) {
+        this.ball.setPosition(mW, mH);
+        this.ball.setImmovable(true);
+      }
     }, 10);
 
     this.ball.setAlpha(0.5);
