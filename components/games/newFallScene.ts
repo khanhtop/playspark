@@ -1,3 +1,4 @@
+import { getImageWithSize } from "@/helpers/cloudinary";
 import Phaser from "phaser";
 
 let w: number,
@@ -67,40 +68,11 @@ export default class newFallScene extends Phaser.Scene {
     super();
     newFallScene.instance = this;
     gameType = newGameType;
+    console.log(newParams)
     this.params = newParams;
   }
 
   preload() {
-
-    this.load.image("bomb", "/pong/" + gameType + "/bomb.png");
-    // this.load.image("bombEffect", "/pong/" + gameType + "/bomb-effect.png");
-    this.load.image("head", "/pong/" + gameType + "/head.png");
-    this.load.image("boosterBall", "/pong/" + gameType + "/booster-ball.png");
-    this.load.image("boosterBat", "/pong/" + gameType + "/booster-bat.png");
-    this.load.image("boosterBatNum", "/pong/" + gameType + "/booster-bat.png");
-    this.load.spritesheet('bombEffect', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 200, frameHeight: 200 });
-    this.load.spritesheet('playerAnim', "/pong/" + gameType + "/player-animation.png", { frameWidth: 180, frameHeight: 300 });
-
-    this.load.image("ball", "/pong/" + gameType + "/ball.png");
-    this.load.image("peck", "/pong/" + gameType + "/player-static-catch.png");
-    this.load.image("bg", "/pong/" + gameType + "/bg.png");
-    //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
-    this.load.image("heart", "/pong/" + gameType + "/heart.png");
-    this.load.image("score", "/pong/" + gameType + "/score.png");
-
-    this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
-
-    this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
-    this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
-    this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
-    this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
-    this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
-    this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
-    this.load.audio("loselife", "/pong/" + gameType + "/sfx/loseLife.mp3");
-    this.load.audio("lifeup", "/pong/" + gameType + "/sfx/lifeup.mp3");
-    this.load.audio("booster", "/pong/" + gameType + "/sfx/booster.mp3");
-    this.load.audio("bomb", "/pong/" + gameType + "/sfx/bomb.mp3");
-    this.load.audio("powerup", "/pong/" + gameType + "/sfx/powerup.mp3");
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
@@ -133,6 +105,37 @@ export default class newFallScene extends Phaser.Scene {
     heartNum = this.params.lives;
     comboNum = 0;
     isStatic = false;
+
+    this.load.image("bomb", getImageWithSize(this.params.enemySprite, 140, 140));
+    // this.load.image("bombEffect", "/pong/" + gameType + "/bomb-effect.png");
+    this.load.image("head", getImageWithSize(this.params.additionalSpriteOne, 300, 180));
+    this.load.image("boosterBall", getImageWithSize(this.params.powerUpSprite, 80, 80));
+    this.load.image("boosterBat", "/pong/" + gameType + "/booster-bat.png");
+    this.load.image("boosterBatNum", "/pong/" + gameType + "/booster-bat.png");
+    this.load.spritesheet('bombEffect', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 200, frameHeight: 200 });
+    this.load.spritesheet('playerAnim', getImageWithSize(this.params.playerSprite, 300, 8 * 180), { frameWidth: 180, frameHeight: 300 });
+
+    this.load.image("ball", getImageWithSize(this.params.objectSprite, ballR, ballR));
+    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, w, h));
+    //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
+    this.load.image("heart", "/pong/" + gameType + "/heart.png");
+    this.load.image("score", "/pong/" + gameType + "/score.png");
+
+    this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
+
+    this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
+    this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
+    this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
+    this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
+    this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
+    this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
+    this.load.audio("loselife", "/pong/" + gameType + "/sfx/loseLife.mp3");
+    this.load.audio("lifeup", "/pong/" + gameType + "/sfx/lifeup.mp3");
+    this.load.audio("booster", "/pong/" + gameType + "/sfx/booster.mp3");
+    this.load.audio("bomb", "/pong/" + gameType + "/sfx/bomb.mp3");
+    this.load.audio("powerup", "/pong/" + gameType + "/sfx/powerup.mp3");
+
+
   }
 
   // 400 800
@@ -659,7 +662,6 @@ export default class newFallScene extends Phaser.Scene {
   addFallBall(type = 'ball') {
     let bball = this.physics.add
     .image(mW, mH, "ball")
-    .setAlpha(0.85)
     .setDisplaySize(ballR, ballR)
     .setCircle(this.textures.get("ball").getSourceImage().width / 2)
     .setCollideWorldBounds(true)
@@ -761,10 +763,10 @@ export default class newFallScene extends Phaser.Scene {
       bb.type = 'bomb';
       bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 2.3), Math.min(ballR + deltaBomb, ballR * 2.3))
     } else if(rate < 0.8 && rate >= 0.55) {
-      bb.setTexture('ball');
+      bb.setTexture('ball').setDisplaySize(ballR, ballR);
       bb.type = 'ball';
     } else {
-      bb.setTexture('boosterBall');
+      bb.setTexture('boosterBall').setDisplaySize(ballR, ballR);
       bb.type = 'boosterBall';
     }
 
@@ -820,7 +822,6 @@ export default class newFallScene extends Phaser.Scene {
     }
     const booster = this.physics.add
     .image(100, mH, "boosterBat")
-    .setAlpha(0.85)
     .setDisplaySize(ballR, ballR)
     .setCollideWorldBounds(true)
     .setPosition(this.player.x, this.player.y)
