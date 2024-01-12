@@ -12,7 +12,7 @@ export default function Leaderboard({ score, gameData }) {
   const context = useAppContext();
 
   useMemo(() => {
-    if (!gameData.tournamentId) return;
+    if (!gameData.tournamentId || !context?.profile?.companyName) return;
     console.log("IN");
     getLeaderboard(gameData.tournamentId).then((lb) => {
       const { rankedBoard, mutated } = rankMe(
@@ -29,7 +29,7 @@ export default function Leaderboard({ score, gameData }) {
         setData(lb);
       }
     });
-  }, [gameData.tournamentId, score]);
+  }, [gameData.tournamentId, context?.profile?.companyName, score]);
 
   const position = data
     ?.sort((a, b) => b.score - a.score)
