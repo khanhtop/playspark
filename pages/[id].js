@@ -1,33 +1,50 @@
+import Hero from "@/components/clientPages/hero";
+import TopNav from "@/components/clientPages/topnav";
 import Button from "@/components/forms/button";
 import UIButton from "@/components/ui/button";
 import { firestore } from "@/helpers/firebase";
+import { computeTotalScore } from "@/helpers/leaderboard";
+import { useAppContext } from "@/helpers/store";
 import { query, collection, where, getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function PageHandler({ user, tournaments }) {
+  const context = useAppContext();
+  const [totalScore, setTotalScore] = useState(0);
+
+  useEffect(() => {
+    const _score = computeTotalScore(tournaments, user?.id);
+    setTotalScore(_score);
+  }, []);
+
   return (
-    <div className="bg-black text-white font-titan">
-      <div className="h-[calc(100vh-20vh)] w-screen p-4 flex flex-col items-center justify-center gap-4">
-        {user?.brandLogo && (
-          <img src={user.brandLogo} className="max-w-[400px]" />
-        )}
-        <h1 className="text-3xl">{user.companyName}</h1>
-      </div>
-      <div>
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-3xl">Compete In Tournaments!</h1>
-        </div>
-        <div className="w-screen grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-8 py-8 bg-black text-regular">
-          {tournaments
-            ?.filter((a) => a.isActive)
-            ?.map((item, key) => (
-              <Game item={item} />
-            ))}
-        </div>
-      </div>
-      <div className="h-72 bg-[#111]"></div>
+    <div className="min-h-screen">
+      <TopNav data={user} context={context} totalScore={totalScore} />
+      <Hero data={user} context={context} />
     </div>
+    // <div className="bg-black text-white font-titan">
+
+    //   <div className="h-[calc(100vh-20vh)] w-screen p-4 flex flex-col items-center justify-center gap-4">
+    //     {user?.brandLogo && (
+    //       <img src={user.brandLogo} className="max-w-[400px]" />
+    //     )}
+    //     <h1 className="text-3xl">{user.companyName}</h1>
+    //   </div>
+    //   <div>
+    //     <div className="flex flex-col items-center justify-center">
+    //       <h1 className="text-3xl">Compete In Tournaments!</h1>
+    //     </div>
+    //     <div className="w-screen grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-8 py-8 bg-black text-regular">
+    //       {tournaments
+    //         ?.filter((a) => a.isActive)
+    //         ?.map((item, key) => (
+    //           <Game item={item} />
+    //         ))}
+    //     </div>
+    //   </div>
+    //   <div className="h-72 bg-[#111]"></div>
+    // </div>
   );
 }
 

@@ -55,3 +55,17 @@ export const getHighScore = async (tournamentId, uid) => {
   if (position === -1) return 0;
   return rankings[position].score;
 };
+
+export const computeTotalScore = (tournaments, uid) => {
+  if (!tournaments || !uid) return;
+  let totalScore = 0;
+  tournaments.forEach((tournament) => {
+    if (!tournament.leaderboard) return;
+    tournament.leaderboard.forEach((lb) => {
+      if (lb.uid === uid) {
+        totalScore += lb.score;
+      }
+    });
+  });
+  return totalScore;
+};
