@@ -23,7 +23,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 
 export default function Advert({ data, theme }) {
   const context = useAppContext();
-  const [stage, setStage] = useState(2);
+  const [stage, setStage] = useState(0);
   const [lockX, setLockX] = useState();
   const [lockY, setLockY] = useState();
   const [shouldRotate, setShouldRotate] = useState(false);
