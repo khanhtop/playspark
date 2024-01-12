@@ -8,6 +8,7 @@ export default function Survey({ data, onComplete }) {
   const context = useAppContext();
   const [questionIndex, setQuestionIndex] = useState(0);
   const [responses, setResponses] = useState([]);
+  const [canClick, setCanClick] = useState(true);
 
   const submitResponse = async (resp) => {
     const currentSurvey = await getDoc(
@@ -83,17 +84,23 @@ export default function Survey({ data, onComplete }) {
           } items-center justify-center w-full`}
         >
           <div className="flex-1 flex flex-col px-4 items-center justify-center">
-            <img src={data?.brandLogo} className="h-16 mb-4" />
-            <p className="mb-4 text-center font-octo text-3xl">
-              {data?.survey?.[questionIndex]?.question}
-              Question 1
-            </p>
+            <img src={data?.brandLogo} className="h-16 mb-2" />
+            <div className="flex flex-col mb-4 ">
+              <p className="text-center font-octo text-lg uppercase opacity-50">
+                Question 1
+              </p>
+              <p className="text-center font-octo text-3xl">
+                {data?.survey?.[questionIndex]?.question}
+              </p>
+            </div>
           </div>
 
-          <div className="flex flex-1 flex-col gap-4 w-full items-center">
+          <div className="flex flex-1 flex-col gap-3 w-full items-center">
             {data?.survey?.[questionIndex]?.responses?.map((item, key) => (
               <SurveyResponse
                 data={data}
+                canClick={canClick}
+                setCanClick={setCanClick}
                 item={item}
                 key={key}
                 onRespond={(response) => {
@@ -107,6 +114,7 @@ export default function Survey({ data, onComplete }) {
                   setResponses(r);
                   if (questionIndex < data?.survey?.length - 1) {
                     setQuestionIndex(questionIndex + 1);
+                    setCanClick(true);
                   } else {
                     submitResponse(r);
                   }
@@ -120,10 +128,11 @@ export default function Survey({ data, onComplete }) {
   );
 }
 
-function SurveyResponse({ data, item, onRespond }) {
+function SurveyResponse({ data, item, onRespond, setCanClick, canClick }) {
   const [isClicked, setIsClicked] = useState(false);
   const clickButton = () => {
     setIsClicked(true);
+    setCanClick(false);
     setTimeout(() => {
       setIsClicked(false);
       setTimeout(() => {
@@ -133,14 +142,14 @@ function SurveyResponse({ data, item, onRespond }) {
   };
   return (
     <button
-      disabled={isClicked}
-      onClick={() => clickButton()}
+      disabled={!canClick}
+      onClick={() => canClick && clickButton()}
       style={{
         backgroundColor: isClicked ? data.primaryColor : "#2196F3",
         color: isClicked ? data.textColor : "#FFF",
         transition: "1s all",
       }}
-      className="shadow-lg shadow-[#444]/50 bg-gray-200 w-full max-w-[300px] h-12 rounded-full hover:bg-cyan-500 border-[#999] border-[1px]"
+      className="shadow-lg shadow-[#444]/50 bg-gray-200 w-full max-w-[300px] h-10 rounded-full hover:bg-cyan-500 border-[#999] border-[1px]"
     >
       <p>{item.value}</p>
     </button>
