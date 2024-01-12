@@ -1069,6 +1069,7 @@ export default class CricketScene extends Phaser.Scene {
       'pointerdown',
       () => {
         author_id--;
+        author_id = author_id == 2? 1 : author_id;
         if (author_id < 1) author_id = player_name.length;
         this.updateAuthorImage(author_id);
         console.log('leftttttttttt');
@@ -1086,6 +1087,7 @@ export default class CricketScene extends Phaser.Scene {
       'pointerdown',
       () => {
         author_id++;
+        author_id = author_id == 2? 3 : author_id;
         if (author_id > player_name.length) author_id = 1;
         this.updateAuthorImage(author_id);
         console.log('rightttttttttt');
