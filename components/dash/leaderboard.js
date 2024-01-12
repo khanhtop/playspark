@@ -1,13 +1,36 @@
 import { useAppContext } from "@/helpers/store";
 import Text from "../ui/text";
+import { useEffect, useMemo, useState } from "react";
+import {
+  getLeaderboard,
+  rankMe,
+  updateLeaderboard,
+} from "@/helpers/leaderboard";
 
-export default function Leaderboard({
-  gameData,
-  data,
-  primaryColor,
-  textColor,
-}) {
+export default function Leaderboard({ score, gameData }) {
+  const [data, setData] = useState();
   const context = useAppContext();
+
+  useMemo(() => {
+    if (!gameData.tournamentId) return;
+    console.log("IN");
+    getLeaderboard(gameData.tournamentId).then((lb) => {
+      const { rankedBoard, mutated } = rankMe(
+        lb,
+        context.loggedIn?.uid,
+        score,
+        context.loggedIn?.email,
+        context?.profile?.companyName || ""
+      );
+      if (mutated) {
+        updateLeaderboard(gameData.tournamentId, rankedBoard);
+        setData(rankedBoard);
+      } else {
+        setData(lb);
+      }
+    });
+  }, [gameData.tournamentId, score]);
+
   const position = data
     ?.sort((a, b) => b.score - a.score)
     ?.findIndex((a) => a.uid === context?.loggedIn?.uid);
@@ -19,7 +42,7 @@ export default function Leaderboard({
   return (
     <div className="py-4 h-full w-full overflow-y-scroll text-black top-0 left-0 w-full h-full flex flex-col items-center gap-2">
       {/* <RankTriangles data={data?.slice(0, 3)} /> */}
-      {topSlice.map((item, key) => (
+      {topSlice?.map((item, key) => (
         <PositionRow
           item={item}
           key={key}
@@ -29,20 +52,21 @@ export default function Leaderboard({
           isMine={item.uid === context.loggedIn?.uid}
         />
       ))}
-      {Array(3 - (topSlice?.length > 3 ? 0 : topSlice?.length))
-        .fill({
-          name: "Unclaimed",
-          score: "0",
-        })
-        ?.map((item, key) => (
-          <PositionRow
-            item={item}
-            key={key}
-            gameData={gameData}
-            index={key + topSlice?.length}
-            topSlice={topSlice}
-          />
-        ))}
+      {typeof topSlice !== "undefined" &&
+        Array(3 - (topSlice?.length > 3 ? 0 : topSlice?.length))
+          .fill({
+            name: "Unclaimed",
+            score: "0",
+          })
+          ?.map((item, key) => (
+            <PositionRow
+              item={item}
+              key={key}
+              gameData={gameData}
+              index={key + topSlice?.length}
+              topSlice={topSlice}
+            />
+          ))}
       {position > 2 && (
         <PositionRow
           item={myRank}

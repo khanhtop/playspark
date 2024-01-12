@@ -1,60 +1,57 @@
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { firestore } from "./firebase";
 
-export const computeLeaderboard = (
-  leaderboard,
-  score,
-  uid,
-  profile,
-  email,
-  demo,
-  tournamentId,
-  data
-) => {
-  if (!leaderboard) return;
-  const _leaderboard = [...leaderboard];
-  if (score > 0 && uid && profile?.companyName) {
-    const position = _leaderboard.findIndex((a) => a.uid === uid);
-    if (position === -1) {
-      _leaderboard.push({
-        email: email,
-        score: score,
-        uid: uid,
-        name: profile?.companyName,
-      });
-      const sorted = _leaderboard.sort((a, b) => b.score > a.score);
-      return {
-        leaderboard: sorted,
-        prevBest: 0,
-        newBest: score,
-      };
-    } else {
-      if (_leaderboard[position].score < score) {
-        _leaderboard[position] = {
-          ..._leaderboard[position],
-          score: score,
-        };
-      }
-    }
-    if (!demo) {
-      console.log("LB", _leaderboard);
-      setDoc(
-        doc(firestore, "tournaments", tournamentId),
-        {
-          ...data,
-          leaderboard: _leaderboard,
-        },
-        { merge: true }
-      );
-    }
-    const sorted = _leaderboard.sort((a, b) => b.score - a.score);
+export const getLeaderboard = async (tournamentId) => {
+  if (!tournamentId) return [];
+  const response = await getDoc(
+    doc(firestore, "tournaments", tournamentId.toString())
+  );
+  const rankings = response.data()?.leaderboard || [];
+  const sorted = rankings.sort((a, b) => b.score - a.score);
+  return sorted;
+};
+
+export const rankMe = (leaderboard, uid, score, email, companyName) => {
+  if (score === 0)
     return {
-      leaderboard: sorted,
-      prevBest: leaderboard[position].score,
-      newBest:
-        _leaderboard[position].score < score
-          ? score
-          : _leaderboard[position].score,
+      rankedBoard: leaderboard,
+      mutated: false,
     };
+  const position = leaderboard?.findIndex((a) => a.uid === uid);
+  if (position !== -1 && score > leaderboard[position].score) {
+    leaderboard[position].score = score;
+  } else if (position === -1) {
+    leaderboard.push({
+      email: email,
+      score: score,
+      uid: uid,
+      name: companyName,
+    });
+    leaderboard.sort((a, b) => b.score - a.score);
   }
+  return {
+    rankedBoard: leaderboard,
+    mutated: true,
+  };
+};
+
+export const updateLeaderboard = async (tournamentId, leaderboard) => {
+  await setDoc(
+    doc(firestore, "tournaments", tournamentId.toString()),
+    {
+      leaderboard: leaderboard,
+    },
+    { merge: true }
+  );
+};
+
+export const getHighScore = async (tournamentId, uid) => {
+  if (!tournamentId) return [];
+  const response = await getDoc(
+    doc(firestore, "tournaments", tournamentId.toString())
+  );
+  const rankings = response.data()?.leaderboard || [];
+  const position = rankings?.findIndex((a) => a.uid === uid);
+  if (position === -1) return 0;
+  return rankings[position].score;
 };
