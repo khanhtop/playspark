@@ -7,15 +7,7 @@ import ShareButton from "./ui/shareButton";
 import SignUp from "./forms/signUp";
 // import Ranking from "./forms/ranking";
 
-export default function Outro({
-  score,
-  setStage,
-  data,
-  leaderboard,
-  prevBest,
-  reviveCount,
-  onReset,
-}) {
+export default function Outro({ score, setStage, data, reviveCount, onReset }) {
   const context = useAppContext();
 
   const selectStage = () => {
@@ -125,12 +117,7 @@ export default function Outro({
                 <Text {...data} className="text-lg w-full text-center">
                   Top Players
                 </Text>
-                <Leaderboard
-                  gameData={data}
-                  data={leaderboard}
-                  primaryColor={data.primaryColor}
-                  textColor={data.textColor}
-                />
+                <Leaderboard gameData={data} score={score} />
               </div>
             )}
           </div>

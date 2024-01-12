@@ -152,6 +152,15 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
+  if (id === 14)
+    return (
+      <Pong
+        data={data}
+        gameType="newfallball"
+        callback={callback}
+        params={params}
+      />
+    );
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {
