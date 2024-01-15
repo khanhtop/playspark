@@ -69,3 +69,20 @@ export const computeTotalScore = (tournaments, uid) => {
   });
   return totalScore;
 };
+
+export const computeAggregateLeaderboard = (tournaments, uid) => {
+  let lb = [];
+  tournaments.forEach((tourn) => {
+    if (tourn.leaderboard) {
+      tourn.leaderboard.forEach((ranking) => {
+        const index = lb.findIndex((item) => item.uid === ranking.uid);
+        if (index === -1) {
+          lb.push({ ...ranking, mine: ranking.uid === uid });
+        } else {
+          lb[index]["score"] += ranking.score;
+        }
+      });
+    }
+  });
+  return lb.sort((a, b) => b.score - a.score);
+};

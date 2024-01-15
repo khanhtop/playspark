@@ -1,28 +1,74 @@
+import Areas from "@/components/clientPages/areas";
 import Hero from "@/components/clientPages/hero";
+import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
 import TopNav from "@/components/clientPages/topnav";
-import Button from "@/components/forms/button";
 import UIButton from "@/components/ui/button";
 import { firestore } from "@/helpers/firebase";
-import { computeTotalScore } from "@/helpers/leaderboard";
+import {
+  computeAggregateLeaderboard,
+  computeTotalScore,
+} from "@/helpers/leaderboard";
 import { useAppContext } from "@/helpers/store";
 import { query, collection, where, getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-export default function PageHandler({ user, tournaments }) {
+export default function PageHandler({
+  user,
+  tournaments,
+  tournamentsByPlayCount,
+  tournamentsByDate,
+}) {
   const context = useAppContext();
+  const router = useRouter();
   const [totalScore, setTotalScore] = useState(0);
+  const [aggregateLeaderboard, setAggregateLeaderboard] = useState([]);
 
   useEffect(() => {
+    if (!context?.loggedIn?.uid) return;
     const _score = computeTotalScore(tournaments, user?.id);
     setTotalScore(_score);
-  }, []);
+  }, [context.loggedIn?.uid]);
+
+  useMemo(() => {
+    if (!totalScore) return;
+    router.replace(router.asPath);
+    const aggregate = computeAggregateLeaderboard(
+      tournaments,
+      context?.loggedIn?.uid
+    );
+    setAggregateLeaderboard(aggregate);
+  }, [totalScore]);
+
+  user = {
+    ...user,
+    primaryColor: user.primaryColor ?? "#222",
+    accentColor: user.accentColor ?? "#00DDFF",
+    textColor: user.textColor ?? "#FFF",
+    xp: Math.floor(totalScore / 8),
+  };
 
   return (
     <div className="min-h-screen">
       <TopNav data={user} context={context} totalScore={totalScore} />
       <Hero data={user} context={context} />
+      <HorizontalGamesScroll
+        data={tournamentsByPlayCount}
+        user={user}
+        label="Trending Now"
+      />
+      <HorizontalGamesScroll
+        data={tournamentsByDate}
+        user={user}
+        label="Latest"
+      />
+      <Areas
+        aggregateLeaderboard={aggregateLeaderboard}
+        user={user}
+        tournaments={tournaments}
+      />
     </div>
+
     // <div className="bg-black text-white font-titan">
 
     //   <div className="h-[calc(100vh-20vh)] w-screen p-4 flex flex-col items-center justify-center gap-4">
@@ -119,10 +165,33 @@ export async function getServerSideProps(context) {
         id: doc.id,
         ...doc.data(),
       }));
+
+      const tournamentsByPlayCount = tournamentsData
+        ? [...tournamentsData]
+            .sort((a, b) => {
+              const playCountA = a.freemiumPlayCount || 0;
+              const playCountB = b.freemiumPlayCount || 0;
+              return playCountB - playCountA;
+            })
+            .slice(0, 5)
+        : [];
+
+      const tournamentsByDate = tournamentsData
+        ? [...tournamentsData]
+            .sort((a, b) => {
+              const dateB = a.timestamp || 0;
+              const dateA = b.timestamp || 0;
+              return dateB - dateA;
+            })
+            .slice(0, 5)
+        : [];
+
       return {
         props: {
           user: userData,
           tournaments: tournamentsData,
+          tournamentsByPlayCount: tournamentsByPlayCount,
+          tournamentsByDate: tournamentsByDate,
         },
       };
     } else {
