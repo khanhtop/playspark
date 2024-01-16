@@ -7,9 +7,16 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 import { signOut } from "firebase/auth";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function TopNav({ data, context, totalScore }) {
+export default function TopNav({
+  data,
+  context,
+  totalScore,
+  totalXp,
+  showLogin,
+}) {
   return (
     <div
       style={{ backgroundColor: data.primaryColor, color: data.textColor }}
@@ -19,12 +26,15 @@ export default function TopNav({ data, context, totalScore }) {
       <div className="h-full flex-1 flex">
         {context?.loggedIn?.uid ? (
           <div className="h-full flex-1 justify-end flex items-center gap-4">
-            <Pill value={data.xp} Icon={XMarkIcon} data={data} />
+            <Pill value={totalXp} Icon={XMarkIcon} data={data} />
             <Pill value={totalScore} Icon={CurrencyDollarIcon} data={data} />
             <Avatar name={data?.companyName} data={data} />
           </div>
         ) : (
-          <div className="flex-1 flex items-center justify-end font-octo text-2xl">
+          <div
+            onClick={showLogin}
+            className="flex-1 flex items-center justify-end font-octo text-2xl"
+          >
             <p className="cursor-pointer hover:opacity-80">Sign In</p>
           </div>
         )}
@@ -57,7 +67,7 @@ function Avatar({ name, data }) {
 function MenuItem({ text }) {
   return (
     <div
-      onClick={() => logout()}
+      onClick={() => logout(window.location.pathname)}
       className="cursor-pointer h-12 font-octo text-2xl flex items-center justify-center"
     >
       <p>{text}</p>

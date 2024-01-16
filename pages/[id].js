@@ -1,3 +1,4 @@
+import AuthModal from "@/components/auth/authModal";
 import Areas from "@/components/clientPages/areas";
 import Hero from "@/components/clientPages/hero";
 import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
@@ -9,7 +10,14 @@ import {
   computeTotalScore,
 } from "@/helpers/leaderboard";
 import { useAppContext } from "@/helpers/store";
-import { query, collection, where, getDocs } from "firebase/firestore";
+import {
+  query,
+  collection,
+  where,
+  getDocs,
+  orderBy,
+  limit,
+} from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 
@@ -18,56 +26,73 @@ export default function PageHandler({
   tournaments,
   tournamentsByPlayCount,
   tournamentsByDate,
+  leaderboard,
 }) {
   const context = useAppContext();
   const router = useRouter();
-  const [totalScore, setTotalScore] = useState(0);
-  const [aggregateLeaderboard, setAggregateLeaderboard] = useState([]);
+  const [showLogin, setShowLogin] = useState(false);
+  // const [totalScore, setTotalScore] = useState(0);
+  // const [aggregateLeaderboard, setAggregateLeaderboard] = useState([]);
+  console.log(leaderboard);
 
-  useEffect(() => {
-    if (!context?.loggedIn?.uid) return;
-    const _score = computeTotalScore(tournaments, user?.id);
-    setTotalScore(_score);
-  }, [context.loggedIn?.uid]);
+  // useEffect(() => {
+  //   if (!context?.loggedIn?.uid) return;
+  //   const _score = computeTotalScore(tournaments, user?.id);
+  //   setTotalScore(_score);
+  // }, [context.loggedIn?.uid]);
 
-  useMemo(() => {
-    if (!totalScore) return;
-    router.replace(router.asPath);
-    const aggregate = computeAggregateLeaderboard(
-      tournaments,
-      context?.loggedIn?.uid
-    );
-    setAggregateLeaderboard(aggregate);
-  }, [totalScore]);
+  // useMemo(() => {
+  //   if (!totalScore) return;
+  //   router.replace(router.asPath);
+  //   const aggregate = computeAggregateLeaderboard(
+  //     tournaments,
+  //     context?.loggedIn?.uid
+  //   );
+  //   setAggregateLeaderboard(aggregate);
+  // }, [totalScore]);
 
   user = {
     ...user,
     primaryColor: user.primaryColor ?? "#222",
     accentColor: user.accentColor ?? "#00DDFF",
     textColor: user.textColor ?? "#FFF",
-    xp: Math.floor(totalScore / 8),
   };
 
   return (
-    <div className="min-h-screen">
-      <TopNav data={user} context={context} totalScore={totalScore} />
-      <Hero data={user} context={context} />
-      <HorizontalGamesScroll
-        data={tournamentsByPlayCount}
-        user={user}
-        label="Trending Now"
-      />
-      <HorizontalGamesScroll
-        data={tournamentsByDate}
-        user={user}
-        label="Latest"
-      />
-      <Areas
-        aggregateLeaderboard={aggregateLeaderboard}
-        user={user}
-        tournaments={tournaments}
-      />
-    </div>
+    <>
+      <div className="min-h-screen">
+        <TopNav
+          data={user}
+          context={context}
+          totalScore={context?.profile?.totalScore || 0}
+          totalXp={context?.profile?.totalXp || 0}
+          showLogin={() => setShowLogin(true)}
+        />
+        <Hero
+          data={user}
+          context={context}
+          totalXp={context?.profile?.totalXp || 0}
+        />
+        <HorizontalGamesScroll
+          data={tournamentsByPlayCount}
+          user={user}
+          label="Trending Now"
+        />
+        <HorizontalGamesScroll
+          data={tournamentsByDate}
+          user={user}
+          label="Latest"
+        />
+        <Areas
+          aggregateLeaderboard={leaderboard}
+          user={user}
+          tournaments={tournaments}
+        />
+      </div>
+      {showLogin && (
+        <AuthModal user={user} closeModal={() => setShowLogin(false)} />
+      )}
+    </>
 
     // <div className="bg-black text-white font-titan">
 
@@ -186,12 +211,24 @@ export async function getServerSideProps(context) {
             .slice(0, 5)
         : [];
 
+      const leaderboardRef = query(
+        collection(firestore, "users"),
+        where("memberOf", "==", userDoc.id),
+        orderBy("totalScore", "desc"),
+        limit(10)
+      );
+      const leaderboardSnapshot = await getDocs(leaderboardRef);
+      const leaderboard = leaderboardSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+      }));
+
       return {
         props: {
           user: userData,
           tournaments: tournamentsData,
           tournamentsByPlayCount: tournamentsByPlayCount,
           tournamentsByDate: tournamentsByDate,
+          leaderboard: leaderboard,
         },
       };
     } else {

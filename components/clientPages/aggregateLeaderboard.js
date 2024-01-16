@@ -23,10 +23,10 @@ function Rank({ item, pos, user }) {
         <p>{pos}</p>
       </div>
       <div className="flex-1">
-        <p>{item.name || "No Name"}</p>
+        <p>{item.companyName || "No Name"}</p>
       </div>
       <div>
-        <p>{item.score}</p>
+        <p>{item.totalScore}</p>
       </div>
     </div>
   );

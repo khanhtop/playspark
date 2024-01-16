@@ -1,12 +1,19 @@
 import { getRank, xpAsPercentage } from "@/helpers/xp";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function Hero({ data, context }) {
-  if (context.loggedIn?.uid) {
-    const percentage = xpAsPercentage(
-      data.xp,
-      getRank(data.xp).xpToNextTier + data.xp
+export default function Hero({ data, context, totalXp }) {
+  const [percentage, setPercentage] = useState(0);
+  useEffect(() => {
+    if (!totalXp) return;
+    setPercentage(
+      xpAsPercentage(
+        totalXp || 0,
+        getRank(totalXp || 0).xpToNextTier + (totalXp || 0)
+      )
     );
+  }, [totalXp]);
+
+  if (context.loggedIn?.uid) {
     return (
       <div
         style={{ backgroundColor: data?.primaryColor, color: data.textColor }}
@@ -26,7 +33,7 @@ export default function Hero({ data, context }) {
 
         <div className="flex-1 flex flex-col gap-2">
           <div className="font-octo text-4xl">
-            Current Rank: {getRank(data.xp).currentTier}
+            Current Rank: {getRank(context?.profile?.totalXp || 0).currentTier}
           </div>
           <div
             style={{ borderColor: data.accentColor }}
@@ -42,12 +49,12 @@ export default function Hero({ data, context }) {
             ></div>
             <div className="absolute left-0 top-0 w-full h-full flex items-center justify-center">
               <p className="font-bold font-octo mt-[1px]">
-                {data.xp} / {getRank(data.xp).xpToNextTier + data.xp}
+                {totalXp} / {getRank(totalXp).xpToNextTier + totalXp}
               </p>
             </div>
           </div>
           <div className="font-octo text-xl">
-            Next Rank: {getRank(data.xp).nextTier}
+            Next Rank: {getRank(totalXp).nextTier}
           </div>
         </div>
       </div>

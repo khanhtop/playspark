@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, increment, setDoc } from "firebase/firestore";
 import { firestore } from "./firebase";
 
 export const getLeaderboard = async (tournamentId) => {
@@ -43,6 +43,20 @@ export const updateLeaderboard = async (tournamentId, leaderboard) => {
     },
     { merge: true }
   );
+};
+
+export const updateScoreAndXP = async (uid, score, companyId) => {
+  const xp = Math.floor(score / 12);
+  await setDoc(
+    doc(firestore, "users", uid.toString()),
+    {
+      memberOf: companyId.toString(),
+      totalScore: increment(score),
+      totalXp: increment(xp),
+    },
+    { merge: true }
+  );
+  return;
 };
 
 export const getHighScore = async (tournamentId, uid) => {
