@@ -1,7 +1,10 @@
 import { logout } from "@/helpers/firebase";
 import {
+  BellAlertIcon,
+  BellIcon,
   CurrencyDollarIcon,
   PlayIcon,
+  PlusCircleIcon,
   PowerIcon,
   TrophyIcon,
   XMarkIcon,
@@ -16,6 +19,7 @@ export default function TopNav({
   totalScore,
   totalXp,
   showLogin,
+  setScreen,
 }) {
   return (
     <div
@@ -26,9 +30,29 @@ export default function TopNav({
       <div className="h-full flex-1 flex">
         {context?.loggedIn?.uid ? (
           <div className="h-full flex-1 justify-end flex items-center gap-4">
-            <Pill value={totalXp} Icon={XMarkIcon} data={data} />
-            <Pill value={totalScore} Icon={CurrencyDollarIcon} data={data} />
-            <Avatar name={data?.companyName} data={data} />
+            <Pill
+              value={totalXp}
+              image="/clientPages/xp.png"
+              Icon={XMarkIcon}
+              data={data}
+              onClick={() => setScreen("xp")}
+            />
+            <Pill
+              value={totalScore}
+              image="/clientPages/coins.png"
+              Icon={CurrencyDollarIcon}
+              data={data}
+              onClick={() => setScreen("coins")}
+            />
+            <BellIcon
+              onClick={() => setScreen("notifications")}
+              className="h-full pb-1 text-yellow-400"
+            />
+            <Avatar
+              onClick={() => setScreen("profile")}
+              name={data?.companyName}
+              data={data}
+            />
           </div>
         ) : (
           <div
@@ -43,11 +67,11 @@ export default function TopNav({
   );
 }
 
-function Avatar({ name, data }) {
+function Avatar({ name, data, onClick }) {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <div
-      onClick={() => setShowMenu(!showMenu)}
+      onClick={onClick}
       style={{ borderColor: data.accentColor, color: data.textColor }}
       className="z-10 relative border-2 h-10 cursor-pointer hover:opacity-80 transition aspect-square bg-[#666] rounded-full flex items-center justify-center"
     >
@@ -75,14 +99,23 @@ function MenuItem({ text }) {
   );
 }
 
-function Pill({ value, Icon, data }) {
+function Pill({ value, Icon, image, data, onClick }) {
   return (
     <div
       style={{ borderColor: data.accentColor }}
-      className="border-2 rounded-full gap-2 h-10 py-1 flex items-center px-4"
+      className="relative border-2 rounded-full gap-2 h-10 py-1 flex items-center px-4"
     >
-      <Icon style={{ color: data.accentColor }} className="h-full" />
+      {image ? (
+        <img src={image} className="h-full" />
+      ) : (
+        <Icon style={{ color: data.accentColor }} className="h-full" />
+      )}
       <p className="font-octo text-2xl">{value}</p>
+      <PlusCircleIcon
+        onClick={onClick}
+        style={{ color: data.textColor }}
+        className="absolute rounded-full -top-2 -right-2 h-6 w-6"
+      />
     </div>
   );
 }

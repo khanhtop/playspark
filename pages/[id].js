@@ -2,6 +2,11 @@ import AuthModal from "@/components/auth/authModal";
 import Areas from "@/components/clientPages/areas";
 import Hero from "@/components/clientPages/hero";
 import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
+import ClientCoins from "@/components/clientPages/subpages/clientCoins";
+import ClientHome from "@/components/clientPages/subpages/clientHome";
+import ClientNotifications from "@/components/clientPages/subpages/clientNotifications";
+import ClientProfile from "@/components/clientPages/subpages/clientProfile";
+import ClientXP from "@/components/clientPages/subpages/clientXp";
 import TopNav from "@/components/clientPages/topnav";
 import UIButton from "@/components/ui/button";
 import { firestore } from "@/helpers/firebase";
@@ -29,143 +34,46 @@ export default function PageHandler({
   leaderboard,
 }) {
   const context = useAppContext();
-  const router = useRouter();
   const [showLogin, setShowLogin] = useState(false);
-  // const [totalScore, setTotalScore] = useState(0);
-  // const [aggregateLeaderboard, setAggregateLeaderboard] = useState([]);
-  console.log(leaderboard);
+  const [screen, setScreen] = useState("home");
 
-  // useEffect(() => {
-  //   if (!context?.loggedIn?.uid) return;
-  //   const _score = computeTotalScore(tournaments, user?.id);
-  //   setTotalScore(_score);
-  // }, [context.loggedIn?.uid]);
-
-  // useMemo(() => {
-  //   if (!totalScore) return;
-  //   router.replace(router.asPath);
-  //   const aggregate = computeAggregateLeaderboard(
-  //     tournaments,
-  //     context?.loggedIn?.uid
-  //   );
-  //   setAggregateLeaderboard(aggregate);
-  // }, [totalScore]);
-
-  user = {
-    ...user,
-    primaryColor: user.primaryColor ?? "#222",
-    accentColor: user.accentColor ?? "#00DDFF",
-    textColor: user.textColor ?? "#FFF",
+  const data = {
+    user: {
+      ...user,
+      primaryColor: user.primaryColor ?? "#222",
+      accentColor: user.accentColor ?? "#00DDFF",
+      textColor: user.textColor ?? "#FFF",
+    },
+    tournaments,
+    tournamentsByPlayCount,
+    tournamentsByDate,
+    leaderboard,
+    context,
+    setScreen,
+    screen,
   };
 
   return (
     <>
       <div className="min-h-screen">
         <TopNav
-          data={user}
+          data={data.user}
           context={context}
           totalScore={context?.profile?.totalScore || 0}
           totalXp={context?.profile?.totalXp || 0}
           showLogin={() => setShowLogin(true)}
+          setScreen={setScreen}
         />
-        <Hero
-          data={user}
-          context={context}
-          totalXp={context?.profile?.totalXp || 0}
-        />
-        <HorizontalGamesScroll
-          data={tournamentsByPlayCount}
-          user={user}
-          label="Trending Now"
-        />
-        <HorizontalGamesScroll
-          data={tournamentsByDate}
-          user={user}
-          label="Latest"
-        />
-        <Areas
-          aggregateLeaderboard={leaderboard}
-          user={user}
-          tournaments={tournaments}
-        />
+        {screen === "home" && <ClientHome {...data} />}
+        {screen === "coins" && <ClientCoins {...data} />}
+        {screen === "xp" && <ClientXP {...data} />}
+        {screen === "profile" && <ClientProfile {...data} />}
+        {screen === "notifications" && <ClientNotifications {...data} />}
       </div>
       {showLogin && (
         <AuthModal user={user} closeModal={() => setShowLogin(false)} />
       )}
     </>
-
-    // <div className="bg-black text-white font-titan">
-
-    //   <div className="h-[calc(100vh-20vh)] w-screen p-4 flex flex-col items-center justify-center gap-4">
-    //     {user?.brandLogo && (
-    //       <img src={user.brandLogo} className="max-w-[400px]" />
-    //     )}
-    //     <h1 className="text-3xl">{user.companyName}</h1>
-    //   </div>
-    //   <div>
-    //     <div className="flex flex-col items-center justify-center">
-    //       <h1 className="text-3xl">Compete In Tournaments!</h1>
-    //     </div>
-    //     <div className="w-screen grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-8 py-8 bg-black text-regular">
-    //       {tournaments
-    //         ?.filter((a) => a.isActive)
-    //         ?.map((item, key) => (
-    //           <Game item={item} />
-    //         ))}
-    //     </div>
-    //   </div>
-    //   <div className="h-72 bg-[#111]"></div>
-    // </div>
-  );
-}
-
-function Game({ item }) {
-  const router = useRouter();
-  const [hover, setHover] = useState(false);
-  const highScorer = item.leaderboard?.sort((a, b) => a - b)?.[0];
-  return (
-    <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      className="rounded-xl overflow-hidden relative group"
-    >
-      <img
-        style={{
-          opacity: hover ? 0.2 : 1,
-          transition: "0.5s all",
-        }}
-        src={item.backgroundImage}
-        className="w-full"
-      />
-      <div
-        style={{
-          bottom: hover ? 0 : -250,
-          height: 250,
-          transition: "0.5s all",
-        }}
-        className="text-black px-4 text-center gap-2 absolute transition w-full bg-white bottom-0 rounded-t-2xl flex flex-col items-center py-8"
-      >
-        <p className="flex-1 font-octo">{item.description}</p>
-        {highScorer && (
-          <p className="font-octo">
-            Top Scorer: {highScorer?.name} ({highScorer?.score})
-          </p>
-        )}
-        <UIButton
-          onClick={() =>
-            window.open(
-              `https://playspark.co/ad/${item.tournamentId}`,
-              "__blank"
-            )
-          }
-          theme="pixel"
-          primaryColor={item.primaryColor}
-          textColor={item.textColor}
-          text="Play"
-          className=""
-        />
-      </div>
-    </div>
   );
 }
 
