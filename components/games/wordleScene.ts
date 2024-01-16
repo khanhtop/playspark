@@ -23,11 +23,41 @@ let w: number,
   boosterNum: number;
 let UI = {};
 let LAYOUT = {};
+let SCORE_SYSTEM = [
+  {
+    score: 250,
+    coin: 100
+  },
+  {
+    score: 200,
+    coin: 75
+  },
+  {
+    score: 150,
+    coin: 50
+  },
+  {
+    score: 100,
+    coin: 25
+  },
+  {
+    score: 50,
+    coin: 15
+  },
+  {
+    score: 10,
+    coin: 5
+  },
+
+]
 
 let LAYOUT_KEYS = {
   LOGO: 'LOGO',
   MENU: 'MENU',
-  GAME: 'GAME'
+  GAME: 'GAME',
+  BONUS: 'BONUS',
+  SCORE: 'SCORE',
+  GUIDE: 'GUIDE'
 }
 
 let UI_KEYS = {
@@ -39,7 +69,46 @@ let UI_KEYS = {
   CALENDA_DAY_GAME: 'CALENDA_DAY_GAME',
   CALENDA_MONTH_GAME: 'CALENDA_MONTH_GAME',
   COIN_GAME: 'COIN_GAME',
+  SCORE_LAYOUT_VAL : 'SCORE_LAYOUT_VAL',
+  SCORE_LAYOUT_STREAK : 'SCORE_LAYOUT_STREAK',
+  SCORE_GAME: 'SCORE_GAME',
+  COIN_BONUS: 'COIN_BONUS',
+  COIN_VIDEO: 'COIN_VIDEO',
+  POWER_TARGET: 'POWER_TARGET',
+  POWER_DISPLAY: 'POWER_DISPLAY',
+  POWER_NEXT: 'POWER_NEXT',
 }
+
+let GAME_TYPE = {
+  DAILY : 'DAILY',
+  CLASSIC : 'CLASSIC'
+}
+
+let GAME = {
+  STATUS : GAME_TYPE.CLASSIC,
+  WORDS : [],
+  TYPING : "",
+  LINE : 0,
+  SCORE: 0,
+  STREAK: 0,
+  COIN: 0,
+  CUR_COIN: 0,
+  PAUSE: false,
+  POWER_UPS: {
+    TARGET: 0,
+    DISPLAY: 0,
+    NEXT: 3
+  }
+}
+
+const sampleWords = [
+  "score",
+  "leave",
+  "rummy",
+  "jumpe",
+  "uncry",
+  "camel",
+]
 
 const INPUT_KEYS = [
   "Q",
@@ -120,11 +189,23 @@ export default class WordleScene extends Phaser.Scene {
     this.load.image("pink_circle", "/pong/" + gameType + "/pink_circle.png");
     this.load.image("blue_circle", "/pong/" + gameType + "/blue_circle.png");
     this.load.image("outline", "/pong/" + gameType + "/outline.png");
+    this.load.image("w2", "/pong/" + gameType + "/1.png");
+    this.load.image("w1", "/pong/" + gameType + "/2.png");
+    this.load.image("w0", "/pong/" + gameType + "/3.png");
+    this.load.image("inp1", "/pong/" + gameType + "/5.png");
+    this.load.image("inp2", "/pong/" + gameType + "/6.png");
     this.load.image("word_input_btn", "/pong/" + gameType + "/word_input_btn.png");
     this.load.image("back_btn", "/pong/" + gameType + "/back_btn.png");
     this.load.image("next_btn", "/pong/" + gameType + "/next_btn.png");
-    this.load.image("blue_btn", "/pong/" + gameType + "/blue_btn.png");
     this.load.image("next", "/pong/" + gameType + "/next.png");
+    this.load.image("bonus", "/pong/" + gameType + "/bonus.png");
+    this.load.image("green_btn", "/pong/" + gameType + "/green_btn.png");
+    this.load.image("play", "/pong/" + gameType + "/play.png");
+    this.load.image("h1", "/pong/" + gameType + "/h1.png");
+    this.load.image("h2", "/pong/" + gameType + "/h2.png");
+    this.load.image("h3", "/pong/" + gameType + "/h3.png");
+    this.load.image("h4", "/pong/" + gameType + "/h4.png");
+    this.load.image("arrow", "/pong/" + gameType + "/arrow.png");
 
     this.load.image("middleAd", this.params.sponsorLogo);
 
@@ -187,12 +268,16 @@ export default class WordleScene extends Phaser.Scene {
     this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
 
 
-    LAYOUT[LAYOUT_KEYS.GAME] = this.add.group();
-    LAYOUT[LAYOUT_KEYS.LOGO] = this.add.group();
-    LAYOUT[LAYOUT_KEYS.MENU] = this.add.group();
+    Object.keys(LAYOUT_KEYS).forEach(key => {
+      LAYOUT[key] = this.add.group();
+    })
 
     // LOGO PART
-    UI[UI_KEYS.PLAY_BTN_LOGO] = this.addButton('main-btn-bg', this.convertScaleData(140), this.convertScaleData(65), mW, mH + this.convertScaleData(30), "PLAY", LAYOUT[LAYOUT_KEYS.LOGO]);
+
+    UI[UI_KEYS.PLAY_BTN_LOGO] = this.addButton('main-btn-bg', this.convertScaleData(140), this.convertScaleData(65), mW, mH + this.convertScaleData(30), "PLAY", LAYOUT[LAYOUT_KEYS.LOGO], '#fff', () => {
+      this.changeScreen(LAYOUT_KEYS.LOGO, false);
+      this.changeScreen(LAYOUT_KEYS.MENU)
+    });
 
     LAYOUT[LAYOUT_KEYS.LOGO].add(
       this.add.text(mW, mH - this.convertScaleData(70), 'Wordle').setOrigin(0.5, 0.5).setStyle({
@@ -201,11 +286,20 @@ export default class WordleScene extends Phaser.Scene {
         fill: '#000',
       })
     )
-    LAYOUT[LAYOUT_KEYS.LOGO].setVisible(false)
+    LAYOUT[LAYOUT_KEYS.LOGO].setVisible(true)
     
     // MENU PART
-    UI[UI_KEYS.DAILY_BTN_MENU] = this.addButton('main-btn-bg', this.convertScaleData(240), this.convertScaleData(75), mW, mH - this.convertScaleData(110), "DAILY PUZZLE", LAYOUT[LAYOUT_KEYS.MENU]);
-    UI[UI_KEYS.CLASSIC_BTN_MENU] = this.addButton('main-btn-bg', this.convertScaleData(240), this.convertScaleData(75), mW, mH - this.convertScaleData(30), "CLASSIC", LAYOUT[LAYOUT_KEYS.MENU]);
+    UI[UI_KEYS.DAILY_BTN_MENU] = this.addButton('main-btn-bg', this.convertScaleData(240), this.convertScaleData(75), mW, mH - this.convertScaleData(110), "DAILY PUZZLE", LAYOUT[LAYOUT_KEYS.MENU], "#fff", () => {
+      this.changeScreen(LAYOUT_KEYS.MENU, false);
+      this.changeScreen(LAYOUT_KEYS.GAME)
+      GAME.STATUS = GAME_TYPE.DAILY;
+    });
+    UI[UI_KEYS.CLASSIC_BTN_MENU] = this.addButton('main-btn-bg', this.convertScaleData(240), this.convertScaleData(75), mW, mH - this.convertScaleData(30), "CLASSIC", LAYOUT[LAYOUT_KEYS.MENU], "#fff", () => {
+      this.changeScreen(LAYOUT_KEYS.MENU, false);
+      this.changeScreen(LAYOUT_KEYS.GAME)
+      GAME.STATUS = GAME_TYPE.CLASSIC;
+      this.startRound()
+    });
 
     LAYOUT[LAYOUT_KEYS.MENU].setVisible(false)
 
@@ -213,26 +307,53 @@ export default class WordleScene extends Phaser.Scene {
     let GAME_PART = LAYOUT[LAYOUT_KEYS.GAME];
     // GAME TOP PART
     const topY = 40;
-    UI[UI_KEYS.BACK_BTN_GAME] = this.addButton('back', this.convertScaleData(20), this.convertScaleData(20), this.convertScaleData(35), this.convertScaleData(50),  "", GAME_PART);
-
-    GAME_PART.add(
-      this.add.sprite(mW, topY, 'calendar').setOrigin(0.5, 0.5).setDisplaySize(45, 45)
-    )
-    UI[UI_KEYS.CALENDA_DAY_GAME] = this.add.text(mW, topY + this.convertScaleData(5), "21").setStyle({
-      ...this.text_main_style,
-      fontSize: 24 + 'px',
-      fill: '#333',
-    }).setOrigin(0.5, 0.5);
-    UI[UI_KEYS.CALENDA_MONTH_GAME] = this.add.text(mW, topY - this.convertScaleData(15), "JAN").setStyle({
-      ...this.text_main_style,
-      fontSize: 6 + 'px',
-      fill: '#fff',
-    }).setOrigin(0.5, 0.5);
-    GAME_PART.add(UI[UI_KEYS.CALENDA_DAY_GAME]);
+    UI[UI_KEYS.BACK_BTN_GAME] = this.addButton('back', this.convertScaleData(20), this.convertScaleData(35), this.convertScaleData(35), this.convertScaleData(40),  "", GAME_PART, "", () => {
+      if(GAME.PAUSE) return;
+      this.initGame();
+      this.changeScreen(LAYOUT_KEYS.GAME, false)
+      this.changeScreen(LAYOUT_KEYS.MENU);
+    });
 
     
+    // GAME DAILY PART
+
+    // GAME_PART.add(
+    //   this.add.sprite(mW, topY, 'calendar').setOrigin(0.5, 0.5).setDisplaySize(45, 45)
+    // )
+    // UI[UI_KEYS.CALENDA_DAY_GAME] = this.add.text(mW, topY + this.convertScaleData(5), "21").setStyle({
+    //   ...this.text_main_style,
+    //   fontSize: 24 + 'px',
+    //   fill: '#333',
+    // }).setOrigin(0.5, 0.5);
+    // UI[UI_KEYS.CALENDA_MONTH_GAME] = this.add.text(mW, topY - this.convertScaleData(15), "JAN").setStyle({
+    //   ...this.text_main_style,
+    //   fontSize: 6 + 'px',
+    //   fill: '#fff',
+    // }).setOrigin(0.5, 0.5);
+    // GAME_PART.add(UI[UI_KEYS.CALENDA_DAY_GAME]);
+
+    // GAME CLASSIC PART
     GAME_PART.add(
-      this.add.sprite(mW + this.convertScaleData(40), topY - this.convertScaleData(10), 'info').setOrigin(0.5, 0.5).setDisplaySize(20, 20)
+      this.add.text(mW, topY - this.convertScaleData(15), "SCORE").setStyle({
+        ...this.text_main_style,
+        fontSize: 12 + 'px',
+        fill: '#575757',
+      }).setOrigin(0.5, 0.5)
+    )
+    
+    UI[UI_KEYS.SCORE_GAME] = this.add.text(mW, topY + this.convertScaleData(5), "10")
+      .setStyle({
+        ...this.text_main_style,
+        fontSize: 20 + 'px',
+        fill: '#575757',
+      }).setOrigin(0.5, 0.5)
+    GAME_PART.add(UI[UI_KEYS.SCORE_GAME])
+
+    GAME_PART.add(
+      this.add.sprite(mW + this.convertScaleData(40), topY - this.convertScaleData(10), 'info').setOrigin(0.5, 0.5).setDisplaySize(20, 20).setInteractive().on('pointerup', () => {
+        this.addScreen(LAYOUT_KEYS.GUIDE)
+
+      })
     )
     
     GAME_PART.add(
@@ -243,6 +364,7 @@ export default class WordleScene extends Phaser.Scene {
       fontSize: 24 + 'px',
       fill: '#fff',
     }).setOrigin(1, 0.5);
+    GAME_PART.add(UI[UI_KEYS.COIN_GAME])
 
     // GAME MIDDLE PART
     const boxR = 45;
@@ -250,9 +372,15 @@ export default class WordleScene extends Phaser.Scene {
     const startX = mW - (boxR * 1.05) * 2.5;
     for(let i = 0; i < 6; i++) {
       for(let j = 0; j < 5; j++) {
-        GAME_PART.add(
-          this.add.sprite(startX + (boxR * 1.05) * j, startY + (boxR * 1.05) * i, 'outline').setDisplaySize(boxR, boxR).setOrigin(0, 0)
-        )
+        UI[`WB${i}${j}`] = this.add.sprite(startX + (boxR * 1.05) * j, startY + (boxR * 1.05) * i, 'outline').setDisplaySize(boxR, boxR).setOrigin(0, 0)
+        UI[`WT${i}${j}`] = this.add.text(startX + (boxR * 1.05) * j + boxR / 2, startY + (boxR * 1.05) * i + boxR / 2, '').setStyle({
+          ...this.text_main_style,
+          fontSize: 25 + "px",
+          color: "#fff"
+        }).setOrigin(0.5, 0.5)
+        
+        GAME_PART.add(UI[`WB${i}${j}`])
+        GAME_PART.add(UI[`WT${i}${j}`])
       }
     }
 
@@ -285,34 +413,275 @@ export default class WordleScene extends Phaser.Scene {
         width *= 3;
       }
 
-      GAME_PART.add(
-        this.addButton(texture, width, height, x, y, key, GAME_PART, "#333")
-      )
+      this.addButton(texture, width, height, x, y, key, GAME_PART, "#333", () => {
+        if(GAME.PAUSE) return;
+        const winput = key;
+        const row = GAME.LINE;
+        const column = GAME.TYPING.length;
+
+        if(GAME.TYPING.length != 0 && isBack) {
+          GAME.TYPING = GAME.TYPING.slice(0, -1);
+          UI[`WB${row}${column - 1}`].setTexture('outline')
+          UI[`WT${row}${column - 1}`].setText('');
+          return;
+        }
+        if(GAME.TYPING.length == 5 || isBack) return;
+
+        UI[`WB${row}${column}`].setTexture('outline')
+        UI[`WT${row}${column}`].setText(winput);
+        GAME.TYPING += winput;
+      }, `input_${key}`)
+      GAME_PART.add(UI[`input_${key}`])
     })
 
     // GAME DOWN PART
-    UI[UI_KEYS.SUMBMIT_BTN_GAME] = this.addButton('main-btn-bg', this.convertScaleData(150), this.convertScaleData(70), mW, h - this.convertScaleData(100),  "SUBMIT", GAME_PART);
+    UI[UI_KEYS.SUMBMIT_BTN_GAME] = this.addButton('main-btn-bg', this.convertScaleData(150), this.convertScaleData(70), mW, h - this.convertScaleData(100),  "SUBMIT", GAME_PART, "#fff", this.onSubmint);
 
     GAME_PART.add(
-      this.addPowerUpBtn('blue_circle', 'item1', 'red_circle', 50, 50, this.convertScaleData(30), h - this.convertScaleData(100), GAME_PART, '2')
+      this.addPowerUpBtn('blue_circle', 'item1', 'red_circle', 50, 50, this.convertScaleData(30), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.TARGET, () => {
+        if(GAME.PAUSE) return;
+        let word = sampleWords[GAME.STREAK].toString();
+        let key = "ABCDEFGHIJKMLNOPQRSTUVWXYZ";
+        let count = 3;
+
+        let randomLetters = this.getRandomLetters(word.toUpperCase(), key, count);
+
+        for(let i = 0; i < count; i++) {
+          UI[`input_${randomLetters[i]}`].setTexture('inp1')
+        }
+
+      }, UI_KEYS.POWER_TARGET)
     )
 
     GAME_PART.add(
-      this.addPowerUpBtn('pink_circle', 'item2', 'red_circle', 50, 50, this.convertScaleData(80), h - this.convertScaleData(100), GAME_PART, '2')
+      this.addPowerUpBtn('pink_circle', 'item2', 'red_circle', 50, 50, this.convertScaleData(80), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.DISPLAY, () => {
+        if(GAME.PAUSE) return;
+
+      }, UI_KEYS.POWER_DISPLAY)
     )
 
     GAME_PART.add(
-      this.addPowerUpBtn('next_btn', 'next', 'red_circle', 80, 50, w - this.convertScaleData(60), h - this.convertScaleData(100), GAME_PART, '2')
+      this.addPowerUpBtn('next_btn', 'next', 'red_circle', 80, 50, w - this.convertScaleData(60), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.NEXT, () => {
+        if(GAME.PAUSE) return;
+
+      }, UI_KEYS.POWER_NEXT)
     )
 
-    GAME_PART.setVisible(true)
+    GAME_PART.setVisible(false)
 
-    this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
-    this.cameras.main.postFX
-      .addColorMatrix()
-      .contrast(1.25)
-      .polaroid()
-      .brightness(0.9);
+    // BONUS PART
+    const BONUS_PART = LAYOUT[LAYOUT_KEYS.BONUS];
+
+    BONUS_PART.add(
+      this.add.graphics()
+      .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+      .fillRect(0, 0, w, h).setInteractive()
+    );
+
+    BONUS_PART.add(
+      this.add.sprite(mW, mH - 40, 'word_input_btn').setDisplaySize(300, 330)
+    )
+
+    BONUS_PART.add(
+      this.addButton('main-btn-bg', 200, 70, mW, mH - 200, 'You Win!', BONUS_PART, "#fff", () => {
+        this.changeScreen(LAYOUT_KEYS.BONUS, false)
+        this.addScreen(LAYOUT_KEYS.SCORE)
+        GAME.COIN += GAME.CUR_COIN;
+        UI[UI_KEYS.COIN_GAME].setText(GAME.CUR_COIN)
+
+      })
+    )
+
+    BONUS_PART.add(
+      this.add.sprite(mW, mH - 90, 'bonus').setDisplaySize(130, 140)
+    )
+
+    BONUS_PART.add(
+      this.add.sprite(mW, mH + 5, 'green_btn').setDisplaySize(200, 70).setInteractive().on('pointerup', () => {
+        this.changeScreen(LAYOUT_KEYS.BONUS, false)
+        this.addScreen(LAYOUT_KEYS.SCORE)
+        GAME.COIN += GAME.CUR_COIN;
+        UI[UI_KEYS.COIN_GAME].setText(GAME.CUR_COIN)
+  
+      })
+    )
+
+    BONUS_PART.add(
+      this.add.sprite(mW - 50, mH, 'play').setDisplaySize(40, 40)
+    )
+
+    UI[UI_KEYS.COIN_VIDEO] = this.add.text(mW, mH, '80').setStyle({
+      ...this.text_main_style,
+      fontSize: this.convertScaleData(35) + 'px',
+      fill: '#fff',
+    }).setOrigin(0.5, 0.5)
+    BONUS_PART.add(UI[UI_KEYS.COIN_VIDEO])
+
+    BONUS_PART.add(
+      this.add.sprite(mW + 50, mH - 3, 'coin').setDisplaySize(45, 45)
+    )
+
+    UI[UI_KEYS.COIN_BONUS] = this.add.text(mW, mH + 60, 'Claim 20').setStyle({
+      ...this.text_main_style,
+      fontSize: this.convertScaleData(20) + 'px',
+      fill: '#faab41',
+    }).setOrigin(0.5, 0.5)
+    BONUS_PART.add(UI[UI_KEYS.COIN_BONUS])
+
+    BONUS_PART.add(
+      this.add.sprite(mW + 60, mH + 60, 'coin').setDisplaySize(30, 30)
+    )
+
+    BONUS_PART.setVisible(false)
+
+    const SCORE_PART = LAYOUT[LAYOUT_KEYS.SCORE]
+
+    SCORE_PART.add(
+      this.add.graphics()
+      .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+      .fillRect(0, 0, w, h).setInteractive()
+    );
+    
+
+    SCORE_PART.add(
+      this.add.text(mW, mH - 200, 'Your Score').setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(35) + 'px',
+        fill: '#fff',
+      })
+    )
+
+    UI[UI_KEYS.SCORE_LAYOUT_VAL] = this.add.text(mW, mH - 150, '80').
+      setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(40) + 'px',
+        fill: '#fff',
+      })
+    SCORE_PART.add(UI[UI_KEYS.SCORE_LAYOUT_VAL])
+    SCORE_PART.add(
+      this.add.text(mW, mH - 100, 'Current Streak').setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(35) + 'px',
+        fill: '#fff',
+      })
+    )
+
+    UI[UI_KEYS.SCORE_LAYOUT_STREAK] = this.add.text(mW, mH - 50, '0')
+      .setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(40) + 'px',
+        fill: '#fff',
+      })
+    SCORE_PART.add(UI[UI_KEYS.SCORE_LAYOUT_STREAK])
+    SCORE_PART.add(
+      this.addButton('main-btn-bg', 200, 70, mW, mH + 50, 'Continue', SCORE_PART, "#fff", () => {
+        this.changeScreen(LAYOUT_KEYS.SCORE, false)
+        this.startRound()
+      })
+    )
+    
+
+    SCORE_PART.setVisible(false)
+
+    // GAME GUIDE PART
+    const GUIDE_PART = LAYOUT[LAYOUT_KEYS.GUIDE];
+    GUIDE_PART.add(
+      this.add.graphics()
+      .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+      .fillRect(0, 0, w, h).setInteractive()
+    );
+
+    GUIDE_PART.add(
+      this.add.sprite(mW, mH - 140, 'word_input_btn').setDisplaySize(300, 330).setInteractive().on('pointerup', () => {
+        this.changeScreen(LAYOUT_KEYS.GUIDE, false)
+      })
+    )
+
+    GUIDE_PART.add(
+      this.add.text(mW, mH - 250, 'HOW TO PLAY').setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(30) + 'px',
+        fill: '#575757',
+      })
+    )
+
+    GUIDE_PART.add(
+      this.add.text(mW - 110, mH - 200, '6').setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(30) + 'px',
+        fill: '#575757',
+      })
+    )
+
+    GUIDE_PART.add(
+      this.add.text(mW - 80, mH - 200, 'You have 6 tries to guess the \nword').setOrigin(0, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(12) + 'px',
+        fill: '#575757',
+        align: 'left'
+      })
+    )
+
+    GUIDE_PART.add(
+      this.add.sprite(mW - 110, mH - 150, 'h1').setDisplaySize(30, 30)
+    )
+
+    GUIDE_PART.add(
+      this.add.text(mW - 80, mH - 150, 'The colours of the letters will\nchange to show if they are \ncorrect').setOrigin(0, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(12) + 'px',
+        fill: '#575757',
+        align: 'left'
+      })
+    )
+    
+    GUIDE_PART.add(
+      this.add.sprite(mW - 110, mH - 100, 'h2').setDisplaySize(30, 30)
+    )
+
+    GUIDE_PART.add(
+      this.add.text(mW - 80, mH - 100, 'Use "Booster" to reveal one \ncorrect letter.').setOrigin(0, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(12) + 'px',
+        fill: '#575757',
+        align: 'left'
+      })
+    )
+
+    GUIDE_PART.add(
+      this.add.sprite(mW - 110, mH - 50, 'h3').setDisplaySize(30, 30)
+    )
+
+    GUIDE_PART.add(
+      this.add.text(mW - 80, mH - 50, 'Use "Bullseye" to remove \nthree incorrect letters.').setOrigin(0, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(12) + 'px',
+        fill: '#575757',
+        align: 'left'
+      })
+    )
+
+    
+    GUIDE_PART.add(
+      this.add.text(mW, mH + 70, 'EXAMPLE').setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: this.convertScaleData(40) + 'px',
+        fill: '#fff',
+      })
+    )
+
+    GUIDE_PART.add(
+      this.add.sprite(mW, mH + 180, 'h4').setDisplaySize(250, 50)
+    )
+
+    GUIDE_PART.setVisible(false)
+
+    // this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
+    // this.cameras.main.postFX
+    //   .addColorMatrix()
+    //   .contrast(1.25)
+    //   .polaroid()
+    //   .brightness(0.9);
 
     this.initGame();
   }
@@ -328,13 +697,14 @@ export default class WordleScene extends Phaser.Scene {
   public initGame(lives = 3) {
     this.cameras.main.fadeIn(1200);
 
-    setTimeout(() => this.startRound(), 2500);
+    GAME.STREAK = 0;
+    // setTimeout(() => this.startRound(), 2500);
   }
 
   loseGame() {
     this.cameras.main.fadeOut(1000);
     this.final.play();
-    // this.scoreHandler(this.scoreNum);
+    this.scoreHandler(GAME.SCORE);
     // game is lost
     //this.initGame();
   }
@@ -343,7 +713,81 @@ export default class WordleScene extends Phaser.Scene {
     return x * rate
   }
 
-  addButton(sprite, width, height, x, y, text, group, color = "#fff") {
+  onSubmint() {
+    if(GAME.TYPING == "" || GAME.TYPING.length != 5) return;
+
+    const word = GAME.TYPING;
+    const compare_word = sampleWords[GAME.STREAK];
+
+    const result = this.compareWords(word, compare_word);
+    console.log(result)
+    let isSuccess = 0;
+    result.forEach((key, i) => {
+      if(key == 2) isSuccess++;
+      UI[`WB${GAME.LINE}${i}`].setTexture(`w${key}`)
+      UI[`WT${GAME.LINE}${i}`].setStyle({
+        ...this.text_main_style,
+        fontSize: 24 + 'px',
+        align: 'center',
+        fill: key == 0? "#fff" : "#333",
+      });
+      UI[`input_${word[i]}`].setTexture(key == 2? `inp2` : `inp1`)
+    })
+    if(isSuccess == 5) {
+      const score = SCORE_SYSTEM[GAME.LINE].score;
+      GAME.CUR_COIN = SCORE_SYSTEM[GAME.LINE].coin;
+      this.addScreen(LAYOUT_KEYS.BONUS)
+      
+      UI[UI_KEYS.COIN_VIDEO].setText(GAME.CUR_COIN * 2.5)
+      UI[UI_KEYS.COIN_BONUS].setText(`Claim ${GAME.CUR_COIN}`)
+      
+      GAME.STREAK++;
+      UI[UI_KEYS.SCORE_LAYOUT_STREAK].setText(GAME.STREAK)
+      this.score(score);
+    } else if(GAME.LINE == 5) {
+      this.loseGame();
+    }
+
+    GAME.LINE++;
+    GAME.WORDS.push(GAME.TYPING);
+    GAME.TYPING = ""
+  }
+
+  compareWords(word, compareWord) {
+    let result = [];
+    word = word.toLowerCase();
+    for (let i = 0; i < word.length; i++) {
+      if (word[i] === compareWord[i]) {
+        result.push(2);
+      } else if (compareWord.includes(word[i])) {
+        result.push(1);
+      } else {
+        result.push(0);
+      }
+    }
+    
+    return result;
+  }
+
+  getRandomLetters(word, key, count) {
+    let remainingLetters = "";
+    
+    for (let i = 0; i < key.length; i++) {
+      if (!word.includes(key[i])) {
+        remainingLetters += key[i];
+      }
+    }
+    
+    let randomLetters = "";
+    for (let i = 0; i < count; i++) {
+      let randomIndex = Math.floor(Math.random() * remainingLetters.length);
+      randomLetters += remainingLetters[randomIndex];
+    }
+    
+    return randomLetters;
+  }
+
+  addButton(sprite, width, height, x, y, text, group, color = "#fff", handleFunc = function(){}, key = '') {
 
     const style = {
       fontFamily: 'customFont',
@@ -352,9 +796,14 @@ export default class WordleScene extends Phaser.Scene {
       fill: color,
     };
 
-    group.add(
-      this.add.sprite(x, y, sprite).setOrigin(0.5, 0.5).setDisplaySize(width, height)
-    )
+    if(key == '') {
+      group.add(
+        this.add.sprite(x, y, sprite).setOrigin(0.5, 0.5).setInteractive().setDisplaySize(width, height).on('pointerup', handleFunc.bind(this))
+      )
+    } else {
+      UI[key] = this.add.sprite(x, y, sprite).setOrigin(0.5, 0.5).setInteractive().setDisplaySize(width, height).on('pointerup', handleFunc.bind(this))
+      group.add(UI[key])
+    }
 
     if(text != "") {
       group.add(
@@ -365,7 +814,7 @@ export default class WordleScene extends Phaser.Scene {
     return group;
   }
 
-  addPowerUpBtn(backSprite, sprite, badge, width, height, x, y, group,  text) {
+  addPowerUpBtn(backSprite, sprite, badge, width, height, x, y, group, text, handleFunc = function () {}, key) {
     const style = {
       fontFamily: 'customFont',
       fontSize: 12 + 'px',
@@ -374,7 +823,7 @@ export default class WordleScene extends Phaser.Scene {
     };
 
     group.add(
-      this.add.sprite(x, y, backSprite).setOrigin(0.5, 0.5).setDisplaySize(width, height)
+      this.add.sprite(x, y, backSprite).setOrigin(0.5, 0.5).setDisplaySize(width, height).setInteractive().on('pointerup', handleFunc)
     )
 
     group.add(
@@ -389,20 +838,60 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     if(text != "") {
-      group.add(
-        this.add.text(badgeX, badgeY, text).setStyle(style).setOrigin(0.5, 0.5)
-      )      
+      UI[key] = this.add.text(badgeX, badgeY, text).setStyle(style).setOrigin(0.5, 0.5)
+      group.add(UI[key])      
     }
 
     return group;
 
   }
 
-  startRound() {
+  changeScreen(key, val = true) {
+    if(val) {
+      Object.keys(LAYOUT_KEYS).forEach(k => {
+        LAYOUT[k].setVisible(false);
+      })
+    } else {
+      GAME.PAUSE = false
+    }
 
+    LAYOUT[key].setVisible(val)
   }
 
-  score(which = 0) {
+  addScreen(key) {
+    LAYOUT[key].setVisible(true)
+    GAME.PAUSE = true;
+  }
+
+  startRound() {
+    GAME.CUR_COIN = 0;
+    // GAME.STREAK = 0;
+    GAME.LINE = 0;
+    GAME.TYPING = "";
+
+    for(let i = 0; i < 6; i++) {
+      for(let j = 0; j < 5; j++) {
+        UI[`WB${i}${j}`].setTexture('outline')
+        UI[`WT${i}${j}`].setStyle({
+          ...this.text_main_style,
+          fontSize: 25 + "px",
+          color: "#fff"
+        }).setText("")
+      }
+    }
+
+    INPUT_KEYS.forEach(key => {
+      UI[`input_${key}`].setTexture('word_input_btn')
+    })
+  }
+
+  score(number = 0) {
+    // this.changeScreen(LAYOUT_KEYS.SCORE, true)
+
+    UI[UI_KEYS.SCORE_LAYOUT_VAL].setText(number);
+    
+    GAME.SCORE += number;
+    UI[UI_KEYS.SCORE_GAME].setText(GAME.SCORE)
 
   }
 
