@@ -457,12 +457,29 @@ export default class WordleScene extends Phaser.Scene {
       this.addPowerUpBtn('pink_circle', 'item2', 'red_circle', 50, 50, this.convertScaleData(80), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.DISPLAY, () => {
         if(GAME.PAUSE) return;
 
+        let word = sampleWords[GAME.STREAK].toString();
+
+        let remainingLetter = "";
+        let randomIndex = Math.floor(Math.random() * word.length);
+        remainingLetter = word[randomIndex];
+
+        UI[`WB${GAME.LINE}${randomIndex}`].setTexture(`w2`)
+        UI[`WT${GAME.LINE}${randomIndex}`].setText(remainingLetter).setStyle({
+          ...this.text_main_style,
+          fontSize: 24 + 'px',
+          align: 'center',
+          fill: "#333",
+        })
+
       }, UI_KEYS.POWER_DISPLAY)
     )
 
     GAME_PART.add(
       this.addPowerUpBtn('next_btn', 'next', 'red_circle', 80, 50, w - this.convertScaleData(60), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.NEXT, () => {
         if(GAME.PAUSE) return;
+
+        this.startRound();
+        sampleWords.splice(GAME.STREAK, 1)
 
       }, UI_KEYS.POWER_NEXT)
     )
@@ -815,6 +832,7 @@ export default class WordleScene extends Phaser.Scene {
   }
 
   addPowerUpBtn(backSprite, sprite, badge, width, height, x, y, group, text, handleFunc = function () {}, key) {
+    text = text.toString();
     const style = {
       fontFamily: 'customFont',
       fontSize: 12 + 'px',
