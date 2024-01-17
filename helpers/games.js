@@ -223,4 +223,14 @@ export const games = [
       additionalSpriteTwo: "weapon",
     },
   },
+  {
+    name: "Wordle Game",
+    description:
+      "This is wordle game.  Try to score as many points as you can before you concede three goals!",
+    backgroundImage: "/defaults/soccerfall.jpg",
+    screenshot: "soccerfall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 14,
+  },
 ];
