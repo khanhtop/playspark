@@ -24,9 +24,9 @@ export default function TopNav({
   return (
     <div
       style={{ backgroundColor: data.primaryColor, color: data.textColor }}
-      className={`h-20 w-full flex py-4 px-4`}
+      className={`h-20 w-full flex py-4 px-6`}
     >
-      <img src={data?.brandLogo} className="h-full" />
+      <img src={data?.sponsorLogo} className="h-full" />
       <div className="h-full flex-1 flex">
         {context?.loggedIn?.uid ? (
           <div className="h-full flex-1 justify-end flex items-center gap-4">

@@ -16,8 +16,8 @@ export default function Hero({ data, context, totalXp }) {
   if (context.loggedIn?.uid) {
     return (
       <div
-        style={{ backgroundColor: data?.primaryColor, color: data.textColor }}
-        className="h-[180px] opacity-90 flex items-center px-4 gap-8"
+        style={{ color: data.textColor }}
+        className="h-[180px] bg-black/10 opacity-90 flex items-center px-4 gap-8"
       >
         <div className="flex flex-col gap-2">
           <div

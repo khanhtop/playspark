@@ -1,6 +1,6 @@
 export default function AreaTabs({ options, onClick, selected, user }) {
   return (
-    <div className="flex font-octo bg-black/40">
+    <div className="flex font-octo bg-black/10">
       {options.map((item, key) => (
         <Tab
           accent={user.accentColor}
