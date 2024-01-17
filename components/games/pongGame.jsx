@@ -12,11 +12,8 @@ import FallScene from "./fallScene";
 import WheelScene from "./wheelScene";
 import CricketScene from "./cricketScene";
 import NewPongScene from "./newPongScene";
-<<<<<<< HEAD
 import newFallScene from "./newFallScene";
-=======
 import WordleScene from "./wordleScene";
->>>>>>> wordleGame
 
 const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) => {
   const [hasRendered, setHasRendered] = useState(false);
