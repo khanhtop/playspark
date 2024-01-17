@@ -39,6 +39,7 @@ export default class NewPongScene extends Phaser.Scene {
   boosterNumText: any;
   private booster: any;
   private boosterAudio: any;
+  private powerup: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -87,6 +88,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.image("MAGNIFY", "/pong/pongassets/magnify.png");
     this.load.image("SHRINK", "/pong/pongassets/shrink.png");
     this.load.audio("boosterAudio", "/pong/pongassets/audio/booster.mp3");
+    this.load.audio("powerup", "/pong/pongassets/audio/powerup.mp3");
 
 
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
@@ -95,7 +97,6 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
     this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
     this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
-
 
   }
 
@@ -117,6 +118,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.goal = this.sound.add("goal");
     this.lost = this.sound.add("lost");
     this.boosterAudio = this.sound.add("boosterAudio");
+    this.powerup = this.sound.add("powerup");
 
     this.physics.world.setBounds(
       sideW,
@@ -226,6 +228,8 @@ export default class NewPongScene extends Phaser.Scene {
         this.boosterNumText.setText(boosterNum);
 
         this.setPowerUps();
+
+        this.powerup.play();
 
         if(isSelect) {
             STATUS[key] = true;
