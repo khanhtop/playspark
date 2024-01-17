@@ -1,4 +1,5 @@
 import CreateImageSlider from "./createImageSlider";
+import GenWordArray from "./genWordArray";
 
 export default function CreateConfiguration({
   tournament,
@@ -82,6 +83,20 @@ export default function CreateConfiguration({
           selected={tournament.additionalSpriteOne}
           updateSprite={(a) => {
             setTournament({ ...tournament, additionalSpriteOne: a });
+          }}
+        />
+      )}
+      {tournament?.words && (
+        <GenWordArray
+          tournament={tournament}
+          maxLength={5}
+          validationFn={(a) => {
+            null;
+          }}
+          isAdmin={isAdmin}
+          title={`Words`}
+          setWords={(a) => {
+            setTournament({ ...tournament, words: a });
           }}
         />
       )}

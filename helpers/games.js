@@ -232,5 +232,9 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 15,
+    //
+    // Configurable Parameters
+    //
+    words: [],
   },
 ];

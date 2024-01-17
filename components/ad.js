@@ -178,6 +178,7 @@ export default function Advert({ data, theme }) {
           powerUpSprite: data?.powerUpSprite,
           additionalSpriteOne: data?.additionalSpriteOne,
           maxscore: prevBest ?? 0,
+          words: data?.words || [],
         })}
       {stage === 2 && (
         <Outro
