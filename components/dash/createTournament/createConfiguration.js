@@ -98,6 +98,9 @@ export default function CreateConfiguration({
           setWords={(a) => {
             setTournament({ ...tournament, words: a });
           }}
+          setTheme={(a) => {
+            setTournament({ ...tournament, wordleTheme: a });
+          }}
         />
       )}
     </div>

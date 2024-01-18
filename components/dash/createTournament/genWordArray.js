@@ -1,5 +1,6 @@
 import Button from "@/components/forms/button";
 import Input from "@/components/forms/input";
+import { getWordlePrompt, wordleSystemPrompt } from "@/helpers/prompts";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
@@ -8,16 +9,48 @@ export default function GenWordArray({
   title,
   maxLength,
   setWords,
+  setTheme,
 }) {
   const [currentWord, setCurrentWord] = useState("");
+  const [generating, setGenerating] = useState(false);
 
   const addWord = () => {
     setWords([...tournament.words, currentWord.toUpperCase()]);
     setCurrentWord("");
   };
 
+  const generateWords = async () => {
+    const messages = [
+      getWordlePrompt(tournament.wordleTheme || "Sports"),
+      { role: "user", content: tournament.words.join(",") },
+    ];
+    const response = await fetch("/api/internal/gpt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ messages }),
+    });
+    const data = await response.json();
+    if (data.answer) {
+      console.log(data.answer);
+      const words = data.answer.filter(
+        (a) => a.length === 5 && !tournament.words.includes(a)
+      );
+      return words.map((a) => a.toUpperCase());
+    }
+  };
+
   return (
     <div className="flex flex-col">
+      <Input
+        label="Theme (A single word to describe the theme of the game, e.g. Baseball"
+        className="bg-white/5 flex-1 w-full py-2 mb-4 text-white"
+        placeHolder="Theme"
+        value={tournament.wordleTheme}
+        labelColor="text-white/70"
+        onChange={(e) => setTheme(e.target.value)}
+      />
       <div className="flex w-full gap-4">
         <Input
           label={title}
@@ -46,6 +79,18 @@ export default function GenWordArray({
             }}
           />
         ))}
+        {tournament.words.length > 2 && (
+          <Button
+            loading={generating}
+            onClick={async () => {
+              const res = await generateWords();
+              setWords([...tournament.words, ...res]);
+            }}
+            className="w-36 bg-transparent border-cyan-500 border-2 text-white"
+          >
+            Generate More
+          </Button>
+        )}
       </div>
     </div>
   );
