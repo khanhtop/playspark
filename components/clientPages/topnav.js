@@ -32,6 +32,8 @@ export default function TopNav({
           <div className="h-full flex-1 justify-end flex items-center gap-4">
             <Pill
               value={totalXp}
+              colorA={data.textColor}
+              colorB={data.accentColor}
               image="/clientPages/xp.png"
               Icon={XMarkIcon}
               data={data}
@@ -39,6 +41,8 @@ export default function TopNav({
             />
             <Pill
               value={totalScore}
+              colorA={data.accentColor}
+              colorB={data.accentColor}
               image="/clientPages/coins.png"
               Icon={CurrencyDollarIcon}
               data={data}
@@ -99,10 +103,10 @@ function MenuItem({ text }) {
   );
 }
 
-function Pill({ value, Icon, image, data, onClick }) {
+function Pill({ value, Icon, image, data, onClick, colorA, colorB }) {
   return (
     <div
-      style={{ borderColor: data.accentColor }}
+      style={{ borderColor: colorA }}
       className="relative border-2 rounded-full gap-2 h-10 py-1 flex items-center px-4"
     >
       {image ? (
@@ -113,8 +117,8 @@ function Pill({ value, Icon, image, data, onClick }) {
       <p className="font-octo text-2xl">{value}</p>
       <PlusCircleIcon
         onClick={onClick}
-        style={{ color: data.textColor }}
-        className="absolute rounded-full -top-2 -right-2 h-6 w-6"
+        style={{ color: colorA }}
+        className="absolute rounded-full -top-3 -right-2 h-6 w-6"
       />
     </div>
   );

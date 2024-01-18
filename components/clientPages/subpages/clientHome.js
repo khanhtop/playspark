@@ -1,10 +1,11 @@
+import { useAppContext } from "@/helpers/store";
+import AccountInfo from "../accountInfo";
 import Areas from "../areas";
 import ClientPageWrapper from "../clientPageWrapper";
 import Hero from "../hero";
 import HorizontalGamesScroll from "../horizontalGamesScroll";
 
 export default function ClientHome({
-  context,
   user,
   tournaments,
   tournamentsByDate,
@@ -13,14 +14,22 @@ export default function ClientHome({
   screen,
   setScreen,
 }) {
+  const context = useAppContext();
   return (
     <ClientPageWrapper user={user}>
+      <AccountInfo
+        data={user}
+        context={context}
+        totalXp={context?.profile?.totalXp || 0}
+        totalCoins={context?.profile?.totalScore || 0}
+      />
       <Hero
         data={user}
         context={context}
         totalXp={context?.profile?.totalXp || 0}
       />
       <HorizontalGamesScroll
+        first
         data={tournamentsByPlayCount}
         user={user}
         label="Trending Now"
