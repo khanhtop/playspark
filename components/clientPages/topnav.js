@@ -24,7 +24,7 @@ export default function TopNav({
   return (
     <div
       style={{ backgroundColor: data.primaryColor, color: data.textColor }}
-      className={`h-20 w-full flex py-4 px-6`}
+      className={`border-b-[1px] h-20 w-full flex py-4 px-6`}
     >
       <img src={data?.sponsorLogo} className="h-full" />
       <div className="h-full flex-1 flex">
@@ -50,7 +50,7 @@ export default function TopNav({
             />
             <BellIcon
               onClick={() => setScreen("notifications")}
-              className="h-full pb-1 text-yellow-400"
+              className="h-full pb-1 opacity-20"
             />
             <Avatar
               onClick={() => setScreen("profile")}
@@ -76,8 +76,12 @@ function Avatar({ name, data, onClick }) {
   return (
     <div
       onClick={onClick}
-      style={{ borderColor: data.accentColor, color: data.textColor }}
-      className="z-10 relative border-2 h-10 cursor-pointer hover:opacity-80 transition aspect-square bg-[#666] rounded-full flex items-center justify-center"
+      style={{
+        borderColor: data.accentColor,
+        color: data.textColor,
+        backgroundColor: data.primaryColor,
+      }}
+      className="z-10 relative border-2 h-10 cursor-pointer hover:opacity-80 transition aspect-square rounded-full flex items-center justify-center"
     >
       <p className="font-octo text-2xl">{name?.substring(0, 1)}</p>
       {showMenu && (

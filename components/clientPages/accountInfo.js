@@ -6,12 +6,12 @@ export default function AccountInfo({ data, totalXp, totalCoins }) {
     return (
       <div
         style={{ color: data.textColor }}
-        className="flex px-4 font-octo items-center"
+        className="flex px-4 py-8 font-octo items-center"
       >
         <div className="flex gap-4 flex-1 justify-start items-center">
           <div
             style={{ borderColor: data.accentColor }}
-            className="h-[80px] border-4 aspect-square bg-[#777] flex items-center justify-center rounded-full"
+            className="h-[80px] border-4 aspect-square flex items-center justify-center rounded-full"
           >
             <div>
               <p className="text-[60px] font-octo uppercase">
