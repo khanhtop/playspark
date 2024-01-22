@@ -13,7 +13,7 @@ export default function ClientPageWrapper({
       )}
       <div
         className={`${
-          withBackNav ? "h-[calc(100vh-135px)]" : "h-[calc(100vh-80px)]"
+          withBackNav ? "h-[calc(100dvh-135px)]" : "h-[calc(100dvh-80px)]"
         } overflow-y-scroll no-scrollbar`}
       >
         {children}
