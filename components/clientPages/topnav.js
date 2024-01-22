@@ -26,10 +26,10 @@ export default function TopNav({
       style={{ backgroundColor: data.primaryColor, color: data.textColor }}
       className={`border-b-[1px] h-20 w-full flex py-4 px-6`}
     >
-      <img src={data?.sponsorLogo} className="h-full" />
-      <div className="h-full flex-1 flex">
+      <img src={data?.sponsorLogo} className="h-full py-2 md:py-1" />
+      <div className="h-full flex-1 flex py-2 md:py-1">
         {context?.loggedIn?.uid ? (
-          <div className="h-full flex-1 justify-end flex items-center gap-4">
+          <div className="h-full flex-1 justify-end flex items-center gap-2 md:gap-4">
             <Pill
               value={totalXp}
               colorA={data.textColor}
@@ -50,7 +50,7 @@ export default function TopNav({
             />
             <BellIcon
               onClick={() => setScreen("notifications")}
-              className="h-full pb-1 opacity-20"
+              className="h-full pb-0 opacity-20"
             />
             <Avatar
               onClick={() => setScreen("profile")}
@@ -81,9 +81,9 @@ function Avatar({ name, data, onClick }) {
         color: data.textColor,
         backgroundColor: data.primaryColor,
       }}
-      className="z-10 relative border-2 h-10 cursor-pointer hover:opacity-80 transition aspect-square rounded-full flex items-center justify-center"
+      className="z-10 relative border-2 h-full cursor-pointer hover:opacity-80 transition aspect-square rounded-full flex items-center justify-center"
     >
-      <p className="font-octo text-2xl">{name?.substring(0, 1)}</p>
+      <p className="font-octo md:text-2xl">{name?.substring(0, 1)}</p>
       {showMenu && (
         <div
           style={{ borderColor: data.accentColor, color: data.textColor }}
@@ -111,14 +111,14 @@ function Pill({ value, Icon, image, data, onClick, colorA, colorB }) {
   return (
     <div
       style={{ borderColor: colorA }}
-      className="relative border-2 rounded-full gap-2 h-10 py-1 flex items-center px-4"
+      className="relative border-2 rounded-full gap-1 md:gap-2 h-full py-2 flex items-center px-3 md:px-4"
     >
       {image ? (
         <img src={image} className="h-full" />
       ) : (
         <Icon style={{ color: data.accentColor }} className="h-full" />
       )}
-      <p className="font-octo text-2xl">{value}</p>
+      <p className="font-octo md:text-2xl">{value}</p>
       <PlusCircleIcon
         onClick={onClick}
         style={{ color: colorA }}

@@ -21,11 +21,11 @@ export default function Hero({ data, context, totalXp }) {
       >
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex justify-between">
-            <div className="font-octo text-4xl">
+            <div className="font-octo text-2xl md:text-4xl">
               Current Rank:{" "}
               {getRank(context?.profile?.totalXp || 0).currentTier}
             </div>
-            <div className="flex pr-1 items-center font-octo text-2xl gap-2 h-full">
+            <div className="flex pr-1 items-center font-octo md:text-2xl gap-2 h-full">
               <img src="/clientPages/xp.png" className="h-12" />
               <p>
                 {totalXp} / {getRank(totalXp).xpToNextTier + totalXp}
