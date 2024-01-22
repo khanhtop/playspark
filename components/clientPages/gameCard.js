@@ -14,7 +14,7 @@ export default function ClientGameCard({ data, item }) {
         backgroundImage: `url(${item.backgroundImage})`,
         transition: "0.5s all",
       }}
-      className="shadow-xl shadow-black/50 font-octo rounded-3xl bg-center bg-cover overflow-hidden relative group min-w-[420px] h-[250px]"
+      className="shadow-lg hover:shadow-md shadow-black/50 font-octo rounded-3xl bg-center bg-cover overflow-hidden relative group min-w-[320px] h-[200px]"
     >
       <div className="px-4 py-4 absolute top-0 left-0 h-full w-full bg-white/70 flex flex-col">
         <div className="flex-1">

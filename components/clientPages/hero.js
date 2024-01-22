@@ -17,12 +17,11 @@ export default function Hero({ data, context, totalXp }) {
     return (
       <div
         style={{ color: data.textColor }}
-        className="h-[180px] opacity-90 flex items-center px-4 gap-8 mx-4 shadow-lg shadow-black rounded-lg"
+        className="h-[180px] opacity-90 flex items-center px-4 gap-8 mx-4 shadow-lg shadow-black/50 rounded-lg"
       >
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex justify-between">
             <div className="font-octo text-2xl md:text-4xl">
-              Current Rank:{" "}
               {getRank(context?.profile?.totalXp || 0).currentTier}
             </div>
             <div className="flex pr-1 items-center font-octo md:text-2xl gap-2 h-full">

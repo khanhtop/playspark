@@ -42,9 +42,13 @@ export default function Areas({ user, tournaments, aggregateLeaderboard }) {
         }
       />
       {tab === "games" && (
-        <div className="grid md:grid-cols-3 gap-8 px-4 py-4">
+        <div className="grid grid-cols-1 px-8 md:grid-cols-3 gap-2 md:gap-8 md:px-4 py-4">
           {tournaments.map((item, key) => (
-            <ClientGameGridCard item={item} key={item.tournamentId} />
+            <ClientGameGridCard
+              item={item}
+              key={item.tournamentId}
+              user={user}
+            />
           ))}
         </div>
       )}
