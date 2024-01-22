@@ -13,6 +13,7 @@ export default function ClientHome({
   leaderboard,
   screen,
   setScreen,
+  setActiveGame,
 }) {
   const context = useAppContext();
   return (
@@ -33,11 +34,19 @@ export default function ClientHome({
         data={tournamentsByPlayCount}
         user={user}
         label="Trending Now"
+        playGame={(id) => {
+          setActiveGame(id);
+          setScreen("game");
+        }}
       />
       <HorizontalGamesScroll
         data={tournamentsByDate}
         user={user}
         label="Latest"
+        playGame={(id) => {
+          setActiveGame(id);
+          setScreen("game");
+        }}
       />
       <Areas
         aggregateLeaderboard={leaderboard}

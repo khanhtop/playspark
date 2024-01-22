@@ -1,6 +1,12 @@
 import ClientGameCard from "./gameCard";
 
-export default function HorizontalGamesScroll({ data, user, label, first }) {
+export default function HorizontalGamesScroll({
+  data,
+  user,
+  label,
+  first,
+  playGame,
+}) {
   if (data.length > 0) {
     return (
       <div
@@ -11,7 +17,12 @@ export default function HorizontalGamesScroll({ data, user, label, first }) {
         <div className="overflow-x-scroll no-scrollbar">
           <div className="flex items-center gap-8 pt-0 pb-6 px-5">
             {data?.map((item, key) => (
-              <ClientGameCard data={user} item={item} key={item.tournamentId} />
+              <ClientGameCard
+                data={user}
+                item={item}
+                key={item.tournamentId}
+                playGame={playGame}
+              />
             ))}
           </div>
         </div>

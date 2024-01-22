@@ -3,6 +3,7 @@ import Areas from "@/components/clientPages/areas";
 import Hero from "@/components/clientPages/hero";
 import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
 import ClientCoins from "@/components/clientPages/subpages/clientCoins";
+import ClientEmbeddedGame from "@/components/clientPages/subpages/clientEmbeddedGame";
 import ClientHome from "@/components/clientPages/subpages/clientHome";
 import ClientNotifications from "@/components/clientPages/subpages/clientNotifications";
 import ClientProfile from "@/components/clientPages/subpages/clientProfile";
@@ -36,6 +37,7 @@ export default function PageHandler({
   const context = useAppContext();
   const [showLogin, setShowLogin] = useState(false);
   const [screen, setScreen] = useState("home");
+  const [activeGame, setActiveGame] = useState();
 
   const data = {
     user: {
@@ -51,6 +53,8 @@ export default function PageHandler({
     context,
     setScreen,
     screen,
+    setActiveGame,
+    activeGame,
   };
 
   return (
@@ -69,6 +73,7 @@ export default function PageHandler({
         {screen === "xp" && <ClientXP {...data} />}
         {screen === "profile" && <ClientProfile {...data} />}
         {screen === "notifications" && <ClientNotifications {...data} />}
+        {screen === "game" && <ClientEmbeddedGame {...data} />}
       </div>
       {showLogin && (
         <AuthModal user={user} closeModal={() => setShowLogin(false)} />

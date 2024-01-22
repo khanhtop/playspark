@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import UIButton from "../ui/button";
 
-export default function ClientGameCard({ data, item }) {
+export default function ClientGameCard({ data, item, playGame }) {
   const router = useRouter();
   const [hover, setHover] = useState(false);
   const highScorer = item.leaderboard?.sort((a, b) => a - b)?.[0];
@@ -27,13 +27,7 @@ export default function ClientGameCard({ data, item }) {
         </div>
         <div className="flex justify-end w-full">
           <UIButton
-            onClick={() =>
-              window.open(
-                `https://playspark.co/ad/${item.tournamentId}`,
-                "__blank"
-              )
-            }
-            // theme="pixel"
+            onClick={() => playGame(item.tournamentId)}
             primaryColor={data.accentColor}
             textColor={data.primaryColor}
             text="Play"
