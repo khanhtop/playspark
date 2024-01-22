@@ -8,13 +8,37 @@ let w: number,
   wingR: number,
   ballR: number;
 
-let startPos = {
-  x: 0, y :0
+let lastPos = {
+  x: 300, y :0, id: 1,
+  ballPos : {
+    x : 300, y : 0
+  }
 }
 
 let HIT_STATUS = {
   TOP: false,
   DOWN: false
+}
+
+let GAME = {
+  level: 15,
+  ball: 3,
+  light: 0,
+  coin: 100,
+  ring: 0
+}
+
+let STATUS = {
+  magnify: false,
+  shrink: false,
+  power: false
+}
+
+let ITEM = {
+  magnify: 5,
+  shrink: 15,
+  power: 25,
+  heart: 35
 }
 
 let gameType = "football";
@@ -25,16 +49,16 @@ export default class FlyBallScene extends Phaser.Scene {
   bg: Phaser.Physics.Arcade.Sprite;
   bg1: Phaser.GameObjects.Sprite;
   bg2: Phaser.GameObjects.Sprite;
-  levelTxt: any;
-  ballTxt: any;
-  lightTxt: any;
-  coinTxt: any;
+  levelTxt: Phaser.GameObjects.Text;
+  ballTxt: Phaser.GameObjects.Text;
+  lightTxt: Phaser.GameObjects.Text;
+  coinTxt: Phaser.GameObjects.Text;
   ball: Phaser.Physics.Arcade.Sprite;
   ballGroup: Phaser.GameObjects.Group;
   hoop: Phaser.Physics.Arcade.StaticGroup;
   wings: Phaser.GameObjects.Sprite[];
   obstacles: any;
-  ballSpeed: any;
+  items: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -58,6 +82,11 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.image("hoop_t", "/pong/" + gameType + "/UI/hoop_t.png");
     this.load.image("hoop_d", "/pong/" + gameType + "/UI/hoop_d.png");
 
+    this.load.image("magnify", "/pong/" + gameType + "/item/magnify.png");
+    this.load.image("heart", "/pong/" + gameType + "/item/heart.png");
+    this.load.image("power", "/pong/" + gameType + "/item/power.png");
+    this.load.image("shrink", "/pong/" + gameType + "/item/shrink.png");
+
     this.load.image("bg", "/pong/" + gameType + "/background/bg1.jpg");
 
     this.load.image("ball", "/pong/" + gameType + "/ball/ball1.png");
@@ -80,7 +109,6 @@ export default class FlyBallScene extends Phaser.Scene {
     scr = h * 0.08;
     mW = w / 2;
     mH = (h - scr) / 2 + scr;
-    this.ballSpeed = 0;
   }
 
   // 400 800
@@ -89,8 +117,8 @@ export default class FlyBallScene extends Phaser.Scene {
 
     this.physics.config.debug = true;
 
-    this.bg = this.physics.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(100, 0);
-    this.bg1 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x + 1920, 0).setFlipX(true);
+    this.bg = this.physics.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
+    this.bg1 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x + 1920, 0);
     this.bg2 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x - 1920, 0).setFlipX(true);
 
     this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
@@ -99,13 +127,14 @@ export default class FlyBallScene extends Phaser.Scene {
     const topOffset = 60;
     const leftOffset = 20;
     // LEVEL HEADER
-    this.add.sprite(60 - leftOffset, topOffset, 'levelBoard').setDisplaySize(70, 70).setOrigin(0.5, 0.5)
+    this.add.sprite(60 - leftOffset, topOffset, 'levelBoard').setDisplaySize(70, 70).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
     this.add
     .text(60 - leftOffset, topOffset - 10, "LEVEL", {
       fontFamily: "TitanOne-Regular",
       fontSize: "15px",
       color: "#fff",
     })
+    .setScrollFactor(0, 0)
     .setOrigin(0.5, 0.5);
     this.levelTxt = this.add
     .text(60 - leftOffset, topOffset + 10, "2", {
@@ -113,36 +142,84 @@ export default class FlyBallScene extends Phaser.Scene {
       fontSize: "20px",
       color: "#fff",
     })
+    .setScrollFactor(0, 0)
     .setOrigin(0.5, 0.5);
     const headerW = w * 0.25;
-    this.add.sprite(headerW * 0.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40);
-    this.add.sprite(90, topOffset - 5, 'ball' ).setOrigin(0, 0.5).setDisplaySize(25, 25)
+    this.add.sprite(headerW * 0.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDisplaySize(headerW, 40);
+    this.add.sprite(90, topOffset - 5, 'ball' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
     this.ballTxt = this.add
     .text(120, topOffset - 5, "2", {
       fontFamily: "TitanOne-Regular",
       fontSize: "18px",
       color: "#000",
-    }).setOrigin(0, 0.5)
+    }).setOrigin(0, 0.5).setScrollFactor(0, 0)
 
-    this.add.sprite(headerW * 1.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40);
-    this.add.sprite(headerW + 90, topOffset - 5, 'light' ).setOrigin(0, 0.5).setDisplaySize(25, 25)
-    this.ballTxt = this.add
+    this.add.sprite(headerW * 1.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40).setScrollFactor(0, 0);
+    this.add.sprite(headerW + 90, topOffset - 5, 'light' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
+    this.lightTxt = this.add
     .text(headerW + 120, topOffset - 5, "2", {
       fontFamily: "TitanOne-Regular",
       fontSize: "18px",
       color: "#000",
-    }).setOrigin(0, 0.5)
+    }).setOrigin(0, 0.5).setScrollFactor(0, 0)
 
-    this.add.sprite(headerW * 2.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40);
-    this.add.sprite(headerW * 2 + 90, topOffset - 5, 'coin' ).setOrigin(0, 0.5).setDisplaySize(25, 25)
-    this.ballTxt = this.add
+    this.add.sprite(headerW * 2.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40).setScrollFactor(0, 0);
+    this.add.sprite(headerW * 2 + 90, topOffset - 5, 'coin' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
+    this.coinTxt = this.add
     .text(headerW * 2 + 120, topOffset - 5, "2", {
       fontFamily: "TitanOne-Regular",
       fontSize: "18px",
       color: "#000",
-    }).setOrigin(0, 0.5)
+    }).setOrigin(0, 0.5).setScrollFactor(0, 0)
 
     // END HEADER
+
+    // LEFT BOTTOM ITEMS
+    const item_dis = 60;
+    const item_x = w - 20
+    const item_r = 45
+    const shrink = this.add.sprite(item_x, h - item_dis, 'shrink').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
+    this.addItemText(shrink.x, shrink.y, ITEM.shrink, "coin");
+    
+    const power = this.add.sprite(item_x, h - item_dis * 2, 'power').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
+    this.addItemText(power.x, power.y, ITEM.power, "coin");
+
+    const magnify = this.add.sprite(item_x, h - item_dis * 3, 'magnify').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
+    this.addItemText(magnify.x, magnify.y, ITEM.magnify, "coin");
+    
+    const heart = this.add.sprite( item_x, h - item_dis * 4, 'heart').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
+    this.addItemText(heart.x, heart.y, ITEM.heart, "coin");
+    shrink.on('pointerup', () => {
+      if(STATUS.shrink || GAME.coin < ITEM.shrink) return;
+      GAME.coin -= ITEM.shrink;
+      STATUS.shrink = true;
+
+      this.addItemEffect("shrink");
+      this.setTopHeader()
+    })
+    power.on('pointerup', () => {
+      if(STATUS.power || GAME.coin < ITEM.power) return;
+      GAME.coin -= ITEM.power;
+      STATUS.power = true;
+
+      this.addItemEffect("power");
+      this.setTopHeader()
+    })
+    magnify.on('pointerup', () => {
+      if(STATUS.magnify || GAME.coin < ITEM.magnify) return;
+      GAME.coin -= ITEM.magnify;
+      STATUS.magnify = true;
+
+      this.addItemEffect("magnify");
+      this.setTopHeader()
+    })
+    heart.on('pointerup', () => {
+      if(GAME.coin < ITEM.heart) return;
+      GAME.coin -= ITEM.heart;
+      GAME.ball++;
+      this.setTopHeader()
+    })
+    // END LEFT BOTTOM ITEMS
 
     // GAME
 
@@ -150,6 +227,7 @@ export default class FlyBallScene extends Phaser.Scene {
     .setDisplaySize(ballR, ballR)
     .setOrigin(0.5, 0.5)
     .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+    .setBounce(1, 1)
     .setPushable(true).setDepth(10);
 
     this.wings = [];
@@ -161,35 +239,52 @@ export default class FlyBallScene extends Phaser.Scene {
     )
 
     this.ballGroup = this.add.group();
-    // this.ballGroup.add(this.ball);
     this.ballGroup.add(this.wings[0]);
     this.ballGroup.add(this.wings[1]);
 
     this.obstacles = [];
-
-    this.obstacles.push(
-      this.initObstacle()
-    ) 
-
+    this.items = [];
+    for(let i = 0; i < 3; i++) {
+      this.obstacles.push(
+        this.initObstacle()
+      ) 
+    }
 
     this.bg.setInteractive();
+    this.bg1.setInteractive();
+    this.bg2.setInteractive();
 
     // Event listener for pointer down event
     this.bg.on('pointerdown', (pointer) => {
       this.setBallAction();
-      this.setBackgroundAction()
+      // this.setBackgroundAction()
+      
+      // this.tweens.add({
+      //   targets: this.ballGroup.getChildren(),
+      //   duration: 50000,
+      //   rotation: 360,
+      //   repeat: -1,
+      // });
+      // this.tweens.add({
+      //   targets: this.ball,
+      //   duration: 50000,
+      //   rotation: 360,
+      //   repeat: -1,
+      // });
+    });
+
+    this.bg1.on('pointerdown', (pointer) => {
+      this.setBallAction();
+      // this.setBackgroundAction()
+
+    });
+    this.bg2.on('pointerdown', (pointer) => {
+      this.setBallAction();
+      // this.setBackgroundAction()
 
     });
 
-    // Event listener for pointer up event
-    this.bg.on('pointerup', (pointer) => {
-
-      const endX = pointer.x;
-      const endY = pointer.y;
-      console.log("booster up------",endX, "  ", endY)
-
-    });
-
+    this.cameras.main.startFollow(this.ball, false, 1, 0, -0.1 * w, -0.1 * h);
 
     this.initGame();
   }
@@ -206,53 +301,97 @@ export default class FlyBallScene extends Phaser.Scene {
     });
 
     this.ball.setGravityY(700);
-    this.ball.setVelocityY(-300)
-  }
-
-  setBackgroundAction() {
-    this.bg.setVelocityX(-100);
-    this.obstacles.forEach(obstacle => {
-      obstacle.getChildren().forEach(item => {
-        item.setVelocityX(-100)
-      })
-    })
+    this.ball.setVelocityY(-300);
+    this.ball.setVelocityX(100);
   }
 
   initObstacle() {
-    const id = 3;
-    const x = 180, y = 300;
-    const angle = -30;
-    const isMove = false;
+    lastPos.id++;
 
-    const objW = 100;
-    const objH = 60;
+    const isLevelUp = lastPos.id % 5 == 0;
+    // LEVEL PART OBSTACLE
+
+    let obstacle_dis = 400;
+    let obstacle_anlge = 0;
+    let width = 200;
+
+    if(GAME.level < 5) {
+      obstacle_dis = 200;
+      width = 250;
+      obstacle_anlge = 0;
+    } else if(GAME.level < 10) {
+      obstacle_dis = 400;
+      width = 200;
+      obstacle_anlge = 40;
+    } else {
+      obstacle_dis = 400;
+      width = 180;
+      obstacle_anlge = 90;
+    }
+
+    // END LEVEL PART OBSTACLE
+
+    if(this.obstacles.length > 0) {
+      const lastObj = this.obstacles[this.obstacles.length - 1];
+      lastPos.x = lastObj.getChildren()[0].x + width;
+    }
+    // lastPos.x += width;
+    lastPos.y = (0.5 - Math.random()) * obstacle_dis + mH
+    const id = lastPos.id;
+    const x = lastPos.x, y = lastPos.y;
+    const angle = -obstacle_anlge * (0.5 - Math.random());
+    const isMove = true;
+
+    const sizeRate = STATUS.magnify? 1.3 : 1;
+    const objW = 100 * sizeRate;
+    const objH = 60 * sizeRate;
     const radius = objH / 1.8;
+    const top = this.add.sprite(x, y, 'hoop_t').setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle)
+    const down = this.add.sprite(x, y, 'hoop_d').setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(12).setAngle(angle)
 
-    const top = this.physics.add.sprite(x, y, 'hoop_t').setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle)
-    const down = this.physics.add.sprite(x, y, 'hoop_d').setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(12).setAngle(angle)
+    if(isLevelUp) {
+      top.setTint(0x00ff00)
+      down.setTint(0x00ff00)
+    }
 
-    const lb = this.physics.add.sprite(x + radius * Math.cos(angle * Math.PI / 180), y + radius * Math.sin(angle * Math.PI / 180), 'ball').setOrigin(0.5, 0.5)
+    const lb = this.physics.add.sprite(x + radius * sizeRate * Math.cos(angle * Math.PI / 180), y + radius * sizeRate * Math.sin(angle * Math.PI / 180), 'ball').setOrigin(0.5, 0.5)
       .setDisplaySize(10, 10)
       .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
+      .setVisible(false)
+      lb.angle = angle;
+      lb.radius = radius;
+
     
-    const rb = this.physics.add.sprite(x - radius * Math.cos(angle * Math.PI / 180), y - radius * Math.sin(angle * Math.PI / 180), 'ball').setOrigin(0.5, 0.5)
+    const rb = this.physics.add.sprite(x - radius * sizeRate * Math.cos(angle * Math.PI / 180), y - radius * sizeRate * Math.sin(angle * Math.PI / 180), 'ball').setOrigin(0.5, 0.5)
       .setDisplaySize(10, 10)
       .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
+      .setVisible(false)
+      rb.angle = angle;
+      rb.radius = radius;
 
     const tb = this.physics.add.sprite(x + radius * Math.cos(angle * Math.PI / 180 + Math.PI / 2), y + radius * Math.sin(angle * Math.PI / 180 + Math.PI / 2), 'ball').setOrigin(0.5, 0.5)
-      .setDisplaySize(10, 10)
+      .setDisplaySize(30, 30)
       .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
+      .setVisible(false)
     
     const db = this.physics.add.sprite(x - radius * Math.cos(angle * Math.PI / 180 + Math.PI / 2), y - radius * Math.sin(angle * Math.PI / 180 + Math.PI / 2), 'ball').setOrigin(0.5, 0.5)
-      .setDisplaySize(10, 10)
+      .setDisplaySize(30, 30)
       .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
+      .setVisible(false)
 
-
-
+    const last = this.physics.add.sprite(x + objW / 1.5, y, 'ball').setOrigin(0.5, 0.5)
+      .setDisplaySize(10, 2 * h)
+      .setPushable(false)
+      .setVisible(false)
+    
+    const last_bottom = this.physics.add.sprite(x, h, 'ball').setOrigin(0.5, 0.5)
+      .setDisplaySize(w * 0.8, 5)
+      .setPushable(false)
+      .setVisible(false)
     const group = this.add.group();
     group.add(top);
     group.add(down);
@@ -260,54 +399,152 @@ export default class FlyBallScene extends Phaser.Scene {
     group.add(rb);
     group.add(tb);
     group.add(db);
+    group.add(last);
+    group.add(last_bottom);
     group.id = id;
     // Collider PART
 
-    const reflect = 15
-    this.physics.add.collider(this.ball, lb, () => {
-      this.bg.setVelocityX(reflect);
-      this.obstacles.forEach(obstacle => {
-        obstacle.getChildren().forEach(item => {
-          item.setVelocityX(reflect)
-        })
-      })
-    }, null, this)
+    const col_l = this.physics.add.collider(this.ball, lb);
+    const col_r = this.physics.add.collider(this.ball, rb);
 
+    // LOSE HEART PART
+    const col_last = this.physics.add.overlap(this.ball, last, () => {
+      if(!HIT_STATUS.DOWN || !HIT_STATUS.TOP) {
+        this.physics.world.removeCollider(col_l);
+        this.physics.world.removeCollider(col_r);
+        this.physics.world.removeCollider(col_last);
+        this.physics.world.removeCollider(col_last_b);
+        this.physics.world.removeCollider(col_tb);
+        this.physics.world.removeCollider(col_db);
+        this.removeObstacle(group);
+        lastPos.ballPos.x = x;
+        lastPos.ballPos.y = y;
+        this.loseLife();
+      }
+      HIT_STATUS.DOWN = false;
+      HIT_STATUS.TOP = false;
+    })
 
-    this.physics.add.collider(this.ball, rb, () => {
-      this.bg.setVelocityX(reflect);
-      this.obstacles.forEach(obstacle => {
-        obstacle.getChildren().forEach(item => {
-          item.setVelocityX(reflect)
-        })
-      })
-    }, null, this)
+    const col_last_b = this.physics.add.overlap(this.ball, last_bottom, () => {
+      if(!HIT_STATUS.DOWN || !HIT_STATUS.TOP) {
+        this.physics.world.removeCollider(col_l);
+        this.physics.world.removeCollider(col_r);
+        this.physics.world.removeCollider(col_last);
+        this.physics.world.removeCollider(col_last_b);
+        this.physics.world.removeCollider(col_tb);
+        this.physics.world.removeCollider(col_db);
+        this.removeObstacle(group);
+        lastPos.ballPos.x = x;
+        lastPos.ballPos.y = y;
+        this.loseLife();
+      }
+      HIT_STATUS.DOWN = false;
+      HIT_STATUS.TOP = false;
+    })
 
-    this.physics.add.overlap(this.ball, db, () => {
+    const col_db = this.physics.add.overlap(this.ball, db, () => {
       console.log("HIT TOP")
       if(!HIT_STATUS.DOWN)
         HIT_STATUS.TOP = true;
     }, null, this)
 
-    this.physics.add.overlap(this.ball, tb, () => {
+    // RING SUCCESS....
+    const col_tb = this.physics.add.overlap(this.ball, tb, () => {
       console.log("HIT DOWN", HIT_STATUS)
-
+      // if(!HIT_STATUS.TOP) {
+      //   HIT_STATUS.DOWN = true;
+      // }
       if(!HIT_STATUS.DOWN && HIT_STATUS.TOP) {
         console.log("CHANGE OBSTACLE")
         HIT_STATUS.DOWN = true;
+        this.physics.world.removeCollider(col_l);
+        this.physics.world.removeCollider(col_r);
+        this.physics.world.removeCollider(col_last);
+        this.physics.world.removeCollider(col_last_b);
+        this.physics.world.removeCollider(col_tb);
+        this.physics.world.removeCollider(col_db);
         this.removeObstacle(group);
+
+        if(isLevelUp) {
+          GAME.level++;
+          this.setTopHeader();
+        }
       }
+
 
     }, null, this)
 
+
+
+    // ITEM INIT (percent)
+    this.items.push(
+      this.initItem(x, y)
+    )
+
+    // MOVE OBSTACLE...
+    if(isMove) {
+      // const tw = this.tweens.add({
+      //   targets: group.getChildren(),
+      //   x : x,
+      //   y : y + 100,
+      //   duration: 2000,
+      //   onComplete: () => {
+      //     this.tweens.add({
+      //       targets: group.getChildren(),
+      //       x : x,
+      //       y : y,
+      //       duration: 2000,
+      //       onComplete: () => {
+              
+      //       },
+      //       callbackScope: this,
+      //     })
+      //   },
+      //   callbackScope: this,
+      // })
+    }
+
     return group;
+  }
+
+  initItem(x, y) {
+    x += (0.5 - Math.random()) * 300;
+    y += (0.5 - Math.random()) * 300;
+    const type = (Math.random() < 0.5)? "light" : "coin"
+    const item = this.physics.add.sprite(x, y, type).setDisplaySize(40, 40)
+    const col = this.physics.add.overlap(this.ball, item, () => {
+      if(type == "light") {
+        GAME.light += STATUS.power? 2 : 1;
+      } else if(type == "coin") {
+        GAME.coin += STATUS.power? 2 : 1;
+      }
+      this.setTopHeader()
+      this.physics.world.removeCollider(col);
+      item.destroy();
+
+    }, null, this)
+    return item;
+  }
+
+  addItemText(x, y, text, type) {
+    const itemW = 32;
+    this.add.graphics()
+    .fillStyle(0x000000, 0.6) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(x - 15, y + 5, itemW, 15)
+    .setScrollFactor(0, 0).setDepth(101)
+    this.add.sprite(x - 15, y + 5, type).setOrigin(0, 0).setDisplaySize(15, 15).setScrollFactor(0, 0).setDepth(102);
+    this.add.text(x, y + 5, text).setStyle({
+      fontFamily: "TitanOne-Regular",
+      fontSize: "13px",
+      color: "#fff",
+    }).setScrollFactor(0, 0).setDepth(102)
   }
 
   removeObstacle(obj) {
     const tween = this.tweens.add({
       targets: obj.getChildren(),
       alpha: 0, // Set the desired alpha value
-      duration: 1000, // Set the duration of the tween in milliseconds
+      duration: 150, // Set the duration of the tween in milliseconds
       onComplete: () => {
           console.log("remove")
 
@@ -318,9 +555,14 @@ export default class FlyBallScene extends Phaser.Scene {
               element.destroy()
             });
             obj1.destroy();
-
           }
 
+          this.addObstacle();
+          
+        HIT_STATUS.DOWN = false;
+        HIT_STATUS.TOP = false;
+
+        GAME.ring++;
       }
       // ease: 'Linear', // Set the easing function
       // repeat: 0, // Set the number of times the tween should repeat (-1 for infinite)
@@ -340,8 +582,9 @@ export default class FlyBallScene extends Phaser.Scene {
 
   public initGame(lives = 3) {
     this.cameras.main.fadeIn(1200);
-
-    setTimeout(() => this.startRound(), 2500);
+    GAME.ring = 0;
+    lastPos.ballPos.x = this.ball.x;
+    this.startRound()
   }
 
   loseGame() {
@@ -352,30 +595,106 @@ export default class FlyBallScene extends Phaser.Scene {
     //this.initGame();
   }
 
-  loseLife(): boolean {
-    return true
+  loseLife(): void {
+    GAME.ball--;
+    if(GAME.ball < 0) {
+      this.loseGame(); 
+      return;
+    }
+    this.startRound()
   }
 
   startRound() {
+    this.ball.setPosition(lastPos.ballPos.x, 0.4 * h);
+    this.ball.setVelocity(0, 0)
+    this.ball.setGravityY(0)
 
+    this.setTopHeader();
+  }
+
+  addItemEffect(type, during = 4000) {
+    if(type == "shrink") {
+      this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2 * 0.7).setDisplaySize(ballR * 0.7, ballR * 0.7)
+    }
+    if(type == "magnify") {
+      this.obstacles.forEach(obstacle => {
+        const objArray = obstacle.getChildren();
+        const sizeRate = 1.3;
+        const x = objArray[0].x;
+        const y = objArray[0].y;
+        const radius = objArray[2].radius;
+        const angle = objArray[2].angle;
+        objArray[0].setDisplaySize(100 * sizeRate, 30 * sizeRate);
+        objArray[1].setDisplaySize(100 * sizeRate, 30 * sizeRate);
+        objArray[2].setPosition(x + radius * sizeRate * Math.cos(angle * Math.PI / 180), y + radius * sizeRate * Math.sin(angle * Math.PI / 180))
+        objArray[3].setPosition(x - radius * sizeRate * Math.cos(angle * Math.PI / 180), y - radius * sizeRate * Math.sin(angle * Math.PI / 180));
+      });
+    }
+
+    this.time.delayedCall(during, () => {
+      this.initItemEffect(type);
+    }, [], this);
+  }
+
+  initItemEffect(type) {
+    if(type == "shrink") {
+      this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2).setDisplaySize(ballR, ballR)
+      STATUS.shrink = false;
+    }
+    if(type == "magnify") {
+      this.obstacles.forEach(obstacle => {
+        const objArray = obstacle.getChildren();
+        const sizeRate = 1;
+        const x = objArray[0].x;
+        const y = objArray[0].y;
+        const radius = objArray[2].radius;
+        const angle = objArray[2].angle;
+        objArray[0].setDisplaySize(100 * sizeRate, 30 * sizeRate);
+        objArray[1].setDisplaySize(100 * sizeRate, 30 * sizeRate);
+        objArray[2].setPosition(x + radius * sizeRate * Math.cos(angle * Math.PI / 180), y + radius * sizeRate * Math.sin(angle * Math.PI / 180))
+        objArray[3].setPosition(x - radius * sizeRate * Math.cos(angle * Math.PI / 180), y - radius * sizeRate * Math.sin(angle * Math.PI / 180));
+      });
+
+      STATUS.magnify = false;
+    }
+
+    if(type == "power") {
+      STATUS.power = false;
+    }
+  }
+
+  addObstacle() {
+    if(this.obstacles.length > 10) return;
+    this.obstacles.push(
+      this.initObstacle()
+    )
+  }
+
+  setTopHeader() {
+    this.levelTxt.setText(GAME.level.toString());
+    this.ballTxt.setText(GAME.ball.toString());
+    this.lightTxt.setText(GAME.light.toString());
+    this.coinTxt.setText(GAME.coin.toString());
   }
 
   setBackgroundPos() {
 
-    if(this.bg.x < - 1918) {
-      this.bg.setPosition(0, 0).setFlipX(true);
-      this.bg1.setFlipX(true);
-      this.bg2.setFlipX(true);
-    } else {
-      this.bg1.setPosition(this.bg.x - 1918, 0);
-      this.bg2.setPosition(this.bg.x + 1918, 0);
+    if(this.ball.x > this.bg.x + 800) {
+      this.bg1.setPosition(this.bg.x, 0);
+      this.bg.setPosition(this.bg.x + this.bg.width, 0).setFlipX(true);
+      this.bg2.setPosition(this.bg.x + 2 * this.bg.width, 0).setFlipX(true)
     }
 
+  }
+
+  checkObstacle() {
+    const x = this.obstacles[0].x
   }
 
   update(time, delta) {
     this.ballGroup.setXY(this.ball.x, this.ball.y)
     this.setBackgroundPos()
+
   }
 
 }
