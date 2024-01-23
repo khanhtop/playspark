@@ -1,3 +1,4 @@
+import Advert from "@/components/ad";
 import ClientPageWrapper from "../clientPageWrapper";
 
 export default function ClientEmbeddedGame({ user, setScreen, activeGame }) {
@@ -8,10 +9,11 @@ export default function ClientEmbeddedGame({ user, setScreen, activeGame }) {
       onBackNav={() => setScreen("home")}
     >
       <div className="bg-black h-full flex items-center justify-center">
-        <iframe
+        <Advert data={activeGame} />
+        {/* <iframe
           src={`https://playspark.co/ad/${activeGame}`}
           className="h-full"
-        />
+        /> */}
       </div>
     </ClientPageWrapper>
   );

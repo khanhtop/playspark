@@ -52,6 +52,10 @@ export default function ClientHome({
         aggregateLeaderboard={leaderboard}
         user={user}
         tournaments={tournaments}
+        playGame={(id) => {
+          setActiveGame(id);
+          setScreen("game");
+        }}
       />
     </ClientPageWrapper>
   );

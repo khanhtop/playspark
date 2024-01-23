@@ -4,7 +4,12 @@ import ClientGameGridCard from "./gridCard";
 import AggregateLeaderboard from "./aggregateLeaderboard";
 import { useAppContext } from "@/helpers/store";
 
-export default function Areas({ user, tournaments, aggregateLeaderboard }) {
+export default function Areas({
+  user,
+  tournaments,
+  aggregateLeaderboard,
+  playGame,
+}) {
   const context = useAppContext();
   const [tab, setTab] = useState("games");
 
@@ -42,12 +47,13 @@ export default function Areas({ user, tournaments, aggregateLeaderboard }) {
         }
       />
       {tab === "games" && (
-        <div className="grid grid-cols-1 px-8 md:grid-cols-3 gap-2 md:gap-8 md:px-4 py-4">
+        <div className="grid grid-cols-2 px-5 md:grid-cols-3 gap-2 md:gap-8 md:px-4 py-4">
           {tournaments.map((item, key) => (
             <ClientGameGridCard
               item={item}
               key={item.tournamentId}
               user={user}
+              playGame={playGame}
             />
           ))}
         </div>

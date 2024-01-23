@@ -40,12 +40,28 @@ export default function CreateDesign({ tournament, setTournament }) {
         <div className="mt-4">
           <ImagePicker
             cover
+            id="bg-image"
             width={tournament.landscape ? 400 : 200}
             height={tournament.landscape ? 200 : 400}
             label="Background Image (Aim for 800px x 1600px)"
             image={tournament.backgroundImage}
             onChange={(url) => {
               setTournament({ ...tournament, backgroundImage: url });
+            }}
+          />
+        </div>
+      </BrandingComponent>
+      <BrandingComponent>
+        <div className="mt-4">
+          <ImagePicker
+            cover
+            id="game-icon"
+            width={200}
+            height={200}
+            label="Game Icon (Aim For 500 x 500px Square)"
+            image={tournament.gameIcon}
+            onChange={(url) => {
+              setTournament({ ...tournament, gameIcon: url });
             }}
           />
         </div>

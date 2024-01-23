@@ -35,6 +35,7 @@ export default function PageHandler({
   leaderboard,
 }) {
   const context = useAppContext();
+  const router = useRouter();
   const [showLogin, setShowLogin] = useState(false);
   const [screen, setScreen] = useState("home");
   const [activeGame, setActiveGame] = useState();
@@ -51,7 +52,12 @@ export default function PageHandler({
     tournamentsByDate,
     leaderboard,
     context,
-    setScreen,
+    setScreen: (s) => {
+      if (screen === "game") {
+        router.reload();
+      }
+      setScreen(s);
+    },
     screen,
     setActiveGame,
     activeGame,
@@ -96,6 +102,7 @@ export async function getServerSideProps(context) {
       const userData = { id: userDoc.id, ...userDoc.data() };
       const tournamentsRef = query(
         collection(firestore, "tournaments"),
+        where("isActive", "==", true),
         where("ownerId", "==", userDoc.id)
       );
       const tournamentsSnapshot = await getDocs(tournamentsRef);
