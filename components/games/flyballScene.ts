@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import Phaser, { Game } from "phaser";
 
 let w: number,
   h: number,
@@ -17,15 +17,18 @@ let lastPos = {
 
 let HIT_STATUS = {
   TOP: false,
-  DOWN: false
+  DOWN: false,
+  COLLIDER: false
 }
 
 let GAME = {
-  level: 15,
+  level: 1,
   ball: 3,
-  light: 0,
+  light: 100,
   coin: 100,
-  ring: 0
+  ring: 0,
+  passRing: 0,
+  sequence: 0
 }
 
 let STATUS = {
@@ -53,12 +56,17 @@ export default class FlyBallScene extends Phaser.Scene {
   ballTxt: Phaser.GameObjects.Text;
   lightTxt: Phaser.GameObjects.Text;
   coinTxt: Phaser.GameObjects.Text;
+  scoreTxt: Phaser.GameObjects.Text;
   ball: Phaser.Physics.Arcade.Sprite;
   ballGroup: Phaser.GameObjects.Group;
   hoop: Phaser.Physics.Arcade.StaticGroup;
   wings: Phaser.GameObjects.Sprite[];
   obstacles: any;
   items: any;
+  emitter: Phaser.GameObjects.Particles.ParticleEmitter;
+  snowEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
+  popUpTexts: any;
+  leftStatus: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -81,6 +89,9 @@ export default class FlyBallScene extends Phaser.Scene {
 
     this.load.image("hoop_t", "/pong/" + gameType + "/UI/hoop_t.png");
     this.load.image("hoop_d", "/pong/" + gameType + "/UI/hoop_d.png");
+    
+    this.load.image("fx", "/pong/" + gameType + "/UI/fx.png");
+    this.load.image("snow", "/pong/" + gameType + "/UI/snow.png");
 
     this.load.image("magnify", "/pong/" + gameType + "/item/magnify.png");
     this.load.image("heart", "/pong/" + gameType + "/item/heart.png");
@@ -172,6 +183,25 @@ export default class FlyBallScene extends Phaser.Scene {
       color: "#000",
     }).setOrigin(0, 0.5).setScrollFactor(0, 0)
 
+    this.add.sprite(w - 70, topOffset + 50, 'score').setOrigin(0.5, 0.5).setDisplaySize(100, 50).setScrollFactor(0, 0);
+    this.add.text(w - 70, topOffset + 40, 'SCORE', {
+      fontFamily: "TitanOne-Regular",
+      fontSize: "18px",
+      color: "#fff",
+    })
+    .setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+    this.scoreTxt = this.add.text(w - 70, topOffset + 60, '12', {
+      fontFamily: "TitanOne-Regular",
+      fontSize: "18px",
+      color: "#fff",
+    })
+    .setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+
+    this.leftStatus = {};
+    this.leftStatus["magnify"] = this.add.sprite(5, topOffset + 50, 'magnify').setDisplaySize(30, 30).setOrigin(0, 0.5).setScrollFactor(0, 0).setAlpha(0.3).setVisible(false);
+    this.leftStatus["power"] = this.add.sprite(5, topOffset + 100, 'power').setDisplaySize(30, 30).setOrigin(0, 0.5).setScrollFactor(0, 0).setAlpha(0.3).setVisible(false);
+    this.leftStatus["shrink"] = this.add.sprite(5, topOffset + 150, 'shrink').setDisplaySize(30, 30).setOrigin(0, 0.5).setScrollFactor(0, 0).setAlpha(0.3).setVisible(false);
+
     // END HEADER
 
     // LEFT BOTTOM ITEMS
@@ -179,49 +209,71 @@ export default class FlyBallScene extends Phaser.Scene {
     const item_x = w - 20
     const item_r = 45
     const shrink = this.add.sprite(item_x, h - item_dis, 'shrink').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
-    this.addItemText(shrink.x, shrink.y, ITEM.shrink, "coin");
+    this.addItemText(shrink.x, shrink.y, ITEM.shrink, "light");
     
     const power = this.add.sprite(item_x, h - item_dis * 2, 'power').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
-    this.addItemText(power.x, power.y, ITEM.power, "coin");
+    this.addItemText(power.x, power.y, ITEM.power, "light");
 
     const magnify = this.add.sprite(item_x, h - item_dis * 3, 'magnify').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
-    this.addItemText(magnify.x, magnify.y, ITEM.magnify, "coin");
+    this.addItemText(magnify.x, magnify.y, ITEM.magnify, "light");
     
     const heart = this.add.sprite( item_x, h - item_dis * 4, 'heart').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
-    this.addItemText(heart.x, heart.y, ITEM.heart, "coin");
+    this.addItemText(heart.x, heart.y, ITEM.heart, "light");
     shrink.on('pointerup', () => {
-      if(STATUS.shrink || GAME.coin < ITEM.shrink) return;
-      GAME.coin -= ITEM.shrink;
+      if(STATUS.shrink || GAME.light < ITEM.shrink) return;
+      GAME.light -= ITEM.shrink;
       STATUS.shrink = true;
 
-      this.addItemEffect("shrink");
+      this.addItemEffect("shrink", 60 * 1000);
       this.setTopHeader()
     })
     power.on('pointerup', () => {
-      if(STATUS.power || GAME.coin < ITEM.power) return;
-      GAME.coin -= ITEM.power;
+      if(STATUS.power || GAME.light < ITEM.power) return;
+      GAME.light -= ITEM.power;
       STATUS.power = true;
 
-      this.addItemEffect("power");
+      this.addItemEffect("power", 60 * 1000);
       this.setTopHeader()
     })
     magnify.on('pointerup', () => {
-      if(STATUS.magnify || GAME.coin < ITEM.magnify) return;
-      GAME.coin -= ITEM.magnify;
+      if(STATUS.magnify || GAME.light < ITEM.magnify) return;
+      GAME.light -= ITEM.magnify;
       STATUS.magnify = true;
 
-      this.addItemEffect("magnify");
+      this.addItemEffect("magnify", 60 * 1000);
       this.setTopHeader()
     })
     heart.on('pointerup', () => {
-      if(GAME.coin < ITEM.heart) return;
-      GAME.coin -= ITEM.heart;
+      if(GAME.light < ITEM.heart) return;
+      GAME.light -= ITEM.heart;
       GAME.ball++;
       this.setTopHeader()
     })
     // END LEFT BOTTOM ITEMS
 
+    // POP UP TEXTS
+    this.popUpTexts = {};
+    this.popUpTexts["ring"] = this.add.text(w / 2, h / 2 - 100, '+12', {
+      fontFamily: "TitanOne-Regular",
+      fontSize: "45px",
+      color: "#000",
+    })
+    .setOrigin(0.5, 0.5).setScrollFactor(0, 0).setAlpha(0);
+
+    this.popUpTexts["direct_ring"] = this.add.text(w / 2, h / 2 - 150, 'SWISH X 2', {
+      fontFamily: "TitanOne-Regular",
+      fontSize: "35px",
+      color: "#f08827",
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setAlpha(0);
+
+    this.popUpTexts["level"] = this.add.text(w / 2, h / 2 + 100, 'LEVEL 2 UNLOCKED', {
+      fontFamily: "TitanOne-Regular",
+      fontSize: "35px",
+      color: "#fed957",
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setAlpha(0);
+    // END POP UP TEXTS
     // GAME
+
 
     this.ball = this.physics.add.sprite(0.2 * w, 0.4 * h, 'ball')
     .setDisplaySize(ballR, ballR)
@@ -229,10 +281,34 @@ export default class FlyBallScene extends Phaser.Scene {
     .setCircle(this.textures.get("ball").getSourceImage().width / 2)
     .setBounce(1, 1)
     .setPushable(true).setDepth(10);
+    
+
+    this.emitter = this.add.particles(0, 0, 'fx', {
+      tint: 0xdddddd,
+      alpha: { start: 0.8, end: 0 },
+      scale: { start: 0.15, end: 0.21 },
+      speed: {random: [1, 5] },
+      accelerationY:  {random: [-10, 20] },
+      rotate: { min: -180, max: 180 },
+      frequency: 100,
+    })
+    this.emitter.start(1, 0)
+    this.emitter.startFollow(this.ball, 0, 0, true)
+
+    // this.snowEmitter = this.add.particles(150, h / 2, 'snow', {
+    //   alpha: { start: 0.8, end: 1 },
+    //   scale: { start: 0.05, end: 0.1 },
+    //   speed: {random: [50, 70] },
+    //   accelerationY:  {random: [-10, 20] },
+    //   rotate: { min: -180, max: 180 },
+    //   frequency: 20,
+    //   maxParticles: 30
+    // })
+    // this.snowEmitter.stop();
 
     this.wings = [];
     this.wings.push(
-      this.add.sprite(0, 0, 'wing').setOrigin(0.8, 1).setDisplaySize(wingR, wingR).setAngle(30).setDepth(9)
+      this.physics.add.sprite(0, 0, 'wing').setOrigin(0.8, 1).setDisplaySize(wingR, wingR).setAngle(30).setDepth(9)
     )
     this.wings.push(
       this.add.sprite(0, 0, 'wing').setOrigin(1.3, 1).setDisplaySize(wingR, wingR).setAngle(30).setDepth(11)
@@ -242,13 +318,6 @@ export default class FlyBallScene extends Phaser.Scene {
     this.ballGroup.add(this.wings[0]);
     this.ballGroup.add(this.wings[1]);
 
-    this.obstacles = [];
-    this.items = [];
-    for(let i = 0; i < 3; i++) {
-      this.obstacles.push(
-        this.initObstacle()
-      ) 
-    }
 
     this.bg.setInteractive();
     this.bg1.setInteractive();
@@ -300,9 +369,9 @@ export default class FlyBallScene extends Phaser.Scene {
       })
     });
 
-    this.ball.setGravityY(700);
-    this.ball.setVelocityY(-300);
-    this.ball.setVelocityX(100);
+    this.ball.setGravityY(1700);
+    this.ball.setVelocityY(-500);
+    this.ball.setVelocityX(120);
   }
 
   initObstacle() {
@@ -388,8 +457,8 @@ export default class FlyBallScene extends Phaser.Scene {
       .setPushable(false)
       .setVisible(false)
     
-    const last_bottom = this.physics.add.sprite(x, h, 'ball').setOrigin(0.5, 0.5)
-      .setDisplaySize(w * 0.8, 5)
+    const last_bottom = this.physics.add.sprite(x, h, 'ball').setOrigin(1, 0.5)
+      .setDisplaySize(w * 0.9, 60)
       .setPushable(false)
       .setVisible(false)
     const group = this.add.group();
@@ -404,8 +473,19 @@ export default class FlyBallScene extends Phaser.Scene {
     group.id = id;
     // Collider PART
 
-    const col_l = this.physics.add.collider(this.ball, lb);
-    const col_r = this.physics.add.collider(this.ball, rb);
+    const col_l = this.physics.add.collider(this.ball, lb, () => { 
+      HIT_STATUS.COLLIDER = true;
+      GAME.sequence = 0;
+      this.emitter.stop()
+      this.ball.setAngularVelocity(200 + 450 * (0.5 - Math.random()))
+
+    });
+    const col_r = this.physics.add.collider(this.ball, rb, () => {
+      HIT_STATUS.COLLIDER = true;
+      GAME.sequence = 0;
+      this.emitter.stop()
+      this.ball.setAngularVelocity(-200 - 450 * (0.5 - Math.random()))
+    });
 
     // LOSE HEART PART
     const col_last = this.physics.add.overlap(this.ball, last, () => {
@@ -423,6 +503,7 @@ export default class FlyBallScene extends Phaser.Scene {
       }
       HIT_STATUS.DOWN = false;
       HIT_STATUS.TOP = false;
+      HIT_STATUS.COLLIDER = false;
     })
 
     const col_last_b = this.physics.add.overlap(this.ball, last_bottom, () => {
@@ -440,6 +521,7 @@ export default class FlyBallScene extends Phaser.Scene {
       }
       HIT_STATUS.DOWN = false;
       HIT_STATUS.TOP = false;
+      HIT_STATUS.COLLIDER = false;
     })
 
     const col_db = this.physics.add.overlap(this.ball, db, () => {
@@ -464,11 +546,43 @@ export default class FlyBallScene extends Phaser.Scene {
         this.physics.world.removeCollider(col_tb);
         this.physics.world.removeCollider(col_db);
         this.removeObstacle(group);
+        
+        if(!HIT_STATUS.COLLIDER) {
+          GAME.sequence++;
+          this.emitter.start(1, 0)
+          const part = this.add.particles(x, y, 'snow', {
+            alpha: { start: 0.8, end: 1 },
+            scale: { start: 0.05, end: 0.1 },
+            speed: {random: [50, 70] },
+            accelerationY:  {random: [-10, 20] },
+            rotate: { min: -180, max: 180 },
+            frequency: 20,
+            maxParticles: 30,
+          })
+          this.time.delayedCall(
+            1000,
+            () => {
+              part.stop(true)
+            },
+            null,
+            this
+          );
+        }
+
+        const addRing = (GAME.sequence < 1? 1 : (GAME.sequence) * 2) * (STATUS.power? 2 : 1)
+
+        GAME.passRing += addRing;
+        if(!HIT_STATUS.COLLIDER && GAME.sequence > 0){
+          this.addPopupText("direct_ring", addRing)
+        } else {
+          this.addPopupText("ring", addRing)
+        }
 
         if(isLevelUp) {
           GAME.level++;
-          this.setTopHeader();
+          this.addPopupText("level", GAME.level);
         }
+        this.setTopHeader();
       }
 
 
@@ -540,28 +654,85 @@ export default class FlyBallScene extends Phaser.Scene {
     }).setScrollFactor(0, 0).setDepth(102)
   }
 
+  addPopupText(type, val) {
+    if(type == "ring") {
+      this.popUpTexts[type].setText(`+${val}`)
+      this.popUpTexts[type].setScale(0);
+      this.tweens.add({
+        targets: this.popUpTexts[type],
+        scaleX: 1,
+        scaleY: 1,
+        alpha: 1,
+        duration: 800,
+        ease: 'Bounce',
+      });
+    } else if(type == "direct_ring") {
+      this.popUpTexts["ring"].setText(`+${val}`)
+      this.popUpTexts["ring"].setScale(0);
+      this.tweens.add({
+        targets: this.popUpTexts["ring"],
+        scaleX: 1,
+        scaleY: 1,
+        alpha: 1,
+        duration: 800,
+        ease: 'Bounce',
+      });
+
+      this.popUpTexts[type].setText(`${GAME.sequence == 1? "PERFECT!" : "COMBO!"}`)
+      this.popUpTexts[type].setScale(0);
+      this.tweens.add({
+        targets: this.popUpTexts[type],
+        scaleX: 1,
+        scaleY: 1,
+        alpha: 1,
+        duration: 800,
+        ease: 'Bounce',
+      });
+    } else if(type == "level") {
+      this.popUpTexts[type].setText(`LEVEL ${val} UNLOCKED`)
+      this.popUpTexts[type].setScale(0);
+      this.tweens.add({
+        targets: this.popUpTexts[type],
+        scaleX: 1,
+        scaleY: 1,
+        alpha: 1,
+        duration: 800,
+        ease: 'Bounce',
+      });
+    }
+
+    this.time.delayedCall(
+      1000,
+      () => {
+        Object.keys(this.popUpTexts).forEach(key => {
+          this.popUpTexts[key].setAlpha(0)
+        });
+      },
+      null,
+      this
+    );
+  }
+
   removeObstacle(obj) {
     const tween = this.tweens.add({
       targets: obj.getChildren(),
       alpha: 0, // Set the desired alpha value
       duration: 150, // Set the duration of the tween in milliseconds
       onComplete: () => {
-          console.log("remove")
-
-          const index = this.obstacles.findIndex(item => item.id === obj.id);
-          if (index !== -1) {
-            const obj1 = this.obstacles.splice(index, 1)[0];
-            obj1.getChildren().forEach(element => {
-              element.destroy()
-            });
-            obj1.destroy();
-          }
-
-          this.addObstacle();
+        console.log("remove")
+        const index = this.obstacles.findIndex(item => item.id === obj.id);
+        if (index !== -1) {
+          const obj1 = this.obstacles.splice(index, 1)[0];
+          obj1.clear(true, true)
+          obj1.destroy();
+        }
+    
+        this.addObstacle();
           
         HIT_STATUS.DOWN = false;
         HIT_STATUS.TOP = false;
-
+        HIT_STATUS.COLLIDER = false;
+    
         GAME.ring++;
       }
       // ease: 'Linear', // Set the easing function
@@ -569,8 +740,7 @@ export default class FlyBallScene extends Phaser.Scene {
       // yoyo: true // Set whether the tween should reverse back to its original value
     });
     
-    // Start the tween
-    tween.play();
+
   }
 
   private scoreNum = 0;
@@ -584,6 +754,9 @@ export default class FlyBallScene extends Phaser.Scene {
     this.cameras.main.fadeIn(1200);
     GAME.ring = 0;
     lastPos.ballPos.x = this.ball.x;
+    this.obstacles = [];
+    this.items = [];
+
     this.startRound()
   }
 
@@ -605,6 +778,47 @@ export default class FlyBallScene extends Phaser.Scene {
   }
 
   startRound() {
+    GAME.level = 1;
+    GAME.passRing = 0;
+    GAME.ring = 1;
+    GAME.sequence = 0;
+    // GAME.ball = 30;
+
+    lastPos.x = 1 * w;
+    lastPos.y = 0.4 * h;
+    lastPos.id = 1;
+    lastPos.ballPos.x = 0.5 * w;
+    lastPos.ballPos.y = 0.4 * h;
+
+    HIT_STATUS.TOP = false;
+    HIT_STATUS.DOWN = false;
+    HIT_STATUS.COLLIDER = false;
+    
+    STATUS.magnify = false;
+    STATUS.shrink = false;
+    STATUS.power = false;
+
+    this.bg.setPosition(0, 0);
+    this.bg1.setPosition(this.bg.x + 1920, 0);
+    this.bg2.setPosition(this.bg.x - 1920, 0);
+
+    this.obstacles.forEach(obj => {
+      obj.clear(true, true);
+    });
+
+    this.items.forEach(item => {
+      item.destroy(true)
+    });
+
+    this.obstacles = [];
+    this.items = [];
+    
+    for(let i = 0; i < 3; i++) {
+      this.obstacles.push(
+        this.initObstacle()
+      ) 
+    }
+
     this.ball.setPosition(lastPos.ballPos.x, 0.4 * h);
     this.ball.setVelocity(0, 0)
     this.ball.setGravityY(0)
@@ -629,6 +843,10 @@ export default class FlyBallScene extends Phaser.Scene {
         objArray[2].setPosition(x + radius * sizeRate * Math.cos(angle * Math.PI / 180), y + radius * sizeRate * Math.sin(angle * Math.PI / 180))
         objArray[3].setPosition(x - radius * sizeRate * Math.cos(angle * Math.PI / 180), y - radius * sizeRate * Math.sin(angle * Math.PI / 180));
       });
+    }
+
+    if(!!this.leftStatus[type]) {
+      this.leftStatus[type].setAlpha(1)
     }
 
     this.time.delayedCall(during, () => {
@@ -661,6 +879,10 @@ export default class FlyBallScene extends Phaser.Scene {
     if(type == "power") {
       STATUS.power = false;
     }
+
+    if(!!this.leftStatus[type]) {
+      this.leftStatus[type].setAlpha(0.3)
+    }
   }
 
   addObstacle() {
@@ -675,6 +897,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.ballTxt.setText(GAME.ball.toString());
     this.lightTxt.setText(GAME.light.toString());
     this.coinTxt.setText(GAME.coin.toString());
+    this.scoreTxt.setText(GAME.passRing.toString());
   }
 
   setBackgroundPos() {
@@ -691,9 +914,14 @@ export default class FlyBallScene extends Phaser.Scene {
     const x = this.obstacles[0].x
   }
 
+  private lastangle = 0;
   update(time, delta) {
-    this.ballGroup.setXY(this.ball.x, this.ball.y)
+    const deltaangle = this.ball.angle - this.lastangle;
+    this.ballGroup.setXY(this.ball.x, this.ball.y);
+    this.ballGroup.angle(deltaangle)
     this.setBackgroundPos()
+
+    this.lastangle = this.ball.angle;
 
   }
 
