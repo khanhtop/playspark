@@ -5,6 +5,7 @@ import UIButton from "./ui/button";
 import EmailSlide from "./forms/emailSlide";
 import ShareButton from "./ui/shareButton";
 import SignUp from "./forms/signUp";
+import { restartEvent, reviveEvent } from "@/helpers/events";
 // import Ranking from "./forms/ranking";
 
 export default function Outro({ score, setStage, data, reviveCount, onReset }) {
@@ -66,7 +67,10 @@ export default function Outro({ score, setStage, data, reviveCount, onReset }) {
               text="Revive"
               disabled={reviveCount === 0}
               {...{ ...data, primaryColor: "green" }}
-              onClick={() => setStage(selectStage())}
+              onClick={() => {
+                reviveEvent(context);
+                setStage(selectStage());
+              }}
               className={`h-12 rounded-full mt-0 ${
                 reviveCount > 0 && "animate-pulse"
               }`}
@@ -74,7 +78,10 @@ export default function Outro({ score, setStage, data, reviveCount, onReset }) {
             <UIButton
               text="Restart"
               {...data}
-              onClick={() => onReset()}
+              onClick={() => {
+                restartEvent(context);
+                onReset();
+              }}
               className="h-12 rounded-full mt-2"
             />
           </div>

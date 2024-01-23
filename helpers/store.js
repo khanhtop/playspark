@@ -21,6 +21,7 @@ export function AppWrapper({ children }) {
   const [myGames, setMyGames] = useState();
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
+  const [event, setEvent] = useState(false);
 
   useEffect(() => {
     if (isIOS && isSafari) {
@@ -102,6 +103,8 @@ export function AppWrapper({ children }) {
     setHasSubscribedToList,
     modal,
     setModal,
+    event,
+    setEvent,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import UIButton from "../ui/button";
 import { useAppContext } from "@/helpers/store";
+import { loginEvent } from "@/helpers/events";
 
 export default function SignUp({ data, closeDialog }) {
   const context = useAppContext();
@@ -104,6 +105,7 @@ export default function SignUp({ data, closeDialog }) {
     setLoading(true);
     await signInWithEmailAndPassword(auth, email.trim(), password)
       .then(async (user) => {
+        loginEvent(context);
         await verifyUserTracked(user.user.uid);
         closeDialog();
       })

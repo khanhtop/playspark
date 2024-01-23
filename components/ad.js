@@ -18,6 +18,8 @@ import Pong from "./games/pong";
 import { isIOS, isAndroid } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
 import { getHighScore } from "@/helpers/leaderboard";
+import NotificationBar from "./ui/notification";
+import { scoreEvent } from "@/helpers/events";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -51,6 +53,7 @@ export default function Advert({ data, theme }) {
   }, [score]);
 
   const callback = (score) => {
+    scoreEvent(context, score);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
       setScore(score);
@@ -146,8 +149,10 @@ export default function Advert({ data, theme }) {
         width: lockX ?? "100%",
         height: lockY ?? "100%",
         overflow: "hidden",
+        position: "relative",
       }}
     >
+      <NotificationBar notification={context.event} />
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
           <img src="/branding/rotate.png" className="h-[80%]" />
