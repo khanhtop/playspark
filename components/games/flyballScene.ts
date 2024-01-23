@@ -115,6 +115,16 @@ export default class FlyBallScene extends Phaser.Scene {
 
     this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
 
+    // AUDIO
+    this.load.audio("bg", "/pong/" + gameType + "/sound/bg.wav");
+    this.load.audio("item_coin", "/pong/" + gameType + "/sound/collectcoin.mp3");
+    this.load.audio("levelup", "/pong/" + gameType + "/sound/game-level-complete-trial.mp3");
+    this.load.audio("item_light", "/pong/" + gameType + "/sound/item-pick-up.mp3");
+    this.load.audio("point", "/pong/" + gameType + "/sound/point.wav");
+    this.load.audio("swish", "/pong/" + gameType + "/sound/swish.wav");
+    this.load.audio("jump", "/pong/" + gameType + "/sound/jump.ogg");
+    this.load.audio("die", "/pong/" + gameType + "/sound/die.ogg");
+
 
 
     w = this.game.canvas.clientWidth;
@@ -127,14 +137,27 @@ export default class FlyBallScene extends Phaser.Scene {
   }
 
   // 400 800
+  private item_coin: Phaser.Sound.BaseSound;
+  private item_light: Phaser.Sound.BaseSound;
+  private levelup: Phaser.Sound.BaseSound;
+  private point: Phaser.Sound.BaseSound;
+  private swish: Phaser.Sound.BaseSound;
+  private jump: Phaser.Sound.BaseSound;
+  private die: Phaser.Sound.BaseSound;
 
   create() {
-
-    this.physics.config.debug = true;
+    this.sound.add("bg").setVolume(0.3).setLoop(true).play();
+    this.item_coin = this.sound.add("item_coin").setVolume(0.3);
+    this.item_light = this.sound.add("item_light").setVolume(0.3);
+    this.levelup = this.sound.add("levelup").setVolume(0.3);
+    this.point = this.sound.add("point").setVolume(0.3);
+    this.swish = this.sound.add("swish").setVolume(0.3);
+    this.jump = this.sound.add("jump").setVolume(0.3);
+    this.die = this.sound.add("die");
 
     this.bg = this.physics.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
     this.bg1 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x + 1920, 0);
-    this.bg2 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x - 1920, 0).setFlipX(true);
+    this.bg2 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x - 1920, 0);
 
     this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
 
@@ -210,7 +233,7 @@ export default class FlyBallScene extends Phaser.Scene {
 
     // LEFT BOTTOM ITEMS
     const item_dis = 60;
-    const item_x = w - 20
+    const item_x = 60
     const item_r = 45
     const shrink = this.add.sprite(item_x, h - item_dis, 'shrink').setDisplaySize(item_r, item_r).setScrollFactor(0, 0).setInteractive().setDepth(100).setOrigin(1, 0.5);
     this.addItemText(shrink.x, shrink.y, ITEM.shrink, "light");
@@ -376,6 +399,8 @@ export default class FlyBallScene extends Phaser.Scene {
     this.ball.setGravityY(1700);
     this.ball.setVelocityY(-500);
     this.ball.setVelocityX(120);
+
+    this.jump.play();
   }
 
   initObstacle() {
@@ -578,13 +603,16 @@ export default class FlyBallScene extends Phaser.Scene {
         GAME.passRing += addRing;
         if(!HIT_STATUS.COLLIDER && GAME.sequence > 0){
           this.addPopupText("direct_ring", addRing)
+          this.swish.play();
         } else {
           this.addPopupText("ring", addRing)
+          this.point.play()
         }
 
         if(isLevelUp) {
           GAME.level++;
           this.addPopupText("level", GAME.level);
+          this.levelup.play();
         }
         this.setTopHeader();
       }
@@ -632,13 +660,15 @@ export default class FlyBallScene extends Phaser.Scene {
     const item = this.physics.add.sprite(x, y, type).setDisplaySize(40, 40)
     const col = this.physics.add.overlap(this.ball, item, () => {
       if(type == "light") {
+        this.item_light.play();
         GAME.light += STATUS.power? 2 : 1;
       } else if(type == "coin") {
+        this.item_coin.play();
         GAME.coin += STATUS.power? 2 : 1;
       }
       this.setTopHeader()
       this.physics.world.removeCollider(col);
-      item.destroy();
+      item.destroy(true);
 
     }, null, this)
     return item;
@@ -747,7 +777,6 @@ export default class FlyBallScene extends Phaser.Scene {
 
   }
 
-  private scoreNum = 0;
   private scoreHandler;
 
   public setScoreHandle(handleScore: any) {
@@ -757,22 +786,24 @@ export default class FlyBallScene extends Phaser.Scene {
   public initGame(lives = 3) {
     this.cameras.main.fadeIn(1200);
     GAME.ring = 0;
+    GAME.ball = this.params.lives;
     lastPos.ballPos.x = this.ball.x;
     this.obstacles = [];
     this.items = [];
-
+    
     this.startRound()
   }
 
   loseGame() {
     this.cameras.main.fadeOut(1000);
-    this.scoreHandler(this.scoreNum);
+    this.scoreHandler(GAME.passRing);
 
     // game is lost
     //this.initGame();
   }
 
   loseLife(): void {
+    this.die.play();
     GAME.ball--;
     if(GAME.ball < 0) {
       this.loseGame(); 
@@ -906,10 +937,10 @@ export default class FlyBallScene extends Phaser.Scene {
 
   setBackgroundPos() {
 
-    if(this.ball.x > this.bg.x + 800) {
+    if(this.ball.x > this.bg.x + 900) {
       this.bg1.setPosition(this.bg.x, 0);
-      this.bg.setPosition(this.bg.x + this.bg.width, 0).setFlipX(true);
-      this.bg2.setPosition(this.bg.x + 2 * this.bg.width, 0).setFlipX(true)
+      this.bg.setPosition(this.bg.x + this.bg.width, 0);
+      this.bg2.setPosition(this.bg.x + 2 * this.bg.width, 0);
     }
 
   }
