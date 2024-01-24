@@ -19,7 +19,7 @@ import { isIOS, isAndroid } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
 import { getHighScore } from "@/helpers/leaderboard";
 import NotificationBar from "./ui/notification";
-import { scoreEvent } from "@/helpers/events";
+import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -238,6 +238,7 @@ export default function Advert({ data, theme }) {
           gameType="wheelspin"
           callback={() => {
             incrementOptInCount(data.tournamentId);
+            playableAdFinishedCTA(context);
             context.setModal({
               title: "You Win",
               contents: (

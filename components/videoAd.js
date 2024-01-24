@@ -4,6 +4,7 @@ import { useState } from "react";
 import UIButton from "./ui/button";
 import { useAppContext } from "@/helpers/store";
 import { WinModal } from "./ui/modalTypes";
+import { videoClickedCTA, videoCompletedCTA } from "@/helpers/events";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
@@ -25,6 +26,7 @@ export default function VideoAd({ data, onSkip, video }) {
   };
 
   const claimReward = () => {
+    videoCompletedCTA(context);
     context.setModal({
       title: "You Win",
       contents: (
@@ -73,7 +75,10 @@ export default function VideoAd({ data, onSkip, video }) {
         </button>
         {data?.sponsoredVideoCtaUrl && (
           <button
-            onClick={() => window.open(data.sponsoredVideoCtaUrl)}
+            onClick={() => {
+              videoClickedCTA(context);
+              window.open(data.sponsoredVideoCtaUrl);
+            }}
             className="text-black bg-white/50 px-6 rounded-full py-2"
           >
             Learn More

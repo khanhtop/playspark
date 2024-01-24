@@ -66,14 +66,16 @@ export default function PageHandler({
   return (
     <>
       <div className="min-h-screen">
-        <TopNav
-          data={data.user}
-          context={context}
-          totalScore={context?.profile?.totalScore || 0}
-          totalXp={context?.profile?.totalXp || 0}
-          showLogin={() => setShowLogin(true)}
-          setScreen={setScreen}
-        />
+        {screen !== "game" && (
+          <TopNav
+            data={data.user}
+            context={context}
+            totalScore={context?.profile?.totalScore || 0}
+            totalXp={context?.profile?.totalXp || 0}
+            showLogin={() => setShowLogin(true)}
+            setScreen={setScreen}
+          />
+        )}
         {screen === "home" && <ClientHome {...data} />}
         {screen === "coins" && <ClientCoins {...data} />}
         {screen === "xp" && <ClientXP {...data} />}

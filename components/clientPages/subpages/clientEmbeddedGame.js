@@ -5,6 +5,7 @@ export default function ClientEmbeddedGame({ user, setScreen, activeGame }) {
   return (
     <ClientPageWrapper
       user={user}
+      withGame
       withBackNav="Quit The Game"
       onBackNav={() => setScreen("home")}
     >
