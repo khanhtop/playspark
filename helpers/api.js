@@ -166,7 +166,8 @@ export function getGame(id, data, callback, params) {
     return (
       <Pong data={data} gameType="wordle" callback={callback} params={params} />
     );
-  if (id === 16) {
+
+  if (id === 16)
     return (
       <Pong
         data={data}
@@ -175,7 +176,6 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
-  }
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {
