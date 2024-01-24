@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { scaleImageViaCloudinary } from "@/helpers/images";
+import { getImageWithSize } from "@/helpers/cloudinary";
 
 let w: number,
   h: number,
@@ -70,17 +70,19 @@ export default class NewPongScene extends Phaser.Scene {
     heartR = w * 0.0625;
     heartNum = this.params.lives
 
-    this.load.image("ball", scaleImageViaCloudinary(this.params.objectSprite, ballR, ballR));
-    this.load.image("peck", scaleImageViaCloudinary(this.params.playerSprite, playerR, playerR));
-    this.load.image("bg", scaleImageViaCloudinary(this.params.backgroundSprite, w, h));
+    this.load.image("ball", getImageWithSize(this.params.objectSprite, ballR, ballR));
+    this.load.image("enemy", getImageWithSize(this.params.enemySprite, playerR, playerR));
+    this.load.image("peck", getImageWithSize(this.params.playerSprite, playerR, playerR));
+    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, w, h));
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
+    this.load.image("bar", "/pong/" + gameType + "/bar.png");
 
     this.load.image("middleAd", this.params.sponsorLogo);
 
     // PONG ASSETS
-    this.load.image("booster", "/pong/pongassets/booster-ball.png");
+    this.load.image("booster", getImageWithSize(this.params.powerUpSprite, 30, 30));
     this.load.image("FREEZE", "/pong/pongassets/freeze.png");
     this.load.image("MAGNIFY", "/pong/pongassets/magnify.png");
     this.load.image("SHRINK", "/pong/pongassets/shrink.png");
@@ -140,18 +142,18 @@ export default class NewPongScene extends Phaser.Scene {
       .setBounce(1, 1);
     this.player = this.physics.add
       .image(mW, h - goalH - playerR / 2, "peck")
-      .setTint(0x0000ff)
+      // .setTint(0x0000ff)
       .setAlpha(0.75)
       .setDisplaySize(playerR, playerR)
       .setCircle(this.textures.get("peck").getSourceImage().width / 2)
       .setCollideWorldBounds(true)
       .setPushable(false);
     this.ai = this.physics.add
-      .image(mW, scr + goalH + playerR / 2, "peck")
-      .setTint(0xff0000)
+      .image(mW, scr + goalH + playerR / 2, "enemy")
+      // .setTint(0xff0000)
       .setAlpha(0.75)
       .setDisplaySize(playerR, playerR)
-      .setCircle(this.textures.get("peck").getSourceImage().width / 2)
+      .setCircle(this.textures.get("enemy").getSourceImage().width / 2)
       .setCollideWorldBounds(true)
       .setPushable(false);
 
@@ -180,31 +182,33 @@ export default class NewPongScene extends Phaser.Scene {
       .setDisplaySize(ballR, ballR)
       .setVisible(false);
 
+    console.log(h)
+
     powerups.push(
-      this.physics.add.image(sideW, goalH + 50, 'SHRINK')
+      this.physics.add.image(sideW, goalH + 50 * h / 663, 'SHRINK')
       .setOrigin(0, 0)
       .setDisplaySize(ballR, ballR)
       .setInteractive()
     )
 
     powerups.push(
-      this.physics.add.image(sideW, goalH + 100, 'MAGNIFY')
+      this.physics.add.image(sideW, goalH + 100 * h / 663, 'MAGNIFY')
       .setOrigin(0, 0)
       .setDisplaySize(ballR, ballR)
       .setInteractive()
     )
 
     powerups.push(
-      this.physics.add.image(sideW, goalH + 150, 'FREEZE')
+      this.physics.add.image(sideW, goalH + 150 * h / 663, 'FREEZE')
       .setOrigin(0, 0)
       .setDisplaySize(ballR, ballR)
       .setInteractive()
     )
 
     powerups.forEach(power => {
+      console.log(power.texture.key)
+      const key = power.texture.key;
       power.on("pointerup", function(pointer) {
-        console.log(power.texture.key)
-        const key = power.texture.key;
         let isSelect = false;
         console.log(STATUS.FREEZE, boosterNum)
 
@@ -221,6 +225,8 @@ export default class NewPongScene extends Phaser.Scene {
         }
         this.boosterNumText.setText(boosterNum);
 
+        this.setPowerUps();
+
         if(isSelect) {
             STATUS[key] = true;
             this.time.delayedCall(
@@ -233,6 +239,13 @@ export default class NewPongScene extends Phaser.Scene {
           );
         }
       }, this);
+      console.log(power.x, power.y, power.width)
+      this.add.sprite(power.x + ballR * 0.7 + 8, power.y + ballR * 0.9, 'bar').setOrigin(0.5, 0.5).setDisplaySize(34, 80)
+      this.add.sprite(power.x + ballR * 0.7 + 19, power.y + ballR * 0.9, 'booster').setOrigin(0.5, 0.5).setDisplaySize(15, 15)
+      this.add.text(power.x + ballR * 0.7 + 3, power.y + ballR * 0.9, key == "FREEZE"?'3':'2').setStyle({
+        fontSize: "15px",
+        color: "#ffffff",
+      }).setOrigin(0.5, 0.5)
     })
 
     this.gr = this.physics.add.staticGroup();
@@ -428,6 +441,8 @@ export default class NewPongScene extends Phaser.Scene {
       this.booster.setVisible(false);
       boosterNum++;
       this.boosterNumText.setText(boosterNum);
+      
+      this.setPowerUps();
       this.boosterAudio.play();
       this.randomBoosterPos();
     }, null, this);
@@ -449,6 +464,22 @@ export default class NewPongScene extends Phaser.Scene {
     this.ball.setMaxVelocity(ballVX * 3, ballVY * 3);
 
     this.initGame();
+  }
+
+  public setPowerUps() {
+    powerups.forEach(power => {
+      power.setAlpha(0.6);
+      const key = power.texture.key;
+      if(key == "SHRINK" || key == "MAGNIFY") {
+        if(boosterNum >= 2) {
+          power.setAlpha(1);
+        }
+      } else if(key == "FREEZE") {
+        if(boosterNum >= 3) {
+          power.setAlpha(1);
+        }
+      }
+    })
   }
 
   private ballDir: number = 1;
@@ -513,6 +544,12 @@ export default class NewPongScene extends Phaser.Scene {
     this.aiMoveTime = 0;
 
     boosterNum = 0;
+    STATUS = {
+      FREEZE : false,
+      MAGNIFY : false,
+      SHRINK : false
+    }
+    this.setPowerUps();
     this.randomBoosterPos();
     setTimeout(() => this.startRound(), 2500);
   }
@@ -570,8 +607,10 @@ export default class NewPongScene extends Phaser.Scene {
     //this.cameras.main.fadeIn(1000);
     this.ball.setVelocity(0, 0);
     setTimeout(() => {
-      this.ball.setPosition(mW, mH);
-      this.ball.setImmovable(true);
+      if(!!this.ball) {
+        this.ball.setPosition(mW, mH);
+        this.ball.setImmovable(true);
+      }
     }, 10);
 
     this.ball.setAlpha(0.5);

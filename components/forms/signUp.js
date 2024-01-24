@@ -15,7 +15,7 @@ import { useAppContext } from "@/helpers/store";
 
 export default function SignUp({ data, closeDialog }) {
   const context = useAppContext();
-  const [phase, setPhase] = useState("login");
+  const [phase, setPhase] = useState("signup");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -188,23 +188,12 @@ export default function SignUp({ data, closeDialog }) {
         {/* Loading */}
 
         {/* Tabs */}
-        <div className="w-full flex px-8 mb-4">
+        <div className="w-full flex px-20 mb-4">
           <p
-            onClick={() => {
-              setErrorSource({
-                email: false,
-                password: false,
-                name: false,
-              });
-              setPhase("login");
+            style={{
+              backgroundColor:
+                phase === "signup" ? data.primaryColor : "transparent",
             }}
-            className={`${
-              phase === "login" ? "text-black" : "text-black/20"
-            } flex-1 text-center cursor-pointer font-octo text-xl`}
-          >
-            Login
-          </p>
-          <p
             onClick={() => {
               setErrorSource({
                 email: false,
@@ -214,10 +203,29 @@ export default function SignUp({ data, closeDialog }) {
               setPhase("signup");
             }}
             className={`${
-              phase === "signup" ? "text-black" : "text-black/20"
-            } flex-1 text-center cursor-pointer font-octo text-xl`}
+              phase === "signup" ? "text-white" : "text-black"
+            } flex-1 py-2 text-center cursor-pointer font-octo text-xl`}
           >
             Sign Up
+          </p>
+          <p
+            onClick={() => {
+              setErrorSource({
+                email: false,
+                password: false,
+                name: false,
+              });
+              setPhase("login");
+            }}
+            style={{
+              backgroundColor:
+                phase === "login" ? data.primaryColor : "transparent",
+            }}
+            className={`${
+              phase === "login" ? "text-white" : "text-black"
+            } flex-1 text-center py-2 cursor-pointer font-octo text-xl`}
+          >
+            Login
           </p>
         </div>
         {/* Form */}

@@ -1,35 +1,87 @@
 import CreateImageSlider from "./createImageSlider";
 
-export default function CreateConfiguration({ tournament, setTournament }) {
+export default function CreateConfiguration({
+  tournament,
+  setTournament,
+  isAdmin,
+}) {
   return (
     <div className="flex flex-col">
-      {tournament?.aspectRatios?.["playerSprite"] && (
+      {tournament?.tags?.["backgroundSprite"] && (
         <CreateImageSlider
-          aspectRatio={tournament?.aspectRatios?.["playerSprite"]}
-          title="Player Sprite"
+          isAdmin={isAdmin}
+          dimension="backgroundSprite"
+          aspectRatio={tournament?.tags?.["backgroundSprite"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Background Sprite`}
+          selected={tournament.backgroundSprite}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, backgroundSprite: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["playerSprite"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="playerSprite"
+          aspectRatio={tournament?.tags?.["playerSprite"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Player Sprite`}
           selected={tournament.playerSprite}
           updateSprite={(a) => {
             setTournament({ ...tournament, playerSprite: a });
           }}
         />
       )}
-      {tournament?.aspectRatios?.["objectSprite"] && (
+      {tournament?.tags?.["enemySprite"] && (
         <CreateImageSlider
-          aspectRatio={tournament?.aspectRatios?.["objectSprite"]}
-          title="Object Sprite"
+          isAdmin={isAdmin}
+          dimension="enemySprite"
+          aspectRatio={tournament?.tags?.["enemySprite"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Enemy Sprite`}
+          selected={tournament.enemySprite}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, enemySprite: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["objectSprite"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="objectSprite"
+          aspectRatio={tournament?.tags?.["objectSprite"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Object Sprite`}
           selected={tournament.objectSprite}
           updateSprite={(a) => {
             setTournament({ ...tournament, objectSprite: a });
           }}
         />
       )}
-      {tournament?.aspectRatios?.["backgroundSprite"] && (
+      {tournament?.tags?.["powerUpSprite"] && (
         <CreateImageSlider
-          aspectRatio={tournament?.aspectRatios?.["backgroundSprite"]}
-          title="Background Sprite"
-          selected={tournament.backgroundSprite}
+          isAdmin={isAdmin}
+          dimension="powerUpSprite"
+          aspectRatio={tournament?.tags?.["powerUpSprite"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Power Up Sprite`}
+          selected={tournament.powerUpSprite}
           updateSprite={(a) => {
-            setTournament({ ...tournament, backgroundSprite: a });
+            setTournament({ ...tournament, powerUpSprite: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["additionalSpriteOne"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteOne"
+          aspectRatio={tournament?.tags?.["additionalSpriteOne"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 1`}
+          selected={tournament.additionalSpriteOne}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteOne: a });
           }}
         />
       )}

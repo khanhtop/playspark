@@ -156,12 +156,21 @@ export function getGame(id, data, callback, params) {
     return (
       <Pong
         data={data}
-        gameType="wordle"
+        gameType="newfallball"
         callback={callback}
         params={params}
       />
     );
   if (id === 15)
+    return (
+      <Pong
+        data={data}
+        gameType="wordle"
+        callback={callback}
+        params={params}
+      />
+    );
+  if (id === 16)
     return (
       <Pong
         data={data}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   getGame,
   incrementImpressions,
@@ -17,7 +17,7 @@ import Survey from "./survey";
 import Pong from "./games/pong";
 import { isIOS, isAndroid } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
-import { computeLeaderboard } from "@/helpers/leaderboard";
+import { getHighScore } from "@/helpers/leaderboard";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -26,18 +26,29 @@ export default function Advert({ data, theme }) {
   const [stage, setStage] = useState(0);
   const [lockX, setLockX] = useState();
   const [lockY, setLockY] = useState();
-  const [dimensions, setDimensions] = useState({ x: undefined, y: undefined });
   const [shouldRotate, setShouldRotate] = useState(false);
   const [score, setScore] = useState(0);
-  const [leaderboard, setLeaderboard] = useState(
-    data.leaderboard?.sort((a, b) => b.score > a.score) ?? []
-  );
   const [prevBest, setPrevBest] = useState();
 
   // Lives & Restarts
   const MAX_REVIVES = 4;
   const [lives, setLives] = useState(data.id === 11 ? 10 : 3);
   const [reviveCount, setReviveCount] = useState(0);
+
+  useMemo(() => {
+    if (!data.tournamentId || !context.loggedIn?.uid) return;
+    getHighScore(data.tournamentId, context?.loggedIn?.uid).then(
+      (highScore) => {
+        setPrevBest(highScore);
+      }
+    );
+  }, [data.tournamentId, context?.loggedIn?.uid]);
+
+  useEffect(() => {
+    if (score > prevBest) {
+      setPrevBest(score);
+    }
+  }, [score]);
 
   const callback = (score) => {
     if (reviveCount - MAX_REVIVES) {
@@ -59,32 +70,6 @@ export default function Advert({ data, theme }) {
     setStage(1);
   };
 
-  useEffect(() => {
-    const _lb = computeLeaderboard(
-      leaderboard,
-      score,
-      context?.loggedIn?.uid,
-      context?.profile,
-      context?.loggedIn?.email,
-      data?.demo,
-      data?.tournamentId?.toString(),
-      data
-    );
-    if (_lb?.leaderboard) {
-      setLeaderboard(_lb?.leaderboard);
-      console.log(_lb?.prevBest);
-      setPrevBest(_lb?.prevBest);
-    }
-  }, [score, context.loggedIn, context.profile]);
-
-  useEffect(() => {
-    if (leaderboard.find((a) => a.uid === context?.loggedIn?.uid)?.score) {
-      setPrevBest(
-        leaderboard.find((a) => a.uid === context?.loggedIn?.uid)?.score
-      );
-    }
-  }, [leaderboard]);
-
   const determineConstraints = () => {
     if (isIOS || isAndroid) {
       setLockX(undefined);
@@ -105,29 +90,6 @@ export default function Advert({ data, theme }) {
     }
     setLockX(window.innerHeight * 0.58);
     setLockY(undefined);
-  };
-
-  const constrainToFrame = () => {
-    if (window?.frameElement) {
-      setDimensions({
-        x: window.frameElement?.offsetWidth,
-        y: window.frameElement?.offsetHeight,
-      });
-    }
-  };
-
-  const getFrameDimensions = () => {
-    if (!isIOS && !isAndroid) {
-      return {
-        width: window?.frameElement?.offsetWidth || window?.innerHeight * 0.58,
-        height: window?.frameElement?.offsetHeight || window?.innerHeight,
-      };
-    } else {
-      return {
-        width: window?.frameElement?.offsetWidth || window?.innerWidth,
-        height: window?.frameElement?.offsetHeight || window?.innerHeight,
-      };
-    }
   };
 
   const handleOrientationChange = (event) => {
@@ -178,8 +140,6 @@ export default function Advert({ data, theme }) {
     }
   }, [data?.tournamentId]);
 
-  console.log(data?.tournamentId);
-
   return (
     <div
       style={{
@@ -214,6 +174,9 @@ export default function Advert({ data, theme }) {
           backgroundSprite: data?.backgroundSprite,
           objectSprite: data?.objectSprite,
           playerSprite: data?.playerSprite,
+          enemySprite: data?.enemySprite,
+          powerUpSprite: data?.powerUpSprite,
+          additionalSpriteOne: data?.additionalSpriteOne,
           maxscore: prevBest ?? 0,
         })}
       {stage === 2 && (
@@ -221,8 +184,6 @@ export default function Advert({ data, theme }) {
           data={data}
           setStage={setStage}
           score={score}
-          leaderboard={leaderboard}
-          prevBest={prevBest}
           onReset={() => reset()}
           reviveCount={MAX_REVIVES - reviveCount}
         />
