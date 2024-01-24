@@ -108,7 +108,6 @@ export default class FlyBallScene extends Phaser.Scene {
 
 
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
-    this.load.image("peck", "/pong/" + gameType + "/player-static-catch.png");
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
