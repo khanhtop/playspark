@@ -25,7 +25,7 @@ let GAME = {
   level: 1,
   ball: 3,
   light: 100,
-  coin: 100,
+  coin: 0,
   ring: 0,
   passRing: 0,
   sequence: 0
