@@ -68,7 +68,6 @@ export default function Outro({ score, setStage, data, reviveCount, onReset }) {
               disabled={reviveCount === 0}
               {...{ ...data, primaryColor: "green" }}
               onClick={() => {
-                reviveEvent(context);
                 setStage(selectStage());
               }}
               className={`h-12 rounded-full mt-0 ${

@@ -31,7 +31,6 @@ export default function Intro({ data, setStage, premium, ready }) {
           <UIButton
             {...data}
             onClick={() => {
-              console.log("BTN CLICKED?");
               playEvent(context);
               setStage(1);
             }}

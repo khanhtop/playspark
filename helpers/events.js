@@ -12,12 +12,8 @@ export function signupEvent(context) {
   allocateXp(context, 300, "Sign Up");
 }
 
-export function reviveEvent(context) {
-  allocateXp(context, 0, "Revive");
-}
-
 export function restartEvent(context) {
-  allocateXp(context, 0, "Restart");
+  allocateXp(context, 30, "Restart");
 }
 
 export function scoreEvent(context, score) {
