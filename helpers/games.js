@@ -243,5 +243,14 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 16,
+    cloudinaryGameTag: "fly",
+    tags: {
+      playerSprite: "1.0",
+      objectSprite: "1.0",
+    },
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+    objectSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169648/kjacp92e8wrlbbkdlksm.png",
   },
 ];
