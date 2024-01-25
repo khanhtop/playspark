@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   getGame,
   incrementImpressions,
@@ -142,6 +142,25 @@ export default function Advert({ data, theme }) {
       incrementImpressions(data?.tournamentId?.toString());
     }
   }, [data?.tournamentId]);
+
+  const eventChannel = useRef(null);
+
+  useEffect(() => {
+    if (!eventChannel.current) {
+      eventChannel.current = setInterval(() => {
+        context.setEventQueue((prevQueue) => {
+          const evQueue = [...prevQueue];
+          const popped = evQueue.pop();
+          context.showEvent(popped);
+          console.log(evQueue, popped);
+          return [...evQueue];
+        });
+      }, 3500);
+    }
+    return () => {
+      if (eventChannel.current) clearInterval(eventChannel.current);
+    };
+  }, []);
 
   return (
     <div

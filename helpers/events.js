@@ -1,87 +1,59 @@
+// Receive Events
+
+export function playEvent(context) {
+  allocateXp(context, 30, "App Open");
+}
+
 export function loginEvent(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: "Login Event",
-  });
+  allocateXp(context, 10, "Login");
 }
 
 export function reviveEvent(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: "Revive Event",
-  });
+  allocateXp(context, 0, "Revive");
 }
 
 export function restartEvent(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: "Restart Event",
-  });
+  allocateXp(context, 0, "Restart");
 }
 
 export function scoreEvent(context, score) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: `Score Event ${score}`,
-  });
+  allocateXp(context, Math.floor(score / 10), "Score");
 }
 
 export function emailAddedCTA(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: `Email Added Event`,
-  });
+  allocateXp(context, 300, "Email Added");
 }
 
 export function playableAdFinishedCTA(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: `Playable Ad Event`,
-  });
+  allocateXp(context, 100, "Playable Ad");
 }
 
 export function surveyResponseCTA(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: `Survey Response Event`,
-  });
+  allocateXp(context, 200, "Survey Response");
 }
 
 export function surveyCompleteCTA(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: `Survey Complete Event`,
-  });
+  allocateXp(context, 100, "Survey Submission");
 }
 
 export function videoSkippedCTA(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: `Video Skipped Event`,
-  });
+  allocateXp(context, 0, "Video Skipped");
 }
 
 export function videoClickedCTA(context) {
-  if (!context.loggedIn?.uid) return;
-  context.setEvent({
-    title: "Event",
-    text: `Video CTA Clicked Event`,
-  });
+  allocateXp(context, 400, "Video Clicked");
 }
 
 export function videoCompletedCTA(context) {
+  allocateXp(context, 200, "Video Completed");
+}
+
+// Event Ouputs
+
+export function allocateXp(context, xp, eventName, incrementCount = null) {
   if (!context.loggedIn?.uid) return;
   context.setEvent({
-    title: "Event",
-    text: `Video Completed Event`,
+    title: `+ ${xp}XP`,
+    text: `${eventName} Event`,
   });
 }
