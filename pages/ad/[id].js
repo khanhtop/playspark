@@ -60,7 +60,6 @@ export default function Ad({ ad, id }) {
         ) : (
           <p>{id} - AD NOT FOUND</p>
         )}
-        <Modal primaryColor={ad?.primaryColor} landscape={ad?.landscape} />
       </div>
     </>
   );

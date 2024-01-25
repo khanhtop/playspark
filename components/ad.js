@@ -20,6 +20,7 @@ import { WinModal } from "./ui/modalTypes";
 import { getHighScore } from "@/helpers/leaderboard";
 import NotificationBar from "./ui/notification";
 import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
+import Modal from "./ui/modal";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -172,6 +173,7 @@ export default function Advert({ data, theme }) {
       }}
     >
       <NotificationBar notification={context.event} />
+
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
           <img src="/branding/rotate.png" className="h-[80%]" />
@@ -276,6 +278,7 @@ export default function Advert({ data, theme }) {
           }}
         />
       )}
+      <Modal primaryColor={data?.primaryColor} landscape={data?.landscape} />
     </div>
   );
 }

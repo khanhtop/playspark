@@ -5,7 +5,11 @@ export function playEvent(context) {
 }
 
 export function loginEvent(context) {
-  allocateXp(context, 10, "Login");
+  allocateXp(context, 100, "Login");
+}
+
+export function signupEvent(context) {
+  allocateXp(context, 300, "Sign Up");
 }
 
 export function reviveEvent(context) {

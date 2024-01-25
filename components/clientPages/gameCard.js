@@ -45,6 +45,7 @@ export default function ClientGameCard({ data, item, playGame }) {
           <Stat
             text="Your Rank"
             value={
+              !item?.leaderboard ||
               item?.leaderboard?.findIndex(
                 (a) => a.uid === context.loggedIn?.uid
               ) === -1

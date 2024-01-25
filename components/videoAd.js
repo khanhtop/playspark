@@ -59,7 +59,7 @@ export default function VideoAd({ data, onSkip, video }) {
         }}
         streamType="on-demand"
       />
-      <div className="px-4 absolute bg-[#222] w-full bottom-0 left-0 h-16 flex items-center">
+      <div className="text-white px-4 absolute bg-[#222] w-full bottom-0 left-0 h-16 flex items-center">
         <button
           disabled={!showClaim}
           onClick={() => claimReward()}
