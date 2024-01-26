@@ -39,7 +39,7 @@ export default function ClientHome({
           setScreen("game");
         }}
       />
-      <HorizontalGamesScroll
+      {/* <HorizontalGamesScroll
         data={tournamentsByDate}
         user={user}
         label="Latest"
@@ -47,7 +47,7 @@ export default function ClientHome({
           setActiveGame(id);
           setScreen("game");
         }}
-      />
+      /> */}
       <Areas
         aggregateLeaderboard={leaderboard}
         user={user}

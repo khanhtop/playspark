@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   getGame,
   incrementImpressions,
@@ -20,6 +20,7 @@ import { WinModal } from "./ui/modalTypes";
 import { getHighScore } from "@/helpers/leaderboard";
 import NotificationBar from "./ui/notification";
 import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
+import Modal from "./ui/modal";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -143,6 +144,25 @@ export default function Advert({ data, theme }) {
     }
   }, [data?.tournamentId]);
 
+  const eventChannel = useRef(null);
+
+  useEffect(() => {
+    if (!eventChannel.current) {
+      eventChannel.current = setInterval(() => {
+        context.setEventQueue((prevQueue) => {
+          const evQueue = [...prevQueue];
+          const popped = evQueue.pop();
+          context.showEvent(popped);
+          console.log(evQueue, popped);
+          return [...evQueue];
+        });
+      }, 3500);
+    }
+    return () => {
+      if (eventChannel.current) clearInterval(eventChannel.current);
+    };
+  }, []);
+
   return (
     <div
       style={{
@@ -153,6 +173,7 @@ export default function Advert({ data, theme }) {
       }}
     >
       <NotificationBar notification={context.event} />
+
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
           <img src="/branding/rotate.png" className="h-[80%]" />
@@ -257,6 +278,7 @@ export default function Advert({ data, theme }) {
           }}
         />
       )}
+      <Modal primaryColor={data?.primaryColor} landscape={data?.landscape} />
     </div>
   );
 }

@@ -21,7 +21,15 @@ export function AppWrapper({ children }) {
   const [myGames, setMyGames] = useState();
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
-  const [event, setEvent] = useState(false);
+  const [event, showEvent] = useState(false);
+  const [eventQueue, setEventQueue] = useState([]);
+
+  const setEvent = (ev) => {
+    setEventQueue((prevQueue) => {
+      return [ev, ...prevQueue];
+    });
+    // setEventQueue([ev, ...eventQueue]);
+  };
 
   useEffect(() => {
     if (isIOS && isSafari) {
@@ -104,7 +112,10 @@ export function AppWrapper({ children }) {
     modal,
     setModal,
     event,
+    showEvent,
     setEvent,
+    eventQueue,
+    setEventQueue,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

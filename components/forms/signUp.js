@@ -12,7 +12,7 @@ import {
 } from "firebase/auth";
 import UIButton from "../ui/button";
 import { useAppContext } from "@/helpers/store";
-import { loginEvent } from "@/helpers/events";
+import { loginEvent, signupEvent } from "@/helpers/events";
 
 export default function SignUp({ data, closeDialog }) {
   const context = useAppContext();
@@ -129,6 +129,7 @@ export default function SignUp({ data, closeDialog }) {
           },
           { merge: true }
         );
+        signupEvent(context);
         await verifyUserTracked(user.user.id, true);
         closeDialog();
       })

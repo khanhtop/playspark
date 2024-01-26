@@ -52,7 +52,6 @@ export const updateScoreAndXP = async (uid, score, companyId) => {
     {
       memberOf: companyId.toString(),
       totalScore: increment(score),
-      totalXp: increment(xp),
     },
     { merge: true }
   );

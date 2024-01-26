@@ -22,7 +22,7 @@ export default function Demo({ ad, id }) {
       ) : (
         <p>{id} - AD NOT FOUND</p>
       )}
-      <Modal title="Leaderboard" />
+      {/* <Modal title="Leaderboard" /> */}
     </div>
   );
 }
