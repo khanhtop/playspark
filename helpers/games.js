@@ -56,7 +56,8 @@ export const games = [
     name: "Spin To Win",
     description:
       "Spin your way to victory in our game of chance! Every turn unlocks a world of rewards, making every moment a winning sensation!",
-    backgroundImage: "/defaults/wheelspin.jpg",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259239/1_jxkksl.png",
     screenshot: "wheelspin.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -66,7 +67,8 @@ export const games = [
     name: "Cricket Smash",
     description:
       "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
-    backgroundImage: "/defaults/cricketsmash.jpg",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -87,7 +89,8 @@ export const games = [
     name: "Power Pong",
     description:
       "Customize your Pong experience, choose your graphics, and compete for glory on the leaderboard in this sleek and stylish arcade game!",
-    backgroundImage: "/defaults/soccerfall.jpg",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/3_cdcojf.png",
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -118,7 +121,8 @@ export const games = [
     name: "Baller Faller",
     description:
       "Dodge obstacles, catch falling objects, and set high scores in this customizable and action-packed game where every move is a step closer to victory!",
-    backgroundImage: "/defaults/basketball-fall.jpg",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259251/4_ehxmnh.png",
     screenshot: "basketball-fall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -155,7 +159,8 @@ export const games = [
     name: "Wordle",
     description:
       "Experience a new twist in Wordle with AI-generated puzzles! Test your word skills against machine-crafted challenges for a thrilling and compact guessing game!",
-    backgroundImage: "/defaults/soccerfall.jpg",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/6_cty2qu.png",
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -166,7 +171,8 @@ export const games = [
     name: "Fly Ball",
     description:
       "Flap, customize, conquer! Dive into an addictive, fully customizable tap-to-fly adventure for endless high-score thrills!",
-    backgroundImage: "/defaults/soccerfall.jpg",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/5_bch6hi.png",
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",

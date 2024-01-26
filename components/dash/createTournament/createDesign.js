@@ -59,7 +59,7 @@ export default function CreateDesign({ tournament, setTournament }) {
             width={200}
             height={200}
             label="Game Icon (Aim For 500 x 500px Square)"
-            image={tournament.gameIcon}
+            image={tournament.gameIcon || tournament.backgroundImage}
             onChange={(url) => {
               setTournament({ ...tournament, gameIcon: url });
             }}
