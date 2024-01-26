@@ -49,10 +49,12 @@ let gameType = "football";
 export default class FlyBallScene extends Phaser.Scene {
   public static instance: FlyBallScene;
   private params: any;
-  bg: Phaser.Physics.Arcade.Sprite;
+  bg: Phaser.GameObjects.Sprite;
   bg1: Phaser.GameObjects.Sprite;
   bg2: Phaser.GameObjects.Sprite;
   additionalSpriteOne: Phaser.GameObjects.Sprite;
+  additionalSpriteOne1: Phaser.GameObjects.Sprite;
+  additionalSpriteOne2: Phaser.GameObjects.Sprite;
   levelTxt: Phaser.GameObjects.Text;
   ballTxt: Phaser.GameObjects.Text;
   lightTxt: Phaser.GameObjects.Text;
@@ -160,10 +162,12 @@ export default class FlyBallScene extends Phaser.Scene {
     this.jump = this.sound.add("jump").setVolume(0.3);
     this.die = this.sound.add("die");
 
-    this.bg = this.physics.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
+    this.bg = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
     this.bg1 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x + 1920, 0);
     this.bg2 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x - 1920, 0);
     this.additionalSpriteOne = this.physics.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
+    this.additionalSpriteOne1 = this.physics.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x + 1920, 0);
+    this.additionalSpriteOne2 = this.physics.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x - 1920, 0);
 
     this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
     this.logo = this.add.image(this.bg.x + 200, this.bg.y + mH + 110 * h / 663, 'fence').setDisplaySize(110, 30).setOrigin(0.5, 0.5)
@@ -357,6 +361,8 @@ export default class FlyBallScene extends Phaser.Scene {
     this.bg1.setInteractive();
     this.bg2.setInteractive();
     this.additionalSpriteOne.setInteractive();
+    this.additionalSpriteOne1.setInteractive();
+    this.additionalSpriteOne2.setInteractive();
 
     // Event listener for pointer down event
     this.bg.on('pointerdown', (pointer) => {
@@ -372,6 +378,12 @@ export default class FlyBallScene extends Phaser.Scene {
       this.setBallAction();
     });
     this.additionalSpriteOne.on('pointerdown', (pointer) => {
+      this.setBallAction();
+    });
+    this.additionalSpriteOne1.on('pointerdown', (pointer) => {
+      this.setBallAction();
+    });
+    this.additionalSpriteOne2.on('pointerdown', (pointer) => {
       this.setBallAction();
     });
 
@@ -829,9 +841,12 @@ export default class FlyBallScene extends Phaser.Scene {
     STATUS.power = false;
 
     this.bg.setPosition(0, 0);
-    this.additionalSpriteOne.setPosition(0, 0)
     this.bg1.setPosition(this.bg.x + 1920, 0);
     this.bg2.setPosition(this.bg.x - 1920, 0);
+    this.additionalSpriteOne.setPosition(0, 0)
+    this.additionalSpriteOne1.setPosition(this.bg.x + 1920, 0)
+    this.additionalSpriteOne2.setPosition(this.bg.x - 1920, 0)
+
 
     this.obstacles.forEach(obj => {
       obj.clear(true, true);
@@ -936,8 +951,12 @@ export default class FlyBallScene extends Phaser.Scene {
     if(this.ball.x > this.bg.x + 900) {
       this.bg1.setPosition(this.bg.x, 0);
       this.bg.setPosition(this.bg.x + this.bg.width, 0);
-      this.additionalSpriteOne.setPosition(this.bg.x, 0)
       this.bg2.setPosition(this.bg.x + 2 * this.bg.width, 0);
+
+      this.additionalSpriteOne1.setPosition(this.bg.x, 0);
+      this.additionalSpriteOne.setPosition(this.bg.x + this.bg.width, 0);
+      this.additionalSpriteOne2.setPosition(this.bg.x + 2 * this.bg.width, 0);
+
       this.logo.setPosition(this.bg.x + 200, this.bg.y + mH + 110 * h / 663);
     }
 
