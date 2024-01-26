@@ -175,7 +175,13 @@ export const games = [
     tags: {
       playerSprite: "1.0",
       objectSprite: "1.0",
+      backgroundSprite: "bg",
+      additionalSpriteOne: "parallax",
     },
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169648/kjacp92e8wrlbbkdlksm.png",
+    additionalSpriteOne:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169648/kjacp92e8wrlbbkdlksm.png",
     playerSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
     objectSprite:
