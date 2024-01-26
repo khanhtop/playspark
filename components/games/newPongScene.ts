@@ -34,6 +34,7 @@ export default class NewPongScene extends Phaser.Scene {
   private ball!: Phaser.Physics.Arcade.Image;
   private player!: Phaser.Physics.Arcade.Image;
   private hitEffect!: any;
+  private fireworkEffect!: any;
   private params: any;
   private ai!: Phaser.Physics.Arcade.Image;
   lifeNumText: any;
@@ -83,6 +84,12 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.spritesheet(
       'hit_effect',
       '/pong/' + gameType + '/hit-effect.png',
+      { frameWidth: 200, frameHeight: 200 }
+    );
+
+    this.load.spritesheet(
+      'firework',
+      "/pong/pongassets/firework1.png",
       { frameWidth: 200, frameHeight: 200 }
     );
 
@@ -140,6 +147,21 @@ export default class NewPongScene extends Phaser.Scene {
     this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
     //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
 
+    // firework effect
+    const firework_frame = this.anims.generateFrameNames(
+      'firework',
+      { start: 0, end: 110 }
+    );
+    this.anims.create({
+      key: 'fire',
+      frames: firework_frame,
+      frameRate: 25,
+      repeat: 0,
+    });
+
+    this.fireworkEffect = this.add.sprite(w / 2, h - scrH - 10, 'firework').setOrigin(0.5, 1).setDisplaySize(300, 300);
+
+    this.fireworkEffect.play('fire')
     // HIT EFFECT
     const hit_frame = this.anims.generateFrameNames(
       'hit_effect',
@@ -669,6 +691,8 @@ export default class NewPongScene extends Phaser.Scene {
       this.scoreText.text = this.scoreNum.toString().padStart(4, "0");
       this.goalTxt.text = this.touches === 1 ? "COMBO HIT!" : "GOAL!";
       this.addedScrTxt.text = this.touches === 1 ? "+200" : "+100";
+
+      this.fireworkEffect.play('fire');
 
       if (this.touches === 1) {
         //this.cameras.main.flash(50);
