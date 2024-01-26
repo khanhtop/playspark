@@ -52,6 +52,7 @@ export default class FlyBallScene extends Phaser.Scene {
   bg: Phaser.Physics.Arcade.Sprite;
   bg1: Phaser.GameObjects.Sprite;
   bg2: Phaser.GameObjects.Sprite;
+  additionalSpriteOne: Phaser.GameObjects.Sprite;
   levelTxt: Phaser.GameObjects.Text;
   ballTxt: Phaser.GameObjects.Text;
   lightTxt: Phaser.GameObjects.Text;
@@ -104,6 +105,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.image("shrink", "/pong/" + gameType + "/item/shrink.png");
 
     this.load.image("bg", this.params.backgroundSprite);
+    this.load.image("additionalSpriteOne", this.params.additionalSpriteOne);
 
     this.load.image("ball", this.params.playerSprite);
 
@@ -161,6 +163,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.bg = this.physics.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
     this.bg1 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x + 1920, 0);
     this.bg2 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x - 1920, 0);
+    this.additionalSpriteOne = this.physics.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
 
     this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
     this.logo = this.add.image(this.bg.x + 200, this.bg.y + mH + 110 * h / 663, 'fence').setDisplaySize(110, 30).setOrigin(0.5, 0.5)
@@ -353,24 +356,11 @@ export default class FlyBallScene extends Phaser.Scene {
     this.bg.setInteractive();
     this.bg1.setInteractive();
     this.bg2.setInteractive();
+    this.additionalSpriteOne.setInteractive();
 
     // Event listener for pointer down event
     this.bg.on('pointerdown', (pointer) => {
       this.setBallAction();
-      // this.setBackgroundAction()
-      
-      // this.tweens.add({
-      //   targets: this.ballGroup.getChildren(),
-      //   duration: 50000,
-      //   rotation: 360,
-      //   repeat: -1,
-      // });
-      // this.tweens.add({
-      //   targets: this.ball,
-      //   duration: 50000,
-      //   rotation: 360,
-      //   repeat: -1,
-      // });
     });
 
     this.bg1.on('pointerdown', (pointer) => {
@@ -380,8 +370,9 @@ export default class FlyBallScene extends Phaser.Scene {
     });
     this.bg2.on('pointerdown', (pointer) => {
       this.setBallAction();
-      // this.setBackgroundAction()
-
+    });
+    this.additionalSpriteOne.on('pointerdown', (pointer) => {
+      this.setBallAction();
     });
 
     this.cameras.main.startFollow(this.ball, false, 1, 0, -0.1 * w, -0.1 * h);
@@ -791,7 +782,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.cameras.main.fadeIn(1200);
     GAME.ring = 0;
     GAME.ball = this.params.lives;
-    GAME.passRing = 0;
+    GAME.passRing = this.params.score;
     lastPos.ballPos.x = this.ball.x;
     this.obstacles = [];
     this.items = [];
@@ -838,6 +829,7 @@ export default class FlyBallScene extends Phaser.Scene {
     STATUS.power = false;
 
     this.bg.setPosition(0, 0);
+    this.additionalSpriteOne.setPosition(0, 0)
     this.bg1.setPosition(this.bg.x + 1920, 0);
     this.bg2.setPosition(this.bg.x - 1920, 0);
 
@@ -944,6 +936,7 @@ export default class FlyBallScene extends Phaser.Scene {
     if(this.ball.x > this.bg.x + 900) {
       this.bg1.setPosition(this.bg.x, 0);
       this.bg.setPosition(this.bg.x + this.bg.width, 0);
+      this.additionalSpriteOne.setPosition(this.bg.x, 0)
       this.bg2.setPosition(this.bg.x + 2 * this.bg.width, 0);
       this.logo.setPosition(this.bg.x + 200, this.bg.y + mH + 110 * h / 663);
     }
