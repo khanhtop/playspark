@@ -165,9 +165,9 @@ export default class FlyBallScene extends Phaser.Scene {
     this.bg = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
     this.bg1 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x + 1920, 0);
     this.bg2 = this.add.sprite(0, 0, "bg").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x - 1920, 0);
-    this.additionalSpriteOne = this.physics.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
-    this.additionalSpriteOne1 = this.physics.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x + 1920, 0);
-    this.additionalSpriteOne2 = this.physics.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.bg.x - 1920, 0);
+    this.additionalSpriteOne = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
+    this.additionalSpriteOne1 = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.additionalSpriteOne.x + 1920, 0);
+    this.additionalSpriteOne2 = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.additionalSpriteOne.x - 1920, 0);
 
     this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
     this.logo = this.add.image(this.bg.x + 200, this.bg.y + mH + 110 * h / 663, 'fence').setDisplaySize(110, 30).setOrigin(0.5, 0.5)
@@ -950,12 +950,12 @@ export default class FlyBallScene extends Phaser.Scene {
 
     if(this.ball.x > this.bg.x + 900) {
       this.bg1.setPosition(this.bg.x, 0);
-      this.bg.setPosition(this.bg.x + this.bg.width, 0);
-      this.bg2.setPosition(this.bg.x + 2 * this.bg.width, 0);
+      this.bg.setPosition(this.bg.x + 1920, 0);
+      this.bg2.setPosition(this.bg.x + 2 * 1920, 0);
 
-      this.additionalSpriteOne1.setPosition(this.bg.x, 0);
-      this.additionalSpriteOne.setPosition(this.bg.x + this.bg.width, 0);
-      this.additionalSpriteOne2.setPosition(this.bg.x + 2 * this.bg.width, 0);
+      this.additionalSpriteOne1.setPosition(this.additionalSpriteOne.x, 0);
+      this.additionalSpriteOne.setPosition(this.additionalSpriteOne.x + 1920, 0);
+      this.additionalSpriteOne2.setPosition(this.additionalSpriteOne.x + 2 * 1920, 0);
 
       this.logo.setPosition(this.bg.x + 200, this.bg.y + mH + 110 * h / 663);
     }
