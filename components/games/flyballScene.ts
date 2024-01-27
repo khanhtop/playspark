@@ -1,4 +1,5 @@
 import Phaser, { Game } from "phaser";
+import { getImageWithSize } from "@/helpers/cloudinary";
 
 let w: number,
   h: number,
@@ -85,11 +86,19 @@ export default class FlyBallScene extends Phaser.Scene {
 
   preload() {
 
+    w = this.game.canvas.clientWidth;
+    h = this.game.canvas.clientHeight;
+    ballR = 40;
+    wingR = 25;
+    scr = h * 0.08;
+    mW = w / 2;
+    mH = (h - scr) / 2 + scr;
+
     this.load.image("wing", "/pong/" + gameType + "/wing/Wing.png");
     // this.load.image("bombEffect", "/pong/" + gameType + "/bomb-effect.png");
     this.load.image("levelBoard", "/pong/" + gameType + "/UI/level.png");
     this.load.image("item_heart", "/pong/" + gameType + "/UI/heart.png");
-    this.load.image("light", this.params.objectSprite);
+    this.load.image("light", getImageWithSize(this.params.objectSprite, ballR, ballR));
     this.load.image("coin", "/pong/" + gameType + "/UI/coin.png");
     this.load.image("btn_m", "/pong/" + gameType + "/UI/btn_m.png");
     this.load.image("btn_l", "/pong/" + gameType + "/UI/btn_l.png");
@@ -106,10 +115,9 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.image("power", "/pong/" + gameType + "/item/power.png");
     this.load.image("shrink", "/pong/" + gameType + "/item/shrink.png");
 
-    this.load.image("bg", this.params.backgroundSprite);
-    this.load.image("additionalSpriteOne", this.params.additionalSpriteOne);
-
-    this.load.image("ball", this.params.playerSprite);
+    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, h, 1920) );
+    this.load.image("additionalSpriteOne", getImageWithSize(this.params.additionalSpriteOne, h, 1920));
+    this.load.image("ball", getImageWithSize(this.params.playerSprite, ballR, ballR));
 
 
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
@@ -132,13 +140,7 @@ export default class FlyBallScene extends Phaser.Scene {
 
 
 
-    w = this.game.canvas.clientWidth;
-    h = this.game.canvas.clientHeight;
-    ballR = 40;
-    wingR = 25;
-    scr = h * 0.08;
-    mW = w / 2;
-    mH = (h - scr) / 2 + scr;
+
   }
 
   // 400 800
