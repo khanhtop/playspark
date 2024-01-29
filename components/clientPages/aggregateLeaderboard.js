@@ -2,9 +2,11 @@ export default function AggregateLeaderboard({ lb, user }) {
   console.log(lb);
   return (
     <div className="w-full flex flex-col gap-2">
-      {lb?.map((item, key) => (
-        <Rank user={user} item={item} key={key} pos={key + 1} />
-      ))}
+      {lb
+        ?.sort((a, b) => a.totalXp - b.totalXp)
+        ?.map((item, key) => (
+          <Rank user={user} item={item} key={key} pos={key + 1} />
+        ))}
     </div>
   );
 }
@@ -25,8 +27,9 @@ function Rank({ item, pos, user }) {
       <div className="flex-1">
         <p>{item.companyName || "No Name"}</p>
       </div>
-      <div>
-        <p>{item.totalScore}</p>
+      <div className="flex gap-2">
+        <img src="/clientPages/xp.png" className="h-8" />
+        <p>{item.totalXp}</p>
       </div>
     </div>
   );

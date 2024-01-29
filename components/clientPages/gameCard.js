@@ -36,7 +36,7 @@ export default function ClientGameCard({ data, item, playGame }) {
         <h3 className="text-base">{item.name}</h3>
         <div className="flex">
           <Stat
-            text="Top Score"
+            text="Your Top Score"
             value={
               item?.leaderboard?.find((a) => a.uid === context.loggedIn?.uid)
                 ?.score || "-"
@@ -55,13 +55,7 @@ export default function ClientGameCard({ data, item, playGame }) {
                   ) + 1
             }
           />
-          <Stat
-            text="Top Score"
-            value={
-              item?.leaderboard?.find((a) => a.uid === context.loggedIn?.uid)
-                ?.score || "-"
-            }
-          />
+          <Stat text="Top Score" value={item?.leaderboard?.[0]?.score} />
         </div>
       </div>
     </div>

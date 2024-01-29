@@ -36,7 +36,7 @@ export default function Areas({
                   value: "challenges",
                 },
                 {
-                  text: "Leaderboard",
+                  text: "Top Players",
                   value: "leaderboard",
                 },
               ]
