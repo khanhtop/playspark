@@ -159,9 +159,9 @@ export default class NewPongScene extends Phaser.Scene {
       repeat: 0,
     });
 
-    this.fireworkEffect = this.add.sprite(w / 2, h - scrH - 10, 'firework').setOrigin(0.5, 1).setDisplaySize(300, 300);
+    this.fireworkEffect = this.add.sprite(w / 2, h - scrH - 10, 'firework').setOrigin(0.5, 1).setDisplaySize(300, 300).setVisible(false);
 
-    this.fireworkEffect.play('fire')
+    // this.fireworkEffect.play('fire')
     // HIT EFFECT
     const hit_frame = this.anims.generateFrameNames(
       'hit_effect',
@@ -461,7 +461,13 @@ export default class NewPongScene extends Phaser.Scene {
 
         const deltaX = this.ball.x - this.player.x;
         const deltaY = this.ball.y - this.player.y;
-        this.hitEffect.setPosition(this.ball.x + deltaX, this.ball.y + deltaY)
+
+        if(STATUS.MAGNIFY) {
+          this.hitEffect.setPosition(this.ball.x + deltaX * ballR / (playerR * 2), this.ball.y + deltaY * ballR / (playerR * 2))
+        } else {
+          this.hitEffect.setPosition(this.ball.x + deltaX * ballR / playerR, this.ball.y + deltaY * ballR / playerR)
+        }
+
         this.hitEffect.play("hit")
         const angle = Phaser.Math.Angle.Between(this.player.x - this.hitEffect.x , this.player.y - this.hitEffect.y, 0, 0);
         this.hitEffect.setAngle(angle * 180 / Math.PI + 180)
@@ -692,6 +698,7 @@ export default class NewPongScene extends Phaser.Scene {
       this.goalTxt.text = this.touches === 1 ? "COMBO HIT!" : "GOAL!";
       this.addedScrTxt.text = this.touches === 1 ? "+200" : "+100";
 
+      this.fireworkEffect.setVisible(true)
       this.fireworkEffect.play('fire');
 
       if (this.touches === 1) {
