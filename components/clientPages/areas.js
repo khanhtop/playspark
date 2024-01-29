@@ -3,12 +3,14 @@ import AreaTabs from "./areaTabs";
 import ClientGameGridCard from "./gridCard";
 import AggregateLeaderboard from "./aggregateLeaderboard";
 import { useAppContext } from "@/helpers/store";
+import Achievements from "./achievements";
 
 export default function Areas({
   user,
   tournaments,
   aggregateLeaderboard,
   playGame,
+  totalXp,
 }) {
   const context = useAppContext();
   const [tab, setTab] = useState("games");
@@ -30,7 +32,7 @@ export default function Areas({
                   value: "games",
                 },
                 {
-                  text: "Challenges",
+                  text: "Achievements",
                   value: "challenges",
                 },
                 {
@@ -58,7 +60,7 @@ export default function Areas({
           ))}
         </div>
       )}
-      {tab === "challenges" && <div className="min-h-[500px]"></div>}
+      {tab === "challenges" && <Achievements data={{ xp: totalXp }} />}
       {tab === "leaderboard" && (
         <div className="">
           <AggregateLeaderboard user={user} lb={aggregateLeaderboard} />

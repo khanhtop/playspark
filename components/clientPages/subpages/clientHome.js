@@ -50,6 +50,8 @@ export default function ClientHome({
       /> */}
       <Areas
         aggregateLeaderboard={leaderboard}
+        totalXp={context?.profile?.totalXp || 0}
+        totalCoins={context?.profile?.totalScore || 0}
         user={user}
         tournaments={tournaments}
         playGame={(id) => {
