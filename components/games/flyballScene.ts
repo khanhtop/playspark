@@ -174,7 +174,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.additionalSpriteOne2 = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.additionalSpriteOne.x - 1920, 0);
 
     this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
-    this.logo = this.add.image(this.additionalSpriteOne.x + 200, this.additionalSpriteOne.y + mH + 110 * h / 663, 'fence').setDisplaySize(110, 30).setOrigin(0.5, 0.5)
+    // this.logo = this.add.image(this.additionalSpriteOne.x + 200, this.additionalSpriteOne.y + mH + 110 * h / 663, 'fence').setDisplaySize(110, 30).setOrigin(0.5, 0.5)
 
     // GAME HEADER
     const topOffset = 60;
@@ -945,7 +945,7 @@ export default class FlyBallScene extends Phaser.Scene {
       this.additionalSpriteOne.setPosition(this.additionalSpriteOne.x + 1920, 0);
       this.additionalSpriteOne2.setPosition(this.additionalSpriteOne.x + 2 * 1920, 0);
 
-      this.logo.setPosition(this.additionalSpriteOne.x + 200, this.additionalSpriteOne.y + mH + 110 * h / 663);
+      // this.logo.setPosition(this.additionalSpriteOne.x + 200, this.additionalSpriteOne.y + mH + 110 * h / 663);
     }
 
     this.tileBg.tilePositionX += this.ball.body.velocity.x * 0.002;
