@@ -53,6 +53,8 @@ export default class WheelScene extends Phaser.Scene {
     WheelScene.instance = this;
     gameType = newGameType;
     this.params = newParams
+    console.log(newParams)
+    this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : "/pong/" + gameType + '/back3.jpg';
   }
 
   preload() {
@@ -70,7 +72,7 @@ export default class WheelScene extends Phaser.Scene {
 
     console.log("Preload");
     this.load.image('logo', this.params.logo);
-    this.load.image('background', "/pong/" + gameType + '/back3.jpg');
+    this.load.image('background',this.params.backgroundSprite);
     this.load.image('ui-center', "/pong/" + gameType + '/out-circle.png');
     this.load.image('ui-btn-top', "/pong/" + gameType + '/ui-top.png');
     this.load.image('ui-btn-down', "/pong/" + gameType + '/ui-down.png');
@@ -119,7 +121,7 @@ export default class WheelScene extends Phaser.Scene {
 
     this.bg=this.add.sprite(0, 0,'background').setOrigin(0).setDisplaySize(w, h);
     // this.bg.setScale(1);
-    this.logo=this.add.sprite(w / 2, 30,'logo').setOrigin(0.5, 0).setDisplaySize(w * 0.5, 70);
+    // this.logo=this.add.sprite(w / 2, 30,'logo').setOrigin(0.5, 0).setDisplaySize(w * 0.5, 70);
     
     //this.add.sprite(centerX, centerY, 'ui-center').setOrigin(0.5, 0).setDisplaySize(centerW, centerH);
     
@@ -182,9 +184,9 @@ export default class WheelScene extends Phaser.Scene {
     this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0);
 
     // BONUS TEXT PART
-    this.bonus_top = this.add.sprite(w/2 + 10, h / 2 - wheelR / 2 - 100 + offsetY, 'bonus').setDisplaySize(wheelR * 0.15, wheelR * 0.15);
-    this.add.text(w / 2 - 70, h / 2 - wheelR / 2 - 100 + offsetY, "WIN", {...this.font_text_style, fontSize: '45px'}).setOrigin(0.5, 0.5);
-    this.add.text(w / 2 + 45, h / 2 - wheelR / 2 - 100 + offsetY, "800", {...this.font_text_style, fontSize: '45px'}).setOrigin(0, 0.5);
+    // this.bonus_top = this.add.sprite(w/2 + 10, h / 2 - wheelR / 2 - 100 + offsetY, 'bonus').setDisplaySize(wheelR * 0.15, wheelR * 0.15);
+    // this.add.text(w / 2 - 70, h / 2 - wheelR / 2 - 100 + offsetY, "WIN", {...this.font_text_style, fontSize: '45px'}).setOrigin(0.5, 0.5);
+    // this.add.text(w / 2 + 45, h / 2 - wheelR / 2 - 100 + offsetY, "800", {...this.font_text_style, fontSize: '45px'}).setOrigin(0, 0.5);
 
     // var but = this.add.image(w / 2,50,'button').setInteractive();
     // but.on('pointerup', this.spinwheel, this);
