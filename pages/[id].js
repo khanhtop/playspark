@@ -2,6 +2,7 @@ import AuthModal from "@/components/auth/authModal";
 import Areas from "@/components/clientPages/areas";
 import Hero from "@/components/clientPages/hero";
 import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
+import ClientAchievements from "@/components/clientPages/subpages/clientAchievements";
 import ClientCoins from "@/components/clientPages/subpages/clientCoins";
 import ClientEmbeddedGame from "@/components/clientPages/subpages/clientEmbeddedGame";
 import ClientHome from "@/components/clientPages/subpages/clientHome";
@@ -82,6 +83,7 @@ export default function PageHandler({
         {screen === "profile" && <ClientProfile {...data} />}
         {screen === "notifications" && <ClientNotifications {...data} />}
         {screen === "game" && <ClientEmbeddedGame {...data} />}
+        {screen === "achievements" && <ClientAchievements {...data} />}
       </div>
       {showLogin && (
         <AuthModal user={user} closeModal={() => setShowLogin(false)} />

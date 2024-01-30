@@ -8,7 +8,6 @@ export default function ClientGameCard({ data, item, playGame }) {
   const context = useAppContext();
   const [hover, setHover] = useState(false);
   const highScorer = item.leaderboard?.sort((a, b) => a - b)?.[0];
-  console.log(item);
   return (
     <div
       onMouseEnter={() => setHover(true)}

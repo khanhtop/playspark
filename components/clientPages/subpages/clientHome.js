@@ -39,15 +39,6 @@ export default function ClientHome({
           setScreen("game");
         }}
       />
-      {/* <HorizontalGamesScroll
-        data={tournamentsByDate}
-        user={user}
-        label="Latest"
-        playGame={(id) => {
-          setActiveGame(id);
-          setScreen("game");
-        }}
-      /> */}
       <Areas
         aggregateLeaderboard={leaderboard}
         totalXp={context?.profile?.totalXp || 0}
@@ -58,6 +49,7 @@ export default function ClientHome({
           setActiveGame(id);
           setScreen("game");
         }}
+        viewAchievements={() => setScreen("achievements")}
       />
     </ClientPageWrapper>
   );

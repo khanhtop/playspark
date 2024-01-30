@@ -2,37 +2,25 @@ import { achievements } from "@/helpers/achievements";
 
 export default function Achievements({ data }) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 px-4 py-4">
-      {achievements.map((item, key) => (
-        <Achievement
-          image={item.image}
-          unlocked={data?.[item.factor] >= item.target}
-          required={item.target}
-          factor={item.factor}
-        />
-      ))}
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-36">
+      {achievements
+        .filter((item) => data?.[item.factor] >= item.target)
+        ?.map((item, key) => (
+          <Achievement
+            image={item.image}
+            unlocked={data?.[item.factor] >= item.target}
+            required={item.target}
+            factor={item.factor}
+          />
+        ))}
     </div>
   );
 }
 
 function Achievement({ image, unlocked, required, factor }) {
   return (
-    <div className="relative w-full aspect-square">
-      <img
-        className={`h-full w-full  p-8 absolute ${
-          unlocked ? "opacity-100" : "opacity-10"
-        }`}
-        src={image}
-      />
-      {!unlocked && (
-        <div className="absolute h-full w-full flex items-center justify-center">
-          <div className="text-sm bg-black/30 py-2 backdrop-blur max-w-[60%] text-center text-white font-octo px-4 rounded-xl">
-            <p className="uppercase">
-              Unlock with {required} {factor}
-            </p>
-          </div>
-        </div>
-      )}
+    <div className="flex h-36 items-center justify-center">
+      <img className={`h-32`} src={image} />
     </div>
   );
 }
