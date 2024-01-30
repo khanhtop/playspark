@@ -5,6 +5,7 @@ import AggregateLeaderboard from "./aggregateLeaderboard";
 import { useAppContext } from "@/helpers/store";
 import Achievements from "./achievements";
 import Challenges from "./challenges";
+import ClientGameCard from "./gameCard";
 
 export default function Areas({
   user,
@@ -51,12 +52,12 @@ export default function Areas({
         }
       />
       {tab === "games" && (
-        <div className="grid grid-cols-2 px-5 md:grid-cols-3 gap-2 md:gap-8 md:px-4 py-4">
+        <div className="grid grid-cols-2 px-5 md:grid-cols-3 gap-2 md:gap-8 md:px-4 py-8">
           {tournaments.map((item, key) => (
-            <ClientGameGridCard
+            <ClientGameCard
+              data={user}
               item={item}
               key={item.tournamentId}
-              user={user}
               playGame={playGame}
             />
           ))}

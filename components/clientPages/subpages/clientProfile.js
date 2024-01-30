@@ -32,6 +32,41 @@ export default function ClientProfile({ user, setScreen }) {
           }}
         />
       </div>
+      <div className="mt-8">
+        <ProfileButton
+          heading="Invite Friends And Win"
+          text="Refer friends and get coins when they sign up PLUS when they play a game."
+          bgColor={user.accentColor}
+          textColor={user.primaryColor}
+        />
+        <ProfileButton
+          heading="My Items"
+          text="View your earned or redeemed items."
+          bgColor={user.accentColor}
+          textColor={user.primaryColor}
+        />
+        <ProfileButton
+          heading="My Games"
+          text="View your active games."
+          bgColor={user.accentColor}
+          textColor={user.primaryColor}
+        />
+      </div>
     </ClientPageWrapper>
+  );
+}
+
+function ProfileButton({ bgColor, textColor, heading, text }) {
+  return (
+    <div
+      className="cursor-pointer mx-5 rounded-2xl px-4 py-4 font-roboto mb-4 max-w-[500px]"
+      style={{ backgroundColor: bgColor, color: textColor }}
+    >
+      <div></div>
+      <div>
+        <h1 className="uppercase font-extrabold text-xl">{heading}</h1>
+        <p className="font-light">{text}</p>
+      </div>
+    </div>
   );
 }

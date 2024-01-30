@@ -55,7 +55,7 @@ const pixel = localFont({
 
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["300", "400", "700"],
   variable: "--font-roboto",
   display: "swap",
 });
