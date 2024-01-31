@@ -153,9 +153,8 @@ export default class WordleScene extends Phaser.Scene {
     gameType = newGameType;
     console.log(newParams)
     this.params = newParams;
-    console.log(sampleWords)
     sampleWords = [...this.params.words]
-    console.log(sampleWords)
+    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + "/bg.jpg";
   }
 
   preload() {
@@ -180,7 +179,7 @@ export default class WordleScene extends Phaser.Scene {
     heartR = w * 0.0625;
     heartNum = this.params.lives
 
-    this.load.image("bg", "/pong/" + gameType + "/bg.jpg");
+    this.load.image("bg", this.params.backgroundSprite);
     this.load.image("main-btn-bg", "/pong/" + gameType + "/main-btn-bg.png");
     this.load.image("back", "/pong/" + gameType + "/back.png");
     this.load.image("calendar", "/pong/" + gameType + "/calendar.png");
@@ -211,7 +210,7 @@ export default class WordleScene extends Phaser.Scene {
     this.load.image("h4", "/pong/" + gameType + "/h4.png");
     this.load.image("arrow", "/pong/" + gameType + "/arrow.png");
 
-    this.load.image("middleAd", this.params.sponsorLogo);
+    // this.load.image("middleAd", this.params.sponsorLogo);
 
     // PONG ASSETS
     this.load.image("booster", "/pong/pongassets/booster-ball.png");
@@ -269,7 +268,7 @@ export default class WordleScene extends Phaser.Scene {
 
 
     this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
-    this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
+    // this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
 
 
     Object.keys(LAYOUT_KEYS).forEach(key => {
