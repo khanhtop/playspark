@@ -18,6 +18,7 @@ export default function HorizontalGamesScroll({
           <div className="flex items-center gap-8 pt-0 pb-6 px-5">
             {data?.map((item, key) => (
               <ClientGameCard
+                inSlider
                 data={user}
                 item={item}
                 key={item.tournamentId}
