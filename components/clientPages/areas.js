@@ -52,7 +52,7 @@ export default function Areas({
         }
       />
       {tab === "games" && (
-        <div className="grid grid-cols-2 px-5 md:grid-cols-3 gap-2 md:gap-8 md:px-4 py-8">
+        <div className="grid grid-cols-1 px-5 md:grid-cols-3 gap-6 md:gap-8 md:px-4 py-8">
           {tournaments.map((item, key) => (
             <ClientGameCard
               data={user}

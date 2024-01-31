@@ -3,7 +3,7 @@ import { useState } from "react";
 import UIButton from "../ui/button";
 import { useAppContext } from "@/helpers/store";
 
-export default function ClientGameCard({ data, item, playGame }) {
+export default function ClientGameCard({ data, item, playGame, inSlider }) {
   const router = useRouter();
   const context = useAppContext();
   const [hover, setHover] = useState(false);
@@ -12,7 +12,9 @@ export default function ClientGameCard({ data, item, playGame }) {
     <div
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className="flex flex-col font-octo rounded-3xl text-base overflow-hidden relative group min-w-[320px] h-[200px] shadow-lg hover:shadow-md shadow-black/50 "
+      className={`flex flex-col font-octo rounded-3xl text-base overflow-hidden relative group ${
+        inSlider && "min-w-[320px]"
+      } h-[200px] shadow-lg hover:shadow-md shadow-black/50`}
     >
       <div
         style={{
