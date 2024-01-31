@@ -364,14 +364,14 @@ export default class WordleScene extends Phaser.Scene {
     )
     UI[UI_KEYS.COIN_GAME] = this.add.text(w - this.convertScaleData(50), topY, "175").setStyle({
       ...this.text_main_style,
-      fontSize: 24 + 'px',
+      fontSize: this.convertScaleData(24) + 'px',
       fill: '#fff',
     }).setOrigin(1, 0.5);
     GAME_PART.add(UI[UI_KEYS.COIN_GAME])
 
     // GAME MIDDLE PART
-    const boxR = 45;
-    const startY = 80;
+    const boxR = this.convertScaleData(45);
+    const startY = this.convertScaleData(80);
     const startX = mW - (boxR * 1.05) * 2.5;
     for(let i = 0; i < 6; i++) {
       for(let j = 0; j < 5; j++) {
@@ -391,10 +391,10 @@ export default class WordleScene extends Phaser.Scene {
       let j = 0;
       let x = 0;
       let y = 0;
-      let width = 35;
-      let height = 50;
+      let width = this.convertScaleData(35);
+      let height = this.convertScaleData(50);
       let startX = mW - 4.5 * width;
-      let startY = 80 + boxR * 7.3;
+      let startY = this.convertScaleData(80) + boxR * 7.3;
 
       let texture = 'word_input_btn';
       let isBack = (i == INPUT_KEYS.length - 1)
@@ -441,7 +441,7 @@ export default class WordleScene extends Phaser.Scene {
     UI[UI_KEYS.SUMBMIT_BTN_GAME] = this.addButton('main-btn-bg', this.convertScaleData(150), this.convertScaleData(70), mW, h - this.convertScaleData(100),  "SUBMIT", GAME_PART, "#fff", this.onSubmint);
 
     GAME_PART.add(
-      this.addPowerUpBtn('blue_circle', 'item1', 'red_circle', 50, 50, this.convertScaleData(30), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.TARGET, () => {
+      this.addPowerUpBtn('blue_circle', 'item1', 'red_circle', this.convertScaleData(50), this.convertScaleData(50), this.convertScaleData(30), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.TARGET, () => {
         if(GAME.PAUSE) return;
         if(this.isPowerUp(UI_KEYS.POWER_TARGET) == -1) {
           return;
@@ -476,7 +476,7 @@ export default class WordleScene extends Phaser.Scene {
         UI[`WB${GAME.LINE}${randomIndex}`].setTexture(`w2`)
         UI[`WT${GAME.LINE}${randomIndex}`].setText(remainingLetter).setStyle({
           ...this.text_main_style,
-          fontSize: 24 + 'px',
+          fontSize: this.convertScaleData(24) + 'px',
           align: 'center',
           fill: "#333",
         })
@@ -485,7 +485,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GAME_PART.add(
-      this.addPowerUpBtn('next_btn', 'next', 'red_circle', 80, 50, w - this.convertScaleData(60), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.NEXT, () => {
+      this.addPowerUpBtn('next_btn', 'next', 'red_circle', this.convertScaleData(80), this.convertScaleData(50), w - this.convertScaleData(60), h - this.convertScaleData(100), GAME_PART, GAME.POWER_UPS.NEXT, () => {
         if(GAME.PAUSE) return;
         if(this.isPowerUp(UI_KEYS.POWER_NEXT) == -1) {
           return;
@@ -509,11 +509,11 @@ export default class WordleScene extends Phaser.Scene {
     );
 
     BONUS_PART.add(
-      this.add.sprite(mW, mH - 40, 'word_input_btn').setDisplaySize(300, 330)
+      this.add.sprite(mW, mH - 40, 'word_input_btn').setDisplaySize(this.convertScaleData(300), this.convertScaleData(330))
     )
 
     BONUS_PART.add(
-      this.addButton('main-btn-bg', 200, 70, mW, mH - 200, 'You Win!', BONUS_PART, "#fff", () => {
+      this.addButton('main-btn-bg', this.convertScaleData(200), this.convertScaleData(70), mW, mH - this.convertScaleData(200), 'You Win!', BONUS_PART, "#fff", () => {
         this.changeScreen(LAYOUT_KEYS.BONUS, false)
         this.addScreen(LAYOUT_KEYS.SCORE)
         GAME.COIN += GAME.CUR_COIN;
@@ -523,11 +523,11 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     BONUS_PART.add(
-      this.add.sprite(mW, mH - 90, 'bonus').setDisplaySize(130, 140)
+      this.add.sprite(mW, mH - this.convertScaleData(90), 'bonus').setDisplaySize(this.convertScaleData(130), this.convertScaleData(140))
     )
 
     BONUS_PART.add(
-      this.add.sprite(mW, mH + 5, 'green_btn').setDisplaySize(200, 70).setInteractive().on('pointerup', () => {
+      this.add.sprite(mW, mH + 5, 'green_btn').setDisplaySize(this.convertScaleData(200), this.convertScaleData(70)).setInteractive().on('pointerup', () => {
         this.changeScreen(LAYOUT_KEYS.BONUS, false)
         this.addScreen(LAYOUT_KEYS.SCORE)
         GAME.COIN += GAME.CUR_COIN;
@@ -537,7 +537,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     BONUS_PART.add(
-      this.add.sprite(mW - 50, mH, 'play').setDisplaySize(40, 40)
+      this.add.sprite(mW - this.convertScaleData(50), mH, 'play').setDisplaySize(this.convertScaleData(40), this.convertScaleData(40))
     )
 
     UI[UI_KEYS.COIN_VIDEO] = this.add.text(mW, mH, '80').setStyle({
@@ -548,10 +548,10 @@ export default class WordleScene extends Phaser.Scene {
     BONUS_PART.add(UI[UI_KEYS.COIN_VIDEO])
 
     BONUS_PART.add(
-      this.add.sprite(mW + 50, mH - 3, 'coin').setDisplaySize(45, 45)
+      this.add.sprite(mW + this.convertScaleData(50), mH - 3, 'coin').setDisplaySize(this.convertScaleData(45), this.convertScaleData(45))
     )
 
-    UI[UI_KEYS.COIN_BONUS] = this.add.text(mW, mH + 60, 'Claim 20').setStyle({
+    UI[UI_KEYS.COIN_BONUS] = this.add.text(mW, mH + this.convertScaleData(60), 'Claim 20').setStyle({
       ...this.text_main_style,
       fontSize: this.convertScaleData(20) + 'px',
       fill: '#faab41',
@@ -559,7 +559,7 @@ export default class WordleScene extends Phaser.Scene {
     BONUS_PART.add(UI[UI_KEYS.COIN_BONUS])
 
     BONUS_PART.add(
-      this.add.sprite(mW + 60, mH + 60, 'coin').setDisplaySize(30, 30)
+      this.add.sprite(mW + this.convertScaleData(60), mH + this.convertScaleData(60), 'coin').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
     )
 
     BONUS_PART.setVisible(false)
@@ -574,14 +574,14 @@ export default class WordleScene extends Phaser.Scene {
     
 
     SCORE_PART.add(
-      this.add.text(mW, mH - 200, 'Your Score').setOrigin(0.5, 0.5).setStyle({
+      this.add.text(mW, mH - this.convertScaleData(200), 'Your Score').setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(35) + 'px',
         fill: '#fff',
       })
     )
 
-    UI[UI_KEYS.SCORE_LAYOUT_VAL] = this.add.text(mW, mH - 150, '80').
+    UI[UI_KEYS.SCORE_LAYOUT_VAL] = this.add.text(mW, mH - this.convertScaleData(150), '80').
       setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(40) + 'px',
@@ -589,7 +589,7 @@ export default class WordleScene extends Phaser.Scene {
       })
     SCORE_PART.add(UI[UI_KEYS.SCORE_LAYOUT_VAL])
     SCORE_PART.add(
-      this.add.text(mW, mH - 100, 'Current Streak').setOrigin(0.5, 0.5).setStyle({
+      this.add.text(mW, mH - this.convertScaleData(100), 'Current Streak').setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(35) + 'px',
         fill: '#fff',
@@ -604,7 +604,7 @@ export default class WordleScene extends Phaser.Scene {
       })
     SCORE_PART.add(UI[UI_KEYS.SCORE_LAYOUT_STREAK])
     SCORE_PART.add(
-      this.addButton('main-btn-bg', 200, 70, mW, mH + 50, 'Continue', SCORE_PART, "#fff", () => {
+      this.addButton('main-btn-bg', this.convertScaleData(200), this.convertScaleData(70), mW, mH + this.convertScaleData(50), 'Continue', SCORE_PART, "#fff", () => {
         this.changeScreen(LAYOUT_KEYS.SCORE, false)
         this.startRound()
       })
@@ -622,13 +622,13 @@ export default class WordleScene extends Phaser.Scene {
     );
 
     GUIDE_PART.add(
-      this.add.sprite(mW, mH - 140, 'word_input_btn').setDisplaySize(300, 330).setInteractive().on('pointerup', () => {
+      this.add.sprite(mW, mH - this.convertScaleData(140), 'word_input_btn').setDisplaySize(this.convertScaleData(300), this.convertScaleData(330)).setInteractive().on('pointerup', () => {
         this.changeScreen(LAYOUT_KEYS.GUIDE, false)
       })
     )
 
     GUIDE_PART.add(
-      this.add.text(mW, mH - 250, 'HOW TO PLAY').setOrigin(0.5, 0.5).setStyle({
+      this.add.text(mW, mH - this.convertScaleData(250), 'HOW TO PLAY').setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(30) + 'px',
         fill: '#575757',
@@ -636,7 +636,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - 110, mH - 200, '6').setOrigin(0.5, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(110), mH - this.convertScaleData(200), '6').setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(30) + 'px',
         fill: '#575757',
@@ -644,7 +644,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - 80, mH - 200, 'You have 6 tries to guess the \nword').setOrigin(0, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(200), 'You have 6 tries to guess the \nword').setOrigin(0, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(12) + 'px',
         fill: '#575757',
@@ -653,11 +653,11 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.sprite(mW - 110, mH - 150, 'h1').setDisplaySize(30, 30)
+      this.add.sprite(mW - this.convertScaleData(110), mH - this.convertScaleData(150), 'h1').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - 80, mH - 150, 'The colours of the letters will\nchange to show if they are \ncorrect').setOrigin(0, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(150), 'The colours of the letters will\nchange to show if they are \ncorrect').setOrigin(0, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(12) + 'px',
         fill: '#575757',
@@ -666,11 +666,11 @@ export default class WordleScene extends Phaser.Scene {
     )
     
     GUIDE_PART.add(
-      this.add.sprite(mW - 110, mH - 100, 'h2').setDisplaySize(30, 30)
+      this.add.sprite(mW - this.convertScaleData(110), mH - this.convertScaleData(100), 'h2').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - 80, mH - 100, 'Use "Booster" to reveal one \ncorrect letter.').setOrigin(0, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(100), 'Use "Booster" to reveal one \ncorrect letter.').setOrigin(0, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(12) + 'px',
         fill: '#575757',
@@ -679,11 +679,11 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.sprite(mW - 110, mH - 50, 'h3').setDisplaySize(30, 30)
+      this.add.sprite(mW - this.convertScaleData(110), mH - this.convertScaleData(50), 'h3').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - 80, mH - 50, 'Use "Bullseye" to remove \nthree incorrect letters.').setOrigin(0, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(50), 'Use "Bullseye" to remove \nthree incorrect letters.').setOrigin(0, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(12) + 'px',
         fill: '#575757',
@@ -693,7 +693,7 @@ export default class WordleScene extends Phaser.Scene {
 
     
     GUIDE_PART.add(
-      this.add.text(mW, mH + 70, 'EXAMPLE').setOrigin(0.5, 0.5).setStyle({
+      this.add.text(mW, mH + this.convertScaleData(70), 'EXAMPLE').setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(40) + 'px',
         fill: '#fff',
@@ -701,7 +701,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.sprite(mW, mH + 180, 'h4').setDisplaySize(250, 50)
+      this.add.sprite(mW, mH + this.convertScaleData(180), 'h4').setDisplaySize(this.convertScaleData(250), this.convertScaleData(50))
     )
 
     GUIDE_PART.setVisible(false)
@@ -772,7 +772,7 @@ export default class WordleScene extends Phaser.Scene {
       UI[`WB${GAME.LINE}${i}`].setTexture(`w${key}`)
       UI[`WT${GAME.LINE}${i}`].setStyle({
         ...this.text_main_style,
-        fontSize: 24 + 'px',
+        fontSize: this.convertScaleData(24) + 'px',
         align: 'center',
         fill: key == 0? "#fff" : "#333",
       });
@@ -836,7 +836,7 @@ export default class WordleScene extends Phaser.Scene {
 
     const style = {
       fontFamily: 'customFont',
-      fontSize: 24 + 'px',
+      fontSize: this.convertScaleData(24) + 'px',
       align: 'center',
       fill: color,
     };
@@ -863,7 +863,7 @@ export default class WordleScene extends Phaser.Scene {
     text = text.toString();
     const style = {
       fontFamily: 'customFont',
-      fontSize: 12 + 'px',
+      fontSize: this.convertScaleData(12) + 'px',
       align: 'center',
       fill: "#fff",
     };
@@ -920,7 +920,7 @@ export default class WordleScene extends Phaser.Scene {
         UI[`WB${i}${j}`].setTexture('outline')
         UI[`WT${i}${j}`].setStyle({
           ...this.text_main_style,
-          fontSize: 25 + "px",
+          fontSize: this.convertScaleData(25) + "px",
           color: "#fff"
         }).setText("")
       }
