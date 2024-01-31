@@ -226,6 +226,10 @@ export default class WordleScene extends Phaser.Scene {
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
     this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
     this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
+    this.load.audio("win", "/pong/" + gameType + "/sfx/win.mp3");
+    this.load.audio("btn", "/pong/" + gameType + "/sfx/btn.wav");
+    this.load.audio("power_up", "/pong/" + gameType + "/sfx/power_up.wav");
+    this.load.audio("submit", "/pong/" + gameType + "/sfx/submit.wav");
 
 
     // FONT
@@ -252,19 +256,19 @@ export default class WordleScene extends Phaser.Scene {
 
   // 400 800
 
-  private whistle: any;
-  private ballHit: any;
+  private submit: any;
+  private win: any;
   private final: any;
-  private goal: any;
-  private lost: any;
+  private btn: any;
+  private power_up: any;
 
   create() {
     this.sound.add("bg").setLoop(true).play();
-    this.whistle = this.sound.add("whistle");
-    this.ballHit = this.sound.add("ballHit");
+    this.submit = this.sound.add("submit");
+    this.win = this.sound.add("win");
     this.final = this.sound.add("final");
-    this.goal = this.sound.add("goal");
-    this.lost = this.sound.add("lost");
+    this.btn = this.sound.add("btn");
+    this.power_up = this.sound.add("power_up");
 
 
     this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
@@ -280,6 +284,7 @@ export default class WordleScene extends Phaser.Scene {
     UI[UI_KEYS.PLAY_BTN_LOGO] = this.addButton('main-btn-bg', this.convertScaleData(140), this.convertScaleData(65), mW, mH + this.convertScaleData(30), "PLAY", LAYOUT[LAYOUT_KEYS.LOGO], '#fff', () => {
       this.changeScreen(LAYOUT_KEYS.LOGO, false);
       this.changeScreen(LAYOUT_KEYS.MENU)
+      this.btn.play();
     });
 
     LAYOUT[LAYOUT_KEYS.LOGO].add(
@@ -298,6 +303,8 @@ export default class WordleScene extends Phaser.Scene {
     //   GAME.STATUS = GAME_TYPE.DAILY;
     // });
     UI[UI_KEYS.CLASSIC_BTN_MENU] = this.addButton('main-btn-bg', this.convertScaleData(240), this.convertScaleData(75), mW, mH - this.convertScaleData(30), "CLASSIC", LAYOUT[LAYOUT_KEYS.MENU], "#fff", () => {
+      this.btn.play();
+      
       this.changeScreen(LAYOUT_KEYS.MENU, false);
       this.changeScreen(LAYOUT_KEYS.GAME)
       GAME.STATUS = GAME_TYPE.CLASSIC;
@@ -312,6 +319,8 @@ export default class WordleScene extends Phaser.Scene {
     const topY = 40;
     UI[UI_KEYS.BACK_BTN_GAME] = this.addButton('back', this.convertScaleData(20), this.convertScaleData(35), this.convertScaleData(35), this.convertScaleData(40),  "", GAME_PART, "", () => {
       if(GAME.PAUSE) return;
+      this.btn.play();
+
       this.initGame();
       this.changeScreen(LAYOUT_KEYS.GAME, false)
       this.changeScreen(LAYOUT_KEYS.MENU);
@@ -355,6 +364,7 @@ export default class WordleScene extends Phaser.Scene {
     GAME_PART.add(
       this.add.sprite(mW + this.convertScaleData(40), topY - this.convertScaleData(10), 'info').setOrigin(0.5, 0.5).setDisplaySize(20, 20).setInteractive().on('pointerup', () => {
         this.addScreen(LAYOUT_KEYS.GUIDE)
+        this.btn.play();
 
       })
     )
@@ -418,6 +428,9 @@ export default class WordleScene extends Phaser.Scene {
 
       this.addButton(texture, width, height, x, y, key, GAME_PART, "#333", () => {
         if(GAME.PAUSE) return;
+
+        this.btn.play();
+
         const winput = key;
         const row = GAME.LINE;
         const column = GAME.TYPING.length;
@@ -447,6 +460,8 @@ export default class WordleScene extends Phaser.Scene {
           return;
         }
         
+        this.power_up.play()
+
         let word = sampleWords[GAME.STREAK].toString();
         let key = "ABCDEFGHIJKMLNOPQRSTUVWXYZ";
         let count = 3;
@@ -466,6 +481,7 @@ export default class WordleScene extends Phaser.Scene {
         if(this.isPowerUp(UI_KEYS.POWER_DISPLAY) == -1) {
           return;
         }
+        this.power_up.play()
 
         let word = sampleWords[GAME.STREAK].toString();
 
@@ -491,6 +507,8 @@ export default class WordleScene extends Phaser.Scene {
           return;
         }
         
+        this.btn.play();
+
         this.startRound();
         sampleWords.splice(GAME.STREAK, 1)
 
@@ -518,6 +536,7 @@ export default class WordleScene extends Phaser.Scene {
         this.addScreen(LAYOUT_KEYS.SCORE)
         GAME.COIN += GAME.CUR_COIN;
         UI[UI_KEYS.COIN_GAME].setText(GAME.CUR_COIN)
+        this.btn.play();
 
       })
     )
@@ -532,6 +551,7 @@ export default class WordleScene extends Phaser.Scene {
         this.addScreen(LAYOUT_KEYS.SCORE)
         GAME.COIN += GAME.CUR_COIN;
         UI[UI_KEYS.COIN_GAME].setText(GAME.CUR_COIN)
+        this.btn.play();
   
       })
     )
@@ -607,6 +627,7 @@ export default class WordleScene extends Phaser.Scene {
       this.addButton('main-btn-bg', this.convertScaleData(200), this.convertScaleData(70), mW, mH + this.convertScaleData(50), 'Continue', SCORE_PART, "#fff", () => {
         this.changeScreen(LAYOUT_KEYS.SCORE, false)
         this.startRound()
+        this.btn.play();
       })
     )
     
@@ -624,6 +645,7 @@ export default class WordleScene extends Phaser.Scene {
     GUIDE_PART.add(
       this.add.sprite(mW, mH - this.convertScaleData(140), 'word_input_btn').setDisplaySize(this.convertScaleData(300), this.convertScaleData(330)).setInteractive().on('pointerup', () => {
         this.changeScreen(LAYOUT_KEYS.GUIDE, false)
+        this.btn.play();
       })
     )
 
@@ -670,7 +692,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(100), 'Use "Booster" to reveal one \ncorrect letter.').setOrigin(0, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(100), 'Use “booster” to reveal 3\ncorrect letters on the keyboard').setOrigin(0, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(12) + 'px',
         fill: '#575757',
@@ -683,7 +705,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(50), 'Use "Bullseye" to remove \nthree incorrect letters.').setOrigin(0, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(50), 'Use “bullseye” to reveal 1 \ncorrect letter on the game board').setOrigin(0, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(12) + 'px',
         fill: '#575757',
@@ -739,7 +761,8 @@ export default class WordleScene extends Phaser.Scene {
 
   public initGame(lives = 3) {
     this.cameras.main.fadeIn(1200);
-
+    GAME.SCORE = this.params.score;
+    UI[UI_KEYS.SCORE_GAME].setText(GAME.SCORE)
     GAME.STREAK = 0;
     // setTimeout(() => this.startRound(), 2500);
   }
@@ -758,6 +781,8 @@ export default class WordleScene extends Phaser.Scene {
 
   onSubmint() {
     if(GAME.TYPING == "" || GAME.TYPING.length != 5) return;
+
+    this.submit.play();
 
     const word = GAME.TYPING;
     const compare_word = sampleWords[GAME.STREAK].toLocaleUpperCase();
@@ -779,6 +804,7 @@ export default class WordleScene extends Phaser.Scene {
       UI[`input_${word[i]}`].setTexture(`inp${key}`)
     })
     if(isSuccess == 5) {
+      this.win.play()
       const score = SCORE_SYSTEM[GAME.LINE].score;
       GAME.CUR_COIN = SCORE_SYSTEM[GAME.LINE].coin;
       this.addScreen(LAYOUT_KEYS.BONUS)
