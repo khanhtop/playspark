@@ -4,30 +4,40 @@ export const achievements = [
     target: 500,
     image: "/badges/xp1.png",
     text: "Earn 500XP",
+    blurb:
+      "Earn 500XP through playing games and participating in various activities to unlock this achievement.",
   },
   {
     factor: "xp",
     target: 2500,
     image: "/badges/xp2.png",
     text: "Earn 2500XP",
+    blurb:
+      "Earn 2500XP through playing games and participating in various activities to unlock this achievement.",
   },
   {
     factor: "xp",
     target: 10000,
     image: "/badges/xp3.png",
     text: "Earn 10,000XP",
+    blurb:
+      "Earn 10,000XP through playing games and participating in various activities to unlock this achievement.",
   },
   {
     factor: "xp",
     target: 50000,
     image: "/badges/xp4.png",
     text: "Earn 50,000XP",
+    blurb:
+      "Earn 50,000XP through playing games and participating in various activities to unlock this achievement.",
   },
   {
     factor: "xp",
     target: 100000,
     image: "/badges/xp5.png",
     text: "Earn 100,000XP",
+    blurb:
+      "Earn 100,000XP through playing games and participating in various activities to unlock this achievement.",
   },
 ];
 

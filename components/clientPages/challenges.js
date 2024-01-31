@@ -1,22 +1,48 @@
 import { useAppContext } from "@/helpers/store";
 import UIButton from "../ui/button";
 import { getChallenge } from "@/helpers/achievements";
+import EmbeddedModal from "./embeddedModal";
+import { useState } from "react";
 
 export default function Challenges({ totalXp, user, viewAchievements }) {
   const xpChallenge = getChallenge("xp", 2000);
+  const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="grid grid-cols-2 p-6">
-      <ChallengeStatus
-        viewAchievements={viewAchievements}
-        title={xpChallenge?.item?.text}
-        nChallenges={xpChallenge?.length}
-        rank={xpChallenge.index}
-        backgroundColor={user?.primaryColor}
-        accentColor={user?.accentColor}
-        textColor={user?.textColor}
-      />
-    </div>
+    <>
+      <EmbeddedModal
+        isOpen={showModal}
+        user={user}
+        onClose={() => setShowModal(false)}
+      >
+        <div className="h-full w-full px-1 py-1 flex flex-col">
+          <img className="w-full rounded-2xl" src="/badges/challenge.png" />
+          <div className="flex-1 mt-4 flex flex-col items-center text-center px-4 gap-4 font-octo">
+            <h1 className="text-3xl">{xpChallenge?.item?.text}</h1>
+            <img src={xpChallenge?.item?.image} className="h-24" />
+            <p className="font-roboto px-4">{xpChallenge?.item?.blurb}</p>
+          </div>
+          <UIButton
+            onClick={() => setShowModal(false)}
+            primaryColor={user.accentColor}
+            textColor={user.primaryColor}
+            text="OK"
+            className=""
+          />
+        </div>
+      </EmbeddedModal>
+      <div className="grid grid-cols-2 p-6">
+        <ChallengeStatus
+          viewAchievements={() => setShowModal(xpChallenge)}
+          title={xpChallenge?.item?.text}
+          nChallenges={xpChallenge?.length}
+          rank={xpChallenge.index}
+          backgroundColor={user?.primaryColor}
+          accentColor={user?.accentColor}
+          textColor={user?.textColor}
+        />
+      </div>
+    </>
   );
 }
 
