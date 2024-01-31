@@ -101,7 +101,7 @@ let GAME = {
   }
 }
 
-const sampleWords = [
+let sampleWords = [
   "score",
   "leave",
   "rummy",
@@ -153,6 +153,9 @@ export default class WordleScene extends Phaser.Scene {
     gameType = newGameType;
     console.log(newParams)
     this.params = newParams;
+    console.log(sampleWords)
+    sampleWords = [...this.params.words]
+    console.log(sampleWords)
   }
 
   preload() {
@@ -758,7 +761,9 @@ export default class WordleScene extends Phaser.Scene {
     if(GAME.TYPING == "" || GAME.TYPING.length != 5) return;
 
     const word = GAME.TYPING;
-    const compare_word = sampleWords[GAME.STREAK];
+    const compare_word = sampleWords[GAME.STREAK].toLocaleUpperCase();
+
+    console.log(word, compare_word)
 
     const result = this.compareWords(word, compare_word);
     console.log(result)
@@ -796,7 +801,7 @@ export default class WordleScene extends Phaser.Scene {
 
   compareWords(word, compareWord) {
     let result = [];
-    word = word.toLowerCase();
+    word = word.toLocaleUpperCase();
     for (let i = 0; i < word.length; i++) {
       if (word[i] === compareWord[i]) {
         result.push(2);
