@@ -209,7 +209,8 @@ export default class WordleScene extends Phaser.Scene {
     this.load.image("h3", "/pong/" + gameType + "/h3.png");
     this.load.image("h4", "/pong/" + gameType + "/h4.png");
     this.load.image("arrow", "/pong/" + gameType + "/arrow.png");
-
+    this.load.image("bonus_video", "/pong/" + gameType + "/bonus_video.png");
+    
     // this.load.image("middleAd", this.params.sponsorLogo);
 
     // PONG ASSETS
@@ -507,7 +508,7 @@ export default class WordleScene extends Phaser.Scene {
           return;
         }
         
-        this.btn.play();
+        this.submit.play();
 
         this.startRound();
         sampleWords.splice(GAME.STREAK, 1)
@@ -568,7 +569,7 @@ export default class WordleScene extends Phaser.Scene {
     BONUS_PART.add(UI[UI_KEYS.COIN_VIDEO])
 
     BONUS_PART.add(
-      this.add.sprite(mW + this.convertScaleData(50), mH - 3, 'coin').setDisplaySize(this.convertScaleData(45), this.convertScaleData(45))
+      this.add.sprite(mW + this.convertScaleData(50), mH - 3, 'bonus_video').setDisplaySize(this.convertScaleData(45), this.convertScaleData(45))
     )
 
     UI[UI_KEYS.COIN_BONUS] = this.add.text(mW, mH + this.convertScaleData(60), 'Claim 20').setStyle({
@@ -579,7 +580,7 @@ export default class WordleScene extends Phaser.Scene {
     BONUS_PART.add(UI[UI_KEYS.COIN_BONUS])
 
     BONUS_PART.add(
-      this.add.sprite(mW + this.convertScaleData(60), mH + this.convertScaleData(60), 'coin').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
+      this.add.sprite(mW + this.convertScaleData(60), mH + this.convertScaleData(60), 'bonus_video').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
     )
 
     BONUS_PART.setVisible(false)
@@ -782,7 +783,7 @@ export default class WordleScene extends Phaser.Scene {
   onSubmint() {
     if(GAME.TYPING == "" || GAME.TYPING.length != 5) return;
 
-    this.submit.play();
+    this.btn.play();
 
     const word = GAME.TYPING;
     const compare_word = sampleWords[GAME.STREAK].toLocaleUpperCase();
