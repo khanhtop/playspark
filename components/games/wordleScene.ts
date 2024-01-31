@@ -569,18 +569,24 @@ export default class WordleScene extends Phaser.Scene {
     BONUS_PART.add(UI[UI_KEYS.COIN_VIDEO])
 
     BONUS_PART.add(
-      this.add.sprite(mW + this.convertScaleData(50), mH - 3, 'bonus_video').setDisplaySize(this.convertScaleData(45), this.convertScaleData(45))
+      this.add.sprite(mW + this.convertScaleData(55), mH - 3, 'bonus_video').setDisplaySize(this.convertScaleData(45), this.convertScaleData(45))
     )
 
     UI[UI_KEYS.COIN_BONUS] = this.add.text(mW, mH + this.convertScaleData(60), 'Claim 20').setStyle({
       ...this.text_main_style,
       fontSize: this.convertScaleData(20) + 'px',
       fill: '#faab41',
-    }).setOrigin(0.5, 0.5)
+    }).setOrigin(0.5, 0.5).setInteractive().on('pointerup', () => {
+      this.changeScreen(LAYOUT_KEYS.BONUS, false)
+      this.addScreen(LAYOUT_KEYS.SCORE)
+      GAME.COIN += GAME.CUR_COIN;
+      UI[UI_KEYS.COIN_GAME].setText(GAME.CUR_COIN)
+      this.btn.play();
+    })
     BONUS_PART.add(UI[UI_KEYS.COIN_BONUS])
 
     BONUS_PART.add(
-      this.add.sprite(mW + this.convertScaleData(60), mH + this.convertScaleData(60), 'bonus_video').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
+      this.add.sprite(mW + this.convertScaleData(65), mH + this.convertScaleData(55), 'bonus_video').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
     )
 
     BONUS_PART.setVisible(false)
