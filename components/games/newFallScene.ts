@@ -110,8 +110,8 @@ export default class newFallScene extends Phaser.Scene {
     // this.load.image("bombEffect", "/pong/" + gameType + "/bomb-effect.png");
     this.load.image("head", getImageWithSize(this.params.additionalSpriteOne, 300, 180));
     this.load.image("boosterBall", getImageWithSize(this.params.powerUpSprite, 80, 80));
-    this.load.image("boosterBat", "/pong/" + gameType + "/booster-bat.png");
-    this.load.image("boosterBatNum", "/pong/" + gameType + "/booster-bat.png");
+    this.load.image("boosterBat", getImageWithSize(this.params.additionalSpriteTwo, 80, 80));
+    this.load.image("boosterBatNum", getImageWithSize(this.params.additionalSpriteTwo, 80, 80));
     this.load.spritesheet('bombEffect', "/pong/" + gameType + "/bomb-effect.png", { frameWidth: 200, frameHeight: 200 });
     this.load.spritesheet('playerAnim', getImageWithSize(this.params.playerSprite, 300, 8 * 180), { frameWidth: 180, frameHeight: 300 });
 
