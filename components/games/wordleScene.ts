@@ -210,6 +210,7 @@ export default class WordleScene extends Phaser.Scene {
     this.load.image("h4", "/pong/" + gameType + "/h4.png");
     this.load.image("arrow", "/pong/" + gameType + "/arrow.png");
     this.load.image("bonus_video", "/pong/" + gameType + "/bonus_video.png");
+    this.load.image("help", "/pong/" + gameType + "/help.png");
     
     // this.load.image("middleAd", this.params.sponsorLogo);
 
@@ -373,7 +374,7 @@ export default class WordleScene extends Phaser.Scene {
     GAME_PART.add(
       this.add.sprite(w - this.convertScaleData(30), topY, 'coin').setOrigin(0.5, 0.5).setDisplaySize(30, 30)
     )
-    UI[UI_KEYS.COIN_GAME] = this.add.text(w - this.convertScaleData(50), topY, "175").setStyle({
+    UI[UI_KEYS.COIN_GAME] = this.add.text(w - this.convertScaleData(50), topY, "0").setStyle({
       ...this.text_main_style,
       fontSize: this.convertScaleData(24) + 'px',
       fill: '#fff',
@@ -557,25 +558,26 @@ export default class WordleScene extends Phaser.Scene {
       })
     )
 
-    BONUS_PART.add(
-      this.add.sprite(mW - this.convertScaleData(50), mH, 'play').setDisplaySize(this.convertScaleData(40), this.convertScaleData(40))
-    )
+    // BONUS_PART.add(
+    //   this.add.sprite(mW - this.convertScaleData(50), mH, 'play').setDisplaySize(this.convertScaleData(40), this.convertScaleData(40))
+    // )
 
-    UI[UI_KEYS.COIN_VIDEO] = this.add.text(mW, mH, '80').setStyle({
-      ...this.text_main_style,
-      fontSize: this.convertScaleData(35) + 'px',
-      fill: '#fff',
-    }).setOrigin(0.5, 0.5)
-    BONUS_PART.add(UI[UI_KEYS.COIN_VIDEO])
+    // UI[UI_KEYS.COIN_VIDEO] = this.add.text(mW, mH, '80').setStyle({
+    //   ...this.text_main_style,
+    //   fontSize: this.convertScaleData(35) + 'px',
+    //   fill: '#fff',
+    // }).setOrigin(0.5, 0.5).setVisible(false)
+    // BONUS_PART.add(UI[UI_KEYS.COIN_VIDEO])
 
-    BONUS_PART.add(
-      this.add.sprite(mW + this.convertScaleData(55), mH - 3, 'bonus_video').setDisplaySize(this.convertScaleData(45), this.convertScaleData(45))
-    )
+    // BONUS_PART.add(
+    //   this.add.sprite(mW + this.convertScaleData(55), mH - 3, 'coin').setDisplaySize(this.convertScaleData(45), this.convertScaleData(45))
+    // )
 
-    UI[UI_KEYS.COIN_BONUS] = this.add.text(mW, mH + this.convertScaleData(60), 'Claim 20').setStyle({
+    UI[UI_KEYS.COIN_BONUS] = this.add.text(mW, mH + this.convertScaleData(0), 'Claim 20').setStyle({
       ...this.text_main_style,
       fontSize: this.convertScaleData(20) + 'px',
-      fill: '#faab41',
+      // fill: '#faab41',
+      fill: '#ffffff',
     }).setOrigin(0.5, 0.5).setInteractive().on('pointerup', () => {
       this.changeScreen(LAYOUT_KEYS.BONUS, false)
       this.addScreen(LAYOUT_KEYS.SCORE)
@@ -586,7 +588,7 @@ export default class WordleScene extends Phaser.Scene {
     BONUS_PART.add(UI[UI_KEYS.COIN_BONUS])
 
     BONUS_PART.add(
-      this.add.sprite(mW + this.convertScaleData(65), mH + this.convertScaleData(55), 'bonus_video').setDisplaySize(this.convertScaleData(30), this.convertScaleData(30))
+      this.add.sprite(mW + this.convertScaleData(65), mH + this.convertScaleData(-15), 'coin').setDisplaySize(this.convertScaleData(40), this.convertScaleData(40))
     )
 
     BONUS_PART.setVisible(false)
@@ -721,16 +723,16 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     
-    GUIDE_PART.add(
-      this.add.text(mW, mH + this.convertScaleData(70), 'EXAMPLE').setOrigin(0.5, 0.5).setStyle({
-        ...this.text_main_style,
-        fontSize: this.convertScaleData(40) + 'px',
-        fill: '#fff',
-      })
-    )
+    // GUIDE_PART.add(
+    //   this.add.text(mW, mH + this.convertScaleData(70), 'EXAMPLE').setOrigin(0.5, 0.5).setStyle({
+    //     ...this.text_main_style,
+    //     fontSize: this.convertScaleData(40) + 'px',
+    //     fill: '#fff',
+    //   })
+    // )
 
     GUIDE_PART.add(
-      this.add.sprite(mW, mH + this.convertScaleData(180), 'h4').setDisplaySize(this.convertScaleData(250), this.convertScaleData(50))
+      this.add.sprite(mW, mH + this.convertScaleData(170), 'help').setDisplaySize(this.convertScaleData(350), this.convertScaleData(245))
     )
 
     GUIDE_PART.setVisible(false)
@@ -816,7 +818,7 @@ export default class WordleScene extends Phaser.Scene {
       GAME.CUR_COIN = SCORE_SYSTEM[GAME.LINE].coin;
       this.addScreen(LAYOUT_KEYS.BONUS)
       
-      UI[UI_KEYS.COIN_VIDEO].setText(GAME.CUR_COIN * 2.5)
+      // UI[UI_KEYS.COIN_VIDEO].setText(GAME.CUR_COIN * 2.5)
       UI[UI_KEYS.COIN_BONUS].setText(`Claim ${GAME.CUR_COIN}`)
       
       GAME.STREAK++;
