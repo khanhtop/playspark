@@ -38,31 +38,36 @@ export default function ClientProfile({ user, setScreen }) {
           text="Refer friends and get coins when they sign up PLUS when they play a game."
           bgColor={user.accentColor}
           textColor={user.primaryColor}
+          img="/badges/wallet.png"
         />
         <ProfileButton
           heading="My Items"
           text="View your earned or redeemed items."
           bgColor={user.accentColor}
           textColor={user.primaryColor}
+          img="/badges/items.png"
         />
         <ProfileButton
           heading="My Games"
           text="View your active games."
           bgColor={user.accentColor}
           textColor={user.primaryColor}
+          img="/badges/pad.png"
         />
       </div>
     </ClientPageWrapper>
   );
 }
 
-function ProfileButton({ bgColor, textColor, heading, text }) {
+function ProfileButton({ bgColor, textColor, heading, text, img }) {
   return (
     <div
-      className="cursor-pointer mx-5 rounded-2xl px-4 py-4 font-roboto mb-4 max-w-[500px]"
+      className="flex gap-4 cursor-pointer mx-5 rounded-2xl px-4 py-4 font-roboto mb-4 max-w-[500px]"
       style={{ backgroundColor: bgColor, color: textColor }}
     >
-      <div></div>
+      <div className="h-8 w-8">
+        <img src={img} />
+      </div>
       <div>
         <h1 className="uppercase font-extrabold text-xl">{heading}</h1>
         <p className="font-light">{text}</p>

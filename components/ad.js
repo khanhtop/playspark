@@ -21,6 +21,7 @@ import { getHighScore } from "@/helpers/leaderboard";
 import NotificationBar from "./ui/notification";
 import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 import Modal from "./ui/modal";
+import { sendEvent } from "@/helpers/analytics";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -135,6 +136,10 @@ export default function Advert({ data, theme }) {
     determineConstraints();
   }, []);
 
+  useEffect(() => {
+    sendEvent(context, data, "start");
+  }, [window?.gtag]);
+
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 
   useEffect(() => {
@@ -153,7 +158,6 @@ export default function Advert({ data, theme }) {
           const evQueue = [...prevQueue];
           const popped = evQueue.pop();
           context.showEvent(popped);
-          console.log(evQueue, popped);
           return [...evQueue];
         });
       }, 3500);

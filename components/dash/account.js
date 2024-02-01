@@ -10,11 +10,13 @@ import SubNav from "../nav/subnav";
 import Usage from "./usage";
 import API from "./api";
 import { ColorPicker } from "./createTournamentModal";
+import AddRewardModal from "./qr/addRewardModal";
 
 export default function Account() {
   const context = useAppContext();
   const [nav, setNav] = useState("branding");
   const [loading, setLoading] = useState(false);
+  const [showRewardModal, setShowRewardModal] = useState(false);
 
   // Image Assets
   const [slug, setSlug] = useState();
@@ -85,9 +87,13 @@ export default function Account() {
             text: "Branding",
             value: "branding",
           },
+          // {
+          //   text: "Surveys",
+          //   value: "surveys",
+          // },
           {
-            text: "Surveys",
-            value: "surveys",
+            text: "Rewards",
+            value: "rewards",
           },
           {
             text: "Email",
@@ -189,6 +195,29 @@ export default function Account() {
       {nav === "surveys" && (
         <>
           <p className="text-white/70 text-sm">Placeholder</p>
+        </>
+      )}
+      {nav === "rewards" && (
+        <>
+          <div className="flex flex-col">
+            <p className="text-white/70 text-md">
+              Add Rewards To Your Platform
+            </p>
+            <p className="text-white/50 text-sm mb-4">
+              Reward users with perks and offers that they can redeem at the
+              point of redemption using a single-use QR code.
+            </p>
+            <button
+              onClick={() => setShowRewardModal(true)}
+              className="cursor-pointer w-[200px] h-12 rounded-lg bg-cyan-400 mt-0 flex items-center justify-center"
+            >
+              Add Reward
+            </button>
+            <AddRewardModal
+              isOpen={showRewardModal}
+              onClose={() => setShowRewardModal(false)}
+            />
+          </div>
         </>
       )}
       {nav === "email" && (
