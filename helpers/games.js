@@ -144,7 +144,7 @@ export const games = [
     additionalSpriteOne:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849184/Fall_-_head_-_basketball_yqri0q.png",
     additionalSpriteTwo:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704931110/iiukoen08wivafjit9kr.png",
     tags: {
       playerSprite: "body",
       objectSprite: "1.0",
@@ -152,7 +152,7 @@ export const games = [
       enemySprite: "1.0",
       powerUpSprite: "1.0",
       additionalSpriteOne: "head",
-      additionalSpriteTwo: "weapon",
+      additionalSpriteTwo: "1.0",
     },
   },
   {
