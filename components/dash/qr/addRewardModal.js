@@ -1,8 +1,56 @@
 import Button from "@/components/forms/button";
 import Input from "@/components/forms/input";
+import { firestore } from "@/helpers/firebase";
+import { useAppContext } from "@/helpers/store";
+import { addDoc, collection } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AddRewardModal({ user, isOpen, onClose, children }) {
   if (!isOpen) return <div />;
+  const context = useAppContext();
+  const [valid, setValid] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [reward, setReward] = useState({
+    name: "",
+    description: "",
+    quantity: 2,
+  });
+
+  useEffect(() => {
+    if (
+      reward.name.length > 0 &&
+      reward.description.length > 0 &&
+      reward.quantity > 0
+    ) {
+      setValid(true);
+    } else {
+      setValid(false);
+    }
+  }, [reward]);
+
+  const addReward = async () => {
+    setLoading(true);
+    const uniqueId = uuidv4();
+    const { name, description, quantity } = reward;
+    const rewardsCollection = collection(firestore, "rewards");
+    for (let i = 0; i < quantity; i++) {
+      const newReward = {
+        name: name,
+        description: description,
+        timestamp: Date.now(),
+        rewardTypeId: uniqueId,
+        rewardId: Date.now().toString() + i.toString(),
+        ownerId: context?.loggedIn?.uid,
+        ownerName: context?.profile?.companyName,
+        isPurchased: false,
+        isRedeemed: false,
+      };
+      await addDoc(rewardsCollection, newReward);
+    }
+    setLoading(false);
+    onClose();
+  };
 
   return (
     <div
@@ -23,7 +71,8 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
           label="Reward name"
           labelColor="text-white/70"
           placeholder="My reward"
-          // value={context?.profile?.apiKey}
+          onChange={(e) => setReward({ ...reward, name: e.target.value })}
+          value={reward.name}
           readonly={true}
         />
         <Input
@@ -31,19 +80,30 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
           label="Reward description"
           labelColor="text-white/70"
           placeholder="My reward entitles you to..."
-          // value={context?.profile?.apiKey}
+          onChange={(e) =>
+            setReward({ ...reward, description: e.target.value })
+          }
+          value={reward.description}
           readonly={true}
         />
         <Input
           className="w-full h-10"
           label="Amount of token required to redeem"
           labelColor="text-white/70"
-          placeholder="Click Generate To Generate an API Key"
-          value={100}
+          placeholder="0"
+          value={reward.quantity}
           readonly={true}
+          onChange={(e) => setReward({ ...reward, quantity: e.target.value })}
           type="number"
         />
-        <Button onClick={() => onClose()}>Add Reward</Button>
+        <Button
+          onClick={() => {
+            addReward();
+          }}
+          disabled={!valid || loading}
+        >
+          Add Reward
+        </Button>
       </div>
     </div>
   );

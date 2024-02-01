@@ -136,9 +136,9 @@ export default function Advert({ data, theme }) {
     determineConstraints();
   }, []);
 
-  useEffect(() => {
-    sendEvent(context, data, "start");
-  }, [window?.gtag]);
+  // useEffect(() => {
+  //   sendEvent(context, data, "start");
+  // }, [window?.gtag]);
 
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 

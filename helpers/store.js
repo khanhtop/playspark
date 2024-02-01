@@ -19,6 +19,7 @@ export function AppWrapper({ children }) {
   const [loggedIn, setLoggedIn] = useState();
   const [profile, setProfile] = useState();
   const [myGames, setMyGames] = useState();
+  const [rewards, setRewards] = useState();
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
   const [event, showEvent] = useState(false);
@@ -58,6 +59,7 @@ export function AppWrapper({ children }) {
     // Listen To Profile
     let _profileUnsub = () => null;
     let _myGamesUnsub = () => null;
+    let _rewardsUnsub = () => null;
     if (loggedIn && !profile) {
       _profileUnsub = onSnapshot(
         doc(firestore, "users", loggedIn.uid),
@@ -76,7 +78,7 @@ export function AppWrapper({ children }) {
         collection(firestore, "tournaments"),
         where("ownerId", "==", loggedIn.uid)
       );
-      const _myGamesUnsub = onSnapshot(q, (querySnapshot) => {
+      _myGamesUnsub = onSnapshot(q, (querySnapshot) => {
         const _myGames = [];
         querySnapshot.forEach((doc) => {
           _myGames.push(doc.data());
@@ -84,11 +86,27 @@ export function AppWrapper({ children }) {
         setMyGames(_myGames);
       });
     }
+
+    if (loggedIn && !rewards) {
+      const q = query(
+        collection(firestore, "rewards"),
+        where("ownerId", "==", loggedIn.uid)
+      );
+      _rewardsUnsub = onSnapshot(q, (querySnapshot) => {
+        const _rewards = [];
+        querySnapshot.forEach((doc) => {
+          _rewards.push(doc.data());
+        });
+        setRewards(_rewards);
+      });
+    }
     return () => {
       _profileUnsub();
       _myGamesUnsub();
+      _rewardsUnsub();
       setProfile();
       setMyGames();
+      setRewards();
     };
   }, [loggedIn]);
 
@@ -102,6 +120,7 @@ export function AppWrapper({ children }) {
     loggedIn,
     profile,
     myGames,
+    rewards,
     device,
     hasSeenSurvey,
     setHasSeenSurvey,

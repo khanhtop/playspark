@@ -11,6 +11,7 @@ import Usage from "./usage";
 import API from "./api";
 import { ColorPicker } from "./createTournamentModal";
 import AddRewardModal from "./qr/addRewardModal";
+import GroupedRewards from "./qr/groupedRewards";
 
 export default function Account() {
   const context = useAppContext();
@@ -217,6 +218,7 @@ export default function Account() {
               isOpen={showRewardModal}
               onClose={() => setShowRewardModal(false)}
             />
+            <GroupedRewards />
           </div>
         </>
       )}
