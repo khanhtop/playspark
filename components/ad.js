@@ -207,6 +207,7 @@ export default function Advert({ data, theme }) {
           enemySprite: data?.enemySprite,
           powerUpSprite: data?.powerUpSprite,
           additionalSpriteOne: data?.additionalSpriteOne,
+          additionalSpriteTwo: data?.additionalSpriteTwo,
           maxscore: prevBest ?? 0,
           words: data?.words || [],
         })}
