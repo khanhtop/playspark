@@ -18,3 +18,13 @@ export function groupRewards(rewards) {
   }
   return out;
 }
+
+export function getAvailableReward(rewards) {
+  const out = [];
+  for (let elem of rewards.filter((a) => !a.isPurchased)) {
+    if (out.findIndex((a) => a.rewardTypeId === elem.rewardTypeId) === -1) {
+      out.push(elem);
+    }
+  }
+  return out;
+}

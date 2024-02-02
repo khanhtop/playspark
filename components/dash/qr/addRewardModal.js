@@ -15,6 +15,7 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
     name: "",
     description: "",
     quantity: 2,
+    price: 200,
   });
 
   useEffect(() => {
@@ -32,12 +33,13 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
   const addReward = async () => {
     setLoading(true);
     const uniqueId = uuidv4();
-    const { name, description, quantity } = reward;
+    const { name, description, quantity, price } = reward;
     const rewardsCollection = collection(firestore, "rewards");
     for (let i = 0; i < quantity; i++) {
       const newReward = {
         name: name,
         description: description,
+        price: price,
         timestamp: Date.now(),
         rewardTypeId: uniqueId,
         rewardId: Date.now().toString() + i.toString(),
@@ -89,6 +91,16 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
         <Input
           className="w-full h-10"
           label="Amount of token required to redeem"
+          labelColor="text-white/70"
+          placeholder="200"
+          value={reward.price}
+          readonly={true}
+          onChange={(e) => setReward({ ...reward, price: e.target.value })}
+          type="number"
+        />
+        <Input
+          className="w-full h-10"
+          label="Number of rewards to issue"
           labelColor="text-white/70"
           placeholder="0"
           value={reward.quantity}
