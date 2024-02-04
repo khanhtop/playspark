@@ -49,7 +49,11 @@ export default function ClientCoins({ user, screen, setScreen }) {
           </div>
           <div className="grid grid-cols-2 mt-6 pb-8 px-5 gap-4">
             {context?.rewards
-              ?.filter((a) => a.purchasedBy === context.loggedIn?.uid)
+              ?.filter(
+                (a) =>
+                  a.purchasedBy === context.loggedIn?.uid &&
+                  a.isRedeemed === false
+              )
               ?.map((item, key) => (
                 <RewardCard user={user} item={item} key={key} isRedeem={true} />
               ))}

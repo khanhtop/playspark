@@ -84,7 +84,7 @@ export default function RewardCard({ user, item, isRedeem }) {
             Show the QR code to the vendor to redeem your reward.
           </p>
           <QR
-            value={`https://dev.playspark.com/redeem/${item.ownerId}?itemId=${item.rewardId}`}
+            value={`https://dev.playspark.co/redeem/${item.ownerId}?itemId=${item.rewardId}`}
           />
           <UIButton
             onClick={() => {
