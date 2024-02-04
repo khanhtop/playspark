@@ -95,7 +95,7 @@ export function AppWrapper({ children }) {
       _rewardsUnsub = onSnapshot(q, (querySnapshot) => {
         const _rewards = [];
         querySnapshot.forEach((doc) => {
-          _rewards.push(doc.data());
+          _rewards.push({ ...doc.data(), id: doc.id });
         });
         setRewards(_rewards);
       });

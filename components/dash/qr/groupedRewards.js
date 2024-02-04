@@ -64,6 +64,9 @@ function RewardCard({ item, onDelete }) {
         <p>{item.name}</p>
         <p className="text-sm text-white/70">{item.description}</p>
         <p className="mt-2">
+          <p className="mt-2">
+            Total Purchased: {item.totalPurchased}/{item.totalIssued}
+          </p>
           Total Redeemed: {item.totalRedeemed}/{item.totalIssued}
         </p>
       </div>

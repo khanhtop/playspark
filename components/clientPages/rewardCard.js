@@ -1,6 +1,33 @@
+import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import UIButton from "../ui/button";
+import { firestore } from "@/helpers/firebase";
+import { useState } from "react";
+import { useAppContext } from "@/helpers/store";
+import EmbeddedModal from "./embeddedModal";
+import QR from "../dash/qr/qr";
 
-export default function RewardCard({ user, item }) {
+export default function RewardCard({ user, item, isRedeem }) {
+  const context = useAppContext();
+  const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const claimReward = async () => {
+    setLoading(true);
+    await updateDoc(doc(firestore, "rewards", item.id), {
+      isPurchased: true,
+      purchasedBy: context?.loggedIn?.uid,
+    });
+    setLoading(false);
+    alert("Reward Claimed");
+  };
+
+  const redeemReward = async () => {
+    console.log(
+      `https://dev.playspark.com/redeem/${item.ownerId}?itemId=${item.rewardId}`
+    );
+    setShowModal(true);
+  };
+
   return (
     <div
       className={`flex flex-col font-octo rounded-3xl text-base overflow-hidden relative group h-[260px] shadow-lg hover:shadow-md shadow-black/50`}
@@ -14,10 +41,11 @@ export default function RewardCard({ user, item }) {
       >
         <div className="flex justify-end w-full">
           <UIButton
-            onClick={() => null}
+            loading={loading}
+            onClick={() => (isRedeem ? redeemReward() : claimReward())}
             primaryColor={user.accentColor}
             textColor={user.primaryColor}
-            text="Claim"
+            text={isRedeem ? "Redeem" : "Claim"}
             className=""
           />
         </div>
@@ -25,15 +53,50 @@ export default function RewardCard({ user, item }) {
       <div>
         <div className="flex justify-between pt-4 px-4 items-center">
           <h3 className="text-2xl">{item.name}</h3>
-          <div className="flex items-center gap-4">
-            <img src="/clientPages/coins.png" className="h-6 w-6" />
-            <p className="text-2xl">{item.price}</p>
-          </div>
+          {!isRedeem && (
+            <div className="flex items-center gap-4">
+              <img src="/clientPages/coins.png" className="h-6 w-6" />
+              <p className="text-2xl">{item.price}</p>
+            </div>
+          )}
         </div>
-        <h3 className="text-base opacity-70 font-roboto px-4 pb-4">
+        <h3 className="text-base opacity-70 font-roboto px-4 ">
           {item.description}
         </h3>
+        {isRedeem ? (
+          <div className="h-4" />
+        ) : (
+          <h3 className="text-sm opacity-50 uppercase text-right font-roboto px-4 pb-4 pb-4">
+            {item.totalIssued - item.totalRedeemed} Left To Claim
+          </h3>
+        )}
       </div>
+      <EmbeddedModal
+        isOpen={showModal}
+        user={user}
+        onClose={() => {
+          setShowModal(false);
+        }}
+      >
+        <div className="h-full w-full px-4 py-4 flex flex-col">
+          <h1 className="text-3xl mb-2">Redeem Reward</h1>
+          <p className="font-roboto mb-4">
+            Show the QR code to the vendor to redeem your reward.
+          </p>
+          <QR
+            value={`https://dev.playspark.com/redeem/${item.ownerId}?itemId=${item.rewardId}`}
+          />
+          <UIButton
+            onClick={() => {
+              setShowModal(false);
+            }}
+            primaryColor={user.accentColor}
+            textColor={user.primaryColor}
+            text="Close"
+            className="mt-4"
+          />
+        </div>
+      </EmbeddedModal>
     </div>
   );
 }

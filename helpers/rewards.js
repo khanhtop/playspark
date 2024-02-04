@@ -11,7 +11,10 @@ export function groupRewards(rewards) {
         totalIssued: rewards.filter((a) => a.rewardTypeId === elem.rewardTypeId)
           ?.length,
         totalRedeemed: rewards.filter(
-          (a) => a.rewardTypeId === elem.rewardTypeId && e.isRedeemed === true
+          (a) => a.rewardTypeId === elem.rewardTypeId && a.isRedeemed === true
+        )?.length,
+        totalPurchased: rewards.filter(
+          (a) => a.rewardTypeId === elem.rewardTypeId && a.isPurchased === true
         )?.length,
       });
     }
@@ -20,10 +23,18 @@ export function groupRewards(rewards) {
 }
 
 export function getAvailableReward(rewards) {
+  if (!rewards) return [];
   const out = [];
   for (let elem of rewards.filter((a) => !a.isPurchased)) {
     if (out.findIndex((a) => a.rewardTypeId === elem.rewardTypeId) === -1) {
-      out.push(elem);
+      out.push({
+        ...elem,
+        totalIssued: rewards.filter((a) => a.rewardTypeId === elem.rewardTypeId)
+          ?.length,
+        totalRedeemed: rewards.filter(
+          (a) => a.rewardTypeId === elem.rewardTypeId && a.isPurchased === true
+        )?.length,
+      });
     }
   }
   return out;
