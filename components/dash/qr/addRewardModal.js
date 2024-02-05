@@ -1,4 +1,5 @@
 import Button from "@/components/forms/button";
+import ImagePicker from "@/components/forms/imagePicker";
 import Input from "@/components/forms/input";
 import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
@@ -16,13 +17,16 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
     description: "",
     quantity: 2,
     price: 200,
+    image: "",
   });
 
   useEffect(() => {
     if (
       reward.name.length > 0 &&
       reward.description.length > 0 &&
-      reward.quantity > 0
+      reward.quantity > 0 &&
+      reward.image &&
+      reward.image !== ""
     ) {
       setValid(true);
     } else {
@@ -41,6 +45,7 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
         description: description,
         price: price,
         timestamp: Date.now(),
+        image: reward.image,
         rewardTypeId: uniqueId,
         rewardId: Date.now().toString() + i.toString(),
         ownerId: context?.loggedIn?.uid,
@@ -68,6 +73,18 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
         }}
       >
         <h1 className="text-white">Add A Reward</h1>
+        <div className="text-white">
+          <ImagePicker
+            cover
+            width={200}
+            height={100}
+            label="Reward Image"
+            image={reward?.image}
+            onChange={(url) => {
+              setReward({ ...reward, image: url });
+            }}
+          />
+        </div>
         <Input
           className="w-full h-10"
           label="Reward name"

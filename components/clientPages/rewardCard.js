@@ -34,7 +34,7 @@ export default function RewardCard({ user, item, isRedeem }) {
     >
       <div
         style={{
-          backgroundImage: `url("/badges/challenge.png")`,
+          backgroundImage: `url("${item.image}")`,
           transition: "0.5s all",
         }}
         className="bg-center bg-cover flex-1 flex items-end p-2"

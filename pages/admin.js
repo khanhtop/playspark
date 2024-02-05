@@ -5,6 +5,7 @@ import MarketPlace from "@/components/dash/marketplace";
 import MyGames from "@/components/dash/mygames";
 import Pane from "@/components/dash/pane";
 import Profile from "@/components/dash/profile";
+import Rewards from "@/components/dash/rewards";
 import Sidebar from "@/components/dash/sidebar";
 import Usage from "@/components/dash/usage";
 import Users from "@/components/dash/users";
@@ -52,6 +53,10 @@ export default function Application() {
           ) : selectedPane === 7 ? (
             <Pane title="Account">
               <Account />
+            </Pane>
+          ) : selectedPane === 8 ? (
+            <Pane title="Rewards">
+              <Rewards />
             </Pane>
           ) : (
             <Pane />

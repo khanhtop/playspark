@@ -55,26 +55,41 @@ export default function GroupedRewards({}) {
 
 function RewardCard({ item, onDelete }) {
   return (
-    <div className="relative text-white bg-black/20 py-4 px-4 rounded-lg flex gap-8">
-      <div className="h-16 w-16">
-        <QR value={`https://playspark.co/redeem/${item.rewardId}`} />
-      </div>
+    <div className="relative text-white bg-black/20 py-4 px-4 rounded-lg flex gap-4">
+      <img src={item.image} className="h-12 rounded-sm object-cover" />
 
       <div>
-        <p>{item.name}</p>
+        <div className="flex gap-2 items-center mb-1">
+          <p>{item.name}</p>
+          <div className="flex items-center gap-1 bg-white/10 px-3 py-0 rounded-full font-octo">
+            <img src="/clientPages/coins.png" className="h-4" />
+            <p className="mt-[1px]">{item.price}</p>
+          </div>
+        </div>
+
         <p className="text-sm text-white/70">{item.description}</p>
-        <p className="mt-2">
-          <p className="mt-2">
-            Total Purchased: {item.totalPurchased}/{item.totalIssued}
-          </p>
-          Total Redeemed: {item.totalRedeemed}/{item.totalIssued}
-        </p>
+        <div className="flex gap-4 flex-wrap  mt-4">
+          <StatBox text="Available" value={item.totalIssued} />
+          <StatBox text="Purchased" value={item.totalPurchased} />
+          <StatBox text="Redeemed" value={item.totalRedeemed} />
+        </div>
       </div>
       <div
         onClick={() => onDelete(item.rewardTypeId)}
         className="absolute top-4 right-4"
       >
         <XMarkIcon className="h-6 w-6" />
+      </div>
+    </div>
+  );
+}
+
+function StatBox({ text, value }) {
+  return (
+    <div className="flex items-center gap-2">
+      <p className="uppercase text-sm text-white/50 mt-[1px]">{text}</p>
+      <div className="text-xs h-[20px] min-w-[20px] px-1 rounded-full flex items-center justify-center ounded-full bg-cyan-500">
+        {value}
       </div>
     </div>
   );
