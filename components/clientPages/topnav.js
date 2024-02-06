@@ -54,7 +54,7 @@ export default function TopNav({
             />
             <Avatar
               onClick={() => setScreen("profile")}
-              name={data?.companyName}
+              name={context?.profile?.companyName || "?"}
               data={data}
             />
           </div>

@@ -24,9 +24,10 @@ import {
   getDocs,
   orderBy,
   limit,
+  onSnapshot,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export default function PageHandler({
   user,
@@ -40,6 +41,32 @@ export default function PageHandler({
   const [showLogin, setShowLogin] = useState(false);
   const [screen, setScreen] = useState("home");
   const [activeGame, setActiveGame] = useState();
+  const _rewardsUnsub = useRef(null);
+  const [rewards, setRewards] = useState([]);
+
+  // Create Rewards Listener
+  const getRewards = () => {
+    const q = query(
+      collection(firestore, "rewards"),
+      where("ownerId", "==", user.id)
+    );
+    _rewardsUnsub.current = onSnapshot(q, (querySnapshot) => {
+      const _rewards = [];
+      querySnapshot.forEach((doc) => {
+        _rewards.push({ ...doc.data(), id: doc.id });
+      });
+      setRewards(_rewards);
+    });
+  };
+
+  useEffect(() => {
+    if (_rewardsUnsub.current === null) {
+      getRewards();
+    }
+    return () => {
+      _rewardsUnsub?.current();
+    };
+  }, []);
 
   const data = {
     user: {
@@ -48,6 +75,7 @@ export default function PageHandler({
       accentColor: user.accentColor ?? "#00DDFF",
       textColor: user.textColor ?? "#FFF",
     },
+    rewards,
     tournaments,
     tournamentsByPlayCount,
     tournamentsByDate,
@@ -55,7 +83,7 @@ export default function PageHandler({
     context,
     setScreen: (s) => {
       if (screen === "game") {
-        router.reload();
+        router.replace(router.asPath);
       }
       setScreen(s);
     },

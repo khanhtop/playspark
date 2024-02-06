@@ -13,9 +13,13 @@ export default function RewardCard({ user, item, isRedeem }) {
 
   const claimReward = async () => {
     setLoading(true);
+    console.log(item.id);
     await updateDoc(doc(firestore, "rewards", item.id), {
       isPurchased: true,
       purchasedBy: context?.loggedIn?.uid,
+    });
+    await updateDoc(doc(firestore, "users", context?.loggedIn?.uid), {
+      totalScore: context?.profile?.totalScore - item.price,
     });
     setLoading(false);
     alert("Reward Claimed");
@@ -42,10 +46,22 @@ export default function RewardCard({ user, item, isRedeem }) {
         <div className="flex justify-end w-full">
           <UIButton
             loading={loading}
-            onClick={() => (isRedeem ? redeemReward() : claimReward())}
+            onClick={() =>
+              isRedeem
+                ? redeemReward()
+                : context?.profile?.totalScore >= item.price
+                ? claimReward()
+                : null
+            }
             primaryColor={user.accentColor}
             textColor={user.primaryColor}
-            text={isRedeem ? "Redeem" : "Claim"}
+            text={
+              isRedeem
+                ? "Redeem"
+                : context?.profile?.totalScore >= item.price
+                ? "Claim"
+                : "Need More Coins"
+            }
             className=""
           />
         </div>

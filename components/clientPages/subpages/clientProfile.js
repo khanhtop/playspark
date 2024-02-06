@@ -3,6 +3,7 @@ import AccountInfo from "../accountInfo";
 import ClientPageWrapper from "../clientPageWrapper";
 import Hero from "../hero";
 import Achievements from "../achievements";
+import { logout } from "@/helpers/firebase";
 
 export default function ClientProfile({ user, setScreen }) {
   const context = useAppContext();
@@ -15,6 +16,7 @@ export default function ClientProfile({ user, setScreen }) {
       <AccountInfo
         vertical
         data={user}
+        user={context.profile}
         context={context}
         totalXp={context?.profile?.totalXp || 0}
         totalCoins={context?.profile?.totalScore || 0}
@@ -54,14 +56,23 @@ export default function ClientProfile({ user, setScreen }) {
           textColor={user.primaryColor}
           img="/badges/pad.png"
         />
+        <ProfileButton
+          heading="Sign Out"
+          text="Sign out."
+          bgColor={user.accentColor}
+          textColor={user.primaryColor}
+          onClick={() => logout()}
+          // img="/badges/pad.png"
+        />
       </div>
     </ClientPageWrapper>
   );
 }
 
-function ProfileButton({ bgColor, textColor, heading, text, img }) {
+function ProfileButton({ bgColor, textColor, heading, text, img, onClick }) {
   return (
     <div
+      onClick={() => (onClick ? onClick() : null)}
       className="flex gap-4 cursor-pointer mx-5 rounded-2xl px-4 py-4 font-roboto mb-4 max-w-[500px]"
       style={{ backgroundColor: bgColor, color: textColor }}
     >
