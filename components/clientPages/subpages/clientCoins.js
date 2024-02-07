@@ -6,13 +6,12 @@ import { useAppContext } from "@/helpers/store";
 import { getAvailableReward } from "@/helpers/rewards";
 import RewardCard from "../rewardCard";
 import { firestore } from "@/helpers/firebase";
+import AreaPills from "../pills";
 
 export default function ClientCoins({ user, rewards, setScreen }) {
   const [tab, setTab] = useState("wallet");
   const [subTab, setSubTab] = useState("offers");
   const context = useAppContext();
-
-  console.log(rewards);
 
   return (
     <ClientPageWrapper
@@ -64,20 +63,8 @@ export default function ClientCoins({ user, rewards, setScreen }) {
       )}
       {tab === "marketplace" && (
         <>
-          <div
-            style={{ color: user.textColor }}
-            className="flex rounded-xl shadow-lg justify-center gap-4 bg-black/10 mt-4 mx-4 px-4 py-8 font-octo text-5xl"
-          >
-            <div>
-              <img src="/clientPages/coins.png" />
-            </div>
-            <div className="flex flex-col gap-2 justify-center">
-              <p className="text-2xl">Available Coin Balance</p>
-              <p>{context?.profile?.totalScore ?? 0}</p>
-            </div>
-          </div>
           <div className="px-4 mt-6">
-            <AreaTabs
+            <AreaPills
               user={user}
               onClick={(a) => setSubTab(a.value)}
               selected={subTab}

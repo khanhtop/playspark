@@ -13,7 +13,6 @@ export default function RewardCard({ user, item, isRedeem }) {
 
   const claimReward = async () => {
     setLoading(true);
-    console.log(item.id);
     await updateDoc(doc(firestore, "rewards", item.id), {
       isPurchased: true,
       purchasedBy: context?.loggedIn?.uid,
@@ -79,13 +78,16 @@ export default function RewardCard({ user, item, isRedeem }) {
         <h3 className="text-base opacity-70 font-roboto px-4 ">
           {item.description}
         </h3>
-        {isRedeem ? (
-          <div className="h-4" />
-        ) : (
-          <h3 className="text-sm opacity-50 uppercase text-right font-roboto px-4 pb-4 pb-4">
-            {item.totalIssued - item.totalRedeemed} Left To Claim
-          </h3>
-        )}
+        <div className="flex justify-between px-4 font-roboto text-sm opacity-50 uppercase mt-2 pb-3">
+          <p>{item.address}</p>
+          {isRedeem ? (
+            <div className="h-4" />
+          ) : (
+            <h3 className="text-right">
+              {item.totalIssued - item.totalRedeemed} Left To Claim
+            </h3>
+          )}
+        </div>
       </div>
       <EmbeddedModal
         isOpen={showModal}
@@ -94,14 +96,25 @@ export default function RewardCard({ user, item, isRedeem }) {
           setShowModal(false);
         }}
       >
-        <div className="h-full w-full px-4 py-4 flex flex-col">
-          <h1 className="text-3xl mb-2">Redeem Reward</h1>
-          <p className="font-roboto mb-4">
+        <div className="h-full w-full px-4 py-4 flex flex-col font-roboto">
+          <h1 className="text-3xl mb-2 font-octo">Redeem Reward</h1>
+          <p className="font-roboto mb-4 text-black/70">
             Show the QR code to the vendor to redeem your reward.
           </p>
-          <QR
-            value={`https://dev.playspark.co/redeem/${item.ownerId}?itemId=${item.rewardId}`}
-          />
+          <div className="flex mb-4 gap-4">
+            <img src={item.image} className="h-20 rounded-lg" />
+            <div className="flex-1 flex-col">
+              <p className="font-bold">{item.name}</p>
+              <p className="h-10">{item.description}</p>
+              <p className="text-xs uppercase text-black/70">{item.address}</p>
+            </div>
+          </div>
+          <div className="flex-1 flex items-center justify-center bg-black/5 rounded-lg">
+            <QR
+              value={`https://dev.playspark.co/redeem/${item.ownerId}?itemId=${item.rewardId}`}
+            />
+          </div>
+
           <UIButton
             onClick={() => {
               setShowModal(false);

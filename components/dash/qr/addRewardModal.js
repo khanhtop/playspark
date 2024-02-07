@@ -18,6 +18,7 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
     quantity: 2,
     price: 200,
     image: "",
+    address: "",
   });
 
   useEffect(() => {
@@ -26,6 +27,7 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
       reward.description.length > 0 &&
       reward.quantity > 0 &&
       reward.image &&
+      reward.address !== "" &&
       reward.image !== ""
     ) {
       setValid(true);
@@ -37,7 +39,7 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
   const addReward = async () => {
     setLoading(true);
     const uniqueId = uuidv4();
-    const { name, description, quantity, price } = reward;
+    const { name, description, quantity, price, address } = reward;
     const rewardsCollection = collection(firestore, "rewards");
     for (let i = 0; i < quantity; i++) {
       const newReward = {
@@ -46,6 +48,7 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
         price: price,
         timestamp: Date.now(),
         image: reward.image,
+        address: reward.address,
         rewardTypeId: uniqueId,
         rewardId: Date.now().toString() + i.toString(),
         ownerId: context?.loggedIn?.uid,
@@ -103,6 +106,15 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
             setReward({ ...reward, description: e.target.value })
           }
           value={reward.description}
+          readonly={true}
+        />
+        <Input
+          className="w-full h-10"
+          label="Reward location / address"
+          labelColor="text-white/70"
+          placeholder="100 51st Street, New York"
+          onChange={(e) => setReward({ ...reward, address: e.target.value })}
+          value={reward.address}
           readonly={true}
         />
         <Input

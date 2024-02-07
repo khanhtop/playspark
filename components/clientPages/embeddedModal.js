@@ -8,7 +8,7 @@ export default function EmbeddedModal({ user, isOpen, onClose, children }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[90%] h-[90%] max-w-[500px] max-h-[800px] border-2 rounded-2xl"
+        className="w-full h-[90%] max-w-[400px] max-h-[800px] border-2 rounded-2xl"
         style={{
           backgroundColor: user?.primaryColor,
           borderColor: user?.accentColor,
