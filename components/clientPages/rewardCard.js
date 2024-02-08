@@ -33,7 +33,9 @@ export default function RewardCard({ user, item, isRedeem }) {
 
   return (
     <div
-      className={`flex flex-col font-octo rounded-3xl text-base overflow-hidden relative group h-[260px] shadow-lg hover:shadow-md shadow-black/50`}
+      className={`flex flex-col font-octo rounded-3xl text-base overflow-hidden relative group h-[260px] shadow-lg hover:shadow-md ${
+        user.primaryColor === "#000000" ? "shadow-[#333]/50" : "shadow-black/50"
+      }`}
     >
       <div
         style={{
