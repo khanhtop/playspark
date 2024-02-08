@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
+import { setDoc } from "firebase/firestore";
 
 export default function AuthModal({ action, closeModal, user }) {
   const context = useAppContext();
@@ -125,7 +126,7 @@ export default function AuthModal({ action, closeModal, user }) {
                 </StyledButton>
               )}
             </div>
-            <div className="text-white flex gap-2">
+            <div className="flex gap-2">
               <p>
                 {authState === "register"
                   ? "Already have an account?"
@@ -150,11 +151,11 @@ export default function AuthModal({ action, closeModal, user }) {
 function LabeledInput({ onChange, secure, label, placeholder }) {
   return (
     <div className="mt-4">
-      <p className="ml-1 mb-2 font-slab text-white font-extralight text-xs uppercase">
+      <p className="ml-1 mb-2 font-slab font-extralight text-xs uppercase">
         {label}
       </p>
       <input
-        className="font-slab w-full bg-transparent bg-black/40 rounded-lg pb-3 pt-3 text-white px-4"
+        className="font-slab w-full bg-black/5 bg-black/40 rounded-lg pb-3 pt-3 px-4"
         type={secure ? "password" : "text"}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}

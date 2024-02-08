@@ -2,6 +2,7 @@ import AuthModal from "@/components/auth/authModal";
 import Areas from "@/components/clientPages/areas";
 import Hero from "@/components/clientPages/hero";
 import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
+import ProfileWrapper from "@/components/clientPages/profileWrapper";
 import ClientAchievements from "@/components/clientPages/subpages/clientAchievements";
 import ClientCoins from "@/components/clientPages/subpages/clientCoins";
 import ClientEmbeddedGame from "@/components/clientPages/subpages/clientEmbeddedGame";
@@ -94,7 +95,7 @@ export default function PageHandler({
 
   return (
     <>
-      <div className="min-h-screen">
+      <ProfileWrapper>
         {screen !== "game" && (
           <TopNav
             data={data.user}
@@ -112,7 +113,7 @@ export default function PageHandler({
         {screen === "notifications" && <ClientNotifications {...data} />}
         {screen === "game" && <ClientEmbeddedGame {...data} />}
         {screen === "achievements" && <ClientAchievements {...data} />}
-      </div>
+      </ProfileWrapper>
       {showLogin && (
         <AuthModal user={user} closeModal={() => setShowLogin(false)} />
       )}
