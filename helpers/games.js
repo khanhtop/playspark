@@ -62,6 +62,12 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 10,
+    cloudinaryGameTag: "spin-to-win",
+    tags: {
+      backgroundSprite: "0.6",
+    },
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
   },
   {
     name: "Cricket Smash",
@@ -166,6 +172,12 @@ export const games = [
     textColor: "#FFF",
     id: 15,
     words: ["SCORE", "PLAYS", "SMASH", "BLOCK", "DRIVE"],
+    cloudinaryGameTag: "wordle",
+    tags: {
+      backgroundSprite: "0.6",
+    },
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
   },
   {
     name: "Fly Ball",
