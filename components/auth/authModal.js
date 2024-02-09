@@ -51,6 +51,7 @@ export default function AuthModal({ action, closeModal, user }) {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setLoading(false);
+        closeModal();
       })
       .catch((error) => {
         setLoading(false);
