@@ -154,7 +154,6 @@ export default class WordleScene extends Phaser.Scene {
     console.log(newParams)
     this.params = newParams;
     sampleWords = [...this.params.words]
-    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + "/bg.jpg";
   }
 
   preload() {
@@ -178,6 +177,8 @@ export default class WordleScene extends Phaser.Scene {
     scrH = w * 0.175 / 1.614;
     heartR = w * 0.0625;
     heartNum = this.params.lives
+    
+    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + "/bg.jpg";
 
     this.load.image("bg", this.params.backgroundSprite);
     this.load.image("main-btn-bg", "/pong/" + gameType + "/main-btn-bg.png");
