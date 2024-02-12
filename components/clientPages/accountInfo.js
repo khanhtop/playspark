@@ -15,7 +15,6 @@ export default function AccountInfo({
   const [name, setName] = useState(context?.profile?.companyName);
 
   const updateProfile = () => {
-    console.log(name);
     if (name) {
       setDoc(
         doc(firestore, "users", context?.loggedIn?.uid),

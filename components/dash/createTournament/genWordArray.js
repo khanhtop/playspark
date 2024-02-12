@@ -55,7 +55,7 @@ export default function GenWordArray({
   const predefinedWordCount = tournament.words.length - customWords.length;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col mt-4">
       <p className="text-xs text-white mb-1">Game Theme</p>
       <select
         value={gameTheme}
