@@ -19,7 +19,7 @@ export default function Dashboard({}) {
       let _plays = [];
       let _optins = [];
       let _playableads = [];
-      for (let game of context.myGames) {
+      for (let game of context.myGames.filter((a) => !a.isArchived)) {
         if (game.name) {
           _names.push(game.name);
           _impressions.push(game.impressions);

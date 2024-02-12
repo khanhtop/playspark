@@ -35,7 +35,7 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           icon={<ChartBarIcon className="h-5" />}
         /> */}
         <Row
-          text="Users"
+          text="Audience & Data"
           selected={selectedPane === 6}
           setSelectedPane={() => setSelectedPane(6)}
           icon={<UsersIcon className="h-5" />}
