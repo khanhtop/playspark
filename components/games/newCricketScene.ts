@@ -589,7 +589,7 @@ export default class newCricketScene extends Phaser.Scene {
       }
 
     // KICK SPRITE LOAD
-    for(let i = 0; i < 2; i ++) {
+    for(let i = 1; i < 3; i ++) {
       this.load.spritesheet(
         `p${i}_player_jump`,
         '/pong/' + gameType + `/p${i}_player_jump.png`,
@@ -1093,21 +1093,21 @@ export default class newCricketScene extends Phaser.Scene {
 
     // HIT EFFECT
     // HIT EFFECT
-    const hit_frame = this.anims.generateFrameNames(
+    const hit_frame1 = this.anims.generateFrameNames(
       'hit_effect',
-      { start: -3, end: 12 }
+      { start: 0, end: 12 }
     );
     
     this.anims.create({
-      key: 'hit1',
-      frames: hit_frame,
+      key: 'hiteffect',
+      frames: hit_frame1,
       frameRate: 25,
       repeat: 0,
     });
 
-    this.hitEffect = this.add.sprite(w / 2, h / 2, 'score').setOrigin(0.5, 0.5).setDisplaySize(200, 200).setVisible(false);
+    this.hitEffect = this.add.sprite(w / 2, h / 2, 'hit_effect').setOrigin(0.5, 0.5).setDisplaySize(200, 200).setVisible(false);
 
-    // this.hitEffect.play("hit1");
+    this.hitEffect.play("hiteffect");
     // END HIT EFFECT
 
     const ball_frame = this.anims.generateFrameNames('ball_effect', {
@@ -3048,12 +3048,12 @@ export default class newCricketScene extends Phaser.Scene {
       }
     };
 
-    this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
-    this.cameras.main.postFX
-      .addColorMatrix()
-      .contrast(1.25)
-      .polaroid()
-      .brightness(0.9);
+    // this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
+    // this.cameras.main.postFX
+    //   .addColorMatrix()
+    //   .contrast(1.25)
+    //   .polaroid()
+    //   .brightness(0.9);
 
     this.initGame();
   }
@@ -3432,16 +3432,16 @@ export default class newCricketScene extends Phaser.Scene {
         .sprite(this.ball.x + 10, this.ball.y, 'ball_effect')
         .setDisplaySize(80, 80)
         .setOrigin(0.5, 0.5);
-      this.ball_effect.setVisible(true);
+      this.ball_effect.setVisible(false);
 
-      this.ball_effect.play('ball_animation');
-      this.ball_effect.on(
-        'animationcomplete',
-        () => {
-          this.ball_effect.setVisible(false);
-        },
-        this
-      );
+      // this.ball_effect.play('ball_animation');
+      // this.ball_effect.on(
+      //   'animationcomplete',
+      //   () => {
+      //     this.ball_effect.setVisible(false);
+      //   },
+      //   this
+      // );
 
       this.ball.setVelocity(
         (target_x - this.ball.x) * speed_scale,
@@ -3451,8 +3451,8 @@ export default class newCricketScene extends Phaser.Scene {
       const deltaX = this.ball.x - this.player.x;
       const deltaY = this.ball.y - this.player.y;
 
-      this.hitEffect.setPosition(this.ball.x + deltaX * this.ball.width / this.player.width, this.ball.y + deltaY * this.ball.width / this.player.width)
-      this.hitEffect.play("hit1")
+      this.hitEffect.setPosition(this.ball.x + deltaX * this.ball.body.width / this.player.body.width, this.ball.y + deltaY * this.ball.body.width / this.player.body.width).setVisible(true)
+      this.hitEffect.play("hiteffect")
       const angle = Phaser.Math.Angle.Between(this.player.x - this.hitEffect.x , this.player.y - this.hitEffect.y, 0, 0);
       this.hitEffect.setAngle(angle * 180 / Math.PI + 180)
 
@@ -3719,8 +3719,8 @@ export default class newCricketScene extends Phaser.Scene {
 
   update(time, delta) {
     const angle = Phaser.Math.Angle.Between(this.ball.x + this.ball.displayWidth / 2, this.ball.y + this.ball.displayHeight / 2, this.ballEffect.x, this.ballEffect.y);
-    this.ballEffect.setPosition(this.ball.x + this.ball.displayWidth / 2, this.ball.y + this.ball.displayHeight / 2);
-    this.ballEffect.setAngle(angle * 180 / Math.PI + 180);
+    // this.ballEffect.setPosition(this.ball.x + this.ball.displayWidth / 2, this.ball.y + this.ball.displayHeight / 2);
+    // this.ballEffect.setAngle(angle * 180 / Math.PI + 180);
 
     if (this.ball.y >= h / 2 + 200 * h / 688 && this.ball.type == 'new') {
       console.log("+++++++++++++++++++ball_________new")
