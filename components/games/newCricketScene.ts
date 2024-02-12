@@ -1107,7 +1107,7 @@ export default class newCricketScene extends Phaser.Scene {
 
     this.hitEffect = this.add.sprite(w / 2, h / 2, 'score').setOrigin(0.5, 0.5).setDisplaySize(200, 200).setVisible(false);
 
-    this.hitEffect.play("hit1");
+    // this.hitEffect.play("hit1");
     // END HIT EFFECT
 
     const ball_frame = this.anims.generateFrameNames('ball_effect', {
