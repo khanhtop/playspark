@@ -176,6 +176,16 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
+  
+  if (id === 17)
+    return (
+      <Pong
+        data={data}
+        gameType="newcricket"
+        callback={callback}
+        params={params}
+      />
+    );
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {

@@ -15,6 +15,7 @@ import NewPongScene from "./newPongScene";
 import WordleScene from "./wordleScene";
 import FlyBallScene from "./flyballScene";
 import newFallScene from "./newFallScene";
+import newCricketScene from "./newCricketScene";
 
 
 const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) => {
@@ -51,6 +52,8 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
         scene = new FlyBallScene(gameType, params);
       } else if(gameType == 'newfallball') {
         scene = new newFallScene(gameType, params);
+      } else if(gameType == 'newcricket') {
+        scene = new newCricketScene(gameType, params);      
       } else {
         scene = new MainScene(gameType, params);
       }
