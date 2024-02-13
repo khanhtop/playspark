@@ -667,45 +667,15 @@ export default class newFallScene extends Phaser.Scene {
     .setCollideWorldBounds(true)
     .setBounce(1, 1);
 
-    this.tweens.add({
-      targets: bball,
-      duration: 50000,
-      rotation: 360,
-      repeat: -1,
-    })
+    if(bball.type != 'bomb') {
+      this.tweens.add({
+        targets: bball,
+        duration: 50000,
+        rotation: 360,
+        repeat: -1,
+      })
+    }
 
-    // this.physics.add.overlap(
-    //   this.player,
-    //   bball,
-    //   (p, bb) => {
-    //     console.log("-------type : ", bb.type);
-
-    //     if(bb.type == "ball") {
-    //       // this.player.play('playerStatic')
-    //       this.ballHit.play();
-    //       comboNum++;
-    //       if(comboNum % 10 == 0) {
-    //         this.lifeup.play();
-    //         heartNum++;
-    //         this.lifeNumText.setText(heartNum);
-    //       }
-    //       this.score1(0);
-    //     } else if(bb.type == "bomb") {
-    //       this.bomb.play();
-    //       this.playBombEffect(bb.x, bb.y)
-    //       this.score1(1);
-    //     } else if(bb.type == "boosterBall") {
-    //       console.log('boosterBall hit')
-    //       this.setBooster();
-    //     }
-
-    //     this.randomBallPos(bb)
-
-    //     // if (!this.ballHit.isPlaying) this.ballHit.play();
-    //   },
-    //   null,
-    //   this
-    // );
 
     this.physics.add.overlap(
       this.boosterGroup,
@@ -827,12 +797,12 @@ export default class newFallScene extends Phaser.Scene {
     .setPosition(this.player.x, this.player.y)
     .setBounce(1, 1);
 
-    this.tweens.add({
-      targets: booster,
-      duration: 30000,
-      rotation: 360,
-      repeat: -1,
-    })
+    // this.tweens.add({
+    //   targets: booster,
+    //   duration: 30000,
+    //   rotation: 360,
+    //   repeat: -1,
+    // })
 
     booster.setVelocity(Math.cos(angle) * throwSpeed, Math.sin(angle) * throwSpeed);
     
