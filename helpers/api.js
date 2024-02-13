@@ -176,7 +176,7 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
-  
+
   if (id === 17)
     return (
       <Pong
@@ -240,8 +240,15 @@ export function switchTier(uid, tier) {
 }
 
 export function switchActive(tournamentId, state) {
-  console.log(tournamentId, state);
   updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
     isActive: !state,
   });
+}
+
+export async function archive(tournamentId) {
+  updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+    isArchived: true,
+    isActive: false,
+  });
+  return;
 }
