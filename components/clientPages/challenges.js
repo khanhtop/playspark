@@ -57,7 +57,11 @@ function ChallengeStatus({
 }) {
   const context = useAppContext();
   return (
-    <div className="flex flex-col font-octo rounded-3xl text-base overflow-hidden relative group min-w-[320px] h-[200px] shadow-lg hover:shadow-md shadow-black/50 ">
+    <div
+      className={`flex flex-col font-octo rounded-3xl text-base overflow-hidden relative group min-w-[320px] h-[200px] shadow-lg hover:shadow-md ${
+        backgroundColor === "#000000" ? "shadow-[#333]/50" : "shadow-black/50"
+      }`}
+    >
       <div
         style={{
           backgroundImage: `url("/badges/challenge.png")`,
