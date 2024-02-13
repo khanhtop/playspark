@@ -2248,7 +2248,7 @@ export default class newCricketScene extends Phaser.Scene {
       this.score6_1,
       this.ball,
       () => {
-        this.onColliderTarget(overlapCallback, this.score6_1, 10);
+        this.onColliderTarget(overlapCallback, this.score6_1, 10, true);
       },
       null,
       this
@@ -2257,7 +2257,7 @@ export default class newCricketScene extends Phaser.Scene {
       this.score6_2,
       this.ball,
       () => {
-        this.onColliderTarget(overlapCallback, this.score6_2, 10);
+        this.onColliderTarget(overlapCallback, this.score6_2, 10, true);
 
       },
       null,
@@ -2267,7 +2267,7 @@ export default class newCricketScene extends Phaser.Scene {
       this.score6_3,
       this.ball,
       () => {
-        this.onColliderTarget(overlapCallback, this.score6_3, 10);
+        this.onColliderTarget(overlapCallback, this.score6_3, 10, true);
 
       },
       null,
@@ -2277,7 +2277,7 @@ export default class newCricketScene extends Phaser.Scene {
       this.score6_4,
       this.ball,
       () => {
-        this.onColliderTarget(overlapCallback, this.score6_4, 10);
+        this.onColliderTarget(overlapCallback, this.score6_4, 10, true);
 
       },
       null,
@@ -2287,7 +2287,7 @@ export default class newCricketScene extends Phaser.Scene {
       this.score6_5,
       this.ball,
       () => {
-        this.onColliderTarget(overlapCallback, this.score6_5, 10);
+        this.onColliderTarget(overlapCallback, this.score6_5, 10, true);
       },
       null,
       this
@@ -2903,7 +2903,7 @@ export default class newCricketScene extends Phaser.Scene {
               this.game_pause = false;
               this.gray_bg.setAlpha(0);
               this.green_text_group.setVisible(false);
-              this.red_powerup_group.setVisible(true);
+              this.green_powerup_group.setVisible(true);
               this.fire_ball();
             },
             null,
@@ -3092,7 +3092,7 @@ export default class newCricketScene extends Phaser.Scene {
     power = 0;
   }
 
-  public onColliderTarget(handleFunc, targetObj, score) {
+  public onColliderTarget(handleFunc, targetObj, score, isRed = false) {
 
     if (this.ball.type == 'old') {
       console.log('11111111111111');
@@ -3114,6 +3114,18 @@ export default class newCricketScene extends Phaser.Scene {
 
       // this.hitball_effect.setPosition(this.ball.x, this.ball.y);
       // this.hitball_effect.play('hitball_effect');
+      if(isRed) {
+        red_powerup_cnt++;
+        if (red_powerup_cnt == 3) {
+          red_powerup_cnt = 0;
+          this.is_random = false;
+          this.is_red_powerup = false;
+          this.ball.setDisplaySize(50 * w / 1248, 50 * w / 1248);
+          this.ball.state = 'ball';
+          this.red_powerup_group.setVisible(false);
+        }
+      }
+
       if (this.is_green_powerup) {
         handleFunc(score * 5);
         this.updateRunsShow(`${score} x 5`);
@@ -3210,7 +3222,7 @@ export default class newCricketScene extends Phaser.Scene {
       this.fire_ball();
 
 
-      if (this.is_green_powerup == true) {
+      if (this.is_green_powerup) {
         green_powerup_cnt++;
         if (green_powerup_cnt == 3) {
           green_powerup_cnt = 0;
