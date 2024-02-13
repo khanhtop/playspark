@@ -78,7 +78,7 @@ export default function Outro({ score, setStage, data, reviveCount, onReset }) {
               text="Restart"
               {...data}
               onClick={() => {
-                restartEvent(context);
+                restartEvent(context, data);
                 onReset();
               }}
               className="h-12 rounded-full mt-2"

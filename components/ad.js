@@ -55,7 +55,7 @@ export default function Advert({ data, theme }) {
   }, [score]);
 
   const callback = (score) => {
-    scoreEvent(context, score);
+    scoreEvent(context, score, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
       setScore(score);
@@ -264,7 +264,7 @@ export default function Advert({ data, theme }) {
           gameType="wheelspin"
           callback={() => {
             incrementOptInCount(data.tournamentId);
-            playableAdFinishedCTA(context);
+            playableAdFinishedCTA(context, data);
             context.setModal({
               title: "You Win",
               contents: (

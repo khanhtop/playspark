@@ -34,7 +34,7 @@ export default function EmailSlide({ data }) {
     );
     await incrementOptInCount(data.tournamentId);
     context.setHasSubscribedToList(true);
-    emailAddedCTA(context);
+    emailAddedCTA(context, data);
     setLoading(false);
   };
 
