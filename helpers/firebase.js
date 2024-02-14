@@ -24,7 +24,7 @@ export const firestore = getFirestore(app);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 
-export const logout = () => {
+export const logout = (href) => {
   signOut(auth);
-  window.location.href = "/";
+  window.location.href = href || "/";
 };

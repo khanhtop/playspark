@@ -1,0 +1,25 @@
+import { useEffect, useState } from "react";
+
+export default function NotificationBar({ notification }) {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (notification) {
+      setOpen(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 3000);
+    }
+  }, [notification]);
+  return (
+    <div
+      style={{
+        right: open ? 0 : "-50%",
+        transition: "0.25s right",
+      }}
+      className="text-white absolute top-12 bg-black z-50 w-1/2 py-2 px-4 rounded-tl-lg rounded-bl-lg border-t-[1px] border-l-[1px] border-b-[1px] border-cyan-500/30"
+    >
+      <h3 className="font-octo font-bold text-2xl">{notification?.title}</h3>
+      <p className="text-md text-white/70 font-octo">{notification?.text}</p>
+    </div>
+  );
+}

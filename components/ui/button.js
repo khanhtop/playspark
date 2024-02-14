@@ -1,3 +1,5 @@
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
+
 export default function UIButton({
   text,
   primaryColor,
@@ -6,13 +8,14 @@ export default function UIButton({
   onClick,
   className,
   disabled,
+  loading,
 }) {
   if (theme === "pixel") {
     return (
       <button
-        disabled={disabled}
+        disabled={disabled || loading}
         onClick={onClick}
-        style={{ opacity: disabled ? 0.2 : 1 }}
+        style={{ opacity: disabled || loading ? 0.2 : 1 }}
         className={`${className} relative font-pixel flex text-xl hover:contrast-125 transition bg-sky-200 pb-1`}
       >
         <div
@@ -31,7 +34,11 @@ export default function UIButton({
             <p className="text-5xl mb-3">{`>`}</p>
           </div>
           <div className="px-8 flex items-center pb-2 text-4xl uppercase">
-            {text}
+            {loading ? (
+              <ArrowPathIcon className="h-7 w-7 animate-spin" />
+            ) : (
+              text
+            )}
           </div>
           <div className="w-full absolute bottom-0 bg-black/30 h-[5px]" />
         </div>
@@ -45,11 +52,13 @@ export default function UIButton({
       style={{
         backgroundColor: primaryColor,
         color: textColor,
-        opacity: disabled ? 0.2 : 1,
+        opacity: disabled || loading ? 0.2 : 1,
       }}
       className={`${className} font-titan text-xl rounded-full px-12 py-2 hover:contrast-125  transition`}
     >
-      <h3>{text}</h3>
+      <h3>
+        {loading ? <ArrowPathIcon className="h-7 w-7 animate-spin" /> : text}
+      </h3>
     </button>
   );
 }

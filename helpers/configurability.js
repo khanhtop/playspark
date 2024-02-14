@@ -8,6 +8,10 @@ export const configurableParameterTitles = {
       text: "Character Head",
       configurable: false,
     },
+    additionalSpriteTwo: {
+      text: "Weapon",
+      configurable: true,
+    },
     enemySprite: {
       text: "Obstacle Sprite",
       configurable: true,

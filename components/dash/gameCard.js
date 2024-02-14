@@ -79,7 +79,7 @@ export default function GameCard({
       <h5 className="font-roboto text-md mb-4 opacity-100 h-[92px] overflow-hidden">
         {game.description}
       </h5>
-      <div className="relative h-[540px] mt-6">
+      <div className="relative h-[300px] mt-6">
         {loading ? (
           <div className="h-full w-full flex items-center justify-center">
             <ArrowPathIcon className="h-8 w-8 animate-spin" />

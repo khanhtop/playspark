@@ -132,6 +132,7 @@ function Img({ item, selected, onSelect }) {
   return (
     <div
       onClick={() => {
+        console.log(item.url);
         onSelect(item.url);
       }}
       className={`h-full flex-shrink-0 rounded-lg overflow-hidden border-2 ${

@@ -1,4 +1,5 @@
 import CreateImageSlider from "./createImageSlider";
+import GenWordArray from "./genWordArray";
 
 export default function CreateConfiguration({
   tournament,
@@ -82,6 +83,36 @@ export default function CreateConfiguration({
           selected={tournament.additionalSpriteOne}
           updateSprite={(a) => {
             setTournament({ ...tournament, additionalSpriteOne: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["additionalSpriteTwo"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteTwo"
+          aspectRatio={tournament?.tags?.["additionalSpriteTwo"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 2`}
+          selected={tournament.additionalSpriteTwo}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteTwo: a });
+          }}
+        />
+      )}
+      {tournament?.words && (
+        <GenWordArray
+          tournament={tournament}
+          maxLength={5}
+          validationFn={(a) => {
+            null;
+          }}
+          isAdmin={isAdmin}
+          title={`Words`}
+          setWords={(a) => {
+            setTournament({ ...tournament, words: a });
+          }}
+          setTheme={(a) => {
+            setTournament({ ...tournament, wordleTheme: a });
           }}
         />
       )}

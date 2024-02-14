@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, increment, setDoc } from "firebase/firestore";
 import { firestore } from "./firebase";
 
 export const getLeaderboard = async (tournamentId) => {
@@ -45,6 +45,19 @@ export const updateLeaderboard = async (tournamentId, leaderboard) => {
   );
 };
 
+export const updateScoreAndXP = async (uid, score, companyId) => {
+  const xp = Math.floor(score / 12);
+  await setDoc(
+    doc(firestore, "users", uid.toString()),
+    {
+      memberOf: companyId.toString(),
+      totalScore: increment(score),
+    },
+    { merge: true }
+  );
+  return;
+};
+
 export const getHighScore = async (tournamentId, uid) => {
   if (!tournamentId) return [];
   const response = await getDoc(
@@ -54,4 +67,35 @@ export const getHighScore = async (tournamentId, uid) => {
   const position = rankings?.findIndex((a) => a.uid === uid);
   if (position === -1) return 0;
   return rankings[position].score;
+};
+
+export const computeTotalScore = (tournaments, uid) => {
+  if (!tournaments || !uid) return;
+  let totalScore = 0;
+  tournaments.forEach((tournament) => {
+    if (!tournament.leaderboard) return;
+    tournament.leaderboard.forEach((lb) => {
+      if (lb.uid === uid) {
+        totalScore += lb.score;
+      }
+    });
+  });
+  return totalScore;
+};
+
+export const computeAggregateLeaderboard = (tournaments, uid) => {
+  let lb = [];
+  tournaments.forEach((tourn) => {
+    if (tourn.leaderboard) {
+      tourn.leaderboard.forEach((ranking) => {
+        const index = lb.findIndex((item) => item.uid === ranking.uid);
+        if (index === -1) {
+          lb.push({ ...ranking, mine: ranking.uid === uid });
+        } else {
+          lb[index]["score"] += ranking.score;
+        }
+      });
+    }
+  });
+  return lb.sort((a, b) => b.score - a.score);
 };

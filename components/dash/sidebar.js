@@ -3,6 +3,7 @@ import {
   ChartBarIcon,
   ChevronRightIcon,
   Cog6ToothIcon,
+  GiftIcon,
   ScaleIcon,
   ShoppingCartIcon,
   Squares2X2Icon,
@@ -34,7 +35,7 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           icon={<ChartBarIcon className="h-5" />}
         /> */}
         <Row
-          text="Users"
+          text="Audience & Data"
           selected={selectedPane === 6}
           setSelectedPane={() => setSelectedPane(6)}
           icon={<UsersIcon className="h-5" />}
@@ -50,6 +51,12 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           selected={selectedPane === 1}
           setSelectedPane={() => setSelectedPane(1)}
           icon={<TrophyIcon className="h-5" />}
+        />
+        <Row
+          text="Rewards"
+          selected={selectedPane === 8}
+          setSelectedPane={() => setSelectedPane(8)}
+          icon={<GiftIcon className="h-5" />}
         />
         <Row
           text="Account"

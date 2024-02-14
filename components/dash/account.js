@@ -9,16 +9,23 @@ import Input from "../forms/input";
 import SubNav from "../nav/subnav";
 import Usage from "./usage";
 import API from "./api";
+import { ColorPicker } from "./createTournamentModal";
+import AddRewardModal from "./qr/addRewardModal";
+import GroupedRewards from "./qr/groupedRewards";
 
 export default function Account() {
   const context = useAppContext();
   const [nav, setNav] = useState("branding");
   const [loading, setLoading] = useState(false);
+  const [showRewardModal, setShowRewardModal] = useState(false);
 
   // Image Assets
   const [slug, setSlug] = useState();
   const [brandLogo, setBrandLogo] = useState();
   const [sponsorLogo, setSponsorLogo] = useState();
+  const [primaryColor, setPrimaryColor] = useState("#222");
+  const [accentColor, setAccentColor] = useState("#06b6d4");
+  const [textColor, setTextColor] = useState("#FFF");
 
   // Email Marketing
   const [emails, setEmails] = useState();
@@ -47,6 +54,15 @@ export default function Account() {
     if (context?.profile?.slug) {
       setSlug(context?.profile?.slug);
     }
+    if (context?.profile?.primaryColor) {
+      setPrimaryColor(context?.profile?.primaryColor);
+    }
+    if (context?.profile?.accentColor) {
+      setAccentColor(context?.profile?.accentColor);
+    }
+    if (context?.profile?.textColor) {
+      setTextColor(context?.profile?.textColor);
+    }
   }, [context.profile]);
 
   const updateProfile = async () => {
@@ -55,6 +71,9 @@ export default function Account() {
       ...(brandLogo && { brandLogo: brandLogo }),
       ...(sponsorLogo && { sponsorLogo: sponsorLogo }),
       ...(slug && { slug: slug }),
+      ...(primaryColor && { primaryColor: primaryColor }),
+      ...(accentColor && { accentColor: accentColor }),
+      ...(textColor && { textColor: textColor }),
     });
     setLoading(false);
   };
@@ -69,10 +88,14 @@ export default function Account() {
             text: "Branding",
             value: "branding",
           },
-          {
-            text: "Surveys",
-            value: "surveys",
-          },
+          // {
+          //   text: "Surveys",
+          //   value: "surveys",
+          // },
+          // {
+          //   text: "Rewards",
+          //   value: "rewards",
+          // },
           {
             text: "Email",
             value: "email",
@@ -132,6 +155,29 @@ export default function Account() {
             image={sponsorLogo}
             onChange={(url) => {
               setSponsorLogo(url);
+            }}
+          />
+          <ColorPicker
+            label="Primary Color"
+            value={primaryColor}
+            onSelect={(a) => {
+              setPrimaryColor(a.hex);
+            }}
+          />
+
+          <ColorPicker
+            label="Accent Color"
+            value={accentColor}
+            onSelect={(a) => {
+              setAccentColor(a.hex);
+            }}
+          />
+
+          <ColorPicker
+            label="Text Color"
+            value={textColor}
+            onSelect={(a) => {
+              setTextColor(a.hex);
             }}
           />
 

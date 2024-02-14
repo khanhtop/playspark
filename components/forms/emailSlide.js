@@ -5,6 +5,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import { incrementOptInCount } from "@/helpers/api";
+import { emailAddedCTA } from "@/helpers/events";
 
 export default function EmailSlide({ data }) {
   const context = useAppContext();
@@ -33,6 +34,7 @@ export default function EmailSlide({ data }) {
     );
     await incrementOptInCount(data.tournamentId);
     context.setHasSubscribedToList(true);
+    emailAddedCTA(context, data);
     setLoading(false);
   };
 
@@ -52,7 +54,7 @@ export default function EmailSlide({ data }) {
       >
         <img
           src={data.brandLogo ?? "/branding/logo2.png"}
-          className="w-3/4 max-w-[200px] pt-4 pb-4"
+          className="w-3/4 max-w-[200px] max-h-[100px] pt-4 pb-4"
         />
         <h3 className="px-4 text-sm text-center w-full">
           {data.customEmailText ??

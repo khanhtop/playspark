@@ -33,12 +33,15 @@ export default class NewPongScene extends Phaser.Scene {
   public static instance: NewPongScene;
   private ball!: Phaser.Physics.Arcade.Image;
   private player!: Phaser.Physics.Arcade.Image;
+  private hitEffect!: any;
+  private fireworkEffect!: any;
   private params: any;
   private ai!: Phaser.Physics.Arcade.Image;
   lifeNumText: any;
   boosterNumText: any;
   private booster: any;
   private boosterAudio: any;
+  private powerup: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -78,6 +81,17 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
     this.load.image("bar", "/pong/" + gameType + "/bar.png");
+    this.load.spritesheet(
+      'hit_effect',
+      '/pong/' + gameType + '/hit-effect.png',
+      { frameWidth: 200, frameHeight: 200 }
+    );
+
+    this.load.spritesheet(
+      'firework',
+      "/pong/pongassets/firework1.png",
+      { frameWidth: 200, frameHeight: 200 }
+    );
 
     this.load.image("middleAd", this.params.sponsorLogo);
 
@@ -87,6 +101,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.image("MAGNIFY", "/pong/pongassets/magnify.png");
     this.load.image("SHRINK", "/pong/pongassets/shrink.png");
     this.load.audio("boosterAudio", "/pong/pongassets/audio/booster.mp3");
+    this.load.audio("powerup", "/pong/pongassets/audio/powerup.mp3");
 
 
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
@@ -95,7 +110,6 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
     this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
     this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
-
 
   }
 
@@ -117,6 +131,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.goal = this.sound.add("goal");
     this.lost = this.sound.add("lost");
     this.boosterAudio = this.sound.add("boosterAudio");
+    this.powerup = this.sound.add("powerup");
 
     this.physics.world.setBounds(
       sideW,
@@ -131,6 +146,38 @@ export default class NewPongScene extends Phaser.Scene {
     this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
     this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
     //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
+
+    // firework effect
+    const firework_frame = this.anims.generateFrameNames(
+      'firework',
+      { start: 0, end: 110 }
+    );
+    this.anims.create({
+      key: 'fire',
+      frames: firework_frame,
+      frameRate: 25,
+      repeat: 0,
+    });
+
+    this.fireworkEffect = this.add.sprite(w / 2, h - scrH - 10, 'firework').setOrigin(0.5, 1).setDisplaySize(300, 300).setVisible(false);
+
+    // this.fireworkEffect.play('fire')
+    // HIT EFFECT
+    const hit_frame = this.anims.generateFrameNames(
+      'hit_effect',
+      { start: -3, end: 12 }
+    );
+    
+    this.anims.create({
+      key: 'hit',
+      frames: hit_frame,
+      frameRate: 25,
+      repeat: 0,
+    });
+
+    this.hitEffect = this.add.sprite(w / 2, h / 2, 'score').setOrigin(0.5, 0.5).setDisplaySize(100, 100);
+
+    this.hitEffect.play("hit");
 
     this.add.image(mW, 37, "score").setDisplaySize(scrW, scrH);
     this.ball = this.physics.add
@@ -226,6 +273,8 @@ export default class NewPongScene extends Phaser.Scene {
         this.boosterNumText.setText(boosterNum);
 
         this.setPowerUps();
+
+        this.powerup.play();
 
         if(isSelect) {
             STATUS[key] = true;
@@ -409,6 +458,19 @@ export default class NewPongScene extends Phaser.Scene {
         // if (!this.ballHit.isPlaying) this.ballHit.play();
         this.ballHit.stop();
         this.ballHit.play();
+
+        const deltaX = this.ball.x - this.player.x;
+        const deltaY = this.ball.y - this.player.y;
+
+        if(STATUS.MAGNIFY) {
+          this.hitEffect.setPosition(this.ball.x + deltaX * ballR / (playerR * 2), this.ball.y + deltaY * ballR / (playerR * 2))
+        } else {
+          this.hitEffect.setPosition(this.ball.x + deltaX * ballR / playerR, this.ball.y + deltaY * ballR / playerR)
+        }
+
+        this.hitEffect.play("hit")
+        const angle = Phaser.Math.Angle.Between(this.player.x - this.hitEffect.x , this.player.y - this.hitEffect.y, 0, 0);
+        this.hitEffect.setAngle(angle * 180 / Math.PI + 180)
       },
       null,
       this
@@ -419,6 +481,13 @@ export default class NewPongScene extends Phaser.Scene {
       () => {
         this.ballHit.stop();
         this.ballHit.play();
+
+        const deltaX = this.ball.x - this.ai.x;
+        const deltaY = this.ball.y - this.ai.y;
+        this.hitEffect.setPosition(this.ball.x + deltaX, this.ball.y + deltaY)
+        this.hitEffect.play("hit")
+        const angle = Phaser.Math.Angle.Between(this.ai.x - this.hitEffect.x , this.ai.y - this.hitEffect.y, 0, 0);
+        this.hitEffect.setAngle(angle * 180 / Math.PI + 180)
       },
       null,
       this
@@ -628,6 +697,9 @@ export default class NewPongScene extends Phaser.Scene {
       this.scoreText.text = this.scoreNum.toString().padStart(4, "0");
       this.goalTxt.text = this.touches === 1 ? "COMBO HIT!" : "GOAL!";
       this.addedScrTxt.text = this.touches === 1 ? "+200" : "+100";
+
+      this.fireworkEffect.setVisible(true)
+      this.fireworkEffect.play('fire');
 
       if (this.touches === 1) {
         //this.cameras.main.flash(50);

@@ -12,7 +12,11 @@ import FallScene from "./fallScene";
 import WheelScene from "./wheelScene";
 import CricketScene from "./cricketScene";
 import NewPongScene from "./newPongScene";
+import WordleScene from "./wordleScene";
+import FlyBallScene from "./flyballScene";
 import newFallScene from "./newFallScene";
+import newCricketScene from "./newCricketScene";
+
 
 const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) => {
   const [hasRendered, setHasRendered] = useState(false);
@@ -42,8 +46,14 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
         scene = new CricketScene(gameType, params);
       } else if(gameType == 'newpongball') {
         scene = new NewPongScene(gameType, params);
+      } else if(gameType == 'wordle') {
+        scene = new WordleScene(gameType, params);
+      } else if(gameType == 'flyball') {
+        scene = new FlyBallScene(gameType, params);
       } else if(gameType == 'newfallball') {
         scene = new newFallScene(gameType, params);
+      } else if(gameType == 'newcricket') {
+        scene = new newCricketScene(gameType, params);      
       } else {
         scene = new MainScene(gameType, params);
       }
@@ -56,6 +66,7 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
         physics: {
           default: "arcade",
           arcade: {
+            // debug: true,
             gravity: { y: 0 },
           },
         },

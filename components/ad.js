@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   getGame,
   incrementImpressions,
@@ -18,6 +18,10 @@ import Pong from "./games/pong";
 import { isIOS, isAndroid } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
 import { getHighScore } from "@/helpers/leaderboard";
+import NotificationBar from "./ui/notification";
+import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
+import Modal from "./ui/modal";
+import { sendEvent } from "@/helpers/analytics";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -51,6 +55,7 @@ export default function Advert({ data, theme }) {
   }, [score]);
 
   const callback = (score) => {
+    scoreEvent(context, score, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
       setScore(score);
@@ -131,6 +136,10 @@ export default function Advert({ data, theme }) {
     determineConstraints();
   }, []);
 
+  // useEffect(() => {
+  //   sendEvent(context, data, "start");
+  // }, [window?.gtag]);
+
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 
   useEffect(() => {
@@ -140,14 +149,35 @@ export default function Advert({ data, theme }) {
     }
   }, [data?.tournamentId]);
 
+  const eventChannel = useRef(null);
+
+  useEffect(() => {
+    if (!eventChannel.current) {
+      eventChannel.current = setInterval(() => {
+        context.setEventQueue((prevQueue) => {
+          const evQueue = [...prevQueue];
+          const popped = evQueue.pop();
+          context.showEvent(popped);
+          return [...evQueue];
+        });
+      }, 3500);
+    }
+    return () => {
+      if (eventChannel.current) clearInterval(eventChannel.current);
+    };
+  }, []);
+
   return (
     <div
       style={{
         width: lockX ?? "100%",
         height: lockY ?? "100%",
         overflow: "hidden",
+        position: "relative",
       }}
     >
+      <NotificationBar notification={context.event} />
+
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
           <img src="/branding/rotate.png" className="h-[80%]" />
@@ -177,7 +207,9 @@ export default function Advert({ data, theme }) {
           enemySprite: data?.enemySprite,
           powerUpSprite: data?.powerUpSprite,
           additionalSpriteOne: data?.additionalSpriteOne,
+          additionalSpriteTwo: data?.additionalSpriteTwo,
           maxscore: prevBest ?? 0,
+          words: data?.words || [],
         })}
       {stage === 2 && (
         <Outro
@@ -232,6 +264,7 @@ export default function Advert({ data, theme }) {
           gameType="wheelspin"
           callback={() => {
             incrementOptInCount(data.tournamentId);
+            playableAdFinishedCTA(context, data);
             context.setModal({
               title: "You Win",
               contents: (
@@ -250,6 +283,7 @@ export default function Advert({ data, theme }) {
           }}
         />
       )}
+      <Modal primaryColor={data?.primaryColor} landscape={data?.landscape} />
     </div>
   );
 }

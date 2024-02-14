@@ -152,11 +152,36 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
+
   if (id === 14)
     return (
       <Pong
         data={data}
         gameType="newfallball"
+        callback={callback}
+        params={params}
+      />
+    );
+  if (id === 15)
+    return (
+      <Pong data={data} gameType="wordle" callback={callback} params={params} />
+    );
+
+  if (id === 16)
+    return (
+      <Pong
+        data={data}
+        gameType="flyball"
+        callback={callback}
+        params={params}
+      />
+    );
+
+  if (id === 17)
+    return (
+      <Pong
+        data={data}
+        gameType="newcricket"
         callback={callback}
         params={params}
       />
@@ -215,8 +240,15 @@ export function switchTier(uid, tier) {
 }
 
 export function switchActive(tournamentId, state) {
-  console.log(tournamentId, state);
   updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
     isActive: !state,
   });
+}
+
+export async function archive(tournamentId) {
+  updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+    isArchived: true,
+    isActive: false,
+  });
+  return;
 }

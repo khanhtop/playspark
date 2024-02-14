@@ -3,7 +3,13 @@ export function getImageWithSize(url, height = 200, width = 200) {
   height = Math.round(height)
   const cloudinaryBaseUrl =
     "https://res.cloudinary.com/dmj6utxgp/image/upload/";
-  const [basePath, restOfPath] = url.split(cloudinaryBaseUrl);
-  const resizedPath = `c_scale,h_${height},w_${width}/`;
-  return cloudinaryBaseUrl + basePath + resizedPath + restOfPath;
+  const resizedPath = `c_scale,h_${height},w_${width}`;
+  // Split the URL into different parts
+  let parts = url.split("/");
+  // Insert the string at the desired position
+  parts.splice(6, 0, resizedPath);
+  // Reassemble the URL
+  const finalUrl = parts.join("/");
+  
+  return finalUrl;
 }

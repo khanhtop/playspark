@@ -3,6 +3,7 @@ import { useAppContext } from "@/helpers/store";
 import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { WinModal } from "./ui/modalTypes";
+import { surveyCompleteCTA, surveyResponseCTA } from "@/helpers/events";
 
 export default function Survey({ data, onComplete }) {
   const context = useAppContext();
@@ -39,13 +40,13 @@ export default function Survey({ data, onComplete }) {
       survey: surveyData,
       respondents: respondents,
     });
-    console.log(data?.tournamentId);
     await updateDoc(
       doc(firestore, "tournaments", data.tournamentId.toString()),
       {
         surveyCompletions: increment(1),
       }
     );
+    surveyCompleteCTA(context, data);
     context.setModal({
       title: "You Win",
       contents: (
@@ -113,6 +114,7 @@ export default function Survey({ data, onComplete }) {
                   ];
                   setResponses(r);
                   if (questionIndex < data?.survey?.length - 1) {
+                    surveyResponseCTA(context, data);
                     setQuestionIndex(questionIndex + 1);
                     setCanClick(true);
                   } else {

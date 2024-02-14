@@ -17,7 +17,7 @@ export default function Ad({ ad, id }) {
   return (
     <>
       <Head>
-        <title>Play {ad.name} at PlaySpark</title>
+        <title>{`Play ${ad.name} at PlaySpark`}</title>
         <meta
           name="description"
           content={`Play ${ad.name} and many other awesome games at PlaySpark.co`}
@@ -60,7 +60,6 @@ export default function Ad({ ad, id }) {
         ) : (
           <p>{id} - AD NOT FOUND</p>
         )}
-        <Modal primaryColor={ad?.primaryColor} landscape={ad?.landscape} />
       </div>
     </>
   );

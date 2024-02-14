@@ -417,10 +417,17 @@ function Progress({ stage, length, setStage }) {
   );
 }
 
-function ColorPicker({ label, value, onSelect }) {
+export function ColorPicker({ label, value, onSelect }) {
   return (
     <div className="mt-4">
-      <p className="text-xs text-black/70 mb-4 text-white">{label}</p>
+      <div className="flex gap-2">
+        <p className="text-xs text-black/70 mb-4 text-white">{label}</p>
+        <div
+          style={{ backgroundColor: value }}
+          className="h-4 w-4 rounded-full border-2 border-white/20"
+        />
+      </div>
+
       <TwitterPicker color={value} onChangeComplete={onSelect} />
     </div>
   );

@@ -5,6 +5,7 @@ import {
   getLeaderboard,
   rankMe,
   updateLeaderboard,
+  updateScoreAndXP,
 } from "@/helpers/leaderboard";
 
 export default function Leaderboard({ score, gameData }) {
@@ -13,8 +14,7 @@ export default function Leaderboard({ score, gameData }) {
 
   useMemo(() => {
     if (!gameData.tournamentId || !context?.profile?.companyName) return;
-    console.log("IN");
-    getLeaderboard(gameData.tournamentId).then((lb) => {
+    getLeaderboard(gameData.tournamentId).then(async (lb) => {
       const { rankedBoard, mutated } = rankMe(
         lb,
         context.loggedIn?.uid,
@@ -22,6 +22,7 @@ export default function Leaderboard({ score, gameData }) {
         context.loggedIn?.email,
         context?.profile?.companyName || ""
       );
+      await updateScoreAndXP(context?.loggedIn?.uid, score, gameData.ownerId);
       if (mutated) {
         updateLeaderboard(gameData.tournamentId, rankedBoard);
         setData(rankedBoard);

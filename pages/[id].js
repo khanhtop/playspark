@@ -1,83 +1,123 @@
-import Button from "@/components/forms/button";
+import AuthModal from "@/components/auth/authModal";
+import Areas from "@/components/clientPages/areas";
+import Hero from "@/components/clientPages/hero";
+import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
+import ProfileWrapper from "@/components/clientPages/profileWrapper";
+import ClientAchievements from "@/components/clientPages/subpages/clientAchievements";
+import ClientCoins from "@/components/clientPages/subpages/clientCoins";
+import ClientEmbeddedGame from "@/components/clientPages/subpages/clientEmbeddedGame";
+import ClientHome from "@/components/clientPages/subpages/clientHome";
+import ClientNotifications from "@/components/clientPages/subpages/clientNotifications";
+import ClientProfile from "@/components/clientPages/subpages/clientProfile";
+import ClientXP from "@/components/clientPages/subpages/clientXp";
+import TopNav from "@/components/clientPages/topnav";
 import UIButton from "@/components/ui/button";
 import { firestore } from "@/helpers/firebase";
-import { query, collection, where, getDocs } from "firebase/firestore";
+import {
+  computeAggregateLeaderboard,
+  computeTotalScore,
+} from "@/helpers/leaderboard";
+import { useAppContext } from "@/helpers/store";
+import {
+  query,
+  collection,
+  where,
+  getDocs,
+  orderBy,
+  limit,
+  onSnapshot,
+} from "firebase/firestore";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-export default function PageHandler({ user, tournaments }) {
-  return (
-    <div className="bg-black text-white font-titan">
-      <div className="h-[calc(100vh-20vh)] w-screen p-4 flex flex-col items-center justify-center gap-4">
-        {user?.brandLogo && (
-          <img src={user.brandLogo} className="max-w-[400px]" />
-        )}
-        <h1 className="text-3xl">{user.companyName}</h1>
-      </div>
-      <div>
-        <div className="flex flex-col items-center justify-center">
-          <h1 className="text-3xl">Compete In Tournaments!</h1>
-        </div>
-        <div className="w-screen grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 px-8 py-8 bg-black text-regular">
-          {tournaments
-            ?.filter((a) => a.isActive)
-            ?.map((item, key) => (
-              <Game item={item} />
-            ))}
-        </div>
-      </div>
-      <div className="h-72 bg-[#111]"></div>
-    </div>
-  );
-}
-
-function Game({ item }) {
+export default function PageHandler({
+  user,
+  tournaments,
+  tournamentsByPlayCount,
+  tournamentsByDate,
+  leaderboard,
+}) {
+  const context = useAppContext();
   const router = useRouter();
-  const [hover, setHover] = useState(false);
-  const highScorer = item.leaderboard?.sort((a, b) => a - b)?.[0];
+  const [showLogin, setShowLogin] = useState(false);
+  const [screen, setScreen] = useState("home");
+  const [activeGame, setActiveGame] = useState();
+  const _rewardsUnsub = useRef(null);
+  const [rewards, setRewards] = useState([]);
+
+  // Create Rewards Listener
+  const getRewards = () => {
+    const q = query(
+      collection(firestore, "rewards"),
+      where("ownerId", "==", user.id)
+    );
+    _rewardsUnsub.current = onSnapshot(q, (querySnapshot) => {
+      const _rewards = [];
+      querySnapshot.forEach((doc) => {
+        _rewards.push({ ...doc.data(), id: doc.id });
+      });
+      setRewards(_rewards);
+    });
+  };
+
+  useEffect(() => {
+    if (_rewardsUnsub.current === null) {
+      getRewards();
+    }
+    return () => {
+      _rewardsUnsub?.current();
+    };
+  }, []);
+
+  const data = {
+    user: {
+      ...user,
+      primaryColor: user.primaryColor ?? "#222",
+      accentColor: user.accentColor ?? "#00DDFF",
+      textColor: user.textColor ?? "#FFF",
+    },
+    rewards,
+    tournaments,
+    tournamentsByPlayCount,
+    tournamentsByDate,
+    leaderboard,
+    context,
+    setScreen: (s) => {
+      if (screen === "game") {
+        router.replace(router.asPath);
+      }
+      setScreen(s);
+    },
+    screen,
+    setActiveGame,
+    activeGame,
+  };
+
   return (
-    <div
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      className="rounded-xl overflow-hidden relative group"
-    >
-      <img
-        style={{
-          opacity: hover ? 0.2 : 1,
-          transition: "0.5s all",
-        }}
-        src={item.backgroundImage}
-        className="w-full"
-      />
-      <div
-        style={{
-          bottom: hover ? 0 : -250,
-          height: 250,
-          transition: "0.5s all",
-        }}
-        className="text-black px-4 text-center gap-2 absolute transition w-full bg-white bottom-0 rounded-t-2xl flex flex-col items-center py-8"
-      >
-        <p className="flex-1 font-octo">{item.description}</p>
-        {highScorer && (
-          <p className="font-octo">
-            Top Scorer: {highScorer?.name} ({highScorer?.score})
-          </p>
+    <>
+      <ProfileWrapper>
+        {screen !== "game" && (
+          <TopNav
+            data={data.user}
+            context={context}
+            totalScore={context?.profile?.totalScore || 0}
+            totalXp={context?.profile?.totalXp || 0}
+            showLogin={() => setShowLogin(true)}
+            setScreen={setScreen}
+          />
         )}
-        <UIButton
-          onClick={() =>
-            window.open(
-              `https://playspark.co/ad/${item.tournamentId}`,
-              "__blank"
-            )
-          }
-          theme="pixel"
-          primaryColor={item.primaryColor}
-          textColor={item.textColor}
-          text="Play"
-          className=""
-        />
-      </div>
-    </div>
+        {screen === "home" && <ClientHome {...data} />}
+        {screen === "coins" && <ClientCoins {...data} />}
+        {screen === "xp" && <ClientXP {...data} />}
+        {screen === "profile" && <ClientProfile {...data} />}
+        {screen === "notifications" && <ClientNotifications {...data} />}
+        {screen === "game" && <ClientEmbeddedGame {...data} />}
+        {screen === "achievements" && <ClientAchievements {...data} />}
+      </ProfileWrapper>
+      {showLogin && (
+        <AuthModal user={user} closeModal={() => setShowLogin(false)} />
+      )}
+    </>
   );
 }
 
@@ -95,6 +135,7 @@ export async function getServerSideProps(context) {
       const userData = { id: userDoc.id, ...userDoc.data() };
       const tournamentsRef = query(
         collection(firestore, "tournaments"),
+        where("isActive", "==", true),
         where("ownerId", "==", userDoc.id)
       );
       const tournamentsSnapshot = await getDocs(tournamentsRef);
@@ -102,10 +143,45 @@ export async function getServerSideProps(context) {
         id: doc.id,
         ...doc.data(),
       }));
+
+      const tournamentsByPlayCount = tournamentsData
+        ? [...tournamentsData]
+            .sort((a, b) => {
+              const playCountA = a.freemiumPlayCount || 0;
+              const playCountB = b.freemiumPlayCount || 0;
+              return playCountB - playCountA;
+            })
+            .slice(0, 5)
+        : [];
+
+      const tournamentsByDate = tournamentsData
+        ? [...tournamentsData]
+            .sort((a, b) => {
+              const dateB = a.timestamp || 0;
+              const dateA = b.timestamp || 0;
+              return dateB - dateA;
+            })
+            .slice(0, 5)
+        : [];
+
+      const leaderboardRef = query(
+        collection(firestore, "users"),
+        where("memberOf", "==", userDoc.id),
+        orderBy("totalScore", "desc"),
+        limit(10)
+      );
+      const leaderboardSnapshot = await getDocs(leaderboardRef);
+      const leaderboard = leaderboardSnapshot.docs.map((doc) => ({
+        ...doc.data(),
+      }));
+
       return {
         props: {
           user: userData,
           tournaments: tournamentsData,
+          tournamentsByPlayCount: tournamentsByPlayCount,
+          tournamentsByDate: tournamentsByDate,
+          leaderboard: leaderboard,
         },
       };
     } else {
