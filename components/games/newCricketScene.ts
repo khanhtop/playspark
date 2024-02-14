@@ -842,14 +842,14 @@ export default class newCricketScene extends Phaser.Scene {
 
     this.levelDesign = {
       LEVEL1: {
-        heigh: h * 0.58,
+        heigh: h * 0.68,
         width: w + 100 * w / 1268,
         speed_scale: 1,
         velocity_scale: 1,
         delay_scale: 1,
       },
       LEVEL2: {
-        heigh: h * 0.58,
+        heigh: h * 0.68,
         width: w + 100 * w / 1268,
         speed_scale: Phaser.Math.FloatBetween(0.8, 1.1),
         velocity_scale: 1,
@@ -1666,8 +1666,8 @@ export default class newCricketScene extends Phaser.Scene {
       .setAlpha(0);
 
     this.wicketbar = this.physics.add
-      .sprite(0.09 * w, 0.8 * h, 'wicketbar')
-      .setDisplaySize(120 * w / 1248, 120 * w / 1248).setInteractive().setVisible(false);
+      .sprite(0.17 * w, 0.65 * h, 'wicketbar')
+      .setDisplaySize(120 * w / 1248, 320 * w / 1248).setInteractive().setVisible(false);
 
     // this.wicket
     // this.unlock_red = this..
@@ -2805,11 +2805,11 @@ export default class newCricketScene extends Phaser.Scene {
 
     // Set the velocity of the ball to simulate a throw
     if (level < 3) {
-      var throwSpeed = 800 * w / 1248;
+      var throwSpeed = 1000 * w / 1248;
     } else {
-      var throwSpeed = 800 * Phaser.Math.FloatBetween(0.8, 1.1) * w / 1248;
+      var throwSpeed = 1300 * Phaser.Math.FloatBetween(0.8, 1.1) * w / 1248;
     }
-    var throwAngle = -155; // Angle in degrees (negative for upward throw)
+    var throwAngle = -165; // Angle in degrees (negative for upward throw)
     var throwVector = this.physics.velocityFromAngle(throwAngle, throwSpeed);
 
     this.ball.setVelocity(
