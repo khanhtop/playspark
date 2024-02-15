@@ -1,4 +1,4 @@
-import { getRank, xpAsPercentage } from "@/helpers/xp";
+import { calculateLevel, getRank, xpAsPercentage } from "@/helpers/xp";
 import { useEffect, useState } from "react";
 
 export default function Hero({ data, context, totalXp }) {
@@ -26,7 +26,8 @@ export default function Hero({ data, context, totalXp }) {
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex justify-between">
             <div className="font-octo text-2xl md:text-4xl">
-              {getRank(context?.profile?.totalXp || 0).currentTier}
+              {/* {getRank(context?.profile?.totalXp || 0).currentTier} */}
+              Level {calculateLevel(context?.profile?.totalXp)}
             </div>
             <div className="flex pr-1 items-center font-octo md:text-2xl gap-2 h-full">
               <img src="/clientPages/xp.png" className="h-12" />
@@ -48,9 +49,6 @@ export default function Hero({ data, context, totalXp }) {
               }}
               className="h-full"
             ></div>
-          </div>
-          <div className="font-octo text-xl">
-            Next Rank: {getRank(totalXp).nextTier}
           </div>
         </div>
       </div>
