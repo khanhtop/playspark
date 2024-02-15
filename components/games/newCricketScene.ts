@@ -326,7 +326,14 @@ export default class newCricketScene extends Phaser.Scene {
     this.params = newParams;
 
     console.log(newParams, "----------")
-    this.params.maxscore = !!this.params.maxscore? this.params.maxscore : 0
+    this.params.maxscore = !!this.params.maxscore? this.params.maxscore : 0;
+
+    this.params.additionalSpriteOne = !!this.params.additionalSpriteOne? this.params.additionalSpriteOne : '/pong/' + gameType + '/51.png';
+    this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/background.jpg';
+    this.params.powerUpSprite = !!this.params.powerUpSprite? this.params.powerUpSprite : '/pong/' + gameType + '/45.png';
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/46.png';
+    this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite : '/pong/' + gameType + '/ball.png';
+
   }
 
   preload() {
@@ -503,7 +510,7 @@ export default class newCricketScene extends Phaser.Scene {
     this.load.audio('wickets5', '/pong/' + gameType + '/audio/wickets/1 (5).mp3');
 
 
-    this.load.image('background', '/pong/' + gameType + '/background.jpg');
+    this.load.image('background', this.params.backgroundSprite);
     this.load.image('gray_bg', '/pong/' + gameType + '/gray_bg.jpg');
     this.load.image('help-board', '/pong/' + gameType + '/help-board.png');
 
@@ -609,7 +616,7 @@ export default class newCricketScene extends Phaser.Scene {
 
     this.load.image('wicketbar', '/pong/' + gameType + '/wicketbar.png');
 
-    this.load.image('ball', '/pong/' + gameType + '/ball.png');
+    this.load.image('ball', this.params.objectSprite);
     this.load.image('fall', '/pong/' + gameType + '/fall.png');
     this.load.image('power_side', '/pong/' + gameType + '/power_side.png');
     this.load.image('cricket_bar', '/pong/' + gameType + '/cricket_bar.png');
@@ -620,14 +627,14 @@ export default class newCricketScene extends Phaser.Scene {
     this.load.image("item-fire", '/pong/' + gameType + '/47.png');
     this.load.image("item-rocket", '/pong/' + gameType + '/48.png');
     this.load.image("tab-jump", '/pong/' + gameType + '/52.png');
-    this.load.image("tab-ball", '/pong/' + gameType + '/ball.png');
-    this.load.image("light", '/pong/' + gameType + '/45.png');
-    this.load.image("goaldoor", '/pong/' + gameType + '/51.png');
+    this.load.image("tab-ball", this.params.objectSprite);
+    this.load.image("light", this.params.powerUpSprite);
+    this.load.image("goaldoor", this.params.additionalSpriteOne);
 
     this.load.image("target-1", '/pong/' + gameType + '/49.png');
     this.load.image("target-2", '/pong/' + gameType + '/50.png');
-    this.load.image("target-3", '/pong/' + gameType + '/46.png');
-    this.load.image("target-4", '/pong/' + gameType + '/45.png');
+    this.load.image("target-3", this.params.enemySprite);
+    this.load.image("target-4", this.params.powerUpSprite);
 
 
     this.load.spritesheet(
