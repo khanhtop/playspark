@@ -1073,14 +1073,14 @@ export default class newCricketScene extends Phaser.Scene {
 
     this.auth_select_bg = this.add
       .sprite(w / 2, h / 2, 'auth_select_bg')
-      .setDisplaySize(w * 0.5, h * 0.9)
+      .setDisplaySize(w * 0.5, h * 1.1)
       .setOrigin(0.5, 0.5)
       .setDepth(1);
 
     this.auths_left = this.add
       .text(w / 2 - 120 * w / 1248, h / 2 + 20 * w / 1248, '<', this.country_text_style)
       .setOrigin(0.5, 0.5)
-      .setAlpha(1)
+      .setAlpha(0)
       .setDepth(1)
       .setInteractive({ cursor: 'pointer' });
     this.auths_left.on(
@@ -1098,7 +1098,7 @@ export default class newCricketScene extends Phaser.Scene {
     this.auths_right = this.add
       .text(w / 2 + 120 * w / 1248, h / 2 + 20 * w / 1248, '>', this.country_text_style)
       .setOrigin(0.5, 0.5)
-      .setAlpha(1)
+      .setAlpha(0)
       .setDepth(1)
       .setInteractive({ cursor: 'pointer' });
     this.auths_right.on(
@@ -1305,7 +1305,7 @@ export default class newCricketScene extends Phaser.Scene {
 
     this.pause_pan = this.add
       .sprite(w / 2, h / 2, 'auth_select_bg')
-      .setDisplaySize(w * 0.5, h * 0.9)
+      .setDisplaySize(w * 0.5, h * 1.1)
       .setOrigin(0.5, 0.5)
       .setDepth(1);
 
@@ -1811,7 +1811,7 @@ export default class newCricketScene extends Phaser.Scene {
     this.red_text_group = this.add.group();
 
     this.red_text_header = this.add
-      .text(w / 2 - 150* w / 1266, h / 2.5, 'SIX SMASH', this.unlockHeaderStyle)
+      .text(w / 2 - 150* w / 1266, h / 2.5, 'Super Smash', this.unlockHeaderStyle)
       .setOrigin(0.5);
     this.red_text_header_g = this.add
       .text(
@@ -1836,7 +1836,7 @@ export default class newCricketScene extends Phaser.Scene {
       .text(
         w / 2 - 125* w / 1266 + this.red_text_body.width,
         h / 2,
-        '6 RUNS',
+        '10 points',
         this.unlockBodyStyle_g
       )
       .setOrigin(0.5);
@@ -2618,7 +2618,7 @@ export default class newCricketScene extends Phaser.Scene {
     );
 
     this.updateRunsShow = (num) => {
-      if (num == 'Out') {
+      if (num == 'Out' || num == '') {
         this.runs_show.setText(num.toString());
       } else {
         this.runs_show.setText(num.toString() + (num == 1? ' Point' : ' Points'));
@@ -2684,7 +2684,7 @@ export default class newCricketScene extends Phaser.Scene {
 
     // console.log("--------this.scorePanel.fire_count----", this.scorePanel.fire_count)
     if(oldT == 0 && this.level != 0) {
-      this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
+      // this.audioSystem.GAMEOVER[this.getRandomNumbers(0, this.audioSystem.GAMEOVER.length - 1, 1)].play();
     }
     this.level = Math.min(Math.ceil(this.scorePanel.fire_count / 6), 10);
 
@@ -2832,11 +2832,11 @@ export default class newCricketScene extends Phaser.Scene {
       .setInteractive()
 
     // LEFT BTN
-    this.add.sprite(w / 2 - 0.25 * w, h * 0.9, 'tab-bg-white')
+    this.add.sprite(w / 2 - 0.35 * w, h * 0.9, 'tab-bg-white')
       .setOrigin(0.5, 0.5)
       .setDisplaySize(w * 0.07, w * 0.07)
       .setInteractive({ cursor: 'pointer' });
-    this.add.sprite(w / 2 - 0.25 * w, h * 0.9, 'tab-ball')
+    this.add.sprite(w / 2 - 0.35 * w, h * 0.9, 'tab-ball')
       .setOrigin(0.5, 0.5)
       .setDisplaySize(w * 0.04, w * 0.04)
       .setInteractive({ cursor: 'pointer' })
@@ -2849,11 +2849,11 @@ export default class newCricketScene extends Phaser.Scene {
       })
 
     // RIGHT BTN
-    this.add.sprite(w / 2 + 0.25 * w, h * 0.9, 'tab-bg-red')
+    this.add.sprite(w / 2 + 0.3 * w, h * 0.9, 'tab-bg-red')
       .setOrigin(0.5, 0.5)
       .setDisplaySize(w * 0.07, w * 0.07)
       .setInteractive({ cursor: 'pointer' });
-    this.add.sprite(w / 2 + 0.25 * w, h * 0.9, 'tab-jump')
+    this.add.sprite(w / 2 + 0.3 * w, h * 0.9, 'tab-jump')
       .setOrigin(0.5, 0.5)
       .setDisplaySize(w * 0.04, w * 0.04)
       .setInteractive({ cursor: 'pointer' })
@@ -3462,7 +3462,7 @@ export default class newCricketScene extends Phaser.Scene {
       if (!this.is_battery) {
 
         this.wicket.setText(--wickets);
-        this.updateRunsShow('Out');
+        this.updateRunsShow('');
         this.runs_show.setScale(0);
 
         this.NEW.MISSBALL.play();
