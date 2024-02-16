@@ -310,6 +310,10 @@ export default class WordleScene extends Phaser.Scene {
       this.changeScreen(LAYOUT_KEYS.MENU, false);
       this.changeScreen(LAYOUT_KEYS.GAME)
       GAME.STATUS = GAME_TYPE.CLASSIC;
+
+      GAME.POWER_UPS.TARGET = 1;
+      GAME.POWER_UPS.DISPLAY = 1;
+      GAME.POWER_UPS.NEXT = 3;
       this.startRound()
     });
 
