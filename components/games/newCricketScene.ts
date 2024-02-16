@@ -2006,11 +2006,11 @@ export default class newCricketScene extends Phaser.Scene {
     )
 
     this.help_board_group.add(
-      this.add.image(w / 2 - 0.35 * w, h * 0.7, 'help-board').setOrigin(0, 0.5).setDisplaySize(440 * w / 1268, 150 * h / 688)
+      this.add.image(w / 2 - 0.2 * w, h * 0.7, 'help-board').setOrigin(0.5, 0.5).setDisplaySize(440 * w / 1268, 150 * h / 688)
     )
     
     this.help_board_group.add(
-      this.add.text(w / 2 - 0.35 * w + 220, h * 0.7, `TAP, HOLD & RELEASE\nHERE TO KICK THE BALL.`, {
+      this.add.text(w / 2 - 0.2 * w, h * 0.7, `TAP, HOLD & RELEASE\nHERE TO KICK THE BALL.`, {
         ...this.runs_text_style,
         fontSize: `${25 * w / 1268}px`,
         lineSpacing: 2,
