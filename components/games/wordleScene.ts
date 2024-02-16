@@ -640,7 +640,7 @@ export default class WordleScene extends Phaser.Scene {
     SCORE_PART.add(UI[UI_KEYS.SCORE_LAYOUT_STREAK])
 
     SCORE_PART.add(
-      this.add.sprite(mW - 40, mH - 50, 'flame').setOrigin(0.5, 0.5).setDisplaySize(40, 40)
+      this.add.sprite(mW - 40, mH - 50, 'bonus_video').setOrigin(0.5, 0.5).setDisplaySize(40, 40)
     )
 
   
