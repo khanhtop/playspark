@@ -7,7 +7,8 @@ let w: number,
   mH: number,
   scr: number,
   wingR: number,
-  ballR: number;
+  ballR: number,
+  backW: number;
 
 let lastPos = {
   x: 300, y :0, id: 1,
@@ -91,6 +92,7 @@ export default class FlyBallScene extends Phaser.Scene {
     scr = h * 0.08;
     mW = w / 2;
     mH = (h - scr) / 2 + scr;
+    backW = 1920 * h / 960;
 
     this.load.image("wing", "/pong/" + gameType + "/wing/Wing.png");
     // this.load.image("bombEffect", "/pong/" + gameType + "/bomb-effect.png");
@@ -113,8 +115,8 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.image("power", "/pong/" + gameType + "/item/power.png");
     this.load.image("shrink", "/pong/" + gameType + "/item/shrink.png");
 
-    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, h, 1920) );
-    this.load.image("additionalSpriteOne", getImageWithSize(this.params.additionalSpriteOne, h, 1920));
+    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, h, backW) );
+    this.load.image("additionalSpriteOne", getImageWithSize(this.params.additionalSpriteOne, h, backW));
     this.load.image("ball", getImageWithSize(this.params.playerSprite, ballR, ballR));
 
 
@@ -167,11 +169,11 @@ export default class FlyBallScene extends Phaser.Scene {
       0,
       0,
       'bg'
-    ).setSize(1920, h).setOrigin(0, 0).setPosition(0, 0).setScrollFactor(0, 0);
+    ).setSize(backW, h).setOrigin(0, 0).setPosition(0, 0).setScrollFactor(0, 0);
 
-    this.additionalSpriteOne = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(0, 0);
-    this.additionalSpriteOne1 = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.additionalSpriteOne.x + 1920, 0);
-    this.additionalSpriteOne2 = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(1920, h).setPosition(this.additionalSpriteOne.x - 1920, 0);
+    this.additionalSpriteOne = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(backW, h).setPosition(0, 0);
+    this.additionalSpriteOne1 = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(backW, h).setPosition(this.additionalSpriteOne.x + backW, 0);
+    this.additionalSpriteOne2 = this.add.sprite(0, 0, "additionalSpriteOne").setOrigin(0).setDisplaySize(backW, h).setPosition(this.additionalSpriteOne.x - backW, 0);
 
     this.add.image(mW, mH, "middleAd").setDisplaySize(50, 50).setAlpha(0);
     // this.logo = this.add.image(this.additionalSpriteOne.x + 200, this.additionalSpriteOne.y + mH + 110 * h / 663, 'fence').setDisplaySize(110, 30).setOrigin(0.5, 0.5)
@@ -835,8 +837,8 @@ export default class FlyBallScene extends Phaser.Scene {
 
     this.tileBg.tilePositionX = 0;
     this.additionalSpriteOne.setPosition(0, 0)
-    this.additionalSpriteOne1.setPosition(this.additionalSpriteOne.x + 1920, 0)
-    this.additionalSpriteOne2.setPosition(this.additionalSpriteOne.x - 1920, 0)
+    this.additionalSpriteOne1.setPosition(this.additionalSpriteOne.x + backW, 0)
+    this.additionalSpriteOne2.setPosition(this.additionalSpriteOne.x - backW, 0)
 
 
     this.obstacles.forEach(obj => {
@@ -942,8 +944,8 @@ export default class FlyBallScene extends Phaser.Scene {
     if(this.ball.x > this.additionalSpriteOne.x + 900) {
 
       this.additionalSpriteOne1.setPosition(this.additionalSpriteOne.x, 0);
-      this.additionalSpriteOne.setPosition(this.additionalSpriteOne.x + 1920, 0);
-      this.additionalSpriteOne2.setPosition(this.additionalSpriteOne.x + 2 * 1920, 0);
+      this.additionalSpriteOne.setPosition(this.additionalSpriteOne.x + backW, 0);
+      this.additionalSpriteOne2.setPosition(this.additionalSpriteOne.x + 2 * backW, 0);
 
       // this.logo.setPosition(this.additionalSpriteOne.x + 200, this.additionalSpriteOne.y + mH + 110 * h / 663);
     }
