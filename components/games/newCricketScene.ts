@@ -47,7 +47,7 @@ let isFireballRunnig = false;
 
 
 let player_name = [
-  "Dead Eye \nDazz",
+  "Striker Steve",
   // "Pakistan",
   // "Gus\n Wicketland",
   // "James\n Bouncer",
@@ -65,7 +65,7 @@ let player_name = [
 ]
 
 let player_name1 = [
-  "Dead Eye Dazz",
+  "Striker Steve",
   // "Pakistan",
   // "Gus Wicketland",
   // "James Bouncer",
@@ -2819,9 +2819,9 @@ export default class newCricketScene extends Phaser.Scene {
 
     // Set the velocity of the ball to simulate a throw
     if (level < 3) {
-      var throwSpeed = 1000 * w / 1248;
+      var throwSpeed = 700 * w / 1248;
     } else {
-      var throwSpeed = 1300 * Phaser.Math.FloatBetween(0.8, 1.1) * w / 1248;
+      var throwSpeed = 1000 * Phaser.Math.FloatBetween(0.8, 1.1) * w / 1248;
     }
     var throwAngle = -165; // Angle in degrees (negative for upward throw)
     var throwVector = this.physics.velocityFromAngle(throwAngle, throwSpeed);
