@@ -3,7 +3,8 @@ export default function AggregateLeaderboard({ lb, user }) {
   return (
     <div className="w-full flex flex-col gap-2">
       {lb
-        ?.sort((a, b) => b.totalXp - a.totalXp)
+        ?.filter((z) => z.currentXp !== 0)
+        ?.sort((a, b) => b.currentXp - a.currentXp)
         ?.map((item, key) => (
           <Rank user={user} item={item} key={key} pos={key + 1} />
         ))}
@@ -29,7 +30,7 @@ function Rank({ item, pos, user }) {
       </div>
       <div className="flex gap-2">
         <img src="/clientPages/xp.png" className="h-8" />
-        <p>{item.totalXp}</p>
+        <p>{item.currentXp}</p>
       </div>
     </div>
   );

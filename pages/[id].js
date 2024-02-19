@@ -170,13 +170,12 @@ export async function getServerSideProps(context) {
 
       const leaderboardRef = query(
         collection(firestore, "users"),
-        where("memberOf", "==", userDoc.id),
-        orderBy("totalScore", "desc"),
-        limit(10)
+        where("memberOf", "array-contains", userDoc.id)
       );
       const leaderboardSnapshot = await getDocs(leaderboardRef);
       const leaderboard = leaderboardSnapshot.docs.map((doc) => ({
         ...doc.data(),
+        currentXp: doc.data()?.dataByClient?.[userDoc.id]?.xp || 0,
       }));
 
       return {

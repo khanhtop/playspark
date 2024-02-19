@@ -1,6 +1,6 @@
 // Receive Events
 
-import { doc, increment, setDoc } from "firebase/firestore";
+import { doc, increment, setDoc, arrayUnion } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { sendSupabaseEvent } from "./analytics";
 
@@ -222,6 +222,7 @@ async function updateAnalytics(
     {
       totalXp: increment(xp),
       totalCoins: increment(coins),
+      memberOf: arrayUnion(ownerId.toString()),
       ...(analytics && { analytics: analytics }),
       dataByClient: {
         [ownerId]: {
