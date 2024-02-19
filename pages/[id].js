@@ -93,6 +93,8 @@ export default function PageHandler({
     activeGame,
   };
 
+  console.log(data.user);
+
   return (
     <>
       <ProfileWrapper>
@@ -100,8 +102,10 @@ export default function PageHandler({
           <TopNav
             data={data.user}
             context={context}
-            totalScore={context?.profile?.totalScore || 0}
-            totalXp={context?.profile?.totalXp || 0}
+            totalScore={
+              context?.profile?.dataByClient?.[data.user.id]?.coins || 0
+            }
+            totalXp={context?.profile?.dataByClient?.[data.user.id]?.xp || 0}
             showLogin={() => setShowLogin(true)}
             setScreen={setScreen}
           />
