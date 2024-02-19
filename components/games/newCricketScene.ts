@@ -333,7 +333,7 @@ export default class newCricketScene extends Phaser.Scene {
     this.params.powerUpSprite = !!this.params.powerUpSprite? this.params.powerUpSprite : '/pong/' + gameType + '/45.png';
     this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/46.png';
     this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite : '/pong/' + gameType + '/ball.png';
-
+    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + `/p1_player_anim.png`;
   }
 
   preload() {
@@ -591,6 +591,13 @@ export default class newCricketScene extends Phaser.Scene {
       this.load.spritesheet(
         `p${i}_player_fire`,
         '/pong/' + gameType + `/p${i}_player_fire.png`,
+        { frameWidth: 200, frameHeight: 300 }
+      );
+
+      this.load.spritesheet(
+        `p${i}_player_anim`,
+        this.params.playerSprite,
+        // '/pong/' + gameType + `/p${i}_player_anim.png`,
         { frameWidth: 200, frameHeight: 300 }
       );
     }
@@ -982,18 +989,18 @@ export default class newCricketScene extends Phaser.Scene {
       this.anims.create({
         key: `p${i}_ready_animation`,
         frames: this.anims.generateFrameNames(
-          `p${i}_player_ready`,
+          `p${i}_player_anim`,
           { start: 0, end: 3 }
         ),
-        frameRate: 10,
+        frameRate: 15,
         repeat: -1,
       });
 
       this.anims.create({
         key: `p${i}_fire_animation`,
         frames: this.anims.generateFrameNames(
-          `p${i}_player_fire`,
-          { start: 0, end: 4 }
+          `p${i}_player_anim`,
+          { start: 5, end: 9 }
         ),
         frameRate: 15,
         repeat: 0,
@@ -1002,8 +1009,8 @@ export default class newCricketScene extends Phaser.Scene {
       this.anims.create({
         key: `p${i}_fire_ready_animation`,
         frames: this.anims.generateFrameNames(
-          `p${i}_player_jump`,
-          { start: 0, end: 4 }
+          `p${i}_player_anim`,
+          { start: 10, end: 14 }
         ),
         frameRate: 10,
         repeat: 0,
@@ -1012,8 +1019,8 @@ export default class newCricketScene extends Phaser.Scene {
       this.anims.create({
         key: `p${i}_jump_animation`,
         frames: this.anims.generateFrameNames(
-          `p${i}_player_jump`,
-          { start: 0, end: 4 }
+          `p${i}_player_anim`,
+          { start: 10, end: 14 }
         ),
         frameRate: 10,
         repeat: 0,
