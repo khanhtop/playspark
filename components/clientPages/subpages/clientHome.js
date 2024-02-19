@@ -21,13 +21,13 @@ export default function ClientHome({
       <AccountInfo
         data={user}
         context={context}
-        totalXp={context?.profile?.totalXp || 0}
-        totalCoins={context?.profile?.totalScore || 0}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
+        totalCoins={context?.profile?.dataByClient?.[user.id]?.coins || 0}
       />
       <Hero
         data={user}
         context={context}
-        totalXp={context?.profile?.totalXp || 0}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
       />
       <HorizontalGamesScroll
         first
