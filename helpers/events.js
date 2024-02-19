@@ -51,6 +51,7 @@ export function scoreEvent(context, score, data) {
     Math.floor(score / 10),
     coinsBonus,
     "Score Bonus",
+    null,
     data.ownerId
   );
   sendSupabaseEvent(
@@ -170,7 +171,6 @@ export async function allocateXp(
   ownerId = null
 ) {
   if (!context.loggedIn?.uid || xp === 0) return;
-  const aO = getAnalyticsObject(context, incrementCount);
   context.setEvent({
     title: `+ ${xp}XP`,
     text: `${eventName}`,
@@ -179,6 +179,7 @@ export async function allocateXp(
     title: `+ ${coins} Coins`,
     text: `${eventName}`,
   });
+  const aO = getAnalyticsObject(context, incrementCount);
   updateAnalytics(context, xp, coins, aO, ownerId);
 }
 
@@ -216,14 +217,18 @@ async function updateAnalytics(
     xp,
     coins
   );
-  console.log(uid, xp, analytics, context, ownerId);
   await setDoc(
     doc(firestore, "users", uid.toString()),
     {
       totalXp: increment(xp),
       totalCoins: increment(coins),
       ...(analytics && { analytics: analytics }),
-      dataByClient: dataArray,
+      dataByClient: {
+        [ownerId]: {
+          coins: increment(coins),
+          xp: increment(xp),
+        },
+      },
     },
     { merge: true }
   );
