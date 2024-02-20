@@ -217,6 +217,7 @@ async function updateAnalytics(
     xp,
     coins
   );
+  if (!ownerId) return;
   await setDoc(
     doc(firestore, "users", uid.toString()),
     {

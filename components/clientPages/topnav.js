@@ -53,6 +53,7 @@ export default function TopNav({
               className="h-full pb-0 opacity-20"
             />
             <Avatar
+              context={context}
               onClick={() => setScreen("profile")}
               name={context?.profile?.companyName || "?"}
               data={data}
@@ -71,7 +72,7 @@ export default function TopNav({
   );
 }
 
-function Avatar({ name, data, onClick }) {
+function Avatar({ name, context, data, onClick }) {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <div
@@ -81,9 +82,10 @@ function Avatar({ name, data, onClick }) {
         color: data.textColor,
         backgroundColor: data.primaryColor,
       }}
-      className="z-10 relative border-2 h-full cursor-pointer hover:opacity-80 transition aspect-square rounded-full flex items-center justify-center"
+      className="z-10 overflow-hidden relative border-2 h-full cursor-pointer hover:opacity-80 transition aspect-square rounded-full flex items-center justify-center"
     >
-      <p className="font-octo md:text-2xl">{name?.substring(0, 1)}</p>
+      <img className="scale-110" src={context?.profile?.profilePhoto} />
+      {/* <p className="font-octo md:text-2xl">{name?.substring(0, 1)}</p> */}
       {showMenu && (
         <div
           style={{ borderColor: data.accentColor, color: data.textColor }}

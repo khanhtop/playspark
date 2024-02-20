@@ -217,5 +217,17 @@ export const games = [
     textColor: "#FFF",
     id: 17,
     landscape: true,
+    cloudinaryGameTag: "target",
+    tags: {
+      playerSprite: "body",
+      backgroundSprite: "bg",
+      objectSprite: "1.0",
+    },
+    backgroundSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    playerSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
   },
 ];

@@ -3,10 +3,43 @@ import AccountInfo from "../accountInfo";
 import ClientPageWrapper from "../clientPageWrapper";
 import Hero from "../hero";
 import Achievements from "../achievements";
-import { logout } from "@/helpers/firebase";
+import { firestore, logout } from "@/helpers/firebase";
+import { useEffect, useState } from "react";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 
 export default function ClientProfile({ user, setScreen }) {
   const context = useAppContext();
+  const [avatars, setAvatars] = useState();
+  const [avatar, setAvatar] = useState();
+  console.log(avatars);
+
+  useEffect(() => {
+    if (avatars) return;
+    fetch("https://api.reimage.dev/get/tags?avatar", {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_REIMAGE_KEY}`,
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((output) => {
+        setAvatars(output.thumbnails);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (avatars && context.profile && !context.profile.profilePhoto) {
+      setDoc(
+        doc(firestore, "users", context?.loggedIn?.uid),
+        {
+          profilePhoto: avatars[Math.floor(Math.random() * avatars.length)],
+        },
+        { merge: true }
+      );
+    }
+  }, [avatars, context.profile]);
+
   return (
     <ClientPageWrapper
       user={user}
@@ -20,6 +53,7 @@ export default function ClientProfile({ user, setScreen }) {
         context={context}
         totalXp={context?.profile?.totalXp || 0}
         totalCoins={context?.profile?.totalScore || 0}
+        avatars={avatars}
       />
       <Hero
         data={user}
