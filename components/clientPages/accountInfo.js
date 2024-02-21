@@ -83,7 +83,7 @@ export default function AccountInfo({
             <div
               src={context?.profile?.profilePhoto}
               style={{ borderColor: data.accentColor }}
-              className={`h-[50px] md:h-[80px] border-4 overflow-hidden aspect-square flex ${
+              className={`h-[120px] md:h-[120px] border-4 overflow-hidden aspect-square flex ${
                 vertical
                   ? "items-center justify-center"
                   : "items-center justify-center"

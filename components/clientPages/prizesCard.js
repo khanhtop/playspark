@@ -18,22 +18,27 @@ export default function PrizesCard({ data, inSlider }) {
     >
       <div
         style={{
-          //   backgroundImage: `url(${item.image})`,
+          backgroundImage: `url("/clientPages/prizeCard.jpg")`,
           transition: "0.5s all",
         }}
-        className="bg-center bg-cover flex-1 flex flex-col p-2"
+        className="bg-center flex-1 flex flex-col"
       >
-        <div className="flex-1 p-4">
-          <p>{groupRewards(context.prizes)?.length} Prizes Available</p>
-          <p>Win prizes such as {context.prizes?.[0]?.name}</p>
-        </div>
-        <div className="flex justify-end w-full">
-          <UIButton
-            primaryColor={data.accentColor}
-            textColor={data.primaryColor}
-            text="See Prizes"
-            className=""
-          />
+        <div className="flex-1 flex flex-col bg-black/50 text-white">
+          <div className="flex-1 p-4">
+            <p className="text-2xl">
+              {groupRewards(context.prizes)?.length} Prize
+              {groupRewards(context.prizes)?.length > 1 && "s"} Available
+            </p>
+            <p>Win prizes such as {context.prizes?.[0]?.name}</p>
+          </div>
+          <div className="flex justify-end w-full pb-4 pr-4">
+            <UIButton
+              primaryColor={data.accentColor}
+              textColor={data.primaryColor}
+              text="See Prizes"
+              className=""
+            />
+          </div>
         </div>
       </div>
     </div>
