@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { getImageWithSize } from "@/helpers/cloudinary";
 
 let gameType = 'football';
 let counter = 0;
@@ -596,7 +597,7 @@ export default class newCricketScene extends Phaser.Scene {
 
       this.load.spritesheet(
         `p${i}_player_anim`,
-        this.params.playerSprite,
+        getImageWithSize(this.params.playerSprite, 300, 15 * 200),
         // '/pong/' + gameType + `/p${i}_player_anim.png`,
         { frameWidth: 200, frameHeight: 300 }
       );
