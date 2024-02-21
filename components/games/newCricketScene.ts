@@ -2891,7 +2891,7 @@ export default class newCricketScene extends Phaser.Scene {
           this
         );
 
-        this.player.setVelocityY(-850);
+        this.player.setVelocityY(-650);
         this.player.setGravityY(1500);
       })
 
