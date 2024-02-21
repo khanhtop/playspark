@@ -2,8 +2,10 @@ import { useState } from "react";
 import UserModal from "./userModal";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
+import { useAppContext } from "@/helpers/store";
 
 export default function AggregateLeaderboard({ lb, user }) {
+  const context = useAppContext();
   const [showModal, setShowModal] = useState();
 
   return (
@@ -18,6 +20,7 @@ export default function AggregateLeaderboard({ lb, user }) {
             }}
             user={user}
             item={item}
+            myId={context?.loggedIn?.uid}
             key={key}
             pos={key + 1}
           />
@@ -27,7 +30,7 @@ export default function AggregateLeaderboard({ lb, user }) {
   );
 }
 
-function Rank({ item, pos, user, showModal }) {
+function Rank({ item, pos, user, showModal, myId }) {
   const [loading, setLoading] = useState(false);
   const handleClick = async () => {
     setLoading(true);
@@ -36,6 +39,7 @@ function Rank({ item, pos, user, showModal }) {
     showModal(_json);
     setLoading(false);
   };
+
   return (
     <div
       onClick={handleClick}
@@ -51,7 +55,7 @@ function Rank({ item, pos, user, showModal }) {
       </div>
       <div className="flex-1">
         <p className="opacity-50 group-hover:opacity-100">
-          {item.companyName || "No Name"}
+          {item.companyName || "No Name"} {item.id === myId && "(Me)"}
         </p>
       </div>
       <div className="flex gap-2">

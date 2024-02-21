@@ -30,6 +30,7 @@ export default function ClientHome({
         totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
       />
       <HorizontalGamesScroll
+        showPrizes
         first
         data={tournamentsByPlayCount}
         user={user}

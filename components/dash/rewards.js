@@ -2,9 +2,12 @@ import { useState } from "react";
 import AddRewardModal from "./qr/addRewardModal";
 import GroupedRewards from "./qr/groupedRewards";
 import SubNav from "../nav/subnav";
+import AddPrizeModal from "./prizes/addPrizeModal";
+import GroupedPrizes from "./prizes/groupedPrizes";
 
 export default function Rewards() {
   const [showRewardModal, setShowRewardModal] = useState(false);
+  const [showPrizeModal, setShowPrizeModal] = useState(false);
   const [nav, setNav] = useState("rewards");
   return (
     <>
@@ -49,17 +52,17 @@ export default function Rewards() {
             Show users what they can win by competing in tournaments. This
             information will be shown to users on your home page.
           </p>
-          {/* <button
-            onClick={() => setShowRewardModal(true)}
+          <button
+            onClick={() => setShowPrizeModal(true)}
             className="cursor-pointer w-[200px] h-12 rounded-lg bg-cyan-400 mt-0 flex items-center justify-center"
           >
             Add Reward
           </button>
-          <AddRewardModal
-            isOpen={showRewardModal}
-            onClose={() => setShowRewardModal(false)}
+          <AddPrizeModal
+            isOpen={showPrizeModal}
+            onClose={() => setShowPrizeModal(false)}
           />
-          <GroupedRewards /> */}
+          <GroupedPrizes />
         </div>
       )}
     </>

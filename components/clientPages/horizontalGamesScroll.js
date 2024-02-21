@@ -1,4 +1,6 @@
+import { useAppContext } from "@/helpers/store";
 import ClientGameCard from "./gameCard";
+import PrizesCard from "./prizesCard";
 
 export default function HorizontalGamesScroll({
   data,
@@ -6,7 +8,9 @@ export default function HorizontalGamesScroll({
   label,
   first,
   playGame,
+  showPrizes,
 }) {
+  const context = useAppContext();
   if (data.length > 0) {
     return (
       <div
@@ -16,6 +20,9 @@ export default function HorizontalGamesScroll({
         <h1 className="px-5 mb-2 tracking-wider">{label}</h1>
         <div className="overflow-x-scroll no-scrollbar">
           <div className="flex items-center gap-8 pt-0 pb-6 px-5">
+            {showPrizes && context?.prizes?.length > 0 && (
+              <PrizesCard data={user} inSlider />
+            )}
             {data?.map((item, key) => (
               <ClientGameCard
                 inSlider
