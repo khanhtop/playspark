@@ -1166,7 +1166,7 @@ export default class newCricketScene extends Phaser.Scene {
     };
 
     this.auth_country = this.add
-      .text(w / 2, h / 2 - 100 * w / 1248, 'AUSTRALIA', {
+      .text(w / 2, h / 2 - 100 * w / 1248, 'Striker Steve', {
         ...this.country_text_style,
         // wordWrap: { width: 100 },
         align: "center",
@@ -1334,7 +1334,7 @@ export default class newCricketScene extends Phaser.Scene {
       .setAlpha(1)
       .setDepth(1);
     this.player_country = this.add
-      .text(w / 2 + 80 * w / 1248, h / 2 - 50 * w / 1248, 'AUSTRALIA', {
+      .text(w / 2 + 80 * w / 1248, h / 2 - 50 * w / 1248, 'Striker Steve', {
         ...this.pause_text_style,
         // wordWrap: { width: 50 },
         align: "center",
