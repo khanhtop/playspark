@@ -8,6 +8,7 @@ import ClientCoins from "@/components/clientPages/subpages/clientCoins";
 import ClientEmbeddedGame from "@/components/clientPages/subpages/clientEmbeddedGame";
 import ClientHome from "@/components/clientPages/subpages/clientHome";
 import ClientNotifications from "@/components/clientPages/subpages/clientNotifications";
+import ClientPrizes from "@/components/clientPages/subpages/clientPrizes";
 import ClientProfile from "@/components/clientPages/subpages/clientProfile";
 import ClientXP from "@/components/clientPages/subpages/clientXp";
 import TopNav from "@/components/clientPages/topnav";
@@ -117,6 +118,7 @@ export default function PageHandler({
         {screen === "notifications" && <ClientNotifications {...data} />}
         {screen === "game" && <ClientEmbeddedGame {...data} />}
         {screen === "achievements" && <ClientAchievements {...data} />}
+        {screen === "prizes" && <ClientPrizes {...data} />}
       </ProfileWrapper>
       {showLogin && (
         <AuthModal user={user} closeModal={() => setShowLogin(false)} />

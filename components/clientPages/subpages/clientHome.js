@@ -39,6 +39,9 @@ export default function ClientHome({
           setActiveGame(id);
           setScreen("game");
         }}
+        changeScreen={(screen) => {
+          setScreen(screen);
+        }}
       />
       <Areas
         aggregateLeaderboard={leaderboard}

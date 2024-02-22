@@ -9,6 +9,7 @@ export default function HorizontalGamesScroll({
   first,
   playGame,
   showPrizes,
+  changeScreen,
 }) {
   const context = useAppContext();
   if (data.length > 0) {
@@ -21,7 +22,7 @@ export default function HorizontalGamesScroll({
         <div className="overflow-x-scroll no-scrollbar">
           <div className="flex items-center gap-8 pt-0 pb-6 px-5">
             {showPrizes && context?.prizes?.length > 0 && (
-              <PrizesCard data={user} inSlider />
+              <PrizesCard data={user} inSlider onClick={changeScreen} />
             )}
             {data?.map((item, key) => (
               <ClientGameCard

@@ -4,7 +4,7 @@ import UIButton from "../ui/button";
 import { useAppContext } from "@/helpers/store";
 import { groupRewards } from "@/helpers/rewards";
 
-export default function PrizesCard({ data, inSlider }) {
+export default function PrizesCard({ data, inSlider, onClick }) {
   const router = useRouter();
   const context = useAppContext();
 
@@ -33,6 +33,7 @@ export default function PrizesCard({ data, inSlider }) {
           </div>
           <div className="flex justify-end w-full pb-4 pr-4">
             <UIButton
+              onClick={() => onClick("prizes")}
               primaryColor={data.accentColor}
               textColor={data.primaryColor}
               text="See Prizes"
