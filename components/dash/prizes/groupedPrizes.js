@@ -1,4 +1,4 @@
-import { groupRewards } from "@/helpers/rewards";
+import { groupPrizes, groupRewards } from "@/helpers/rewards";
 import { useAppContext } from "@/helpers/store";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import {
@@ -16,13 +16,13 @@ export default function GroupedPrizes({}) {
 
   const deleteConfirmation = async (rewardTypeId) => {
     const isSure = window.confirm(
-      "Are you sure you want to delete this reward?  Users may be affected if they hold unredeemed rewards."
+      "Are you sure you want to delete this prize?  Users may be affected if they hold unredeemed prizes."
     );
     if (isSure) {
       const rewardsCollection = collection(firestore, "prizes");
       const q = query(
         rewardsCollection,
-        where("rewardTypeId", "==", rewardTypeId)
+        where("prizeTypeId", "==", rewardTypeId)
       );
       const querySnapshot = await getDocs(q);
       const deletePromises = [];
@@ -31,7 +31,7 @@ export default function GroupedPrizes({}) {
         deletePromises.push(deleteDoc(docRef));
       });
       await Promise.all(deletePromises);
-      alert("Reward Deleted");
+      alert("Prize Deleted");
     } else {
       console.log("Canceling delete operation");
     }
@@ -39,7 +39,7 @@ export default function GroupedPrizes({}) {
 
   return (
     <div className="mt-4 flex flex-col gap-4">
-      {groupRewards(context.prizes)?.map((item, key) => {
+      {groupPrizes(context.prizes)?.map((item, key) => {
         return (
           <RewardCard
             item={item}
@@ -69,7 +69,7 @@ function RewardCard({ item, onDelete }) {
         </div>
       </div>
       <div
-        onClick={() => onDelete(item.rewardTypeId)}
+        onClick={() => onDelete(item.rewardTypeId || item.prizeTypeId || null)}
         className="absolute top-4 right-4"
       >
         <XMarkIcon className="h-6 w-6" />

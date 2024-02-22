@@ -56,7 +56,7 @@ export default function Rewards() {
             onClick={() => setShowPrizeModal(true)}
             className="cursor-pointer w-[200px] h-12 rounded-lg bg-cyan-400 mt-0 flex items-center justify-center"
           >
-            Add Reward
+            Add Prize
           </button>
           <AddPrizeModal
             isOpen={showPrizeModal}
