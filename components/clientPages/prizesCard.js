@@ -4,7 +4,7 @@ import UIButton from "../ui/button";
 import { useAppContext } from "@/helpers/store";
 import { groupRewards } from "@/helpers/rewards";
 
-export default function PrizesCard({ data, inSlider, onClick }) {
+export default function PrizesCard({ data, inSlider, onClick, prizes }) {
   const router = useRouter();
   const context = useAppContext();
 
@@ -26,10 +26,10 @@ export default function PrizesCard({ data, inSlider, onClick }) {
         <div className="flex-1 flex flex-col bg-black/50 text-white">
           <div className="flex-1 p-4">
             <p className="text-2xl">
-              {groupRewards(context.prizes)?.length} Prize
-              {groupRewards(context.prizes)?.length > 1 && "s"} Available
+              {groupRewards(prizes)?.length} Prize
+              {groupRewards(prizes)?.length > 1 && "s"} Available
             </p>
-            <p>Win prizes such as {context.prizes?.[0]?.name}</p>
+            <p>Win prizes such as {prizes?.[0]?.name}</p>
           </div>
           <div className="flex justify-end w-full pb-4 pr-4">
             <UIButton

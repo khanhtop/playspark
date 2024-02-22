@@ -207,11 +207,11 @@ export const games = [
   },
 
   {
-    name: "New Hit Cricket Smash",
+    name: "Smash Blitz",
     description:
-      "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
+      "Smash Blitz is a high-energy arcade game where players deflect oncoming objects into colorful targets for points. As the speed increases and lives dwindle, can you keep up the pace and survive the relentless challenge?",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708641627/cjpqqvkxmkpsgajlpt9a.png",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",

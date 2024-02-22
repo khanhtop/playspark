@@ -3,6 +3,7 @@ import UserModal from "./userModal";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
+import { calculateLevel } from "@/helpers/xp";
 
 export default function AggregateLeaderboard({ lb, user }) {
   const context = useAppContext();
@@ -57,6 +58,10 @@ function Rank({ item, pos, user, showModal, myId }) {
         <p className="opacity-50 group-hover:opacity-100">
           {item.companyName || "No Name"} {item.id === myId && "(Me)"}
         </p>
+      </div>
+      <div className="flex gap-2">
+        <img src="/clientPages/xp.png" className="h-8" />
+        <p>{calculateLevel(item.currentXp)}</p>
       </div>
       <div className="flex gap-2">
         <img src="/clientPages/xp.png" className="h-8" />

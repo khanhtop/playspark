@@ -43,8 +43,14 @@ export default function PageHandler({
   const [showLogin, setShowLogin] = useState(false);
   const [screen, setScreen] = useState("home");
   const [activeGame, setActiveGame] = useState();
+
+  // REWARDS
   const _rewardsUnsub = useRef(null);
   const [rewards, setRewards] = useState([]);
+
+  // PRIZES
+  const _prizesUnsub = useRef(null);
+  const [prizes, setPrizes] = useState([]);
 
   // Create Rewards Listener
   const getRewards = () => {
@@ -61,12 +67,31 @@ export default function PageHandler({
     });
   };
 
+  // Create Rewards Listener
+  const getPrizes = () => {
+    const q = query(
+      collection(firestore, "prizes"),
+      where("ownerId", "==", user.id)
+    );
+    _prizesUnsub.current = onSnapshot(q, (querySnapshot) => {
+      const _prizes = [];
+      querySnapshot.forEach((doc) => {
+        _prizes.push({ ...doc.data(), id: doc.id });
+      });
+      setPrizes(_prizes);
+    });
+  };
+
   useEffect(() => {
     if (_rewardsUnsub.current === null) {
       getRewards();
     }
+    if (_prizesUnsub.current === null) {
+      getPrizes();
+    }
     return () => {
       _rewardsUnsub?.current();
+      _prizesUnsub?.current();
     };
   }, []);
 
@@ -78,6 +103,7 @@ export default function PageHandler({
       textColor: user.textColor ?? "#FFF",
     },
     rewards,
+    prizes,
     tournaments,
     tournamentsByPlayCount,
     tournamentsByDate,

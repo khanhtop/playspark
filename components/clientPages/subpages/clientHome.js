@@ -14,6 +14,7 @@ export default function ClientHome({
   screen,
   setScreen,
   setActiveGame,
+  prizes,
 }) {
   const context = useAppContext();
   return (
@@ -30,6 +31,7 @@ export default function ClientHome({
         totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
       />
       <HorizontalGamesScroll
+        prizes={prizes}
         showPrizes
         first
         data={tournamentsByPlayCount}
