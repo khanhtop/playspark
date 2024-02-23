@@ -546,6 +546,7 @@ export default class newCricketScene extends Phaser.Scene {
     );
     this.load.image('green_btn', '/pong/' + gameType + '/green_btn.png');
     this.load.image('red_btn', '/pong/' + gameType + '/red_btn.png');
+    this.load.image('arrow', '/pong/' + gameType + '/arrow.png');
 
     this.load.spritesheet(
       'hit_effect',
@@ -1167,7 +1168,7 @@ export default class newCricketScene extends Phaser.Scene {
     };
 
     this.auth_country = this.add
-      .text(w / 2, h / 2 - 100 * w / 1248, 'AUSTRALIA', {
+      .text(w / 2, h / 2 - 100 * w / 1248, 'Striker Steve', {
         ...this.country_text_style,
         // wordWrap: { width: 100 },
         align: "center",
@@ -1335,7 +1336,7 @@ export default class newCricketScene extends Phaser.Scene {
       .setAlpha(1)
       .setDepth(1);
     this.player_country = this.add
-      .text(w / 2 + 80 * w / 1248, h / 2 - 50 * w / 1248, 'AUSTRALIA', {
+      .text(w / 2 + 80 * w / 1248, h / 2 - 50 * w / 1248, 'Striker Steve', {
         ...this.pause_text_style,
         // wordWrap: { width: 50 },
         align: "center",
@@ -1486,12 +1487,12 @@ export default class newCricketScene extends Phaser.Scene {
       .setDisplaySize(w * 0.04, w * 0.04)
       .setInteractive({ cursor: 'pointer' });
     
-    this.lightNumText = this.add.text(w / 28 + w * 0.045 * w / 1248, h / 4.5 , this.scorePanel.light, {...this.country_text_style, 
+    this.lightNumText = this.add.text(w / 28 + w * 0.07 * w / 1248, h / 4.5 , this.scorePanel.light, {...this.country_text_style, 
         fill: '#fff',
         fontSize: 32 * w / 1248 + 'px',
         align: 'left'
       })
-      .setOrigin(0, 0.5)
+      .setOrigin(0.5, 0.5)
       .setAlpha(1)
       .setDepth(1)
 
@@ -2005,6 +2006,9 @@ export default class newCricketScene extends Phaser.Scene {
       this.add.image(w / 2 + 0.25 * w, h * 0.7, 'help-board').setOrigin(0.5, 0.5).setDisplaySize(250 * w / 1268, 100 * h / 688)
     )
     this.help_board_group.add(
+      this.add.image(w / 2 + 0.25 * w, h * 0.82, 'arrow').setOrigin(0.5, 0.5).setDisplaySize(100 * w / 1268, 100 * h / 688)
+    )
+    this.help_board_group.add(
       this.add.text(w / 2 + 0.25 * w, h * 0.7, `TAP HERE TO JUMP`, {
         ...this.runs_text_style,
         fontSize: `${25 * w / 1268}px`,
@@ -2016,9 +2020,11 @@ export default class newCricketScene extends Phaser.Scene {
     this.help_board_group.add(
       this.add.image(w / 2 - 0.2 * w, h * 0.7, 'help-board').setOrigin(0.5, 0.5).setDisplaySize(440 * w / 1268, 150 * h / 688)
     )
-    
     this.help_board_group.add(
-      this.add.text(w / 2 - 0.2 * w, h * 0.7, `TAP, HOLD & RELEASE\nHERE TO KICK THE BALL.`, {
+      this.add.image(w / 2 - 0.285 * w, h * 0.84, 'arrow').setOrigin(0.5, 0.5).setDisplaySize(100 * w / 1268, 100 * h / 688).setScale(-0.2, 0.2)
+    )
+    this.help_board_group.add(
+      this.add.text(w / 2 - 0.2 * w, h * 0.7, `TAP, HOLD & RELEASE\nHERE TO HIT`, {
         ...this.runs_text_style,
         fontSize: `${25 * w / 1268}px`,
         lineSpacing: 2,
@@ -2885,7 +2891,7 @@ export default class newCricketScene extends Phaser.Scene {
           this
         );
 
-        this.player.setVelocityY(-850);
+        this.player.setVelocityY(-650);
         this.player.setGravityY(1500);
       })
 
