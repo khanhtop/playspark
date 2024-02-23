@@ -34,11 +34,13 @@ export default function AggregateLeaderboard({ lb, user }) {
 function Rank({ item, pos, user, showModal, myId }) {
   const [loading, setLoading] = useState(false);
   const handleClick = async () => {
-    setLoading(true);
-    const _user = await getDoc(doc(firestore, "users", user.id));
-    const _json = _user.data();
-    showModal(_json);
-    setLoading(false);
+    showModal(item);
+    // console.log(item);
+    // setLoading(true);
+    // const _user = await getDoc(doc(firestore, "users", item.id));
+    // const _json = _user.data();
+    // showModal(item);
+    // setLoading(false);
   };
 
   return (
@@ -48,6 +50,10 @@ function Rank({ item, pos, user, showModal, myId }) {
         item.mine ? "bg-white/20" : "bg-white/5"
       } w-full h-16 group cursor-pointer font-octo text-2xl px-8 flex items-center gap-4`}
     >
+      <div className="h-10 w-10 rounded-full overflow-hidden">
+        <img src={item.profilePhoto} className="scale-110" />
+      </div>
+
       <div
         style={{ borderColor: user?.accentColor }}
         className={`group-hover:opacity-100 opacity-50 border-2 rounded-full h-10 w-10 flex items-center justify-center`}
@@ -60,7 +66,10 @@ function Rank({ item, pos, user, showModal, myId }) {
         </p>
       </div>
       <div className="flex gap-2">
-        <img src="/clientPages/xp.png" className="h-8" />
+        <img
+          src={`/level-badges/${calculateLevel(item.currentXp) + 8}.png`}
+          className="h-8"
+        />
         <p>{calculateLevel(item.currentXp)}</p>
       </div>
       <div className="flex gap-2">

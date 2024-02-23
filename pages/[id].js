@@ -203,6 +203,7 @@ export async function getServerSideProps(context) {
       const leaderboardSnapshot = await getDocs(leaderboardRef);
       const leaderboard = leaderboardSnapshot.docs.map((doc) => ({
         ...doc.data(),
+        id: doc.id,
         currentXp: doc.data()?.dataByClient?.[userDoc.id]?.xp || 0,
       }));
 
