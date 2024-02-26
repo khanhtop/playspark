@@ -26,10 +26,21 @@ export default function TopNav({
       style={{ backgroundColor: data.primaryColor, color: data.textColor }}
       className={`border-b-[1px] h-20 w-full flex py-4 px-6`}
     >
-      <img src={data?.sponsorLogo} className="h-full py-2 md:py-1" />
+      <img src={data?.brandLogo} className="h-full py-0 md:py-0" />
       <div className="h-full flex-1 flex py-2 md:py-1">
         {context?.loggedIn?.uid ? (
           <div className="h-full flex-1 justify-end flex items-center gap-2 md:gap-4">
+            {context?.prizes?.length > 0 && (
+              <Pill
+                value={context.prizes.length}
+                colorA={data.textColor}
+                colorB={data.accentColor}
+                image="/clientPages/xp.png"
+                Icon={XMarkIcon}
+                data={data}
+                onClick={() => setScreen("prizes")}
+              />
+            )}
             <Pill
               value={totalXp}
               colorA={data.textColor}
@@ -64,7 +75,7 @@ export default function TopNav({
             onClick={showLogin}
             className="flex-1 flex items-center justify-end font-octo text-2xl"
           >
-            <p className="cursor-pointer hover:opacity-80">Sign In</p>
+            <p className="cursor-pointer hover:opacity-80">Sign In/Up</p>
           </div>
         )}
       </div>

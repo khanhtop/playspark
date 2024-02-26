@@ -118,7 +118,7 @@ export default function AccountInfo({
             image="/clientPages/xp.png"
           />
           <ParameterBox
-            title="Tokens"
+            title="Coins"
             value={totalCoins}
             image="/clientPages/coins.png"
           />

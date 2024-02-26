@@ -72,10 +72,10 @@ export default function AuthModal({ action, closeModal, user }) {
           borderColor: user.accentColor,
           color: user.textColor,
         }}
-        className="border-2 w-[90%] max-w-[500px] h-[90%] rounded-xl overflow-hidden"
+        className="border-2 w-[90%] max-w-[500px] max-h-[90%] rounded-xl overflow-y-scroll "
       >
-        <div className="h-full w-full flex items-center justify-center flex-col gap-2">
-          <div className="w-full flex flex-col flex-1 items-center gap-2 lg:px-8  h-full justify-center">
+        <div className="h-full w-full flex items-center justify-center flex-col gap-2  pb-8">
+          <div className="w-full flex flex-col flex-1 items-center gap-2 lg:px-8  h-full justify-start">
             <img className="h-[80px]" src={user.brandLogo} />
             <h1 className="text-xl text-white font-octo">
               {authState === "login" ? "Login" : "Sign Up"}

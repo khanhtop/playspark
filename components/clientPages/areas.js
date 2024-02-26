@@ -48,6 +48,10 @@ export default function Areas({
                   text: "Games",
                   value: "games",
                 },
+                {
+                  text: "Top Players",
+                  value: "leaderboard",
+                },
               ]
         }
       />
