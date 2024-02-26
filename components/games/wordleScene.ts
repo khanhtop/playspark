@@ -153,7 +153,7 @@ export default class WordleScene extends Phaser.Scene {
     gameType = newGameType;
     console.log(newParams)
     this.params = newParams;
-    sampleWords = [...this.params.words]
+    sampleWords = this.shuffle([...this.params.words])
   }
 
   preload() {
@@ -714,7 +714,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(100), 'Use “booster” to reveal 3\ncorrect letters on the keyboard').setOrigin(0, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(100), 'Use “booster” to reveal 3\nincorrect letters on the keyboard').setOrigin(0, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(12) + 'px',
         fill: '#575757',
@@ -773,6 +773,24 @@ export default class WordleScene extends Phaser.Scene {
       UI[key].setText(num);
     }
     return num;
+  }
+
+  shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex > 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
   }
 
   private scoreHandler;
