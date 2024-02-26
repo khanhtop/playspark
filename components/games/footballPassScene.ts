@@ -73,6 +73,20 @@ export default class FootballPassScene extends Phaser.Scene {
     scrH = w * 0.175 / 1.614;
     heartR = w * 0.0625;
     heartNum = this.params.lives
+
+    this.load.spritesheet(
+      'player_anim',
+      '/pong/' + gameType + '/player.png',
+      { frameWidth: 120, frameHeight: 150 }
+    );
+
+    this.load.spritesheet(
+      'enemy_anim',
+      '/pong/' + gameType + '/enemy.png',
+      { frameWidth: 150, frameHeight: 150 }
+    );
+
+
   }
 
   // 400 800
@@ -116,11 +130,11 @@ export default class FootballPassScene extends Phaser.Scene {
       .setCollideWorldBounds(true)
       .setBounce(1, 1);
     this.player = this.physics.add
-      .image(mW, h - goalH - playerR / 2, "peck")
-      .setTint(0x0000ff)
+      .sprite(mW, h - goalH - playerR / 2, "peck")
+      // .setTint(0x0000ff)
       .setAlpha(0.75)
       .setDisplaySize(playerR, playerR)
-      .setCircle(this.textures.get("peck").getSourceImage().width / 2)
+      // .setCircle(this.textures.get("peck").getSourceImage().width / 2)
       .setCollideWorldBounds(true)
       .setPushable(false);
     this.ai = this.physics.add
@@ -181,6 +195,51 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.gr.refresh();
 
+    // ANIMATION CREATE
+    const player_frame = this.anims.generateFrameNames('player_anim', {
+      start: 0,
+      end: 17,
+    });
+    const player_idle_frame = this.anims.generateFrameNames('player_anim', {
+      start: 0,
+      end: 1,
+    });
+    this.anims.create({
+      key: 'player_anim',
+      frames: player_frame,
+      frameRate: 16,
+      repeat: -1,
+    });
+
+    this.anims.create({
+      key: 'player_idle_anim',
+      frames: player_idle_frame,
+      frameRate: 16,
+      repeat: -1,
+    });
+
+    const enemy_frame = this.anims.generateFrameNames('enemy_anim', {
+      start: 0,
+      end: 15,
+    });
+    const enemy_idle_frame = this.anims.generateFrameNames('enemy_anim', {
+      start: 0,
+      end: 1,
+    });
+    this.anims.create({
+      key: 'enemy_anim',
+      frames: enemy_frame,
+      frameRate: 16,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: 'enemy_idle_anim',
+      frames: enemy_idle_frame,
+      frameRate: 16,
+      repeat: -1,
+    });
+    // END ANIAMTION CREATE
+
     //this.physics.add.collider(this.player, gr);
     //this.physics.add.collider(this.ai, gr);
 
@@ -210,6 +269,8 @@ export default class FootballPassScene extends Phaser.Scene {
           h - goalH - playerR / 2
         );
         this.isDragging = true;
+        this.player.play('enemy_anim')
+
       },
       this
     );
@@ -238,6 +299,8 @@ export default class FootballPassScene extends Phaser.Scene {
         // Stop dragging and stop the player
         this.isDragging = false;
         this.player.setVelocity(0, 0);
+
+        this.player.play('player_anim')
       },
       this
     );
