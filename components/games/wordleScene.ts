@@ -714,7 +714,7 @@ export default class WordleScene extends Phaser.Scene {
     )
 
     GUIDE_PART.add(
-      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(100), 'Use “booster” to reveal 3\ncorrect letters on the keyboard').setOrigin(0, 0.5).setStyle({
+      this.add.text(mW - this.convertScaleData(80), mH - this.convertScaleData(100), 'Use “booster” to reveal 3\nincorrect letters on the keyboard').setOrigin(0, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: this.convertScaleData(12) + 'px',
         fill: '#575757',
