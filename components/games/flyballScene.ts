@@ -48,6 +48,8 @@ let ITEM = {
 
 let gameType = "football";
 
+const SCORE_PER_RING = 5
+
 export default class FlyBallScene extends Phaser.Scene {
   public static instance: FlyBallScene;
   private params: any;
@@ -799,7 +801,7 @@ export default class FlyBallScene extends Phaser.Scene {
 
   loseGame() {
     this.cameras.main.fadeOut(1000);
-    this.scoreHandler(GAME.passRing);
+    this.scoreHandler(GAME.passRing * SCORE_PER_RING);
 
     // game is lost
     //this.initGame();
@@ -936,7 +938,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.ballTxt.setText(GAME.ball.toString());
     this.lightTxt.setText(GAME.light.toString());
     this.coinTxt.setText(GAME.coin.toString());
-    this.scoreTxt.setText(GAME.passRing.toString());
+    this.scoreTxt.setText((GAME.passRing * SCORE_PER_RING).toString());
   }
 
   setBackgroundPos() {

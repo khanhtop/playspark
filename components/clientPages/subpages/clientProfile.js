@@ -9,36 +9,25 @@ import { doc, setDoc, updateDoc } from "firebase/firestore";
 
 export default function ClientProfile({ user, setScreen }) {
   const context = useAppContext();
-  const [avatars, setAvatars] = useState();
-  const [avatar, setAvatar] = useState();
-  console.log(avatars);
 
   useEffect(() => {
-    if (avatars) return;
-    fetch("https://api.reimage.dev/get/tags?avatar", {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_REIMAGE_KEY}`,
-      },
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((output) => {
-        setAvatars(output.thumbnails);
-      });
+    context.fetchAvatars();
   }, []);
 
   useEffect(() => {
-    if (avatars && context.profile && !context.profile.profilePhoto) {
+    if (context?.avatars && context.profile && !context.profile.profilePhoto) {
       setDoc(
         doc(firestore, "users", context?.loggedIn?.uid),
         {
-          profilePhoto: avatars[Math.floor(Math.random() * avatars.length)],
+          profilePhoto:
+            context?.avatars[
+              Math.floor(Math.random() * context?.avatars.length)
+            ],
         },
         { merge: true }
       );
     }
-  }, [avatars, context.profile]);
+  }, [context?.avatars, context.profile]);
 
   return (
     <ClientPageWrapper
@@ -53,7 +42,7 @@ export default function ClientProfile({ user, setScreen }) {
         context={context}
         totalXp={context?.profile?.totalXp || 0}
         totalCoins={context?.profile?.totalScore || 0}
-        avatars={avatars}
+        avatars={context?.avatars}
       />
       <Hero
         data={user}

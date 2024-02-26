@@ -134,6 +134,20 @@ export function AppWrapper({ children }) {
   const [hasSeenVideo, setHasSeenVideo] = useState(false);
   const [hasSubscribedToList, setHasSubscribedToList] = useState(false);
 
+  // Fetch Avatars
+  const [avatars, setAvatars] = useState();
+
+  const fetchAvatars = async () => {
+    if (avatars) return;
+    const res = await fetch("https://api.reimage.dev/get/tags?avatar", {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_REIMAGE_KEY}`,
+      },
+    });
+    const json = await res.json();
+    setAvatars(json.thumbnails);
+  };
+
   const sharedState = {
     isAuthed,
     loggedIn,
@@ -155,6 +169,8 @@ export function AppWrapper({ children }) {
     setEvent,
     eventQueue,
     setEventQueue,
+    avatars,
+    fetchAvatars,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

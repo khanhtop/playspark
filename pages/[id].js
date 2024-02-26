@@ -27,6 +27,8 @@ import {
   orderBy,
   limit,
   onSnapshot,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -95,6 +97,25 @@ export default function PageHandler({
     };
   }, []);
 
+  useEffect(() => {
+    context.fetchAvatars();
+  }, []);
+
+  useEffect(() => {
+    if (context?.avatars && context.profile && !context.profile.profilePhoto) {
+      setDoc(
+        doc(firestore, "users", context?.loggedIn?.uid),
+        {
+          profilePhoto:
+            context?.avatars[
+              Math.floor(Math.random() * context?.avatars.length)
+            ],
+        },
+        { merge: true }
+      );
+    }
+  }, [context?.avatars, context.profile]);
+
   const data = {
     user: {
       ...user,
@@ -119,8 +140,6 @@ export default function PageHandler({
     setActiveGame,
     activeGame,
   };
-
-  console.log(data.user);
 
   return (
     <>

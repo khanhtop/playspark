@@ -33,9 +33,9 @@ export default function TopNav({
             {context?.prizes?.length > 0 && (
               <Pill
                 value={context.prizes.length}
-                colorA={data.textColor}
+                colorA={data.accentColor}
                 colorB={data.accentColor}
-                image="/clientPages/xp.png"
+                image="/clientPages/prizes.png"
                 Icon={XMarkIcon}
                 data={data}
                 onClick={() => setScreen("prizes")}
@@ -59,10 +59,10 @@ export default function TopNav({
               data={data}
               onClick={() => setScreen("coins")}
             />
-            <BellIcon
+            {/* <BellIcon
               onClick={() => setScreen("notifications")}
               className="h-full pb-0 opacity-20"
-            />
+            /> */}
             <Avatar
               context={context}
               onClick={() => setScreen("profile")}
