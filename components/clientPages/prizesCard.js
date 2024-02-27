@@ -25,10 +25,7 @@ export default function PrizesCard({ data, inSlider, onClick, prizes }) {
       >
         <div className="flex-1 flex flex-col bg-black/50 text-white">
           <div className="flex-1 p-4">
-            <p className="text-2xl">
-              {groupRewards(prizes)?.length} Prize
-              {groupRewards(prizes)?.length > 1 && "s"} Available
-            </p>
+            <p className="text-2xl">Win Great Prizes!</p>
             <p>Win prizes such as {prizes?.[0]?.name}</p>
           </div>
           <div className="flex justify-end w-full pb-4 pr-4">

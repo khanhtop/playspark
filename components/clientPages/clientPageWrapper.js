@@ -17,7 +17,7 @@ export default function ClientPageWrapper({
       <div
         className={`${
           withGame
-            ? "h-[calc(100dvh-56px)]"
+            ? "h-[calc(100dvh-0px)]"
             : withBackNav
             ? "h-[calc(100dvh-135px)]"
             : "h-[calc(100dvh-80px)]"

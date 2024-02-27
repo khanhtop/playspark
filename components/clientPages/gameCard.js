@@ -20,7 +20,7 @@ export default function ClientGameCard({ data, item, playGame, inSlider }) {
     >
       <div
         style={{
-          backgroundImage: `url(${item.backgroundImage})`,
+          backgroundImage: `url(${item.gameIcon ?? item.backgroundImage})`,
           transition: "0.5s all",
         }}
         className="bg-center bg-cover flex-1 flex items-end p-2"

@@ -61,7 +61,7 @@ function Rank({ item, pos, user, showModal, myId }) {
         <p>{pos}</p>
       </div>
       <div className="flex-1">
-        <p className="opacity-50 group-hover:opacity-100">
+        <p className="opacity-50 group-hover:opacity-100 text-lg">
           {item.companyName || "No Name"} {item.id === myId && "(Me)"}
         </p>
       </div>
@@ -70,11 +70,11 @@ function Rank({ item, pos, user, showModal, myId }) {
           src={`/level-badges/${calculateLevel(item.currentXp) + 8}.png`}
           className="h-8"
         />
-        <p>{calculateLevel(item.currentXp)}</p>
+        {/* <p>{calculateLevel(item.currentXp)}</p> */}
       </div>
       <div className="flex gap-2">
         <img src="/clientPages/xp.png" className="h-8" />
-        <p>{item.currentXp}</p>
+        <p className="min-w-[40px]">{item.currentXp}</p>
       </div>
     </div>
   );

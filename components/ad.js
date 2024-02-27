@@ -179,12 +179,14 @@ export default function Advert({ data, withPopoutBackNav }) {
     >
       <NotificationBar notification={context.event} />
       {withPopoutBackNav && <PopoutBackNav action={withPopoutBackNav} />}
-      <p
-        onClick={() => logout()}
-        className="absolute bottom-4 right-4 text-black z-20 underline"
-      >
-        Sign Out
-      </p>
+      {stage === 0 && (
+        <p
+          onClick={() => logout()}
+          className="absolute bottom-4 right-4 text-black z-20 underline"
+        >
+          Sign Out
+        </p>
+      )}
 
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
