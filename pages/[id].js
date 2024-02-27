@@ -147,6 +147,7 @@ export default function PageHandler({
         {screen !== "game" && (
           <TopNav
             data={data.user}
+            prizes={data.prizes}
             context={context}
             totalScore={
               context?.profile?.dataByClient?.[data.user.id]?.coins || 0

@@ -48,7 +48,7 @@ let ITEM = {
 
 let gameType = "football";
 
-const SCORE_PER_RING = 5
+const SCORE_PER_RING = 1
 
 export default class FlyBallScene extends Phaser.Scene {
   public static instance: FlyBallScene;

@@ -27,23 +27,24 @@ function PrizeRow({ item, user }) {
         borderColor: user?.accentColor,
         color: user?.textColor,
       }}
-      className="border-2 p-4 rounded-xl flex gap-4"
+      className="border-2 p-4 rounded-xl flex gap-2 md:gap-6 flex-col md:flex-row"
     >
-      <div className="h-28 rounded-2xl overflow-hidden">
-        <img src={item.image} className="h-full scale-110" />
-      </div>
+      <img
+        src={item.image}
+        className="w-24 md:h-24 md:object-cover md:rounded-full"
+      />
 
       <div className="flex-1">
-        <p>{item.name}</p>
-        <p className="opacity-60">{item.description}</p>
+        <p className="text-base">{item.name}</p>
+        <p className="opacity-60 text-sm">{item.description}</p>
       </div>
-      <div>
+      <div className="flex justify-end items-start">
         <div
           style={{
             backgroundColor: user?.accentColor,
             color: user?.primaryColor,
           }}
-          className="px-4 py-1 rounded-full"
+          className="px-2 text-sm py-1 rounded-full"
         >
           <p>Active</p>
         </div>

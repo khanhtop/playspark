@@ -179,13 +179,12 @@ export default function Advert({ data, withPopoutBackNav }) {
     >
       <NotificationBar notification={context.event} />
       {withPopoutBackNav && <PopoutBackNav action={withPopoutBackNav} />}
-      {stage === 0 && (
-        <p
+      {stage === 0 && context?.loggedIn?.uid && (
+        <img
           onClick={() => logout()}
-          className="absolute bottom-4 right-4 text-black z-20 underline"
-        >
-          Sign Out
-        </p>
+          className="absolute bottom-4 left-4 text-black z-20 underline h-10 w-10"
+          src="/clientPages/signout.png"
+        />
       )}
 
       {shouldRotate && (

@@ -48,18 +48,18 @@ function Rank({ item, pos, user, showModal, myId }) {
       onClick={handleClick}
       className={`${
         item.mine ? "bg-white/20" : "bg-white/5"
-      } w-full h-16 group cursor-pointer font-octo text-2xl px-8 flex items-center gap-4`}
+      } w-full h-16 group cursor-pointer font-octo text-2xl px-8 flex items-center gap-2`}
     >
-      <div className="h-10 w-10 rounded-full overflow-hidden">
-        <img src={item.profilePhoto} className="scale-110" />
-      </div>
-
       <div
         style={{ borderColor: user?.accentColor }}
         className={`group-hover:opacity-100 opacity-50 border-2 rounded-full h-10 w-10 flex items-center justify-center`}
       >
         <p>{pos}</p>
       </div>
+      <div className="h-10 w-10 rounded-full overflow-hidden">
+        <img src={item.profilePhoto} className="scale-110" />
+      </div>
+
       <div className="flex-1">
         <p className="opacity-50 group-hover:opacity-100 text-lg">
           {item.companyName || "No Name"} {item.id === myId && "(Me)"}
@@ -72,9 +72,9 @@ function Rank({ item, pos, user, showModal, myId }) {
         />
         {/* <p>{calculateLevel(item.currentXp)}</p> */}
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 items-center">
         <img src="/clientPages/xp.png" className="h-8" />
-        <p className="min-w-[40px]">{item.currentXp}</p>
+        <p className="min-w-[30px] text-lg">{item.currentXp}</p>
       </div>
     </div>
   );

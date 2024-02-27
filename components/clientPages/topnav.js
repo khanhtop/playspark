@@ -1,4 +1,5 @@
 import { logout } from "@/helpers/firebase";
+import { groupPrizes } from "@/helpers/rewards";
 import {
   BellAlertIcon,
   BellIcon,
@@ -20,6 +21,7 @@ export default function TopNav({
   totalXp,
   showLogin,
   setScreen,
+  prizes,
 }) {
   return (
     <div
@@ -30,9 +32,9 @@ export default function TopNav({
       <div className="h-full flex-1 flex py-2 md:py-1">
         {context?.loggedIn?.uid ? (
           <div className="h-full flex-1 justify-end flex items-center gap-2 md:gap-4">
-            {context?.prizes?.length > 0 && (
+            {prizes?.length > 0 && (
               <Pill
-                value={context.prizes.length}
+                value={groupPrizes(prizes).length}
                 colorA={data.accentColor}
                 colorB={data.accentColor}
                 image="/clientPages/prizes.png"
