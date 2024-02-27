@@ -70,8 +70,8 @@ export default function AccountInfo({
       >
         <div
           className={`px-2 flex flex-col ${
-            vertical ? "md:flex-col" : "md:flex-row"
-          } gap-2 md:gap-4 flex-1 justify-center md:justify-start items-start md:items-center`}
+            vertical ? "md:flex-col items-center" : "md:flex-row items-start"
+          } gap-2 md:gap-4 flex-1 justify-center md:justify-start  md:items-center`}
         >
           <div className="flex items-center gap-2">
             {vertical && (

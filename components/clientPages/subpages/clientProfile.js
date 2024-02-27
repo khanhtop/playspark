@@ -6,9 +6,11 @@ import Achievements from "../achievements";
 import { firestore, logout } from "@/helpers/firebase";
 import { useEffect, useState } from "react";
 import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 export default function ClientProfile({ user, setScreen }) {
   const context = useAppContext();
+  const router = useRouter();
 
   // useEffect(() => {
   //   context.fetchAvatars();
@@ -84,7 +86,7 @@ export default function ClientProfile({ user, setScreen }) {
           text="Sign out."
           bgColor={user.accentColor}
           textColor={user.primaryColor}
-          onClick={() => logout()}
+          onClick={() => logout(window?.location?.pathname || "/")}
           img="/clientPages/signout.png"
         />
       </div>

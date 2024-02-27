@@ -126,7 +126,7 @@ function Pill({ value, Icon, image, data, onClick, colorA, colorB }) {
   return (
     <div
       style={{ borderColor: colorA }}
-      className="relative border-2 rounded-full gap-1 md:gap-2 h-full py-2 flex items-center px-3 md:px-4"
+      className="relative border-2 rounded-full gap-1 md:gap-2 h-full py-2 flex items-center px-4 flex justify-center"
     >
       {image ? (
         <img src={image} className="h-full" />
