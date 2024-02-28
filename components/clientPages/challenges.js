@@ -4,9 +4,12 @@ import { getChallenge } from "@/helpers/achievements";
 import EmbeddedModal from "./embeddedModal";
 import { useState } from "react";
 
-export default function Challenges({ totalXp, user, viewAchievements }) {
-  const xpChallenge = getChallenge("xp", 2000);
+export default function Challenges({ data, user, viewAchievements }) {
+  const xpChallenge = getChallenge("xp", data.xp);
+  const nPlaysChallenge = getChallenge("nPlays", data.nPlays);
   const [showModal, setShowModal] = useState(false);
+
+  console.log(data);
 
   return (
     <>
@@ -18,9 +21,9 @@ export default function Challenges({ totalXp, user, viewAchievements }) {
         <div className="h-full w-full px-1 py-1 flex flex-col">
           <img className="w-full rounded-2xl" src="/badges/challenge.png" />
           <div className="flex-1 mt-4 flex flex-col items-center text-center px-4 gap-4 font-octo">
-            <h1 className="text-3xl">{xpChallenge?.item?.text}</h1>
-            <img src={xpChallenge?.item?.image} className="h-24" />
-            <p className="font-roboto px-4">{xpChallenge?.item?.blurb}</p>
+            <h1 className="text-3xl">{showModal?.item?.text}</h1>
+            <img src={showModal?.item?.image} className="h-24" />
+            <p className="font-roboto px-4">{showModal?.item?.blurb}</p>
           </div>
           <UIButton
             onClick={() => setShowModal(false)}
@@ -31,12 +34,21 @@ export default function Challenges({ totalXp, user, viewAchievements }) {
           />
         </div>
       </EmbeddedModal>
-      <div className="grid grid-cols-2 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 p-6 gap-4">
         <ChallengeStatus
           viewAchievements={() => setShowModal(xpChallenge)}
           title={xpChallenge?.item?.text}
           nChallenges={xpChallenge?.length}
           rank={xpChallenge.index}
+          backgroundColor={user?.primaryColor}
+          accentColor={user?.accentColor}
+          textColor={user?.textColor}
+        />
+        <ChallengeStatus
+          viewAchievements={() => setShowModal(nPlaysChallenge)}
+          title={nPlaysChallenge?.item?.text}
+          nChallenges={nPlaysChallenge?.length}
+          rank={nPlaysChallenge.index}
           backgroundColor={user?.primaryColor}
           accentColor={user?.accentColor}
           textColor={user?.textColor}
@@ -69,7 +81,7 @@ function ChallengeStatus({
         }}
         className="bg-center bg-cover flex-1 p-2 relative"
       >
-        <div className="absolute top-0 left-0 bg-white/50 w-full h-full flex items-end">
+        <div className="absolute top-0 left-0 bg-black/20 w-full h-full flex items-end">
           <div className="flex justify-end w-full pb-2 pr-4">
             <UIButton
               onClick={() => viewAchievements()}

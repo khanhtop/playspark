@@ -56,6 +56,7 @@ export default function ClientProfile({ user, setScreen }) {
         <Achievements
           data={{
             xp: context?.profile?.dataByClient?.[user.id]?.xp || 0,
+            nPlays: context?.profile?.analytics?.playCount,
           }}
         />
       </div>

@@ -70,7 +70,10 @@ export default function Areas({
       {/* {tab === "challenges" && <Achievements data={{ xp: totalXp }} />} */}
       {tab === "challenges" && (
         <Challenges
-          data={{ xp: totalXp }}
+          data={{
+            xp: totalXp || 0,
+            nPlays: context?.profile?.analytics?.playCount || 0,
+          }}
           user={user}
           viewAchievements={viewAchievements}
         />
