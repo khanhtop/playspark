@@ -105,7 +105,7 @@ export default function SignUp({ data, closeDialog }) {
     setLoading(true);
     await signInWithEmailAndPassword(auth, email.trim(), password)
       .then(async (user) => {
-        loginEvent(context);
+        loginEvent(context, data);
         await verifyUserTracked(user.user.uid);
         closeDialog();
       })
@@ -129,7 +129,7 @@ export default function SignUp({ data, closeDialog }) {
           },
           { merge: true }
         );
-        signupEvent(context);
+        signupEvent(context, data);
         await verifyUserTracked(user.user.id, true);
         closeDialog();
       })

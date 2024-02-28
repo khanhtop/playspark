@@ -104,7 +104,7 @@ function EditableNameBox({ data, value, onChange, onBlur }) {
         onBlur={onBlur}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Enter Name"
-        style={{ borderColor: data.accentColor, color: data.textColor }}
+        style={{ borderColor: data.accentColor, color: "black" }}
         className="h-8 px-2 rounded-xl w-36 border-2 relative"
         defaultValue={value}
       ></input>

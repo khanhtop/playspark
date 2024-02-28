@@ -17,7 +17,11 @@ export default function Hero({ data, context, totalXp }) {
     return (
       <div
         style={{ color: data.textColor }}
-        className="h-[180px] opacity-90 flex items-center px-4 gap-8 mx-4 shadow-lg shadow-black/50 rounded-lg"
+        className={`h-[180px] opacity-90 flex items-center px-4 gap-8 mx-4 shadow-lg ${
+          data.primaryColor === "#000000"
+            ? "shadow-[#333]/50"
+            : "shadow-black/50"
+        } rounded-lg`}
       >
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex justify-between">
