@@ -2909,7 +2909,7 @@ export default class newCricketScene extends Phaser.Scene {
       .on('pointerup', () => {
         console.log("-----item fire----")
 
-        if(this.scorePanel.light > 2) {
+        if(this.scorePanel.light >= 2) {
           this.scorePanel.light -= 2;
           this.lightNumText.setText(this.scorePanel.light);
     
