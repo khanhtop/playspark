@@ -24,15 +24,38 @@ export async function sendSupabaseEvent(
   uid,
   clientId,
   tournamentId,
-  eventName
+  eventName,
+  clientName
 ) {
-  if (!uid || !tournamentId || !eventName || !clientId) return;
+  if (!tournamentId || !eventName || !clientId) return;
   await supabase.from("events").insert([
     {
-      user_id: uid.toString(),
+      user_id: uid?.toString() || null,
       tournament_id: tournamentId.toString(),
       event_name: eventName.toString(),
       client_id: clientId.toString(),
+      client_name: clientName,
     },
   ]);
+}
+
+export async function updateDwell(id, data) {
+  if (!data.tournament_id || !data.event_name || !data.client_id) return;
+  if (id) {
+    await supabase
+      .from("events")
+      .update({
+        ...data,
+      })
+      .eq("id", id);
+    return;
+  } else {
+    const result = await supabase
+      .from("events")
+      .insert({
+        ...data,
+      })
+      .select();
+    return result?.data?.[0]?.id;
+  }
 }

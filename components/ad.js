@@ -21,7 +21,7 @@ import { getHighScore } from "@/helpers/leaderboard";
 import NotificationBar from "./ui/notification";
 import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 import Modal from "./ui/modal";
-import { sendEvent } from "@/helpers/analytics";
+import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
@@ -124,7 +124,30 @@ export default function Advert({ data, withPopoutBackNav }) {
     }
   }, [data]);
 
+  let dwellCallback = () => null;
+  let dwellTime = 0;
+  let dwellId = null;
+
+  const dwell = () => {
+    updateDwell(dwellId, {
+      user_id: context?.loggedIn?.uid?.toString() || null,
+      tournament_id: data?.tournamentId?.toString() || null,
+      event_name: "dwell",
+      client_id: data?.ownerId?.toString() || null,
+      client_name: data?.ownerCompanyName?.toString() || null,
+      event_value: dwellTime,
+    }).then((result) => {
+      if (result) dwellId = result;
+    });
+  };
+
   useEffect(() => {
+    dwell();
+    dwellCallback = setInterval(() => {
+      dwellTime += 15;
+      dwell();
+    }, 15000);
+
     if (
       (isIOS || isAndroid) &&
       ((data.landscape && window.innerHeight > window.innerWidth) ||
@@ -135,11 +158,9 @@ export default function Advert({ data, withPopoutBackNav }) {
       setShouldRotate(false);
     }
     determineConstraints();
-  }, []);
 
-  // useEffect(() => {
-  //   sendEvent(context, data, "start");
-  // }, [window?.gtag]);
+    return () => clearInterval(dwellCallback);
+  }, []);
 
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 
