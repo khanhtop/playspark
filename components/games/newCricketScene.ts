@@ -769,7 +769,7 @@ export default class newCricketScene extends Phaser.Scene {
       fire_count: 0,
       score_count: 0,
       missFire: 0,
-      light: 100,
+      light: 0,
       totalScore: this.params.score,
       maxscore: this.params.maxscore,
       itemCount: {
