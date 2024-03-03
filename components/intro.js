@@ -1,4 +1,4 @@
-import { loginEvent, playEvent } from "@/helpers/events";
+import { playEvent } from "@/helpers/events";
 import UIButton from "./ui/button";
 import Text from "./ui/text";
 import { useAppContext } from "@/helpers/store";
@@ -31,7 +31,7 @@ export default function Intro({ data, setStage, premium, ready }) {
           <UIButton
             {...data}
             onClick={() => {
-              playEvent(context);
+              playEvent(context, data);
               setStage(1);
             }}
             text="START"
