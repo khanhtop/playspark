@@ -5,7 +5,7 @@ import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { calculateLevel } from "@/helpers/xp";
 
-export default function AggregateLeaderboard({ lb, user }) {
+export default function AggregateLeaderboard({ lb, user, tournaments }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState();
 
@@ -14,6 +14,7 @@ export default function AggregateLeaderboard({ lb, user }) {
       {lb
         ?.filter((z) => z.currentXp !== 0)
         ?.sort((a, b) => b.currentXp - a.currentXp)
+        ?.slice(0, 10)
         ?.map((item, key) => (
           <Rank
             showModal={(a) => {
@@ -26,7 +27,11 @@ export default function AggregateLeaderboard({ lb, user }) {
             pos={key + 1}
           />
         ))}
-      <UserModal userData={showModal} onClose={() => setShowModal()} />
+      <UserModal
+        tournaments={tournaments}
+        userData={showModal}
+        onClose={() => setShowModal()}
+      />
     </div>
   );
 }

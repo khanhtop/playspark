@@ -80,7 +80,11 @@ export default function Areas({
       )}
       {tab === "leaderboard" && (
         <div className="">
-          <AggregateLeaderboard user={user} lb={aggregateLeaderboard} />
+          <AggregateLeaderboard
+            user={user}
+            lb={aggregateLeaderboard}
+            tournaments={tournaments}
+          />
         </div>
       )}
     </div>
