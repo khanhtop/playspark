@@ -82,6 +82,7 @@ export default function Areas({
         <div className="">
           <AggregateLeaderboard
             user={user}
+            totalXp={totalXp}
             lb={aggregateLeaderboard}
             tournaments={tournaments}
           />

@@ -5,7 +5,12 @@ import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { calculateLevel } from "@/helpers/xp";
 
-export default function AggregateLeaderboard({ lb, user, tournaments }) {
+export default function AggregateLeaderboard({
+  lb,
+  user,
+  tournaments,
+  totalXp,
+}) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState();
 
@@ -31,6 +36,7 @@ export default function AggregateLeaderboard({ lb, user, tournaments }) {
         tournaments={tournaments}
         userData={showModal}
         onClose={() => setShowModal()}
+        totalXp={totalXp}
       />
     </div>
   );

@@ -2,14 +2,17 @@ import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import ChallengeButton from "./challengeButton";
 import { useState } from "react";
 import { useAppContext } from "@/helpers/store";
+import Button from "../forms/button";
 
-export default function UserModal({ userData, onClose, tournaments }) {
+export default function UserModal({ userData, onClose, tournaments, totalXp }) {
   if (!userData) return <div />;
   const context = useAppContext();
   const client = userData?.client ?? {};
   const performanceData = userData?.dataByClient?.[client.id] || {};
   const [isChallenging, setIsChallenging] = useState(false);
-
+  const [isConfirmingChallenge, setIsConfirmingChallenge] = useState(false);
+  const xpSteal = Math.floor(userData?.totalXp / 10);
+  const xpLose = Math.floor(totalXp / 10);
   return (
     <div
       onClick={onClose}
@@ -24,7 +27,36 @@ export default function UserModal({ userData, onClose, tournaments }) {
         }}
         className="relative border-2 rounded-xl p-4 w-[90%] max-h-[90%] max-w-[500px]"
       >
-        {isChallenging ? (
+        {isConfirmingChallenge ? (
+          <div>
+            <h1 className="text-2xl mb-4">Are you sure?</h1>
+            <p>
+              If you win the challenge, you will steal {xpSteal}XP from{" "}
+              {userData.companyName}. However, if you lose the challenge, you
+              will lose {xpLose}XP.
+            </p>
+            <div className="flex mt-4 flex-row gap-2 max-h-[400px] overflow-y-scroll">
+              <button
+                className="h-12 rounded-2xl flex-1"
+                style={{
+                  backgroundColor: client.accentColor,
+                  textColor: client.primaryColor,
+                }}
+              >
+                Do It!
+              </button>
+              <button
+                className="h-12 rounded-2xl w-36"
+                style={{
+                  backgroundColor: client.accentColor,
+                  textColor: client.primaryColor,
+                }}
+              >
+                Don't Do It!
+              </button>
+            </div>
+          </div>
+        ) : isChallenging ? (
           <div>
             <h1 className="text-2xl mb-4">Select a challenge</h1>
             <div className="flex flex-col gap-2 max-h-[400px] overflow-y-scroll">
@@ -35,7 +67,10 @@ export default function UserModal({ userData, onClose, tournaments }) {
                     src={item.backgroundImage}
                   />
                   <p className="flex-1 font-octo text-xl">{item.name}</p>
-                  <div className="cursor-pointer group flex items-center justify-center gap-1">
+                  <div
+                    onClick={() => setIsConfirmingChallenge(true)}
+                    className="cursor-pointer group flex items-center justify-center gap-1"
+                  >
                     <p className="text-white/80 group-hover:text-white/100">
                       Challenge
                     </p>
@@ -87,7 +122,13 @@ export default function UserModal({ userData, onClose, tournaments }) {
           </>
         )}
         <div
-          onClick={() => (isChallenging ? setIsChallenging(false) : onClose())}
+          onClick={() =>
+            isConfirmingChallenge
+              ? setIsConfirmingChallenge(false)
+              : isChallenging
+              ? setIsChallenging(false)
+              : onClose()
+          }
           style={{
             backgroundColor: client.accentColor,
             color: client.primaryColor,
