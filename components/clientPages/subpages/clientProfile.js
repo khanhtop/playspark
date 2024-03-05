@@ -3,10 +3,34 @@ import AccountInfo from "../accountInfo";
 import ClientPageWrapper from "../clientPageWrapper";
 import Hero from "../hero";
 import Achievements from "../achievements";
-import { logout } from "@/helpers/firebase";
+import { firestore, logout } from "@/helpers/firebase";
+import { useEffect, useState } from "react";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 export default function ClientProfile({ user, setScreen }) {
   const context = useAppContext();
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   context.fetchAvatars();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (context?.avatars && context.profile && !context.profile.profilePhoto) {
+  //     setDoc(
+  //       doc(firestore, "users", context?.loggedIn?.uid),
+  //       {
+  //         profilePhoto:
+  //           context?.avatars[
+  //             Math.floor(Math.random() * context?.avatars.length)
+  //           ],
+  //       },
+  //       { merge: true }
+  //     );
+  //   }
+  // }, [context?.avatars, context.profile]);
+
   return (
     <ClientPageWrapper
       user={user}
@@ -18,24 +42,26 @@ export default function ClientProfile({ user, setScreen }) {
         data={user}
         user={context.profile}
         context={context}
-        totalXp={context?.profile?.totalXp || 0}
-        totalCoins={context?.profile?.totalScore || 0}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
+        totalCoins={context?.profile?.dataByClient?.[user.id]?.coins || 0}
+        avatars={context?.avatars}
       />
       <Hero
         data={user}
         context={context}
-        totalXp={context?.profile?.totalXp || 0}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
       />
       <div className="shadow shadow-lg mx-5 my-4 border-[1px] border-[#DDD]/50 rounded-xl">
         <h3 className="font-octo text-3xl ml-4 mt-4">My Achievements</h3>
         <Achievements
           data={{
-            xp: user.totalXp,
+            xp: context?.profile?.dataByClient?.[user.id]?.xp || 0,
+            nPlays: context?.profile?.analytics?.playCount,
           }}
         />
       </div>
       <div className="mt-8">
-        <ProfileButton
+        {/* <ProfileButton
           heading="Invite Friends And Win"
           text="Refer friends and get coins when they sign up PLUS when they play a game."
           bgColor={user.accentColor}
@@ -55,14 +81,14 @@ export default function ClientProfile({ user, setScreen }) {
           bgColor={user.accentColor}
           textColor={user.primaryColor}
           img="/badges/pad.png"
-        />
+        /> */}
         <ProfileButton
           heading="Sign Out"
           text="Sign out."
           bgColor={user.accentColor}
           textColor={user.primaryColor}
-          onClick={() => logout()}
-          // img="/badges/pad.png"
+          onClick={() => logout(window?.location?.pathname || "/")}
+          img="/clientPages/signout.png"
         />
       </div>
     </ClientPageWrapper>

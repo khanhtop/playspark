@@ -10,7 +10,7 @@ import dynamic from "next/dynamic";
 import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
 import { doc, increment, setDoc, updateDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
+import { firestore, logout } from "@/helpers/firebase";
 import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
 import Survey from "./survey";
@@ -21,11 +21,12 @@ import { getHighScore } from "@/helpers/leaderboard";
 import NotificationBar from "./ui/notification";
 import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 import Modal from "./ui/modal";
-import { sendEvent } from "@/helpers/analytics";
+import { sendEvent, updateDwell } from "@/helpers/analytics";
+import PopoutBackNav from "./clientPages/popoutBackNav";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
-export default function Advert({ data, theme }) {
+export default function Advert({ data, withPopoutBackNav }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
   const [lockX, setLockX] = useState();
@@ -123,7 +124,30 @@ export default function Advert({ data, theme }) {
     }
   }, [data]);
 
+  let dwellCallback = () => null;
+  let dwellTime = 0;
+  let dwellId = null;
+
+  const dwell = () => {
+    updateDwell(dwellId, {
+      user_id: context?.loggedIn?.uid?.toString() || null,
+      tournament_id: data?.tournamentId?.toString() || null,
+      event_name: "dwell",
+      client_id: data?.ownerId?.toString() || null,
+      client_name: data?.ownerCompanyName?.toString() || null,
+      event_value: dwellTime,
+    }).then((result) => {
+      if (result) dwellId = result;
+    });
+  };
+
   useEffect(() => {
+    dwell();
+    dwellCallback = setInterval(() => {
+      dwellTime += 15;
+      dwell();
+    }, 15000);
+
     if (
       (isIOS || isAndroid) &&
       ((data.landscape && window.innerHeight > window.innerWidth) ||
@@ -134,11 +158,9 @@ export default function Advert({ data, theme }) {
       setShouldRotate(false);
     }
     determineConstraints();
-  }, []);
 
-  // useEffect(() => {
-  //   sendEvent(context, data, "start");
-  // }, [window?.gtag]);
+    return () => clearInterval(dwellCallback);
+  }, []);
 
   const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
 
@@ -177,6 +199,14 @@ export default function Advert({ data, theme }) {
       }}
     >
       <NotificationBar notification={context.event} />
+      {withPopoutBackNav && <PopoutBackNav action={withPopoutBackNav} />}
+      {stage === 0 && context?.loggedIn?.uid && (
+        <img
+          onClick={() => logout()}
+          className="absolute bottom-4 left-4 text-black z-20 underline h-10 w-10"
+          src="/clientPages/signout.png"
+        />
+      )}
 
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">

@@ -45,7 +45,7 @@ export default function ClientCoins({ user, rewards, setScreen }) {
             </div>
             <div className="flex flex-col gap-2 justify-center">
               <p className="text-2xl">Available Coin Balance</p>
-              <p>{context?.profile?.totalScore ?? 0}</p>
+              <p>{context?.profile?.dataByClient?.[user.id]?.coins || 0}</p>
             </div>
           </div>
           <div className="grid grid-cols-2 mt-6 pb-8 px-5 gap-4">

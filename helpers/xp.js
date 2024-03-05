@@ -53,3 +53,21 @@ export function getRank(xp) {
 export function xpAsPercentage(xp, next) {
   return (xp / next) * 100;
 }
+
+export function calculateLevel(xp) {
+  if (xp < 1000) {
+    return 1;
+  }
+
+  let level = 1;
+  let base = 1000;
+  let step = 100;
+  for (let i = 1; i < 100; i++) {
+    if (xp <= i * base + step) {
+      return i;
+    } else {
+      step *= 1.1;
+    }
+  }
+  return level;
+}

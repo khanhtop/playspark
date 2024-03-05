@@ -47,10 +47,10 @@ export default function SignUp({ data, closeDialog }) {
       errors.push("your password is at least 6 characters");
     }
 
-    if (phase === "signup" && name.length < 3) {
-      setErrorSource((prevErrorSource) => ({ ...prevErrorSource, name: true }));
-      errors.push("you have entered your name");
-    }
+    // if (phase === "signup" && name.length < 3) {
+    //   setErrorSource((prevErrorSource) => ({ ...prevErrorSource, name: true }));
+    //   errors.push("you have entered your name");
+    // }
 
     if (errors.length > 0) {
       let errorMessage = "Please ensure that ";
@@ -125,7 +125,6 @@ export default function SignUp({ data, closeDialog }) {
           {
             email: email.trim(),
             uid: user.user.uid,
-            companyName: name,
           },
           { merge: true }
         );
@@ -145,7 +144,6 @@ export default function SignUp({ data, closeDialog }) {
         doc(firestore, "users", data.ownerId, "users", email.trim()),
         {
           active: true,
-          name: name,
           id: id ?? "",
         },
         { merge: true }
@@ -269,7 +267,7 @@ export default function SignUp({ data, closeDialog }) {
             )}
           </div>
           <div className="flex-1  flex flex-col items-center">
-            {phase === "signup" && (
+            {/* {phase === "signup" && (
               <input
                 className={`${
                   errorSource.name ? "border-red-500/50" : "border-transparent"
@@ -280,7 +278,7 @@ export default function SignUp({ data, closeDialog }) {
                   setName(e.target.value);
                 }}
               />
-            )}
+            )} */}
             {/* {error && (
             <p className="text-[10px] mt-2 text-red-500 font-bold">{error}</p>
           )} */}
