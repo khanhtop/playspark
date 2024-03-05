@@ -22,6 +22,9 @@ let w: number,
 
 let gameType = "football";
 
+let boardW = 800;
+let boardH = 2000;
+
 export default class FootballPassScene extends Phaser.Scene {
   public static instance: FootballPassScene;
   private ball!: Phaser.Physics.Arcade.Image;
@@ -29,6 +32,11 @@ export default class FootballPassScene extends Phaser.Scene {
   private params: any;
   private ai!: Phaser.Physics.Arcade.Image;
   lifeNumText: any;
+  private text_main_style: any;
+  private tapGroup: Phaser.GameObjects.Group;
+  private blueline: any;
+  private yellowline: any;
+  private selRing: Phaser.GameObjects.Sprite;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -46,6 +54,21 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.image("score", "/pong/" + gameType + "/score.png");
 
     this.load.image("middleAd", this.params.sponsorLogo);
+
+    this.load.image("line", "/pong/" + gameType + "/line.png");
+    this.load.image("game-over", "/pong/" + gameType + "/game-over.png");
+    this.load.image("ring", "/pong/" + gameType + "/ring.png");
+    this.load.image("TAP1", "/pong/" + gameType + "/TAP1.png");
+    this.load.image("ring", "/pong/" + gameType + "/ring.png");
+
+    this.load.image("plan1", "/pong/" + gameType + "/p1.png");
+    this.load.image("plan2", "/pong/" + gameType + "/p2.png");
+    this.load.image("plan3", "/pong/" + gameType + "/p3.png");
+    this.load.image("plan4", "/pong/" + gameType + "/p4.png");
+    this.load.image("plan5", "/pong/" + gameType + "/p5.png");
+    this.load.image("plan-board", "/pong/" + gameType + "/plan-board.png");
+
+
 
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
@@ -77,7 +100,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.spritesheet(
       'player_anim',
       '/pong/' + gameType + '/player.png',
-      { frameWidth: 120, frameHeight: 150 }
+      { frameWidth: 141, frameHeight: 150 }
     );
 
     this.load.spritesheet(
@@ -86,7 +109,26 @@ export default class FootballPassScene extends Phaser.Scene {
       { frameWidth: 150, frameHeight: 150 }
     );
 
+    let fontUrl = '/pong/' + gameType + '/ZingRustDemo-Base.otf';
+    const font = new FontFace('customFont', `url(${fontUrl})`);
 
+    font
+      .load()
+      .then(() => {
+        // Font loaded successfully
+        document.fonts.add(font);
+      })
+      .catch((error) => {
+        // Font failed to load
+        console.log('Failed to load font:', error);
+      });
+
+    this.text_main_style = {
+      fontFamily: 'customFont',
+      fontSize: 14 + 'px',
+      align: 'center',
+      fill: '#ffffff',
+    }
   }
 
   // 400 800
@@ -117,14 +159,112 @@ export default class FootballPassScene extends Phaser.Scene {
       false,
       false
     );
-    this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
+    this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, boardH * w / boardW);
     this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
     //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
 
     this.add.image(mW, 37, "score").setDisplaySize(scrW, scrH);
+    
+    // BEGIN HEADER
+    
+    const header = this.add.image(w / 2, 30, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.9, 40).setScrollFactor(0, 0);
+
+    this.add.text(header.x, header.y, '001423 PTS', {
+      ...this.text_main_style,
+      color: '#454545',
+      fontSize: '12px'
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+
+    this.add.text(header.x - w * 0.25, header.y, '2ND AND 11', {
+      ...this.text_main_style,
+      color: '#454545'
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+
+    this.add.text(header.x + w * 0.25, header.y, 'TDS: 0', {
+      ...this.text_main_style,
+      color: '#454545'
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+
+    const lifePanel = this.add.image(w / 2 + w * 0.45 - w * 0.075, 75, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.15, 40).setScrollFactor(0, 0);
+
+    this.add.image(lifePanel.x - w * 0.03, lifePanel.y, 'heart').setOrigin(0.5, 0.5).setDisplaySize(15, 15).setScrollFactor(0, 0);
+    this.lifeNumText = this.add.text(lifePanel.x + w * 0.03, lifePanel.y, heartNum.toString(), {
+      ...this.text_main_style,
+      color: '#454545'
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+    // END HEADER
+
+    // BEGIN BOTTOM
+
+    this.tapGroup = this.add.group();
+
+    this.tapGroup.add(
+      this.add.image(w / 2, header.y + 30, 'TAP1').setOrigin(0.5, 0).setDisplaySize(w * 0.7, w * 0.7 * 0.65).setScrollFactor(0, 0)
+    )
+
+    const itemR = w * 0.2;
+
+    this.tapGroup.add(
+      this.add.image(w / 2, h - itemR * 1.35, 'plan-board').setOrigin(0.5, 0.5).setDisplaySize(itemR * 4, itemR * 1.7).setScrollFactor(0, 0)
+    )
+
+    this.tapGroup.add(
+      this.add.image(w / 2 - itemR * 1.2, h - itemR * 1.5, 'plan1').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
+      .setInteractive()
+      .on('pointerup', () => {
+        this.onSelectPlan("plan1")
+      })
+    )
+    
+    this.tapGroup.add(
+      this.add.image(w / 2, h - itemR * 1.5, 'plan2').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
+      .setInteractive()
+      .on('pointerup', () => {
+        this.onSelectPlan("plan2")
+      })
+    )
+    
+    this.tapGroup.add(
+      this.add.image(w / 2 + itemR * 1.2, h - itemR * 1.5, 'plan3').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
+      .setInteractive()
+      .on('pointerup', () => {
+        this.onSelectPlan("plan3")
+      })
+    )
+
+    this.tapGroup.add(
+      this.add.text(w / 2, h - itemR * 0.82, "SELECT A PLAY", {
+        ...this.text_main_style,
+        fontSize: '25px',
+        color: '#454545'
+      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)  
+    )
+    
+    this.tapGroup.add(
+      this.add.rectangle(w / 2 + itemR * 1.5, h - itemR * 0.8, itemR * 0.8, itemR * 0.2, 0x0f2f1f).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
+    )
+
+    this.tapGroup.add(
+      this.add.text(w / 2 + itemR * 1.5, h - itemR * 0.8, "0:10", {
+        ...this.text_main_style,
+        color: '#ffffff'
+      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)  
+    )
+
+    
+    // END BOTTOM
+    
+    // BEGIN GAME
+
+    this.blueline = this.add.rectangle(w / 2, w / 800 * 300, w * 0.96, 5, 0x22d3ee).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+    this.yellowline = this.add.rectangle(w / 2, w / 800 * (300 + 140), w * 0.96, 5, 0xf3cb04).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+
+    this.selRing = this.add.sprite(w / 2, h / 2, 'ring').setOrigin(0.5, 0.5).setDisplaySize(playerR * 0.5, playerR * 0.5);
+    // END GAME
+
+
     this.ball = this.physics.add
       .image(mW, mH, "ball")
-      .setAlpha(0.85)
       .setDisplaySize(ballR, ballR)
       .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setCollideWorldBounds(true)
@@ -132,15 +272,13 @@ export default class FootballPassScene extends Phaser.Scene {
     this.player = this.physics.add
       .sprite(mW, h - goalH - playerR / 2, "peck")
       // .setTint(0x0000ff)
-      .setAlpha(0.75)
       .setDisplaySize(playerR, playerR)
-      // .setCircle(this.textures.get("peck").getSourceImage().width / 2)
+      .setCircle(this.textures.get("peck").getSourceImage().width / 3)
       .setCollideWorldBounds(true)
       .setPushable(false);
     this.ai = this.physics.add
       .image(mW, scr + goalH + playerR / 2, "peck")
       .setTint(0xff0000)
-      .setAlpha(0.75)
       .setDisplaySize(playerR, playerR)
       .setCircle(this.textures.get("peck").getSourceImage().width / 2)
       .setCollideWorldBounds(true)
@@ -198,7 +336,7 @@ export default class FootballPassScene extends Phaser.Scene {
     // ANIMATION CREATE
     const player_frame = this.anims.generateFrameNames('player_anim', {
       start: 0,
-      end: 17,
+      end: 14,
     });
     const player_idle_frame = this.anims.generateFrameNames('player_anim', {
       start: 0,
@@ -243,12 +381,6 @@ export default class FootballPassScene extends Phaser.Scene {
     //this.physics.add.collider(this.player, gr);
     //this.physics.add.collider(this.ai, gr);
 
-    this.lifeNumText = this.add
-    .text(w - 70, 13, heartNum.toString(), {
-      fontFamily: "enhanced_led_board-7",
-      fontSize: "22px",
-      color: "#ffffff",
-    })
 
     this.player.setInteractive();
     //(this.player as any).setDraggable(true);
@@ -304,6 +436,8 @@ export default class FootballPassScene extends Phaser.Scene {
       },
       this
     );
+
+    // this.selRing.startFollow(this.player);
 
     this.scoreText = this.add
       .text(mW + 2, 36, this.params.score.toString()?.padStart(4, "0"), {
@@ -446,15 +580,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.scoreNum = this.params.score;
     this.ballDir = 1;
     this.scoreText.text = this.params.score.toString()?.padStart(4, "0");
-    this.hearts.forEach((h) => h.destroy);
-    this.hearts.length = 0;
-    for (let i = 0; i < 1; i++) {
-      const heart = this.add
-        .image(w - 30 - i * 40, 30, "heart")
-        .setDisplaySize(heartR, heartR);
-      this.hearts.push(heart);
-    }
-    console.log(this.hearts);
+
     this.ball.setAlpha(0.5);
     this.ball.setCircle(0.1);
 
@@ -496,6 +622,12 @@ export default class FootballPassScene extends Phaser.Scene {
       }
       return false;
     }
+  }
+
+  onSelectPlan(planType) {
+    console.log(planType);
+
+
   }
 
   startRound() {
@@ -669,6 +801,9 @@ export default class FootballPassScene extends Phaser.Scene {
 
   update(time, delta) {
     this.aiUpdate(time, delta);
+
+    this.selRing.setPosition(this.player.x - playerR * 0.05, this.player.y - playerR * 0.1);
+
 
     if (this.isDragging) {
       this.goalXPos = Phaser.Math.Clamp(
