@@ -26,7 +26,14 @@ import PopoutBackNav from "./clientPages/popoutBackNav";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
-export default function Advert({ data, withPopoutBackNav }) {
+export default function Advert({
+  data,
+  withPopoutBackNav,
+  coins,
+  xp,
+  userId,
+  email,
+}) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
   const [lockX, setLockX] = useState();
@@ -39,6 +46,14 @@ export default function Advert({ data, withPopoutBackNav }) {
   const MAX_REVIVES = 4;
   const [lives, setLives] = useState(data.id === 11 ? 10 : 3);
   const [reviveCount, setReviveCount] = useState(0);
+
+  useEffect(() => {
+    // For Sportzfan Only
+    context.setWebhookBasePayload({
+      userId: userId,
+      email: email,
+    });
+  }, [userId, email]);
 
   useMemo(() => {
     if (!data.tournamentId || !context.loggedIn?.uid) return;

@@ -26,6 +26,12 @@ export function AppWrapper({ children }) {
   const [event, showEvent] = useState(false);
   const [eventQueue, setEventQueue] = useState([]);
 
+  // For Webhooks
+  const [webhookBasePayload, setWebhookBasePayload] = useState({
+    userId: null,
+    email: null,
+  });
+
   const setEvent = (ev) => {
     setEventQueue((prevQueue) => {
       return [ev, ...prevQueue];
@@ -171,6 +177,8 @@ export function AppWrapper({ children }) {
     setEventQueue,
     avatars,
     fetchAvatars,
+    webhookBasePayload,
+    setWebhookBasePayload,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>
