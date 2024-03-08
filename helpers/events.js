@@ -261,7 +261,7 @@ async function fireXpWebhook(context, data, value) {
     },
     body: JSON.stringify({
       userId: base.userId,
-      kudosAmount: 0,
+      kudosAmount: value,
     }),
   })
     .then((res) => res.json())
