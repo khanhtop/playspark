@@ -23,6 +23,18 @@ export async function getAd(id) {
   }
 }
 
+export async function getClient(id) {
+  const user = await getDoc(doc(firestore, "users", id));
+  if (user.exists()) {
+    const packet = {
+      ...user.data(),
+    };
+    return packet;
+  } else {
+    return null;
+  }
+}
+
 export async function getDemo(id) {
   const game = games.find((a) => a.id === parseInt(id));
   return {

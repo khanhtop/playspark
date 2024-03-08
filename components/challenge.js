@@ -26,14 +26,7 @@ import PopoutBackNav from "./clientPages/popoutBackNav";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
-export default function Advert({
-  data,
-  withPopoutBackNav,
-  coins,
-  xp,
-  userId,
-  email,
-}) {
+export default function Challenge({ data, withPopoutBackNav }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
   const [lockX, setLockX] = useState();
@@ -47,41 +40,8 @@ export default function Advert({
   const [lives, setLives] = useState(data.id === 11 ? 10 : 3);
   const [reviveCount, setReviveCount] = useState(0);
 
-  useEffect(() => {
-    // For Sportzfan Only
-    context.setWebhookBasePayload({
-      userId: userId,
-      email: email,
-    });
-  }, [userId, email]);
-
-  useMemo(() => {
-    if (!data.tournamentId || !context.loggedIn?.uid) return;
-    getHighScore(data.tournamentId, context?.loggedIn?.uid).then(
-      (highScore) => {
-        setPrevBest(highScore);
-      }
-    );
-  }, [data.tournamentId, context?.loggedIn?.uid]);
-
-  useEffect(() => {
-    if (score > prevBest) {
-      setPrevBest(score);
-    }
-  }, [score]);
-
   const callback = (score) => {
-    scoreEvent(context, score, data);
-    if (reviveCount - MAX_REVIVES) {
-      setLives(data.id === 11 ? 3 : 1);
-      setScore(score);
-      setStage(2);
-      setReviveCount(reviveCount + 1);
-    } else {
-      setLives(data.id === 11 ? 10 : 3);
-      setScore(0);
-      setStage(2);
-    }
+    console.log(score);
   };
 
   const reset = () => {
@@ -139,30 +99,7 @@ export default function Advert({
     }
   }, [data]);
 
-  let dwellCallback = () => null;
-  let dwellTime = 0;
-  let dwellId = null;
-
-  const dwell = () => {
-    updateDwell(dwellId, {
-      user_id: context?.loggedIn?.uid?.toString() || null,
-      tournament_id: data?.tournamentId?.toString() || null,
-      event_name: "dwell",
-      client_id: data?.ownerId?.toString() || null,
-      client_name: data?.ownerCompanyName?.toString() || null,
-      event_value: dwellTime,
-    }).then((result) => {
-      if (result) dwellId = result;
-    });
-  };
-
   useEffect(() => {
-    dwell();
-    dwellCallback = setInterval(() => {
-      dwellTime += 15;
-      dwell();
-    }, 15000);
-
     if (
       (isIOS || isAndroid) &&
       ((data.landscape && window.innerHeight > window.innerWidth) ||
@@ -173,35 +110,6 @@ export default function Advert({
       setShouldRotate(false);
     }
     determineConstraints();
-
-    return () => clearInterval(dwellCallback);
-  }, []);
-
-  const [hasLoggedImpression, setHasLoggedImpression] = useState(false);
-
-  useEffect(() => {
-    if (data?.tournamentId && !hasLoggedImpression) {
-      setHasLoggedImpression(true);
-      incrementImpressions(data?.tournamentId?.toString());
-    }
-  }, [data?.tournamentId]);
-
-  const eventChannel = useRef(null);
-
-  useEffect(() => {
-    if (!eventChannel.current) {
-      eventChannel.current = setInterval(() => {
-        context.setEventQueue((prevQueue) => {
-          const evQueue = [...prevQueue];
-          const popped = evQueue.pop();
-          context.showEvent(popped);
-          return [...evQueue];
-        });
-      }, 3500);
-    }
-    return () => {
-      if (eventChannel.current) clearInterval(eventChannel.current);
-    };
   }, []);
 
   return (
@@ -213,7 +121,6 @@ export default function Advert({
         position: "relative",
       }}
     >
-      <NotificationBar notification={context.event} />
       {withPopoutBackNav && <PopoutBackNav action={withPopoutBackNav} />}
       {stage === 0 && context?.loggedIn?.uid && (
         <img
@@ -265,69 +172,7 @@ export default function Advert({
           reviveCount={MAX_REVIVES - reviveCount}
         />
       )}
-      {stage === 3 && (
-        <VideoAd
-          video={
-            data?.sponsoredVideo ??
-            mockVideos[Math.floor(Math.random() * mockVideos.length)]
-          }
-          data={data}
-          onSkip={() => {
-            updateDoc(
-              doc(firestore, "tournaments", data?.tournamentId?.toString()),
-              {
-                videoViews: increment(1),
-              }
-            ).then(() => {
-              if (!data.demo) {
-                incrementPlayCountWithImpressions(
-                  data?.tournamentId?.toString(),
-                  "freemium"
-                );
-              }
-              setStage(1);
-            });
-          }}
-        />
-      )}
-      {stage === 4 && (
-        <Survey
-          data={data}
-          onComplete={(response) => {
-            if (!data.demo) {
-              incrementPlayCountWithImpressions(
-                data?.tournamentId?.toString(),
-                "freemium"
-              );
-            }
-            setStage(1);
-          }}
-        />
-      )}
-      {stage === 5 && (
-        <Pong
-          gameType="wheelspin"
-          callback={() => {
-            incrementOptInCount(data.tournamentId);
-            playableAdFinishedCTA(context, data);
-            context.setModal({
-              title: "You Win",
-              contents: (
-                <WinModal
-                  onClaim={() => {
-                    context.setModal();
-                    setStage(1);
-                  }}
-                />
-              ),
-            });
-          }}
-          params={{
-            logo: "/branding/logo.png",
-            winProbability: data?.playableAd?.winProbability ?? 0.5,
-          }}
-        />
-      )}
+
       <Modal primaryColor={data?.primaryColor} landscape={data?.landscape} />
     </div>
   );

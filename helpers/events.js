@@ -66,6 +66,7 @@ export function scoreEvent(context, score, data) {
     "scored_points",
     data.ownerCompanyName
   );
+  fireXpWebhook(context, data, Math.floor(score / 10));
 }
 
 export function emailAddedCTA(context, data) {
@@ -248,4 +249,27 @@ async function updateAnalytics(
     { merge: true }
   );
   return;
+}
+
+async function fireXpWebhook(context, data, value) {
+  const base = context.webhookBasePayload;
+  if (!base.userId || !data?.xpWebhook) return;
+  fetch(data.xpWebhook, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: base.userId,
+      kudosAmount: 0,
+    }),
+  })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json);
+      console.log("WEBHOOK FIRED");
+    })
+    .catch((error) =>
+      console.warn("WEBHOOK ERROR, CHECK THE API SETTINGS", error)
+    );
 }

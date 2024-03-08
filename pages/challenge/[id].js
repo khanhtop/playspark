@@ -1,19 +1,14 @@
-import Advert from "@/components/ad";
-import PremiumAdvert from "@/components/premiumAd";
-import Modal from "@/components/ui/modal";
-import { getAd, getClient } from "@/helpers/api";
+import Challenge from "@/components/challenge";
+import { getAd } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 import Head from "next/head";
-import { useEffect, useState } from "react";
-import { isIOS, isAndroid, isSafari } from "react-device-detect";
 
-export default function Ad({ ad, id, coins, xp, userId, email }) {
-  const context = useAppContext();
-
+export default function ChallengeHome({ ad, id, challenger }) {
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
     return "https://playspark.co" + url;
   };
+
   return (
     <>
       <Head>
@@ -52,16 +47,8 @@ export default function Ad({ ad, id, coins, xp, userId, email }) {
         {ad ? (
           !ad.isActive ? (
             <p>This tournament is not currently running.</p>
-          ) : ad.isPremium ? (
-            <PremiumAdvert data={ad} />
           ) : (
-            <Advert
-              data={ad}
-              coins={coins}
-              userId={userId}
-              xp={xp}
-              email={email}
-            />
+            <Challenge data={ad} />
           )
         ) : (
           <p>{id} - AD NOT FOUND</p>
@@ -72,22 +59,14 @@ export default function Ad({ ad, id, coins, xp, userId, email }) {
 }
 
 export async function getServerSideProps(context) {
+  console.log(context.query);
   // Get the ad from the id here:
-  const { id, email, xp, coins, userId } = context?.query;
-  const ad = await getAd(id);
-  const client = await getClient(ad.ownerId);
+  const ad = await getAd(context.query?.id);
   return {
     props: {
-      id: id,
-      ad: {
-        ...ad,
-        xpWebhook: client.xpWebhook,
-      },
-      email: email || null,
-      xp: xp || null,
-      coins: coins || null,
-      userId: userId || null,
-      xpWebhook: client.xpWebhook,
+      id: context.query?.id,
+      challenger: context.query.challenger,
+      ad: ad,
     },
   };
 }
