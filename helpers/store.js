@@ -21,6 +21,7 @@ export function AppWrapper({ children }) {
   const [myGames, setMyGames] = useState();
   const [rewards, setRewards] = useState();
   const [prizes, setPrizes] = useState();
+  const [notifications, setNotifications] = useState();
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
   const [event, showEvent] = useState(false);
@@ -68,6 +69,7 @@ export function AppWrapper({ children }) {
     let _myGamesUnsub = () => null;
     let _rewardsUnsub = () => null;
     let _prizesUnsub = () => null;
+    let _notificationsUnsub = () => null;
     if (loggedIn && !profile) {
       _profileUnsub = onSnapshot(
         doc(firestore, "users", loggedIn.uid),
@@ -123,15 +125,32 @@ export function AppWrapper({ children }) {
       });
     }
 
+    if (loggedIn && !notifications) {
+      const q = query(
+        collection(firestore, "notifications"),
+        where("uid", "==", loggedIn.uid),
+        orderBy("timestamp", "desc")
+      );
+      _notificationsUnsub = onSnapshot(q, (querySnapshot) => {
+        const _notifications = [];
+        querySnapshot.forEach((doc) => {
+          _notifications.push({ ...doc.data(), id: doc.id });
+        });
+        setNotifications(_notifications);
+      });
+    }
+
     return () => {
       _profileUnsub();
       _myGamesUnsub();
       _rewardsUnsub();
       _prizesUnsub();
+      _notificationsUnsub();
       setProfile();
       setMyGames();
       setRewards();
       setPrizes();
+      setNotifications();
     };
   }, [loggedIn]);
 
@@ -161,6 +180,7 @@ export function AppWrapper({ children }) {
     myGames,
     rewards,
     prizes,
+    notifications,
     device,
     hasSeenSurvey,
     setHasSeenSurvey,

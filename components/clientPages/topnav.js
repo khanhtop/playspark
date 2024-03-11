@@ -61,10 +61,16 @@ export default function TopNav({
               data={data}
               onClick={() => setScreen("coins")}
             />
-            {/* <BellIcon
-              onClick={() => setScreen("notifications")}
-              className="h-full pb-0 opacity-20"
-            /> */}
+            <div className="h-full relative">
+              <BellIcon
+                onClick={() => setScreen("notifications")}
+                className="h-full pb-0 opacity-20"
+              />
+              <div className="absolute bg-black/80 -top-2 -right-1 h-6 w-6 text-xs flex items-center justify-center border-2 border-white rounded-full">
+                {context?.notifications?.length}
+              </div>
+            </div>
+
             <Avatar
               context={context}
               onClick={() => setScreen("profile")}

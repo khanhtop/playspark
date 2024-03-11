@@ -1,4 +1,9 @@
+import { useAppContext } from "@/helpers/store";
+
 export default function ChallengeButton({ userData, onChallengeButtonClick }) {
+  const context = useAppContext();
+  if (!context?.loggedIn?.uid) return <div />;
+
   const { client } = userData;
   const xpSteal = Math.floor(userData?.totalXp / 10);
 
@@ -14,7 +19,7 @@ export default function ChallengeButton({ userData, onChallengeButtonClick }) {
         className="cursor-pointer hover:opacity-80 transition rounded-2xl px-4 py-4 flex flex-col items-center justify-center"
       >
         <p className="uppercase font-octo text-xl">
-          Challenge {userData.companyName}
+          Battle {userData.companyName}
         </p>
         <p className="uppercase opacity-80">Steal {xpSteal}XP if you win!</p>
       </div>

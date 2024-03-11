@@ -10,7 +10,7 @@ export default function UIButton({
   disabled,
   loading,
 }) {
-  if (theme === "pixel") {
+  if (theme === "aixel") {
     return (
       <button
         disabled={disabled || loading}

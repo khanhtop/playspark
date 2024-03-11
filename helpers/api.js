@@ -1,5 +1,13 @@
 //import Pong from ;
-import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  increment,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import dynamic from "next/dynamic";
 import { firestore } from "./firebase";
 import { games } from "./games";
@@ -16,6 +24,18 @@ export async function getAd(id) {
       backgroundImage:
         ad.data()?.backgroundImage ??
         "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
+    };
+    return packet;
+  } else {
+    return null;
+  }
+}
+
+export async function getChallenge(id) {
+  const ad = await getDoc(doc(firestore, "challenges", id));
+  if (ad.exists()) {
+    const packet = {
+      ...ad.data(),
     };
     return packet;
   } else {
@@ -263,4 +283,20 @@ export async function archive(tournamentId) {
     isActive: false,
   });
   return;
+}
+
+export async function createChallenge(game, challengee, challenger) {
+  const challengeId = Date.now().toString();
+  await setDoc(doc(firestore, "challenges", challengeId), {
+    game: game,
+    challengee: challengee,
+    challenger: challenger,
+  });
+  await addDoc(collection(firestore, "notifications"), {
+    timestamp: Date.now(),
+    link: `https://playspark.co/battle/${challengeId}`,
+    text: `The battle has begun with ${challengee?.companyName}`,
+    uid: challenger.id,
+  });
+  return challengeId;
 }

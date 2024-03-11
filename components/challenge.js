@@ -23,6 +23,7 @@ import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 import Modal from "./ui/modal";
 import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
+import ChallengeIntro from "./challengeIntro";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -136,32 +137,29 @@ export default function Challenge({ data, withPopoutBackNav }) {
         </div>
       )}
       {stage === 0 && (
-        <Intro
+        <ChallengeIntro
           data={data}
           setStage={(a) => {
             setStage(a);
-            if (!data.demo) {
-              incrementPlayCount(data?.tournamentId?.toString(), "freemium");
-            }
           }}
         />
       )}
 
       {stage === 1 &&
-        getGame(data.id, data, callback, {
-          lives: lives,
-          score: score,
-          brandLogo: data?.brandLogo,
-          sponsorLogo: data?.sponsorLogo,
-          backgroundSprite: data?.backgroundSprite,
-          objectSprite: data?.objectSprite,
-          playerSprite: data?.playerSprite,
-          enemySprite: data?.enemySprite,
-          powerUpSprite: data?.powerUpSprite,
-          additionalSpriteOne: data?.additionalSpriteOne,
-          additionalSpriteTwo: data?.additionalSpriteTwo,
-          maxscore: prevBest ?? 0,
-          words: data?.words || [],
+        getGame(data.game.id, data.game, callback, {
+          lives: 1,
+          score: 0,
+          brandLogo: data?.game?.brandLogo,
+          sponsorLogo: data?.game?.sponsorLogo,
+          backgroundSprite: data?.game?.backgroundSprite,
+          objectSprite: data?.game?.objectSprite,
+          playerSprite: data?.game?.playerSprite,
+          enemySprite: data?.game?.enemySprite,
+          powerUpSprite: data?.game?.powerUpSprite,
+          additionalSpriteOne: data?.game?.additionalSpriteOne,
+          additionalSpriteTwo: data?.game?.additionalSpriteTwo,
+          maxscore: 0,
+          words: data?.game?.words || [],
         })}
       {stage === 2 && (
         <Outro
