@@ -120,7 +120,7 @@ function ChallengeAvatar({ data }) {
         <img src={data.profilePhoto} className="h-full w-full scale-110" />
       </div>
 
-      <p className="z-10">{data.companyName}</p>
+      <p className="z-10 uppercase">{data.companyName}</p>
     </div>
   );
 }
@@ -133,19 +133,18 @@ function ChallengeSummary({ data, role, ready }) {
       ) : role === "challenger" ? (
         <div className="flex flex-col gap-2">
           <p>
-            If you win the challenge, you can steal{" "}
-            {Math.floor(data.totalXp / 10)}
+            If you win the battle, you can steal {Math.floor(data.totalXp / 10)}
             XP from {data.companyName}
           </p>
           <p>
-            As the challenger, you must go first and set the score that{" "}
+            As the battle creator, you must go first and set the score that{" "}
             {data.companyName} must beat.
           </p>
           <p className="">You only get one life, so make it count!</p>
         </div>
       ) : (
         <p>
-          If you win the challenge, you will win 200XP and reduce{" "}
+          If you win the battle, you will win 200XP and reduce{" "}
           {data.companyName}'s XP by 10%
         </p>
       )}

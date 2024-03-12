@@ -59,7 +59,7 @@ export default function ChallengeHome({ ad, id }) {
       <div
         className={`text-white font-bold w-[calc(100dvw)] h-[calc(100dvh)] flex items-center bg-black justify-center`}
       >
-        {ad ? <Challenge data={ad} /> : <p>{id} - AD NOT FOUND</p>}
+        {ad ? <Challenge data={ad} id={id} /> : <p>{id} - AD NOT FOUND</p>}
       </div>
     </>
   );

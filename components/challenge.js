@@ -24,10 +24,11 @@ import Modal from "./ui/modal";
 import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
 import ChallengeIntro from "./challengeIntro";
+import ChallengeOutro from "./challengeOutro";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
-export default function Challenge({ data, withPopoutBackNav }) {
+export default function Challenge({ data, withPopoutBackNav, id }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
   const [lockX, setLockX] = useState();
@@ -42,7 +43,25 @@ export default function Challenge({ data, withPopoutBackNav }) {
   const [reviveCount, setReviveCount] = useState(0);
 
   const callback = (score) => {
-    console.log(score);
+    setScore(score);
+    setStage(2);
+    if (context?.loggedIn?.uid === data?.challenger?.id) {
+      console.log(score, id);
+      updateDoc(doc(firestore, "challenges", id), {
+        challengerResult: {
+          score: score,
+          timestamp: Date.now(),
+        },
+      });
+    }
+    if (context?.loggedIn?.uid === data?.challengee?.id) {
+      updateDoc(doc(firestore, "challenges", id), {
+        challengeeResult: {
+          score: score,
+          timestamp: Date.now(),
+        },
+      });
+    }
   };
 
   const reset = () => {
@@ -162,8 +181,8 @@ export default function Challenge({ data, withPopoutBackNav }) {
           words: data?.game?.words || [],
         })}
       {stage === 2 && (
-        <Outro
-          data={data}
+        <ChallengeOutro
+          data={data.game}
           setStage={setStage}
           score={score}
           onReset={() => reset()}
