@@ -25,18 +25,31 @@ let gameType = "football";
 let boardW = 800;
 let boardH = 2000;
 
+let plans = [
+  "PLAN1"
+]
+
 export default class FootballPassScene extends Phaser.Scene {
   public static instance: FootballPassScene;
   private ball!: Phaser.Physics.Arcade.Image;
-  private player!: Phaser.Physics.Arcade.Image;
+  private player!: Phaser.Physics.Arcade.Sprite;
   private params: any;
-  private ai!: Phaser.Physics.Arcade.Image;
   lifeNumText: any;
   private text_main_style: any;
   private tapGroup: Phaser.GameObjects.Group;
+  private playerGroup: Phaser.GameObjects.Group;
   private blueline: any;
   private yellowline: any;
   private selRing: Phaser.GameObjects.Sprite;
+  private aiPlayers: Phaser.Physics.Arcade.Sprite[];
+  private aiEnemies: Phaser.Physics.Arcade.Sprite[];
+  private status: Object;
+  private posObject: any;
+  private linesGroup: Phaser.GameObjects.Group[];
+  private roundText: Phaser.GameObjects.Text;
+  private touchDownText: Phaser.GameObjects.Text;
+  private gameoverTexts: Object;
+  private gameOverGroup: Phaser.GameObjects.Group;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -49,7 +62,6 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
     this.load.image("peck", "/pong/" + gameType + "/peck.png");
     this.load.image("bg", "/pong/" + gameType + "/bg.png");
-    //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
 
@@ -79,14 +91,14 @@ export default class FootballPassScene extends Phaser.Scene {
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
-    ballR = w * 0.1;
+    ballR = w * 0.05;
     playerR = w * 0.175;
     aiR = w * 0.175;
     scr = h * 0.08;
     mW = w / 2;
     mH = (h - scr) / 2 + scr;
-    goalH = h * 0.09;
-    sideW = w * 0.08;
+    goalH = w / 800 * 160;
+    sideW = w * 0;
     boundW = w - 2 * sideW;
     boundH = h - scr - 2 * goalH;
     ballVY = h * 0.5;
@@ -109,7 +121,13 @@ export default class FootballPassScene extends Phaser.Scene {
       { frameWidth: 150, frameHeight: 150 }
     );
 
-    let fontUrl = '/pong/' + gameType + '/ZingRustDemo-Base.otf';
+    this.load.spritesheet(
+      'smoke',
+      '/pong/' + gameType + '/smoke.png',
+      { frameWidth: 156, frameHeight: 105 }
+    );
+
+    let fontUrl = '/pong/' + gameType + '/ZingRustDemo-Base.ttf';
     const font = new FontFace('customFont', `url(${fontUrl})`);
 
     font
@@ -132,9 +150,6 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   // 400 800
-
-  private gr: Phaser.Physics.Arcade.StaticGroup;
-
   private whistle: any;
   private ballHit: any;
   private final: any;
@@ -142,7 +157,116 @@ export default class FootballPassScene extends Phaser.Scene {
   private lost: any;
 
   create() {
-    this.sound.add("bg").setLoop(true).play();
+    this.status = {
+      isBallPlayer: true,
+      isPlaying: false,
+      planIdx: -1,
+      isKick: false,
+      isThrowBall: false,
+      isSacked: false,
+      score: {
+        touchDown: 0,
+        firstDown: 0,
+        passStreak: 0,
+        passYards: 0,
+        runYards: 0,
+        hailMarys: 0,
+      }
+    }
+
+    this.posObject = {
+      startPos : {
+        x : 400,
+        y : 160 + 140 * 11,
+        first: 160 + 140 * 10,
+        second: 160 + 140 * 7,
+      },
+      lastLine: 160 + 140,
+      PLAN1: {
+        players : [
+          {
+            x : 100,
+            y : 50
+          },
+          {
+            x : 400,
+            y : 50
+          },
+          {
+            x : 600,
+            y : 50,
+          },
+          {
+            x : 700,
+            y : 50
+          }
+        ],
+        enemies: [
+          {
+            x : 100,
+            y : -80
+          },
+          {
+            x : 400,
+            y : -100
+          },
+          {
+            x : 600,
+            y : -150
+          },
+          {
+            x : 700,
+            y : -300
+          },
+        ],
+        targets: [
+          [
+            {
+              x : 100,
+              y : -210
+            },
+            {
+              x : 360,
+              y : -320
+            }
+          ],
+          [
+            {
+              x : 400,
+              y : 0
+            },
+            {
+              x : 400,
+              y : 0
+            },
+          ],
+          [
+            {
+              x : 400,
+              y : -460
+            },
+            {
+              x : 400,
+              y : -460
+            },
+          ],
+          [
+            {
+              x : 700,
+              y : -210
+            },
+            {
+              x : 400,
+              y : -500
+            }
+          ]
+        ]
+      }
+    }
+
+    this.gameoverTexts = {};
+
+    // this.sound.add("bg").setLoop(true).play();
     this.whistle = this.sound.add("whistle");
     this.ballHit = this.sound.add("ballHit");
     this.final = this.sound.add("final");
@@ -151,22 +275,26 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.physics.world.setBounds(
       sideW,
-      scr + goalH,
+      goalH,
       boundW,
-      boundH,
+      boardH * w / boardW,
       true,
       true,
       false,
       false
     );
-    this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, boardH * w / boardW);
+    let bg = this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, boardH * w / boardW);
     this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
     //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
 
     this.add.image(mW, 37, "score").setDisplaySize(scrW, scrH);
     
+    this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
     // BEGIN HEADER
     
+    this.blueline = this.add.rectangle(w / 2, w / 800 * 300, w * 0.96, 5, 0x22d3ee).setOrigin(0.5, 0.5);
+    this.yellowline = this.add.rectangle(w / 2, w / 800 * (300 + 140), w * 0.96, 5, 0xf3cb04).setOrigin(0.5, 0.5);
+
     const header = this.add.image(w / 2, 30, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.9, 40).setScrollFactor(0, 0);
 
     this.add.text(header.x, header.y, '001423 PTS', {
@@ -212,7 +340,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2 - itemR * 1.2, h - itemR * 1.5, 'plan1').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
-        this.onSelectPlan("plan1")
+        this.onSelectPlan("PLAN1", 0)
       })
     )
     
@@ -220,7 +348,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2, h - itemR * 1.5, 'plan2').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
-        this.onSelectPlan("plan2")
+        this.onSelectPlan("PLAN1", 0)
       })
     )
     
@@ -228,7 +356,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2 + itemR * 1.2, h - itemR * 1.5, 'plan3').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
-        this.onSelectPlan("plan3")
+        this.onSelectPlan("PLAN1", 0)
       })
     )
 
@@ -251,22 +379,48 @@ export default class FootballPassScene extends Phaser.Scene {
       }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)  
     )
 
+    this.tapGroup.setDepth(3)
     
     // END BOTTOM
     
     // BEGIN GAME
 
-    this.blueline = this.add.rectangle(w / 2, w / 800 * 300, w * 0.96, 5, 0x22d3ee).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
-    this.yellowline = this.add.rectangle(w / 2, w / 800 * (300 + 140), w * 0.96, 5, 0xf3cb04).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+    this.linesGroup = [];
+    plans.forEach(key => {
+      const group = this.add.group();
+      this.posObject[key].targets.forEach((posArray, i) => {
+        let offset = {
+          x : 0, 
+          y : - 50
+        }
+        let start = {
+          x : this.posObject[key].players[i].x, 
+          y : this.posObject[key].players[i].y
+        }
+        posArray.forEach(pos => {
+          const line = this.add.line(0, 0, this.getUIPos(start.x + offset.x), this.getUIPos(start.y + offset.y), this.getUIPos(pos.x + offset.x), this.getUIPos(pos.y + offset.y),  0xd0ae04).setOrigin(0);
+          line.setLineWidth(2);
+
+          group.add(line);
+          start.x = pos.x;
+          start.y = pos.y;
+
+        });
+      });
+
+      group.setVisible(false);
+      this.linesGroup.push(group);
+    })
+
 
     this.selRing = this.add.sprite(w / 2, h / 2, 'ring').setOrigin(0.5, 0.5).setDisplaySize(playerR * 0.5, playerR * 0.5);
     // END GAME
 
 
     this.ball = this.physics.add
-      .image(mW, mH, "ball")
+      .sprite(mW, mH, "ball")
       .setDisplaySize(ballR, ballR)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setCircle(this.textures.get("ball").getSourceImage().width / 4)
       .setCollideWorldBounds(true)
       .setBounce(1, 1);
     this.player = this.physics.add
@@ -276,62 +430,10 @@ export default class FootballPassScene extends Phaser.Scene {
       .setCircle(this.textures.get("peck").getSourceImage().width / 3)
       .setCollideWorldBounds(true)
       .setPushable(false);
-    this.ai = this.physics.add
-      .image(mW, scr + goalH + playerR / 2, "peck")
-      .setTint(0xff0000)
-      .setDisplaySize(playerR, playerR)
-      .setCircle(this.textures.get("peck").getSourceImage().width / 2)
-      .setCollideWorldBounds(true)
-      .setPushable(false);
 
-    this.aa = this.physics.add.image(0, h - goalH, "peck")
-      .setTint(0xff0000)
-      .setAlpha(0.75)
-      .setOrigin(0)
-      .setPosition(0, h - goalH - ballR / 2)
-      .setDisplaySize(ballR / 2, ballR / 2)
-      .setCollideWorldBounds(true)
-      .setVisible(false)
-      .setPushable(false);
-
-    this.aa1 = this.physics.add.image(0, h - goalH, "peck")
-      .setTint(0xff0000)
-      .setAlpha(0.75)
-      .setOrigin(0)
-      .setPosition(w - ballR, h - goalH - ballR / 2)
-      .setDisplaySize(ballR / 2, ballR / 2)
-      .setCollideWorldBounds(true)
-      .setVisible(false)
-      .setPushable(false);
-
-    this.gr = this.physics.add.staticGroup();
-
-    (this.gr.create(collW, goalH) as Phaser.Physics.Arcade.Image)
-      .setSize(collW, goalH)
-      .setDisplaySize(collW, goalH)
-      .setOrigin(0)
-      .setPosition(0, scr)
-      .setVisible(false);
-    (this.gr.create(collW, goalH) as Phaser.Physics.Arcade.Image)
-      .setSize(collW, goalH)
-      .setDisplaySize(collW, goalH)
-      .setOrigin(0)
-      .setPosition(w - collW, scr)
-      .setVisible(false);
-    (this.gr.create(collW, goalH) as Phaser.Physics.Arcade.Image)
-      .setSize(collW, goalH)
-      .setDisplaySize(collW, goalH)
-      .setOrigin(0)
-      .setPosition(0, h - goalH)
-      .setVisible(false);
-    (this.gr.create(collW, goalH) as Phaser.Physics.Arcade.Image)
-      .setSize(collW, goalH)
-      .setDisplaySize(collW, goalH)
-      .setOrigin(0)
-      .setPosition(w - collW, h - goalH)
-      .setVisible(false);
-
-    this.gr.refresh();
+    this.playerGroup = this.add.group();
+    this.playerGroup.add(this.player);
+    this.playerGroup.add(this.selRing);
 
     // ANIMATION CREATE
     const player_frame = this.anims.generateFrameNames('player_anim', {
@@ -340,7 +442,7 @@ export default class FootballPassScene extends Phaser.Scene {
     });
     const player_idle_frame = this.anims.generateFrameNames('player_anim', {
       start: 0,
-      end: 1,
+      end: 0,
     });
     this.anims.create({
       key: 'player_anim',
@@ -362,7 +464,7 @@ export default class FootballPassScene extends Phaser.Scene {
     });
     const enemy_idle_frame = this.anims.generateFrameNames('enemy_anim', {
       start: 0,
-      end: 1,
+      end: 0,
     });
     this.anims.create({
       key: 'enemy_anim',
@@ -376,11 +478,48 @@ export default class FootballPassScene extends Phaser.Scene {
       frameRate: 16,
       repeat: -1,
     });
+
+    const smoke_frame = this.anims.generateFrameNames('smoke', {
+      start: 0,
+      end: 1,
+    });
+    this.anims.create({
+      key: 'smoke_anim',
+      frames: smoke_frame,
+      frameRate: 10,
+      repeat: -1,
+    });
     // END ANIAMTION CREATE
 
-    //this.physics.add.collider(this.player, gr);
-    //this.physics.add.collider(this.ai, gr);
+    // BEGIN INIT AIs
+    this.aiPlayers = [];
+    this.aiEnemies = [];
 
+    for(let i = 0; i < 4; i++) {
+      this.aiPlayers.push(
+        this.physics.add
+          .sprite(mW, scr + goalH + playerR / 2, "peck")
+          // .setTint(0xff0000)
+          .setDisplaySize(playerR, playerR)
+          .setCircle(this.textures.get("peck").getSourceImage().width / 3)
+          .setCollideWorldBounds(true)
+          .setPushable(true)
+          .play('player_idle_anim')
+      )
+
+      this.aiEnemies.push(
+        this.physics.add
+          .sprite(mW, scr + goalH + playerR / 2, "peck")
+          // .setTint(0xff0000)
+          .setDisplaySize(playerR, playerR)
+          .setCircle(this.textures.get("peck").getSourceImage().width / 3, 0, playerR * 0.5)
+          .setCollideWorldBounds(true)
+          .setPushable(true)
+          .play('enemy_idle_anim')
+      )
+    }
+
+    // END INIT AIs
 
     this.player.setInteractive();
     //(this.player as any).setDraggable(true);
@@ -397,11 +536,11 @@ export default class FootballPassScene extends Phaser.Scene {
         );
         this.goalYPos = Phaser.Math.Clamp(
           pointer.y,
-          mH + playerR / 2,
+          playerR / 2,
           h - goalH - playerR / 2
         );
         this.isDragging = true;
-        this.player.play('enemy_anim')
+        this.player.play('player_anim')
 
       },
       this
@@ -418,8 +557,8 @@ export default class FootballPassScene extends Phaser.Scene {
         );
         this.goalYPos = Phaser.Math.Clamp(
           dragY,
-          mH + playerR / 2,
-          h - goalH - playerR / 2
+          playerR / 2,
+          boardH * w / boardW - goalH - playerR / 2
         );
       },
       this
@@ -432,10 +571,42 @@ export default class FootballPassScene extends Phaser.Scene {
         this.isDragging = false;
         this.player.setVelocity(0, 0);
 
-        this.player.play('player_anim')
+        // this.player.play('player_anim')
       },
       this
     );
+
+    bg.on("pointerup", (pointer) => {
+
+      let x = pointer.x;
+      let y = pointer.y + this.cameras.main.worldView.y;
+
+      if(!this.status.isBallPlayer || this.isDragging || !this.status.isPlaying || this.status.isThrowBall) return;
+
+      this.status.isThrowBall = true;
+      this.status.isBallPlayer = false;
+      this.status.isKick = true;
+
+      let dx = x - this.ball.x;
+      let dy = y - this.ball.y;
+
+      let distance = Phaser.Math.Distance.Between(x, y, this.ball.x, this.ball.y)
+
+      this.ball.target = {
+        x : x,
+        y : y
+      }
+      this.ball.start = {
+        x : this.ball.x,
+        y : this.ball.y,
+      }
+
+      let angle = Math.atan2(dy, dx);
+
+      this.ball.setAngle(angle);
+      this.ball.setVelocity(dx / distance * 140, dy / distance * 140);
+
+    }).setInteractive()
 
     // this.selRing.startFollow(this.player);
 
@@ -467,84 +638,225 @@ export default class FootballPassScene extends Phaser.Scene {
       })
       .setOrigin(0.5, 0.5);
 
-    this.tweens.add({
-      targets: this.ball,
-      duration: 50000,
-      rotation: 360,
-      repeat: -1,
-    });
+    // this.physics.add.overlap(
+    //   this.player,
+    //   this.ball,
+    //   () => {
 
-    /*
-        const ballFx = this.ball.postFX.addBloom(0xffffff, 0, 0, 0, 1);
+    //     if(this.status.isBallPlayer) return;
 
-        const ballFXTween = this.tweens.add({
-            targets: ballFx,
-            blurStrength: 5,
-            yoyo: true,
-            duration: 200,
-            paused: true,
-            onComplete: () => {
-                ballFXTween.restart();
-                ballFXTween.pause();
-            }
-        });
-        */
+    //     this.touches++;
+    //     // if (!this.ballHit.isPlaying) this.ballHit.play();
+    //     this.ballHit.stop();
+    //     this.ballHit.play();
+    //   },
+    //   null,
+    //   this
+    // );
 
+    for(let i = 0; i < 4; i++) {
+      this.physics.add.overlap(
+        this.ball,
+        this.aiPlayers[i],
+        () => {
+          if(this.status.isPlaying && !this.status.isKick && !this.status.isBallPlayer) {
+            // this.status.isPlaying = false;
+            console.log("hit ball in playground.")
+            this.status.isBallPlayer = true;
+
+            let x = this.player.x;
+            let y = this.player.y;
+            
+            this.player.setPosition(this.aiPlayers[i].x, this.aiPlayers[i].y);
+            this.aiPlayers[i].setPosition(x, y);
+
+          }
+        },
+        null,
+        this
+      )
+
+      this.physics.add.collider(
+        this.player,
+        this.aiEnemies[i],
+        () => {
+
+        },
+        null,
+        this
+      )
+
+      this.physics.add.overlap(
+        this.ball,
+        this.aiEnemies[i],
+        () => {
+          console.log("SACKED!!")
+          if(this.status.isSacked || !this.status.isBallPlayer) return;
+          this.status.isSacked = true;
+          this.onCatchLogic("sacked");
+        },
+        null,
+        this
+      )
+    }
     this.physics.add.collider(
-      this.player,
-      this.ball,
+      this.aiEnemies,
+      this.aiPlayers,
       () => {
-        this.touches++;
-        // if (!this.ballHit.isPlaying) this.ballHit.play();
-        this.ballHit.stop();
-        this.ballHit.play();
+
       },
       null,
       this
-    );
+    )
     this.physics.add.collider(
-      this.ai,
-      this.ball,
+      this.aiEnemies,
+      this.aiEnemies,
       () => {
-        this.ballHit.stop();
-        this.ballHit.play();
+
       },
       null,
       this
-    );
-    this.physics.add.collider(this.ball, this.gr, () => {
-        this.ballHit.stop();
-        this.ballHit.play();
-    });
+    )
+    // ROUND TEXT STATUS
+    this.roundText = this.add.text(mW, mH - this.getUIPos(300), "TOUCHDOWN!", {
+      ...this.text_main_style,
+      fontSize: this.getUIPos(110) + "px",
+      fill: "#ffffff",
+      stroke: '#000000',
+      strokeThickness: 4
+      
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
 
-    this.physics.add.collider(this.ai, this.gr, () => {
-      // if (!this.ballHit.isPlaying) this.ballHit.play();
-    });
+    this.touchDownText = this.add.text(mW, mH - this.getUIPos(160), "+7000", {
+      ...this.text_main_style,
+      fontSize: this.getUIPos(110) + "px",
+      fill: "#c57614",
+      stroke: '#000000',
+      strokeThickness: 4
+      
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
 
-    this.physics.add.collider(this.ball, this.aa, () => {})
-    this.physics.add.collider(this.ball, this.aa1, () => {})
+    // END ROUND TEXT STATUS
 
-    //this.cameras.main.postFX.addBloom(0xffffff, 1, 1, 10, 0.5);
-    //this.cameras.main.postFX.addBokeh(0.1, 0.5, 0.05);
-    //this.cameras.main.postFX.addTiltShift(0.5, 0.25, 0.0015, 0.05, 0.05, 1);
-    this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
-    this.cameras.main.postFX
-      .addColorMatrix()
-      .contrast(1.25)
-      .polaroid()
-      .brightness(0.9);
+    // GAME OVER SCREEN
+    this.gameOverGroup = this.add.group();
+    const gameOver = this.add.sprite(mW, mH - this.getUIPos(150), 'game-over').setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDisplaySize(w, w * 1);
+    
+    this.gameoverTexts["reachlevel"] = this.add.text(gameOver.x, gameOver.y - this.getUIPos(70), "LEVEL REACHED: 1", {
+      ...this.text_main_style,
+      fill: "#000",
+      fontSize: this.getUIPos(45) + "px",
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+    
+ 
+    const rightX = w * 0.2;
+    this.gameoverTexts["touchdowns"] = this.add.text(gameOver.x + rightX, gameOver.y - this.getUIPos(0), "0 X 7,000 = 0", {
+      ...this.text_main_style,
+      fill: "#fff",
+      align: 'right',
+      fontSize: this.getUIPos(30) + "px",
+    }).setOrigin(1, 0.5).setScrollFactor(0, 0);
+    
+    this.gameoverTexts["firstdowns"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(45), "2 X 125 = 250", {
+      ...this.text_main_style,
+      fill: "#fff",
+      align: 'right',
+      fontSize: this.getUIPos(30) + "px",
+    }).setOrigin(1, 0.5).setScrollFactor(0, 0);
+
+    this.gameoverTexts["passstreak"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(90), "EARNED = 0", {
+      ...this.text_main_style,
+      fill: "#fff",
+      align: 'right',
+      fontSize: this.getUIPos(30) + "px",
+    }).setOrigin(1, 0.5).setScrollFactor(0, 0);
+
+    this.gameoverTexts["runyards"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(135), "20 X 30 = 600", {
+      ...this.text_main_style,
+      fill: "#fff",
+      align: 'right',
+      fontSize: this.getUIPos(30) + "px",
+    }).setOrigin(1, 0.5).setScrollFactor(0, 0);
+
+    this.gameoverTexts["gametotal"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(180), "53455", {
+      ...this.text_main_style,
+      fill: "#fff",
+      align: 'right',
+      fontSize: this.getUIPos(30) + "px",
+    }).setOrigin(1, 0.5).setScrollFactor(0, 0);
+
+    this.gameOverGroup.add(gameOver);
+    this.gameOverGroup.add(this.gameoverTexts["reachlevel"]);
+    this.gameOverGroup.add(this.gameoverTexts["touchdowns"]);
+    this.gameOverGroup.add(this.gameoverTexts["firstdowns"]);
+    this.gameOverGroup.add(this.gameoverTexts["passstreak"]);
+    this.gameOverGroup.add(this.gameoverTexts["runyards"]);
+    this.gameOverGroup.add(this.gameoverTexts["gametotal"]);
+
+    // LEFT ARRANGE TITLES
+    const leftX = -w * 0.1;
+    this.gameOverGroup.add(
+      this.add.text(gameOver.x + leftX, gameOver.y - this.getUIPos(0), "TOUCHDOWNS", {
+        ...this.text_main_style,
+        fill: "#f3cb04",
+        align: 'right',
+        fontSize: this.getUIPos(30) + "px",
+      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
+    )
+
+    this.gameOverGroup.add(
+      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(45), "FIRST DOWNS", {
+        ...this.text_main_style,
+        fill: "#f3cb04",
+        align: 'right',
+        fontSize: this.getUIPos(30) + "px",
+      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
+    )
+
+    this.gameOverGroup.add(
+      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(90), "PASS STREAK", {
+        ...this.text_main_style,
+        fill: "#f3cb04",
+        align: 'right',
+        fontSize: this.getUIPos(30) + "px",
+      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
+    )
+
+    this.gameOverGroup.add(
+      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(135), "RUN YARDS", {
+        ...this.text_main_style,
+        fill: "#f3cb04",
+        align: 'right',
+        fontSize: this.getUIPos(30) + "px",
+      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
+    )
+
+    this.gameOverGroup.add(
+      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(180), "GAME TOTAL", {
+        ...this.text_main_style,
+        fill: "#f3cb04",
+        align: 'right',
+        fontSize: this.getUIPos(30) + "px",
+      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
+    )
+
+    this.gameOverGroup.setVisible(false)
+    // END GAME OVER SCREEN
+
     this.ball.preFX.addShadow();
     this.player.preFX.addShadow();
-    this.ai.preFX.addShadow();
     //this.cameras.main.postFX.addGlow();
 
     this.ball.setMaxVelocity(ballVX * 3, ballVY * 3);
+
+    this.player.play('player_idle_anim');
+    // this.cameras.main.startFollow(this.player);
+    this.cameras.main.startFollow(this.player, false, 0, 1, 0, 0);
 
     this.initGame();
   }
 
   private ballDir: number = 1;
-  private hearts = [];
   private scoreNum = 0;
   private scoreText: Phaser.GameObjects.Text;
   private goalTxt: Phaser.GameObjects.Text;
@@ -558,21 +870,15 @@ export default class FootballPassScene extends Phaser.Scene {
 
   public initGame(lives = 3) {
     this.cameras.main.fadeIn(1200);
-
+    
     this.goalTxt.setVisible(false);
     this.addedScrTxt.setVisible(false);
 
-    this.player.setPosition(mW, h - goalH - playerR / 2);
-    this.ai.setPosition(mW, scr + goalH + aiR / 2);
+    // this.player.setPosition(mW, h - goalH - playerR / 2);
     this.player.setVelocity(0, 0);
-    this.ai.setVelocity(0, 0);
 
     this.ball.setVelocity(0, 0);
 
-    this.ball.setPosition(mW, mH);
-
-    this.aiTargetX = mW;
-    this.aiTargetY = scr + goalH + aiR / 2;
 
     this.goalXPos = mW;
     this.goalYPos = h - goalH - playerR / 2;
@@ -588,15 +894,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.scored = false;
     this.isDragging = false;
 
-    this.patrolAiSpeed = 75;
-    this.defenceAiSpeed = 250;
-    this.aiSpeed = 250;
-    this.aiSize = 1;
-
-    this.aiIsMoving = false;
-    this.aiMoveTime = 0;
-
-    setTimeout(() => this.startRound(), 2500);
+    setTimeout(() => this.startRound(), 500);
   }
 
   loseGame() {
@@ -609,7 +907,6 @@ export default class FootballPassScene extends Phaser.Scene {
 
   loseLife(): boolean {
     if (heartNum > 0) {
-      // this.hearts.pop().destroy();
       // Handle life loss logic here
 
       heartNum--;
@@ -624,19 +921,96 @@ export default class FootballPassScene extends Phaser.Scene {
     }
   }
 
-  onSelectPlan(planType) {
+  onSelectPlan(planType, idx) {
     console.log(planType);
 
+    if(idx == this.status.planIdx) {
+      this.status.isPlaying = true;
+      this.tapGroup.setVisible(false);
+
+      if(this.status.planIdx != -1) {
+        this.linesGroup[this.status.planIdx].setVisible(false);
+      }
+      this.onActivePlayers()
+    } else {
+      
+      if(this.status.planIdx != -1) {
+        this.linesGroup[this.status.planIdx].setVisible(false);
+      }
+
+      this.status.planIdx = idx;
+      this.linesGroup[idx].setXY(0, this.getUIPos(this.posObject.startPos.first))
+      this.linesGroup[idx].setVisible(true);
+    }
 
   }
 
+  onActivePlayers() {
+    for(let i = 0; i < 4; i ++) {
+      this.aiPlayers[i].play("player_anim")
+      this.aiEnemies[i].play("enemy_anim")
+    }
+  }
+
+  getUIPos(x) {
+    return x * w / boardW;
+  }
+
+  getRealPos(x) {
+    return x * boardW / w;
+  }
+
   startRound() {
-    //this.player.setPosition(mW, h - goalH - playerR / 2);
+    // this.player.setPosition(mW, h - goalH - playerR / 2);
     //this.ai.setPosition(mW, scr + goalH + playerR / 2);
-    this.ball.setPosition(mW, mH);
-    const dirX = Math.random() > 0.5 ? 1 : -1;
+
+    this.isDragging = false;
+
+    this.status.isBallPlayer = true;
+    this.status.isPlaying = false;
+    this.status.planIdx = -1;
+    this.status.isKick = false;
+    this.status.isThrowBall = false;
+    this.status.isSacked = false;
+
+    this.posObject.startPos.x = 400;
+    this.posObject.startPos.y = this.posObject.startPos.first + 140;
+    // this.posObject.startPos.first = 160 + 140 * 10;
+    // this.posObject.lineDistance = 140 * 3;
+
+    // INIT DATA
+  
+    this.player.setPosition(this.getUIPos(this.posObject.startPos.x), this.getUIPos(this.posObject.startPos.y));
+    this.player.setVelocity(0, 0).setAngle(0).play("player_idle_anim");
+    this.blueline.setPosition(this.blueline.x, this.getUIPos(this.posObject.startPos.first));
+    this.yellowline.setPosition(this.yellowline.x, this.getUIPos(this.posObject.startPos.second));
+
+    for(let i = 0; i < 4; i++) {
+      let y = this.posObject.startPos.first;
+
+      this.aiPlayers[i].pathIdx = 0;
+      this.aiEnemies[i].pathIdx = 0;
+
+      this.aiPlayers[i].setPosition(this.getUIPos(this.posObject.PLAN1.players[i].x), this.getUIPos(this.posObject.PLAN1.players[i].y + y))
+      this.aiEnemies[i].setPosition(this.getUIPos(this.posObject.PLAN1.enemies[i].x), this.getUIPos(this.posObject.PLAN1.enemies[i].y + y)).setFlipY(true)
+
+      this.aiPlayers[i].setVelocity(0, 0).play("player_idle_anim")
+      this.aiEnemies[i].setVelocity(0, 0).play("enemy_idle_anim")
+
+    }
+
+    this.onSelectPlan("PLAN1", 0);
+    // END INIT DATA
+
+    // INIT UI
+    this.tapGroup.setVisible(true)
+
+    this.roundText.setVisible(false);
+    this.touchDownText.setVisible(false);
+
+    // END INIT UI
     this.ballDir *= -1;
-    this.ball.setVelocity(dirX * ballVX, ballVY * this.ballDir);
+    // this.ball.setVelocity(dirX * ballVX, ballVY * this.ballDir);
     this.whistle.play();
     this.scored = false;
     //this.player.setVelocity(0, 0);
@@ -686,7 +1060,6 @@ export default class FootballPassScene extends Phaser.Scene {
         this.cameras.main.shake(25, 0.01);
       }
 
-      this.changeAI(this.scoreNum / 100);
 
       this.goalTxt.setVisible(true);
       this.addedScrTxt.setVisible(true);
@@ -702,129 +1075,194 @@ export default class FootballPassScene extends Phaser.Scene {
   private goalYPos: number;
   private isDragging = false;
 
-  private patrolAiSpeed = 75;
-  private defenceAiSpeed = 250;
-  private aiSpeed = 250;
-  private aiSize = 1;
+  aiUpdate() {
+    if(this.status.isPlaying) {
+      for(let i = 0; i < 4; i++) {
+        const player = this.aiPlayers[i];
+        const enemy = this.aiEnemies[i];
 
-  changeAI(score: number) {
-    if (score === 1) {
-      this.aiSpeed += 50; // Increase speed
-      this.defenceAiSpeed += 50; // Increase speed
-      this.patrolAiSpeed += 25; // Increase speed
-    } else if (score === 3) {
-      this.aiSpeed += 25; // Increase speed
-      this.defenceAiSpeed += 25; // Increase speed
-      this.patrolAiSpeed += 10;
-    } else if (score === 5) {
-      this.aiSize += 0.1; // Increase size by 10%
-      this.ai.setDisplaySize(aiR * this.aiSize, aiR * this.aiSize); // Update the visual size
-      //this.ai.setCircle(this.aiSize / 2); // Update the physics body size
-    } else if (score === 7) {
-      this.aiSize += 0.2; // Increase size by 20%
-      this.ai.setDisplaySize(aiR * this.aiSize, aiR * this.aiSize); // Update the visual size
-      //this.ai.setCircle(this.aiSize / 2); // Update the physics body size
-    }
-  }
+        let idx = player.pathIdx;
+        let first = this.posObject.startPos.first;
+        if(player.pathIdx >= 2) {
+          first = 160;
+          idx = 1;
+        } 
 
-  aiSetTargetPos(x: number, y: number, speed: number) {
-    // Clamp the target position to ensure it's within bounds
-    x = Phaser.Math.Clamp(
-      x,
-      sideW + (aiR * this.aiSize) / 2,
-      w - sideW - (aiR * this.aiSize) / 2
-    );
-    y = Phaser.Math.Clamp(
-      y,
-      scr + goalH + (aiR * this.aiSize) / 2,
-      mH - (aiR * this.aiSize) / 2
-    );
+        let target = this.posObject[plans[this.status.planIdx]].targets[i][idx];
 
-    this.aiTargetX = x;
-    this.aiTargetY = y;
-    // Calculate the distance to the target
-    const dx = x - this.ai.x;
-    const dy = y - this.ai.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+        let targetX = this.getUIPos(target.x);
+        let targetY = this.getUIPos(first + target.y);
+        if(first == 160 || this.status.isKick) {
+          targetX = enemy.x;
+          targetY = enemy.y;
+        }
 
-    // Calculate the velocity based on the distance to the target
-    const maxDistance = 50; // Adjust this value as needed
-    const velocity = (speed * distance) / maxDistance;
+        let dx = targetX - player.x;
+        let dy = targetY - player.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        let velocity = 90 * (distance < 1? 0 : 1);
 
-    // Calculate the direction towards the target
-    const angle = Math.atan2(dy, dx);
+        if(velocity == 0) {
+          player.pathIdx++;
+        }
 
-    // Calculate the velocity components
-    const vx = Math.cos(angle) * velocity;
-    const vy = Math.sin(angle) * velocity;
+        // Calculate the direction towards the goal
+        let angle = Math.atan2(dy, dx);
+  
+        // Calculate the velocity components
+        let vx = Math.cos(angle) * velocity;
+        let vy = Math.sin(angle) * velocity;
 
-    // Set the AI's velocity
-    this.ai.setVelocity(vx, vy);
-    if(this.ai.y < 0 || this.ai.x < 0 || this.ai.x > w + 20) {
-      this.ai.setPosition(x, 20);
-    }
-  }
+        player.setVelocity(vx, vy)
 
-  private aiIsMoving = false;
-  private aiMoveTime = 0;
-  private aiTargetX = 0;
-  private aiTargetY = 0;
+        // AI ENEMEY
+        targetX = player.x;
+        targetY = player.y - 50;
 
-  aiUpdate(time, delta) {
-    if (this.ball.y <= scr + goalH + (aiR * this.aiSize) / 2 + 10) {
-      // The ball is touching the gr static group, so the AI should defend the goal
-      const dirX = this.ball.x < mW ? -50 : 50;
-      const x = mW + dirX;
-      const y = this.ball.y < mH ? this.ball.y : mH - (aiR * this.aiSize) / 2;
-      this.aiSetTargetPos(x, y, this.defenceAiSpeed); // Adjust the speed as needed
-    } else if (this.ball.y < mH && this.ball.alpha !== 0.5) {
-      // The ball is on the AI's side of the field, so the AI should chase the ball
-      this.aiSetTargetPos(this.ball.x, this.ball.y, this.aiSpeed); // Adjust the speed as needed
-    } else {
-      // The ball is on the player's side of the field, so the AI should wander randomly
-      const dx = this.aiTargetX - this.ai.x;
-      const dy = this.aiTargetY - this.ai.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+        if(first == 160 || this.status.isKick) {
+          targetX = this.ball.x;
+          targetY = this.ball.y;
+          if(player.anims.getName() != "smoke_anim") {
+            player.play("smoke_anim");
+          }
+        }
 
-      if (distance < 10) {
-        // Adjust the threshold as needed
-        // The AI has arrived at its target position, so generate a new target position
-        const x = Phaser.Math.Between(mW - 100, mW + 100);
-        const y = Phaser.Math.Between(
-          scr + goalH + (aiR * this.aiSize) / 2,
-          scr + goalH + 50 + (aiR * this.aiSize) / 2
-        );
-        this.aiSetTargetPos(x, y, this.patrolAiSpeed); // Adjust the speed as needed
+        dx = targetX - enemy.x;
+        dy = targetY - enemy.y;
+        distance = Math.sqrt(dx * dx + dy * dy);
+        velocity = 80 * (distance < 1? 0 : 1);
+
+        // Calculate the direction towards the goal
+        angle = Math.atan2(dy, dx);
+  
+        // Calculate the velocity components
+        vx = Math.cos(angle) * velocity;
+        vy = Math.sin(angle) * velocity;
+
+        enemy.setVelocity(vx, vy)
+
       }
     }
   }
 
+  ballUpdate() {
+    if(this.status.isKick) {
+      let target = this.ball.target;
+      let start = this.ball.start;
+
+      console.log(target, start)
+      let dx = target.x - start.x;
+      let dy = target.y - start.y;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+
+      // let velocity = 80 * (distance < 1? 0 : 1);
+      // Calculate the direction towards the goal
+      // let angle = Math.atan2(dy, dx);
+
+      // Calculate the velocity components
+      // let vx = Math.cos(angle) * velocity;
+      // let vy = Math.sin(angle) * velocity;
+
+      // this.ball.setVelocity(vx, vy)
+      // this.ball.setAngle(angle);
+
+      let dx1 = target.x - this.ball.x;
+      let dy1 = target.y - this.ball.y;
+      let remainDistance = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+
+      if(remainDistance < 10) {
+        this.ball.setVelocity(0, 0);
+        this.status.isKick = false;
+
+        this.time.delayedCall(500, () => {
+          if(!this.status.isBallPlayer) {
+            this.onCatchLogic("incomplete");
+          }
+        }, [], this);
+      }
+
+      this.ball.setDisplaySize(ballR * (- Math.abs(0.5 - remainDistance / distance) + 1.5), ballR * (- Math.abs(0.5 - remainDistance / distance) + 1.5));
+
+    } else {
+      if(this.status.isPlaying) {
+        if(this.getRealPos(this.ball.y) < this.posObject.lastLine) {
+          this.onCatchLogic();
+        }
+      }
+    }
+  }
+
+  onCatchLogic(type = "normal") {
+    let x = this.ball.x;
+    let y = this.ball.y;
+
+    let first = this.getUIPos(this.posObject.startPos.first);
+    let second = this.getUIPos(this.posObject.startPos.second);
+
+    let text = "";
+
+    if(y > second || type == "incomplete") {
+      text = "INCOMPLETE";
+      if(type == "sacked") {
+        text = "SACKED!!";
+        if(this.posObject.startPos.first > this.getRealPos(this.ball.y)) {
+          this.posObject.startPos.first = this.getRealPos(this.ball.y);
+        }
+      }
+    } else if(y > this.getUIPos(this.posObject.lastLine)) {
+      text = "1ST DOWN!";
+      this.posObject.startPos.first = this.posObject.startPos.second;
+      this.posObject.startPos.second = this.posObject.startPos.first - 140 * 3;
+      if(this.posObject.startPos.second < this.posObject.lastLine) {
+        this.posObject.startPos.second = this.posObject.lastLine
+      }
+    } else {
+      text = "TOUCHDOWN!";
+      this.touchDownText.setVisible(true);
+
+      this.posObject.startPos.first = 160 + 140 * 10;
+      this.posObject.startPos.second = 160 + 140 * 7;
+    }
+
+    this.roundText.setText(text).setVisible(true);
+
+    this.status.isPlaying = false;
+    this.time.delayedCall(2000, this.startRound, [], this);
+
+  }
+
   update(time, delta) {
-    this.aiUpdate(time, delta);
 
-    this.selRing.setPosition(this.player.x - playerR * 0.05, this.player.y - playerR * 0.1);
+    this.playerGroup.setXY(this.player.x, this.player.y)
 
+    this.aiUpdate();
+    this.ballUpdate();
+    if(this.status.isBallPlayer) {
+      this.ball.setPosition(this.player.x + playerR / 4, this.player.y - playerR / 3.4);
+    } 
 
-    if (this.isDragging) {
-      this.goalXPos = Phaser.Math.Clamp(
-        this.goalXPos,
-        sideW + playerR / 2,
-        w - sideW - playerR / 2
-      );
-      this.goalYPos = Phaser.Math.Clamp(
-        this.goalYPos,
-        mH + playerR / 2,
-        h - goalH - playerR / 2
-      );
+    if (this.isDragging && this.status.isPlaying) {
+      // this.goalXPos = Phaser.Math.Clamp(
+      //   this.goalXPos,
+      //   sideW + playerR / 2,
+      //   w - sideW - playerR / 2
+      // );
+      // this.goalYPos = Phaser.Math.Clamp(
+      //   this.goalYPos,
+      //   playerR / 2,
+      //   h - goalH - playerR / 2
+      // );
 
       const dx = this.goalXPos - this.player.x;
       const dy = this.goalYPos - this.player.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       // Calculate the velocity based on the distance to the target
-      const playerSpeed = 1050; // Adjust the speed as needed
+      const playerSpeed = 300; // Adjust the speed as needed
       const maxDistance = 45; // Adjust the speed as needed
-      const velocity = (playerSpeed * distance) / maxDistance;
+      let velocity = (playerSpeed * distance) / maxDistance;
+
+      velocity = 100 * (distance < 1? 0 : 1);
 
       // Calculate the direction towards the goal
       const angle = Math.atan2(dy, dx);
@@ -835,11 +1273,12 @@ export default class FootballPassScene extends Phaser.Scene {
 
       // Set the player's velocity
       this.player.setVelocity(vx, vy);
+      this.player.setAngle(angle / Math.PI * 180 + 90)
     }
 
     if (this.scored) return;
 
-    if (this.ball.y >= h - goalH + ballR / 2) this.score(1);
-    else if (this.ball.y <= goalH + ballR / 2) this.score();
+    // if (this.ball.y >= h - goalH + ballR / 2) this.score(1);
+    // else if (this.ball.y <= goalH + ballR / 2) this.score();
   }
 }
