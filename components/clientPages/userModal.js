@@ -30,18 +30,6 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
     });
     router.push("/battle/" + id);
     setLoading(false);
-    // console.log(id);
-    // const response = await fetch("/api/email", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     email: "hello@jlgn.io",
-    //     game: isConfirmingChallenge,
-    //   }),
-    // });
-    // console.log(response);
   };
   return (
     <div
@@ -152,6 +140,7 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
                 accumulated {userData?.totalXp} XP throughout their journey.
               </p>
             )}
+
             <ChallengeButton
               userData={userData}
               onChallengeButtonClick={() => setIsChallenging(true)}

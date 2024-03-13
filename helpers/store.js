@@ -6,6 +6,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
@@ -63,6 +64,18 @@ export function AppWrapper({ children }) {
 
   // Profile
 
+  const patchProfileWithEmail = async () => {
+    if (loggedIn.uid) {
+      setDoc(
+        doc(firestore, "users", loggedIn.uid),
+        {
+          email: loggedIn.email,
+        },
+        { merge: true }
+      );
+    }
+  };
+
   useEffect(() => {
     // Listen To Profile
     let _profileUnsub = () => null;
@@ -75,6 +88,7 @@ export function AppWrapper({ children }) {
         doc(firestore, "users", loggedIn.uid),
         (doc) => {
           const data = doc.data();
+          if (!data.email) patchProfileWithEmail();
           setProfile(
             { ...data, subscription: getSubscriptionType(data?.tier ?? 0) } || {
               subscription: getSubscriptionType(data?.tier ?? 0),

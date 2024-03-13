@@ -4,6 +4,8 @@ const resend = new Resend(process.env.RESEND_KEY);
 export default async function handler(req, res) {
   const { email, name, url, game, customText } = req.body;
 
+  console.log(email);
+
   const response = await resend.emails.send({
     // from: "challenge@playspark.co",
     from: "onboarding@resend.dev",
