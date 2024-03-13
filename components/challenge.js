@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  completeBattleForChallenger,
   getGame,
   incrementImpressions,
   incrementOptInCount,
@@ -46,13 +47,15 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
     setScore(score);
     setStage(2);
     if (context?.loggedIn?.uid === data?.challenger?.id) {
-      console.log(score, id);
-      updateDoc(doc(firestore, "challenges", id), {
-        challengerResult: {
-          score: score,
-          timestamp: Date.now(),
-        },
-      });
+      // Challenger Has Completed
+      completeBattleForChallenger(
+        id,
+        score,
+        data?.challenger?.companyName,
+        data?.game?.name,
+        data?.challengee?.id,
+        data?.challengee?.email
+      );
     }
     if (context?.loggedIn?.uid === data?.challengee?.id) {
       updateDoc(doc(firestore, "challenges", id), {
