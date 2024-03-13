@@ -85,12 +85,16 @@ export default class FootballPassScene extends Phaser.Scene {
 
 
 
-    this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
+    this.load.audio("bg", "/pong/" + gameType + "/sfx/crowd.mp3");
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
     this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
     this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
+    this.load.audio("button", "/pong/" + gameType + "/sfx/button.wav");
+    this.load.audio("gameover", "/pong/" + gameType + "/sfx/gameover.wav");
+    this.load.audio("throw", "/pong/" + gameType + "/sfx/throw.wav");
+    this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.wav");
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
@@ -158,6 +162,11 @@ export default class FootballPassScene extends Phaser.Scene {
   private final: any;
   private goal: any;
   private lost: any;
+
+  private gameover: any;
+  private throw: any;
+  private touchdown: any;
+  private button: any;
 
   create() {
     this.status = {
@@ -275,12 +284,16 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.gameoverTexts = {};
 
-    // this.sound.add("bg").setLoop(true).play();
+    this.sound.add("bg").setLoop(true).play();
     this.whistle = this.sound.add("whistle");
     this.ballHit = this.sound.add("ballHit");
     this.final = this.sound.add("final");
     this.goal = this.sound.add("goal");
     this.lost = this.sound.add("lost");
+    this.button = this.sound.add("button");
+    this.gameover = this.sound.add("gameover");
+    this.throw = this.sound.add("throw");
+    this.touchdown = this.sound.add("touchdown");
 
     this.physics.world.setBounds(
       sideW,
@@ -349,6 +362,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2 - itemR * 1.2, h - itemR * 1.5, 'plan1').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
+        this.button.play();
         this.onSelectPlan("PLAN1", 0)
       })
     )
@@ -357,6 +371,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2, h - itemR * 1.5, 'plan2').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
+        this.button.play();
         this.onSelectPlan("PLAN1", 0)
       })
     )
@@ -365,6 +380,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2 + itemR * 1.2, h - itemR * 1.5, 'plan3').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
+        this.button.play();
         this.onSelectPlan("PLAN1", 0)
       })
     )
@@ -613,7 +629,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
       this.ball.setAngle(angle);
       this.ball.setVelocity(dx / distance * 140, dy / distance * 140);
-
+      this.throw.play()
     }).setInteractive()
 
     // this.selRing.startFollow(this.player);
@@ -1263,6 +1279,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.posObject.startPos.first = 160 + 140 * 10;
       this.posObject.startPos.second = 160 + 140 * 7;
       this.status["score"].touchDown++;
+      this.touchdown.play();
     }
 
     this.roundText.setText(text).setVisible(true);
@@ -1313,6 +1330,7 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   onGameOver() {
+    this.gameover.play();
     this.status.isRound = false;
     this.status.isPlaying = false;
 
