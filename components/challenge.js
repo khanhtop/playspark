@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  completeBattleForChallengee,
   completeBattleForChallenger,
   getGame,
   incrementImpressions,
@@ -58,12 +59,25 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
       );
     }
     if (context?.loggedIn?.uid === data?.challengee?.id) {
-      updateDoc(doc(firestore, "challenges", id), {
-        challengeeResult: {
-          score: score,
-          timestamp: Date.now(),
-        },
-      });
+      completeBattleForChallengee(
+        id,
+        score,
+        data?.game?.name,
+        data?.challengerResult?.score,
+        data?.challenger?.companyName,
+        data?.challengee?.companyName,
+        data?.challenger?.id,
+        data?.challengee?.id,
+        data?.challenger?.email,
+        data?.challengee?.email
+      );
+
+      // id,
+      // score,
+      // data?.challenger?.companyName,
+      // data?.game?.name,
+      // data?.challengee?.id,
+      // data?.challengee?.email
     }
   };
 

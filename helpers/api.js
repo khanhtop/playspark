@@ -335,3 +335,53 @@ export async function completeBattleForChallenger(
     uid: challengeeId,
   });
 }
+
+export async function completeBattleForChallengee(
+  challengeId,
+  score,
+  gameName,
+  challengerScore,
+  challengerName,
+  challengeeName,
+  challengerId,
+  challengeeId,
+  challengerEmail,
+  challengeeEmail
+) {
+  // await fetch("/api/email", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     email: challengeeEmail,
+  //     name: challengerName,
+  //     game: gameName,
+  //     url: `https://playspark.co/battle/${challengeId}`,
+  //     customText: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
+  //   }),
+  // });
+  const challengerWon = parseInt(challengerScore) > parseInt(score);
+  await updateDoc(doc(firestore, "challenges", challengeId), {
+    challengeeResult: {
+      score: score,
+      timestamp: Date.now(),
+    },
+  });
+  await addDoc(collection(firestore, "notifications"), {
+    timestamp: Date.now(),
+    link: ``,
+    text: `${
+      challengerWon ? "You Lost" : "You Won"
+    } the battle with ${challengerName}`,
+    uid: challengeeId,
+  });
+  await addDoc(collection(firestore, "notifications"), {
+    timestamp: Date.now(),
+    link: ``,
+    text: `${
+      challengerWon ? "You Won" : "You Lost"
+    } the battle with ${challengeeName}`,
+    uid: challengerId,
+  });
+}
