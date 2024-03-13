@@ -922,6 +922,10 @@ export default class FootballPassScene extends Phaser.Scene {
     this.status["score"].passStreak = 0;
     this.status["score"].runYards = 0;
 
+    this.posObject.startPos.y = 160 + 140 * 11;
+    this.posObject.startPos.first = 160 + 140 * 10;
+    this.posObject.startPos.second = 160 + 140 * 7;
+
     setTimeout(() => this.startRound(), 500);
   }
 
@@ -1148,6 +1152,7 @@ export default class FootballPassScene extends Phaser.Scene {
         player.setVelocity(vx, vy)
 
         // AI ENEMEY
+        let eVelocity = 40;
         targetX = player.x;
         targetY = player.y - 50;
 
@@ -1157,12 +1162,13 @@ export default class FootballPassScene extends Phaser.Scene {
           if(player.anims.getName() != "smoke_anim") {
             player.play("smoke_anim");
           }
+          eVelocity = 90
         }
 
         dx = targetX - enemy.x;
         dy = targetY - enemy.y;
         distance = Math.sqrt(dx * dx + dy * dy);
-        velocity = 40 * (distance < 1? 0 : 1);
+        velocity = eVelocity * (distance < 1? 0 : 1);
 
         // Calculate the direction towards the goal
         angle = Math.atan2(dy, dx);
