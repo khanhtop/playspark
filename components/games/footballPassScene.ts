@@ -50,6 +50,9 @@ export default class FootballPassScene extends Phaser.Scene {
   private touchDownText: Phaser.GameObjects.Text;
   private gameoverTexts: Object;
   private gameOverGroup: Phaser.GameObjects.Group;
+  private gameTimeText: Phaser.GameObjects.Text;
+  private roundTimeText: Phaser.GameObjects.Text;
+
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -164,14 +167,16 @@ export default class FootballPassScene extends Phaser.Scene {
       isKick: false,
       isThrowBall: false,
       isSacked: false,
+      isRound: true,
       score: {
         touchDown: 0,
         firstDown: 0,
         passStreak: 0,
-        passYards: 0,
         runYards: 0,
-        hailMarys: 0,
-      }
+      },
+      runDistance: 0,
+      startGameTime: new Date().getTime(),
+      startRoundTime: new Date().getTime()
     }
 
     this.posObject = {
@@ -180,6 +185,10 @@ export default class FootballPassScene extends Phaser.Scene {
         y : 160 + 140 * 11,
         first: 160 + 140 * 10,
         second: 160 + 140 * 7,
+      },
+      runPos: {
+        x : 0,
+        y : 0
       },
       lastLine: 160 + 140,
       PLAN1: {
@@ -297,7 +306,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     const header = this.add.image(w / 2, 30, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.9, 40).setScrollFactor(0, 0);
 
-    this.add.text(header.x, header.y, '001423 PTS', {
+    this.scoreText = this.add.text(header.x, header.y, '001423 PTS', {
       ...this.text_main_style,
       color: '#454545',
       fontSize: '12px'
@@ -308,7 +317,7 @@ export default class FootballPassScene extends Phaser.Scene {
       color: '#454545'
     }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
 
-    this.add.text(header.x + w * 0.25, header.y, 'TDS: 0', {
+    this.gameTimeText = this.add.text(header.x + w * 0.25, header.y, 'TDS: 0', {
       ...this.text_main_style,
       color: '#454545'
     }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
@@ -371,13 +380,12 @@ export default class FootballPassScene extends Phaser.Scene {
     this.tapGroup.add(
       this.add.rectangle(w / 2 + itemR * 1.5, h - itemR * 0.8, itemR * 0.8, itemR * 0.2, 0x0f2f1f).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
     )
-
-    this.tapGroup.add(
-      this.add.text(w / 2 + itemR * 1.5, h - itemR * 0.8, "0:10", {
-        ...this.text_main_style,
-        color: '#ffffff'
-      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)  
-    )
+    
+    this.roundTimeText = this.add.text(w / 2 + itemR * 1.5, h - itemR * 0.8, "0:10", {
+      ...this.text_main_style,
+      color: '#ffffff'
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)  
+    this.tapGroup.add(this.roundTimeText);
 
     this.tapGroup.setDepth(3)
     
@@ -610,14 +618,6 @@ export default class FootballPassScene extends Phaser.Scene {
 
     // this.selRing.startFollow(this.player);
 
-    this.scoreText = this.add
-      .text(mW + 2, 36, this.params.score.toString()?.padStart(4, "0"), {
-        fontFamily: "enhanced_led_board-7",
-        fontSize: "26px",
-        color: "#ffffff",
-      })
-      .setOrigin(0.5, 0.5);
-
     this.goalTxt = this.add
       .text(mW, mH - 52, "GOAL!", {
         fontFamily: "TitanOne-Regular",
@@ -667,6 +667,9 @@ export default class FootballPassScene extends Phaser.Scene {
             let x = this.player.x;
             let y = this.player.y;
             
+            this.posObject.runPos.x = this.aiPlayers[i].x;
+            this.posObject.runPos.y = this.aiPlayers[i].y;
+
             this.player.setPosition(this.aiPlayers[i].x, this.aiPlayers[i].y);
             this.aiPlayers[i].setPosition(x, y);
 
@@ -691,7 +694,7 @@ export default class FootballPassScene extends Phaser.Scene {
         this.aiEnemies[i],
         () => {
           console.log("SACKED!!")
-          if(this.status.isSacked || !this.status.isBallPlayer) return;
+          if(this.status.isSacked || !this.status.isBallPlayer || !this.status.isPlaying) return;
           this.status.isSacked = true;
           this.onCatchLogic("sacked");
         },
@@ -894,6 +897,15 @@ export default class FootballPassScene extends Phaser.Scene {
     this.scored = false;
     this.isDragging = false;
 
+    this.gameOverGroup.setVisible(false);
+    this.status["startGameTime"] = new Date().getTime();
+    this.status.isRound = true;
+
+    this.status["score"].touchDown = 0;
+    this.status["score"].firstDown = 0;
+    this.status["score"].passStreak = 0;
+    this.status["score"].runYards = 0;
+
     setTimeout(() => this.startRound(), 500);
   }
 
@@ -925,13 +937,7 @@ export default class FootballPassScene extends Phaser.Scene {
     console.log(planType);
 
     if(idx == this.status.planIdx) {
-      this.status.isPlaying = true;
-      this.tapGroup.setVisible(false);
-
-      if(this.status.planIdx != -1) {
-        this.linesGroup[this.status.planIdx].setVisible(false);
-      }
-      this.onActivePlayers()
+      this.onStartPlan();
     } else {
       
       if(this.status.planIdx != -1) {
@@ -943,6 +949,16 @@ export default class FootballPassScene extends Phaser.Scene {
       this.linesGroup[idx].setVisible(true);
     }
 
+  }
+
+  onStartPlan() {
+    this.status.isPlaying = true;
+    this.tapGroup.setVisible(false);
+
+    if(this.status.planIdx != -1) {
+      this.linesGroup[this.status.planIdx].setVisible(false);
+    }
+    this.onActivePlayers()
   }
 
   onActivePlayers() {
@@ -963,6 +979,7 @@ export default class FootballPassScene extends Phaser.Scene {
   startRound() {
     // this.player.setPosition(mW, h - goalH - playerR / 2);
     //this.ai.setPosition(mW, scr + goalH + playerR / 2);
+    this.status["startRoundTime"] = new Date().getTime();
 
     this.isDragging = false;
 
@@ -1048,7 +1065,6 @@ export default class FootballPassScene extends Phaser.Scene {
     } else if (which === 0) {
       this.scoreNum += 100;
       this.goal.play();
-      this.scoreText.text = this.scoreNum.toString().padStart(4, "0");
       this.goalTxt.text = this.touches === 1 ? "COMBO HIT!" : "GOAL!";
       this.addedScrTxt.text = this.touches === 1 ? "+200" : "+100";
 
@@ -1092,10 +1108,10 @@ export default class FootballPassScene extends Phaser.Scene {
 
         let targetX = this.getUIPos(target.x);
         let targetY = this.getUIPos(first + target.y);
-        if(first == 160 || this.status.isKick) {
-          targetX = enemy.x;
-          targetY = enemy.y;
-        }
+        // if(first == 160 || this.status.isThrowBall) {
+        //   targetX = enemy.x;
+        //   targetY = enemy.y;
+        // }
 
         let dx = targetX - player.x;
         let dy = targetY - player.y;
@@ -1119,7 +1135,7 @@ export default class FootballPassScene extends Phaser.Scene {
         targetX = player.x;
         targetY = player.y - 50;
 
-        if(first == 160 || this.status.isKick) {
+        if(first == 160 || this.status.isThrowBall) {
           targetX = this.ball.x;
           targetY = this.ball.y;
           if(player.anims.getName() != "smoke_anim") {
@@ -1130,7 +1146,7 @@ export default class FootballPassScene extends Phaser.Scene {
         dx = targetX - enemy.x;
         dy = targetY - enemy.y;
         distance = Math.sqrt(dx * dx + dy * dy);
-        velocity = 80 * (distance < 1? 0 : 1);
+        velocity = 40 * (distance < 1? 0 : 1);
 
         // Calculate the direction towards the goal
         angle = Math.atan2(dy, dx);
@@ -1192,6 +1208,27 @@ export default class FootballPassScene extends Phaser.Scene {
     }
   }
 
+  scoreUpdate() {
+
+    if(this.status.isPlaying && this.status.isThrowBall && this.status.isBallPlayer) {
+      const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.posObject.runPos.x, this.posObject.runPos.y);
+
+      this.status["runDistance"] = Math.round(this.getRealPos(distance) / 14);
+      console.log(this.status["runDistance"]);
+    }
+
+    this.scoreText.setText(`${this.getTotalScore()} PTS`);
+  }
+
+  getTotalScore() {
+    return (
+      this.status["score"].touchDown * 7000 +
+      this.status["score"].firstDown * 125 +
+      this.status["score"].passStreak * 500 +
+      (this.status["score"].runYards + this.status["runDistance"]) * 30
+    );
+  }
+
   onCatchLogic(type = "normal") {
     let x = this.ball.x;
     let y = this.ball.y;
@@ -1216,19 +1253,77 @@ export default class FootballPassScene extends Phaser.Scene {
       if(this.posObject.startPos.second < this.posObject.lastLine) {
         this.posObject.startPos.second = this.posObject.lastLine
       }
+
+      this.status["score"].firstDown++;
+
     } else {
       text = "TOUCHDOWN!";
       this.touchDownText.setVisible(true);
 
       this.posObject.startPos.first = 160 + 140 * 10;
       this.posObject.startPos.second = 160 + 140 * 7;
+      this.status["score"].touchDown++;
     }
 
     this.roundText.setText(text).setVisible(true);
 
     this.status.isPlaying = false;
+
+
+
+    this.status["score"].runYards += this.status["runDistance"];
+    this.status["runDistance"] = 0;
+
+    console.log("add run yards : " + this.status["runDistance"], "total: ", this.getTotalScore());
+
+    console.log(this.status["score"])
+
     this.time.delayedCall(2000, this.startRound, [], this);
 
+  }
+
+  getTimeFormatString(val, type = "game") {
+    let total = 120;
+    if(type == "round") {
+      total = 10;
+    }
+    const min = Math.floor((total - val) / 60).toString()?.padStart(2, "0");
+    const sec = Math.floor((total - val) % 60).toString()?.padStart(2, "0");
+
+    return `${min} : ${sec}`;
+  }
+
+  timeUpdate() {
+    const gameSec = Math.ceil((new Date().getTime() - this.status["startGameTime"]) / 1000);
+
+    const roundSec = Math.ceil((new Date().getTime() - this.status["startRoundTime"]) / 1000);
+
+    if(gameSec > 50 && this.status.isRound) {
+      this.onGameOver();
+      return; 
+    }
+
+    if(roundSec > 10 && !this.status.isPlaying && !this.status.isThrowBall && this.status.isRound) {
+      console.log("-----", roundSec)
+      this.onStartPlan();
+    }
+
+    this.gameTimeText.setText(`TDS : ${this.getTimeFormatString(gameSec)}`)
+    this.roundTimeText.setText(`${this.getTimeFormatString(roundSec, "round")}`);
+  }
+
+  onGameOver() {
+    this.status.isRound = false;
+    this.status.isPlaying = false;
+
+    this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X 7000 = ${this.status["score"].touchDown * 7000}`);
+    this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X 125 = ${this.status["score"].firstDown * 7000}`);
+    this.gameoverTexts["passstreak"].setText(`EARNED = ${this.status["score"].passStreak * 500}`);
+    this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X 30 = ${this.status["score"].runYards * 30}`);
+    this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
+
+    this.gameOverGroup.setVisible(true);
+    this.time.delayedCall(4000, this.initGame, [], this);
   }
 
   update(time, delta) {
@@ -1237,21 +1332,17 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.aiUpdate();
     this.ballUpdate();
+    this.scoreUpdate();
+    this.timeUpdate();
     if(this.status.isBallPlayer) {
       this.ball.setPosition(this.player.x + playerR / 4, this.player.y - playerR / 3.4);
     } 
 
     if (this.isDragging && this.status.isPlaying) {
-      // this.goalXPos = Phaser.Math.Clamp(
-      //   this.goalXPos,
-      //   sideW + playerR / 2,
-      //   w - sideW - playerR / 2
-      // );
-      // this.goalYPos = Phaser.Math.Clamp(
-      //   this.goalYPos,
-      //   playerR / 2,
-      //   h - goalH - playerR / 2
-      // );
+
+      if(this.player.y < this.getUIPos(this.posObject.startPos.first) && !this.status.isThrowBall) {
+        this.goalYPos = this.getUIPos(2000);
+      }
 
       const dx = this.goalXPos - this.player.x;
       const dy = this.goalYPos - this.player.y;
