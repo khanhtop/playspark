@@ -171,7 +171,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 15,
-    words: ["SCORE", "PLAYS", "SMASH", "BLOCK", "DRIVE"],
+    words: [],
     cloudinaryGameTag: "wordle",
     tags: {
       backgroundSprite: "0.6",
@@ -207,16 +207,28 @@ export const games = [
   },
 
   {
-    name: "New Hit Cricket Smash",
+    name: "Smash Blitz",
     description:
-      "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
+      "Smash Blitz is a high-energy arcade game where players deflect oncoming objects into colorful targets for points. As the speed increases and lives dwindle, can you keep up the pace and survive the relentless challenge?",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708641627/cjpqqvkxmkpsgajlpt9a.png",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 17,
     landscape: true,
+    cloudinaryGameTag: "target",
+    tags: {
+      playerSprite: "body",
+      backgroundSprite: "bg",
+      objectSprite: "1.0",
+    },
+    backgroundSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    playerSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
   },
 
   {

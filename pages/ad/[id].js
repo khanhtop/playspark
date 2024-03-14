@@ -1,13 +1,13 @@
 import Advert from "@/components/ad";
 import PremiumAdvert from "@/components/premiumAd";
 import Modal from "@/components/ui/modal";
-import { getAd } from "@/helpers/api";
+import { getAd, getClient } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { isIOS, isAndroid, isSafari } from "react-device-detect";
 
-export default function Ad({ ad, id }) {
+export default function Ad({ ad, id, coins, xp, userId, email }) {
   const context = useAppContext();
 
   const getImageURL = (url) => {
@@ -55,7 +55,13 @@ export default function Ad({ ad, id }) {
           ) : ad.isPremium ? (
             <PremiumAdvert data={ad} />
           ) : (
-            <Advert data={ad} />
+            <Advert
+              data={ad}
+              coins={coins}
+              userId={userId}
+              xp={xp}
+              email={email}
+            />
           )
         ) : (
           <p>{id} - AD NOT FOUND</p>
@@ -67,11 +73,21 @@ export default function Ad({ ad, id }) {
 
 export async function getServerSideProps(context) {
   // Get the ad from the id here:
-  const ad = await getAd(context.query?.id);
+  const { id, email, xp, coins, userId } = context?.query;
+  const ad = await getAd(id);
+  const client = await getClient(ad.ownerId);
   return {
     props: {
-      id: context.query?.id,
-      ad: ad,
+      id: id,
+      ad: {
+        ...ad,
+        xpWebhook: client.xpWebhook,
+      },
+      email: email || null,
+      xp: xp || null,
+      coins: coins || null,
+      userId: userId || null,
+      xpWebhook: client.xpWebhook,
     },
   };
 }

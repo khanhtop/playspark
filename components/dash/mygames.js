@@ -117,7 +117,10 @@ export default function MyGames({}) {
                   text: item.isActive ? "Play Demo" : "Archive Tournament",
                   action: () =>
                     item.isActive
-                      ? setDemo(item.tournamentId)
+                      ? setDemo({
+                          id: item.tournamentId,
+                          landscape: item.landscape,
+                        })
                       : archive(item.tournamentId),
                 },
               ]}
@@ -128,7 +131,12 @@ export default function MyGames({}) {
             onClick={() => setDemo()}
             className="absolute top-0 left-0 h-screen w-screen bg-black/95 z-10 flex items-center justify-center"
           >
-            <iframe src={`/ad/${demo}`} className="h-[663px] w-[375px]" />
+            <iframe
+              src={`/ad/${demo.id}`}
+              className={`${
+                demo.landscape ? "h-[375px] w-[663px]" : "h-[663px] w-[375px]"
+              }`}
+            />
           </div>
         )}
         {showEmbed && <Embed id={showEmbed} setShowEmbed={setShowEmbed} />}

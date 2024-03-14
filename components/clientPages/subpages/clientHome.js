@@ -14,22 +14,28 @@ export default function ClientHome({
   screen,
   setScreen,
   setActiveGame,
+  prizes,
 }) {
   const context = useAppContext();
+
+  console.log(context?.loggedIn);
+
   return (
     <ClientPageWrapper user={user}>
       <AccountInfo
         data={user}
         context={context}
-        totalXp={context?.profile?.totalXp || 0}
-        totalCoins={context?.profile?.totalScore || 0}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
+        totalCoins={context?.profile?.dataByClient?.[user.id]?.coins || 0}
       />
       <Hero
         data={user}
         context={context}
-        totalXp={context?.profile?.totalXp || 0}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
       />
       <HorizontalGamesScroll
+        prizes={prizes}
+        showPrizes
         first
         data={tournamentsByPlayCount}
         user={user}
@@ -38,11 +44,14 @@ export default function ClientHome({
           setActiveGame(id);
           setScreen("game");
         }}
+        changeScreen={(screen) => {
+          setScreen(screen);
+        }}
       />
       <Areas
         aggregateLeaderboard={leaderboard}
-        totalXp={context?.profile?.totalXp || 0}
-        totalCoins={context?.profile?.totalScore || 0}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
+        totalCoins={context?.profile?.dataByClient?.[user.id]?.coins || 0}
         user={user}
         tournaments={tournaments}
         playGame={(id) => {

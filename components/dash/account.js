@@ -27,23 +27,6 @@ export default function Account() {
   const [accentColor, setAccentColor] = useState("#06b6d4");
   const [textColor, setTextColor] = useState("#FFF");
 
-  // Email Marketing
-  const [emails, setEmails] = useState();
-
-  useEffect(() => {
-    if (!emails) {
-      let _emails = [];
-      getDocs(
-        collection(firestore, "users", context?.loggedIn?.uid, "emails")
-      ).then((r) => {
-        for (let doc of r.docs) {
-          _emails.push(doc.id);
-        }
-        setEmails(_emails);
-      });
-    }
-  }, []);
-
   useEffect(() => {
     if (context?.profile?.brandLogo) {
       setBrandLogo(context?.profile?.brandLogo);
@@ -96,10 +79,10 @@ export default function Account() {
           //   text: "Rewards",
           //   value: "rewards",
           // },
-          {
-            text: "Email",
-            value: "email",
-          },
+          // {
+          //   text: "Email",
+          //   value: "email",
+          // },
           {
             text: "Usage",
             value: "usage",
@@ -198,22 +181,7 @@ export default function Account() {
           <p className="text-white/70 text-sm">Placeholder</p>
         </>
       )}
-      {nav === "email" && (
-        <>
-          <p className="text-white/70 text-sm">
-            Explore and export email addresses that have been captured through
-            PlaySpark. We will soon be launching direct integration into your
-            email marketing platforms, such as MailChimp and Klaviyo.
-          </p>
-          <div className="flex gap-2">
-            {emails.map((item, key) => (
-              <div key={key} className="bg-white/10 px-4 py-1 rounded-full">
-                <p className="text-white/80">{item}</p>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+
       {nav === "usage" && (
         <>
           <Usage />
