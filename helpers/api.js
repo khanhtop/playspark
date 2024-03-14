@@ -218,6 +218,16 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
+
+  if (id === 18)
+    return (
+      <Pong
+        data={data}
+        gameType="footballpass"
+        callback={callback}
+        params={params}
+      />
+    );
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {

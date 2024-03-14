@@ -230,4 +230,17 @@ export const games = [
     objectSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
   },
+
+  {
+    name: "FootBall Pass Game",
+    description:
+      "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+    screenshot: "cricketsmash.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 18,
+    landscape: true,
+  },
 ];
