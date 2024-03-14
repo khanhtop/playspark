@@ -19,8 +19,8 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
   const [isChallenging, setIsChallenging] = useState(false);
   const [isConfirmingChallenge, setIsConfirmingChallenge] = useState(false);
   const [loading, setLoading] = useState(false);
-  const xpSteal = Math.floor(userData?.totalXp / 10);
-  const xpLose = Math.floor(totalXp / 10);
+  const xpSteal = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
+  const xpLose = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
 
   const issueChallenge = async () => {
     setLoading(true);
@@ -143,6 +143,7 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
 
             <ChallengeButton
               userData={userData}
+              client={client}
               onChallengeButtonClick={() => setIsChallenging(true)}
             />
           </>

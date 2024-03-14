@@ -5,7 +5,7 @@ export default function ChallengeButton({ userData, onChallengeButtonClick }) {
   if (!context?.loggedIn?.uid) return <div />;
 
   const { client } = userData;
-  const xpSteal = Math.floor(userData?.totalXp / 10);
+  const xpSteal = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
 
   return (
     <div className="flex-1 flex justify-end mt-4">
