@@ -26,7 +26,9 @@ let boardW = 800;
 let boardH = 2000;
 
 let plans = [
-  "PLAN1"
+  "PLAN1",
+  "PLAN2",
+  "PLAN3",
 ]
 
 export default class FootballPassScene extends Phaser.Scene {
@@ -281,7 +283,167 @@ export default class FootballPassScene extends Phaser.Scene {
             }
           ]
         ]
-      }
+      },
+      PLAN2: {
+        players : [
+          {
+            x : 100,
+            y : 50
+          },
+          {
+            x : 400,
+            y : 50
+          },
+          {
+            x : 600,
+            y : 50,
+          },
+          {
+            x : 700,
+            y : 50
+          }
+        ],
+        enemies: [
+          {
+            x : 100,
+            y : -80
+          },
+          {
+            x : 400,
+            y : -100
+          },
+          {
+            x : 600,
+            y : -150
+          },
+          {
+            x : 700,
+            y : -300
+          },
+        ],
+        targets: [
+          [
+            {
+              x : 100,
+              y : -210
+            },
+            {
+              x : 360,
+              y : -320
+            }
+          ],
+          [
+            {
+              x : 400,
+              y : 0
+            },
+            {
+              x : 400,
+              y : 0
+            },
+          ],
+          [
+            {
+              x : 400,
+              y : -460
+            },
+            {
+              x : 400,
+              y : -460
+            },
+          ],
+          [
+            {
+              x : 700,
+              y : -210
+            },
+            {
+              x : 400,
+              y : -500
+            }
+          ]
+        ]
+      },
+      PLAN3: {
+        players : [
+          {
+            x : 100,
+            y : 50
+          },
+          {
+            x : 400,
+            y : 50
+          },
+          {
+            x : 600,
+            y : 50,
+          },
+          {
+            x : 700,
+            y : 50
+          }
+        ],
+        enemies: [
+          {
+            x : 100,
+            y : -80
+          },
+          {
+            x : 400,
+            y : -100
+          },
+          {
+            x : 600,
+            y : -150
+          },
+          {
+            x : 700,
+            y : -300
+          },
+        ],
+        targets: [
+          [
+            {
+              x : 100,
+              y : -210
+            },
+            {
+              x : 360,
+              y : -320
+            }
+          ],
+          [
+            {
+              x : 400,
+              y : 0
+            },
+            {
+              x : 400,
+              y : 0
+            },
+          ],
+          [
+            {
+              x : 400,
+              y : -460
+            },
+            {
+              x : 400,
+              y : -460
+            },
+          ],
+          [
+            {
+              x : 700,
+              y : -210
+            },
+            {
+              x : 400,
+              y : -500
+            }
+          ]
+        ]
+      },
     }
 
     this.gameoverTexts = {};
@@ -361,7 +523,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.highlight = this.add.image(mW, 37, "score").setDisplaySize(itemR* 1.03, itemR * 1.03).setScrollFactor(0, 0);
     this.highlight.setPosition(w / 2 - itemR * 1.2, h - itemR * 1.5);
-
+    this.tapGroup.add(this.highlight);
     this.tapGroup.add(
       this.add.image(w / 2 - itemR * 1.2, h - itemR * 1.5, 'plan1').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
@@ -378,7 +540,7 @@ export default class FootballPassScene extends Phaser.Scene {
       .on('pointerup', () => {
         this.highlight.setPosition(w / 2, h - itemR * 1.5);
         this.button.play();
-        this.onSelectPlan("PLAN1", 0)
+        this.onSelectPlan("PLAN2", 1)
       })
     )
     
@@ -388,7 +550,7 @@ export default class FootballPassScene extends Phaser.Scene {
       .on('pointerup', () => {
         this.highlight.setPosition(w / 2 + itemR * 1.2, h - itemR * 1.5);
         this.button.play();
-        this.onSelectPlan("PLAN1", 0)
+        this.onSelectPlan("PLAN3", 2)
       })
     )
 
