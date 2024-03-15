@@ -20,6 +20,8 @@ let w: number,
   heartNum: number,
   heartR: number;
 
+  let power = 0;
+
 let gameType = "football";
 
 let boardW = 800;
@@ -55,7 +57,7 @@ export default class FootballPassScene extends Phaser.Scene {
   private gameTimeText: Phaser.GameObjects.Text;
   private roundTimeText: Phaser.GameObjects.Text;
   private highlight: Phaser.GameObjects.Image;
-
+  private power_effect: Phaser.GameObjects.Sprite;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -136,6 +138,13 @@ export default class FootballPassScene extends Phaser.Scene {
       '/pong/' + gameType + '/smoke.png',
       { frameWidth: 156, frameHeight: 105 }
     );
+
+    this.load.spritesheet(
+      'power_effect',
+      '/pong/' + gameType + '/power_effect.png',
+      { frameWidth: 421, frameHeight: 68 }
+    );
+    
 
     let fontUrl = '/pong/' + gameType + '/ZingRustDemo-Base.ttf';
     const font = new FontFace('customFont', `url(${fontUrl})`);
@@ -248,8 +257,8 @@ export default class FootballPassScene extends Phaser.Scene {
               y : -210
             },
             {
-              x : 360,
-              y : -320
+              x : 460,
+              y : -520
             }
           ],
           [
@@ -264,12 +273,12 @@ export default class FootballPassScene extends Phaser.Scene {
           ],
           [
             {
-              x : 400,
-              y : -460
+              x : 600,
+              y : -260
             },
             {
               x : 400,
-              y : -460
+              y : -160
             },
           ],
           [
@@ -278,7 +287,7 @@ export default class FootballPassScene extends Phaser.Scene {
               y : -210
             },
             {
-              x : 400,
+              x : 800,
               y : -500
             }
           ]
@@ -344,11 +353,11 @@ export default class FootballPassScene extends Phaser.Scene {
           ],
           [
             {
-              x : 400,
-              y : -460
+              x : 600,
+              y : -260
             },
             {
-              x : 400,
+              x : 300,
               y : -460
             },
           ],
@@ -371,15 +380,15 @@ export default class FootballPassScene extends Phaser.Scene {
             y : 50
           },
           {
-            x : 400,
+            x : 200,
             y : 50
           },
           {
-            x : 600,
+            x : 400,
             y : 50,
           },
           {
-            x : 700,
+            x : 600,
             y : 50
           }
         ],
@@ -389,15 +398,15 @@ export default class FootballPassScene extends Phaser.Scene {
             y : -80
           },
           {
-            x : 400,
+            x : 200,
             y : -100
           },
           {
-            x : 600,
-            y : -150
+            x : 400,
+            y : -80
           },
           {
-            x : 700,
+            x : 600,
             y : -300
           },
         ],
@@ -408,37 +417,37 @@ export default class FootballPassScene extends Phaser.Scene {
               y : -210
             },
             {
-              x : 360,
-              y : -320
+              x : 260,
+              y : -420
             }
           ],
           [
             {
-              x : 400,
-              y : 0
-            },
-            {
-              x : 400,
-              y : 0
-            },
-          ],
-          [
-            {
-              x : 400,
-              y : -460
-            },
-            {
-              x : 400,
-              y : -460
-            },
-          ],
-          [
-            {
-              x : 700,
+              x : 200,
               y : -210
             },
             {
+              x : 100,
+              y : -420
+            },
+          ],
+          [
+            {
               x : 400,
+              y : 0
+            },
+            {
+              x : 400,
+              y : 0
+            },
+          ],
+          [
+            {
+              x : 600,
+              y : -210
+            },
+            {
+              x : 800,
               y : -500
             }
           ]
@@ -528,7 +537,6 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2 - itemR * 1.2, h - itemR * 1.5, 'plan1').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
-        this.highlight.setPosition(w / 2 - itemR * 1.2, h - itemR * 1.5);
         this.button.play();
         this.onSelectPlan("PLAN1", 0)
       })
@@ -538,7 +546,6 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2, h - itemR * 1.5, 'plan2').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
-        this.highlight.setPosition(w / 2, h - itemR * 1.5);
         this.button.play();
         this.onSelectPlan("PLAN2", 1)
       })
@@ -548,7 +555,6 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2 + itemR * 1.2, h - itemR * 1.5, 'plan3').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
-        this.highlight.setPosition(w / 2 + itemR * 1.2, h - itemR * 1.5);
         this.button.play();
         this.onSelectPlan("PLAN3", 2)
       })
@@ -624,9 +630,17 @@ export default class FootballPassScene extends Phaser.Scene {
       .setCollideWorldBounds(true)
       .setPushable(false);
 
+    this.power_effect = this.physics.add
+      .sprite(w * 0.005 + h * 0.45, h / 2 - 0.15 * h, 'power_effect')
+      .setDisplaySize(190 * w / 1248, 30 * w / 1248)
+      .setOrigin(1, 0)
+      .setAlpha(1);
+
     this.playerGroup = this.add.group();
     this.playerGroup.add(this.player);
     this.playerGroup.add(this.selRing);
+    this.playerGroup.add(this.power_effect);
+    this.power_effect.position
 
     // ANIMATION CREATE
     const player_frame = this.anims.generateFrameNames('player_anim', {
@@ -1134,7 +1148,10 @@ export default class FootballPassScene extends Phaser.Scene {
   onSelectPlan(planType, idx) {
     console.log(planType);
 
-    if(idx == this.status.planIdx) {
+    const itemR = w * 0.2;
+    this.highlight.setPosition(w / 2 - itemR * 1.2 + itemR * 1.2 * idx, h - itemR * 1.5);
+
+    if(idx == this.status.planIdx && this.status.planIdx != -1) {
       this.onStartPlan();
     } else {
       
@@ -1146,7 +1163,24 @@ export default class FootballPassScene extends Phaser.Scene {
       this.linesGroup[idx].setXY(0, this.getUIPos(this.posObject.startPos.first))
       this.linesGroup[idx].setVisible(true);
     }
+    this.onInitPlayer();
 
+  }
+
+  onInitPlayer() {
+    for(let i = 0; i < 4; i++) {
+      let y = this.posObject.startPos.first;
+
+      this.aiPlayers[i].pathIdx = 0;
+      this.aiEnemies[i].pathIdx = 0;
+
+      this.aiPlayers[i].setPosition(this.getUIPos(this.posObject[plans[this.status.planIdx]].players[i].x), this.getUIPos(this.posObject[plans[this.status.planIdx]].players[i].y + y))
+      this.aiEnemies[i].setPosition(this.getUIPos(this.posObject[plans[this.status.planIdx]].enemies[i].x), this.getUIPos(this.posObject[plans[this.status.planIdx]].enemies[i].y + y)).setFlipY(true)
+
+      this.aiPlayers[i].setVelocity(0, 0).play("player_idle_anim")
+      this.aiEnemies[i].setVelocity(0, 0).play("enemy_idle_anim")
+
+    }
   }
 
   onStartPlan() {
@@ -1186,6 +1220,9 @@ export default class FootballPassScene extends Phaser.Scene {
     //this.ai.setPosition(mW, scr + goalH + playerR / 2);
     this.status["startRoundTime"] = new Date().getTime();
 
+    power = 0;
+    this.power_effect.setFrame(Math.round(power));
+
     this.isDragging = false;
 
     this.status.isBallPlayer = true;
@@ -1208,20 +1245,6 @@ export default class FootballPassScene extends Phaser.Scene {
     this.player.setVelocity(0, 0).setAngle(0).play("player_idle_anim");
     this.blueline.setPosition(this.blueline.x, this.getUIPos(this.posObject.startPos.first));
     this.yellowline.setPosition(this.yellowline.x, this.getUIPos(this.posObject.startPos.second));
-
-    for(let i = 0; i < 4; i++) {
-      let y = this.posObject.startPos.first;
-
-      this.aiPlayers[i].pathIdx = 0;
-      this.aiEnemies[i].pathIdx = 0;
-
-      this.aiPlayers[i].setPosition(this.getUIPos(this.posObject.PLAN1.players[i].x), this.getUIPos(this.posObject.PLAN1.players[i].y + y))
-      this.aiEnemies[i].setPosition(this.getUIPos(this.posObject.PLAN1.enemies[i].x), this.getUIPos(this.posObject.PLAN1.enemies[i].y + y)).setFlipY(true)
-
-      this.aiPlayers[i].setVelocity(0, 0).play("player_idle_anim")
-      this.aiEnemies[i].setVelocity(0, 0).play("enemy_idle_anim")
-
-    }
 
     this.onSelectPlan("PLAN1", 0);
     // END INIT DATA
@@ -1423,7 +1446,6 @@ export default class FootballPassScene extends Phaser.Scene {
       const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.posObject.runPos.x, this.posObject.runPos.y);
 
       this.status["runDistance"] = Math.round(this.getRealPos(distance) / 14);
-      console.log(this.status["runDistance"]);
     }
 
     this.scoreText.setText(`${this.getTotalScore()} PTS`);
@@ -1546,14 +1568,28 @@ export default class FootballPassScene extends Phaser.Scene {
     this.time.delayedCall(4000, this.initGame, [], this);
   }
 
+  powerupUpdate(delta) {
+    console.log(power);
+
+    if (this.isDragging == true && this.status.isThrowBall && this.status.isPlaying) {
+      console.log(power);
+
+      power += 10 * (delta / 1000);
+      if (power > 15) power = 15;
+      this.power_effect.setFrame(Math.round(power));
+    }
+  }
+
   update(time, delta) {
 
     this.playerGroup.setXY(this.player.x, this.player.y)
+    this.power_effect.setPosition(this.power_effect.x + this.getUIPos(playerR * 0.7), this.power_effect.y - this.getUIPos(playerR * 1.3))
 
     this.aiUpdate();
     this.ballUpdate();
     this.scoreUpdate();
     this.timeUpdate();
+    this.powerupUpdate(delta);
     if(this.status.isBallPlayer) {
       this.ball.setPosition(this.player.x + playerR / 4, this.player.y - playerR / 3.4);
     } 
@@ -1573,7 +1609,7 @@ export default class FootballPassScene extends Phaser.Scene {
       const maxDistance = 45; // Adjust the speed as needed
       let velocity = (playerSpeed * distance) / maxDistance;
 
-      velocity = 100 * (distance < 1? 0 : 1);
+      velocity = 100 * (distance < 1? 0 : 1) * (15 - Math.round(power)) / 15;
 
       // Calculate the direction towards the goal
       const angle = Math.atan2(dy, dx);
