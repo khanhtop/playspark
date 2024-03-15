@@ -26,7 +26,9 @@ let boardW = 800;
 let boardH = 2000;
 
 let plans = [
-  "PLAN1"
+  "PLAN1",
+  "PLAN2",
+  "PLAN3",
 ]
 
 export default class FootballPassScene extends Phaser.Scene {
@@ -52,6 +54,7 @@ export default class FootballPassScene extends Phaser.Scene {
   private gameOverGroup: Phaser.GameObjects.Group;
   private gameTimeText: Phaser.GameObjects.Text;
   private roundTimeText: Phaser.GameObjects.Text;
+  private highlight: Phaser.GameObjects.Image;
 
 
   constructor(newGameType: string, newParams: any) {
@@ -177,6 +180,7 @@ export default class FootballPassScene extends Phaser.Scene {
       isThrowBall: false,
       isSacked: false,
       isRound: true,
+      roundNum: 1,
       score: {
         touchDown: 0,
         firstDown: 0,
@@ -279,7 +283,167 @@ export default class FootballPassScene extends Phaser.Scene {
             }
           ]
         ]
-      }
+      },
+      PLAN2: {
+        players : [
+          {
+            x : 100,
+            y : 50
+          },
+          {
+            x : 400,
+            y : 50
+          },
+          {
+            x : 600,
+            y : 50,
+          },
+          {
+            x : 700,
+            y : 50
+          }
+        ],
+        enemies: [
+          {
+            x : 100,
+            y : -80
+          },
+          {
+            x : 400,
+            y : -100
+          },
+          {
+            x : 600,
+            y : -150
+          },
+          {
+            x : 700,
+            y : -300
+          },
+        ],
+        targets: [
+          [
+            {
+              x : 100,
+              y : -210
+            },
+            {
+              x : 360,
+              y : -320
+            }
+          ],
+          [
+            {
+              x : 400,
+              y : 0
+            },
+            {
+              x : 400,
+              y : 0
+            },
+          ],
+          [
+            {
+              x : 400,
+              y : -460
+            },
+            {
+              x : 400,
+              y : -460
+            },
+          ],
+          [
+            {
+              x : 700,
+              y : -210
+            },
+            {
+              x : 400,
+              y : -500
+            }
+          ]
+        ]
+      },
+      PLAN3: {
+        players : [
+          {
+            x : 100,
+            y : 50
+          },
+          {
+            x : 400,
+            y : 50
+          },
+          {
+            x : 600,
+            y : 50,
+          },
+          {
+            x : 700,
+            y : 50
+          }
+        ],
+        enemies: [
+          {
+            x : 100,
+            y : -80
+          },
+          {
+            x : 400,
+            y : -100
+          },
+          {
+            x : 600,
+            y : -150
+          },
+          {
+            x : 700,
+            y : -300
+          },
+        ],
+        targets: [
+          [
+            {
+              x : 100,
+              y : -210
+            },
+            {
+              x : 360,
+              y : -320
+            }
+          ],
+          [
+            {
+              x : 400,
+              y : 0
+            },
+            {
+              x : 400,
+              y : 0
+            },
+          ],
+          [
+            {
+              x : 400,
+              y : -460
+            },
+            {
+              x : 400,
+              y : -460
+            },
+          ],
+          [
+            {
+              x : 700,
+              y : -210
+            },
+            {
+              x : 400,
+              y : -500
+            }
+          ]
+        ]
+      },
     }
 
     this.gameoverTexts = {};
@@ -306,10 +470,9 @@ export default class FootballPassScene extends Phaser.Scene {
       false
     );
     let bg = this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, boardH * w / boardW);
-    this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
+    // this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
     //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
 
-    this.add.image(mW, 37, "score").setDisplaySize(scrW, scrH);
     
     this.cameras.main.setBounds(0, 0, bg.displayWidth, bg.displayHeight);
     // BEGIN HEADER
@@ -325,7 +488,7 @@ export default class FootballPassScene extends Phaser.Scene {
       fontSize: '12px'
     }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
 
-    this.add.text(header.x - w * 0.25, header.y, '2ND AND 11', {
+    this.yardsText = this.add.text(header.x - w * 0.25, header.y, '2ND AND 11', {
       ...this.text_main_style,
       color: '#454545'
     }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
@@ -358,10 +521,14 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2, h - itemR * 1.35, 'plan-board').setOrigin(0.5, 0.5).setDisplaySize(itemR * 4, itemR * 1.7).setScrollFactor(0, 0)
     )
 
+    this.highlight = this.add.image(mW, 37, "score").setDisplaySize(itemR* 1.03, itemR * 1.03).setScrollFactor(0, 0);
+    this.highlight.setPosition(w / 2 - itemR * 1.2, h - itemR * 1.5);
+    this.tapGroup.add(this.highlight);
     this.tapGroup.add(
       this.add.image(w / 2 - itemR * 1.2, h - itemR * 1.5, 'plan1').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
+        this.highlight.setPosition(w / 2 - itemR * 1.2, h - itemR * 1.5);
         this.button.play();
         this.onSelectPlan("PLAN1", 0)
       })
@@ -371,8 +538,9 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2, h - itemR * 1.5, 'plan2').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
+        this.highlight.setPosition(w / 2, h - itemR * 1.5);
         this.button.play();
-        this.onSelectPlan("PLAN1", 0)
+        this.onSelectPlan("PLAN2", 1)
       })
     )
     
@@ -380,8 +548,9 @@ export default class FootballPassScene extends Phaser.Scene {
       this.add.image(w / 2 + itemR * 1.2, h - itemR * 1.5, 'plan3').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
       .setInteractive()
       .on('pointerup', () => {
+        this.highlight.setPosition(w / 2 + itemR * 1.2, h - itemR * 1.5);
         this.button.play();
-        this.onSelectPlan("PLAN1", 0)
+        this.onSelectPlan("PLAN3", 2)
       })
     )
 
@@ -699,7 +868,9 @@ export default class FootballPassScene extends Phaser.Scene {
         this.player,
         this.aiEnemies[i],
         () => {
-
+          if(this.aiEnemies[i].anims.getName() != "smoke_anim") {
+            this.aiEnemies[i].play("smoke_anim");
+          }
         },
         null,
         this
@@ -813,7 +984,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.gameOverGroup.add(this.gameoverTexts["gametotal"]);
 
     // LEFT ARRANGE TITLES
-    const leftX = -w * 0.1;
+    const leftX = -w * 0.14;
     this.gameOverGroup.add(
       this.add.text(gameOver.x + leftX, gameOver.y - this.getUIPos(0), "TOUCHDOWNS", {
         ...this.text_main_style,
@@ -880,6 +1051,7 @@ export default class FootballPassScene extends Phaser.Scene {
   private scoreText: Phaser.GameObjects.Text;
   private goalTxt: Phaser.GameObjects.Text;
   private addedScrTxt: Phaser.GameObjects.Text;
+  private yardsText: Phaser.GameObjects.Text;
 
   private scoreHandler;
 
@@ -921,10 +1093,15 @@ export default class FootballPassScene extends Phaser.Scene {
     this.status["score"].firstDown = 0;
     this.status["score"].passStreak = 0;
     this.status["score"].runYards = 0;
+    this.status.roundNum = 1;
 
     this.posObject.startPos.y = 160 + 140 * 11;
     this.posObject.startPos.first = 160 + 140 * 10;
     this.posObject.startPos.second = 160 + 140 * 7;
+
+    const itemR = w * 0.2;
+    this.highlight.setPosition(w / 2 - itemR * 1.2, h - itemR * 1.5);
+
 
     setTimeout(() => this.startRound(), 500);
   }
@@ -932,6 +1109,7 @@ export default class FootballPassScene extends Phaser.Scene {
   loseGame() {
     this.cameras.main.fadeOut(1000);
     this.final.play();
+    this.scoreNum = this.getTotalScore();
     this.scoreHandler(this.scoreNum);
     // game is lost
     //this.initGame();
@@ -996,6 +1174,13 @@ export default class FootballPassScene extends Phaser.Scene {
     return x * boardW / w;
   }
 
+  getAttempText(num) {
+    if(num == 1) return "1st";
+    if(num == 2) return "2nd";
+    if(num == 3) return "3th";
+    if(num == 4) return "4th";
+  }
+
   startRound() {
     // this.player.setPosition(mW, h - goalH - playerR / 2);
     //this.ai.setPosition(mW, scr + goalH + playerR / 2);
@@ -1012,6 +1197,8 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.posObject.startPos.x = 400;
     this.posObject.startPos.y = this.posObject.startPos.first + 140;
+
+    this.yardsText.setText(`${this.getAttempText(this.status.roundNum)} AND ${Math.round((this.posObject.startPos.first - this.posObject.startPos.second) / 14)}`);
     // this.posObject.startPos.first = 160 + 140 * 10;
     // this.posObject.lineDistance = 140 * 3;
 
@@ -1159,9 +1346,9 @@ export default class FootballPassScene extends Phaser.Scene {
         if(first == 160 || this.status.isThrowBall) {
           targetX = this.ball.x;
           targetY = this.ball.y;
-          if(player.anims.getName() != "smoke_anim") {
-            player.play("smoke_anim");
-          }
+          // if(player.anims.getName() != "smoke_anim") {
+          //   player.play("smoke_anim");
+          // }
           eVelocity = 90
         }
 
@@ -1261,14 +1448,22 @@ export default class FootballPassScene extends Phaser.Scene {
     let text = "";
 
     if(y > second || type == "incomplete") {
+      this.status.roundNum++;
+
+      if(this.status.roundNum > 4) {
+        this.onGameOver();
+        return;
+      }
+
       text = "INCOMPLETE";
       if(type == "sacked") {
-        text = "SACKED!!";
+        text = y > first? "SACKED!!" : "TACKLED!!";
         if(this.posObject.startPos.first > this.getRealPos(this.ball.y)) {
           this.posObject.startPos.first = this.getRealPos(this.ball.y);
         }
       }
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
+      this.status.roundNum = 1;
       text = "1ST DOWN!";
       this.posObject.startPos.first = this.posObject.startPos.second;
       this.posObject.startPos.second = this.posObject.startPos.first - 140 * 3;
@@ -1279,6 +1474,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.status["score"].firstDown++;
 
     } else {
+      this.status.roundNum = 1;
       text = "TOUCHDOWN!";
       this.touchDownText.setVisible(true);
 
@@ -1291,8 +1487,6 @@ export default class FootballPassScene extends Phaser.Scene {
     this.roundText.setText(text).setVisible(true);
 
     this.status.isPlaying = false;
-
-
 
     this.status["score"].runYards += this.status["runDistance"];
     this.status["runDistance"] = 0;
@@ -1321,17 +1515,18 @@ export default class FootballPassScene extends Phaser.Scene {
 
     const roundSec = Math.ceil((new Date().getTime() - this.status["startRoundTime"]) / 1000);
 
-    if(gameSec > 50 && this.status.isRound) {
-      this.onGameOver();
-      return; 
-    }
+    // if(gameSec > 50 && this.status.isRound) {
+    //   this.onGameOver();
+    //   return; 
+    // }
 
     if(roundSec > 10 && !this.status.isPlaying && !this.status.isThrowBall && this.status.isRound) {
       console.log("-----", roundSec)
       this.onStartPlan();
     }
 
-    this.gameTimeText.setText(`TDS : ${this.getTimeFormatString(gameSec)}`)
+    // this.gameTimeText.setText(`TDS : ${this.getTimeFormatString(gameSec)}`)
+    this.gameTimeText.setText(`TDS : ${this.status["score"].touchDown}`)
     this.roundTimeText.setText(`${this.getTimeFormatString(roundSec, "round")}`);
   }
 
@@ -1347,6 +1542,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
 
     this.gameOverGroup.setVisible(true);
+    this.loseLife();
     this.time.delayedCall(4000, this.initGame, [], this);
   }
 
