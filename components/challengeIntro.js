@@ -4,7 +4,7 @@ import Text from "./ui/text";
 import { useAppContext } from "@/helpers/store";
 import SignUp from "./forms/signUp";
 
-export default function ChallengeIntro({ data, setStage, role }) {
+export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
   const context = useAppContext();
   return (
     <div style={{ width: "100%" }} className={`h-full w-full relative`}>
@@ -75,6 +75,7 @@ export default function ChallengeIntro({ data, setStage, role }) {
                   <ChallengeAvatar data={data.challengee} />
                 </div>
                 <ChallengeSummary
+                  xpStealAmount={xpStealAmount}
                   role="challenger"
                   data={data.challengee}
                   ready={true}
@@ -92,8 +93,10 @@ export default function ChallengeIntro({ data, setStage, role }) {
                   <ChallengeAvatar data={data.challengee} />
                 </div>
                 <ChallengeSummary
+                  xpStealAmount={xpStealAmount}
                   role="challengee"
                   data={data.challenger}
+                  scoreToBeat={data?.challengerResult?.score}
                   ready={true}
                 />
               </div>
@@ -125,7 +128,7 @@ function ChallengeAvatar({ data }) {
   );
 }
 
-function ChallengeSummary({ data, role, ready }) {
+function ChallengeSummary({ data, role, ready, xpStealAmount, scoreToBeat }) {
   return (
     <div className="flex text-white/60 flex-col items-center gap-2 mt-2 font-roboto text-center text-base max-w-[80%] mt-4">
       {!ready ? (
@@ -133,20 +136,25 @@ function ChallengeSummary({ data, role, ready }) {
       ) : role === "challenger" ? (
         <div className="flex flex-col gap-2">
           <p>
-            If you win the battle, you can steal {Math.floor(data.totalXp / 10)}
-            XP from {data.companyName}
+            If you win the battle, you can steal {xpStealAmount}
+            XP from {data.companyName}.
           </p>
-          <p>
-            As the battle creator, you must go first and set the score that{" "}
-            {data.companyName} must beat.
-          </p>
+          <p>If you lose the battle, you will lose 10% of your XP.</p>
           <p className="">You only get one life, so make it count!</p>
         </div>
       ) : (
-        <p>
-          If you win the battle, you will win 200XP and reduce{" "}
-          {data.companyName}'s XP by 10%
-        </p>
+        <div className="flex flex-col gap-2">
+          <p>
+            {data.companyName} started a battle with you, and scored{" "}
+            {scoreToBeat}!
+          </p>
+          <p>
+            If you beat {data.companyName}'s score, you will steal{" "}
+            {xpStealAmount}XP from them!
+          </p>
+          <p>If you lose the battle, you will lose 10% of your XP.</p>
+          <p className="">You only get one life, so make it count!</p>
+        </div>
       )}
     </div>
   );

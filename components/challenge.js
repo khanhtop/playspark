@@ -44,6 +44,18 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
   const [lives, setLives] = useState(data.id === 11 ? 10 : 3);
   const [reviveCount, setReviveCount] = useState(0);
 
+  const calculateXpStealAmount = () => {
+    if (context?.loggedIn?.uid === data?.challenger?.id) {
+      return Math.floor(
+        data.challengee.dataByClient[data.game.ownerId].xp / 10
+      );
+    } else if (context?.loggedIn?.uid === data?.challengee?.id) {
+      return Math.floor(
+        data.challenger.dataByClient[data.game.ownerId].xp / 10
+      );
+    }
+  };
+
   const callback = (score) => {
     setScore(score);
     setStage(2);
@@ -174,6 +186,7 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
       )}
       {stage === 0 && (
         <ChallengeIntro
+          xpStealAmount={calculateXpStealAmount()}
           data={data}
           setStage={(a) => {
             setStage(a);
@@ -199,7 +212,8 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
         })}
       {stage === 2 && (
         <ChallengeOutro
-          data={data.game}
+          xpStealAmount={calculateXpStealAmount()}
+          data={data}
           setStage={setStage}
           score={score}
           onReset={() => reset()}

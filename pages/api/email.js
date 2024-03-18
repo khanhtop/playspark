@@ -7,8 +7,7 @@ export default async function handler(req, res) {
   console.log(email);
 
   const response = await resend.emails.send({
-    // from: "challenge@playspark.co",
-    from: "onboarding@resend.dev",
+    from: "battle@playspark.co",
     to: email,
     subject: `You have been challenged by ${name}!`,
     react: ChallengeTemplate({
