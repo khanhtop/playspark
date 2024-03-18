@@ -96,7 +96,7 @@ export default class newFallScene extends Phaser.Scene {
     heartR = w * 0.0625;
     distance = 500;
     speed = 200;
-    deltaSpeed = 15;
+    deltaSpeed = 7;
     deltaDistance = 15;
     deltaBomb = 0.1;
     boosterNum = 0;
@@ -668,14 +668,13 @@ export default class newFallScene extends Phaser.Scene {
     .setBounce(1, 1);
 
     if(bball.type != 'bomb') {
-      this.tweens.add({
+      bball.tween = this.tweens.add({
         targets: bball,
         duration: 50000,
         rotation: 360,
         repeat: -1,
       })
     }
-
 
     this.physics.add.overlap(
       this.boosterGroup,
@@ -722,7 +721,7 @@ export default class newFallScene extends Phaser.Scene {
     }
 
 
-    distance = Math.max(100, distance);
+    distance = Math.max(200, distance);
     speed = Math.min(500, speed);
 
     bb.setDisplaySize(ballR, ballR)
@@ -732,6 +731,9 @@ export default class newFallScene extends Phaser.Scene {
       bb.setTexture('bomb');
       bb.type = 'bomb';
       bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 2.3), Math.min(ballR + deltaBomb, ballR * 2.3))
+      if(!!bb.tween) {
+        bb.tween.stop();
+      }
     } else if(rate < 0.8 && rate >= 0.55) {
       bb.setTexture('ball').setDisplaySize(ballR, ballR);
       bb.type = 'ball';
