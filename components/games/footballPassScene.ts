@@ -20,17 +20,21 @@ let w: number,
   heartNum: number,
   heartR: number;
 
-  let power = 0;
+let power = 0;
 
 let gameType = "football";
 
 let boardW = 800;
 let boardH = 2000;
+let totalScore = 0;
+let randomIdx = {}
 
 let plans = [
   "PLAN1",
   "PLAN2",
   "PLAN3",
+  "PLAN4",
+  "PLAN5",
 ]
 
 export default class FootballPassScene extends Phaser.Scene {
@@ -58,6 +62,8 @@ export default class FootballPassScene extends Phaser.Scene {
   private roundTimeText: Phaser.GameObjects.Text;
   private highlight: Phaser.GameObjects.Image;
   private power_effect: Phaser.GameObjects.Sprite;
+  private tabList: Phaser.GameObjects.Sprite[];
+  private drag: Phaser.GameObjects.Sprite;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -81,12 +87,15 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.image("TAP1", "/pong/" + gameType + "/TAP1.png");
     this.load.image("ring", "/pong/" + gameType + "/ring.png");
 
-    this.load.image("plan1", "/pong/" + gameType + "/p1.png");
-    this.load.image("plan2", "/pong/" + gameType + "/p2.png");
-    this.load.image("plan3", "/pong/" + gameType + "/p3.png");
-    this.load.image("plan4", "/pong/" + gameType + "/p4.png");
-    this.load.image("plan5", "/pong/" + gameType + "/p5.png");
+    this.load.image("PLAN1", "/pong/" + gameType + "/p1.png");
+    this.load.image("PLAN2", "/pong/" + gameType + "/p2.png");
+    this.load.image("PLAN3", "/pong/" + gameType + "/p3.png");
+    this.load.image("PLAN4", "/pong/" + gameType + "/p4.png");
+    this.load.image("PLAN5", "/pong/" + gameType + "/p5.png");
     this.load.image("plan-board", "/pong/" + gameType + "/plan-board.png");
+    this.load.image("drag", "/pong/" + gameType + "/drag.png");
+    this.load.image("mute", "/pong/" + gameType + "/mute.png");
+    this.load.image("pause", "/pong/" + gameType + "/pause.png");
 
 
 
@@ -100,6 +109,9 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.audio("gameover", "/pong/" + gameType + "/sfx/gameover.wav");
     this.load.audio("throw", "/pong/" + gameType + "/sfx/throw.wav");
     this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.wav");
+    this.load.audio("tackle", "/pong/" + gameType + "/sfx/tackle.wav");
+    this.load.audio("hitbody", "/pong/" + gameType + "/sfx/hitbody.wav");
+    this.load.audio("firstdown", "/pong/" + gameType + "/sfx/firstdown.wav");
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
@@ -179,8 +191,13 @@ export default class FootballPassScene extends Phaser.Scene {
   private throw: any;
   private touchdown: any;
   private button: any;
+  private tackle: any;
+  private hitbody: any;
+  private firstdown: any;
 
   create() {
+    totalScore = this.params.score;
+
     this.status = {
       isBallPlayer: true,
       isPlaying: false,
@@ -453,6 +470,170 @@ export default class FootballPassScene extends Phaser.Scene {
           ]
         ]
       },
+      PLAN4: {
+        players : [
+          {
+            x : 100,
+            y : 50
+          },
+          {
+            x : 200,
+            y : 50
+          },
+          {
+            x : 300,
+            y : 50,
+          },
+          {
+            x : 500,
+            y : 50
+          }
+        ],
+        enemies: [
+          {
+            x : 100,
+            y : -80
+          },
+          {
+            x : 200,
+            y : -100
+          },
+          {
+            x : 300,
+            y : -120
+          },
+          {
+            x : 500,
+            y : -180
+          },
+        ],
+        targets: [
+          [
+            {
+              x : 700,
+              y : -80
+            },
+            {
+              x : 700,
+              y : -220
+            },
+            {
+              x : 800,
+              y : -420
+            },
+          ],
+          [
+            {
+              x : 200,
+              y : -210
+            },
+            {
+              x : 100,
+              y : -420
+            },
+          ],
+          [
+            {
+              x : 300,
+              y : -80
+            },
+            {
+              x : 200,
+              y : -420
+            },
+          ],
+          [
+            {
+              x : 500,
+              y : 0
+            },
+            {
+              x : 500,
+              y : 0
+            }
+          ]
+        ]
+      },
+      PLAN5: {
+        players : [
+          {
+            x : 100,
+            y : 50
+          },
+          {
+            x : 400,
+            y : 50
+          },
+          {
+            x : 600,
+            y : 50,
+          },
+          {
+            x : 700,
+            y : 50
+          }
+        ],
+        enemies: [
+          {
+            x : 100,
+            y : -80
+          },
+          {
+            x : 400,
+            y : -100
+          },
+          {
+            x : 600,
+            y : -80
+          },
+          {
+            x : 700,
+            y : -300
+          },
+        ],
+        targets: [
+          [
+            {
+              x : 100,
+              y : -420
+            },
+            {
+              x : 100,
+              y : -420
+            }
+          ],
+          [
+            {
+              x : 400,
+              y : 0
+            },
+            {
+              x : 400,
+              y : 0
+            },
+          ],
+          [
+            {
+              x : 600,
+              y : -220
+            },
+            {
+              x : 800,
+              y : -420
+            },
+          ],
+          [
+            {
+              x : 700,
+              y : -210
+            },
+            {
+              x : 400,
+              y : -220
+            }
+          ]
+        ]
+      },
     }
 
     this.gameoverTexts = {};
@@ -467,6 +648,9 @@ export default class FootballPassScene extends Phaser.Scene {
     this.gameover = this.sound.add("gameover");
     this.throw = this.sound.add("throw");
     this.touchdown = this.sound.add("touchdown");
+    this.tackle = this.sound.add("tackle");
+    this.hitbody = this.sound.add("hitbody");
+    this.firstdown = this.sound.add("firstdown");
 
     this.physics.world.setBounds(
       sideW,
@@ -489,36 +673,50 @@ export default class FootballPassScene extends Phaser.Scene {
     this.blueline = this.add.rectangle(w / 2, w / 800 * 300, w * 0.96, 5, 0x22d3ee).setOrigin(0.5, 0.5);
     this.yellowline = this.add.rectangle(w / 2, w / 800 * (300 + 140), w * 0.96, 5, 0xf3cb04).setOrigin(0.5, 0.5);
 
-    const header = this.add.image(w / 2, 30, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.9, 40).setScrollFactor(0, 0);
+    const header = this.add.image(w / 2, 30, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.9, 60 * w / 375).setScrollFactor(0, 0).setDepth(4);
 
     this.scoreText = this.add.text(header.x, header.y, '001423 PTS', {
       ...this.text_main_style,
       color: '#454545',
-      fontSize: '12px'
-    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+      fontSize: `${17 * w / 375}px`
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDepth(4);
 
     this.yardsText = this.add.text(header.x - w * 0.25, header.y, '2ND AND 11', {
       ...this.text_main_style,
-      color: '#454545'
-    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+      color: '#454545',
+      fontSize: `${17 * w / 375}px`
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDepth(4);
 
     this.gameTimeText = this.add.text(header.x + w * 0.25, header.y, 'TDS: 0', {
       ...this.text_main_style,
-      color: '#454545'
-    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+      color: '#454545',
+      fontSize: `${17 * w / 375}px`
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDepth(4);
 
-    const lifePanel = this.add.image(w / 2 + w * 0.45 - w * 0.075, 75, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.15, 40).setScrollFactor(0, 0);
+    // MUTE, PASUE BTN
+    this.add.sprite(header.x - w * 0.4, header.y + 40 * w / 375, 'pause').setOrigin(0.5, 0.5)
+    .setDisplaySize(30 * w / 375, 30 * w / 375)
+    .setScrollFactor(0, 0).setDepth(4);
 
-    this.add.image(lifePanel.x - w * 0.03, lifePanel.y, 'heart').setOrigin(0.5, 0.5).setDisplaySize(15, 15).setScrollFactor(0, 0);
+    this.add.sprite(header.x- w * 0.3, header.y + 40 * w / 375, 'mute').setOrigin(0.5, 0.5)
+    .setDisplaySize(30 * w / 375, 30 * w / 375)
+    .setScrollFactor(0, 0).setDepth(4);
+    
+    
+    const lifePanel = this.add.image(w / 2 + w * 0.45 - w * 0.075, 75, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.15, 40).setScrollFactor(0, 0).setDepth(4);
+
+    this.add.image(lifePanel.x - w * 0.03, lifePanel.y, 'heart').setOrigin(0.5, 0.5).setDisplaySize(15, 15).setScrollFactor(0, 0).setDepth(4);
     this.lifeNumText = this.add.text(lifePanel.x + w * 0.03, lifePanel.y, heartNum.toString(), {
       ...this.text_main_style,
       color: '#454545'
-    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
+    }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDepth(4);
     // END HEADER
 
     // BEGIN BOTTOM
 
     this.tapGroup = this.add.group();
+
+    this.drag = this.add.sprite(w / 2, h - 120, 'drag').setOrigin(0.5, 0.5).setDisplaySize(200, 150).setScrollFactor(0, 0).setVisible(false);
 
     this.tapGroup.add(
       this.add.image(w / 2, header.y + 30, 'TAP1').setOrigin(0.5, 0).setDisplaySize(w * 0.7, w * 0.7 * 0.65).setScrollFactor(0, 0)
@@ -533,32 +731,51 @@ export default class FootballPassScene extends Phaser.Scene {
     this.highlight = this.add.image(mW, 37, "score").setDisplaySize(itemR* 1.03, itemR * 1.03).setScrollFactor(0, 0);
     this.highlight.setPosition(w / 2 - itemR * 1.2, h - itemR * 1.5);
     this.tapGroup.add(this.highlight);
-    this.tapGroup.add(
-      this.add.image(w / 2 - itemR * 1.2, h - itemR * 1.5, 'plan1').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
-      .setInteractive()
-      .on('pointerup', () => {
-        this.button.play();
-        this.onSelectPlan("PLAN1", 0)
-      })
-    )
+
+    this.tabList = [];
+
+    plans.forEach((plan, index) => {
+      this.tabList.push(
+        this.add.sprite(-300, h - itemR * 1.5, plan).setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
+        .setInteractive()
+        .on('pointerup', () => {
+          this.button.play();
+          this.onSelectPlan(plan, index)
+        }).setVisible(false)
+      )
+      this.tabList[index].idx = index;
+      this.tapGroup.add(this.tabList[index]);
+    })
+
+    // this.tabList.push(
+    //   this.add.sprite(w / 2 - itemR * 1.2, h - itemR * 1.5, 'plan1').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
+    //   .setInteractive()
+    //   .on('pointerup', () => {
+    //     this.button.play();
+    //     this.onSelectPlan("PLAN1", 0)
+    //   })
+    // )
+    // this.tabList.push(
+    //   this.add.sprite(w / 2, h - itemR * 1.5, 'plan2').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
+    //   .setInteractive()
+    //   .on('pointerup', () => {
+    //     this.button.play();
+    //     this.onSelectPlan("PLAN2", 1)
+    //   })
+    // )
+    // this.tabList.push(
+    //   this.add.sprite(w / 2 + itemR * 1.2, h - itemR * 1.5, 'plan3').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
+    //   .setInteractive()
+    //   .on('pointerup', () => {
+    //     this.button.play();
+    //     this.onSelectPlan("PLAN3", 2)
+    //   })
+    // )
+
+    // this.tapGroup.add(this.tabList[0]);
+    // this.tapGroup.add(this.tabList[1]);
+    // this.tapGroup.add(this.tabList[2]);
     
-    this.tapGroup.add(
-      this.add.image(w / 2, h - itemR * 1.5, 'plan2').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
-      .setInteractive()
-      .on('pointerup', () => {
-        this.button.play();
-        this.onSelectPlan("PLAN2", 1)
-      })
-    )
-    
-    this.tapGroup.add(
-      this.add.image(w / 2 + itemR * 1.2, h - itemR * 1.5, 'plan3').setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
-      .setInteractive()
-      .on('pointerup', () => {
-        this.button.play();
-        this.onSelectPlan("PLAN3", 2)
-      })
-    )
 
     this.tapGroup.add(
       this.add.text(w / 2, h - itemR * 0.82, "SELECT A PLAY", {
@@ -1057,6 +1274,8 @@ export default class FootballPassScene extends Phaser.Scene {
     // this.cameras.main.startFollow(this.player);
     this.cameras.main.startFollow(this.player, false, 0, 1, 0, 0);
 
+    heartNum = this.params.lives
+    this.scoreNum = this.params.score;
     this.initGame();
   }
 
@@ -1076,6 +1295,8 @@ export default class FootballPassScene extends Phaser.Scene {
   public initGame(lives = 3) {
     this.cameras.main.fadeIn(1200);
     
+    this.scoreNum += this.getTotalScore();
+
     this.goalTxt.setVisible(false);
     this.addedScrTxt.setVisible(false);
 
@@ -1088,7 +1309,6 @@ export default class FootballPassScene extends Phaser.Scene {
     this.goalXPos = mW;
     this.goalYPos = h - goalH - playerR / 2;
 
-    this.scoreNum = this.params.score;
     this.ballDir = 1;
     this.scoreText.text = this.params.score.toString()?.padStart(4, "0");
 
@@ -1123,7 +1343,7 @@ export default class FootballPassScene extends Phaser.Scene {
   loseGame() {
     this.cameras.main.fadeOut(1000);
     this.final.play();
-    this.scoreNum = this.getTotalScore();
+    this.scoreNum += this.getTotalScore();
     this.scoreHandler(this.scoreNum);
     // game is lost
     //this.initGame();
@@ -1146,13 +1366,17 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   onSelectPlan(planType, idx) {
-    console.log(planType);
+    console.log(planType, idx, randomIdx[idx], "select plan");
 
     const itemR = w * 0.2;
-    this.highlight.setPosition(w / 2 - itemR * 1.2 + itemR * 1.2 * idx, h - itemR * 1.5);
+    this.highlight.setPosition(w / 2 - itemR * 1.2 + itemR * 1.2 * randomIdx[idx], h - itemR * 1.5);
 
     if(idx == this.status.planIdx && this.status.planIdx != -1) {
       this.onStartPlan();
+      this.drag.setVisible(true);
+      this.time.delayedCall(3000, () => {
+        this.drag.setVisible(false);
+      }, [], this);
     } else {
       
       if(this.status.planIdx != -1) {
@@ -1198,6 +1422,14 @@ export default class FootballPassScene extends Phaser.Scene {
       this.aiPlayers[i].play("player_anim")
       this.aiEnemies[i].play("enemy_anim")
     }
+  }
+
+  shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
   }
 
   getUIPos(x) {
@@ -1246,7 +1478,8 @@ export default class FootballPassScene extends Phaser.Scene {
     this.blueline.setPosition(this.blueline.x, this.getUIPos(this.posObject.startPos.first));
     this.yellowline.setPosition(this.yellowline.x, this.getUIPos(this.posObject.startPos.second));
 
-    this.onSelectPlan("PLAN1", 0);
+    this.initTabList();
+    // this.onSelectPlan("PLAN1", 0);
     // END INIT DATA
 
     // INIT UI
@@ -1271,6 +1504,25 @@ export default class FootballPassScene extends Phaser.Scene {
     this.goalTxt.setVisible(false);
     this.addedScrTxt.setVisible(false);
     this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2);
+  }
+
+  initTabList() {
+    let randomTaps = this.shuffleArray(this.tabList);
+
+    this.tabList.forEach(tap => {
+      tap.setVisible(false);
+    })
+
+    for(let i = 0; i < 3; i ++) {
+      let tap = randomTaps[i];
+      const itemR = w * 0.2;
+      tap.setPosition(w / 2 - itemR * 1.2 + itemR * 1.2 * i, h - itemR * 1.5);
+      // tap.setVisible(true);
+      randomIdx[tap.idx] = i;
+    }
+    console.log("randomIdx", randomIdx)
+    console.log("randomIdx: --", plans[randomTaps[0].idx], randomTaps[0].idx)
+    this.onSelectPlan(plans[randomTaps[0].idx], randomTaps[0].idx)
   }
 
   score(which = 0) {
@@ -1422,7 +1674,7 @@ export default class FootballPassScene extends Phaser.Scene {
         this.ball.setVelocity(0, 0);
         this.status.isKick = false;
 
-        this.time.delayedCall(500, () => {
+        this.time.delayedCall(100, () => {
           if(!this.status.isBallPlayer) {
             this.onCatchLogic("incomplete");
           }
@@ -1448,7 +1700,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.status["runDistance"] = Math.round(this.getRealPos(distance) / 14);
     }
 
-    this.scoreText.setText(`${this.getTotalScore()} PTS`);
+    this.scoreText.setText(`${this.getTotalScore() + this.scoreNum} PTS`);
   }
 
   getTotalScore() {
@@ -1483,6 +1735,10 @@ export default class FootballPassScene extends Phaser.Scene {
         if(this.posObject.startPos.first > this.getRealPos(this.ball.y)) {
           this.posObject.startPos.first = this.getRealPos(this.ball.y);
         }
+
+        if(y < first) {
+          this.tackle.play();
+        }
       }
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
       this.status.roundNum = 1;
@@ -1494,6 +1750,7 @@ export default class FootballPassScene extends Phaser.Scene {
       }
 
       this.status["score"].firstDown++;
+      this.firstdown.play();
 
     } else {
       this.status.roundNum = 1;
@@ -1574,7 +1831,7 @@ export default class FootballPassScene extends Phaser.Scene {
     if (this.isDragging == true && this.status.isThrowBall && this.status.isPlaying) {
       console.log(power);
 
-      power += 10 * (delta / 1000);
+      power += 3 * (delta / 1000);
       if (power > 15) power = 15;
       this.power_effect.setFrame(Math.round(power));
     }
@@ -1609,7 +1866,7 @@ export default class FootballPassScene extends Phaser.Scene {
       const maxDistance = 45; // Adjust the speed as needed
       let velocity = (playerSpeed * distance) / maxDistance;
 
-      velocity = 100 * (distance < 1? 0 : 1) * (15 - Math.round(power)) / 15;
+      velocity = 100 * (distance < 1? 0 : 1) * (1 - 0.4 * (Math.round(power)) / 15);
 
       // Calculate the direction towards the goal
       const angle = Math.atan2(dy, dx);
