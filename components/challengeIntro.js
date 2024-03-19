@@ -3,9 +3,12 @@ import UIButton from "./ui/button";
 import Text from "./ui/text";
 import { useAppContext } from "@/helpers/store";
 import SignUp from "./forms/signUp";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/router";
 
 export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
   const context = useAppContext();
+  const router = useRouter();
   return (
     <div style={{ width: "100%" }} className={`h-full w-full relative`}>
       <img
@@ -13,7 +16,15 @@ export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
         className="absolute top-0 left-0 h-full w-full object-cover"
       />
       <div className="text-white items-center justify-end absolute top-0 left-0 h-full w-full  flex flex-col p-8 bg-black/90">
-        <div className="flex-1 font-octo text-2xl my-12 w-[90%] rounded-2xl bg-white/5 backdrop-blur flex flex-col p-4 items-center justify-center gap-4">
+        <div className="relative flex-1 font-octo text-2xl my-12 w-[90%] rounded-2xl bg-white/5 backdrop-blur flex flex-col p-4 items-center justify-center gap-4">
+          {/* Close Button */}
+          <div
+            onClick={() => router.push(`https://playspark.co${data.referrer}`)}
+            className="absolute bg-white p-2 h-12 w-12 -top-6 -right-6 rounded-full"
+          >
+            <XMarkIcon className="h-full w-full text-black" />
+          </div>
+
           {/* Handle The Non-Logged In User */}
           {!context?.loggedIn?.uid && (
             <div className="text-center px-8 flex flex-col">
@@ -80,6 +91,14 @@ export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
                   data={data.challengee}
                   ready={true}
                 />
+                <div className="h-8" />
+                <UIButton
+                  {...data.game}
+                  onClick={() => {
+                    setStage(1);
+                  }}
+                  text="START"
+                />
               </div>
             )}
 
@@ -99,18 +118,33 @@ export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
                   scoreToBeat={data?.challengerResult?.score}
                   ready={true}
                 />
+                <div className="h-8" />
+                <UIButton
+                  {...data.game}
+                  onClick={() => {
+                    setStage(1);
+                  }}
+                  text="START"
+                />
               </div>
             )}
         </div>
 
-        <UIButton
-          {...data.game}
-          onClick={() => {
-            playEvent(context, data);
-            setStage(1);
-          }}
-          text="START"
-        />
+        {/* {context?.loggedIn?.uid &&
+          ((context?.loggedIn?.uid === data?.challengee?.id &&
+            data.challengerResult &&
+            !data?.challengeeResult) ||
+            (context?.loggedIn?.uid === data?.challenger?.id &&
+              !data.challengerResult)) && (
+            <UIButton
+              {...data.game}
+              onClick={() => {
+                playEvent(context, data);
+                setStage(1);
+              }}
+              text="START"
+            />
+          )} */}
       </div>
     </div>
   );

@@ -56,12 +56,15 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
     }
   };
 
-  const callback = (score) => {
+  const [hasNotified, setHasNotified] = useState(false);
+  const callback = async (score) => {
     setScore(score);
     setStage(2);
-    if (context?.loggedIn?.uid === data?.challenger?.id) {
+    if (context?.loggedIn?.uid === data?.challenger?.id && !hasNotified) {
+      console.warn("DEBUG - CHALLENGE.JS EFFECT TRIGGERED");
       // Challenger Has Completed
-      completeBattleForChallenger(
+      setHasNotified(true);
+      await completeBattleForChallenger(
         id,
         score,
         data?.challenger?.companyName,
@@ -70,8 +73,10 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
         data?.challengee?.email
       );
     }
-    if (context?.loggedIn?.uid === data?.challengee?.id) {
-      completeBattleForChallengee(
+    if (context?.loggedIn?.uid === data?.challengee?.id && !hasNotified) {
+      console.warn("DEBUG - CHALLENGE.JS EFFECT TRIGGERED");
+      setHasNotified(true);
+      await completeBattleForChallengee(
         id,
         score,
         data?.game?.name,
@@ -83,13 +88,6 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
         data?.challenger?.email,
         data?.challengee?.email
       );
-
-      // id,
-      // score,
-      // data?.challenger?.companyName,
-      // data?.game?.name,
-      // data?.challengee?.id,
-      // data?.challengee?.email
     }
   };
 

@@ -295,12 +295,13 @@ export async function archive(tournamentId) {
   return;
 }
 
-export async function createChallenge(game, challengee, challenger) {
+export async function createChallenge(game, challengee, challenger, referrer) {
   const challengeId = Date.now().toString();
   await setDoc(doc(firestore, "challenges", challengeId), {
     game: game,
     challengee: challengee,
     challenger: challenger,
+    referrer: referrer,
   });
   await addDoc(collection(firestore, "notifications"), {
     timestamp: Date.now(),
@@ -346,6 +347,7 @@ export async function completeBattleForChallenger(
     text: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
     uid: challengeeId,
   });
+  return;
 }
 
 export async function completeBattleForChallengee(
@@ -360,6 +362,7 @@ export async function completeBattleForChallengee(
   challengerEmail,
   challengeeEmail
 ) {
+  console.warn("DEBUG - API.JS TRIGGERED");
   const challengerWon = parseInt(challengerScore) > parseInt(score);
   await fetch("/api/email", {
     method: "POST",
@@ -417,4 +420,5 @@ export async function completeBattleForChallengee(
     } the battle with ${challengeeName}`,
     uid: challengerId,
   });
+  return;
 }

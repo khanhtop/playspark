@@ -20,14 +20,19 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
   const [isConfirmingChallenge, setIsConfirmingChallenge] = useState(false);
   const [loading, setLoading] = useState(false);
   const xpSteal = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
-  const xpLose = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
+  const xpLose = Math.floor(context?.profile?.dataByClient[client.id]?.xp / 10);
 
   const issueChallenge = async () => {
     setLoading(true);
-    const id = await createChallenge(isConfirmingChallenge, userData, {
-      ...context.profile,
-      id: context?.loggedIn.uid,
-    });
+    const id = await createChallenge(
+      isConfirmingChallenge,
+      userData,
+      {
+        ...context.profile,
+        id: context?.loggedIn.uid,
+      },
+      router.asPath
+    );
     router.push("/battle/" + id);
     setLoading(false);
   };

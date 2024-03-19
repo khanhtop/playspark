@@ -6,9 +6,16 @@ import EmailSlide from "./forms/emailSlide";
 import ShareButton from "./ui/shareButton";
 import SignUp from "./forms/signUp";
 import { restartEvent, reviveEvent } from "@/helpers/events";
+import { useRouter } from "next/router";
+import { useContext } from "react";
 // import Ranking from "./forms/ranking";
 
-export default function ChallengeOutro({ score, data }) {
+export default function ChallengeOutro({ score, data, xpStealAmount }) {
+  const router = useRouter();
+  const context = useAppContext();
+  const challengerWon =
+    parseInt(data?.challengerResult?.score) > parseInt(score);
+
   return (
     <div className="h-full w-full flex items-center justify-center">
       <div className="relative bg-white rounded-2xl text-black font-light h-[80%] portrait:h-[90%] w-[90%] relative flex items-center justify-start flex-col">
@@ -48,6 +55,41 @@ export default function ChallengeOutro({ score, data }) {
                 >
                   {score}
                 </Text>
+              </div>
+              <div className="bg-black/10 text-center p-4 w-full mb-8 mt-4 rounded-full backdrop-blur flex justify-center">
+                {context?.loggedIn?.uid === data?.challenger?.id && (
+                  <div className="flex flex-col gap-1">
+                    <p>Waiting for {data.challengee?.companyName} to play.</p>
+                    <p>
+                      Check your notifications and your email for the results
+                      later!
+                    </p>
+                  </div>
+                )}
+                {context?.loggedIn?.uid === data?.challengee?.id && (
+                  <div className="flex flex-col gap-1">
+                    <p className="text-2xl font-extrabold font-octo">
+                      You{" "}
+                      {challengerWon ? "Lost The Battle..." : "Won The Battle!"}
+                    </p>
+                    <p
+                      className={`${
+                        challengerWon ? "text-red-500" : "text-green-500"
+                      } font-octo text-3xl font-extrabold`}
+                    >
+                      {challengerWon ? "-" : "+"} {xpStealAmount}XP
+                    </p>
+                  </div>
+                )}
+              </div>
+              <div>
+                <UIButton
+                  {...data.game}
+                  onClick={() => {
+                    router.push(`https://playspark.co${data.referrer}`);
+                  }}
+                  text="Exit Game"
+                />
               </div>
             </div>
           </div>
