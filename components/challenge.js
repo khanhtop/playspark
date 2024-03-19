@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  completeBattleForChallengee,
+  completeBattleForChallenger,
   getGame,
   incrementImpressions,
   incrementOptInCount,
@@ -23,10 +25,12 @@ import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 import Modal from "./ui/modal";
 import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
+import ChallengeIntro from "./challengeIntro";
+import ChallengeOutro from "./challengeOutro";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
-export default function Challenge({ data, withPopoutBackNav }) {
+export default function Challenge({ data, withPopoutBackNav, id }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
   const [lockX, setLockX] = useState();
@@ -40,8 +44,51 @@ export default function Challenge({ data, withPopoutBackNav }) {
   const [lives, setLives] = useState(data.id === 11 ? 10 : 3);
   const [reviveCount, setReviveCount] = useState(0);
 
-  const callback = (score) => {
-    console.log(score);
+  const calculateXpStealAmount = () => {
+    if (context?.loggedIn?.uid === data?.challenger?.id) {
+      return Math.floor(
+        data.challengee.dataByClient[data.game.ownerId].xp / 10
+      );
+    } else if (context?.loggedIn?.uid === data?.challengee?.id) {
+      return Math.floor(
+        data.challenger.dataByClient[data.game.ownerId].xp / 10
+      );
+    }
+  };
+
+  const [hasNotified, setHasNotified] = useState(false);
+  const callback = async (score) => {
+    setScore(score);
+    setStage(2);
+    if (context?.loggedIn?.uid === data?.challenger?.id && !hasNotified) {
+      console.warn("DEBUG - CHALLENGE.JS EFFECT TRIGGERED");
+      // Challenger Has Completed
+      setHasNotified(true);
+      await completeBattleForChallenger(
+        id,
+        score,
+        data?.challenger?.companyName,
+        data?.game?.name,
+        data?.challengee?.id,
+        data?.challengee?.email
+      );
+    }
+    if (context?.loggedIn?.uid === data?.challengee?.id && !hasNotified) {
+      console.warn("DEBUG - CHALLENGE.JS EFFECT TRIGGERED");
+      setHasNotified(true);
+      await completeBattleForChallengee(
+        id,
+        score,
+        data?.game?.name,
+        data?.challengerResult?.score,
+        data?.challenger?.companyName,
+        data?.challengee?.companyName,
+        data?.challenger?.id,
+        data?.challengee?.id,
+        data?.challenger?.email,
+        data?.challengee?.email
+      );
+    }
   };
 
   const reset = () => {
@@ -136,35 +183,34 @@ export default function Challenge({ data, withPopoutBackNav }) {
         </div>
       )}
       {stage === 0 && (
-        <Intro
+        <ChallengeIntro
+          xpStealAmount={calculateXpStealAmount()}
           data={data}
           setStage={(a) => {
             setStage(a);
-            if (!data.demo) {
-              incrementPlayCount(data?.tournamentId?.toString(), "freemium");
-            }
           }}
         />
       )}
 
       {stage === 1 &&
-        getGame(data.id, data, callback, {
-          lives: lives,
-          score: score,
-          brandLogo: data?.brandLogo,
-          sponsorLogo: data?.sponsorLogo,
-          backgroundSprite: data?.backgroundSprite,
-          objectSprite: data?.objectSprite,
-          playerSprite: data?.playerSprite,
-          enemySprite: data?.enemySprite,
-          powerUpSprite: data?.powerUpSprite,
-          additionalSpriteOne: data?.additionalSpriteOne,
-          additionalSpriteTwo: data?.additionalSpriteTwo,
-          maxscore: prevBest ?? 0,
-          words: data?.words || [],
+        getGame(data.game.id, data.game, callback, {
+          lives: 1,
+          score: 0,
+          brandLogo: data?.game?.brandLogo,
+          sponsorLogo: data?.game?.sponsorLogo,
+          backgroundSprite: data?.game?.backgroundSprite,
+          objectSprite: data?.game?.objectSprite,
+          playerSprite: data?.game?.playerSprite,
+          enemySprite: data?.game?.enemySprite,
+          powerUpSprite: data?.game?.powerUpSprite,
+          additionalSpriteOne: data?.game?.additionalSpriteOne,
+          additionalSpriteTwo: data?.game?.additionalSpriteTwo,
+          maxscore: 0,
+          words: data?.game?.words || [],
         })}
       {stage === 2 && (
-        <Outro
+        <ChallengeOutro
+          xpStealAmount={calculateXpStealAmount()}
           data={data}
           setStage={setStage}
           score={score}

@@ -1,5 +1,13 @@
 //import Pong from ;
-import { doc, getDoc, increment, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  increment,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import dynamic from "next/dynamic";
 import { firestore } from "./firebase";
 import { games } from "./games";
@@ -16,6 +24,18 @@ export async function getAd(id) {
       backgroundImage:
         ad.data()?.backgroundImage ??
         "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
+    };
+    return packet;
+  } else {
+    return null;
+  }
+}
+
+export async function getChallenge(id) {
+  const ad = await getDoc(doc(firestore, "challenges", id));
+  if (ad.exists()) {
+    const packet = {
+      ...ad.data(),
     };
     return packet;
   } else {
@@ -271,6 +291,134 @@ export async function archive(tournamentId) {
   updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
     isArchived: true,
     isActive: false,
+  });
+  return;
+}
+
+export async function createChallenge(game, challengee, challenger, referrer) {
+  const challengeId = Date.now().toString();
+  await setDoc(doc(firestore, "challenges", challengeId), {
+    game: game,
+    challengee: challengee,
+    challenger: challenger,
+    referrer: referrer,
+  });
+  await addDoc(collection(firestore, "notifications"), {
+    timestamp: Date.now(),
+    link: `https://playspark.co/battle/${challengeId}`,
+    text: `The battle has begun with ${challengee?.companyName}`,
+    uid: challenger.id,
+  });
+  return challengeId;
+}
+
+export async function completeBattleForChallenger(
+  challengeId,
+  score,
+  challengerName,
+  gameName,
+  challengeeId,
+  challengeeEmail
+) {
+  await fetch("/api/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: challengeeEmail,
+      template: 0,
+      name: challengerName,
+      subject: `You have been challenged by ${challengerName}!`,
+      game: gameName,
+      url: `https://playspark.co/battle/${challengeId}`,
+      customText: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
+    }),
+  });
+  await updateDoc(doc(firestore, "challenges", challengeId), {
+    challengerResult: {
+      score: score,
+      timestamp: Date.now(),
+    },
+  });
+  await addDoc(collection(firestore, "notifications"), {
+    timestamp: Date.now(),
+    link: `https://playspark.co/battle/${challengeId}`,
+    text: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
+    uid: challengeeId,
+  });
+  return;
+}
+
+export async function completeBattleForChallengee(
+  challengeId,
+  score,
+  gameName,
+  challengerScore,
+  challengerName,
+  challengeeName,
+  challengerId,
+  challengeeId,
+  challengerEmail,
+  challengeeEmail
+) {
+  console.warn("DEBUG - API.JS TRIGGERED");
+  const challengerWon = parseInt(challengerScore) > parseInt(score);
+  await fetch("/api/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      template: 1,
+      email: challengeeEmail,
+      name: challengerName,
+      subject: `The battle with ${challengerName} has ended!`,
+      game: gameName,
+      url: `https://playspark.co/battle/${challengeId}`,
+      customText: `${
+        challengerWon ? "You Lost" : "You Won"
+      } the battle with ${challengerName}`,
+    }),
+  });
+  await fetch("/api/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      template: 1,
+      email: challengerEmail,
+      name: challengeeName,
+      subject: `The battle with ${challengeeName} has ended!`,
+      game: gameName,
+      url: `https://playspark.co/battle/${challengeId}`,
+      customText: `${
+        challengerWon ? "You Lost" : "You Won"
+      } the battle with ${challengerName}`,
+    }),
+  });
+  await updateDoc(doc(firestore, "challenges", challengeId), {
+    challengeeResult: {
+      score: score,
+      timestamp: Date.now(),
+    },
+  });
+  await addDoc(collection(firestore, "notifications"), {
+    timestamp: Date.now(),
+    link: ``,
+    text: `${
+      challengerWon ? "You Lost" : "You Won"
+    } the battle with ${challengerName}`,
+    uid: challengeeId,
+  });
+  await addDoc(collection(firestore, "notifications"), {
+    timestamp: Date.now(),
+    link: ``,
+    text: `${
+      challengerWon ? "You Won" : "You Lost"
+    } the battle with ${challengeeName}`,
+    uid: challengerId,
   });
   return;
 }

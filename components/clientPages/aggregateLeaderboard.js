@@ -46,12 +46,7 @@ function Rank({ item, pos, user, showModal, myId }) {
   const [loading, setLoading] = useState(false);
   const handleClick = async () => {
     showModal(item);
-    // console.log(item);
-    // setLoading(true);
-    // const _user = await getDoc(doc(firestore, "users", item.id));
-    // const _json = _user.data();
-    // showModal(item);
-    // setLoading(false);
+    console.log(item);
   };
 
   return (

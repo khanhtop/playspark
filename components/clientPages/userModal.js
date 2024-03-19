@@ -1,18 +1,41 @@
-import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowPathIcon,
+  ChevronRightIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
 import ChallengeButton from "./challengeButton";
 import { useState } from "react";
 import { useAppContext } from "@/helpers/store";
 import Button from "../forms/button";
+import { createChallenge } from "@/helpers/api";
+import { useRouter } from "next/router";
 
 export default function UserModal({ userData, onClose, tournaments, totalXp }) {
   if (!userData) return <div />;
   const context = useAppContext();
+  const router = useRouter();
   const client = userData?.client ?? {};
   const performanceData = userData?.dataByClient?.[client.id] || {};
   const [isChallenging, setIsChallenging] = useState(false);
   const [isConfirmingChallenge, setIsConfirmingChallenge] = useState(false);
-  const xpSteal = Math.floor(userData?.totalXp / 10);
-  const xpLose = Math.floor(totalXp / 10);
+  const [loading, setLoading] = useState(false);
+  const xpSteal = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
+  const xpLose = Math.floor(context?.profile?.dataByClient[client.id]?.xp / 10);
+
+  const issueChallenge = async () => {
+    setLoading(true);
+    const id = await createChallenge(
+      isConfirmingChallenge,
+      userData,
+      {
+        ...context.profile,
+        id: context?.loggedIn.uid,
+      },
+      router.asPath
+    );
+    router.push("/battle/" + id);
+    setLoading(false);
+  };
   return (
     <div
       onClick={onClose}
@@ -31,21 +54,28 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
           <div>
             <h1 className="text-2xl mb-4">Are you sure?</h1>
             <p>
-              If you win the challenge, you will steal {xpSteal}XP from{" "}
-              {userData.companyName}. However, if you lose the challenge, you
-              will lose {xpLose}XP.
+              If you win the battle, you will steal {xpSteal}XP from{" "}
+              {userData.companyName}. However, if you lose, you will lose{" "}
+              {xpLose}XP.
             </p>
             <div className="flex mt-4 flex-row gap-2 max-h-[400px] overflow-y-scroll">
               <button
-                className="h-12 rounded-2xl flex-1"
+                disabled={loading}
+                onClick={() => issueChallenge()}
+                className="h-12 rounded-2xl flex-1 flex items-center justify-center"
                 style={{
                   backgroundColor: client.accentColor,
                   textColor: client.primaryColor,
                 }}
               >
-                Do It!
+                {loading ? (
+                  <ArrowPathIcon className="h-8 w-8 animate-spin" />
+                ) : (
+                  "Do It!"
+                )}
               </button>
               <button
+                disabled={loading}
                 className="h-12 rounded-2xl w-36"
                 style={{
                   backgroundColor: client.accentColor,
@@ -58,7 +88,7 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
           </div>
         ) : isChallenging ? (
           <div>
-            <h1 className="text-2xl mb-4">Select a challenge</h1>
+            <h1 className="text-2xl mb-4">Select a game</h1>
             <div className="flex flex-col gap-2 max-h-[400px] overflow-y-scroll">
               {tournaments?.map((item, key) => (
                 <div className="flex gap-4 items-center" key={key}>
@@ -68,11 +98,11 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
                   />
                   <p className="flex-1 font-octo text-xl">{item.name}</p>
                   <div
-                    onClick={() => setIsConfirmingChallenge(true)}
+                    onClick={() => setIsConfirmingChallenge(item)}
                     className="cursor-pointer group flex items-center justify-center gap-1"
                   >
                     <p className="text-white/80 group-hover:text-white/100">
-                      Challenge
+                      Battle!
                     </p>
                     <ChevronRightIcon className="w-6 h-6" />
                   </div>
@@ -115,8 +145,10 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
                 accumulated {userData?.totalXp} XP throughout their journey.
               </p>
             )}
+
             <ChallengeButton
               userData={userData}
+              client={client}
               onChallengeButtonClick={() => setIsChallenging(true)}
             />
           </>
