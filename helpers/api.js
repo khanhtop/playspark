@@ -326,7 +326,9 @@ export async function completeBattleForChallenger(
     },
     body: JSON.stringify({
       email: challengeeEmail,
+      template: 0,
       name: challengerName,
+      subject: `You have been challenged by ${challengerName}!`,
       game: gameName,
       url: `https://playspark.co/battle/${challengeId}`,
       customText: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
@@ -358,20 +360,41 @@ export async function completeBattleForChallengee(
   challengerEmail,
   challengeeEmail
 ) {
-  // await fetch("/api/email", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({
-  //     email: challengeeEmail,
-  //     name: challengerName,
-  //     game: gameName,
-  //     url: `https://playspark.co/battle/${challengeId}`,
-  //     customText: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
-  //   }),
-  // });
   const challengerWon = parseInt(challengerScore) > parseInt(score);
+  await fetch("/api/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      template: 1,
+      email: challengeeEmail,
+      name: challengerName,
+      subject: `The battle with ${challengerName} has ended!`,
+      game: gameName,
+      url: `https://playspark.co/battle/${challengeId}`,
+      customText: `${
+        challengerWon ? "You Lost" : "You Won"
+      } the battle with ${challengerName}`,
+    }),
+  });
+  await fetch("/api/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      template: 1,
+      email: challengerEmail,
+      name: challengeeName,
+      subject: `The battle with ${challengeeName} has ended!`,
+      game: gameName,
+      url: `https://playspark.co/battle/${challengeId}`,
+      customText: `${
+        challengerWon ? "You Lost" : "You Won"
+      } the battle with ${challengerName}`,
+    }),
+  });
   await updateDoc(doc(firestore, "challenges", challengeId), {
     challengeeResult: {
       score: score,
