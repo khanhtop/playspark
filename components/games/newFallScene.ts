@@ -668,7 +668,7 @@ export default class newFallScene extends Phaser.Scene {
     .setBounce(1, 1);
 
     if(bball.type != 'bomb') {
-      this.tweens.add({
+      bball.tween = this.tweens.add({
         targets: bball,
         duration: 50000,
         rotation: 360,
@@ -732,6 +732,11 @@ export default class newFallScene extends Phaser.Scene {
       bb.setTexture('bomb');
       bb.type = 'bomb';
       bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 2.3), Math.min(ballR + deltaBomb, ballR * 2.3))
+      
+      if(!!bb.tween) {
+        bb.tween.stop();
+      }
+
     } else if(rate < 0.8 && rate >= 0.55) {
       bb.setTexture('ball').setDisplaySize(ballR, ballR);
       bb.type = 'ball';
