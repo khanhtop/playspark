@@ -1005,7 +1005,7 @@ export default class FootballPassScene extends Phaser.Scene {
       let x = pointer.x;
       let y = pointer.y + this.cameras.main.worldView.y;
 
-      if(!this.status.isBallPlayer || this.isDragging || !this.status.isPlaying || this.status.isThrowBall) return;
+      if(!this.status.isBallPlayer  || !this.status.isPlaying || this.status.isThrowBall) return;
 
       this.status.isThrowBall = true;
       this.status.isBallPlayer = false;
@@ -1403,7 +1403,8 @@ export default class FootballPassScene extends Phaser.Scene {
 
       this.aiPlayers[i].setVelocity(0, 0).play("player_idle_anim")
       this.aiEnemies[i].setVelocity(0, 0).play("enemy_idle_anim")
-
+      this.aiPlayers[i].setAngle(0);
+      this.aiEnemies[i].setAngle(0);
     }
   }
 
@@ -1611,6 +1612,7 @@ export default class FootballPassScene extends Phaser.Scene {
         let vx = Math.cos(angle) * velocity;
         let vy = Math.sin(angle) * velocity;
 
+        player.setAngle(angle * 180 / Math.PI + 90)
         player.setVelocity(vx, vy)
 
         // AI ENEMEY
@@ -1639,6 +1641,7 @@ export default class FootballPassScene extends Phaser.Scene {
         vx = Math.cos(angle) * velocity;
         vy = Math.sin(angle) * velocity;
 
+        enemy.setAngle(angle * 180 / Math.PI - 90)
         enemy.setVelocity(vx, vy)
 
       }
