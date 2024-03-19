@@ -6,11 +6,12 @@ export default function ClientEmbeddedGame({ user, setScreen, activeGame }) {
     <ClientPageWrapper
       user={user}
       withGame
-      withBackNav="Quit The Game"
+      // withBackNav="Quit The Game"
+      withPopoutBackNav
       onBackNav={() => setScreen("home")}
     >
       <div className="bg-black h-full flex items-center justify-center">
-        <Advert data={activeGame} />
+        <Advert data={activeGame} withPopoutBackNav={() => setScreen("home")} />
         {/* <iframe
           src={`https://playspark.co/ad/${activeGame}`}
           className="h-full"

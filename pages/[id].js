@@ -2,11 +2,13 @@ import AuthModal from "@/components/auth/authModal";
 import Areas from "@/components/clientPages/areas";
 import Hero from "@/components/clientPages/hero";
 import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
+import ProfileWrapper from "@/components/clientPages/profileWrapper";
 import ClientAchievements from "@/components/clientPages/subpages/clientAchievements";
 import ClientCoins from "@/components/clientPages/subpages/clientCoins";
 import ClientEmbeddedGame from "@/components/clientPages/subpages/clientEmbeddedGame";
 import ClientHome from "@/components/clientPages/subpages/clientHome";
 import ClientNotifications from "@/components/clientPages/subpages/clientNotifications";
+import ClientPrizes from "@/components/clientPages/subpages/clientPrizes";
 import ClientProfile from "@/components/clientPages/subpages/clientProfile";
 import ClientXP from "@/components/clientPages/subpages/clientXp";
 import TopNav from "@/components/clientPages/topnav";
@@ -25,6 +27,8 @@ import {
   orderBy,
   limit,
   onSnapshot,
+  setDoc,
+  doc,
 } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -41,8 +45,14 @@ export default function PageHandler({
   const [showLogin, setShowLogin] = useState(false);
   const [screen, setScreen] = useState("home");
   const [activeGame, setActiveGame] = useState();
+
+  // REWARDS
   const _rewardsUnsub = useRef(null);
   const [rewards, setRewards] = useState([]);
+
+  // PRIZES
+  const _prizesUnsub = useRef(null);
+  const [prizes, setPrizes] = useState([]);
 
   // Create Rewards Listener
   const getRewards = () => {
@@ -59,14 +69,52 @@ export default function PageHandler({
     });
   };
 
+  // Create Rewards Listener
+  const getPrizes = () => {
+    const q = query(
+      collection(firestore, "prizes"),
+      where("ownerId", "==", user.id)
+    );
+    _prizesUnsub.current = onSnapshot(q, (querySnapshot) => {
+      const _prizes = [];
+      querySnapshot.forEach((doc) => {
+        _prizes.push({ ...doc.data(), id: doc.id });
+      });
+      setPrizes(_prizes);
+    });
+  };
+
   useEffect(() => {
     if (_rewardsUnsub.current === null) {
       getRewards();
     }
+    if (_prizesUnsub.current === null) {
+      getPrizes();
+    }
     return () => {
       _rewardsUnsub?.current();
+      _prizesUnsub?.current();
     };
   }, []);
+
+  useEffect(() => {
+    context.fetchAvatars();
+  }, []);
+
+  useEffect(() => {
+    if (context?.avatars && context.profile && !context.profile.profilePhoto) {
+      setDoc(
+        doc(firestore, "users", context?.loggedIn?.uid),
+        {
+          profilePhoto:
+            context?.avatars[
+              Math.floor(Math.random() * context?.avatars.length)
+            ],
+        },
+        { merge: true }
+      );
+    }
+  }, [context?.avatars, context.profile]);
 
   const data = {
     user: {
@@ -76,6 +124,7 @@ export default function PageHandler({
       textColor: user.textColor ?? "#FFF",
     },
     rewards,
+    prizes,
     tournaments,
     tournamentsByPlayCount,
     tournamentsByDate,
@@ -94,13 +143,16 @@ export default function PageHandler({
 
   return (
     <>
-      <div className="min-h-screen">
+      <ProfileWrapper>
         {screen !== "game" && (
           <TopNav
             data={data.user}
+            prizes={data.prizes}
             context={context}
-            totalScore={context?.profile?.totalScore || 0}
-            totalXp={context?.profile?.totalXp || 0}
+            totalScore={
+              context?.profile?.dataByClient?.[data.user.id]?.coins || 0
+            }
+            totalXp={context?.profile?.dataByClient?.[data.user.id]?.xp || 0}
             showLogin={() => setShowLogin(true)}
             setScreen={setScreen}
           />
@@ -112,7 +164,8 @@ export default function PageHandler({
         {screen === "notifications" && <ClientNotifications {...data} />}
         {screen === "game" && <ClientEmbeddedGame {...data} />}
         {screen === "achievements" && <ClientAchievements {...data} />}
-      </div>
+        {screen === "prizes" && <ClientPrizes {...data} />}
+      </ProfileWrapper>
       {showLogin && (
         <AuthModal user={user} closeModal={() => setShowLogin(false)} />
       )}
@@ -165,13 +218,13 @@ export async function getServerSideProps(context) {
 
       const leaderboardRef = query(
         collection(firestore, "users"),
-        where("memberOf", "==", userDoc.id),
-        orderBy("totalScore", "desc"),
-        limit(10)
+        where("memberOf", "array-contains", userDoc.id)
       );
       const leaderboardSnapshot = await getDocs(leaderboardRef);
       const leaderboard = leaderboardSnapshot.docs.map((doc) => ({
         ...doc.data(),
+        id: doc.id,
+        currentXp: doc.data()?.dataByClient?.[userDoc.id]?.xp || 0,
       }));
 
       return {

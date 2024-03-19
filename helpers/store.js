@@ -6,6 +6,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
@@ -20,10 +21,18 @@ export function AppWrapper({ children }) {
   const [profile, setProfile] = useState();
   const [myGames, setMyGames] = useState();
   const [rewards, setRewards] = useState();
+  const [prizes, setPrizes] = useState();
+  const [notifications, setNotifications] = useState();
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
   const [event, showEvent] = useState(false);
   const [eventQueue, setEventQueue] = useState([]);
+
+  // For Webhooks
+  const [webhookBasePayload, setWebhookBasePayload] = useState({
+    userId: null,
+    email: null,
+  });
 
   const setEvent = (ev) => {
     setEventQueue((prevQueue) => {
@@ -55,16 +64,31 @@ export function AppWrapper({ children }) {
 
   // Profile
 
+  const patchProfileWithEmail = async () => {
+    if (loggedIn.uid) {
+      setDoc(
+        doc(firestore, "users", loggedIn.uid),
+        {
+          email: loggedIn.email,
+        },
+        { merge: true }
+      );
+    }
+  };
+
   useEffect(() => {
     // Listen To Profile
     let _profileUnsub = () => null;
     let _myGamesUnsub = () => null;
     let _rewardsUnsub = () => null;
+    let _prizesUnsub = () => null;
+    let _notificationsUnsub = () => null;
     if (loggedIn && !profile) {
       _profileUnsub = onSnapshot(
         doc(firestore, "users", loggedIn.uid),
         (doc) => {
           const data = doc.data();
+          if (!data.email) patchProfileWithEmail();
           setProfile(
             { ...data, subscription: getSubscriptionType(data?.tier ?? 0) } || {
               subscription: getSubscriptionType(data?.tier ?? 0),
@@ -100,13 +124,47 @@ export function AppWrapper({ children }) {
         setRewards(_rewards);
       });
     }
+
+    if (loggedIn && !prizes) {
+      const q = query(
+        collection(firestore, "prizes"),
+        where("ownerId", "==", loggedIn.uid)
+      );
+      _prizesUnsub = onSnapshot(q, (querySnapshot) => {
+        const _prizes = [];
+        querySnapshot.forEach((doc) => {
+          _prizes.push({ ...doc.data(), id: doc.id });
+        });
+        setPrizes(_prizes);
+      });
+    }
+
+    if (loggedIn && !notifications) {
+      const q = query(
+        collection(firestore, "notifications"),
+        where("uid", "==", loggedIn.uid),
+        orderBy("timestamp", "desc")
+      );
+      _notificationsUnsub = onSnapshot(q, (querySnapshot) => {
+        const _notifications = [];
+        querySnapshot.forEach((doc) => {
+          _notifications.push({ ...doc.data(), id: doc.id });
+        });
+        setNotifications(_notifications);
+      });
+    }
+
     return () => {
       _profileUnsub();
       _myGamesUnsub();
       _rewardsUnsub();
+      _prizesUnsub();
+      _notificationsUnsub();
       setProfile();
       setMyGames();
       setRewards();
+      setPrizes();
+      setNotifications();
     };
   }, [loggedIn]);
 
@@ -115,12 +173,28 @@ export function AppWrapper({ children }) {
   const [hasSeenVideo, setHasSeenVideo] = useState(false);
   const [hasSubscribedToList, setHasSubscribedToList] = useState(false);
 
+  // Fetch Avatars
+  const [avatars, setAvatars] = useState();
+
+  const fetchAvatars = async () => {
+    if (avatars) return;
+    const res = await fetch("https://api.reimage.dev/get/tags?avatar", {
+      headers: {
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_REIMAGE_KEY}`,
+      },
+    });
+    const json = await res.json();
+    setAvatars(json.thumbnails);
+  };
+
   const sharedState = {
     isAuthed,
     loggedIn,
     profile,
     myGames,
     rewards,
+    prizes,
+    notifications,
     device,
     hasSeenSurvey,
     setHasSeenSurvey,
@@ -135,6 +209,10 @@ export function AppWrapper({ children }) {
     setEvent,
     eventQueue,
     setEventQueue,
+    avatars,
+    fetchAvatars,
+    webhookBasePayload,
+    setWebhookBasePayload,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

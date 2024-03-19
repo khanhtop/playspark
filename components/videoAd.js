@@ -26,7 +26,7 @@ export default function VideoAd({ data, onSkip, video }) {
   };
 
   const claimReward = () => {
-    videoCompletedCTA(context);
+    videoCompletedCTA(context, data);
     context.setModal({
       title: "You Win",
       contents: (
@@ -76,7 +76,7 @@ export default function VideoAd({ data, onSkip, video }) {
         {data?.sponsoredVideoCtaUrl && (
           <button
             onClick={() => {
-              videoClickedCTA(context);
+              videoClickedCTA(context, data);
               window.open(data.sponsoredVideoCtaUrl);
             }}
             className="text-black bg-white/50 px-6 rounded-full py-2"

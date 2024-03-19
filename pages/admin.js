@@ -47,7 +47,7 @@ export default function Application() {
           ) : selectedPane === 5 ? (
             <Pane title="Analytics">{/* <Dashboard /> */}</Pane>
           ) : selectedPane === 6 ? (
-            <Pane title="Users">
+            <Pane title="Audience & Data">
               <Users />
             </Pane>
           ) : selectedPane === 7 ? (

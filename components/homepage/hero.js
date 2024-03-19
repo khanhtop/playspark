@@ -1,7 +1,9 @@
 import { ArrowPathIcon, ArrowRightCircleIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Hero() {
+  const router = useRouter();
   const [reveal, setReveal] = useState(false);
 
   const [email, setEmail] = useState("");
@@ -75,10 +77,10 @@ export default function Hero() {
           </div>
         ) : (
           <button
-            onClick={() => setReveal(true)}
+            onClick={() => router.push("/admin")}
             className="font-anton text-xl bg-cyan-500 px-8 py-2 rounded-full flex items-center justify-center gap-4 mt-8"
           >
-            Join The Waitlist
+            Get Started For Free
             <ArrowRightCircleIcon className="h-8 w-8" />
           </button>
         )}

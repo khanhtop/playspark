@@ -1,6 +1,10 @@
 import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
-import { PencilIcon } from "@heroicons/react/24/solid";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PencilIcon,
+} from "@heroicons/react/24/solid";
 import { doc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
@@ -10,12 +14,16 @@ export default function AccountInfo({
   totalXp,
   totalCoins,
   vertical,
+  avatars,
 }) {
   const context = useAppContext();
   const [name, setName] = useState(context?.profile?.companyName);
+  const [avatar, setAvatar] = useState(context?.profile?.profilePhoto);
+  const [loading, setLoading] = useState(false);
+
+  console.log(avatars);
 
   const updateProfile = () => {
-    console.log(name);
     if (name) {
       setDoc(
         doc(firestore, "users", context?.loggedIn?.uid),
@@ -31,7 +39,26 @@ export default function AccountInfo({
     if (context.profile) {
       setName(context?.profile?.companyName);
     }
+    if (context?.profile?.profilePhoto) {
+      setAvatar(context?.profile?.profilePhoto);
+    }
   }, [context.profile]);
+
+  const changeImage = async (reverse = false) => {
+    if (!loading) {
+      setLoading(true);
+      const av = avatars[Math.floor(Math.random() * avatars.length)];
+      setAvatar(av);
+      await setDoc(
+        doc(firestore, "users", context?.loggedIn?.uid),
+        {
+          profilePhoto: av,
+        },
+        { merge: true }
+      );
+      setLoading(false);
+    }
+  };
 
   if (context.loggedIn?.uid)
     return (
@@ -43,22 +70,36 @@ export default function AccountInfo({
       >
         <div
           className={`px-2 flex flex-col ${
-            vertical ? "md:flex-col" : "md:flex-row"
-          } gap-2 md:gap-4 flex-1 justify-center md:justify-start items-start md:items-center`}
+            vertical ? "md:flex-col items-center" : "md:flex-row items-start"
+          } gap-2 md:gap-4 flex-1 justify-center md:justify-start  md:items-center`}
         >
-          <div
-            style={{ borderColor: data.accentColor }}
-            className={`h-[50px] md:h-[80px] border-4 aspect-square flex ${
-              vertical
-                ? "items-center justify-center"
-                : "items-center justify-center"
-            } rounded-full`}
-          >
-            <div>
-              <p className="text-[30px] md:text-[60px] font-octo uppercase">
-                {context?.profile?.companyName?.substring(0, 1) || "?"}
-              </p>
+          <div className="flex items-center gap-2">
+            {vertical && (
+              <ChevronLeftIcon
+                onClick={() => changeImage(true)}
+                className="cursor-pointer h-12 w-12 text-[#999] hover:text-black transition"
+              />
+            )}
+            <div
+              src={context?.profile?.profilePhoto}
+              style={{ borderColor: data.accentColor }}
+              className={`h-[120px] md:h-[120px] border-4 overflow-hidden aspect-square flex ${
+                vertical
+                  ? "items-center justify-center"
+                  : "items-center justify-center"
+              } rounded-full`}
+            >
+              <img
+                src={avatar}
+                className="h-full w-full object-cover scale-110"
+              />
             </div>
+            {vertical && (
+              <ChevronRightIcon
+                onClick={() => changeImage()}
+                className="cursor-pointer h-12 w-12 text-[#999] hover:text-black transition"
+              />
+            )}
           </div>
           <EditableNameBox
             data={data}
@@ -77,7 +118,7 @@ export default function AccountInfo({
             image="/clientPages/xp.png"
           />
           <ParameterBox
-            title="Tokens"
+            title="Coins"
             value={totalCoins}
             image="/clientPages/coins.png"
           />
@@ -105,7 +146,7 @@ function EditableNameBox({ data, value, onChange, onBlur }) {
         onBlur={onBlur}
         onChange={(e) => onChange(e.target.value)}
         placeholder="Enter Name"
-        style={{ borderColor: data.accentColor, color: data.textColor }}
+        style={{ borderColor: data.accentColor, color: "black" }}
         className="h-8 px-2 rounded-xl w-36 border-2 relative"
         defaultValue={value}
       ></input>
