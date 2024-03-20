@@ -39,7 +39,7 @@ let plans = [
 
 export default class FootballPassScene extends Phaser.Scene {
   public static instance: FootballPassScene;
-  private ball!: Phaser.Physics.Arcade.Image;
+  private ball!: Phaser.Physics.Arcade.Sprite;
   private player!: Phaser.Physics.Arcade.Sprite;
   private params: any;
   lifeNumText: any;
@@ -159,7 +159,7 @@ export default class FootballPassScene extends Phaser.Scene {
     
     this.load.spritesheet(
       'ball_anim',
-      '/pong/' + gameType + '/ball_anim.png',
+      '/pong/' + gameType + '/ball-anim.png',
       { frameWidth: 480, frameHeight: 441 }
     );
 
@@ -211,6 +211,7 @@ export default class FootballPassScene extends Phaser.Scene {
       isThrowBall: false,
       isSacked: false,
       isRound: true,
+      isGamePause: false,
       roundNum: 1,
       score: {
         touchDown: 0,
@@ -699,13 +700,30 @@ export default class FootballPassScene extends Phaser.Scene {
     }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDepth(4);
 
     // MUTE, PASUE BTN
+    
     this.add.sprite(header.x - w * 0.4, header.y + 40 * w / 375, 'pause').setOrigin(0.5, 0.5)
     .setDisplaySize(30 * w / 375, 30 * w / 375)
-    .setScrollFactor(0, 0).setDepth(4);
+    .setScrollFactor(0, 0).setDepth(4)
+    .setInteractive({ cursor: 'pointer' })
+    .on("pointerup", () => {
+      console.log("pause", this.status["isGamePause"])
+      this.status["isGamePause"] = !this.status["isGamePause"];
+      if(this.status["isGamePause"]) {
+        this.physics.pause()
+        // this.scene.pause();
+      } else {
+        this.physics.resume()
+        // this.scene.resume();
+      }
+    });
 
     this.add.sprite(header.x- w * 0.3, header.y + 40 * w / 375, 'mute').setOrigin(0.5, 0.5)
     .setDisplaySize(30 * w / 375, 30 * w / 375)
-    .setScrollFactor(0, 0).setDepth(4);
+    .setScrollFactor(0, 0).setDepth(4)
+    .setInteractive({ cursor: 'pointer' })
+    .on("pointerup", () => {
+      this.sound.mute = !this.sound.mute;
+    });
     
     
     const lifePanel = this.add.image(w / 2 + w * 0.45 - w * 0.075, 75, 'line').setOrigin(0.5, 0.5).setDisplaySize(w * 0.15, 40).setScrollFactor(0, 0).setDepth(4);
@@ -742,7 +760,7 @@ export default class FootballPassScene extends Phaser.Scene {
     plans.forEach((plan, index) => {
       this.tabList.push(
         this.add.sprite(-300, h - itemR * 1.5, plan).setOrigin(0.5, 0.5).setDisplaySize(itemR, itemR).setScrollFactor(0, 0)
-        .setInteractive()
+        .setInteractive({ cursor: 'pointer' })
         .on('pointerup', () => {
           this.button.play();
           this.onSelectPlan(plan, index)
@@ -844,7 +862,6 @@ export default class FootballPassScene extends Phaser.Scene {
       .setCircle(this.textures.get("ball").getSourceImage().width / 4)
       .setCollideWorldBounds(true)
       .setBounce(1, 1);
-    this.ball.play("ball_anim");
     this.player = this.physics.add
       .sprite(mW, h - goalH - playerR / 2, "peck")
       // .setTint(0x0000ff)
@@ -1030,6 +1047,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     bg.on("pointerup", (pointer) => {
 
+
       let x = pointer.x;
       let y = pointer.y + this.cameras.main.worldView.y;
 
@@ -1055,8 +1073,9 @@ export default class FootballPassScene extends Phaser.Scene {
 
       let angle = Math.atan2(dy, dx);
 
-      this.ball.setAngle(angle);
+      this.ball.setAngle(angle * 180 / Math.PI + 45);
       this.ball.setVelocity(dx / distance * 140, dy / distance * 140);
+      this.ball.play("ball_anim");
       this.throw.play()
     }).setInteractive()
 
@@ -1301,6 +1320,9 @@ export default class FootballPassScene extends Phaser.Scene {
     this.player.play('player_idle_anim');
     // this.cameras.main.startFollow(this.player);
     this.cameras.main.startFollow(this.player, false, 0, 1, 0, 0);
+
+    this.ball.play('ball_idle_anim')
+
 
     heartNum = this.params.lives
     this.scoreNum = this.params.score;
@@ -1706,6 +1728,7 @@ export default class FootballPassScene extends Phaser.Scene {
         this.status.isKick = false;
 
         this.time.delayedCall(100, () => {
+          this.ball.play('ball_idle_anim')
           if(!this.status.isBallPlayer) {
             this.onCatchLogic("incomplete");
           }
@@ -1869,7 +1892,8 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   update(time, delta) {
-
+    if(this.status["isGamePause"]) return;
+    
     this.playerGroup.setXY(this.player.x, this.player.y)
     this.power_effect.setPosition(this.power_effect.x + this.getUIPos(playerR * 0.7), this.power_effect.y - this.getUIPos(playerR * 1.3))
 
