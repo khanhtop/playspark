@@ -1797,7 +1797,7 @@ export default class FootballPassScene extends Phaser.Scene {
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
       this.status.roundNum = 1;
       text = "1ST DOWN!";
-      this.posObject.startPos.first = this.posObject.startPos.second;
+      this.posObject.startPos.first = this.getRealPos(this.ball.y);
       this.posObject.startPos.second = this.posObject.startPos.first - 140 * 3;
       if(this.posObject.startPos.second < this.posObject.lastLine) {
         this.posObject.startPos.second = this.posObject.lastLine
@@ -1880,7 +1880,6 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   powerupUpdate(delta) {
-    console.log(power);
 
     if (this.isDragging == true && this.status.isThrowBall && this.status.isPlaying) {
       console.log(power);
