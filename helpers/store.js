@@ -3,6 +3,7 @@ import { auth, firestore } from "./firebase";
 import {
   collection,
   doc,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -143,7 +144,8 @@ export function AppWrapper({ children }) {
       const q = query(
         collection(firestore, "notifications"),
         where("uid", "==", loggedIn.uid),
-        orderBy("timestamp", "desc")
+        orderBy("timestamp", "desc"),
+        limit(30)
       );
       _notificationsUnsub = onSnapshot(q, (querySnapshot) => {
         const _notifications = [];
