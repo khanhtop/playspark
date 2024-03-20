@@ -157,6 +157,11 @@ export default class FootballPassScene extends Phaser.Scene {
       { frameWidth: 421, frameHeight: 68 }
     );
     
+    this.load.spritesheet(
+      'ball_anim',
+      '/pong/' + gameType + '/ball_anim.png',
+      { frameWidth: 480, frameHeight: 441 }
+    );
 
     let fontUrl = '/pong/' + gameType + '/ZingRustDemo-Base.ttf';
     const font = new FontFace('customFont', `url(${fontUrl})`);
@@ -839,6 +844,7 @@ export default class FootballPassScene extends Phaser.Scene {
       .setCircle(this.textures.get("ball").getSourceImage().width / 4)
       .setCollideWorldBounds(true)
       .setBounce(1, 1);
+    this.ball.play("ball_anim");
     this.player = this.physics.add
       .sprite(mW, h - goalH - playerR / 2, "peck")
       // .setTint(0x0000ff)
@@ -913,6 +919,28 @@ export default class FootballPassScene extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
+
+    const ball_frame = this.anims.generateFrameNames('ball_anim', {
+      start: 0,
+      end: 7,
+    });
+    const ball_idle_frame = this.anims.generateFrameNames('ball_anim', {
+      start: 0,
+      end: 0,
+    });
+    this.anims.create({
+      key: 'ball_anim',
+      frames: ball_frame,
+      frameRate: 16,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: 'ball_idle_anim',
+      frames: ball_idle_frame,
+      frameRate: 16,
+      repeat: -1,
+    });
+
     // END ANIAMTION CREATE
 
     // BEGIN INIT AIs
