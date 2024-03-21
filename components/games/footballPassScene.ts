@@ -29,6 +29,12 @@ let boardH = 2000;
 let totalScore = 0;
 let randomIdx = {}
 
+let scoreSystem = {
+  touchdown: 300,
+  yard: 1,
+  firstdown: 100,
+}
+
 let plans = [
   "PLAN1",
   "PLAN2",
@@ -1146,7 +1152,7 @@ export default class FootballPassScene extends Phaser.Scene {
         this.player,
         this.aiEnemies[i],
         () => {
-          if(this.aiEnemies[i].anims.getName() != "smoke_anim") {
+          if(this.aiEnemies[i].anims.getName() != "smoke_anim" && this.status.isSacked) {
             this.aiEnemies[i].play("smoke_anim");
           }
         },
@@ -1195,7 +1201,7 @@ export default class FootballPassScene extends Phaser.Scene {
       
     }).setOrigin(0.5, 0.5).setScrollFactor(0, 0);
 
-    this.touchDownText = this.add.text(mW, mH - this.getUIPos(160), "+7000", {
+    this.touchDownText = this.add.text(mW, mH - this.getUIPos(160), `+${scoreSystem.touchdown}`, {
       ...this.text_main_style,
       fontSize: this.getUIPos(110) + "px",
       fill: "#c57614",
@@ -1739,7 +1745,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     } else {
       if(this.status.isPlaying) {
-        if(this.getRealPos(this.ball.y) < this.posObject.lastLine) {
+        if(this.getRealPos(this.ball.y) < this.posObject.lastLine - 50) {
           this.onCatchLogic();
         }
       }
@@ -1759,10 +1765,10 @@ export default class FootballPassScene extends Phaser.Scene {
 
   getTotalScore() {
     return (
-      this.status["score"].touchDown * 7000 +
-      this.status["score"].firstDown * 125 +
+      this.status["score"].touchDown * scoreSystem.touchdown +
+      this.status["score"].firstDown * scoreSystem.firstdown +
       this.status["score"].passStreak * 500 +
-      (this.status["score"].runYards + this.status["runDistance"]) * 30
+      (this.status["score"].runYards + this.status["runDistance"]) * scoreSystem.yard
     );
   }
 
@@ -1793,6 +1799,9 @@ export default class FootballPassScene extends Phaser.Scene {
         if(y < first) {
           this.tackle.play();
         }
+
+        this.onTackled();
+
       }
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
       this.status.roundNum = 1;
@@ -1806,7 +1815,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.status["score"].firstDown++;
       this.firstdown.play();
 
-    } else {
+    } else if(y < this.getUIPos(this.posObject.lastLine - 20)){
       this.status.roundNum = 1;
       text = "TOUCHDOWN!";
       this.touchDownText.setVisible(true);
@@ -1826,10 +1835,16 @@ export default class FootballPassScene extends Phaser.Scene {
 
     console.log("add run yards : " + this.status["runDistance"], "total: ", this.getTotalScore());
 
-    console.log(this.status["score"])
-
     this.time.delayedCall(2000, this.startRound, [], this);
 
+  }
+
+  onTackled() {
+    this.aiEnemies.forEach(enemy => {
+      if(enemy.anims.getName() != "smoke_anim") {
+        enemy.play("smoke_anim");
+      }
+    })
   }
 
   getTimeFormatString(val, type = "game") {
@@ -1868,10 +1883,10 @@ export default class FootballPassScene extends Phaser.Scene {
     this.status.isRound = false;
     this.status.isPlaying = false;
 
-    this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X 7000 = ${this.status["score"].touchDown * 7000}`);
-    this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X 125 = ${this.status["score"].firstDown * 7000}`);
+    this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X ${scoreSystem.touchdown} = ${this.status["score"].touchDown * 7000}`);
+    this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X ${scoreSystem.firstdown} = ${this.status["score"].firstDown * 7000}`);
     this.gameoverTexts["passstreak"].setText(`EARNED = ${this.status["score"].passStreak * 500}`);
-    this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X 30 = ${this.status["score"].runYards * 30}`);
+    this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X ${scoreSystem.yard} = ${this.status["score"].runYards * 30}`);
     this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
 
     this.gameOverGroup.setVisible(true);
