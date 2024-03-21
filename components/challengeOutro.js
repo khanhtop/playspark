@@ -17,8 +17,13 @@ export default function ChallengeOutro({ score, data, xpStealAmount }) {
     parseInt(data?.challengerResult?.score) > parseInt(score);
 
   return (
-    <div className="h-full w-full flex items-center justify-center">
-      <div className="relative bg-white rounded-2xl text-black font-light h-[80%] portrait:h-[90%] w-[90%] relative flex items-center justify-start flex-col">
+    <div className="relative h-full w-full flex items-center justify-center">
+      <img
+        src={data?.game.backgroundImage}
+        className="absolute top-0 left-0 h-full w-full object-cover"
+      />
+      <div className="absolute top-0 left-0 h-full w-full bg-black/90" />
+      <div className="relative bg-white/5 backdrop-blur rounded-2xl text-white font-light h-[80%] portrait:h-[90%] w-[90%] relative flex items-center justify-start flex-col">
         {/* Header Title */}
         <div
           style={{ backgroundColor: data.game?.primaryColor }}
@@ -30,12 +35,12 @@ export default function ChallengeOutro({ score, data, xpStealAmount }) {
         <div
           className={`h-full w-full rounded-2xl flex ${
             data.game?.landscape ? "flex-row" : "flex-col"
-          } overflow-hidden mt-8`}
+          } overflow-hidden justify-center`}
         >
           <div
             className={`${
               data.game?.landscape && "flex-1"
-            } px-4 py-4 flex flex-col items-center`}
+            } py-4 flex flex-col items-center`}
           >
             <div className="font-octo text-xl flex flex-col items-center justify-center my-4">
               <ChallengeAvatar data={data.challenger} />
@@ -56,10 +61,12 @@ export default function ChallengeOutro({ score, data, xpStealAmount }) {
                   {score}
                 </Text>
               </div>
-              <div className="bg-black/10 text-center p-4 w-full mb-8 mt-4 rounded-full backdrop-blur flex justify-center">
+              <div className="bg-black text-center p-4 w-full mb-8 mt-4  flex justify-center">
                 {context?.loggedIn?.uid === data?.challenger?.id && (
                   <div className="flex flex-col gap-1">
-                    <p>Waiting for {data.challengee?.companyName} to play.</p>
+                    <p className="font-octo text-3xl mb-1">
+                      Waiting for {data.challengee?.companyName} to play.
+                    </p>
                     <p>
                       Check your notifications and your email for the results
                       later!
