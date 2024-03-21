@@ -1800,7 +1800,7 @@ export default class FootballPassScene extends Phaser.Scene {
           this.tackle.play();
         }
 
-        this.onTackled();
+        // this.onTackled();
 
       }
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
