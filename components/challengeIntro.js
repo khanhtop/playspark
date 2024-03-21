@@ -16,7 +16,7 @@ export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
         className="absolute top-0 left-0 h-full w-full object-cover"
       />
       <div className="text-white items-center justify-end absolute top-0 left-0 h-full w-full  flex flex-col p-8 bg-black/90">
-        <div className="relative flex-1 font-octo text-2xl my-12 w-[90%] rounded-2xl bg-white/5 backdrop-blur flex flex-col p-4 items-center justify-center gap-4">
+        <div className="relative flex-1 font-octo text-2xl my-12 w-[90%] rounded-2xl bg-white/5 backdrop-blur flex flex-col  items-center justify-center gap-4">
           {/* Close Button */}
           <div
             onClick={() => router.push(`https://playspark.co${data.referrer}`)}
@@ -79,18 +79,31 @@ export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
           {/* Handle Logged In Users / Challengee / Ready */}
           {context?.loggedIn?.uid === data?.challenger?.id &&
             !data?.challengerResult && (
-              <div className="text-center px-8 flex flex-col items-center">
+              <div className="text-center flex flex-col items-center w-full">
                 <div className="flex flex-col items-center justify-center my-4">
                   <ChallengeAvatar data={data.challenger} />
                   <p className="text-red-500"> - VS - </p>
                   <ChallengeAvatar data={data.challengee} />
                 </div>
-                <ChallengeSummary
+                <div className="bg-black py-4 w-full flex flex-col items-center my-4">
+                  <div className="h-24 flex items-center justify-center gap-4 px-8 w-[400px]">
+                    <img src="/battle/win.png" className="h-full" />
+                    <p>
+                      Steal {xpStealAmount} XP from{" "}
+                      {data.challengee?.companyName} if you win
+                    </p>
+                  </div>
+                  <div className="h-24 flex items-center justify-center gap-4 px-8 w-[400px]">
+                    <img src="/battle/lose.png" className="h-full" />
+                    <p>Lose 10% of your XP if you get beaten</p>
+                  </div>
+                </div>
+                {/* <ChallengeSummary
                   xpStealAmount={xpStealAmount}
                   role="challenger"
                   data={data.challengee}
                   ready={true}
-                />
+                /> */}
                 <div className="h-8" />
                 <UIButton
                   {...data.game}
@@ -105,19 +118,40 @@ export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
           {/* Handle Logged In Users / Challengee / Ready */}
           {context?.loggedIn?.uid === data?.challengee?.id &&
             !data?.challengeeResult && (
-              <div className="text-center px-8 flex flex-col items-center">
+              <div className="text-center flex flex-col items-center w-full">
                 <div className="flex flex-col items-center justify-center my-4">
                   <ChallengeAvatar data={data.challenger} />
                   <p className="text-red-500"> - VS - </p>
                   <ChallengeAvatar data={data.challengee} />
                 </div>
-                <ChallengeSummary
+                <div className="bg-black py-4 w-full flex flex-col items-center my-4">
+                  <div className="h-24 flex items-center justify-center gap-4 px-8 w-[450px]">
+                    <img src="/battle/vs.png" className="h-full" />
+                    <p>
+                      {data.challenger?.companyName} challenged you to beat
+                      their score of {data?.challengerResult?.score} in{" "}
+                      {data.game?.name}
+                    </p>
+                  </div>
+                  <div className="h-24 flex items-center justify-center gap-4 px-8 w-[400px]">
+                    <img src="/battle/win.png" className="h-full" />
+                    <p>
+                      Steal {xpStealAmount} XP from{" "}
+                      {data.challengee?.companyName} if you win
+                    </p>
+                  </div>
+                  <div className="h-24 flex items-center justify-center gap-4 px-8 w-[400px]">
+                    <img src="/battle/lose.png" className="h-full" />
+                    <p>Lose 10% of your XP if you get beaten</p>
+                  </div>
+                </div>
+                {/* <ChallengeSummary
                   xpStealAmount={xpStealAmount}
                   role="challengee"
                   data={data.challenger}
                   scoreToBeat={data?.challengerResult?.score}
                   ready={true}
-                />
+                /> */}
                 <div className="h-8" />
                 <UIButton
                   {...data.game}

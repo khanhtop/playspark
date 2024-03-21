@@ -67,7 +67,7 @@ export default function TopNav({
                 className="h-full pb-0 opacity-20"
               />
               <div className="absolute bg-black/80 -top-2 -right-1 h-6 w-6 text-xs flex items-center justify-center border-2 border-white rounded-full">
-                {context?.notifications?.length}
+                {context?.notifications?.filter((a) => !a.read)?.length}
               </div>
             </div>
 
