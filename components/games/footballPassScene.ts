@@ -20,6 +20,7 @@ let w: number,
   heartNum: number,
   heartR: number;
 
+let helpIdx = 0;
 let power = 0;
 
 let gameType = "football";
@@ -70,6 +71,9 @@ export default class FootballPassScene extends Phaser.Scene {
   private power_effect: Phaser.GameObjects.Sprite;
   private tabList: Phaser.GameObjects.Sprite[];
   private drag: Phaser.GameObjects.Sprite;
+  private gameOverBack: Phaser.GameObjects.Sprite;
+  private helpGroup: Phaser.GameObjects.Group;
+  private helpBack: Phaser.GameObjects.Sprite;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -102,6 +106,14 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.image("drag", "/pong/" + gameType + "/drag.png");
     this.load.image("mute", "/pong/" + gameType + "/mute.png");
     this.load.image("pause", "/pong/" + gameType + "/pause.png");
+    this.load.image("pause_back", "/pong/" + gameType + "/pause-back.png");
+    this.load.image("pause_btn", "/pong/" + gameType + "/pause-btn.png");
+    this.load.image("help1", "/pong/" + gameType + "/2.png");
+    this.load.image("help2", "/pong/" + gameType + "/3.png");
+    this.load.image("help3", "/pong/" + gameType + "/4.png");
+    this.load.image("help4", "/pong/" + gameType + "/5.png");
+    this.load.image("help5", "/pong/" + gameType + "/6.png");
+    this.load.image("ring1", "/pong/" + gameType + "/ring1.png");
 
 
 
@@ -217,7 +229,7 @@ export default class FootballPassScene extends Phaser.Scene {
       isThrowBall: false,
       isSacked: false,
       isRound: true,
-      isGamePause: false,
+      isGamePause: true,
       roundNum: 1,
       score: {
         touchDown: 0,
@@ -712,15 +724,21 @@ export default class FootballPassScene extends Phaser.Scene {
     .setScrollFactor(0, 0).setDepth(4)
     .setInteractive({ cursor: 'pointer' })
     .on("pointerup", () => {
-      console.log("pause", this.status["isGamePause"])
-      this.status["isGamePause"] = !this.status["isGamePause"];
+      this.status["isGamePause"] = true;
       if(this.status["isGamePause"]) {
         this.physics.pause()
         // this.scene.pause();
-      } else {
-        this.physics.resume()
-        // this.scene.resume();
-      }
+
+        this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X ${scoreSystem.touchdown} = ${this.status["score"].touchDown * scoreSystem.touchdown}`);
+        this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X ${scoreSystem.firstdown} = ${this.status["score"].firstDown * scoreSystem.firstdown}`);
+        this.gameoverTexts["passstreak"].setText(`EARNED = ${this.status["score"].passStreak * 500}`);
+        this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X ${scoreSystem.yard} = ${this.status["score"].runYards * scoreSystem.yard}`);
+        this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
+
+        this.gameOverGroup.setVisible(true)
+        this.gameOverBack.setTexture("pause_back");
+        this.gameOverBack.setPosition(gameOver.x, gameOver.y + this.getUIPos(50)).setDisplaySize(w, w * 0.93);
+      } 
     });
 
     this.add.sprite(header.x- w * 0.3, header.y + 40 * w / 375, 'mute').setOrigin(0.5, 0.5)
@@ -1153,7 +1171,8 @@ export default class FootballPassScene extends Phaser.Scene {
         this.aiEnemies[i],
         () => {
           if(this.aiEnemies[i].anims.getName() != "smoke_anim" && this.status.isSacked) {
-            this.aiEnemies[i].play("smoke_anim");
+            // this.aiEnemies[i].play("smoke_anim");
+            this.player.play("smoke_anim");
           }
         },
         null,
@@ -1243,16 +1262,16 @@ export default class FootballPassScene extends Phaser.Scene {
       fill: "#fff",
       align: 'right',
       fontSize: this.getUIPos(30) + "px",
-    }).setOrigin(1, 0.5).setScrollFactor(0, 0);
+    }).setOrigin(1, 0.5).setScrollFactor(0, 0).setVisible(false);
 
-    this.gameoverTexts["runyards"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(135), "20 X 30 = 600", {
+    this.gameoverTexts["runyards"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(90), "20 X 30 = 600", {
       ...this.text_main_style,
       fill: "#fff",
       align: 'right',
       fontSize: this.getUIPos(30) + "px",
     }).setOrigin(1, 0.5).setScrollFactor(0, 0);
 
-    this.gameoverTexts["gametotal"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(180), "53455", {
+    this.gameoverTexts["gametotal"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(135), "53455", {
       ...this.text_main_style,
       fill: "#fff",
       align: 'right',
@@ -1293,11 +1312,11 @@ export default class FootballPassScene extends Phaser.Scene {
         fill: "#f3cb04",
         align: 'right',
         fontSize: this.getUIPos(30) + "px",
-      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
+      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setVisible(false)
     )
 
     this.gameOverGroup.add(
-      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(135), "RUN YARDS", {
+      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(90), "RUN YARDS", {
         ...this.text_main_style,
         fill: "#f3cb04",
         align: 'right',
@@ -1306,7 +1325,7 @@ export default class FootballPassScene extends Phaser.Scene {
     )
 
     this.gameOverGroup.add(
-      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(180), "GAME TOTAL", {
+      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(135), "GAME TOTAL", {
         ...this.text_main_style,
         fill: "#f3cb04",
         align: 'right',
@@ -1314,8 +1333,86 @@ export default class FootballPassScene extends Phaser.Scene {
       }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
     )
 
+    // const gameOver = this.add.sprite(mW, mH - this.getUIPos(150), 'game-over').setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDisplaySize(w, w * 1);
+
+    this.gameOverGroup.add(
+      this.add.sprite(gameOver.x + this.getUIPos(w / 1.4), gameOver.y - this.getUIPos(280), "pause_btn")
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(this.getUIPos(60), this.getUIPos(60))
+      .setScrollFactor(0, 0)
+      .setInteractive({ cursor: 'pointer' })
+      .on("pointerup", () => {
+        this.status["isGamePause"] = false;
+        this.physics.resume();
+        this.gameOverGroup.setVisible(false)
+        this.gameOverBack.setTexture("game-over")
+        this.gameOverBack.setPosition(mW, mH - this.getUIPos(150))
+      })
+    )
+    this.gameOverBack = gameOver;
     this.gameOverGroup.setVisible(false)
     // END GAME OVER SCREEN
+
+    // First Screen
+    this.helpGroup = this.add.group();
+    this.helpBack = this.add.sprite(mW, mH - this.getUIPos(100), "help1").setOrigin(0.5, 0.5).setDisplaySize(w, w * 1280 / 800).setScrollFactor(0, 0).setDepth(10);
+    
+    for(let i = 0; i < 5; i ++) {
+      this.helpGroup.add(
+        this.add.sprite(this.helpBack.x - this.getUIPos(60) + this.getUIPos(30) * i, this.helpBack.y + this.getUIPos(200), "ring1")
+        .setDisplaySize(this.getUIPos(25), this.getUIPos(25))
+        .setScrollFactor(0, 0)
+        .setDepth(10)
+        .setInteractive()
+        .on("pointerup", () => {
+          this.helpBack.setTexture(`help${i + 1}`);
+        })
+      );
+    }
+
+    this.helpGroup.add(this.helpBack);
+
+    this.helpGroup.add(
+      this.add.sprite(this.helpBack.x, this.helpBack.y + this.getUIPos(280), "ring1")
+      .setDisplaySize(this.getUIPos(350), this.getUIPos(80))
+      .setScrollFactor(0, 0)
+      .setDepth(10)
+      .setInteractive()
+      .on("pointerup", () => {
+        this.helpGroup.setVisible(false)
+        this.status["isGamePause"] = false;
+        this.status["startRoundTime"] = new Date().getTime();
+      })
+    )
+
+    this.helpGroup.add(
+      this.add.sprite(this.helpBack.x - this.getUIPos(200), this.helpBack.y, "ring1")
+      .setDisplaySize(this.getUIPos(250), this.getUIPos(300))
+      .setScrollFactor(0, 0)
+      .setDepth(10)
+      .setInteractive()
+      .on("pointerup", () => {
+        helpIdx--;
+        helpIdx = helpIdx < 0? 0 : helpIdx;
+        this.helpBack.setTexture(`help${helpIdx + 1}`);
+      })
+    )
+
+    this.helpGroup.add(
+      this.add.sprite(this.helpBack.x + this.getUIPos(200), this.helpBack.y, "ring1")
+      .setDisplaySize(this.getUIPos(250), this.getUIPos(300))
+      .setScrollFactor(0, 0)
+      .setDepth(10)
+      .setInteractive()
+      .on("pointerup", () => {
+        helpIdx++;
+        helpIdx = helpIdx > 4? 4 : helpIdx;
+        this.helpBack.setTexture(`help${helpIdx + 1}`);
+      })
+    )
+
+    // END FIRST SCREEN 
+
 
     this.ball.preFX.addShadow();
     this.player.preFX.addShadow();
@@ -1744,7 +1841,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.ball.setDisplaySize(ballR * (- Math.abs(0.5 - remainDistance / distance) + 1.5), ballR * (- Math.abs(0.5 - remainDistance / distance) + 1.5));
 
     } else {
-      if(this.status.isPlaying) {
+      if(this.status.isPlaying && this.status.isBallPlayer) {
         if(this.getRealPos(this.ball.y) < this.posObject.lastLine - 50) {
           this.onCatchLogic();
         }
@@ -1883,10 +1980,10 @@ export default class FootballPassScene extends Phaser.Scene {
     this.status.isRound = false;
     this.status.isPlaying = false;
 
-    this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X ${scoreSystem.touchdown} = ${this.status["score"].touchDown * 7000}`);
-    this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X ${scoreSystem.firstdown} = ${this.status["score"].firstDown * 7000}`);
+    this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X ${scoreSystem.touchdown} = ${this.status["score"].touchDown * scoreSystem.touchdown}`);
+    this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X ${scoreSystem.firstdown} = ${this.status["score"].firstDown * scoreSystem.firstdown}`);
     this.gameoverTexts["passstreak"].setText(`EARNED = ${this.status["score"].passStreak * 500}`);
-    this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X ${scoreSystem.yard} = ${this.status["score"].runYards * 30}`);
+    this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X ${scoreSystem.yard} = ${this.status["score"].runYards * scoreSystem.yard}`);
     this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
 
     this.gameOverGroup.setVisible(true);
