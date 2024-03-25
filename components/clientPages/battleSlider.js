@@ -10,11 +10,16 @@ export default function BattleSlider() {
     return <div />;
 
   return (
-    <div className="mt-8 overflow-x-scroll whitespace-nowrap px-6 no-scrollbar">
-      {context?.battles?.map((item, key) => (
-        <BattleCard battle={item} key={key} myUid={context?.loggedIn?.uid} />
-      ))}
-    </div>
+    <>
+      <h1 className="px-5 mb-2 mt-8 font-octo text-2xl tracking-wider text-white/90">
+        Battles
+      </h1>
+      <div className="overflow-x-scroll whitespace-nowrap px-6 no-scrollbar">
+        {context?.battles?.map((item, key) => (
+          <BattleCard battle={item} key={key} myUid={context?.loggedIn?.uid} />
+        ))}
+      </div>
+    </>
   );
 }
 
