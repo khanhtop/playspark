@@ -243,4 +243,30 @@ export const games = [
     id: 18,
     landscape: false,
   },
+  {
+    name: "Fly Collect",
+    description:
+      "Flap, customize, conquer! Dive into an addictive, fully customizable tap-to-fly adventure for endless high-score thrills!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/5_bch6hi.png",
+    screenshot: "soccerfall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 19,
+    cloudinaryGameTag: "fly",
+    tags: {
+      playerSprite: "1.0",
+      objectSprite: "1.0",
+      backgroundSprite: "bg",
+      additionalSpriteOne: "parallax",
+    },
+    backgroundSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
+    additionalSpriteOne:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
+    playerSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+  },
 ];
