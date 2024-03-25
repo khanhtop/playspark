@@ -5,6 +5,7 @@ import {
   doc,
   limit,
   onSnapshot,
+  or,
   orderBy,
   query,
   setDoc,
@@ -23,6 +24,7 @@ export function AppWrapper({ children }) {
   const [myGames, setMyGames] = useState();
   const [rewards, setRewards] = useState();
   const [prizes, setPrizes] = useState();
+  const [battles, setBattles] = useState();
   const [notifications, setNotifications] = useState();
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
@@ -84,6 +86,7 @@ export function AppWrapper({ children }) {
     let _rewardsUnsub = () => null;
     let _prizesUnsub = () => null;
     let _notificationsUnsub = () => null;
+    let _battleUnsub = () => null;
     if (loggedIn && !profile) {
       _profileUnsub = onSnapshot(
         doc(firestore, "users", loggedIn.uid),
@@ -156,11 +159,31 @@ export function AppWrapper({ children }) {
       });
     }
 
+    if (loggedIn && !battles) {
+      const q = query(
+        collection(firestore, "challenges"),
+        or(
+          where("challenger.id", "==", loggedIn.uid),
+          where("challengee.id", "==", loggedIn.uid)
+        ),
+        // orderBy("timestamp", "desc"),
+        limit(30)
+      );
+      _battleUnsub = onSnapshot(q, (querySnapshot) => {
+        const _battles = [];
+        querySnapshot.forEach((doc) => {
+          _battles.push({ ...doc.data(), id: doc.id });
+        });
+        setBattles(_battles);
+      });
+    }
+
     return () => {
       _profileUnsub();
       _myGamesUnsub();
       _rewardsUnsub();
       _prizesUnsub();
+      _battleUnsub();
       _notificationsUnsub();
       setProfile();
       setMyGames();
@@ -215,6 +238,7 @@ export function AppWrapper({ children }) {
     fetchAvatars,
     webhookBasePayload,
     setWebhookBasePayload,
+    battles,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

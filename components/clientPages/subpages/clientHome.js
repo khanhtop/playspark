@@ -4,6 +4,7 @@ import Areas from "../areas";
 import ClientPageWrapper from "../clientPageWrapper";
 import Hero from "../hero";
 import HorizontalGamesScroll from "../horizontalGamesScroll";
+import BattleSlider from "../battleSlider";
 
 export default function ClientHome({
   user,
@@ -33,6 +34,7 @@ export default function ClientHome({
         context={context}
         totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
       />
+      <BattleSlider />
       <HorizontalGamesScroll
         prizes={prizes}
         showPrizes
