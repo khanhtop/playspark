@@ -177,6 +177,8 @@ export default class WordleScene extends Phaser.Scene {
     scrH = w * 0.175 / 1.614;
     heartR = w * 0.0625;
     heartNum = this.params.lives
+    
+    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + "/bg.jpg";
 
     this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + "/bg.jpg";
 

@@ -89,8 +89,9 @@ export default class FlyBallScene extends Phaser.Scene {
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
-    ballR = 40;
-    wingR = 25;
+    console.log(w)
+    ballR = 50 * w / 375;
+    wingR = 30 * w / 375;
     scr = h * 0.08;
     mW = w / 2;
     mH = (h - scr) / 2 + scr;
@@ -220,14 +221,17 @@ export default class FlyBallScene extends Phaser.Scene {
       color: "#000",
     }).setOrigin(0, 0.5).setScrollFactor(0, 0)
 
-    this.add.sprite(headerW * 2.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40).setScrollFactor(0, 0);
-    this.add.sprite(headerW * 2 + 90, topOffset - 5, 'coin' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
-    this.coinTxt = this.add
-    .text(headerW * 2 + 120, topOffset - 5, "2", {
-      fontFamily: "TitanOne-Regular",
-      fontSize: "18px",
-      color: "#000",
-    }).setOrigin(0, 0.5).setScrollFactor(0, 0)
+    // HEAD COIN MENU
+    // this.add.sprite(headerW * 2.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40).setScrollFactor(0, 0);
+    // this.add.sprite(headerW * 2 + 90, topOffset - 5, 'coin' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
+    // this.coinTxt = this.add
+    // .text(headerW * 2 + 120, topOffset - 5, "2", {
+    //   fontFamily: "TitanOne-Regular",
+    //   fontSize: "18px",
+    //   color: "#000",
+    // }).setOrigin(0, 0.5).setScrollFactor(0, 0)
+
+    // END HEAD COIN MENU
 
     this.add.sprite(w - 70, topOffset + 50, 'score').setOrigin(0.5, 0.5).setDisplaySize(100, 50).setScrollFactor(0, 0);
     this.add.text(w - 70, topOffset + 40, 'SCORE', {
@@ -445,9 +449,9 @@ export default class FlyBallScene extends Phaser.Scene {
     const isMove = true;
 
     const sizeRate = STATUS.magnify? 1.3 : 1;
-    const objW = 100 * sizeRate;
-    const objH = 60 * sizeRate;
-    const radius = objH / 1.8;
+    const objW = 120 * sizeRate * w / 375;
+    const objH = 60 * sizeRate * w / 375;
+    const radius = objH / 1.8 * w / 375;
     const top = this.add.sprite(x, y, 'hoop_t').setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle)
     const down = this.add.sprite(x, y, 'hoop_d').setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(12).setAngle(angle)
 
@@ -660,7 +664,8 @@ export default class FlyBallScene extends Phaser.Scene {
   initItem(x, y) {
     x += (0.5 - Math.random()) * 300;
     y += (0.5 - Math.random()) * 300;
-    const type = (Math.random() < 0.5)? "light" : "coin"
+    // const type = (Math.random() < 0.5)? "light" : "coin"
+    const type = "light";
     const item = this.physics.add.sprite(x, y, type).setDisplaySize(40, 40)
     const col = this.physics.add.overlap(this.ball, item, () => {
       if(type == "light") {
@@ -937,7 +942,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.levelTxt.setText(GAME.level.toString());
     this.ballTxt.setText(GAME.ball.toString());
     this.lightTxt.setText(GAME.light.toString());
-    this.coinTxt.setText(GAME.coin.toString());
+    // this.coinTxt.setText(GAME.coin.toString());
     this.scoreTxt.setText((GAME.passRing * SCORE_PER_RING).toString());
   }
 
