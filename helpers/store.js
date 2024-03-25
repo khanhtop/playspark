@@ -1,8 +1,10 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { auth, firestore } from "./firebase";
 import {
+  FieldPath,
   collection,
   doc,
+  documentId,
   limit,
   onSnapshot,
   or,
@@ -166,7 +168,6 @@ export function AppWrapper({ children }) {
           where("challenger.id", "==", loggedIn.uid),
           where("challengee.id", "==", loggedIn.uid)
         ),
-        // orderBy("timestamp", "desc"),
         limit(30)
       );
       _battleUnsub = onSnapshot(q, (querySnapshot) => {
@@ -174,7 +175,11 @@ export function AppWrapper({ children }) {
         querySnapshot.forEach((doc) => {
           _battles.push({ ...doc.data(), id: doc.id });
         });
-        setBattles(_battles);
+        setBattles(
+          _battles.sort((a, b) => {
+            return a.id - b.id;
+          })
+        );
       });
     }
 
