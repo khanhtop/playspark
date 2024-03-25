@@ -34,7 +34,7 @@ export default function ClientHome({
         context={context}
         totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
       />
-      <BattleSlider />
+      <BattleSlider clientId={user.id} />
       <HorizontalGamesScroll
         prizes={prizes}
         showPrizes

@@ -94,7 +94,7 @@ export function AppWrapper({ children }) {
         doc(firestore, "users", loggedIn.uid),
         (doc) => {
           const data = doc.data();
-          if (!data.email) patchProfileWithEmail();
+          if (!data?.email) patchProfileWithEmail();
           setProfile(
             { ...data, subscription: getSubscriptionType(data?.tier ?? 0) } || {
               subscription: getSubscriptionType(data?.tier ?? 0),
