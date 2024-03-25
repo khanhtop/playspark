@@ -105,6 +105,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.image("plan-board", "/pong/" + gameType + "/plan-board.png");
     this.load.image("drag", "/pong/" + gameType + "/drag.png");
     this.load.image("mute", "/pong/" + gameType + "/mute.png");
+    this.load.image("mute_on", "/pong/" + gameType + "/mute-on.png");
     this.load.image("pause", "/pong/" + gameType + "/pause.png");
     this.load.image("pause_back", "/pong/" + gameType + "/pause-back.png");
     this.load.image("pause_btn", "/pong/" + gameType + "/pause-btn.png");
@@ -741,12 +742,13 @@ export default class FootballPassScene extends Phaser.Scene {
       } 
     });
 
-    this.add.sprite(header.x- w * 0.3, header.y + 40 * w / 375, 'mute').setOrigin(0.5, 0.5)
+    const muteBtn = this.add.sprite(header.x- w * 0.3, header.y + 40 * w / 375, 'mute').setOrigin(0.5, 0.5)
     .setDisplaySize(30 * w / 375, 30 * w / 375)
     .setScrollFactor(0, 0).setDepth(4)
     .setInteractive({ cursor: 'pointer' })
     .on("pointerup", () => {
       this.sound.mute = !this.sound.mute;
+      muteBtn.setTexture(this.sound.mute? "mute_on" : "mute")
     });
     
     
@@ -1350,7 +1352,7 @@ export default class FootballPassScene extends Phaser.Scene {
       })
     )
     this.gameOverBack = gameOver;
-    this.gameOverGroup.setVisible(false)
+    this.gameOverGroup.setVisible(false).setDepth(11)
     // END GAME OVER SCREEN
 
     // First Screen
@@ -1532,9 +1534,12 @@ export default class FootballPassScene extends Phaser.Scene {
       }, [], this);
     } else {
       
-      if(this.status.planIdx != -1) {
-        this.linesGroup[this.status.planIdx].setVisible(false);
-      }
+      this.linesGroup.forEach(group => {
+        group.setVisible(false);
+      })
+      // if(this.status.planIdx != -1) {
+      //   this.linesGroup[this.status.planIdx].setVisible(false);
+      // }
 
       this.status.planIdx = idx;
       this.linesGroup[idx].setXY(0, this.getUIPos(this.posObject.startPos.first))
@@ -1893,9 +1898,9 @@ export default class FootballPassScene extends Phaser.Scene {
           this.posObject.startPos.first = this.getRealPos(this.ball.y);
         }
 
-        if(y < first) {
+        // if(y < first) {
           this.tackle.play();
-        }
+        // }
 
         // this.onTackled();
 
