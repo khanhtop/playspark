@@ -302,6 +302,7 @@ export async function createChallenge(game, challengee, challenger, referrer) {
     challengee: challengee,
     challenger: challenger,
     referrer: referrer,
+    timestamp: Date.now(),
   });
   await addDoc(collection(firestore, "notifications"), {
     timestamp: Date.now(),

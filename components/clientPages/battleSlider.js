@@ -56,13 +56,9 @@ function BattleCard({ battle, myUid }) {
             won={challengeeWon}
           />
         </div>
-        {/* <div className="flex gap-2 items-start">
-          <img
-            src={battle?.game?.backgroundImage}
-            className="h-8 w-8 rounded-full object-cover"
-          />
-          <p className="font-octo mt-[4px]">Battle | {battle.game.name}</p>
-        </div> */}
+        <div className="flex gap-2 items-start">
+          <BattleStatus battle={battle} myUid={myUid} />
+        </div>
       </div>
     </div>
   );
@@ -88,6 +84,62 @@ function Battler({ data, myUid, won, isComplete }) {
           />
         </div>
       )}
+    </div>
+  );
+}
+
+function BattleStatus({ battle, myUid }) {
+  if (
+    !battle.challengerResult &&
+    !battle?.challengeeResult &&
+    battle.challenger?.id === myUid
+  ) {
+    return (
+      <div className="flex w-full justify-between gap-2 font-octo">
+        <div className="flex items-center gap-2 font-octo">
+          <div className="h-8 w-8 bg-purple-500 rounded-full"></div>
+          <div>Play First</div>
+        </div>
+        <button className="bg-purple-500 px-4 rounded-xl">Play</button>
+      </div>
+    );
+  }
+  if (
+    battle.challengerResult &&
+    !battle?.challengeeResult &&
+    battle.challenger?.id === myUid
+  ) {
+    return (
+      <div className="flex w-full justify-between gap-2 font-octo">
+        <div className="flex items-center gap-2 font-octo">
+          <div className="h-8 w-8 bg-green-500 rounded-full"></div>
+          <div>Played - Waiting For Challenger</div>
+        </div>
+      </div>
+    );
+  }
+  if (
+    battle.challengerResult &&
+    !battle?.challengeeResult &&
+    battle.challengee?.id === myUid
+  ) {
+    return (
+      <div className="flex w-full justify-between gap-2 font-octo">
+        <div className="flex items-center gap-2 font-octo">
+          <div className="h-8 w-8 bg-purple-500 rounded-full"></div>
+          <div>Invited - Play Now</div>
+        </div>
+        <button className="bg-purple-500 px-4 rounded-xl">Play</button>
+      </div>
+    );
+  }
+  return (
+    <div className="flex w-full justify-between gap-2 font-octo">
+      <div className="flex items-center gap-2 font-octo">
+        <div className="h-8 w-8 bg-red-500 rounded-full"></div>
+        <div>Complete</div>
+      </div>
+      <button className="bg-red-500 px-4 rounded-xl">View Results</button>
     </div>
   );
 }
