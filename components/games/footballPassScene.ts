@@ -72,6 +72,7 @@ export default class FootballPassScene extends Phaser.Scene {
   private tabList: Phaser.GameObjects.Sprite[];
   private drag: Phaser.GameObjects.Sprite;
   private gameOverBack: Phaser.GameObjects.Sprite;
+  private gameOverExitBtn: Phaser.GameObjects.Sprite;
   private helpGroup: Phaser.GameObjects.Group;
   private helpBack: Phaser.GameObjects.Sprite;
 
@@ -737,6 +738,8 @@ export default class FootballPassScene extends Phaser.Scene {
         this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
 
         this.gameOverGroup.setVisible(true)
+        this.gameOverExitBtn.setVisible(true);
+
         this.gameOverBack.setTexture("pause_back");
         this.gameOverBack.setPosition(gameOver.x, gameOver.y + this.getUIPos(50)).setDisplaySize(w, w * 0.93);
       } 
@@ -1320,8 +1323,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     // const gameOver = this.add.sprite(mW, mH - this.getUIPos(150), 'game-over').setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDisplaySize(w, w * 1);
 
-    this.gameOverGroup.add(
-      this.add.sprite(gameOver.x + this.getUIPos(w / 1.4), gameOver.y - this.getUIPos(240), "pause_btn")
+    this.gameOverExitBtn =  this.add.sprite(gameOver.x + this.getUIPos(w / 1.4), gameOver.y - this.getUIPos(240), "pause_btn")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(this.getUIPos(60), this.getUIPos(60))
       .setScrollFactor(0, 0)
@@ -1333,7 +1335,7 @@ export default class FootballPassScene extends Phaser.Scene {
         this.gameOverBack.setTexture("game-over")
         this.gameOverBack.setPosition(mW, mH - this.getUIPos(150))
       })
-    )
+    this.gameOverGroup.add(this.gameOverExitBtn)
     this.gameOverBack = gameOver;
     this.gameOverGroup.setVisible(false).setDepth(11)
     // END GAME OVER SCREEN
@@ -1977,6 +1979,7 @@ export default class FootballPassScene extends Phaser.Scene {
     const isEnd = this.loseLife();
     if(isEnd) {
       this.gameOverGroup.setVisible(true);
+      this.gameOverExitBtn.setVisible(false);
       this.time.delayedCall(4000, this.loseGame, [], this);
     } else {
       this.time.delayedCall(4000, this.initGame, [], this);
