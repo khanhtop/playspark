@@ -72,6 +72,7 @@ export default class FootballPassScene extends Phaser.Scene {
   private tabList: Phaser.GameObjects.Sprite[];
   private drag: Phaser.GameObjects.Sprite;
   private gameOverBack: Phaser.GameObjects.Sprite;
+  private gameOverExitBtn: Phaser.GameObjects.Sprite;
   private helpGroup: Phaser.GameObjects.Group;
   private helpBack: Phaser.GameObjects.Sprite;
 
@@ -115,6 +116,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.image("help4", "/pong/" + gameType + "/5.png");
     this.load.image("help5", "/pong/" + gameType + "/6.png");
     this.load.image("ring1", "/pong/" + gameType + "/ring1.png");
+    this.load.image("arrow", "/pong/" + gameType + "/arrow.png");
 
 
 
@@ -725,18 +727,19 @@ export default class FootballPassScene extends Phaser.Scene {
     .setScrollFactor(0, 0).setDepth(4)
     .setInteractive({ cursor: 'pointer' })
     .on("pointerup", () => {
-      this.status["isGamePause"] = true;
-      if(this.status["isGamePause"]) {
+      if(!this.status["isGamePause"]) {
+        this.status["isGamePause"] = true;
         this.physics.pause()
         // this.scene.pause();
 
         this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X ${scoreSystem.touchdown} = ${this.status["score"].touchDown * scoreSystem.touchdown}`);
         this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X ${scoreSystem.firstdown} = ${this.status["score"].firstDown * scoreSystem.firstdown}`);
-        this.gameoverTexts["passstreak"].setText(`EARNED = ${this.status["score"].passStreak * 500}`);
         this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X ${scoreSystem.yard} = ${this.status["score"].runYards * scoreSystem.yard}`);
         this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
 
         this.gameOverGroup.setVisible(true)
+        this.gameOverExitBtn.setVisible(true);
+
         this.gameOverBack.setTexture("pause_back");
         this.gameOverBack.setPosition(gameOver.x, gameOver.y + this.getUIPos(50)).setDisplaySize(w, w * 0.93);
       } 
@@ -1259,13 +1262,6 @@ export default class FootballPassScene extends Phaser.Scene {
       fontSize: this.getUIPos(30) + "px",
     }).setOrigin(1, 0.5).setScrollFactor(0, 0);
 
-    this.gameoverTexts["passstreak"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(90), "EARNED = 0", {
-      ...this.text_main_style,
-      fill: "#fff",
-      align: 'right',
-      fontSize: this.getUIPos(30) + "px",
-    }).setOrigin(1, 0.5).setScrollFactor(0, 0).setVisible(false);
-
     this.gameoverTexts["runyards"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(90), "20 X 30 = 600", {
       ...this.text_main_style,
       fill: "#fff",
@@ -1284,7 +1280,6 @@ export default class FootballPassScene extends Phaser.Scene {
     this.gameOverGroup.add(this.gameoverTexts["reachlevel"]);
     this.gameOverGroup.add(this.gameoverTexts["touchdowns"]);
     this.gameOverGroup.add(this.gameoverTexts["firstdowns"]);
-    this.gameOverGroup.add(this.gameoverTexts["passstreak"]);
     this.gameOverGroup.add(this.gameoverTexts["runyards"]);
     this.gameOverGroup.add(this.gameoverTexts["gametotal"]);
 
@@ -1309,15 +1304,6 @@ export default class FootballPassScene extends Phaser.Scene {
     )
 
     this.gameOverGroup.add(
-      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(90), "PASS STREAK", {
-        ...this.text_main_style,
-        fill: "#f3cb04",
-        align: 'right',
-        fontSize: this.getUIPos(30) + "px",
-      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setVisible(false)
-    )
-
-    this.gameOverGroup.add(
       this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(90), "RUN YARDS", {
         ...this.text_main_style,
         fill: "#f3cb04",
@@ -1337,8 +1323,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     // const gameOver = this.add.sprite(mW, mH - this.getUIPos(150), 'game-over').setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDisplaySize(w, w * 1);
 
-    this.gameOverGroup.add(
-      this.add.sprite(gameOver.x + this.getUIPos(w / 1.4), gameOver.y - this.getUIPos(280), "pause_btn")
+    this.gameOverExitBtn =  this.add.sprite(gameOver.x + this.getUIPos(w / 1.4), gameOver.y - this.getUIPos(240), "pause_btn")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(this.getUIPos(60), this.getUIPos(60))
       .setScrollFactor(0, 0)
@@ -1350,7 +1335,7 @@ export default class FootballPassScene extends Phaser.Scene {
         this.gameOverBack.setTexture("game-over")
         this.gameOverBack.setPosition(mW, mH - this.getUIPos(150))
       })
-    )
+    this.gameOverGroup.add(this.gameOverExitBtn)
     this.gameOverBack = gameOver;
     this.gameOverGroup.setVisible(false).setDepth(11)
     // END GAME OVER SCREEN
@@ -1388,11 +1373,12 @@ export default class FootballPassScene extends Phaser.Scene {
     )
 
     this.helpGroup.add(
-      this.add.sprite(this.helpBack.x - this.getUIPos(200), this.helpBack.y, "ring1")
-      .setDisplaySize(this.getUIPos(250), this.getUIPos(300))
+      this.add.sprite(this.helpBack.x - this.getUIPos(200), this.helpBack.y, "arrow")
+      .setDisplaySize(this.getUIPos(50), this.getUIPos(63))
       .setScrollFactor(0, 0)
       .setDepth(10)
-      .setInteractive()
+      .setFlipX(true)
+      .setInteractive({ cursor: 'pointer' })
       .on("pointerup", () => {
         helpIdx--;
         helpIdx = helpIdx < 0? 0 : helpIdx;
@@ -1401,11 +1387,11 @@ export default class FootballPassScene extends Phaser.Scene {
     )
 
     this.helpGroup.add(
-      this.add.sprite(this.helpBack.x + this.getUIPos(200), this.helpBack.y, "ring1")
-      .setDisplaySize(this.getUIPos(250), this.getUIPos(300))
+      this.add.sprite(this.helpBack.x + this.getUIPos(200), this.helpBack.y, "arrow")
+      .setDisplaySize(this.getUIPos(50), this.getUIPos(63))
       .setScrollFactor(0, 0)
       .setDepth(10)
-      .setInteractive()
+      .setInteractive({ cursor: 'pointer' })
       .on("pointerup", () => {
         helpIdx++;
         helpIdx = helpIdx > 4? 4 : helpIdx;
@@ -1478,10 +1464,10 @@ export default class FootballPassScene extends Phaser.Scene {
     this.status["startGameTime"] = new Date().getTime();
     this.status.isRound = true;
 
-    this.status["score"].touchDown = 0;
-    this.status["score"].firstDown = 0;
-    this.status["score"].passStreak = 0;
-    this.status["score"].runYards = 0;
+    // this.status["score"].touchDown = 0;
+    // this.status["score"].firstDown = 0;
+    // this.status["score"].passStreak = 0;
+    // this.status["score"].runYards = 0;
     this.status.roundNum = 1;
 
     this.posObject.startPos.y = 160 + 140 * 11;
@@ -1513,7 +1499,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
       if (heartNum === 0) {
         // Game lost
-        this.loseGame();
+        // this.loseGame();
         return true;
       }
       return false;
@@ -1987,13 +1973,17 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X ${scoreSystem.touchdown} = ${this.status["score"].touchDown * scoreSystem.touchdown}`);
     this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X ${scoreSystem.firstdown} = ${this.status["score"].firstDown * scoreSystem.firstdown}`);
-    this.gameoverTexts["passstreak"].setText(`EARNED = ${this.status["score"].passStreak * 500}`);
     this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X ${scoreSystem.yard} = ${this.status["score"].runYards * scoreSystem.yard}`);
     this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
 
-    this.gameOverGroup.setVisible(true);
-    this.loseLife();
-    this.time.delayedCall(4000, this.initGame, [], this);
+    const isEnd = this.loseLife();
+    if(isEnd) {
+      this.gameOverGroup.setVisible(true);
+      this.gameOverExitBtn.setVisible(false);
+      this.time.delayedCall(4000, this.loseGame, [], this);
+    } else {
+      this.time.delayedCall(4000, this.initGame, [], this);
+    }
   }
 
   powerupUpdate(delta) {
@@ -2018,6 +2008,13 @@ export default class FootballPassScene extends Phaser.Scene {
     this.scoreUpdate();
     this.timeUpdate();
     this.powerupUpdate(delta);
+
+    if(this.physics.overlap(this.player, this.aiEnemies)) {
+      
+    } else {
+
+    }
+
     if(this.status.isBallPlayer) {
       this.ball.setPosition(this.player.x + playerR / 4, this.player.y - playerR / 3.4);
     } 
