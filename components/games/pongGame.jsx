@@ -33,27 +33,40 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
     }),
     [mainScene]
   );
+  let loader = (_gameType) => {
+    let loder = document.createElement("script");
+    loder.setAttribute("charset", `utf-8`);
+    loder.setAttribute("src", `/${_gameType}/__loader.js`);
+    document.body.appendChild(loder);
 
+    loder.addEventListener("load", () => {
+      console.log(`loder loaded correctly`);
+    });
+  };
   useEffect(() => {
     if (!memoizedHasRendered) {
       setHasRendered(true);
       let scene;
-      if(gameType == 'baseballFall' || gameType == 'basketballFall' || gameType == 'cricketFall' || gameType == 'soccerFall') {
+      if (gameType == 'baseballFall' || gameType == 'basketballFall' || gameType == 'cricketFall' || gameType == 'soccerFall') {
         scene = new FallScene(gameType, params);
-      } else if(gameType == 'wheelspin') {
-        scene = new WheelScene(gameType, params);
-      } else if(gameType == 'cricket') {
+      } else if (gameType == 'wheelspin') {
+        //scene = new WheelScene(gameType, params);
+        loader(gameType);
+        return;
+      } else if (gameType == 'cricket') {
         scene = new CricketScene(gameType, params);
-      } else if(gameType == 'newpongball') {
+      } else if (gameType == 'newpongball') {
         scene = new NewPongScene(gameType, params);
-      } else if(gameType == 'wordle') {
-        scene = new WordleScene(gameType, params);
-      } else if(gameType == 'flyball') {
+      } else if (gameType == 'wordle') {
+        // scene = new WordleScene(gameType, params);
+        loader(gameType);
+        return;
+      } else if (gameType == 'flyball') {
         scene = new FlyBallScene(gameType, params);
-      } else if(gameType == 'newfallball') {
+      } else if (gameType == 'newfallball') {
         scene = new newFallScene(gameType, params);
-      } else if(gameType == 'newcricket') {
-        scene = new newCricketScene(gameType, params);      
+      } else if (gameType == 'newcricket') {
+        scene = new newCricketScene(gameType, params);
       } else {
         scene = new MainScene(gameType, params);
       }
@@ -85,9 +98,9 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
   }, [memoizedHasRendered]);
 
   useEffect(() => {
-          return () => {
-        gameRef.current.destroy(true);
-      };
+    return () => {
+      gameRef.current.destroy(true);
+    };
   }, [])
 
   return (
