@@ -3,7 +3,7 @@ import LineChart from "./charts/lineChart";
 import { useAppContext } from "@/helpers/store";
 import BarChart from "./charts/barChart";
 
-export default function Dashboard({}) {
+export default function Analytics({}) {
   const context = useAppContext();
   const [impressions, setImpressions] = useState();
   const [plays, setPlays] = useState();
@@ -58,27 +58,38 @@ export default function Dashboard({}) {
   }, [context?.myGames]);
 
   return (
-    <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div>
-        <h2 className="mb-4">Impressions Per Game</h2>
-        {impressions && <BarChart chartData={impressions} />}
-      </div>
-      <div>
-        <h2 className="mb-4">Plays Per Game</h2>
-        {plays && <BarChart chartData={plays} />}
-      </div>
-      <div>
-        <h2 className="mb-4">Click Through Rate (CTR)</h2>
-        {ctr && <BarChart chartData={ctr} />}
-      </div>
-      {/* <div>
-        <h2 className="mb-4">Email Opt Ins</h2>
-        {ctr && <BarChart chartData={optins} />}
-      </div>
-      <div>
-        <h2 className="mb-4">Playable Ad Views</h2>
-        {ctr && <BarChart chartData={playableAds} />}
-      </div> */}
+    <div className="h-[calc(100vh-140px)]">
+      <iframe
+        src={`https://playspark.jetadmin.io/public/s23n8d48z10963jousoxvlvwbrrr86ma?client_id=${context?.loggedIn?.uid}&iframe=1`}
+        width="100%"
+        height="100%"
+        frameborder="0"
+        webkitallowfullscreen
+        mozallowfullscreen
+        allowfullscreen
+      ></iframe>
     </div>
+    // <div className="text-white grid grid-cols-1 xl:grid-cols-2 gap-8">
+    //   <div>
+    //     <h2 className="mb-4">Impressions Per Game</h2>
+    //     {impressions && <BarChart chartData={impressions} />}
+    //   </div>
+    //   <div>
+    //     <h2 className="mb-4">Plays Per Game</h2>
+    //     {plays && <BarChart chartData={plays} />}
+    //   </div>
+    //   <div>
+    //     <h2 className="mb-4">Click Through Rate (CTR)</h2>
+    //     {ctr && <BarChart chartData={ctr} />}
+    //   </div>
+    //   <div>
+    //     <h2 className="mb-4">Email Opt Ins</h2>
+    //     {ctr && <BarChart chartData={optins} />}
+    //   </div>
+    //   <div>
+    //     <h2 className="mb-4">Playable Ad Views</h2>
+    //     {ctr && <BarChart chartData={playableAds} />}
+    //   </div>
+    // </div>
   );
 }

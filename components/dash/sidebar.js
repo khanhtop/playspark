@@ -28,12 +28,12 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           setSelectedPane={() => setSelectedPane(4)}
           icon={<Squares2X2Icon className="h-5" />}
         />
-        {/* <Row
+        <Row
           text="Analytics"
           selected={selectedPane === 5}
           setSelectedPane={() => setSelectedPane(5)}
           icon={<ChartBarIcon className="h-5" />}
-        /> */}
+        />
         <Row
           text="Audience & Data"
           selected={selectedPane === 6}

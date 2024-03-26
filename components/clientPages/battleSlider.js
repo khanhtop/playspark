@@ -1,7 +1,9 @@
 import { useAppContext } from "@/helpers/store";
+import { useState } from "react";
 
 export default function BattleSlider({ clientId }) {
   const context = useAppContext();
+  const [stage, setStage] = useState(0);
 
   if (
     !context?.loggedIn?.uid ||
@@ -12,12 +14,27 @@ export default function BattleSlider({ clientId }) {
 
   return (
     <>
-      <h1 className="px-5 mb-2 mt-8 font-octo text-2xl tracking-wider text-white/90">
+      <h1 className="px-5 mt-8 font-octo text-2xl tracking-wider text-white/90">
         Battles
       </h1>
+      <div className="flex pl-5 gap-4 pb-4">
+        <Tab
+          selected={stage === 0}
+          text="Ongoing"
+          setSelected={() => setStage(0)}
+        />
+        <Tab
+          selected={stage === 1}
+          text="Ended"
+          setSelected={() => setStage(1)}
+        />
+      </div>
       <div className="overflow-x-scroll whitespace-nowrap px-6 no-scrollbar pb-4">
         {context?.battles
           ?.filter((a) => a.game.ownerId === clientId)
+          ?.filter((a) =>
+            stage === 0 ? !a.challengeeResult : a.challengeeResult
+          )
           .map((item, key) => (
             <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
               <BattleCard
@@ -29,6 +46,21 @@ export default function BattleSlider({ clientId }) {
           ))}
       </div>
     </>
+  );
+}
+
+function Tab({ text, selected, setSelected }) {
+  return (
+    <div
+      onClick={setSelected}
+      className={`py-2 font-octo text-lg ${
+        selected
+          ? "border-b-cyan-500 border-b-2 text-white"
+          : "text-white/50 cursor-pointer"
+      }`}
+    >
+      <p>{text}</p>
+    </div>
   );
 }
 
