@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-
+import { getImageWithSize } from "@/helpers/cloudinary";
 
 let gameType = "football";
 let counter = 0;
@@ -54,10 +54,18 @@ export default class WheelScene extends Phaser.Scene {
     gameType = newGameType;
     this.params = newParams
     console.log(newParams)
-    this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : "/pong/" + gameType + '/back3.jpg';
   }
 
   preload() {
+    w = this.game.canvas.clientWidth;
+    h = this.game.canvas.clientHeight;
+    wheelR = w / 1.2;
+
+    centerW = w * 0.97;
+    centerH = h * 0.8;
+    centerX = w / 2;
+    centerY = h * 0.05;
+
     let fontUrl = "/pong/" + gameType + '/TitanOne-Regular.ttf';
     const font = new FontFace('customFont', `url(${fontUrl})`);
     font.load().then(() => {
@@ -71,6 +79,10 @@ export default class WheelScene extends Phaser.Scene {
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
 
     console.log("Preload");
+
+    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + '/back3.jpg';
+
+
     this.load.image('logo', this.params.logo);
     this.load.image('background',this.params.backgroundSprite);
     this.load.image('ui-center', "/pong/" + gameType + '/out-circle.png');
@@ -103,14 +115,7 @@ export default class WheelScene extends Phaser.Scene {
 
     // this.load.font('customFont', "/pong/" + gameType + '/TitanOne-Regular.ttf');
 
-    w = this.game.canvas.clientWidth;
-    h = this.game.canvas.clientHeight;
-    wheelR = w / 1.2;
 
-    centerW = w * 0.97;
-    centerH = h * 0.8;
-    centerX = w / 2;
-    centerY = h * 0.05;
   }
 
   // 400 800
