@@ -115,6 +115,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.image("help4", "/pong/" + gameType + "/5.png");
     this.load.image("help5", "/pong/" + gameType + "/6.png");
     this.load.image("ring1", "/pong/" + gameType + "/ring1.png");
+    this.load.image("arrow", "/pong/" + gameType + "/arrow.png");
 
 
 
@@ -725,8 +726,8 @@ export default class FootballPassScene extends Phaser.Scene {
     .setScrollFactor(0, 0).setDepth(4)
     .setInteractive({ cursor: 'pointer' })
     .on("pointerup", () => {
-      this.status["isGamePause"] = true;
-      if(this.status["isGamePause"]) {
+      if(!this.status["isGamePause"]) {
+        this.status["isGamePause"] = true;
         this.physics.pause()
         // this.scene.pause();
 
@@ -1320,7 +1321,7 @@ export default class FootballPassScene extends Phaser.Scene {
     // const gameOver = this.add.sprite(mW, mH - this.getUIPos(150), 'game-over').setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDisplaySize(w, w * 1);
 
     this.gameOverGroup.add(
-      this.add.sprite(gameOver.x + this.getUIPos(w / 1.4), gameOver.y - this.getUIPos(280), "pause_btn")
+      this.add.sprite(gameOver.x + this.getUIPos(w / 1.4), gameOver.y - this.getUIPos(240), "pause_btn")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(this.getUIPos(60), this.getUIPos(60))
       .setScrollFactor(0, 0)
@@ -1370,11 +1371,12 @@ export default class FootballPassScene extends Phaser.Scene {
     )
 
     this.helpGroup.add(
-      this.add.sprite(this.helpBack.x - this.getUIPos(200), this.helpBack.y, "ring1")
-      .setDisplaySize(this.getUIPos(250), this.getUIPos(300))
+      this.add.sprite(this.helpBack.x - this.getUIPos(200), this.helpBack.y, "arrow")
+      .setDisplaySize(this.getUIPos(50), this.getUIPos(63))
       .setScrollFactor(0, 0)
       .setDepth(10)
-      .setInteractive()
+      .setFlipX(true)
+      .setInteractive({ cursor: 'pointer' })
       .on("pointerup", () => {
         helpIdx--;
         helpIdx = helpIdx < 0? 0 : helpIdx;
@@ -1383,11 +1385,11 @@ export default class FootballPassScene extends Phaser.Scene {
     )
 
     this.helpGroup.add(
-      this.add.sprite(this.helpBack.x + this.getUIPos(200), this.helpBack.y, "ring1")
-      .setDisplaySize(this.getUIPos(250), this.getUIPos(300))
+      this.add.sprite(this.helpBack.x + this.getUIPos(200), this.helpBack.y, "arrow")
+      .setDisplaySize(this.getUIPos(50), this.getUIPos(63))
       .setScrollFactor(0, 0)
       .setDepth(10)
-      .setInteractive()
+      .setInteractive({ cursor: 'pointer' })
       .on("pointerup", () => {
         helpIdx++;
         helpIdx = helpIdx > 4? 4 : helpIdx;
