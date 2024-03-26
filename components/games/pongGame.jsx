@@ -72,7 +72,7 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
         physics: {
           default: "arcade",
           arcade: {
-            // debug: true,
+            debug: true,
             gravity: { y: 0 },
           },
         },

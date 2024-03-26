@@ -10,6 +10,7 @@ let w: number,
   ballR: number,
   backW: number;
 
+
 let lastPos = {
   x: 300, y :0, id: 1,
   ballPos : {
@@ -26,7 +27,7 @@ let HIT_STATUS = {
 let GAME = {
   level: 1,
   ball: 3,
-  light: 100,
+  light: 0,
   coin: 0,
   ring: 0,
   passRing: 0,
@@ -90,7 +91,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     console.log(w)
-    ballR = 50 * w / 375;
+    ballR = 100 * w / 375;
     wingR = 30 * w / 375;
     scr = h * 0.08;
     mW = w / 2;
@@ -123,13 +124,19 @@ export default class FlyCollectScene extends Phaser.Scene {
     this.load.image("ball", getImageWithSize(this.params.playerSprite, ballR, ballR));
 
 
-    this.load.image("ball", "/pong/" + gameType + "/ball.png");
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
 
     this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
     this.load.image("fence", this.params.sponsorLogo);
+
+    this.load.spritesheet(
+      'ball_anim',
+      '/pong/' + gameType + '/ball/ball-anim.png',
+      { frameWidth: 200, frameHeight: 300 }
+    );
+
 
     // AUDIO
     this.load.audio("bg", "/pong/" + gameType + "/sound/bg.mp3");
@@ -325,13 +332,29 @@ export default class FlyCollectScene extends Phaser.Scene {
     // GAME
 
 
+    // ANIM
+    const ball_frame = this.anims.generateFrameNames('ball_anim', {
+      start: 0,
+      end: 3,
+    });
+
+    this.anims.create({
+      key: 'ball_anim',
+      frames: ball_frame,
+      frameRate: 5,
+      repeat: -1,
+    });
+    // END ANIM
+
+
     this.ball = this.physics.add.sprite(0.2 * w, 0.4 * h, 'ball')
-    .setDisplaySize(ballR, ballR)
+    .setDisplaySize(ballR, ballR * 1.5)
     .setOrigin(0.5, 0.5)
-    .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+    .setBodySize(ballR * 1.5, ballR * 2.25)
     .setBounce(1, 1)
     .setPushable(true).setDepth(10);
     
+    this.ball.play("ball_anim").setDisplaySize(ballR, ballR * 1.5).setOrigin(0.5, 0.5).setBodySize(ballR * 1.5, ballR * 2.25)
 
     this.emitter = this.add.particles(0, 0, 'fx', {
       tint: 0xdddddd,
@@ -356,17 +379,17 @@ export default class FlyCollectScene extends Phaser.Scene {
     // })
     // this.snowEmitter.stop();
 
-    this.wings = [];
-    this.wings.push(
-      this.physics.add.sprite(0, 0, 'wing').setOrigin(0.8, 1).setDisplaySize(wingR, wingR).setAngle(30).setDepth(9)
-    )
-    this.wings.push(
-      this.add.sprite(0, 0, 'wing').setOrigin(1.3, 1).setDisplaySize(wingR, wingR).setAngle(30).setDepth(11)
-    )
+    // this.wings = [];
+    // this.wings.push(
+    //   this.physics.add.sprite(0, 0, 'wing').setOrigin(0.8, 1).setDisplaySize(wingR, wingR).setAngle(30).setDepth(9)
+    // )
+    // this.wings.push(
+    //   this.add.sprite(0, 0, 'wing').setOrigin(1.3, 1).setDisplaySize(wingR, wingR).setAngle(30).setDepth(11)
+    // )
 
     this.ballGroup = this.add.group();
-    this.ballGroup.add(this.wings[0]);
-    this.ballGroup.add(this.wings[1]);
+    // this.ballGroup.add(this.wings[0]);
+    // this.ballGroup.add(this.wings[1]);
 
 
     this.additionalSpriteOne.setInteractive();
@@ -394,19 +417,23 @@ export default class FlyCollectScene extends Phaser.Scene {
   }
 
   setBallAction() {
-    this.wings.forEach(wing => {
-      wing.setAngle(50);
-      this.tweens.add({
-        targets: wing,
-        duration: 200,
-        rotation: 0,
-        repeat: 0,
-      })
-    });
+    // this.wings.forEach(wing => {
+    //   wing.setAngle(50);
+    //   this.tweens.add({
+    //     targets: wing,
+    //     duration: 200,
+    //     rotation: 0,
+    //     repeat: 0,
+    //   })
+    // });
 
     this.ball.setGravityY(1700);
     this.ball.setVelocityY(-500);
     this.ball.setVelocityX(120);
+
+    this.ball.play("ball_anim")
+    this.ball.setDisplaySize(ballR, ballR * 1.5)
+    this.ball.setOrigin(0.5, 0.5).setBodySize(ballR * 1.5, ballR * 2.25)
 
     this.jump.play();
   }
@@ -449,9 +476,9 @@ export default class FlyCollectScene extends Phaser.Scene {
     const isMove = true;
 
     const sizeRate = STATUS.magnify? 1.3 : 1;
-    const objW = 120 * sizeRate * w / 375;
-    const objH = 60 * sizeRate * w / 375;
-    const radius = objH / 1.8 * w / 375;
+    const objW = 200 * sizeRate * w / 375;
+    const objH = 100 * sizeRate * w / 375;
+    const radius = objW / 2.4 * w / 375;
     const top = this.add.sprite(x, y, 'hoop_t').setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle)
     const down = this.add.sprite(x, y, 'hoop_d').setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(12).setAngle(angle)
 
@@ -874,7 +901,8 @@ export default class FlyCollectScene extends Phaser.Scene {
 
   addItemEffect(type, during = 4000) {
     if(type == "shrink") {
-      this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2 * 0.7).setDisplaySize(ballR * 0.7, ballR * 0.7)
+      // this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2 * 0.7).setDisplaySize(ballR * 0.7, ballR * 0.7)
+      this.ball.setDisplaySize(ballR * 0.7, ballR * 0.7)
     }
     if(type == "magnify") {
       this.obstacles.forEach(obstacle => {
@@ -902,7 +930,8 @@ export default class FlyCollectScene extends Phaser.Scene {
 
   initItemEffect(type) {
     if(type == "shrink") {
-      this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2).setDisplaySize(ballR, ballR)
+      // this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2).setDisplaySize(ballR, ballR)
+      this.ball.setDisplaySize(ballR, ballR)
       STATUS.shrink = false;
     }
     if(type == "magnify") {

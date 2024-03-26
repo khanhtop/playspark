@@ -26,7 +26,7 @@ let HIT_STATUS = {
 let GAME = {
   level: 1,
   ball: 3,
-  light: 100,
+  light: 0,
   coin: 0,
   ring: 0,
   passRing: 0,
