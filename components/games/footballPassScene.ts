@@ -732,7 +732,6 @@ export default class FootballPassScene extends Phaser.Scene {
 
         this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X ${scoreSystem.touchdown} = ${this.status["score"].touchDown * scoreSystem.touchdown}`);
         this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X ${scoreSystem.firstdown} = ${this.status["score"].firstDown * scoreSystem.firstdown}`);
-        this.gameoverTexts["passstreak"].setText(`EARNED = ${this.status["score"].passStreak * 500}`);
         this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X ${scoreSystem.yard} = ${this.status["score"].runYards * scoreSystem.yard}`);
         this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
 
@@ -1259,13 +1258,6 @@ export default class FootballPassScene extends Phaser.Scene {
       fontSize: this.getUIPos(30) + "px",
     }).setOrigin(1, 0.5).setScrollFactor(0, 0);
 
-    this.gameoverTexts["passstreak"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(90), "EARNED = 0", {
-      ...this.text_main_style,
-      fill: "#fff",
-      align: 'right',
-      fontSize: this.getUIPos(30) + "px",
-    }).setOrigin(1, 0.5).setScrollFactor(0, 0).setVisible(false);
-
     this.gameoverTexts["runyards"] = this.add.text(gameOver.x + rightX, gameOver.y + this.getUIPos(90), "20 X 30 = 600", {
       ...this.text_main_style,
       fill: "#fff",
@@ -1284,7 +1276,6 @@ export default class FootballPassScene extends Phaser.Scene {
     this.gameOverGroup.add(this.gameoverTexts["reachlevel"]);
     this.gameOverGroup.add(this.gameoverTexts["touchdowns"]);
     this.gameOverGroup.add(this.gameoverTexts["firstdowns"]);
-    this.gameOverGroup.add(this.gameoverTexts["passstreak"]);
     this.gameOverGroup.add(this.gameoverTexts["runyards"]);
     this.gameOverGroup.add(this.gameoverTexts["gametotal"]);
 
@@ -1306,15 +1297,6 @@ export default class FootballPassScene extends Phaser.Scene {
         align: 'right',
         fontSize: this.getUIPos(30) + "px",
       }).setOrigin(0.5, 0.5).setScrollFactor(0, 0)
-    )
-
-    this.gameOverGroup.add(
-      this.add.text(gameOver.x + leftX, gameOver.y + this.getUIPos(90), "PASS STREAK", {
-        ...this.text_main_style,
-        fill: "#f3cb04",
-        align: 'right',
-        fontSize: this.getUIPos(30) + "px",
-      }).setOrigin(0.5, 0.5).setScrollFactor(0, 0).setVisible(false)
     )
 
     this.gameOverGroup.add(
@@ -1513,7 +1495,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
       if (heartNum === 0) {
         // Game lost
-        this.loseGame();
+        // this.loseGame();
         return true;
       }
       return false;
@@ -1987,13 +1969,16 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.gameoverTexts["touchdowns"].setText(`${this.status["score"].touchDown} X ${scoreSystem.touchdown} = ${this.status["score"].touchDown * scoreSystem.touchdown}`);
     this.gameoverTexts["firstdowns"].setText(`${this.status["score"].firstDown} X ${scoreSystem.firstdown} = ${this.status["score"].firstDown * scoreSystem.firstdown}`);
-    this.gameoverTexts["passstreak"].setText(`EARNED = ${this.status["score"].passStreak * 500}`);
     this.gameoverTexts["runyards"].setText(`${this.status["score"].runYards} X ${scoreSystem.yard} = ${this.status["score"].runYards * scoreSystem.yard}`);
     this.gameoverTexts["gametotal"].setText(`${this.getTotalScore()}`);
 
-    this.gameOverGroup.setVisible(true);
-    this.loseLife();
-    this.time.delayedCall(4000, this.initGame, [], this);
+    const isEnd = this.loseLife();
+    if(isEnd) {
+      this.gameOverGroup.setVisible(true);
+      this.time.delayedCall(4000, this.loseGame, [], this);
+    } else {
+      this.time.delayedCall(4000, this.initGame, [], this);
+    }
   }
 
   powerupUpdate(delta) {
@@ -2018,6 +2003,13 @@ export default class FootballPassScene extends Phaser.Scene {
     this.scoreUpdate();
     this.timeUpdate();
     this.powerupUpdate(delta);
+
+    if(this.physics.overlap(this.player, this.aiEnemies)) {
+      
+    } else {
+
+    }
+
     if(this.status.isBallPlayer) {
       this.ball.setPosition(this.player.x + playerR / 4, this.player.y - playerR / 3.4);
     } 
