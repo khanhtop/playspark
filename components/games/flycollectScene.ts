@@ -902,7 +902,8 @@ export default class FlyCollectScene extends Phaser.Scene {
   addItemEffect(type, during = 4000) {
     if(type == "shrink") {
       // this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2 * 0.7).setDisplaySize(ballR * 0.7, ballR * 0.7)
-      this.ball.setDisplaySize(ballR * 0.7, ballR * 0.7)
+    this.ball.setDisplaySize(ballR * 0.7, ballR * 1.5 * 0.7).setOrigin(0.5, 0.5).setBodySize(ballR * 1.5 * 0.7, ballR * 2.25 * 0.7)
+
     }
     if(type == "magnify") {
       this.obstacles.forEach(obstacle => {
@@ -931,7 +932,8 @@ export default class FlyCollectScene extends Phaser.Scene {
   initItemEffect(type) {
     if(type == "shrink") {
       // this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2).setDisplaySize(ballR, ballR)
-      this.ball.setDisplaySize(ballR, ballR)
+      this.ball.setDisplaySize(ballR, ballR * 1.5).setOrigin(0.5, 0.5).setBodySize(ballR * 1.5, ballR * 2.25)
+
       STATUS.shrink = false;
     }
     if(type == "magnify") {
