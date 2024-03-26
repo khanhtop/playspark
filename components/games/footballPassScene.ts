@@ -1464,10 +1464,10 @@ export default class FootballPassScene extends Phaser.Scene {
     this.status["startGameTime"] = new Date().getTime();
     this.status.isRound = true;
 
-    this.status["score"].touchDown = 0;
-    this.status["score"].firstDown = 0;
-    this.status["score"].passStreak = 0;
-    this.status["score"].runYards = 0;
+    // this.status["score"].touchDown = 0;
+    // this.status["score"].firstDown = 0;
+    // this.status["score"].passStreak = 0;
+    // this.status["score"].runYards = 0;
     this.status.roundNum = 1;
 
     this.posObject.startPos.y = 160 + 140 * 11;
