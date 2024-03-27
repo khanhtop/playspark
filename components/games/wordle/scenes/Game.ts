@@ -12,6 +12,7 @@ import { GuidePart } from "./GuidePart";
 import { GameComletePart } from "./GameCompletPart";
 
 import { getImageWithSize } from "@/helpers/cloudinary";
+import { WordCompletePart } from "./WordCompletePart";
 
 let w: number,
   h: number,
@@ -73,14 +74,21 @@ export default class WordleScene extends Phaser.Scene {
 
   constructor(newGameType: string, newParams: any) {
     super("GameScene");
+    Observer.emitter.destroy()
+    Observer.emitter = new Phaser.Events.EventEmitter();
+
     WordleScene.instance = this;
     gameType = newGameType;
 
     this.params = newParams;
-    sampleWords = Helper.shuffle(["TOUCH", "COUCH", "TOUCH", "TOUCH", "TOUCH"]); //[...this.params.words])
+    console.log("word from server: ", this.params.words);
+    if (this.params.words.length == 0)
+      this.params.words = ["TOUCH", "COUCH", "TOUCH"];
+    sampleWords = Helper.shuffle([...this.params.words]); //Helper.shuffle(["TOUCH", "COUCH", "TOUCH", "TOUCH", "TOUCH"]); //reza [...this.params.words])
   }
 
   preload() {
+    
     w = this.game.canvas.clientWidth;
 
     h = this.game.canvas.clientHeight;
@@ -102,7 +110,9 @@ export default class WordleScene extends Phaser.Scene {
     heartR = w * 0.0625;
     heartNum = 10; //this.params.lives
 
-    this.params.backgroundSprite =  !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + "/bg.jpg";
+    this.params.backgroundSprite = !!this.params.backgroundSprite
+      ? getImageWithSize(this.params.backgroundSprite, w, h)
+      : "/pong/" + gameType + "/bg.jpg";
 
     this.load.image("bg", this.params.backgroundSprite);
     ImageLoader.load(this, gameType);
@@ -135,7 +145,13 @@ export default class WordleScene extends Phaser.Scene {
   // 400 800
 
   create() {
+   
     soundManager.init(this);
+
+    Observer.emitter.on("on_all_word_coplete_btn_click",()=>{
+      if (this.scoreHandler != undefined) this.scoreHandler(GAME.SCORE);
+    });
+
 
     let bg = this.add
       .image(0, 0, "bg")
@@ -222,10 +238,14 @@ export default class WordleScene extends Phaser.Scene {
     (LAYOUT as any)[CONSTS.LAYOUT_KEYS.MENU].setVisible(true);
 
     // GAME PART
-    GamePart.init(this, LAYOUT, UI, mW, mH, w, h, this.onSubmint, sampleWords);
+    GamePart.init(this, LAYOUT, UI, mW, mH, w, h, ()=>{this.onSubmint()}, sampleWords);
     // bonus part
-    //BonusPart.init(this, LAYOUT, UI, mW, mH, w, h);
+    BonusPart.init(this, LAYOUT, UI, mW, mH, w, h);
+
     GameComletePart.init(this, LAYOUT, UI, mW, mH, w, h);
+
+    // WordCompletePart.init(this, LAYOUT, UI, mW, mH, w, h);
+
     //scre part
     ScorePart.init(this, LAYOUT, UI, mW, mH, w, h);
     // GAME GUIDE PART
@@ -271,6 +291,7 @@ export default class WordleScene extends Phaser.Scene {
 
     Observer.emitter.emit("btn_click");
 
+    
     const word = GAME.TYPING;
 
     const compare_word = sampleWords[GAME.STREAK].toLocaleUpperCase();
@@ -291,6 +312,16 @@ export default class WordleScene extends Phaser.Scene {
       (UI as any)[`input_${word[i]}`].setTexture(`inp${key}`);
     });
     if (isSuccess == 5) {
+      GAME.STREAK++;
+
+      if (GAME.STREAK == sampleWords.length) {
+        Helper.addScreen(LAYOUT, CONSTS.LAYOUT_KEYS.GAME_COMPLETE);
+        GAME.PAUSE = true;
+        Observer.emitter.emit("onWinGame");
+        
+        return;
+      }
+
       Observer.emitter.emit("onWinGame");
 
       const score = SCORE_SYSTEM[GAME.LINE].score;
@@ -301,7 +332,7 @@ export default class WordleScene extends Phaser.Scene {
       //console.log(UI ,CONSTS.UI_KEYS.COIN_BONUS,(UI as any)[CONSTS.UI_KEYS.COIN_BONUS],GAME.CUR_COIN);
       //(UI as any)[CONSTS.UI_KEYS.COIN_BONUS].setText(`Claim ${GAME.CUR_COIN}`);
 
-      GAME.STREAK++;
+    
       (UI as any)[CONSTS.UI_KEYS.SCORE_LAYOUT_STREAK].setText(GAME.STREAK);
       Helper.score(UI, score);
     } else if (GAME.LINE == 5) {

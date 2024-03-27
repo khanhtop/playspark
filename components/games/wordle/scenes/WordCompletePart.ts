@@ -4,7 +4,7 @@ import { Observer } from "./Observer";
 import { CONSTS } from "./Consts";
 import { GAME } from "./GameConfg";
 
-export class GameComletePart {
+export class WordCompletePart {
   public static init(
     app: Scene,
     LAYOUT: any,
@@ -14,7 +14,7 @@ export class GameComletePart {
     w: number,
     h: number
   ) {
-    const GAME_COMPLETE_PART = (LAYOUT as any)[CONSTS.LAYOUT_KEYS.GAME_COMPLETE];
+    const WORD_COMPLETE_PART = (LAYOUT as any)[CONSTS.LAYOUT_KEYS.WORD_COMPLETE];
 
     let black_bg = app.add
       .graphics()
@@ -27,9 +27,9 @@ export class GameComletePart {
       black_bg.fillRect(0, 0, _w, _h);
     });
 
-    GAME_COMPLETE_PART.add(black_bg);
+    WORD_COMPLETE_PART.add(black_bg);
 
-    GAME_COMPLETE_PART.add(
+    WORD_COMPLETE_PART.add(
       app.add
         .sprite(mW, mH - 40, "popup_bg")
         .setDisplaySize(
@@ -38,7 +38,7 @@ export class GameComletePart {
         )
     );
 
-    GAME_COMPLETE_PART.add(
+    WORD_COMPLETE_PART.add(
       Helper.addButton(
         UI,
         app,
@@ -48,10 +48,10 @@ export class GameComletePart {
         mW,
         mH - Helper.convertScaleData(200),
         "NICE!",
-        GAME_COMPLETE_PART,
+        WORD_COMPLETE_PART,
         "#fff",
         () => {
-          Helper.changeScreen(LAYOUT, CONSTS.LAYOUT_KEYS.GAME_COMPLETE, false);
+          Helper.changeScreen(LAYOUT, CONSTS.LAYOUT_KEYS.WORD_COMPLETE, false);
           Helper.addScreen(LAYOUT, CONSTS.LAYOUT_KEYS.SCORE);
           GAME.PAUSE = true;
           GAME.COIN += GAME.CUR_COIN;
@@ -77,7 +77,7 @@ export class GameComletePart {
       })
 */
 
-    app.anims.create({
+    /*app.anims.create({
       key: "diamond",
       frames: app.anims.generateFrameNumbers("gems", {
         frames: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
@@ -87,19 +87,19 @@ export class GameComletePart {
       repeatDelay: 1000,
     });
 
-    GAME_COMPLETE_PART.add(
+    WORD_COMPLETE_PART.add(
       app.add
         .sprite(mW, mH - Helper.convertScaleData(80), "gems")
         .play("diamond")
         .setScale(0.35)
     );
-
-    GAME_COMPLETE_PART.add(
+*/
+    WORD_COMPLETE_PART.add(
       app.add
         .text(
           mW,
-          mH - Helper.convertScaleData(-40),
-          "You have completed \n all the words!"
+          mH - Helper.convertScaleData(50),
+          "Great job! \n Let's keep the streak going."
         )
         .setOrigin(0.5, 0.5)
         .setStyle({
@@ -109,7 +109,7 @@ export class GameComletePart {
         })
     );
 
-    GAME_COMPLETE_PART.add(
+    WORD_COMPLETE_PART.add(
       Helper.addButton(
         UI,
         app,
@@ -118,18 +118,18 @@ export class GameComletePart {
         Helper.convertScaleData(70),
         mW,
         mH + Helper.convertScaleData(100),
-        "Continue",
-        GAME_COMPLETE_PART,
+        "Next",
+        WORD_COMPLETE_PART,
         "#fff",
         () => {
-         // Helper.changeScreen(LAYOUT, CONSTS.LAYOUT_KEYS.GAME_COMPLETE, false);
-         // Helper.startRound(UI);
-         Observer.emitter.emit("on_all_word_coplete_btn_click");
+          Helper.changeScreen(LAYOUT, CONSTS.LAYOUT_KEYS.WORD_COMPLETE, false);
+          Helper.startRound(UI);
+
           Observer.emitter.emit("btn_click");
         }
       )
     );
 
-    GAME_COMPLETE_PART.setVisible(false);
+    WORD_COMPLETE_PART.setVisible(false);
   }
 }

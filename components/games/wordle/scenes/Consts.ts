@@ -6,6 +6,8 @@ export class CONSTS {
     BONUS: "BONUS",
     SCORE: "SCORE",
     GUIDE: "GUIDE",
+    WORD_COMPLETE: "WORD_COMPLETE",
+    GAME_COMPLETE: "GAME_COMPLETE",
   };
 
   public static UI_KEYS = {

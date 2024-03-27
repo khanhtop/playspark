@@ -10,6 +10,7 @@ export class SoundManager {
   private sound: any;
 
   public loadAudios(app: Scene, gameType: string) {
+    console.log("000000 load soubds");
     app.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
     app.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     app.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
@@ -22,6 +23,8 @@ export class SoundManager {
     app.load.audio("submit", "/pong/" + gameType + "/sfx/submit.wav");
   }
   public init(app: Scene) {
+    console.log("000000 init soubds");
+
     //reza this.sound.add("bg").setLoop(true).play();
     app.sound.add("bg").play();
 
@@ -44,7 +47,14 @@ export class SoundManager {
       Observer.emitter.on(
         item[0],
         () => {
-          item[1].play();
+          console.log(item);
+
+          try {
+            item[1].play();
+          } catch (e) {
+            console.log(e);
+          } finally {
+          }
         },
         this
       );
