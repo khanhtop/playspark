@@ -47,9 +47,7 @@ export class SoundManager {
       Observer.emitter.on(
         item[0],
         () => {
-          console.log(item);
-
-          try {
+               try {
             item[1].play();
           } catch (e) {
             console.log(e);
