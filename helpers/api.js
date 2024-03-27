@@ -228,7 +228,7 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
-  
+
   if (id === 19)
     return (
       <Pong
@@ -381,7 +381,7 @@ export async function completeBattleForChallengee(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      template: 1,
+      template: challengerWon ? 2 : 1,
       email: challengeeEmail,
       name: challengerName,
       subject: `The battle with ${challengerName} has ended!`,
@@ -389,7 +389,7 @@ export async function completeBattleForChallengee(
       url: `https://playspark.co/battle/${challengeId}`,
       customText: `${
         challengerWon ? "You Lost" : "You Won"
-      } the battle with ${challengerName}`,
+      } the battle with ${challengerName} with a score of ${score} vs ${challengerScore} in ${gameName}`,
     }),
   });
   await fetch("/api/email", {
@@ -398,15 +398,15 @@ export async function completeBattleForChallengee(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      template: 1,
+      template: challengerWon ? 1 : 2,
       email: challengerEmail,
       name: challengeeName,
       subject: `The battle with ${challengeeName} has ended!`,
       game: gameName,
       url: `https://playspark.co/battle/${challengeId}`,
       customText: `${
-        challengerWon ? "You Lost" : "You Won"
-      } the battle with ${challengerName}`,
+        challengerWon ? "You Won" : "You Lost"
+      } the battle with ${challengeeName} with a score of ${challengerScore} vs ${score} in ${gameName}`,
     }),
   });
   await updateDoc(doc(firestore, "challenges", challengeId), {

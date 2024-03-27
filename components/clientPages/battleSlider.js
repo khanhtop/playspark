@@ -1,16 +1,77 @@
+import { createChallenge } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function BattleSlider({ clientId }) {
+export default function BattleSlider({
+  clientId,
+  user,
+  leaderboard,
+  tournaments,
+}) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
+  const filteredPlayers = leaderboard.filter(
+    (a) => a.id !== context?.loggedIn?.uid
+  );
+
+  if (!context?.loggedIn?.uid || !context?.battles) return <div />;
 
   if (
-    !context?.loggedIn?.uid ||
-    !context?.battles ||
     context?.battles?.filter((a) => a.game.ownerId === clientId)?.length === 0
   )
-    return <div />;
+    return (
+      <>
+        <h1 className="px-5 mt-8 font-octo text-2xl tracking-wider text-white/90">
+          Battles
+        </h1>
+        <div className="overflow-x-scroll whitespace-nowrap px-6 no-scrollbar pb-4">
+          <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+            <BattleInviteCard
+              battle={{ game: {} }}
+              tournament={
+                tournaments[Math.floor(Math.random() * tournaments.length)]
+              }
+              me={context?.profile}
+              you={
+                filteredPlayers[
+                  Math.floor(Math.random() * filteredPlayers.length)
+                ]
+              }
+            />
+          </div>
+          <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+            <BattleInviteCard
+              battle={{ game: {} }}
+              tournament={
+                tournaments[Math.floor(Math.random() * tournaments.length)]
+              }
+              me={context?.profile}
+              you={
+                filteredPlayers[
+                  Math.floor(Math.random() * filteredPlayers.length)
+                ]
+              }
+            />
+          </div>
+          <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+            <BattleInviteCard
+              battle={{ game: {} }}
+              tournament={
+                tournaments[Math.floor(Math.random() * tournaments.length)]
+              }
+              me={context?.profile}
+              you={
+                filteredPlayers[
+                  Math.floor(Math.random() * filteredPlayers.length)
+                ]
+              }
+            />
+          </div>
+        </div>
+      </>
+    );
 
   return (
     <>
@@ -30,6 +91,27 @@ export default function BattleSlider({ clientId }) {
         />
       </div>
       <div className="overflow-x-scroll whitespace-nowrap px-6 no-scrollbar pb-4">
+        {/* <button
+          onClick={() => {
+            fetch("/api/email", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: "hello@jlgn.io",
+                template: 2,
+                name: "THE WINNER",
+                subject: `The battle with THE WINNER has ended!`,
+                game: "SOME GAME",
+                url: `https://playspark.co/battle/123`,
+                customText: `YOU LOST THE BATTLE WITH THE WINNER`,
+              }),
+            });
+          }}
+        >
+          Email
+        </button> */}
         {context?.battles
           ?.filter((a) => a.game.ownerId === clientId)
           ?.filter((a) =>
@@ -60,6 +142,58 @@ function Tab({ text, selected, setSelected }) {
       }`}
     >
       <p>{text}</p>
+    </div>
+  );
+}
+
+function BattleInviteCard({ tournament, me, you, battle, myUid }) {
+  const [loading, setLoading] = useState(false);
+  const context = useAppContext();
+  const router = useRouter();
+  return (
+    <div className="inline-block h-48 w-72 relative rounded-3xl overflow-hidden">
+      <img src="/battle/vsbg.jpg" className="h-full w-full object-cover" />
+      <div className="absolute top-0 left-0 bg-black/70 h-full w-full px-4 py-4 flex flex-col">
+        <div className="flex gap-2 items-start">
+          <img
+            src={tournament?.backgroundImage}
+            className="h-8 w-8 rounded-full object-cover"
+          />
+          <p className="font-octo mt-[4px]">Battle | {tournament?.name}</p>
+        </div>
+        <div className="flex-1 flex items-center justify-center">
+          <Battler data={me} isComplete={false} myUid={myUid} won={false} />
+          <p className="font-octo text-3xl">VS</p>
+          <Battler data={you} isComplete={false} myUid={myUid} won={false} />
+        </div>
+        <div className="flex gap-2 items-start">
+          <div className="flex w-full justify-end gap-2 font-octo">
+            <button
+              onClick={async () => {
+                setLoading(true);
+                const id = await createChallenge(
+                  tournament,
+                  you,
+                  {
+                    ...context.profile,
+                    id: context?.loggedIn.uid,
+                  },
+                  router.asPath
+                );
+                router.push("/battle/" + id);
+                setLoading(false);
+              }}
+              className="bg-purple-500 px-4 h-6 rounded-xl"
+            >
+              {loading ? (
+                <ArrowPathIcon className="h-4 w-4 animate-spin " />
+              ) : (
+                `Battle ${you?.companyName} at ${tournament?.name}`
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

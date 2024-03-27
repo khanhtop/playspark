@@ -12,6 +12,13 @@ export default async function handler(req, res) {
     }),
     EndTemplate({
       customText: customText,
+      image: "https://files.reimage.dev/playspark/3260ea22a28b/h-100.avif",
+      subject: subject,
+    }),
+    EndTemplate({
+      customText: customText,
+      image: "https://files.reimage.dev/playspark/4ea7ce29880c/h-100.avif",
+      subject: subject,
     }),
   ];
 
@@ -28,18 +35,42 @@ export default async function handler(req, res) {
 }
 
 const ChallengeTemplate = ({ challengerName, customText, url }) => (
-  <div>
-    <h1>A Battle Has Begun with {challengerName}!</h1>
-    <p>{customText}</p>
-    <p>
-      Accept the challenge by visiting <a href={url}>{url}</a>
-    </p>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "flex-col",
+      alignItems: "center",
+      justifyContent: "center",
+    }}
+  >
+    <h1
+      style={{ textAlign: "center" }}
+      className="text-2xl font-bold text-center"
+    >
+      A Battle Has Begun with {challengerName}!
+    </h1>
+    <img
+      src="https://files.reimage.dev/playspark/9f13bb5b892b/h-100.avif"
+      style={{
+        height: 60,
+      }}
+    />
+    <h3>{customText}</h3>
+    <h3>
+      Click <a href={url}>Here</a> to accept the battle!
+    </h3>
   </div>
 );
 
-const EndTemplate = ({ customText }) => (
+const EndTemplate = ({ customText, image, subject }) => (
   <div>
-    <h1>The battle has ended!</h1>
-    <p>{customText}</p>
+    <h1>{subject}</h1>
+    <img
+      src={image}
+      style={{
+        height: 60,
+      }}
+    />
+    <h3>{customText}</h3>
   </div>
 );

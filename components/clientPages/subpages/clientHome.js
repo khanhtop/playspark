@@ -34,7 +34,12 @@ export default function ClientHome({
         context={context}
         totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
       />
-      <BattleSlider clientId={user.id} />
+      <BattleSlider
+        clientId={user.id}
+        client={user}
+        tournaments={tournaments}
+        leaderboard={leaderboard}
+      />
       <HorizontalGamesScroll
         prizes={prizes}
         showPrizes
