@@ -1904,10 +1904,21 @@ export default class FootballPassScene extends Phaser.Scene {
     this.status["score"].runYards += this.status["runDistance"];
     this.status["runDistance"] = 0;
 
+    this.onInitPlayerVelocity();
     console.log("add run yards : " + this.status["runDistance"], "total: ", this.getTotalScore());
 
     this.time.delayedCall(2000, this.startRound, [], this);
 
+  }
+
+  onInitPlayerVelocity() {
+    this.player.setVelocity(0, 0)
+    this.aiEnemies.forEach(e => {
+      e.setVelocity(0, 0)
+    })
+    this.aiPlayers.forEach(p => {
+      p.setVelocity(0, 0)
+    })
   }
 
   onTackled() {
