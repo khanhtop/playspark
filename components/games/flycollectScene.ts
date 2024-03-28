@@ -81,7 +81,8 @@ export default class FlyCollectScene extends Phaser.Scene {
     this.params = newParams;
     console.log(this.params)
     this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : ("/pong/" + gameType + "/background/bg1.jpg");
-    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : "/pong/" + gameType + "/ball/ball1.png";
+    // this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : "/pong/" + gameType + "/ball/ball1.png";
+    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + '/ball/ball-anim.png';
     this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite : "/pong/" + gameType + "/UI/light.png";
     this.params.sponsorLogo = !!this.params.sponsorLogo? this.params.sponsorLogo : "/pong/" + gameType + "/fence.png";
   }
@@ -91,7 +92,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     console.log(w)
-    ballR = 100 * w / 375;
+    ballR = 70 * w / 375;
     wingR = 30 * w / 375;
     scr = h * 0.08;
     mW = w / 2;
@@ -125,7 +126,7 @@ export default class FlyCollectScene extends Phaser.Scene {
 
 
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
-    this.load.image("heart", "/pong/" + gameType + "/heart.png");
+    this.load.image("heartUI", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
 
     this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
@@ -133,7 +134,8 @@ export default class FlyCollectScene extends Phaser.Scene {
 
     this.load.spritesheet(
       'ball_anim',
-      '/pong/' + gameType + '/ball/ball-anim.png',
+      // '/pong/' + gameType + '/ball/ball-anim.png',
+      getImageWithSize(this.params.playerSprite, 300, 200 * 5),
       { frameWidth: 200, frameHeight: 300 }
     );
 
@@ -211,7 +213,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     .setOrigin(0.5, 0.5);
     const headerW = w * 0.25;
     this.add.sprite(headerW * 0.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setScrollFactor(0, 0).setDisplaySize(headerW, 40);
-    this.add.sprite(90, topOffset - 5, 'ball' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
+    this.add.sprite(90, topOffset - 5, 'heartUI' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
     this.ballTxt = this.add
     .text(120, topOffset - 5, "2", {
       fontFamily: "TitanOne-Regular",
@@ -476,8 +478,8 @@ export default class FlyCollectScene extends Phaser.Scene {
     const isMove = true;
 
     const sizeRate = STATUS.magnify? 1.3 : 1;
-    const objW = 200 * sizeRate * w / 375;
-    const objH = 100 * sizeRate * w / 375;
+    const objW = 200 * 0.6 * sizeRate * w / 375;
+    const objH = 100 * 0.6 * sizeRate * w / 375;
     const radius = objW / 2.4 * w / 375;
     const top = this.add.sprite(x, y, 'hoop_t').setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle)
     const down = this.add.sprite(x, y, 'hoop_d').setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(12).setAngle(angle)
@@ -693,7 +695,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     y += (0.5 - Math.random()) * 300;
     // const type = (Math.random() < 0.5)? "light" : "coin"
     const type = "light";
-    const item = this.physics.add.sprite(x, y, type).setDisplaySize(40, 40)
+    const item = this.physics.add.sprite(x, y, type).setDisplaySize(60, 60)
     const col = this.physics.add.overlap(this.ball, item, () => {
       if(type == "light") {
         this.item_light.play();
