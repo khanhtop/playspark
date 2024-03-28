@@ -1173,7 +1173,7 @@ export default class FootballPassScene extends Phaser.Scene {
         this
       )
 
-      this.physics.add.collider(
+      this.physics.add.overlap(
         this.player,
         this.aiEnemies[i],
         () => {
@@ -1186,18 +1186,6 @@ export default class FootballPassScene extends Phaser.Scene {
         this
       )
 
-      this.physics.add.overlap(
-        this.ball,
-        this.aiEnemies[i],
-        () => {
-          // console.log("SACKED!!")
-          // if(this.status.isSacked || !this.status.isBallPlayer || !this.status.isPlaying) return;
-          // this.status.isSacked = true;
-          // this.onCatchLogic("sacked");
-        },
-        null,
-        this
-      )
     }
     this.physics.add.collider(
       this.aiEnemies,
