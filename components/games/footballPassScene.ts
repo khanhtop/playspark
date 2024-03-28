@@ -23,6 +23,8 @@ let w: number,
 let helpIdx = 0;
 let power = 0;
 
+let tackleTime = 0;
+
 let gameType = "football";
 
 let boardW = 800;
@@ -1188,10 +1190,10 @@ export default class FootballPassScene extends Phaser.Scene {
         this.ball,
         this.aiEnemies[i],
         () => {
-          console.log("SACKED!!")
-          if(this.status.isSacked || !this.status.isBallPlayer || !this.status.isPlaying) return;
-          this.status.isSacked = true;
-          this.onCatchLogic("sacked");
+          // console.log("SACKED!!")
+          // if(this.status.isSacked || !this.status.isBallPlayer || !this.status.isPlaying) return;
+          // this.status.isSacked = true;
+          // this.onCatchLogic("sacked");
         },
         null,
         this
@@ -1883,13 +1885,6 @@ export default class FootballPassScene extends Phaser.Scene {
         if(this.posObject.startPos.first > this.getRealPos(this.ball.y)) {
           this.posObject.startPos.first = this.getRealPos(this.ball.y);
         }
-
-        // if(y < first) {
-          this.tackle.play();
-        // }
-
-        // this.onTackled();
-
       }
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
       this.status.roundNum = 1;
@@ -1989,12 +1984,17 @@ export default class FootballPassScene extends Phaser.Scene {
   powerupUpdate(delta) {
 
     if (this.isDragging == true && this.status.isThrowBall && this.status.isPlaying) {
-      console.log(power);
-
       power += 3 * (delta / 1000);
       if (power > 15) power = 15;
       this.power_effect.setFrame(Math.round(power));
     }
+  }
+
+  onTackleEvent() {
+    if(this.status.isSacked || !this.status.isBallPlayer || !this.status.isPlaying) return;
+    this.tackle.play();
+    this.status.isSacked = true;
+    this.onCatchLogic("sacked");
   }
 
   update(time, delta) {
@@ -2009,10 +2009,14 @@ export default class FootballPassScene extends Phaser.Scene {
     this.timeUpdate();
     this.powerupUpdate(delta);
 
-    if(this.physics.overlap(this.player, this.aiEnemies)) {
-      
+    if(this.physics.overlap(this.player, this.aiEnemies) && this.status.isBallPlayer) {
+      tackleTime += (delta / 1000);
+      console.log("tackle", tackleTime)
+      if(tackleTime > 1) {
+        this.onTackleEvent();
+      }
     } else {
-
+      tackleTime = 0;
     }
 
     if(this.status.isBallPlayer) {
