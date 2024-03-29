@@ -140,16 +140,9 @@ export default class FlyCollectScene extends Phaser.Scene {
       "additionalSpriteOne",
       getImageWithSize(this.params.additionalSpriteOne, h, backW)
     );
-    // Parameters include
-    // h-<height> //=> Sets the height and retains the aspect ratio
-    // w-<width> //=> Sets the width and retains the aspect ratio
-    // h-<height>_w-<width> // Contrains the image to exact bounds
-    // sprite-sheet //=> Creates a sprite sheet if possible (for example from a GIF)
-    // bg-none // => Removes the background (experimental)
     this.load.image(
       "ball",
-      this.params.playerSprite + "h-300_sprite-sheet.png"
-      // getImageWithSize(this.params.playerSprite, ballR, ballR)
+      getImageWithSize(this.params.playerSprite, ballR, ballR)
     );
 
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
@@ -162,8 +155,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     this.load.spritesheet(
       "ball_anim",
       // '/pong/' + gameType + '/ball/ball-anim.png',
-      // getImageWithSize(this.params.playerSprite, 300, 200 * 5),
-      this.params.playerSprite + "h-300_sprite-sheet.png",
+      getImageWithSize(this.params.playerSprite, 300, 200 * 5),
       { frameWidth: 200, frameHeight: 300 }
     );
 
