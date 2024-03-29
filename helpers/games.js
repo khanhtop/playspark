@@ -264,8 +264,7 @@ export const games = [
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
     additionalSpriteOne:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
-    playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+    playerSprite: "https://files.reimage.dev/playspark/bb08a2e21952/",
     objectSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
