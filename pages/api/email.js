@@ -38,7 +38,7 @@ const ChallengeTemplate = ({ challengerName, customText, url }) => (
   <div
     style={{
       display: "flex",
-      flexDirection: "flex-col",
+      flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
     }}
