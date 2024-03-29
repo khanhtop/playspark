@@ -74,7 +74,7 @@ export default class WordleScene extends Phaser.Scene {
 
   constructor(newGameType: string, newParams: any) {
     super("GameScene");
-    Observer.emitter.destroy()
+    Observer.emitter.destroy();
     Observer.emitter = new Phaser.Events.EventEmitter();
 
     WordleScene.instance = this;
@@ -83,12 +83,13 @@ export default class WordleScene extends Phaser.Scene {
     this.params = newParams;
     console.log("word from server: ", this.params.words);
     if (this.params.words.length == 0)
-     // this.params.words = ["TOUCH", "COUCH", "TOUCH"];
-    sampleWords = Helper.shuffle([...this.params.words]); //Helper.shuffle(["TOUCH", "COUCH", "TOUCH", "TOUCH", "TOUCH"]); //reza [...this.params.words])
+      // this.params.words = ["TOUCH", "COUCH", "TOUCH"];
+      sampleWords = Helper.shuffle([
+        ...(this.params.words?.length > 0 ? this.params.words : sampleWords),
+      ]); //Helper.shuffle(["TOUCH", "COUCH", "TOUCH", "TOUCH", "TOUCH"]); //reza [...this.params.words])
   }
 
   preload() {
-    
     w = this.game.canvas.clientWidth;
 
     h = this.game.canvas.clientHeight;
@@ -145,13 +146,11 @@ export default class WordleScene extends Phaser.Scene {
   // 400 800
 
   create() {
-   
     soundManager.init(this);
 
-    Observer.emitter.on("on_all_word_coplete_btn_click",()=>{
+    Observer.emitter.on("on_all_word_coplete_btn_click", () => {
       if (this.scoreHandler != undefined) this.scoreHandler(GAME.SCORE);
     });
-
 
     let bg = this.add
       .image(0, 0, "bg")
@@ -238,7 +237,19 @@ export default class WordleScene extends Phaser.Scene {
     (LAYOUT as any)[CONSTS.LAYOUT_KEYS.MENU].setVisible(true);
 
     // GAME PART
-    GamePart.init(this, LAYOUT, UI, mW, mH, w, h, ()=>{this.onSubmint()}, sampleWords);
+    GamePart.init(
+      this,
+      LAYOUT,
+      UI,
+      mW,
+      mH,
+      w,
+      h,
+      () => {
+        this.onSubmint();
+      },
+      sampleWords
+    );
     // bonus part
     BonusPart.init(this, LAYOUT, UI, mW, mH, w, h);
 
@@ -291,7 +302,6 @@ export default class WordleScene extends Phaser.Scene {
 
     Observer.emitter.emit("btn_click");
 
-    
     const word = GAME.TYPING;
 
     const compare_word = sampleWords[GAME.STREAK].toLocaleUpperCase();
@@ -318,7 +328,7 @@ export default class WordleScene extends Phaser.Scene {
         Helper.addScreen(LAYOUT, CONSTS.LAYOUT_KEYS.GAME_COMPLETE);
         GAME.PAUSE = true;
         Observer.emitter.emit("onWinGame");
-        
+
         return;
       }
 
@@ -332,7 +342,6 @@ export default class WordleScene extends Phaser.Scene {
       //console.log(UI ,CONSTS.UI_KEYS.COIN_BONUS,(UI as any)[CONSTS.UI_KEYS.COIN_BONUS],GAME.CUR_COIN);
       //(UI as any)[CONSTS.UI_KEYS.COIN_BONUS].setText(`Claim ${GAME.CUR_COIN}`);
 
-    
       (UI as any)[CONSTS.UI_KEYS.SCORE_LAYOUT_STREAK].setText(GAME.STREAK);
       Helper.score(UI, score);
     } else if (GAME.LINE == 5) {
