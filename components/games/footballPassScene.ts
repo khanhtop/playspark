@@ -77,6 +77,7 @@ export default class FootballPassScene extends Phaser.Scene {
   private gameOverExitBtn: Phaser.GameObjects.Sprite;
   private helpGroup: Phaser.GameObjects.Group;
   private helpBack: Phaser.GameObjects.Sprite;
+  private TAP: Phaser.GameObjects.Sprite;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -772,9 +773,9 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.drag = this.add.sprite(w / 2, h - 120, 'drag').setOrigin(0.5, 0.5).setDisplaySize(200, 150).setScrollFactor(0, 0).setVisible(false);
 
-    this.tapGroup.add(
-      this.add.image(w / 2, header.y + 30, 'TAP1').setOrigin(0.5, 0).setDisplaySize(w * 0.7, w * 0.7 * 0.65).setScrollFactor(0, 0)
-    )
+    this.TAP = this.add.sprite(w / 2, header.y + 30, 'TAP1').setOrigin(0.5, 0).setDisplaySize(w * 0.7, w * 0.7 * 0.65).setScrollFactor(0, 0);
+      
+    // this.tapGroup.add(this.TAP)
 
     const itemR = w * 0.2;
 
@@ -1177,7 +1178,7 @@ export default class FootballPassScene extends Phaser.Scene {
         this.player,
         this.aiEnemies[i],
         () => {
-          if(this.aiEnemies[i].anims.getName() != "smoke_anim" && this.status.isSacked) {
+          if(this.player.anims.getName() != "smoke_anim" && this.status.isSacked) {
             // this.aiEnemies[i].play("smoke_anim");
             this.player.play("smoke_anim");
           }
@@ -1545,7 +1546,7 @@ export default class FootballPassScene extends Phaser.Scene {
   onStartPlan() {
     this.status.isPlaying = true;
     this.tapGroup.setVisible(false);
-
+    this.TAP.setVisible(false);
     if(this.status.planIdx != -1) {
       this.linesGroup[this.status.planIdx].setVisible(false);
     }
