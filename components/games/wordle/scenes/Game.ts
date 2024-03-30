@@ -82,11 +82,13 @@ export default class WordleScene extends Phaser.Scene {
 
     this.params = newParams;
     console.log("word from server: ", this.params.words);
-    if (this.params.words.length == 0)
+    if (this.params.words.length == 0){
       // this.params.words = ["TOUCH", "COUCH", "TOUCH"];
-      sampleWords = Helper.shuffle([
+     /* sampleWords = Helper.shuffle([
         ...(this.params.words?.length > 0 ? this.params.words : sampleWords),
-      ]); //Helper.shuffle(["TOUCH", "COUCH", "TOUCH", "TOUCH", "TOUCH"]); //reza [...this.params.words])
+      ]); *///Helper.shuffle(["TOUCH", "COUCH", "TOUCH", "TOUCH", "TOUCH"]); //reza [...this.params.words])
+      sampleWords = Helper.shuffle([...(this.params.words)]); 
+    }
   }
 
   preload() {

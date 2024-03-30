@@ -259,7 +259,7 @@ export class GamePart {
           );
 
           for (let i = 0; i < count; i++) {
-            (UI as any)[`input_${randomLetters[i]}`].setTexture("inp0");
+            (UI as any)[`input_${randomLetters[i].toUpperCase()}`].setTexture("inp0");
           }
         },
         CONSTS.UI_KEYS.POWER_TARGET
