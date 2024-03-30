@@ -1,4 +1,3 @@
-import PWA from "@/components/pwa/PWA";
 import { AppWrapper } from "@/helpers/store";
 import "@/styles/globals.css";
 import localFont from "@next/font/local";
@@ -87,9 +86,7 @@ export default function App({ Component, pageProps }) {
       className={`${titan.variable} ${roboto.variable} ${pixel.variable} ${anton.variable} ${octomed.variable} ${octolight.variable} font-sans font-roboto`}
     >
       <AppWrapper>
-        <PWA>
-          <Component {...pageProps} />
-        </PWA>
+        <Component {...pageProps} />
       </AppWrapper>
     </main>
   );
