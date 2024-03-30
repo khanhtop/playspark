@@ -137,7 +137,7 @@ export default function ChallengeIntro({ data, setStage, xpStealAmount }) {
                     <img src="/battle/win.png" className="h-full" />
                     <p>
                       Steal {xpStealAmount} XP from{" "}
-                      {data.challengee?.companyName} if you win
+                      {data.challenger?.companyName} if you win
                     </p>
                   </div>
                   <div className="h-24 flex items-center justify-center gap-4 px-8 w-[400px]">

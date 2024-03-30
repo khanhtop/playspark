@@ -56,6 +56,10 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
     }
   };
 
+  const riskXp = Math.floor(
+    context?.profile?.dataByClient[data.game.ownerId].xp / 10
+  );
+
   const [hasNotified, setHasNotified] = useState(false);
   const callback = async (score) => {
     setScore(score);
@@ -216,6 +220,7 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
           score={score}
           onReset={() => reset()}
           reviveCount={MAX_REVIVES - reviveCount}
+          riskXp={riskXp}
         />
       )}
 

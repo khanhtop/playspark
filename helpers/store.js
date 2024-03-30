@@ -16,6 +16,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { isIOS, isAndroid, isSafari } from "react-device-detect";
 import { getSubscriptionType } from "./tiers";
+import { playNotificationSound } from "./audio";
 
 export const AppContext = createContext();
 
@@ -28,6 +29,7 @@ export function AppWrapper({ children }) {
   const [prizes, setPrizes] = useState();
   const [battles, setBattles] = useState();
   const [notifications, setNotifications] = useState();
+  const [hasNewNotification, setHasNewNotification] = useState(false);
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
   const [event, showEvent] = useState(false);
@@ -153,6 +155,10 @@ export function AppWrapper({ children }) {
         limit(30)
       );
       _notificationsUnsub = onSnapshot(q, (querySnapshot) => {
+        if (notifications) {
+          playNotificationSound();
+          setHasNewNotification(true);
+        }
         const _notifications = [];
         querySnapshot.forEach((doc) => {
           _notifications.push({ ...doc.data(), id: doc.id });
@@ -244,6 +250,8 @@ export function AppWrapper({ children }) {
     webhookBasePayload,
     setWebhookBasePayload,
     battles,
+    hasNewNotification,
+    setHasNewNotification,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>
