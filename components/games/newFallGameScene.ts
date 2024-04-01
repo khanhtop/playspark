@@ -93,7 +93,7 @@ export default class newFallGameScene extends Phaser.Scene {
     ballVY = h * 0.5;
     ballVX = w * 0.75;
     collW = w * 0.2;
-    scrW = w * 0.4;
+    scrW = w * 0.35;
     scrH = w * 0.175 / 1.614;
     heartR = w * 0.0625;
     distance = 500;
@@ -387,11 +387,11 @@ export default class newFallGameScene extends Phaser.Scene {
     .setOrigin(0.5, 0.5);
 
     // this.add.image(10, 30, "score").setDisplaySize(80, scrH).setOrigin(0, 0.5);
-    this.add.image(30, 30, "boosterBatNum").setDisplaySize(30, 30);
+    this.add.image(30, 30, "boosterBall").setDisplaySize(30, 30);
     this.boostNumText = this.add
-    .text(70, 30, "0", {
+    .text(90, 30, "0/10", {
       fontFamily: "enhanced_led_board-7",
-      fontSize: "22px",
+      fontSize: "20px",
       color: "#ffffff",
     })
     .setOrigin(0.5, 0.5);
@@ -749,7 +749,7 @@ export default class newFallGameScene extends Phaser.Scene {
   setBooster() {
     boosterNum++;
     this.booster.play();
-    if(boosterNum > 2) {
+    if(boosterNum > 9) {
       this.powerup.play();
       boosterNum = 0;
       // boosterBat += 10;
@@ -795,6 +795,7 @@ export default class newFallGameScene extends Phaser.Scene {
       }
 
     }
+    this.boostNumText.setText(`${boosterNum.toString()}/10`);
   }
 
   playBombEffect(x, y) {
