@@ -1735,10 +1735,10 @@ export default class FootballPassScene extends Phaser.Scene {
 
         let targetX = this.getUIPos(target.x);
         let targetY = this.getUIPos(first + target.y);
-        // if(first == 160 || this.status.isThrowBall) {
-        //   targetX = enemy.x;
-        //   targetY = enemy.y;
-        // }
+        if(first == 160) {
+          targetX = enemy.x;
+          targetY = enemy.y;
+        }
 
         let dx = targetX - player.x;
         let dy = targetY - player.y;
