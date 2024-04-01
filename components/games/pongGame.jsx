@@ -18,6 +18,7 @@ import FlyCollectScene from "./flycollectScene";
 import newFallScene from "./newFallScene";
 import newCricketScene from "./newCricketScene";
 import FootballPassScene from "./footballPassScene";
+import NewCricketBall from "./newCricketBall";
 
 
 const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) => {
@@ -60,6 +61,8 @@ const PongClientComponent = forwardRef(({ handleScore, gameType, params }, ref) 
         scene = new FootballPassScene(gameType, params);
       } else if(gameType == 'newcricket') {
         scene = new newCricketScene(gameType, params);      
+      } else if(gameType == 'newcricketball') {
+        scene = new NewCricketBall(gameType, params);    
       } else {
         scene = new MainScene(gameType, params);
       }
