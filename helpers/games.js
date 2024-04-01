@@ -281,4 +281,42 @@ export const games = [
     id: 20,
     landscape: true,
   },
+  {
+    name: "Baller Faller",
+    description:
+      "Dodge obstacles, catch falling objects, and set high scores in this customizable and action-packed game where every move is a step closer to victory!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259251/4_ehxmnh.png",
+    screenshot: "basketball-fall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 21,
+    //
+    // Configurable Parameters
+    //
+    cloudinaryGameTag: "fall",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870377/vxtjhmvs2qj11xlyxaug.png",
+    powerUpSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+    objectSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169648/kjacp92e8wrlbbkdlksm.png",
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870197/g45zsfq8kr4gz4op7u1q.png",
+    additionalSpriteOne:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849184/Fall_-_head_-_basketball_yqri0q.png",
+    additionalSpriteTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704931110/iiukoen08wivafjit9kr.png",
+    tags: {
+      playerSprite: "body",
+      objectSprite: "1.0",
+      backgroundSprite: "0.6",
+      enemySprite: "1.0",
+      powerUpSprite: "1.0",
+      additionalSpriteOne: "head",
+      additionalSpriteTwo: "1.0",
+    },
+  },
 ];
