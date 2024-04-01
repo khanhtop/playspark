@@ -1402,6 +1402,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.player.play('player_idle_anim');
     // this.cameras.main.startFollow(this.player);
     this.cameras.main.startFollow(this.player, false, 0, 1, 0, 0);
+    this.cameras.main.setFollowOffset(0, mH * 0.7)
 
     this.ball.play('ball_idle_anim')
 
@@ -1409,6 +1410,8 @@ export default class FootballPassScene extends Phaser.Scene {
     heartNum = this.params.lives
     this.scoreNum = this.params.score;
     this.initGame();
+
+    // this.cameras.main.scrollY -= 4;
   }
 
   private ballDir: number = 1;
@@ -1536,8 +1539,6 @@ export default class FootballPassScene extends Phaser.Scene {
       this.aiPlayers[i].setPosition(this.getUIPos(this.posObject[plans[this.status.planIdx]].players[i].x), this.getUIPos(this.posObject[plans[this.status.planIdx]].players[i].y + y))
       this.aiEnemies[i].setPosition(this.getUIPos(this.posObject[plans[this.status.planIdx]].enemies[i].x), this.getUIPos(this.posObject[plans[this.status.planIdx]].enemies[i].y + y)).setFlipY(true)
 
-      this.aiPlayers[i].setVelocity(0, 0).play("player_idle_anim")
-      this.aiEnemies[i].setVelocity(0, 0).play("enemy_idle_anim")
       this.aiPlayers[i].setAngle(0);
       this.aiEnemies[i].setAngle(0);
     }
@@ -1640,6 +1641,14 @@ export default class FootballPassScene extends Phaser.Scene {
     this.goalTxt.setVisible(false);
     this.addedScrTxt.setVisible(false);
     this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2);
+
+    this.aiEnemies.forEach(e => {
+      e.setVelocity(0, 0).setAngle(0).play("enemy_idle_anim");
+    });
+    this.aiPlayers.forEach(p => {
+      p.setVelocity(0, 0).setAngle(0).play("player_idle_anim");
+    })
+
   }
 
   initTabList() {
