@@ -758,24 +758,32 @@ export default class newFallGameScene extends Phaser.Scene {
       heartNum++;
       this.lifeNumText.setText(heartNum);
       
-      if(!isStatic) {
+      // if(!isStatic) {
         isStatic = true;
         this.staticBonusScreen.setVisible(true);
 
+        const offsetYY = -80;
+        this.staticHeart.setPosition(mW - 60, mH + offsetYY).setScale(1, 1);
+        this.staticText.setPosition(mW + 30, mH + offsetYY).setScale(1, 1);
+
         this.tweens.add({
           targets: this.staticHeart,
-          scaleX: 0.7, // Scale to 1 (original size)
-          scaleY: 0.7,
-          alpha: 1, // Fade in to full opacity
-          duration: 600, // Duration of the animation in milliseconds
+          scaleX: 0, // Scale to 1 (original size)
+          scaleY: 0,
+          x: w - 30,
+          y : 30,
+          alpha: 0, // Fade in to full opacity
+          duration: 1000, // Duration of the animation in milliseconds
           ease: 'Bounce', // Easing function for a bouncing effect
         });
         this.tweens.add({
           targets: this.staticText,
-          scaleX: 1, // Scale to 1 (original size)
-          scaleY: 1,
-          alpha: 1, // Fade in to full opacity
-          duration: 600, // Duration of the animation in milliseconds
+          scaleX: 0, // Scale to 1 (original size)
+          scaleY: 0,
+          x: w - 30,
+          y : 30,
+          alpha: 0, // Fade in to full opacity
+          duration: 1000, // Duration of the animation in milliseconds
           ease: 'Bounce', // Easing function for a bouncing effect
         });
 
@@ -791,8 +799,8 @@ export default class newFallGameScene extends Phaser.Scene {
               fb.setVelocity(0, speed);
             });
           }
-        }, 3000);
-      }
+        }, 2000);
+      // }
 
     }
     this.boostNumText.setText(`${boosterNum.toString()}/10`);
