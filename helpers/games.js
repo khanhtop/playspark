@@ -122,6 +122,19 @@ export const games = [
       enemySprite: "1.0",
       powerUpSprite: "1.0",
     },
+    useReimage: false,
+    reimageSprites: [
+      {
+        name: "Player Sprite",
+        requiredTags: ["square"],
+        key: "playerSprite",
+      },
+      {
+        name: "Enemy Sprite",
+        requiredTags: ["square"],
+        key: "enemySprite",
+      },
+    ],
   },
   {
     name: "Baller Faller",
