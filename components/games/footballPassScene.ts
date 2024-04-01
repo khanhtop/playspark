@@ -132,8 +132,11 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.audio("button", "/pong/" + gameType + "/sfx/button.wav");
     this.load.audio("gameover", "/pong/" + gameType + "/sfx/gameover.wav");
     this.load.audio("throw", "/pong/" + gameType + "/sfx/throw.wav");
-    this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.wav");
-    this.load.audio("tackle", "/pong/" + gameType + "/sfx/tackle.wav");
+    // this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.wav");
+    this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.m4a");
+    // this.load.audio("tackle", "/pong/" + gameType + "/sfx/tackle.wav");
+    this.load.audio("tackle", "/pong/" + gameType + "/sfx/tackle.m4a");
+    this.load.audio("sacked", "/pong/" + gameType + "/sfx/sacked.m4a");
     this.load.audio("hitbody", "/pong/" + gameType + "/sfx/hitbody.wav");
     this.load.audio("firstdown", "/pong/" + gameType + "/sfx/firstdown.wav");
 
@@ -221,6 +224,7 @@ export default class FootballPassScene extends Phaser.Scene {
   private touchdown: any;
   private button: any;
   private tackle: any;
+  private sacked: any;
   private hitbody: any;
   private firstdown: any;
 
@@ -679,6 +683,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.throw = this.sound.add("throw");
     this.touchdown = this.sound.add("touchdown");
     this.tackle = this.sound.add("tackle");
+    this.sacked = this.sound.add("sacked");
     this.hitbody = this.sound.add("hitbody");
     this.firstdown = this.sound.add("firstdown");
 
@@ -1401,7 +1406,8 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.player.play('player_idle_anim');
     // this.cameras.main.startFollow(this.player);
-    this.cameras.main.startFollow(this.player, false, 0, 1, 0, 0);
+    this.cameras.main.startFollow(this.ball, false, 0, 1, 0, 0);
+    this.cameras.main.setFollowOffset(0, mH * 0.7)
 
     this.ball.play('ball_idle_anim')
 
@@ -1409,6 +1415,8 @@ export default class FootballPassScene extends Phaser.Scene {
     heartNum = this.params.lives
     this.scoreNum = this.params.score;
     this.initGame();
+
+    // this.cameras.main.scrollY -= 4;
   }
 
   private ballDir: number = 1;
@@ -1536,8 +1544,6 @@ export default class FootballPassScene extends Phaser.Scene {
       this.aiPlayers[i].setPosition(this.getUIPos(this.posObject[plans[this.status.planIdx]].players[i].x), this.getUIPos(this.posObject[plans[this.status.planIdx]].players[i].y + y))
       this.aiEnemies[i].setPosition(this.getUIPos(this.posObject[plans[this.status.planIdx]].enemies[i].x), this.getUIPos(this.posObject[plans[this.status.planIdx]].enemies[i].y + y)).setFlipY(true)
 
-      this.aiPlayers[i].setVelocity(0, 0).play("player_idle_anim")
-      this.aiEnemies[i].setVelocity(0, 0).play("enemy_idle_anim")
       this.aiPlayers[i].setAngle(0);
       this.aiEnemies[i].setAngle(0);
     }
@@ -1640,6 +1646,14 @@ export default class FootballPassScene extends Phaser.Scene {
     this.goalTxt.setVisible(false);
     this.addedScrTxt.setVisible(false);
     this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2);
+
+    this.aiEnemies.forEach(e => {
+      e.setVelocity(0, 0).setAngle(0).play("enemy_idle_anim");
+    });
+    this.aiPlayers.forEach(p => {
+      p.setVelocity(0, 0).setAngle(0).play("player_idle_anim");
+    })
+
   }
 
   initTabList() {
@@ -1726,15 +1740,17 @@ export default class FootballPassScene extends Phaser.Scene {
 
         let targetX = this.getUIPos(target.x);
         let targetY = this.getUIPos(first + target.y);
-        // if(first == 160 || this.status.isThrowBall) {
-        //   targetX = enemy.x;
-        //   targetY = enemy.y;
-        // }
+        let rate = 1;
+        if(this.posObject[plans[this.status.planIdx]].targets[i][0].y == 0 && this.posObject[plans[this.status.planIdx]].targets[i][1].y == 0) {
+          targetX = enemy.x;
+          targetY = enemy.y;
+          rate = 0.5
+        }
 
         let dx = targetX - player.x;
         let dy = targetY - player.y;
         let distance = Math.sqrt(dx * dx + dy * dy);
-        let velocity = 90 * (distance < 1? 0 : 1);
+        let velocity = 90 * (distance < 1? 0 : 1) * rate;
 
         if(velocity == 0) {
           player.pathIdx++;
@@ -1874,6 +1890,11 @@ export default class FootballPassScene extends Phaser.Scene {
         if(this.posObject.startPos.first > this.getRealPos(this.ball.y)) {
           this.posObject.startPos.first = this.getRealPos(this.ball.y);
         }
+        if(y > first) {
+          this.sacked.play();
+        } else {
+          this.tackle.play();
+        }
       }
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
       this.status.roundNum = 1;
@@ -1992,7 +2013,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
   onTackleEvent() {
     if(this.status.isSacked || !this.status.isBallPlayer || !this.status.isPlaying) return;
-    this.tackle.play();
+    // this.tackle.play();
     this.status.isSacked = true;
     this.onCatchLogic("sacked");
   }
