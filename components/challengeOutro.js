@@ -10,11 +10,13 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 // import Ranking from "./forms/ranking";
 
-export default function ChallengeOutro({ score, data, xpStealAmount }) {
+export default function ChallengeOutro({ score, data, xpStealAmount, riskXp }) {
   const router = useRouter();
   const context = useAppContext();
   const challengerWon =
     parseInt(data?.challengerResult?.score) > parseInt(score);
+
+  console.log(riskXp);
 
   return (
     <div className="relative h-full w-full flex items-center justify-center">
@@ -84,7 +86,9 @@ export default function ChallengeOutro({ score, data, xpStealAmount }) {
                         challengerWon ? "text-red-500" : "text-green-500"
                       } font-octo text-3xl font-extrabold`}
                     >
-                      {challengerWon ? "-" : "+"} {xpStealAmount}XP
+                      {challengerWon ? "-" : "+"}{" "}
+                      {challengerWon ? riskXp : xpStealAmount}
+                      XP
                     </p>
                   </div>
                 )}

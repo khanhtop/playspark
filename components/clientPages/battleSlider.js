@@ -12,66 +12,8 @@ export default function BattleSlider({
 }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
-  const filteredPlayers = leaderboard.filter(
-    (a) => a.id !== context?.loggedIn?.uid
-  );
 
   if (!context?.loggedIn?.uid || !context?.battles) return <div />;
-
-  if (
-    context?.battles?.filter((a) => a.game.ownerId === clientId)?.length === 0
-  )
-    return (
-      <>
-        <h1 className="px-5 mt-8 font-octo text-2xl tracking-wider text-white/90">
-          Battles
-        </h1>
-        <div className="overflow-x-scroll whitespace-nowrap px-6 no-scrollbar pb-4">
-          <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
-            <BattleInviteCard
-              battle={{ game: {} }}
-              tournament={
-                tournaments[Math.floor(Math.random() * tournaments.length)]
-              }
-              me={context?.profile}
-              you={
-                filteredPlayers[
-                  Math.floor(Math.random() * filteredPlayers.length)
-                ]
-              }
-            />
-          </div>
-          <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
-            <BattleInviteCard
-              battle={{ game: {} }}
-              tournament={
-                tournaments[Math.floor(Math.random() * tournaments.length)]
-              }
-              me={context?.profile}
-              you={
-                filteredPlayers[
-                  Math.floor(Math.random() * filteredPlayers.length)
-                ]
-              }
-            />
-          </div>
-          <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
-            <BattleInviteCard
-              battle={{ game: {} }}
-              tournament={
-                tournaments[Math.floor(Math.random() * tournaments.length)]
-              }
-              me={context?.profile}
-              you={
-                filteredPlayers[
-                  Math.floor(Math.random() * filteredPlayers.length)
-                ]
-              }
-            />
-          </div>
-        </div>
-      </>
-    );
 
   return (
     <>
@@ -81,17 +23,75 @@ export default function BattleSlider({
       <div className="flex pl-5 gap-4 pb-4">
         <Tab
           selected={stage === 0}
-          text="Ongoing"
+          text="Start New Battle"
           setSelected={() => setStage(0)}
         />
-        <Tab
-          selected={stage === 1}
-          text="Ended"
-          setSelected={() => setStage(1)}
-        />
+        {context?.battles
+          ?.filter((a) => a.game.ownerId === clientId)
+          ?.filter((a) => !a.challengeeResult)?.length > 0 && (
+          <Tab
+            selected={stage === 1}
+            text="Ongoing"
+            setSelected={() => setStage(1)}
+          />
+        )}
+
+        {context?.battles
+          ?.filter((a) => a.game.ownerId === clientId)
+          ?.filter((a) => a.challengeeResult)?.length > 0 && (
+          <Tab
+            selected={stage === 2}
+            text="Ended"
+            setSelected={() => setStage(2)}
+          />
+        )}
       </div>
       <div className="overflow-x-scroll whitespace-nowrap px-6 no-scrollbar pb-4">
-        {/* <button
+        {stage === 0 && (
+          <RandomBattles tournaments={tournaments} leaderboard={leaderboard} />
+        )}
+        {stage === 1 &&
+          context?.battles
+            ?.filter((a) => a.game.ownerId === clientId)
+            ?.filter((a) => !a.challengeeResult)
+            .map((item, key) => (
+              <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+                <BattleCard
+                  battle={item}
+                  key={key}
+                  myUid={context?.loggedIn?.uid}
+                />
+              </div>
+            ))}
+        {stage === 2 &&
+          context?.battles
+            ?.filter((a) => a.game.ownerId === clientId)
+            ?.filter((a) => a.challengeeResult)
+            .map((item, key) => (
+              <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+                <BattleCard
+                  battle={item}
+                  key={key}
+                  myUid={context?.loggedIn?.uid}
+                />
+              </div>
+            ))}
+        {/* {context?.battles
+          ?.filter((a) => a.game.ownerId === clientId)
+          ?.filter((a) =>
+            stage === 0 ? !a.challengeeResult : a.challengeeResult
+          )
+          .map((item, key) => (
+            <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+              <BattleCard
+                battle={item}
+                key={key}
+                myUid={context?.loggedIn?.uid}
+              />
+            </div>
+          ))} */}
+      </div>
+      {/* <button
           onClick={() => {
             fetch("/api/email", {
               method: "POST",
@@ -112,22 +112,55 @@ export default function BattleSlider({
         >
           Email
         </button> */}
-        {context?.battles
-          ?.filter((a) => a.game.ownerId === clientId)
-          ?.filter((a) =>
-            stage === 0 ? !a.challengeeResult : a.challengeeResult
-          )
-          .map((item, key) => (
-            <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
-              <BattleCard
-                battle={item}
-                key={key}
-                myUid={context?.loggedIn?.uid}
-              />
-            </div>
-          ))}
-      </div>
     </>
+  );
+}
+
+function RandomBattles({ tournaments, leaderboard }) {
+  const context = useAppContext();
+  const filteredPlayers = leaderboard.filter(
+    (a) => a.id !== context?.loggedIn?.uid
+  );
+
+  return (
+    <div className="overflow-x-scroll whitespace-nowrap no-scrollbar pb-4">
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+        <BattleInviteCard
+          battle={{ game: {} }}
+          tournament={
+            tournaments[Math.floor(Math.random() * tournaments.length)]
+          }
+          me={context?.profile}
+          you={
+            filteredPlayers[Math.floor(Math.random() * filteredPlayers.length)]
+          }
+        />
+      </div>
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+        <BattleInviteCard
+          battle={{ game: {} }}
+          tournament={
+            tournaments[Math.floor(Math.random() * tournaments.length)]
+          }
+          me={context?.profile}
+          you={
+            filteredPlayers[Math.floor(Math.random() * filteredPlayers.length)]
+          }
+        />
+      </div>
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+        <BattleInviteCard
+          battle={{ game: {} }}
+          tournament={
+            tournaments[Math.floor(Math.random() * tournaments.length)]
+          }
+          me={context?.profile}
+          you={
+            filteredPlayers[Math.floor(Math.random() * filteredPlayers.length)]
+          }
+        />
+      </div>
+    </div>
   );
 }
 

@@ -12,7 +12,7 @@ import FallScene from "./fallScene";
 import WheelScene from "./wheelScene";
 import CricketScene from "./cricketScene";
 import NewPongScene from "./newPongScene";
-import WordleScene from "./wordleScene";
+import WordleScene from "./wordle/scenes/Game";
 import FlyBallScene from "./flyballScene";
 import FlyCollectScene from "./flycollectScene";
 import newFallScene from "./newFallScene";
