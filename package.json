@@ -39,6 +39,7 @@
     "react-unity-webgl": "^9.4.3",
     "react-web-share": "^2.0.2",
     "resend": "^3.2.0",
+    "short-uuid": "^4.2.2",
     "swiper": "^11.0.3",
     "tailwindcss": "3.3.3",
     "uuid": "^9.0.1"
