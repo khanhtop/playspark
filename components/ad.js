@@ -255,6 +255,13 @@ export default function Advert({
           additionalSpriteTwo: data?.additionalSpriteTwo,
           maxscore: prevBest ?? 0,
           words: data?.words || [],
+          ball: data?.ball,
+          powerup: data?.powerup,
+          obstacle: data?.obstacle,
+          normal_target_1: data?.normal_target_1,
+          normal_target_2: data?.normal_target_2,
+          normal_target_3: data?.normal_target_3,
+          high_value_target: data?.high_value_target,
         })}
       {stage === 2 && (
         <Outro
