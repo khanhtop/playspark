@@ -132,9 +132,9 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.audio("button", "/pong/" + gameType + "/sfx/button.wav");
     this.load.audio("gameover", "/pong/" + gameType + "/sfx/gameover.wav");
     this.load.audio("throw", "/pong/" + gameType + "/sfx/throw.wav");
-    // this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.wav");
+    this.load.audio("touchdown1", "/pong/" + gameType + "/sfx/touchdown.wav");
     this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.m4a");
-    // this.load.audio("tackle", "/pong/" + gameType + "/sfx/tackle.wav");
+    this.load.audio("tackle1", "/pong/" + gameType + "/sfx/tackle.wav");
     this.load.audio("tackle", "/pong/" + gameType + "/sfx/tackle.m4a");
     this.load.audio("sacked", "/pong/" + gameType + "/sfx/sacked.m4a");
     this.load.audio("hitbody", "/pong/" + gameType + "/sfx/hitbody.wav");
@@ -222,8 +222,10 @@ export default class FootballPassScene extends Phaser.Scene {
   private gameover: any;
   private throw: any;
   private touchdown: any;
+  private touchdown1: any;
   private button: any;
   private tackle: any;
+  private tackle1: any;
   private sacked: any;
   private hitbody: any;
   private firstdown: any;
@@ -682,7 +684,9 @@ export default class FootballPassScene extends Phaser.Scene {
     this.gameover = this.sound.add("gameover");
     this.throw = this.sound.add("throw");
     this.touchdown = this.sound.add("touchdown");
+    this.touchdown1 = this.sound.add("touchdown1");
     this.tackle = this.sound.add("tackle");
+    this.tackle1 = this.sound.add("tackle1");
     this.sacked = this.sound.add("sacked");
     this.hitbody = this.sound.add("hitbody");
     this.firstdown = this.sound.add("firstdown");
@@ -1742,9 +1746,9 @@ export default class FootballPassScene extends Phaser.Scene {
         let targetY = this.getUIPos(first + target.y);
         let rate = 1;
         if(this.posObject[plans[this.status.planIdx]].targets[i][0].y == 0 && this.posObject[plans[this.status.planIdx]].targets[i][1].y == 0) {
-          targetX = enemy.x;
+          targetX = enemy.x + 30;
           targetY = enemy.y;
-          rate = 0.5
+          rate = 0.35
         }
 
         let dx = targetX - player.x;
@@ -1771,7 +1775,7 @@ export default class FootballPassScene extends Phaser.Scene {
         targetX = player.x;
         targetY = player.y - 50;
 
-        if(first == 160 || this.status.isThrowBall) {
+        if(first == 160 || this.status.isThrowBall || this.posObject[plans[this.status.planIdx]].targets[i][0].y == 0 && this.posObject[plans[this.status.planIdx]].targets[i][1].y == 0) {
           targetX = this.ball.x;
           targetY = this.ball.y;
           // if(player.anims.getName() != "smoke_anim") {
@@ -1895,6 +1899,7 @@ export default class FootballPassScene extends Phaser.Scene {
         } else {
           this.tackle.play();
         }
+        this.tackle1.play();
       }
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
       this.status.roundNum = 1;
@@ -1907,6 +1912,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
       this.status["score"].firstDown++;
       this.firstdown.play();
+      this.tackle1.play();
 
     } else if(y < this.getUIPos(this.posObject.lastLine - 20)){
       this.status.roundNum = 1;
@@ -1917,6 +1923,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.posObject.startPos.second = 160 + 140 * 7;
       this.status["score"].touchDown++;
       this.touchdown.play();
+      this.touchdown1.play();
     }
 
     this.roundText.setText(text).setVisible(true);
