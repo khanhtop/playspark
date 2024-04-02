@@ -97,7 +97,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     super();
     SmashBlitzThrowing.instance = this;
     // console.log(`----[[[ \n ${gameType} \n ${_params}`);
-    this.params = undefined;
+    this.params = _params;
   }
 
   width: number = 1920 / 2;
