@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { getImageWithSize } from "@/helpers/cloudinary";
 
 let w: number,
   h: number,
@@ -84,12 +85,21 @@ export default class FootballPassScene extends Phaser.Scene {
     FootballPassScene.instance = this;
     gameType = newGameType;
     this.params = newParams;
+
+    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + '/player.png';
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/enemy.png';
+
+    this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/bg.png';
+    
+    this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite: "/pong/" + gameType + "/ball.png";
+
+
   }
 
   preload() {
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
     this.load.image("peck", "/pong/" + gameType + "/peck.png");
-    this.load.image("bg", "/pong/" + gameType + "/bg.png");
+    this.load.image("bg", this.params.backgroundSprite);
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
 
@@ -162,13 +172,13 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.load.spritesheet(
       'player_anim',
-      '/pong/' + gameType + '/player.png',
+      this.params.playerSprite,
       { frameWidth: 141, frameHeight: 150 }
     );
 
     this.load.spritesheet(
       'enemy_anim',
-      '/pong/' + gameType + '/enemy.png',
+      this.params.enemySprite,
       { frameWidth: 150, frameHeight: 150 }
     );
 
@@ -186,7 +196,7 @@ export default class FootballPassScene extends Phaser.Scene {
     
     this.load.spritesheet(
       'ball_anim',
-      '/pong/' + gameType + '/ball-anim.png',
+      this.params.objectSprite,
       { frameWidth: 480, frameHeight: 441 }
     );
 
