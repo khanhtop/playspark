@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { getImageWithSize } from "@/helpers/cloudinary";
 
 let w: number,
   h: number,
@@ -84,12 +85,41 @@ export default class FootballPassScene extends Phaser.Scene {
     FootballPassScene.instance = this;
     gameType = newGameType;
     this.params = newParams;
+
+    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + '/player.png';
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/enemy.png';
+
+    this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/bg.png';
+    
+    this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite: "/pong/" + gameType + "/ball-anim.png";
+
+
   }
 
   preload() {
+    w = this.game.canvas.clientWidth;
+    h = this.game.canvas.clientHeight;
+    ballR = w * 0.05;
+    playerR = w * 0.175;
+    aiR = w * 0.175;
+    scr = h * 0.08;
+    mW = w / 2;
+    mH = (h - scr) / 2 + scr;
+    goalH = w / 800 * 160;
+    sideW = w * 0;
+    boundW = w - 2 * sideW;
+    boundH = h - scr - 2 * goalH;
+    ballVY = h * 0.5;
+    ballVX = w * 0.75;
+    collW = w * 0.24;
+    scrW = w * 0.375;
+    scrH = w * 0.175 / 1.614;
+    heartR = w * 0.0625;
+    heartNum = this.params.lives
+
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
     this.load.image("peck", "/pong/" + gameType + "/peck.png");
-    this.load.image("bg", "/pong/" + gameType + "/bg.png");
+    this.load.image("bg", this.params.backgroundSprite);
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
 
@@ -132,43 +162,25 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.audio("button", "/pong/" + gameType + "/sfx/button.wav");
     this.load.audio("gameover", "/pong/" + gameType + "/sfx/gameover.wav");
     this.load.audio("throw", "/pong/" + gameType + "/sfx/throw.wav");
-    // this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.wav");
+    this.load.audio("touchdown1", "/pong/" + gameType + "/sfx/touchdown.wav");
     this.load.audio("touchdown", "/pong/" + gameType + "/sfx/touchdown.m4a");
-    // this.load.audio("tackle", "/pong/" + gameType + "/sfx/tackle.wav");
+    this.load.audio("tackle1", "/pong/" + gameType + "/sfx/tackle.wav");
     this.load.audio("tackle", "/pong/" + gameType + "/sfx/tackle.m4a");
     this.load.audio("sacked", "/pong/" + gameType + "/sfx/sacked.m4a");
     this.load.audio("hitbody", "/pong/" + gameType + "/sfx/hitbody.wav");
     this.load.audio("firstdown", "/pong/" + gameType + "/sfx/firstdown.wav");
 
-    w = this.game.canvas.clientWidth;
-    h = this.game.canvas.clientHeight;
-    ballR = w * 0.05;
-    playerR = w * 0.175;
-    aiR = w * 0.175;
-    scr = h * 0.08;
-    mW = w / 2;
-    mH = (h - scr) / 2 + scr;
-    goalH = w / 800 * 160;
-    sideW = w * 0;
-    boundW = w - 2 * sideW;
-    boundH = h - scr - 2 * goalH;
-    ballVY = h * 0.5;
-    ballVX = w * 0.75;
-    collW = w * 0.24;
-    scrW = w * 0.375;
-    scrH = w * 0.175 / 1.614;
-    heartR = w * 0.0625;
-    heartNum = this.params.lives
+
 
     this.load.spritesheet(
       'player_anim',
-      '/pong/' + gameType + '/player.png',
+      this.params.playerSprite,
       { frameWidth: 141, frameHeight: 150 }
     );
 
     this.load.spritesheet(
       'enemy_anim',
-      '/pong/' + gameType + '/enemy.png',
+      this.params.enemySprite,
       { frameWidth: 150, frameHeight: 150 }
     );
 
@@ -186,7 +198,7 @@ export default class FootballPassScene extends Phaser.Scene {
     
     this.load.spritesheet(
       'ball_anim',
-      '/pong/' + gameType + '/ball-anim.png',
+      this.params.objectSprite,
       { frameWidth: 480, frameHeight: 441 }
     );
 
@@ -222,8 +234,10 @@ export default class FootballPassScene extends Phaser.Scene {
   private gameover: any;
   private throw: any;
   private touchdown: any;
+  private touchdown1: any;
   private button: any;
   private tackle: any;
+  private tackle1: any;
   private sacked: any;
   private hitbody: any;
   private firstdown: any;
@@ -682,7 +696,9 @@ export default class FootballPassScene extends Phaser.Scene {
     this.gameover = this.sound.add("gameover");
     this.throw = this.sound.add("throw");
     this.touchdown = this.sound.add("touchdown");
+    this.touchdown1 = this.sound.add("touchdown1");
     this.tackle = this.sound.add("tackle");
+    this.tackle1 = this.sound.add("tackle1");
     this.sacked = this.sound.add("sacked");
     this.hitbody = this.sound.add("hitbody");
     this.firstdown = this.sound.add("firstdown");
@@ -1742,9 +1758,9 @@ export default class FootballPassScene extends Phaser.Scene {
         let targetY = this.getUIPos(first + target.y);
         let rate = 1;
         if(this.posObject[plans[this.status.planIdx]].targets[i][0].y == 0 && this.posObject[plans[this.status.planIdx]].targets[i][1].y == 0) {
-          targetX = enemy.x;
+          targetX = enemy.x + 30;
           targetY = enemy.y;
-          rate = 0.5
+          rate = 0.35
         }
 
         let dx = targetX - player.x;
@@ -1771,7 +1787,7 @@ export default class FootballPassScene extends Phaser.Scene {
         targetX = player.x;
         targetY = player.y - 50;
 
-        if(first == 160 || this.status.isThrowBall) {
+        if(first == 160 || this.status.isThrowBall || this.posObject[plans[this.status.planIdx]].targets[i][0].y == 0 && this.posObject[plans[this.status.planIdx]].targets[i][1].y == 0) {
           targetX = this.ball.x;
           targetY = this.ball.y;
           // if(player.anims.getName() != "smoke_anim") {
@@ -1895,6 +1911,7 @@ export default class FootballPassScene extends Phaser.Scene {
         } else {
           this.tackle.play();
         }
+        this.tackle1.play();
       }
     } else if(y > this.getUIPos(this.posObject.lastLine)) {
       this.status.roundNum = 1;
@@ -1907,6 +1924,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
       this.status["score"].firstDown++;
       this.firstdown.play();
+      this.tackle1.play();
 
     } else if(y < this.getUIPos(this.posObject.lastLine - 20)){
       this.status.roundNum = 1;
@@ -1917,6 +1935,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.posObject.startPos.second = 160 + 140 * 7;
       this.status["score"].touchDown++;
       this.touchdown.play();
+      this.touchdown1.play();
     }
 
     this.roundText.setText(text).setVisible(true);
