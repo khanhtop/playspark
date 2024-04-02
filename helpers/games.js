@@ -122,16 +122,16 @@ export const games = [
       enemySprite: "1.0",
       powerUpSprite: "1.0",
     },
-    useReimage: false,
+    // useReimage: true,
     reimageSprites: [
       {
         name: "Player Sprite",
-        requiredTags: ["square"],
+        requiredTags: ["pong", "square"],
         key: "playerSprite",
       },
       {
         name: "Enemy Sprite",
-        requiredTags: ["square"],
+        requiredTags: ["pong", "square"],
         key: "enemySprite",
       },
     ],

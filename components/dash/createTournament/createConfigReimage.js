@@ -5,12 +5,12 @@ import { ArrowPathIcon } from "@heroicons/react/24/solid";
 export default function CreateConfigReimage({ tournament, setTournament }) {
   const [selectedSprite, setSelectedSprite] = useState(0);
   const [images, setImages] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const tags = tournament?.reimageSprites[selectedSprite]?.requiredTags;
 
-  console.log(tournament);
-
   const fetchImages = () => {
+    setLoading(true);
     fetch(`https://api.reimage.dev/get/tags?${tags.join("&")}`, {
       headers: {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_REIMAGE_KEY}`,
@@ -20,6 +20,7 @@ export default function CreateConfigReimage({ tournament, setTournament }) {
         return raw.json();
       })
       .then((json) => {
+        setLoading(false);
         setImages({
           ...images,
           [tournament?.reimageSprites[selectedSprite]?.key]: json,
@@ -48,14 +49,14 @@ export default function CreateConfigReimage({ tournament, setTournament }) {
             />
           ))}
         </div>
-        <ArrowPathIcon className="text-cyan-500 h-5 w-5 animate-spin" />
+
+        {loading && (
+          <ArrowPathIcon className="text-cyan-500 h-5 w-5 animate-spin" />
+        )}
       </div>
 
       <ReimageGrid
-        tags={[
-          tournament.name?.toLowerCase()?.replace(/\s+/g, "-"),
-          ...tournament?.reimageSprites[selectedSprite]?.requiredTags,
-        ]}
+        tags={tags}
         images={images?.[tournament?.reimageSprites[selectedSprite]?.key]}
         onUpload={fetchImages}
       />

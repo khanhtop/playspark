@@ -77,7 +77,7 @@ function NotificationItem({ item, onClick }) {
   return (
     <div
       onClick={onClick}
-      className="w-full bg-white/5 px-4 py-2 flex rounded-xl gap-4 group cursor-pointer hover:bg-white/10"
+      className="w-full bg-black/5 px-4 py-2 flex rounded-xl gap-4 group cursor-pointer hover:bg-black/10"
     >
       <div
         className={`w-4 h-4 ${
@@ -87,7 +87,7 @@ function NotificationItem({ item, onClick }) {
       {/* <BellAlertIcon className="h-6 w-6 text-white/50 pt-1" /> */}
       <div className="flex-1">
         <p className="font-extrabold">{item.text}</p>
-        <p className="text-white/50">{formatTimeDifference(item.timestamp)}</p>
+        <p className="opacity-50">{formatTimeDifference(item.timestamp)}</p>
       </div>
       <ChevronRightIcon
         className={`h-12 w-12 text-white/0 group-hover:text-white/100`}

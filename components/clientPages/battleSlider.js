@@ -17,7 +17,10 @@ export default function BattleSlider({
 
   return (
     <>
-      <h1 className="px-5 mt-8 font-octo text-2xl tracking-wider text-white/90">
+      <h1
+        style={{ color: user.textColor }}
+        className="px-5 mt-8 font-octo text-2xl tracking-wider"
+      >
         Battles
       </h1>
       <div className="flex pl-5 gap-4 pb-4">
@@ -25,6 +28,7 @@ export default function BattleSlider({
           selected={stage === 0}
           text="Start New Battle"
           setSelected={() => setStage(0)}
+          color={user.textColor}
         />
         {context?.battles
           ?.filter((a) => a.game.ownerId === clientId)
@@ -33,6 +37,7 @@ export default function BattleSlider({
             selected={stage === 1}
             text="Ongoing"
             setSelected={() => setStage(1)}
+            color={user.textColor}
           />
         )}
 
@@ -124,7 +129,7 @@ function RandomBattles({ tournaments, leaderboard }) {
 
   return (
     <div className="overflow-x-scroll whitespace-nowrap no-scrollbar pb-4">
-      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8 text-white  rounded-3xl">
         <BattleInviteCard
           battle={{ game: {} }}
           tournament={
@@ -136,7 +141,7 @@ function RandomBattles({ tournaments, leaderboard }) {
           }
         />
       </div>
-      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl text-white">
         <BattleInviteCard
           battle={{ game: {} }}
           tournament={
@@ -148,7 +153,7 @@ function RandomBattles({ tournaments, leaderboard }) {
           }
         />
       </div>
-      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8 text-white rounded-3xl">
         <BattleInviteCard
           battle={{ game: {} }}
           tournament={
@@ -164,14 +169,15 @@ function RandomBattles({ tournaments, leaderboard }) {
   );
 }
 
-function Tab({ text, selected, setSelected }) {
+function Tab({ text, selected, setSelected, color }) {
   return (
     <div
       onClick={setSelected}
+      style={{ color: color }}
       className={`py-2 font-octo text-lg ${
         selected
-          ? "border-b-cyan-500 border-b-2 text-white"
-          : "text-white/50 cursor-pointer"
+          ? "border-b-cyan-500 border-b-2 opacity-100"
+          : "opacity-50 cursor-pointer"
       }`}
     >
       <p>{text}</p>
