@@ -97,6 +97,26 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   preload() {
+    w = this.game.canvas.clientWidth;
+    h = this.game.canvas.clientHeight;
+    ballR = w * 0.05;
+    playerR = w * 0.175;
+    aiR = w * 0.175;
+    scr = h * 0.08;
+    mW = w / 2;
+    mH = (h - scr) / 2 + scr;
+    goalH = w / 800 * 160;
+    sideW = w * 0;
+    boundW = w - 2 * sideW;
+    boundH = h - scr - 2 * goalH;
+    ballVY = h * 0.5;
+    ballVX = w * 0.75;
+    collW = w * 0.24;
+    scrW = w * 0.375;
+    scrH = w * 0.175 / 1.614;
+    heartR = w * 0.0625;
+    heartNum = this.params.lives
+
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
     this.load.image("peck", "/pong/" + gameType + "/peck.png");
     this.load.image("bg", this.params.backgroundSprite);
@@ -150,25 +170,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.audio("hitbody", "/pong/" + gameType + "/sfx/hitbody.wav");
     this.load.audio("firstdown", "/pong/" + gameType + "/sfx/firstdown.wav");
 
-    w = this.game.canvas.clientWidth;
-    h = this.game.canvas.clientHeight;
-    ballR = w * 0.05;
-    playerR = w * 0.175;
-    aiR = w * 0.175;
-    scr = h * 0.08;
-    mW = w / 2;
-    mH = (h - scr) / 2 + scr;
-    goalH = w / 800 * 160;
-    sideW = w * 0;
-    boundW = w - 2 * sideW;
-    boundH = h - scr - 2 * goalH;
-    ballVY = h * 0.5;
-    ballVX = w * 0.75;
-    collW = w * 0.24;
-    scrW = w * 0.375;
-    scrH = w * 0.175 / 1.614;
-    heartR = w * 0.0625;
-    heartNum = this.params.lives
+
 
     this.load.spritesheet(
       'player_anim',
