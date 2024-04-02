@@ -218,7 +218,29 @@ export const games = [
     objectSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
-
+  {
+    name: "Smash Blitz Throw",
+    description: "Smash Blitz Throw is balabala bala babab",
+    backgroundImage: "/pong/smashBlitzThrow/smashBlitzThrowing.png",
+    screenshot: "cricketsmash.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 22,
+    landscape: true,
+    cloudinaryGameTag: "target",
+    lives: 5,
+    score: 100,
+    backgroundSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    ball: "ball.png",
+    powerup: "powerup.png",
+    obstacle:
+      "bomb.png",
+    normal_target_1: "gold_ball.png",
+    normal_target_2: "purple_ball.png",
+    normal_target_3: "blue_ball.png",
+    high_value_target: "super_gold.png",
+  },
   {
     name: "Smash Blitz",
     description:
