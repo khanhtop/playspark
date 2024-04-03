@@ -695,7 +695,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.button = this.sound.add("button");
     this.gameover = this.sound.add("gameover");
     this.throw = this.sound.add("throw");
-    this.touchdown = this.sound.add("touchdown");
+    this.touchdown = this.sound.add("touchdown",  {volume: 6.5});
     this.touchdown1 = this.sound.add("touchdown1");
     this.tackle = this.sound.add("tackle");
     this.tackle1 = this.sound.add("tackle1");
