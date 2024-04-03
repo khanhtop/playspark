@@ -242,6 +242,18 @@ export const games = [
     textColor: "#FFF",
     id: 18,
     landscape: false,
+    cloudinaryGameTag: "nfl",
+    tags: {
+      playerSprite: "1.0",
+      objectSprite: "1.0",
+      enemySprite: "1.0",
+    },
+    enemySprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+    playerSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   {
     name: "Fly Collect",
