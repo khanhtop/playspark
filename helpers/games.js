@@ -234,8 +234,7 @@ export const games = [
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
     ball: "ball.png",
     powerup: "powerup.png",
-    obstacle:
-      "bomb.png",
+    obstacle: "bomb.png",
     normal_target_1: "gold_ball.png",
     normal_target_2: "purple_ball.png",
     normal_target_3: "blue_ball.png",
@@ -279,16 +278,19 @@ export const games = [
     landscape: false,
     cloudinaryGameTag: "nfl",
     tags: {
-      playerSprite: "1.0",
-      objectSprite: "1.0",
-      enemySprite: "1.0",
+      backgroundSprite: "0.6",
+      playerSprite: "spritesheet",
+      objectSprite: "spritesheet",
+      enemySprite: "spritesheet",
     },
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
     enemySprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
   },
   {
     name: "Fly Collect",
