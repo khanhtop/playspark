@@ -228,8 +228,9 @@ export const games = [
     id: 22,
     landscape: true,
     cloudinaryGameTag: "target",
-    lives: 5,
-    score: 100,
+    lives: 3,
+    score: 0,
+    level : 1,
     backgroundSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
     ball: "ball.png",
@@ -240,6 +241,11 @@ export const games = [
     normal_target_2: "purple_ball.png",
     normal_target_3: "blue_ball.png",
     high_value_target: "super_gold.png",
+    shoes : "shoes.png",
+    head :  "head.png",
+    right_hand :  "right_hand.png",
+    left_hand : "left_hand.png",
+    body : "body.png"
   },
   {
     name: "Smash Blitz",

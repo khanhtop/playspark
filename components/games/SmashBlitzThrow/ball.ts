@@ -17,6 +17,7 @@ export class Ball {
     this.sprite.setTexture(textureName);
     this.sprite.disableBody(true, true);
     this.sprite.setBounce(0,0.5);
+    this.sprite.setDepth(10)
     this.sprite.body.onCollide = true;
 
     return this.sprite;

@@ -262,6 +262,12 @@ export default function Advert({
           normal_target_2: data?.normal_target_2,
           normal_target_3: data?.normal_target_3,
           high_value_target: data?.high_value_target,
+          level : data?.level,
+          shoes : data?.shoes,
+          head :  data?.head,
+          right_hand :  data?.right_hand,
+          left_hand : data?.left_hand,
+          body : data?.body
         })}
       {stage === 2 && (
         <Outro
