@@ -625,7 +625,7 @@ export default class newFallGameScene extends Phaser.Scene {
       });
 
       let combo = which === 2 ? 1 : comboNum;
-      let score = which === 2 ? 10 : combo * 100;
+      let score = which === 2 ? 10 : combo * 10;
       this.scoreNum += score;
       // this.goal.play();
       this.scoreText.text = this.scoreNum.toString().padStart(4, "0");
@@ -749,11 +749,11 @@ export default class newFallGameScene extends Phaser.Scene {
   setBooster() {
     boosterNum++;
     this.booster.play();
-    if(boosterNum > 9) {
+    if(boosterNum > 1) {
       this.powerup.play();
       boosterNum = 0;
       // boosterBat += 10;
-      // this.boostNumText.setText(boosterBat.toString());
+      this.boostNumText.setText(`${boosterNum.toString()}/10`);
 
       heartNum++;
       this.lifeNumText.setText(heartNum);
@@ -763,8 +763,8 @@ export default class newFallGameScene extends Phaser.Scene {
         this.staticBonusScreen.setVisible(true);
 
         const offsetYY = -80;
-        this.staticHeart.setPosition(mW - 60, mH + offsetYY).setScale(1, 1);
-        this.staticText.setPosition(mW + 30, mH + offsetYY).setScale(1, 1);
+        this.staticHeart.setPosition(mW - 60, mH + offsetYY).setScale(1, 1).setAlpha(1);
+        this.staticText.setPosition(mW + 30, mH + offsetYY).setScale(1, 1).setAlpha(1);
 
         this.tweens.add({
           targets: this.staticHeart,
@@ -799,7 +799,7 @@ export default class newFallGameScene extends Phaser.Scene {
               fb.setVelocity(0, speed);
             });
           }
-        }, 2000);
+        }, 1500);
       // }
 
     }
