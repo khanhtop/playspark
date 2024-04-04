@@ -405,6 +405,13 @@ export async function completeBattleForChallengee(
 ) {
   console.warn("DEBUG - API.JS TRIGGERED");
   const challengerWon = parseInt(challengerScore) > parseInt(score);
+  const { dataByClient: challengerDataByClient, xp: challengerXp } =
+    await getDataByClientAndXP(challengerId);
+  const { dataByClient: challengeeDataByClient, xp: challengeeXp } =
+    await getDataByClientAndXP(challengeeId);
+  const xpStealAmount = challengerWon
+    ? Math.floor(challengeeDataByClient[clientId]["xp"] / 10)
+    : Math.floor(challengerDataByClient[clientId]["xp"] / 10);
   await fetch("/api/email", {
     method: "POST",
     headers: {
@@ -444,6 +451,10 @@ export async function completeBattleForChallengee(
       score: score,
       timestamp: Date.now(),
     },
+    xpMovement: {
+      to: challengerWon ? "challenger" : "challengee",
+      amount: xpStealAmount,
+    },
   });
   await addDoc(collection(firestore, "notifications"), {
     timestamp: Date.now(),
@@ -461,13 +472,6 @@ export async function completeBattleForChallengee(
     } the battle with ${challengeeName}`,
     uid: challengerId,
   });
-  const { dataByClient: challengerDataByClient, xp: challengerXp } =
-    await getDataByClientAndXP(challengerId);
-  const { dataByClient: challengeeDataByClient, xp: challengeeXp } =
-    await getDataByClientAndXP(challengeeId);
-  const xpStealAmount = challengerWon
-    ? Math.floor(challengeeDataByClient[clientId]["xp"] / 10)
-    : Math.floor(challengerDataByClient[clientId]["xp"] / 10);
   const challengerOutputData = {
     dataByClient: {
       ...challengerDataByClient,

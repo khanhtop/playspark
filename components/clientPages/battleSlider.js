@@ -1,6 +1,6 @@
 import { createChallenge } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -75,6 +75,7 @@ export default function BattleSlider({
             .map((item, key) => (
               <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
                 <BattleCard
+                  user={user}
                   battle={item}
                   key={key}
                   myUid={context?.loggedIn?.uid}
@@ -237,7 +238,7 @@ function BattleInviteCard({ tournament, me, you, battle, myUid }) {
   );
 }
 
-function BattleCard({ battle, myUid }) {
+function BattleCard({ battle, myUid, user }) {
   console.log(battle);
   const hasStarted = battle?.challengerResult;
   const isComplete = battle?.challengeeResult;
@@ -276,7 +277,12 @@ function BattleCard({ battle, myUid }) {
           />
         </div>
         <div className="flex gap-2 items-start">
-          <BattleStatus battle={battle} myUid={myUid} />
+          <BattleStatus
+            battle={battle}
+            myUid={myUid}
+            user={user}
+            won={challengerWon ? "challenger" : "challengee"}
+          />
         </div>
       </div>
     </div>
@@ -307,7 +313,9 @@ function Battler({ data, myUid, won, isComplete }) {
   );
 }
 
-function BattleStatus({ battle, myUid }) {
+function BattleStatus({ battle, myUid, user, won }) {
+  const [showResultsModal, setShowResultsModal] = useState(false);
+
   if (
     !battle.challengerResult &&
     !battle?.challengeeResult &&
@@ -372,7 +380,51 @@ function BattleStatus({ battle, myUid }) {
         <div className="h-8 w-8 bg-red-500 rounded-full"></div>
         <div>Complete</div>
       </div>
-      <button className="bg-red-500 px-4 rounded-xl">View Results</button>
+      <button
+        onClick={() => setShowResultsModal(true)}
+        className="bg-red-500 px-4 rounded-xl"
+      >
+        View Results
+      </button>
+
+      {showResultsModal && (
+        <div className="fixed w-screen h-screen bg-black/10 backdrop-blur top-0 left-0 z-20 flex items-center justify-center">
+          <div
+            style={{
+              backgroundColor: user.primaryColor,
+              color: user.textColor,
+            }}
+            className=" border-2 border-white w-[90%] h-[90%] max-w-[400px] max-h-[600px] rounded-2xl flex flex-col items-center justify-center p-4 relative"
+          >
+            <div
+              onClick={() => setShowResultsModal(false)}
+              className="absolute h-12 w-12 bg-cyan-500 -top-6 -right-6 rounded-full p-2"
+            >
+              <XMarkIcon />
+            </div>
+            <h1 className="text-3xl">Battle Results</h1>
+            <div className="flex mt-8">
+              <div className="w-24">
+                <Battler
+                  data={battle?.challenger}
+                  isComplete={true}
+                  myUid={myUid}
+                  won={won === "challenger"}
+                />
+              </div>
+              <img src="/battle/vs.png" className="h-12" />
+              <div className="w-24">
+                <Battler
+                  data={battle?.challengee}
+                  isComplete={true}
+                  myUid={myUid}
+                  won={won === "challengee"}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
