@@ -40,13 +40,17 @@ import { TutorialMessage } from "./TutorialMessage";
 import { Tutorial } from "./Tutorial";
 import { Audios } from "./Audios";
 import { AudioBtn } from "./AudioBtn";
-import { GAME_STATES, LIFE_COUNT, TUTORIAL_DURATION } from "./Consts";
+import {
+  GAME_STATES,
+  LIFE_COUNT,
+  PLAYER_STATES,
+  TUTORIAL_DURATION,
+} from "./Consts";
 import { Global } from "./Global";
 import { GameStateCtrl } from "./GameStateCtrl";
 import { PauseBtn } from "./PauseBtn";
 import { PausePopup } from "./PausePopup";
 import { FourNumbersContainer } from "./FourNumbersContainer";
-
 
 export default class SmashBlitzThrowing extends Phaser.Scene {
   public static instance: SmashBlitzThrowing;
@@ -96,8 +100,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   constructor(gameType: any, _params: any) {
     super();
     SmashBlitzThrowing.instance = this;
-    // console.log(`----[[[ \n ${gameType} \n ${_params}`);
+    console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
     this.params = _params;
+    this.gameType = gameType;
   }
 
   width: number = 1920 / 2;
@@ -112,7 +117,6 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   preload() {
     loading(this);
 
-    this.gameType = "smashBlitzThrow";
     let imageLoader = new AssetsLoader(this);
     imageLoader.load(this.gameType, this.params);
   }
@@ -154,11 +158,10 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     );
     var ballShooter = new BallShooter(this).init(throwingCenter, ball);
 
-    let playerController = new PlayerController(
-      this,
-      throwingCenterX,
-      throwingCenterY
-    );
+    let playerPosx = throwingCenterX + 40;
+    let playerPosy = throwingCenterY + 70;
+
+    let playerController = new PlayerController(this, playerPosx, playerPosy);
 
     new AudioBtn(this);
     new PauseBtn(this);
@@ -184,7 +187,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
     new TargetReplacer(this);
 
-    playerController.player_sprite.on(
+    playerController.body.on(
       Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN,
       (pointer: any) => {
         if (Global.gameState != GAME_STATES.PLAYING) return;
@@ -199,6 +202,16 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       (pointer: any) => {
         if (Global.gameState != GAME_STATES.PLAYING) return;
         this.events.emit("Input:pointermove", pointer);
+        //ball.enableBody(true, center.x, center.y, true, true);
+        if (Global.playerState == PLAYER_STATES.ARM_BACK) {
+          ball.disableBody(true, true);
+          ball.visible = true;
+          ball.alpha = 1;
+          ball.setPosition(
+            (playerController.right_hand.x-10) + playerPosx,
+            (playerController.right_hand.y-10) + playerPosy
+          );
+        }
       }
     );
     this.input.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, (pointer: any) => {
@@ -212,17 +225,18 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
     this.createCounters();
 
-    let _score = this.params ? this.params.score : 0;
-    new ScoreManager(this).setCount(_score);
+    let _score = this.params == undefined? 0 : parseInt(this.params.score);
+    
     let pointPopup = new PointPopup(this);
     pointPopup.setPos(this.width / 2, this.height / 2);
 
     this.events.on("ScoreManager:onChange", (currentScore: number) => {
       this.pointsCounter.setText(currentScore);
+      if(currentScore != 0)
       pointPopup.show(currentScore - this.prevScore);
       this.prevScore = currentScore;
     });
-
+    new ScoreManager(this).setCount(_score);
     this.events.on("LivesHandler:onChange", (currentLifes: number) => {
       this.livesCounter.setText(currentLifes);
     });
@@ -231,9 +245,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       this.livesCounter.setText(0);
       //console.log("---gameLose");
     });
-  
+
     let _lives = this.params ? this.params.lives : LIFE_COUNT;
-    new LivesHandler(this,_lives);
+    new LivesHandler(this, _lives);
 
     this.boostCredits = 0;
     let powerupCounter = new BudgetCounter(this);
@@ -323,8 +337,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
         }
       );
     });
-
-    this.levelManager = new LevelManager(this);
+   
+    let retrievedLevel = this.params == undefined  ? 0 : parseInt(this.params.level) -1;
+    this.levelManager = new LevelManager(this, retrievedLevel);
     this.events.emit(
       "LevelManager:getCurrentLevel",
       (levelNum: number, data: any) => {
@@ -421,8 +436,8 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   }
 }
 
-window.onload = () => {
-  /* const config = {
+/*window.onload = () => {
+  const config = {
     type: Phaser.AUTO,
     width: 960,
     height: 512,
@@ -441,5 +456,6 @@ window.onload = () => {
     },
   };
 
-  const game = new Phaser.Game(config);*/
+  const game = new Phaser.Game(config);
 };
+*/

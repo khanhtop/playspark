@@ -17,3 +17,7 @@ export function separateDigits(number: number) {
 export function getValuePercentage(value: number, min: number, max: number) {
   return (value - min) / (max - min);
 }
+
+export function getValueBetweenByPercent(min:number, max:number, percent:number) {
+  return min + (max - min) * percent;
+  }
