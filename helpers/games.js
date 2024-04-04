@@ -229,18 +229,18 @@ export const games = [
     landscape: true,
     cloudinaryGameTag: "smash-blitz",
     playerSprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273756/ggm9gp0ksw4krnjwbgu3.png",
     backgroundSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
     additionalSpriteOne:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849184/Fall_-_head_-_basketball_yqri0q.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273662/gniqllcbuvpxpjyv7ccf.png",
     additionalSpriteTwo:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704931110/iiukoen08wivafjit9kr.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273812/t5dhqvsulaqxnbkmdbab.png",
     tags: {
       playerSprite: "body",
       backgroundSprite: "0.6",
       additionalSpriteOne: "head",
-      additionalSpriteTwo: "1.0",
+      additionalSpriteTwo: "shoes",
     },
     lives: 3,
     score: 0,
