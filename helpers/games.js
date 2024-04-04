@@ -227,12 +227,24 @@ export const games = [
     textColor: "#FFF",
     id: 22,
     landscape: true,
-    cloudinaryGameTag: "target",
-    lives: 3,
-    score: 0,
-    level : 1,
+    cloudinaryGameTag: "smash-blitz",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
     backgroundSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    additionalSpriteOne:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849184/Fall_-_head_-_basketball_yqri0q.png",
+    additionalSpriteTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704931110/iiukoen08wivafjit9kr.png",
+    tags: {
+      playerSprite: "body",
+      backgroundSprite: "0.6",
+      additionalSpriteOne: "head",
+      additionalSpriteTwo: "1.0",
+    },
+    lives: 3,
+    score: 0,
+    level: 1,
     ball: "ball.png",
     powerup: "powerup.png",
     obstacle: "bomb.png",
@@ -240,11 +252,11 @@ export const games = [
     normal_target_2: "purple_ball.png",
     normal_target_3: "blue_ball.png",
     high_value_target: "super_gold.png",
-    shoes : "shoes.png",
-    head :  "head.png",
-    right_hand :  "right_hand.png",
-    left_hand : "left_hand.png",
-    body : "body.png"
+    shoes: "shoes.png",
+    head: "head.png",
+    right_hand: "right_hand.png",
+    left_hand: "left_hand.png",
+    body: "body.png",
   },
   {
     name: "Smash Blitz",
