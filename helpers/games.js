@@ -227,25 +227,36 @@ export const games = [
     textColor: "#FFF",
     id: 22,
     landscape: true,
-    cloudinaryGameTag: "target",
+    cloudinaryGameTag: "smash-blitz",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273756/ggm9gp0ksw4krnjwbgu3.png",
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    additionalSpriteOne:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273662/gniqllcbuvpxpjyv7ccf.png",
+    additionalSpriteTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273812/t5dhqvsulaqxnbkmdbab.png",
+    tags: {
+      playerSprite: "body",
+      backgroundSprite: "0.6",
+      additionalSpriteOne: "head",
+      additionalSpriteTwo: "shoes",
+    },
     lives: 3,
     score: 0,
-    level : 1,
-    backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    level: 1,
     ball: "ball.png",
     powerup: "powerup.png",
-    obstacle:
-      "bomb.png",
+    obstacle: "bomb.png",
     normal_target_1: "gold_ball.png",
     normal_target_2: "purple_ball.png",
     normal_target_3: "blue_ball.png",
     high_value_target: "super_gold.png",
-    shoes : "shoes.png",
-    head :  "head.png",
-    right_hand :  "right_hand.png",
-    left_hand : "left_hand.png",
-    body : "body.png"
+    shoes: "shoes.png",
+    head: "head.png",
+    right_hand: "right_hand.png",
+    left_hand: "left_hand.png",
+    body: "body.png",
   },
   {
     name: "Smash Blitz",
@@ -283,6 +294,21 @@ export const games = [
     textColor: "#FFF",
     id: 18,
     landscape: false,
+    cloudinaryGameTag: "nfl",
+    tags: {
+      backgroundSprite: "0.6",
+      playerSprite: "spritesheet",
+      objectSprite: "spritesheet",
+      enemySprite: "spritesheet",
+    },
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
+    enemySprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
   },
   {
     name: "Fly Collect",
