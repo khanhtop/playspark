@@ -8,6 +8,7 @@ export class AssetsLoader {
 
     if (params != undefined) {
       // console.log("----[[[ params ----", params)
+ 
       this.scene.load.image("bg", params.backgroundSprite);
       this.scene.load.image("ball", params.ball);
       this.scene.load.image("powerup", params.powerup);
@@ -17,11 +18,17 @@ export class AssetsLoader {
       this.scene.load.image("blue_ball", params.normal_target_3);
       this.scene.load.image("super_gold", params.high_value_target);
 
-      this.scene.load.image("shoes", params.shoes);
-      this.scene.load.image("head", params.head);
+      let shsp = params.additionalSpriteTwo == undefined ? params.shoes : params.additionalSpriteTwo;
+      this.scene.load.image("shoes", shsp);
+
+      let hdsp = params.additionalSpriteOne == undefined ? params.head : params.additionalSpriteOne;
+      this.scene.load.image("head", hdsp);
+      
       this.scene.load.image("right_hand", params.right_hand);
       this.scene.load.image("left_hand",params.left_hand);
-      this.scene.load.image("body", params.body);
+
+      let bdsp = params.playerSprite == undefined ? params.body : params.playerSprite ;
+      this.scene.load.image("body", bdsp);
     }
 
     let baseUrl = "/"; ///pong/${gameType}/
