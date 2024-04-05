@@ -1635,6 +1635,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.player.setVelocity(0, 0).setAngle(0).play("player_idle_anim");
     this.blueline.setPosition(this.blueline.x, this.getUIPos(this.posObject.startPos.first));
     this.yellowline.setPosition(this.yellowline.x, this.getUIPos(this.posObject.startPos.second));
+    this.ball.setPosition(this.player.x + playerR / 4, this.player.y - playerR / 3.4);
 
     this.drag.setPosition(this.drag.x, this.player.y);
 
