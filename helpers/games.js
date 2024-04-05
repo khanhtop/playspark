@@ -231,11 +231,7 @@ export const games = [
     playerSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273756/ggm9gp0ksw4krnjwbgu3.png",
     backgroundSprite:
-<<<<<<< HEAD
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
-=======
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
->>>>>>> smash_blitz_throw
     additionalSpriteOne:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273662/gniqllcbuvpxpjyv7ccf.png",
     additionalSpriteTwo:
