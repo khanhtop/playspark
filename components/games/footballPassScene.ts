@@ -1886,6 +1886,8 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   onCatchLogic(type = "normal") {
+    if(!this.status.isPlaying) return;
+
     let x = this.ball.x;
     let y = this.ball.y;
 
@@ -1955,6 +1957,7 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   onInitPlayerVelocity() {
+    this.isDragging = false;
     this.player.setVelocity(0, 0)
     this.aiEnemies.forEach(e => {
       e.setVelocity(0, 0)
@@ -2067,9 +2070,9 @@ export default class FootballPassScene extends Phaser.Scene {
 
     if (this.isDragging && this.status.isPlaying) {
 
-      if(this.player.y < this.getUIPos(this.posObject.startPos.first) && !this.status.isThrowBall) {
-        this.goalYPos = this.getUIPos(2000);
-      }
+      // if(this.player.y < this.getUIPos(this.posObject.startPos.first) && !this.status.isThrowBall) {
+      //   this.goalYPos = this.getUIPos(2000);
+      // }
 
       const dx = this.goalXPos - this.player.x;
       const dy = this.goalYPos - this.player.y;
