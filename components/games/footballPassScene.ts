@@ -792,7 +792,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     this.tapGroup = this.add.group();
 
-    this.drag = this.add.sprite(w / 2, h - 120, 'drag').setOrigin(0.5, 0.5).setDisplaySize(200, 150).setScrollFactor(0, 0).setVisible(false);
+    this.drag = this.add.sprite(w / 2, h - 120, 'drag').setOrigin(0.5, 0.5).setDisplaySize(200, 150).setVisible(false);
 
     this.TAP = this.add.sprite(w / 2, header.y + 30, 'TAP1').setOrigin(0.5, 0).setDisplaySize(w * 0.7, w * 0.7 * 0.65).setScrollFactor(0, 0);
       
@@ -1635,6 +1635,8 @@ export default class FootballPassScene extends Phaser.Scene {
     this.player.setVelocity(0, 0).setAngle(0).play("player_idle_anim");
     this.blueline.setPosition(this.blueline.x, this.getUIPos(this.posObject.startPos.first));
     this.yellowline.setPosition(this.yellowline.x, this.getUIPos(this.posObject.startPos.second));
+
+    this.drag.setPosition(this.drag.x, this.player.y);
 
     this.initTabList();
     // this.onSelectPlan("PLAN1", 0);
