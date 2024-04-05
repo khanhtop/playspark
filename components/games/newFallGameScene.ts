@@ -749,7 +749,7 @@ export default class newFallGameScene extends Phaser.Scene {
   setBooster() {
     boosterNum++;
     this.booster.play();
-    if(boosterNum > 1) {
+    if(boosterNum > 9) {
       this.powerup.play();
       boosterNum = 0;
       // boosterBat += 10;
