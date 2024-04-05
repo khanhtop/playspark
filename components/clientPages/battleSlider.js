@@ -289,7 +289,7 @@ function BattleCard({ battle, myUid, user }) {
   );
 }
 
-function Battler({ data, myUid, won, isComplete }) {
+function Battler({ data, myUid, won, isComplete, withScore }) {
   return (
     <div className="flex flex-col items-center flex-1 relative">
       <div className="h-12 w-12 rounded-full overflow-hidden">
@@ -301,6 +301,11 @@ function Battler({ data, myUid, won, isComplete }) {
       <p className="font-octo text-sm">
         {data?.id === myUid ? "You" : data?.companyName}
       </p>
+      {typeof withScore !== "undefined" && (
+        <p className={`text-2xl ${won ? "text-green-500" : "text-red-500"} `}>
+          {withScore}
+        </p>
+      )}
       {isComplete && (
         <div className="absolute h-8 w-8 -top-4 right-2 border-white border-2 rounded-full overflow-hidden">
           <img
@@ -314,7 +319,11 @@ function Battler({ data, myUid, won, isComplete }) {
 }
 
 function BattleStatus({ battle, myUid, user, won }) {
+  const context = useAppContext();
+  const router = useRouter();
   const [showResultsModal, setShowResultsModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const iWon = battle.challenger.id === myUid && won === "challenger";
 
   if (
     !battle.challengerResult &&
@@ -410,6 +419,7 @@ function BattleStatus({ battle, myUid, user, won }) {
                   isComplete={true}
                   myUid={myUid}
                   won={won === "challenger"}
+                  withScore={battle?.challengerResult.score}
                 />
               </div>
               <img src="/battle/vs.png" className="h-12" />
@@ -419,9 +429,42 @@ function BattleStatus({ battle, myUid, user, won }) {
                   isComplete={true}
                   myUid={myUid}
                   won={won === "challengee"}
+                  withScore={battle?.challengeeResult.score}
                 />
               </div>
             </div>
+            <p className="text-2xl mt-2">YOU {iWon ? "WON" : "LOST"}!</p>
+            <p
+              className={`text-4xl ${iWon ? "text-green-500" : "text-red-500"}`}
+            >
+              {iWon ? "+" : "-"} {battle.xpMovement.amount} XP
+            </p>
+            <button
+              onClick={async () => {
+                setLoading(true);
+                const id = await createChallenge(
+                  battle.game,
+                  battle.challenger.id === myUid
+                    ? battle.challenger
+                    : battle.challengee,
+                  {
+                    ...context.profile,
+                    id: context?.loggedIn.uid,
+                  },
+                  router.asPath
+                );
+                router.push("/battle/" + id);
+                setLoading(false);
+              }}
+              disabled={loading}
+              className="bg-green-500 h-12 w-36 rounded-xl text-3xl mt-6"
+            >
+              {loading ? (
+                <ArrowPathIcon className="h-6 w-full animate-spin" />
+              ) : (
+                "Rematch"
+              )}
+            </button>
           </div>
         </div>
       )}
