@@ -323,7 +323,9 @@ function BattleStatus({ battle, myUid, user, won }) {
   const router = useRouter();
   const [showResultsModal, setShowResultsModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const iWon = battle.challenger.id === myUid && won === "challenger";
+  const iWon =
+    (battle.challenger.id === myUid && won === "challenger") ||
+    (battle.challengee.id === myUid && won === "challengee");
 
   if (
     !battle.challengerResult &&
