@@ -184,7 +184,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 15,
-    words: [],
+    words: ["SCORE", "GOALS", "CATCH", "BLITZ"],
     cloudinaryGameTag: "wordle",
     tags: {
       backgroundSprite: "0.6",
