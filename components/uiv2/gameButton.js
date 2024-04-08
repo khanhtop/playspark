@@ -33,7 +33,7 @@ export default function GameButton({
     >
       <img
         src="/buttons/button_stripes.png"
-        className="absolute top-0 left-8 h-full w-full"
+        className="absolute top-0 left-8 h-full"
       />
       <div
         style={{ backgroundColor: disabled ? "#AAA" : bgColor || "cyan" }}
