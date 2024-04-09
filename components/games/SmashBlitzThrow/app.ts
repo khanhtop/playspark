@@ -102,7 +102,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     SmashBlitzThrowing.instance = this;
     console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
     this.params = _params;
-    this.gameType = gameType;
+    //  this.gameType = gameType;
   }
 
   width: number = 1920 / 2;
@@ -187,7 +187,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
     new TargetReplacer(this);
 
-    playerController.body.on(
+    playerController.container._body.on(
       Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN,
       (pointer: any) => {
         if (Global.gameState != GAME_STATES.PLAYING) return;
@@ -208,8 +208,8 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
           ball.visible = true;
           ball.alpha = 1;
           ball.setPosition(
-            (playerController.right_hand.x-10) + playerPosx,
-            (playerController.right_hand.y-10) + playerPosy
+            playerController.container.right_hand.x - 10 + playerPosx,
+            playerController.container.right_hand.y - 10 + playerPosy
           );
         }
       }
@@ -225,15 +225,14 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
     this.createCounters();
 
-    let _score = this.params == undefined? 0 : parseInt(this.params.score);
-    
+    let _score = this.params == undefined ? 0 : parseInt(this.params.score);
+
     let pointPopup = new PointPopup(this);
     pointPopup.setPos(this.width / 2, this.height / 2);
 
     this.events.on("ScoreManager:onChange", (currentScore: number) => {
       this.pointsCounter.setText(currentScore);
-      if(currentScore != 0)
-      pointPopup.show(currentScore - this.prevScore);
+      if (currentScore != 0) pointPopup.show(currentScore - this.prevScore);
       this.prevScore = currentScore;
     });
     new ScoreManager(this).setCount(_score);
@@ -332,13 +331,17 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
           this.countDownTimer.set(data[1]);
           this.countDownTimer.start();
 
-          this.events.emit("ProgressBox:setGreenAreaWidth", data[2]);
-          this.events.emit("ProgressBox:setTimeScale", data[3]);
+          this.events.emit(
+            "ProgressBox:setGreenAreaWidth",
+            parseFloat(data[2])
+          );
+          this.events.emit("ProgressBox:setTimeScale", parseFloat(data[3]));
         }
       );
     });
-   
-    let retrievedLevel = this.params == undefined  ? 0 : parseInt(this.params.level) -1;
+
+    let retrievedLevel =
+      this.params == undefined ? 0 : parseInt(this.params.level) - 1;
     this.levelManager = new LevelManager(this, retrievedLevel);
     this.events.emit(
       "LevelManager:getCurrentLevel",
@@ -346,8 +349,8 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
         this.hitCounterClass.setGoalCount(data[0]);
         this.levelCounter.setText(levelNum + 1);
         this.countDownTimer.set(data[1]);
-        this.events.emit("ProgressBox:setGreenAreaWidth", data[2]);
-        this.events.emit("ProgressBox:setTimeScale", data[3]);
+        this.events.emit("ProgressBox:setGreenAreaWidth", parseFloat(data[2]));
+        this.events.emit("ProgressBox:setTimeScale", parseFloat(data[3]));
       }
     );
 
@@ -436,7 +439,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   }
 }
 
-/*window.onload = () => {
+window.onload = () => {
   const config = {
     type: Phaser.AUTO,
     width: 960,
@@ -458,4 +461,3 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
   const game = new Phaser.Game(config);
 };
-*/
