@@ -6,10 +6,13 @@ import EmailSlide from "./forms/emailSlide";
 import ShareButton from "./ui/shareButton";
 import SignUp from "./forms/signUp";
 import { restartEvent, reviveEvent } from "@/helpers/events";
+import useMusic from "@/helpers/useMusic";
+import GameButton from "./uiv2/gameButton";
 // import Ranking from "./forms/ranking";
 
 export default function Outro({ score, setStage, data, reviveCount, onReset }) {
   const context = useAppContext();
+  // useMusic("/uisounds/intro.mp3", 0.5);
 
   const selectStage = () => {
     const possibleRouting = [];
@@ -25,9 +28,18 @@ export default function Outro({ score, setStage, data, reviveCount, onReset }) {
     }
   };
 
+  console.log(data);
+
   return (
-    <div className="bg-[#222] h-full w-full flex items-center justify-center">
-      <div className="relative bg-white rounded-2xl text-black font-light h-[80%] portrait:h-[90%] w-[90%] relative flex items-center justify-start flex-col">
+    <div
+      style={{
+        backgroundImage: `url("${
+          data?.backgroundSprite || data?.backgroundImage
+        }")`,
+      }}
+      className={`bg-cover h-full w-full flex items-center justify-center`}
+    >
+      <div className="relative bg-white/50 border-2 border-white backdrop-blur rounded-2xl text-black font-light h-[80%] portrait:h-[90%] w-[90%] relative flex items-center justify-start flex-col">
         {!context.hasSubscribedToList && <EmailSlide data={data} />}
         {/* Header Title */}
         <div
@@ -63,26 +75,27 @@ export default function Outro({ score, setStage, data, reviveCount, onReset }) {
                 <ShareButton data={data} score={score} />
               </div>
             </div>
-            <UIButton
-              text="Revive"
-              disabled={reviveCount === 0}
-              {...{ ...data, primaryColor: "green" }}
+            <GameButton
+              bgColor="#00F"
+              textColor={data.textColor}
               onClick={() => {
                 setStage(selectStage());
               }}
-              className={`h-12 rounded-full mt-0 ${
-                reviveCount > 0 && "animate-pulse"
-              }`}
-            />
-            <UIButton
-              text="Restart"
-              {...data}
+              badge={reviveCount}
+              disabled={reviveCount === 0}
+            >
+              Revive
+            </GameButton>
+            <GameButton
+              bgColor={data.primaryColor}
+              textColor={data.textColor}
               onClick={() => {
                 restartEvent(context, data);
                 onReset();
               }}
-              className="h-12 rounded-full mt-2"
-            />
+            >
+              Restart
+            </GameButton>
           </div>
           <div
             className={`${
