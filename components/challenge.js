@@ -90,7 +90,8 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
         data?.challenger?.id,
         data?.challengee?.id,
         data?.challenger?.email,
-        data?.challengee?.email
+        data?.challengee?.email,
+        data?.game?.ownerId
       );
     }
   };

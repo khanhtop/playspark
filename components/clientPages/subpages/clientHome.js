@@ -36,7 +36,7 @@ export default function ClientHome({
       />
       <BattleSlider
         clientId={user.id}
-        client={user}
+        user={user}
         tournaments={tournaments}
         leaderboard={leaderboard}
       />

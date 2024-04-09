@@ -7,6 +7,7 @@ import { useAppContext } from "@/helpers/store";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import CreateConfiguration from "./createConfiguration";
+import CreateConfigReimage from "./createConfigReimage";
 
 export default function CreateModal({ data, hide }) {
   const context = useAppContext();
@@ -63,7 +64,12 @@ export default function CreateModal({ data, hide }) {
               setTournament={setTournament}
             />
           )}
-          {stage === 1 && (
+          {stage === 1 && data.useReimage ? (
+            <CreateConfigReimage
+              tournament={tournament}
+              setTournament={setTournament}
+            />
+          ) : (
             <CreateConfiguration
               isAdmin={true}
               tournament={tournament}

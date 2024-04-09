@@ -238,6 +238,35 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
+
+  if (id === 20)
+    return (
+      <Pong
+        data={data}
+        gameType="newcricketball"
+        callback={callback}
+        params={params}
+      />
+    );
+  if (id === 21)
+    return (
+      <Pong
+        data={data}
+        gameType="newfallgame"
+        callback={callback}
+        params={params}
+      />
+    );
+
+  if (id === 22)
+    return (
+      <Pong
+        data={data}
+        gameType="smashBlitzThrow"
+        callback={callback}
+        params={params}
+      />
+    );
 }
 
 export function incrementPlayCount(tournamentId, gameType = "freemium") {
@@ -371,10 +400,18 @@ export async function completeBattleForChallengee(
   challengerId,
   challengeeId,
   challengerEmail,
-  challengeeEmail
+  challengeeEmail,
+  clientId
 ) {
   console.warn("DEBUG - API.JS TRIGGERED");
   const challengerWon = parseInt(challengerScore) > parseInt(score);
+  const { dataByClient: challengerDataByClient, xp: challengerXp } =
+    await getDataByClientAndXP(challengerId);
+  const { dataByClient: challengeeDataByClient, xp: challengeeXp } =
+    await getDataByClientAndXP(challengeeId);
+  const xpStealAmount = challengerWon
+    ? Math.floor(challengeeDataByClient[clientId]["xp"] / 10)
+    : Math.floor(challengerDataByClient[clientId]["xp"] / 10);
   await fetch("/api/email", {
     method: "POST",
     headers: {
@@ -414,6 +451,10 @@ export async function completeBattleForChallengee(
       score: score,
       timestamp: Date.now(),
     },
+    xpMovement: {
+      to: challengerWon ? "challenger" : "challengee",
+      amount: xpStealAmount,
+    },
   });
   await addDoc(collection(firestore, "notifications"), {
     timestamp: Date.now(),
@@ -431,5 +472,49 @@ export async function completeBattleForChallengee(
     } the battle with ${challengeeName}`,
     uid: challengerId,
   });
+  const challengerOutputData = {
+    dataByClient: {
+      ...challengerDataByClient,
+      [clientId]: {
+        ...challengerDataByClient[clientId],
+        xp: challengerWon
+          ? challengerDataByClient[clientId]["xp"] + xpStealAmount
+          : challengerDataByClient[clientId]["xp"] - xpStealAmount,
+      },
+    },
+    totalXp: challengerWon
+      ? challengerXp + xpStealAmount
+      : challengerXp - xpStealAmount,
+  };
+  const challengeeOutputData = {
+    dataByClient: {
+      ...challengeeDataByClient,
+      [clientId]: {
+        ...challengeeDataByClient[clientId],
+        xp: challengerWon
+          ? challengeeDataByClient[clientId]["xp"] - xpStealAmount
+          : challengeeDataByClient[clientId]["xp"] + xpStealAmount,
+      },
+    },
+    totalXp: challengerWon
+      ? challengeeXp - xpStealAmount
+      : challengeeXp + xpStealAmount,
+  };
+  await updateDoc(
+    doc(firestore, "users", challengerId.toString()),
+    challengerOutputData
+  );
+  await updateDoc(
+    doc(firestore, "users", challengeeId.toString()),
+    challengeeOutputData
+  );
   return;
+}
+
+async function getDataByClientAndXP(userId) {
+  const result = await getDoc(doc(firestore, "users", userId.toString()));
+  return {
+    dataByClient: result.data()?.dataByClient,
+    xp: result.data()?.totalXp,
+  };
 }

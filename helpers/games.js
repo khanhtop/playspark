@@ -122,6 +122,19 @@ export const games = [
       enemySprite: "1.0",
       powerUpSprite: "1.0",
     },
+    // useReimage: true,
+    reimageSprites: [
+      {
+        name: "Player Sprite",
+        requiredTags: ["pong", "square"],
+        key: "playerSprite",
+      },
+      {
+        name: "Enemy Sprite",
+        requiredTags: ["pong", "square"],
+        key: "enemySprite",
+      },
+    ],
   },
   {
     name: "Baller Faller",
@@ -171,7 +184,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 15,
-    words: [],
+    words: ["SCORE", "GOALS", "CATCH", "BLITZ"],
     cloudinaryGameTag: "wordle",
     tags: {
       backgroundSprite: "0.6",
@@ -205,7 +218,46 @@ export const games = [
     objectSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
-
+  {
+    name: "Smash Blitz Throw",
+    description: "Smash Blitz Throw is balabala bala babab",
+    backgroundImage: "/pong/smashBlitzThrow/smashBlitzThrowing.png",
+    screenshot: "cricketsmash.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 22,
+    landscape: true,
+    cloudinaryGameTag: "smash-blitz",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273756/ggm9gp0ksw4krnjwbgu3.png",
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    additionalSpriteOne:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273662/gniqllcbuvpxpjyv7ccf.png",
+    additionalSpriteTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273812/t5dhqvsulaqxnbkmdbab.png",
+    tags: {
+      playerSprite: "body",
+      backgroundSprite: "0.6",
+      additionalSpriteOne: "head",
+      additionalSpriteTwo: "shoes",
+    },
+    lives: 3,
+    score: 0,
+    level: 1,
+    ball: "ball.png",
+    powerup: "powerup.png",
+    obstacle: "bomb.png",
+    normal_target_1: "gold_ball.png",
+    normal_target_2: "purple_ball.png",
+    normal_target_3: "blue_ball.png",
+    high_value_target: "super_gold.png",
+    shoes: "shoes.png",
+    head: "head.png",
+    right_hand: "right_hand.png",
+    left_hand: "left_hand.png",
+    body: "body.png",
+  },
   {
     name: "Smash Blitz",
     description:
@@ -242,6 +294,21 @@ export const games = [
     textColor: "#FFF",
     id: 18,
     landscape: false,
+    cloudinaryGameTag: "nfl",
+    tags: {
+      backgroundSprite: "0.6",
+      playerSprite: "spritesheet",
+      objectSprite: "spritesheet",
+      enemySprite: "spritesheet",
+    },
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
+    enemySprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
   },
   {
     name: "Fly Collect",
@@ -268,5 +335,55 @@ export const games = [
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     objectSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+  },
+  {
+    name: "Cricket Ball Smash",
+    description:
+      "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+    screenshot: "cricketsmash.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 20,
+    landscape: true,
+  },
+  {
+    name: "Baller Faller",
+    description:
+      "Dodge obstacles, catch falling objects, and set high scores in this customizable and action-packed game where every move is a step closer to victory!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259251/4_ehxmnh.png",
+    screenshot: "basketball-fall.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 21,
+    //
+    // Configurable Parameters
+    //
+    cloudinaryGameTag: "fall",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870377/vxtjhmvs2qj11xlyxaug.png",
+    powerUpSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+    objectSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169648/kjacp92e8wrlbbkdlksm.png",
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870197/g45zsfq8kr4gz4op7u1q.png",
+    additionalSpriteOne:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849184/Fall_-_head_-_basketball_yqri0q.png",
+    additionalSpriteTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704931110/iiukoen08wivafjit9kr.png",
+    tags: {
+      playerSprite: "body",
+      objectSprite: "1.0",
+      backgroundSprite: "0.6",
+      enemySprite: "1.0",
+      powerUpSprite: "1.0",
+      additionalSpriteOne: "head",
+      additionalSpriteTwo: "1.0",
+    },
   },
 ];

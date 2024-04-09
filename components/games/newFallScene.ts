@@ -626,7 +626,7 @@ export default class newFallScene extends Phaser.Scene {
       });
 
       let combo = which === 2 ? 1 : comboNum;
-      let score = which === 2 ? 10 : combo * 100;
+      let score = which === 2 ? 10 : combo * 10;
       this.scoreNum += score;
       // this.goal.play();
       this.scoreText.text = this.scoreNum.toString().padStart(4, "0");

@@ -1,6 +1,6 @@
 import { createChallenge } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -17,7 +17,10 @@ export default function BattleSlider({
 
   return (
     <>
-      <h1 className="px-5 mt-8 font-octo text-2xl tracking-wider text-white/90">
+      <h1
+        style={{ color: user.textColor }}
+        className="px-5 mt-8 font-octo text-2xl tracking-wider"
+      >
         Battles
       </h1>
       <div className="flex pl-5 gap-4 pb-4">
@@ -25,6 +28,7 @@ export default function BattleSlider({
           selected={stage === 0}
           text="Start New Battle"
           setSelected={() => setStage(0)}
+          color={user.textColor}
         />
         {context?.battles
           ?.filter((a) => a.game.ownerId === clientId)
@@ -33,6 +37,7 @@ export default function BattleSlider({
             selected={stage === 1}
             text="Ongoing"
             setSelected={() => setStage(1)}
+            color={user.textColor}
           />
         )}
 
@@ -70,6 +75,7 @@ export default function BattleSlider({
             .map((item, key) => (
               <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
                 <BattleCard
+                  user={user}
                   battle={item}
                   key={key}
                   myUid={context?.loggedIn?.uid}
@@ -124,7 +130,7 @@ function RandomBattles({ tournaments, leaderboard }) {
 
   return (
     <div className="overflow-x-scroll whitespace-nowrap no-scrollbar pb-4">
-      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8 text-white  rounded-3xl">
         <BattleInviteCard
           battle={{ game: {} }}
           tournament={
@@ -136,7 +142,7 @@ function RandomBattles({ tournaments, leaderboard }) {
           }
         />
       </div>
-      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl text-white">
         <BattleInviteCard
           battle={{ game: {} }}
           tournament={
@@ -148,7 +154,7 @@ function RandomBattles({ tournaments, leaderboard }) {
           }
         />
       </div>
-      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl">
+      <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8 text-white rounded-3xl">
         <BattleInviteCard
           battle={{ game: {} }}
           tournament={
@@ -164,14 +170,15 @@ function RandomBattles({ tournaments, leaderboard }) {
   );
 }
 
-function Tab({ text, selected, setSelected }) {
+function Tab({ text, selected, setSelected, color }) {
   return (
     <div
       onClick={setSelected}
+      style={{ color: color }}
       className={`py-2 font-octo text-lg ${
         selected
-          ? "border-b-cyan-500 border-b-2 text-white"
-          : "text-white/50 cursor-pointer"
+          ? "border-b-cyan-500 border-b-2 opacity-100"
+          : "opacity-50 cursor-pointer"
       }`}
     >
       <p>{text}</p>
@@ -231,7 +238,7 @@ function BattleInviteCard({ tournament, me, you, battle, myUid }) {
   );
 }
 
-function BattleCard({ battle, myUid }) {
+function BattleCard({ battle, myUid, user }) {
   console.log(battle);
   const hasStarted = battle?.challengerResult;
   const isComplete = battle?.challengeeResult;
@@ -270,14 +277,19 @@ function BattleCard({ battle, myUid }) {
           />
         </div>
         <div className="flex gap-2 items-start">
-          <BattleStatus battle={battle} myUid={myUid} />
+          <BattleStatus
+            battle={battle}
+            myUid={myUid}
+            user={user}
+            won={challengerWon ? "challenger" : "challengee"}
+          />
         </div>
       </div>
     </div>
   );
 }
 
-function Battler({ data, myUid, won, isComplete }) {
+function Battler({ data, myUid, won, isComplete, withScore }) {
   return (
     <div className="flex flex-col items-center flex-1 relative">
       <div className="h-12 w-12 rounded-full overflow-hidden">
@@ -289,6 +301,11 @@ function Battler({ data, myUid, won, isComplete }) {
       <p className="font-octo text-sm">
         {data?.id === myUid ? "You" : data?.companyName}
       </p>
+      {typeof withScore !== "undefined" && (
+        <p className={`text-2xl ${won ? "text-green-500" : "text-red-500"} `}>
+          {withScore}
+        </p>
+      )}
       {isComplete && (
         <div className="absolute h-8 w-8 -top-4 right-2 border-white border-2 rounded-full overflow-hidden">
           <img
@@ -301,7 +318,15 @@ function Battler({ data, myUid, won, isComplete }) {
   );
 }
 
-function BattleStatus({ battle, myUid }) {
+function BattleStatus({ battle, myUid, user, won }) {
+  const context = useAppContext();
+  const router = useRouter();
+  const [showResultsModal, setShowResultsModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const iWon =
+    (battle.challenger.id === myUid && won === "challenger") ||
+    (battle.challengee.id === myUid && won === "challengee");
+
   if (
     !battle.challengerResult &&
     !battle?.challengeeResult &&
@@ -366,7 +391,85 @@ function BattleStatus({ battle, myUid }) {
         <div className="h-8 w-8 bg-red-500 rounded-full"></div>
         <div>Complete</div>
       </div>
-      <button className="bg-red-500 px-4 rounded-xl">View Results</button>
+      <button
+        onClick={() => setShowResultsModal(true)}
+        className="bg-red-500 px-4 rounded-xl"
+      >
+        View Results
+      </button>
+
+      {showResultsModal && (
+        <div className="fixed w-screen h-screen bg-black/10 backdrop-blur top-0 left-0 z-20 flex items-center justify-center">
+          <div
+            style={{
+              backgroundColor: user.primaryColor,
+              color: user.textColor,
+            }}
+            className=" border-2 border-white w-[90%] h-[90%] max-w-[400px] max-h-[600px] rounded-2xl flex flex-col items-center justify-center p-4 relative"
+          >
+            <div
+              onClick={() => setShowResultsModal(false)}
+              className="absolute h-12 w-12 bg-cyan-500 -top-6 -right-6 rounded-full p-2"
+            >
+              <XMarkIcon />
+            </div>
+            <h1 className="text-3xl">Battle Results</h1>
+            <div className="flex mt-8">
+              <div className="w-24">
+                <Battler
+                  data={battle?.challenger}
+                  isComplete={true}
+                  myUid={myUid}
+                  won={won === "challenger"}
+                  withScore={battle?.challengerResult.score}
+                />
+              </div>
+              <img src="/battle/vs.png" className="h-12" />
+              <div className="w-24">
+                <Battler
+                  data={battle?.challengee}
+                  isComplete={true}
+                  myUid={myUid}
+                  won={won === "challengee"}
+                  withScore={battle?.challengeeResult.score}
+                />
+              </div>
+            </div>
+            <p className="text-2xl mt-2">YOU {iWon ? "WON" : "LOST"}!</p>
+            <p
+              className={`text-4xl ${iWon ? "text-green-500" : "text-red-500"}`}
+            >
+              {iWon ? "+" : "-"} {battle.xpMovement.amount} XP
+            </p>
+            <button
+              onClick={async () => {
+                setLoading(true);
+                const id = await createChallenge(
+                  battle.game,
+                  battle.challenger.id === myUid
+                    ? battle.challenger
+                    : battle.challengee,
+                  {
+                    ...context.profile,
+                    id: context?.loggedIn.uid,
+                  },
+                  router.asPath
+                );
+                router.push("/battle/" + id);
+                setLoading(false);
+              }}
+              disabled={loading}
+              className="bg-green-500 h-12 w-36 rounded-xl text-3xl mt-6"
+            >
+              {loading ? (
+                <ArrowPathIcon className="h-6 w-full animate-spin" />
+              ) : (
+                "Rematch"
+              )}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
