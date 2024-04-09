@@ -12,7 +12,7 @@ import GameButton from "./uiv2/gameButton";
 
 export default function Outro({ score, setStage, data, reviveCount, onReset }) {
   const context = useAppContext();
-  useMusic("/uisounds/intro.mp3", 0.5);
+  // useMusic("/uisounds/intro.mp3", 0.5);
 
   const selectStage = () => {
     const possibleRouting = [];

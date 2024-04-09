@@ -8,7 +8,7 @@ import useMusic from "@/helpers/useMusic";
 
 export default function Intro({ data, setStage, premium, ready }) {
   const context = useAppContext();
-  useMusic("/uisounds/intro.mp3", 0.5);
+  // useMusic("/uisounds/intro.mp3", 0.5);
 
   return (
     <div
