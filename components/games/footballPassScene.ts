@@ -86,19 +86,19 @@ export default class FootballPassScene extends Phaser.Scene {
     gameType = newGameType;
     this.params = newParams;
 
-    // this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + '/player.png';
-    // this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/enemy.png';
+    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + '/player.png';
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/enemy.png';
 
-    // this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/bg.png';
+    this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/bg.png';
     
-    // this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite: "/pong/" + gameType + "/ball-anim.png";
+    this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite: "/pong/" + gameType + "/ball-anim.png";
 
-    this.params.playerSprite = '/pong/' + gameType + '/player.png';
-    this.params.enemySprite = '/pong/' + gameType + '/enemy.png';
+    // this.params.playerSprite = '/pong/' + gameType + '/player.png';
+    // this.params.enemySprite = '/pong/' + gameType + '/enemy.png';
 
-    this.params.backgroundSprite = '/pong/' + gameType + '/bg.png';
+    // this.params.backgroundSprite = '/pong/' + gameType + '/bg.png';
     
-    this.params.objectSprite = "/pong/" + gameType + "/ball-anim.png";
+    // this.params.objectSprite = "/pong/" + gameType + "/ball-anim.png";
 
 
   }
