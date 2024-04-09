@@ -93,6 +93,13 @@ export default class FootballPassScene extends Phaser.Scene {
     
     this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite: "/pong/" + gameType + "/ball-anim.png";
 
+    // this.params.playerSprite = '/pong/' + gameType + '/player.png';
+    // this.params.enemySprite = '/pong/' + gameType + '/enemy.png';
+
+    // this.params.backgroundSprite = '/pong/' + gameType + '/bg.png';
+    
+    // this.params.objectSprite = "/pong/" + gameType + "/ball-anim.png";
+
 
   }
 
@@ -2029,7 +2036,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
   powerupUpdate(delta) {
 
-    if (this.isDragging == true && this.status.isThrowBall && this.status.isPlaying) {
+    if (this.isDragging == true && this.status.isPlaying) {
       power += 3 * (delta / 1000);
       if (power > 15) power = 15;
       this.power_effect.setFrame(Math.round(power));
