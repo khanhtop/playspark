@@ -151,7 +151,7 @@ export default class WordleScene extends Phaser.Scene {
     super();
     WordleScene.instance = this;
     gameType = newGameType;
-    console.log(newParams)
+    console.error(newParams)
     this.params = newParams;
     sampleWords = this.shuffle([...this.params.words])
   }
