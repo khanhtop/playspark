@@ -65,6 +65,9 @@ export default class newFallGameScene extends Phaser.Scene {
   powerup: any;
   staticBonusScreen: any;
   timer: NodeJS.Timeout;
+  text_main_style: any;
+  help_board: any;
+  isStart: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -124,6 +127,8 @@ export default class newFallGameScene extends Phaser.Scene {
     this.load.image("score", "/pong/" + gameType + "/score.png");
 
     this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
+    this.load.image("help-board", "/pong/help-board.png");
+    this.load.image("arrow", "/pong/arrow.png");
 
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
@@ -137,7 +142,25 @@ export default class newFallGameScene extends Phaser.Scene {
     this.load.audio("bomb", "/pong/" + gameType + "/sfx/bomb.mp3");
     this.load.audio("powerup", "/pong/" + gameType + "/sfx/powerup.mp3");
 
+    let fontUrl = '/pong/TitanOne-Regular.ttf';
+    const font = new FontFace('customFont', `url(${fontUrl})`);
+    font
+      .load()
+      .then(() => {
+        // Font loaded successfully
+        document.fonts.add(font);
+      })
+      .catch((error) => {
+        // Font failed to load
+        console.log('Failed to load font:', error);
+      });
 
+      this.text_main_style = {
+        fontFamily: 'customFont',
+        fontSize: 24 + 'px',
+        align: 'center',
+        fill: '#ffffff',
+      }
   }
 
   // 400 800
@@ -154,6 +177,7 @@ export default class newFallGameScene extends Phaser.Scene {
   private currentAnim: any;
 
   create() {
+    this.isStart = false;
     this.sound.add("bg").setVolume(0.3).setLoop(true).play();
     this.whistle = this.sound.add("whistle");
     this.ballHit = this.sound.add("ballHit");
@@ -197,6 +221,13 @@ export default class newFallGameScene extends Phaser.Scene {
 
     // Event listener for pointer down event
     this.bg.on('pointerdown', (pointer) => {
+      if(!this.isStart) {
+        this.startRound();
+        this.help_board.setVisible(false)
+        this.isStart = true;
+        return;
+      }
+      
       console.log("booster click------", startX, "  ", startY)
       startX = pointer.x;
       startY = pointer.y;
@@ -471,6 +502,60 @@ export default class newFallGameScene extends Phaser.Scene {
 
     this.staticBonusScreen.setVisible(false);
 
+    this.help_board = this.add.group();
+
+    const first = this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height)
+    .setInteractive()
+    .on("pointerup", (pointer) => {
+      console.log("___click___")
+      this.startRound();
+    })
+    this.help_board.add(first)
+
+    this.help_board.add(
+      this.add.text(mW, mH, "CLICK TO\nPLAY").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      )
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW, 200, "help-board").setOrigin(0.5, 0.5).setDisplaySize(250, 100)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW - 130, 150, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(-165)
+    )
+
+    this.help_board.add(
+      this.add.text(mW, 200, "Collect items,\navoid the enemies").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "20" + "px",
+      })
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW - 70, mH + 100, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 80)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW - 70, mH + 180, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(-20)
+    )
+
+    this.help_board.add(
+      this.add.text(mW - 70, mH + 100, "Click and drag\nto move").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "20" + "px",
+      })
+    )
+
+    
+
     this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
     this.cameras.main.postFX
       .addColorMatrix()
@@ -523,7 +608,7 @@ export default class newFallGameScene extends Phaser.Scene {
 
     this.initFallBall();
 
-    setTimeout(() => this.startRound(), 2500);
+    //setTimeout(() => this.startRound(), 2500);
   }
 
   loseGame() {
@@ -660,7 +745,7 @@ export default class newFallGameScene extends Phaser.Scene {
 
   addFallBall(type = 'ball') {
     let bball = this.physics.add
-    .image(mW, mH, "ball")
+    .image(20, 100, "ball")
     .setDisplaySize(ballR, ballR)
     .setCircle(this.textures.get("ball").getSourceImage().width / 2)
     .setCollideWorldBounds(true)

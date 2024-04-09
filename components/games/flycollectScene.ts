@@ -75,6 +75,8 @@ export default class FlyCollectScene extends Phaser.Scene {
   snowEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
   popUpTexts: any;
   leftStatus: any;
+  help_board: any;
+  text_main_style: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -177,6 +179,30 @@ export default class FlyCollectScene extends Phaser.Scene {
     this.load.audio("swish", "/pong/" + gameType + "/sound/swish.wav");
     this.load.audio("jump", "/pong/" + gameType + "/sound/jump.mp3");
     this.load.audio("die", "/pong/" + gameType + "/sound/die.mp3");
+
+    this.load.image("help-board", "/pong/help-board.png");
+    this.load.image("arrow", "/pong/arrow.png");
+
+    let fontUrl = '/pong/TitanOne-Regular.ttf';
+    const font = new FontFace('customFont', `url(${fontUrl})`);
+    font
+      .load()
+      .then(() => {
+        // Font loaded successfully
+        document.fonts.add(font);
+      })
+      .catch((error) => {
+        // Font failed to load
+        console.log('Failed to load font:', error);
+      });
+
+      this.text_main_style = {
+        fontFamily: 'customFont',
+        fontSize: 24 + 'px',
+        align: 'center',
+        fill: '#ffffff',
+      }
+
   }
 
   // 400 800
@@ -539,6 +565,57 @@ export default class FlyCollectScene extends Phaser.Scene {
 
     this.cameras.main.startFollow(this.ball, false, 1, 0, -0.1 * w, -0.1 * h);
 
+    
+    this.help_board = this.add.group();
+
+    const first = this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0)
+
+    this.help_board.add(first)
+
+    this.help_board.add(
+      this.add.text(mW, mH, "CLICK TO PLAY").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      ).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW, mH - 180, "help-board").setOrigin(0.5, 0.5).setDisplaySize(250, 100).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW - 90, mH - 100, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(0).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.text(mW, mH - 180, "Collect power ups\nto buy boosters.").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "20" + "px",
+      }).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW + 70, mH + 150, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 80).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW + 130, mH + 80, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(-80).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.text(mW + 70, mH + 150, "Enter rings to\nscore.").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "20" + "px",
+      }).setScrollFactor(0, 0)
+    )
+
+
+
     this.initGame();
   }
 
@@ -552,6 +629,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     //     repeat: 0,
     //   })
     // });
+    this.help_board.setVisible(false)
 
     this.ball.setGravityY(1700);
     this.ball.setVelocityY(-500);
