@@ -102,7 +102,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     SmashBlitzThrowing.instance = this;
     console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
     this.params = _params;
-    //  this.gameType = gameType;
+    this.gameType = gameType;
   }
 
   width: number = 1920 / 2;
@@ -438,7 +438,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     );
   }
 }
-
+/*
 window.onload = () => {
   const config = {
     type: Phaser.AUTO,
@@ -461,3 +461,4 @@ window.onload = () => {
 
   const game = new Phaser.Game(config);
 };
+*/
