@@ -91,7 +91,7 @@ export default class FootballPassScene extends Phaser.Scene {
     gameType = newGameType;
     this.params = newParams;
 
-    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + '/player.png';
+    this.params.playerSprite = '/pong/' + gameType + '/player.png';
     this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/enemy.png';
 
     this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/bg.png';
@@ -1455,7 +1455,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.levelBoard.add(this.levelScoreText)
 
     this.levelBoard.add(
-      this.add.sprite(mW, mH + this.getUIPos(230), "ball")
+      this.add.sprite(mW, mH + this.getUIPos(230), "ring1")
       .setDisplaySize(this.getUIPos(500), this.getUIPos(80))
       .setOrigin(0.5, 0.5)
       .setScrollFactor(0, 0)
@@ -1476,7 +1476,7 @@ export default class FootballPassScene extends Phaser.Scene {
     )
 
     this.levelBoard.add(
-      this.add.sprite(mW - this.getUIPos(200), mH, "player_anim").setDepth(11).setScrollFactor(0, 0).setDisplaySize(this.getUIPos(100), this.getUIPos(100))
+      this.add.sprite(mW - this.getUIPos(150), mH, "player_anim").setDepth(11).setScrollFactor(0, 0).setDisplaySize(this.getUIPos(200), this.getUIPos(200))
     )
 
     this.levelBoard.setVisible(false)
@@ -1984,8 +1984,8 @@ export default class FootballPassScene extends Phaser.Scene {
       this.physics.pause()
       this.levelBoard.setVisible(true)
 
-      this.levelBoardText.setText(`YOU COMPLETED LEVEL ${level + 1}`);
-      this.levelScoreText.setText(`SCORE: ${score}\nTOUCHDOWN: ${this.status["score"].touchDown}`);
+      this.levelBoardText.setText(`YOU COMPLETED LEVEL ${level}`);
+      this.levelScoreText.setText(`SCORE: ${score}\nTOUCHDOWNS: ${this.status["score"].touchDown}`);
     }
 
     this.scoreText.setText(`${score} PTS`);
