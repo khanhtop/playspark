@@ -274,6 +274,10 @@ export const games = [
       playerSprite: "body",
       backgroundSprite: "bg",
       objectSprite: "1.0",
+      powerUpSprite: "1.0",
+      enemySprite: "1.0",
+      additionalSpriteOne: "1.0",
+      additionalSpriteTwo: "1.0",
     },
     backgroundSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
@@ -281,6 +285,14 @@ export const games = [
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
     objectSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+    powerUpSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
+    enemySprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteOne:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteTwo:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
   },
 
   {
