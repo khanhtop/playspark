@@ -5,8 +5,9 @@ import { useAppContext } from "@/helpers/store";
 import GameButton from "./uiv2/gameButton";
 import { useEffect } from "react";
 import useMusic from "@/helpers/useMusic";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
-export default function Intro({ data, setStage, premium, ready }) {
+export default function Intro({ data, setStage, premium, ready, signingIn }) {
   const context = useAppContext();
   // useMusic("/uisounds/intro.mp3", 0.5);
 
@@ -22,16 +23,6 @@ export default function Intro({ data, setStage, premium, ready }) {
         className="absolute top-0 left-0 h-full w-full object-cover"
       />
       <div className="text-white items-center justify-end absolute top-0 left-0 h-full w-full  flex flex-col p-8">
-        {/* <Text
-          {...data}
-          style={{
-            color: data?.textColor,
-            fontSize: 24,
-          }}
-          className="font-light mb-4 px-2 py-1 rounded-lg"
-        >
-          {data?.name}
-        </Text> */}
         {(!premium || ready) && (
           <GameButton
             bgColor={data.primaryColor}
@@ -45,6 +36,11 @@ export default function Intro({ data, setStage, premium, ready }) {
           </GameButton>
         )}
       </div>
+      {signingIn === 1 && (
+        <div className="absolute top-0 left-0 bg-black/60 backdrop-blur h-full w-full flex items-center justify-center">
+          <ArrowPathIcon className="h-12 w-12 animate-spin" />
+        </div>
+      )}
     </div>
   );
 }

@@ -271,6 +271,7 @@ export const games = [
     landscape: true,
     cloudinaryGameTag: "target",
     tags: {
+      backgroundSprite: "0.6",
       playerSprite: "body",
       backgroundSprite: "bg",
       objectSprite: "1.0",
@@ -278,7 +279,6 @@ export const games = [
       enemySprite: "1.0",
       additionalSpriteOne: "1.0",
       additionalSpriteTwo: "1.0",
-      additionalSpriteThree: "1.0",
     },
     backgroundSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",

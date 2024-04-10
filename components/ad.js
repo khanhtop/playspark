@@ -29,8 +29,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 export default function Advert({
   data,
   withPopoutBackNav,
-  coins,
-  xp,
+  signingIn,
   userId,
   email,
 }) {
@@ -230,6 +229,7 @@ export default function Advert({
       )}
       {stage === 0 && (
         <Intro
+          signingIn={signingIn}
           data={data}
           setStage={(a) => {
             setStage(a);

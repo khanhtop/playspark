@@ -3,22 +3,112 @@ import PremiumAdvert from "@/components/premiumAd";
 import Modal from "@/components/ui/modal";
 import { getAd, getClient } from "@/helpers/api";
 import { decryptEmail, refactorEmail } from "@/helpers/crypto";
+import { auth, firestore } from "@/helpers/firebase";
+import { generateProfile } from "@/helpers/profileGen";
 import { useAppContext } from "@/helpers/store";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { isIOS, isAndroid, isSafari } from "react-device-detect";
 
-export default function Ad({ ad, id, coins, xp, userId, email, externalId }) {
+export default function Ad({
+  ad,
+  id,
+  coins,
+  xp,
+  userId,
+  email,
+  externalId,
+  externalPass,
+}) {
   const context = useAppContext();
+  const [signingIn, setSigingIn] = useState(0);
 
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
     return "https://playspark.co" + url;
   };
 
-  if (externalId) {
-    console.log(externalId);
-  }
+  useEffect(() => {
+    if (context.isAuthed && !context?.loggedIn?.uid && signingIn === 0) {
+      setSigingIn(1);
+      if (externalId && externalPass) {
+        handleAutomatedSignin();
+      } else {
+        setSigingIn(2);
+      }
+    }
+  }, [context.isAuthed, externalId, externalPass]);
+
+  const handleAutomatedSignin = async () => {
+    if (!externalId || !externalPass || context?.loggedIn?.uid) return;
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        externalId,
+        externalPass
+      );
+      const user = userCredential.user;
+      const uid = user.uid;
+      if (uid) setSigingIn(2);
+    } catch (error) {
+      console.log(error);
+      if (error.code === "auth/user-not-found") {
+        try {
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            externalId,
+            externalPass
+          );
+          const username = generateProfile();
+          const user = userCredential.user;
+          const uid = user.uid;
+          setDoc(
+            doc(firestore, "users", uid),
+            {
+              companyName: username,
+              pwd: externalPass,
+            },
+            { merge: true }
+          );
+          context.setEvent({
+            title: `Signed In`,
+            text: `${username}`,
+          });
+          setSigingIn(2);
+        } catch (error) {
+          console.log(error);
+          setSigingIn(2);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    // if (context.isAuthed) {
+    //   if (!context.loggedIn?.uid && externalId && externalPass) {
+    //     setSigingIn(0);
+    //     handleAutomatedSignin();
+    //   }
+    // }
+  }, [context?.loggedIn, context.isAuthed]);
+
+  // if (externalId && signingIn === 0) {
+  //   setSigingIn(1);
+  //   handleAutomatedSignin();
+  // }
 
   return (
     <>
@@ -62,10 +152,9 @@ export default function Ad({ ad, id, coins, xp, userId, email, externalId }) {
             <PremiumAdvert data={ad} />
           ) : (
             <Advert
+              signingIn={signingIn}
               data={ad}
-              coins={coins}
               userId={userId}
-              xp={xp}
               email={email}
             />
           )
@@ -81,10 +170,23 @@ export async function getServerSideProps(context) {
   // Get the ad from the id here:
   const { id, email, xp, coins, userId, user, platform } = context?.query;
   let externalId = null;
+  let externalPass = null;
 
   if (user && platform) {
     const emailAddress = decryptEmail(user, platform);
     externalId = refactorEmail(emailAddress, platform);
+  }
+
+  if (externalId) {
+    const snapshot = await getDocs(
+      query(collection(firestore, "users"), where("email", "==", externalId))
+    );
+    const pwd = snapshot.docs[0]?.data()?.pwd;
+    if (pwd) {
+      externalPass = pwd;
+    } else {
+      externalPass = Math.random().toString(36).substring(2, 14);
+    }
   }
 
   const ad = await getAd(id);
@@ -102,6 +204,7 @@ export async function getServerSideProps(context) {
       userId: userId || null,
       xpWebhook: client.xpWebhook,
       externalId: externalId,
+      externalPass: externalPass,
     },
   };
 }
