@@ -2,18 +2,24 @@ import Advert from "@/components/ad";
 import PremiumAdvert from "@/components/premiumAd";
 import Modal from "@/components/ui/modal";
 import { getAd, getClient } from "@/helpers/api";
+import { decryptEmail, refactorEmail } from "@/helpers/crypto";
 import { useAppContext } from "@/helpers/store";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { isIOS, isAndroid, isSafari } from "react-device-detect";
 
-export default function Ad({ ad, id, coins, xp, userId, email }) {
+export default function Ad({ ad, id, coins, xp, userId, email, externalId }) {
   const context = useAppContext();
 
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
     return "https://playspark.co" + url;
   };
+
+  if (externalId) {
+    console.log(externalId);
+  }
+
   return (
     <>
       <Head>
@@ -73,7 +79,14 @@ export default function Ad({ ad, id, coins, xp, userId, email }) {
 
 export async function getServerSideProps(context) {
   // Get the ad from the id here:
-  const { id, email, xp, coins, userId } = context?.query;
+  const { id, email, xp, coins, userId, user, platform } = context?.query;
+  let externalId = null;
+
+  if (user && platform) {
+    const emailAddress = decryptEmail(user, platform);
+    externalId = refactorEmail(emailAddress, platform);
+  }
+
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);
   return {
@@ -88,6 +101,7 @@ export async function getServerSideProps(context) {
       coins: coins || null,
       userId: userId || null,
       xpWebhook: client.xpWebhook,
+      externalId: externalId,
     },
   };
 }
