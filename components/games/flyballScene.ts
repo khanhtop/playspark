@@ -423,7 +423,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.help_board.add(first)
 
     this.help_board.add(
-      this.add.text(mW, mH, "CLICK TO PLAY").setOrigin(0.5, 0.5).setStyle({
+      this.add.text(mW, mH - 150, "CLICK TO PLAY").setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: "35" + "px",
       }).setStroke(
@@ -433,17 +433,21 @@ export default class FlyBallScene extends Phaser.Scene {
     )
 
     this.help_board.add(
-      this.add.sprite(mW, mH - 180, "help-board").setOrigin(0.5, 0.5).setDisplaySize(250, 100).setScrollFactor(0, 0)
+      this.add.sprite(mW, mH, "help-board").setOrigin(0.5, 0.5).setDisplaySize(250, 100).setScrollFactor(0, 0)
     )
 
     this.help_board.add(
-      this.add.sprite(mW - 90, mH - 100, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(0).setScrollFactor(0, 0)
+      this.add.sprite(mW - 100, mH, 'ball').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0)
     )
 
     this.help_board.add(
-      this.add.text(mW, mH - 180, "Collect power ups\nto buy boosters.").setOrigin(0.5, 0.5).setStyle({
+      this.add.sprite(mW - 90, mH + 80, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(0).setFlipX(true).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.text(mW + 20, mH, "Collect power ups\nto buy boosters.").setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
-        fontSize: "20" + "px",
+        fontSize: "17" + "px",
       }).setScrollFactor(0, 0)
     )
 

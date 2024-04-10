@@ -597,7 +597,7 @@ export default class NewPongScene extends Phaser.Scene {
     )
 
     this.help_board.add(
-      this.add.text(mW,  mH - 200, "Click herer for\npower ups").setOrigin(0.5, 0.5).setStyle({
+      this.add.text(mW,  mH - 200, "Click here for\npower ups").setOrigin(0.5, 0.5).setStyle({
         ...this.text_main_style,
         fontSize: "16" + "px",
       })
