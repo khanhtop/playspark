@@ -1,45 +1,38 @@
 import Phaser, { Scene } from "phaser";
 
 import { BackGroundManager } from "./backGroundManager";
-import { Targets } from "./Targets";
 import { TargetFactory } from "./TargetFactory";
 import { Ball } from "./ball";
 import { ThrowingCenter } from "./ThrowingCenter";
 import { BallShooter } from "./BallShooter";
-import { Observer } from "./Observer";
 import { BallAndTargetsOverlap } from "./BallAndTargetsOverlap";
 import { StretchingArrow } from "./StretchingArrow";
 import { GreenArrow } from "./GreenArrow";
 import { ExplosionEffect } from "./ExplosionEffect";
 import { TargetReplacer } from "./TargetReplacer";
-import { CountDownTimer } from "./CountDownTimer";
+import { CountDownTimer } from "./UI/CountDownTimer";
 import { AssetsLoader } from "./AssetsLoader";
-import { TimerContainer } from "./TimerContainer";
-import { PairNumbersContainer } from "./PairNumbersContainer";
-import { BudgetCounter } from "./BudgetCounter";
-import { PowerupBtn } from "./PowerupBtn";
-import { ProgressBox } from "./ProgressBox";
-import { getPercentage } from "./Helper";
+import { TimerContainer } from "./UI/TimerContainer";
+import { PairNumbersContainer } from "./UI/PairNumbersContainer";
+import { BudgetCounter } from "./UI/BudgetCounter";
+import { ProgressBox } from "./UI/ProgressBox";
 import { BallGravity } from "./BallGravity";
-import ComponentService from "./ComponentService";
-import { ClickComponent } from "./Components/ClickComponent";
 import { LivesHandler } from "./LivesHandler";
-import { PowerupHandler } from "./PowerupHandler";
+import { PowerupHandler } from "./Powerups/PowerupHandler";
 import { LoseManager } from "./LoseManager";
 import { WinManager } from "./WinManager";
-import { TargetHitCounter } from "./TargetHitCounter";
+import { TargetHitCounter } from "./UI/TargetHitCounter";
 import { ScoreManager } from "./ScoreManager";
-import { LevelCompletePopup } from "./LevelCompletePopup";
-import { PointPopup } from "./PointPopup";
+import { LevelCompletePopup } from "./UI/LevelCompletePopup";
+import { PointPopup } from "./UI/PointPopup";
 import { LevelManager } from "./LevelManager";
-import { PlayerController } from "./PlayerController";
-import { FlameBoost } from "./FlameBoost";
-import { RocketBoost } from "./RocketBoost";
+import { PlayerController } from "./Player/PlayerController";
+import { FlameBoost } from "./Powerups/FlameBoost";
+import { RocketBoost } from "./Powerups/RocketBoost";
 import { loading } from "./Preloader";
-import { TutorialMessage } from "./TutorialMessage";
-import { Tutorial } from "./Tutorial";
+import { Tutorial } from "./UI/Tutorial";
 import { Audios } from "./Audios";
-import { AudioBtn } from "./AudioBtn";
+import { AudioBtn } from "./UI/AudioBtn";
 import {
   GAME_STATES,
   LIFE_COUNT,
@@ -48,9 +41,12 @@ import {
 } from "./Consts";
 import { Global } from "./Global";
 import { GameStateCtrl } from "./GameStateCtrl";
-import { PauseBtn } from "./PauseBtn";
-import { PausePopup } from "./PausePopup";
-import { FourNumbersContainer } from "./FourNumbersContainer";
+import { PauseBtn } from "./UI/PauseBtn";
+import { PausePopup } from "./UI/PausePopup";
+import { FourNumbersContainer } from "./UI/FourNumbersContainer";
+import { PowerupOverlay } from "./Powerups/PowerupOverlay";
+import { RocketBoostBtn } from "./Powerups/RocketBoostBtn";
+import { FlameBoostBtn } from "./Powerups/FlameBoostBtn";
 
 export default class SmashBlitzThrowing extends Phaser.Scene {
   public static instance: SmashBlitzThrowing;
@@ -58,13 +54,16 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   powerupBtnFire: any;
   powerupBtnRocket: any;
   scoreHandler: any;
+  isFirstFlameBoost: boolean = true;
+  isFirstRoketBoost: boolean = true;
+  powerupOverlay!: PowerupOverlay;
 
   public setScoreHandle(handleScore: any) {
     this.scoreHandler = handleScore;
   }
 
   gameType: string = "smashBlitzThrow";
-  private components!: ComponentService;
+
   levelCompletePopup: any;
   levelManager!: LevelManager;
 
@@ -100,7 +99,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   constructor(gameType: any, _params: any) {
     super();
     SmashBlitzThrowing.instance = this;
-    console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
+   // console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
     this.params = _params;
     this.gameType = gameType;
   }
@@ -109,10 +108,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   height: number = 1024 / 2;
 
   init() {
-    this.components = new ComponentService();
-    this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
-      this.components.destroy();
-    });
+
   }
   preload() {
     loading(this);
@@ -278,24 +274,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     new FlameBoost(this);
     new RocketBoost(this);
 
-    this.powerupBtnRocket = new PowerupBtn(
-      this,
-      this.widthFactor * 5.5,
-      this.heightFactor * 9,
-      "rocket",
-      "2"
-    );
-    this.initRocketPowerupBtn();
+    new RocketBoostBtn(this, this.widthFactor * 5.5, this.heightFactor * 9);
+    new FlameBoostBtn(this, this.widthFactor * 4.4, this.heightFactor * 9);
 
-    this.powerupBtnFire = new PowerupBtn(
-      this,
-      this.widthFactor * 4.4,
-      this.heightFactor * 9,
-      "fire",
-      "3"
-    );
-
-    this.initFlamePowerupBtn();
 
     let progressBox = new ProgressBox(this);
     progressBox.setPos(this.widthFactor * 2, this.heightFactor * 9.35);
@@ -357,21 +338,13 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     new LoseManager(this);
     new WinManager(this);
     new PausePopup(this);
+
+    this.powerupOverlay = PowerupOverlay.getInstance(this);
+    this.add.container(this.width / 2, this.height / 2, this.powerupOverlay);
+
+
     return;
 
-    /* const particles = this.add.particles(0, 0, "red", {
-      speed: 100,
-      scale: { start: 1, end: 0 },
-      blendMode: "ADD",
-    });
-
-    const logo = this.physics.add.image(400, 100, "logo");
-
-    logo.setVelocity(100, 200);
-    logo.setBounce(1, 1);
-    logo.setCollideWorldBounds(true);
-
-    particles.startFollow(logo);*/
   }
   bypassTutorial() {
     if (Global.gameState == GAME_STATES.TUTURIAL) {
@@ -379,31 +352,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       this.countDownTimer.start();
     }
   }
-  initRocketPowerupBtn() {
-    let cmnt = new ClickComponent();
-    cmnt.callBack = () => {
-      // console.log("booster flame");
-      if (this.boostCredits < 2) return;
-      this.boostCredits -= 2;
-      this.events.emit("PowerupHandler:setCount", this.boostCredits);
-      this.events.emit("RocketBoost:boost");
-    };
-    this.components.addComponent(this.powerupBtnRocket.clickArea, cmnt);
-  }
-  initFlamePowerupBtn() {
-    let cmnt = new ClickComponent();
-    cmnt.callBack = () => {
-      // console.log("booster flame");
-      if (this.boostCredits < 3) return;
-      this.boostCredits -= 3;
-      this.events.emit("PowerupHandler:setCount", this.boostCredits);
-      this.events.emit("FlameBoost:boost");
-    };
-    this.components.addComponent(this.powerupBtnFire.clickArea, cmnt);
-  }
 
   update(t: number, dt: number) {
-    this.components.update(dt);
+
     if (this.stretchingArrow) this.stretchingArrow.update();
     return;
     this.physics.world.collide(this.sprite, this.group);

@@ -1,4 +1,4 @@
-import { separateDigits } from "./Helper";
+import { separateDigits } from "../Helper";
 
 export class FourNumbersContainer {
   scene: Phaser.Scene;

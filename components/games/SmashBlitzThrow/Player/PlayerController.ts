@@ -1,8 +1,9 @@
 import Phaser from "phaser";
-import { getValueBetweenByPercent } from "./Helper";
-import { Global } from "./Global";
-import { PLAYER_STATES } from "./Consts";
+import { getValueBetweenByPercent } from "../Helper";
+import { Global } from "../Global";
+import { PLAYER_STATES } from "../Consts";
 import { PlayerContainer } from "./PlayerContainer";
+
 
 export class PlayerController {
   container: PlayerContainer;//Phaser.GameObjects.Container;

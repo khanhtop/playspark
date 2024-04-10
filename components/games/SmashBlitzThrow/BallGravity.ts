@@ -1,5 +1,5 @@
 import { getPercentage } from "./Helper";
-import { ProgressBox } from "./ProgressBox";
+import { ProgressBox } from "./UI/ProgressBox";
 
 export class BallGravity {
   scene: Phaser.Scene;

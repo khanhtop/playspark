@@ -14,7 +14,7 @@ export class GameStateCtrl {
     _scene.events.on("LevelCompletePopup:onClaimBtnClick", () => {
       Global.gameState = GAME_STATES.PLAYING;
     });
-    _scene.events.on("PauseBtn:onClick", () => {
+    _scene.events.on("PAUSE_PLAY", () => {
       if (Global.gameState == GAME_STATES.PAUSE)
         Global.gameState = GAME_STATES.PLAYING;
       else Global.gameState = GAME_STATES.PAUSE;

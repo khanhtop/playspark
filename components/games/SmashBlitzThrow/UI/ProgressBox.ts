@@ -1,4 +1,4 @@
-import { getValuePercentage } from "./Helper";
+import { getValuePercentage } from "../Helper";
 
 export class ProgressBox {
   scene: Phaser.Scene;

@@ -1,4 +1,4 @@
-import { BALLS } from "./Consts";
+import { BALLS } from "../Consts";
 
 export class PowerupHandler {
   scene: Phaser.Scene;

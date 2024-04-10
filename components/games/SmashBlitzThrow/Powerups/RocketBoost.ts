@@ -1,3 +1,5 @@
+import { ROKET_BOOST_TRY_COUNT } from "../Consts";
+
 export class RocketBoost {
   scene: Phaser.Scene;
 
@@ -12,7 +14,7 @@ export class RocketBoost {
     this.boostCount = 0;
     this.canBoost = false;
     this.scene.events.on("RocketBoost:boost", () => {
-      this.boostCount = 3;
+      this.boostCount = ROKET_BOOST_TRY_COUNT;
       this.canBoost = true;
      
     });

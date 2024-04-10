@@ -14,6 +14,7 @@ export enum GAME_STATES {
   "PAUSE",
   "WIN_POPOP",
   "LOSE",
+  "POEWR_UP_MODAL"
 }
 export enum PLAYER_STATES {
   "ARM_BACK",
@@ -22,3 +23,12 @@ export enum PLAYER_STATES {
 }
 export const LIFE_COUNT = 3;
 export const TUTORIAL_DURATION: number = 5; // sec
+
+export const FLAME_BOOST_COST = 3;
+export const FLAME_BOOST_TRY_COUNT = 3;
+export const FLAME_BOOST_TEXTURE = "fire";
+
+export const ROKET_BOOST_MULTIPLIER = 5;
+export const ROKET_BOOST_COST = 2;
+export const ROKET_BOOST_TRY_COUNT = 3;
+export const ROKET_BOOST_TEXTURE = "rocket";

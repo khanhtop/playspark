@@ -1,4 +1,4 @@
-import { BudgetCounter } from "./BudgetCounter";
+import { BudgetCounter } from "../UI/BudgetCounter";
 
 export class PowerupBtn {
   scene: Phaser.Scene;

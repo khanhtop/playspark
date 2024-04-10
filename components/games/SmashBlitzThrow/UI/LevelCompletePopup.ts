@@ -1,5 +1,5 @@
-import { PlayerContainer } from "./PlayerContainer";
-import { PlayerController } from "./PlayerController";
+import { PlayerContainer } from "../Player/PlayerContainer";
+import { PlayerController } from "../Player/PlayerController";
 
 export class LevelCompletePopup {
   scene: Phaser.Scene;
