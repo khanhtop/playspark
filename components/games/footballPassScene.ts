@@ -26,6 +26,8 @@ let power = 0;
 
 let tackleTime = 0;
 
+let completedLevel = 0;
+
 let gameType = "football";
 
 let boardW = 800;
@@ -79,6 +81,9 @@ export default class FootballPassScene extends Phaser.Scene {
   private helpGroup: Phaser.GameObjects.Group;
   private helpBack: Phaser.GameObjects.Sprite;
   private TAP: Phaser.GameObjects.Sprite;
+  private levelBoard: Phaser.GameObjects.Group;
+  private levelBoardText: Phaser.GameObjects.Text;
+  private levelScoreText: Phaser.GameObjects.Text;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -157,6 +162,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.load.image("help5", "/pong/" + gameType + "/6.png");
     this.load.image("ring1", "/pong/" + gameType + "/ring1.png");
     this.load.image("arrow", "/pong/" + gameType + "/arrow.png");
+    this.load.image("level-board", "/pong/" + gameType + "/level-board.png");
 
 
 
@@ -1420,6 +1426,62 @@ export default class FootballPassScene extends Phaser.Scene {
 
     // END FIRST SCREEN 
 
+    // BEGIN LEVEL SCREEN
+
+    this.levelBoard = this.add.group();
+    this.levelBoard.add(
+      this.add.sprite(mW, mH, "level-board")
+      .setDisplaySize(this.getUIPos(800), this.getUIPos(800))
+      .setScrollFactor(0, 0)
+      .setDepth(11).setOrigin(0.5, 0.5)
+    )
+
+    this.levelBoardText = this.add.text(mW, mH - this.getUIPos(150), "YOU COMPLETED LEVEL 1", {
+        ...this.text_main_style,
+        fontSize: '25px',
+        fill: '#111'
+      }).setScrollFactor(0, 0)
+      .setDepth(11).setOrigin(0.5, 0.5)
+
+
+    this.levelScoreText = this.add.text(mW + this.getUIPos(100), mH, "SCORE: 10 000\nTOUCHDOWN: 2", {
+        ...this.text_main_style,
+        fontSize: '25px',
+        fill: '#111'
+      }).setScrollFactor(0, 0)
+      .setDepth(12).setOrigin(0.5, 0.5)
+
+    this.levelBoard.add(this.levelBoardText)
+    this.levelBoard.add(this.levelScoreText)
+
+    this.levelBoard.add(
+      this.add.sprite(mW, mH + this.getUIPos(230), "ball")
+      .setDisplaySize(this.getUIPos(500), this.getUIPos(80))
+      .setOrigin(0.5, 0.5)
+      .setScrollFactor(0, 0)
+      .setDepth(12)
+      .setInteractive({
+        cursor: "pointer"
+      })
+      .on("pointerup", () => {
+        this.levelBoard.setVisible(false)
+        
+        this.status["isGamePause"] = false;
+        this.physics.resume();
+
+        // this.status["isGamePause"] = true;
+        // this.physics.pause()
+        //this.initGame();
+      })
+    )
+
+    this.levelBoard.add(
+      this.add.sprite(mW - this.getUIPos(200), mH, "player_anim").setDepth(11).setScrollFactor(0, 0).setDisplaySize(this.getUIPos(100), this.getUIPos(100))
+    )
+
+    this.levelBoard.setVisible(false)
+
+    // END LEVEL SCREEN
 
     this.ball.preFX.addShadow();
     this.player.preFX.addShadow();
@@ -1437,6 +1499,9 @@ export default class FootballPassScene extends Phaser.Scene {
 
     heartNum = this.params.lives
     this.scoreNum = this.params.score;
+
+    completedLevel = this.getLevelFromScore(this.scoreNum);
+
     this.initGame();
 
     // this.cameras.main.scrollY -= 4;
@@ -1453,6 +1518,34 @@ export default class FootballPassScene extends Phaser.Scene {
 
   public setScoreHandle(handleScore: any) {
     this.scoreHandler = handleScore;
+  }
+
+  public getLevelFromScore(score) {
+    let level = 0;
+
+    if(score < 300) {
+      level = 0
+    } else if(score < 700) {
+      level = 1
+    } else if(score < 1200) {
+      level = 2
+    } else if(score < 2000) {
+      level = 3
+    } else if(score < 5000) {
+      level = 4
+    } else if(score < 7500) {
+      level = 5
+    } else if(score < 10000) {
+      level = 6
+    } else if(score < 15000) {
+      level = 7
+    } else if(score < 20000) {
+      level = 8
+    } else {
+      level = 9
+    }
+
+    return level;
   }
 
   public initGame(lives = 3) {
@@ -1881,7 +1974,21 @@ export default class FootballPassScene extends Phaser.Scene {
       this.status["runDistance"] = Math.round(this.getRealPos(distance) / 14);
     }
 
-    this.scoreText.setText(`${this.getTotalScore() + this.scoreNum} PTS`);
+    let score = this.getTotalScore() + this.scoreNum;
+
+    let level = this.getLevelFromScore(score);
+
+    if(level > completedLevel) {
+      completedLevel = level;
+      this.status["isGamePause"] = true;
+      this.physics.pause()
+      this.levelBoard.setVisible(true)
+
+      this.levelBoardText.setText(`YOU COMPLETED LEVEL ${level + 1}`);
+      this.levelScoreText.setText(`SCORE: ${score}\nTOUCHDOWN: ${this.status["score"].touchDown}`);
+    }
+
+    this.scoreText.setText(`${score} PTS`);
   }
 
   getTotalScore() {
