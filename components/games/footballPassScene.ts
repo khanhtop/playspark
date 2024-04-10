@@ -26,6 +26,8 @@ let power = 0;
 
 let tackleTime = 0;
 
+let completedLevel = 0;
+
 let gameType = "football";
 
 let boardW = 800;
@@ -1453,8 +1455,31 @@ export default class FootballPassScene extends Phaser.Scene {
     this.levelBoard.add(this.levelScoreText)
 
     this.levelBoard.add(
+      this.add.sprite(mW, mH + this.getUIPos(230), "ball")
+      .setDisplaySize(this.getUIPos(500), this.getUIPos(80))
+      .setOrigin(0.5, 0.5)
+      .setScrollFactor(0, 0)
+      .setDepth(12)
+      .setInteractive({
+        cursor: "pointer"
+      })
+      .on("pointerup", () => {
+        this.levelBoard.setVisible(false)
+        
+        this.status["isGamePause"] = false;
+        this.physics.resume();
+
+        // this.status["isGamePause"] = true;
+        // this.physics.pause()
+        //this.initGame();
+      })
+    )
+
+    this.levelBoard.add(
       this.add.sprite(mW - this.getUIPos(200), mH, "player_anim").setDepth(11).setScrollFactor(0, 0).setDisplaySize(this.getUIPos(100), this.getUIPos(100))
     )
+
+    this.levelBoard.setVisible(false)
 
     // END LEVEL SCREEN
 
@@ -1474,6 +1499,9 @@ export default class FootballPassScene extends Phaser.Scene {
 
     heartNum = this.params.lives
     this.scoreNum = this.params.score;
+
+    completedLevel = this.getLevelFromScore(this.scoreNum);
+
     this.initGame();
 
     // this.cameras.main.scrollY -= 4;
@@ -1490,6 +1518,34 @@ export default class FootballPassScene extends Phaser.Scene {
 
   public setScoreHandle(handleScore: any) {
     this.scoreHandler = handleScore;
+  }
+
+  public getLevelFromScore(score) {
+    let level = 0;
+
+    if(score < 300) {
+      level = 0
+    } else if(score < 700) {
+      level = 1
+    } else if(score < 1200) {
+      level = 2
+    } else if(score < 2000) {
+      level = 3
+    } else if(score < 5000) {
+      level = 4
+    } else if(score < 7500) {
+      level = 5
+    } else if(score < 10000) {
+      level = 6
+    } else if(score < 15000) {
+      level = 7
+    } else if(score < 20000) {
+      level = 8
+    } else {
+      level = 9
+    }
+
+    return level;
   }
 
   public initGame(lives = 3) {
@@ -1918,7 +1974,21 @@ export default class FootballPassScene extends Phaser.Scene {
       this.status["runDistance"] = Math.round(this.getRealPos(distance) / 14);
     }
 
-    this.scoreText.setText(`${this.getTotalScore() + this.scoreNum} PTS`);
+    let score = this.getTotalScore() + this.scoreNum;
+
+    let level = this.getLevelFromScore(score);
+
+    if(level > completedLevel) {
+      completedLevel = level;
+      this.status["isGamePause"] = true;
+      this.physics.pause()
+      this.levelBoard.setVisible(true)
+
+      this.levelBoardText.setText(`YOU COMPLETED LEVEL ${level + 1}`);
+      this.levelScoreText.setText(`SCORE: ${score}\nTOUCHDOWN: ${this.status["score"].touchDown}`);
+    }
+
+    this.scoreText.setText(`${score} PTS`);
   }
 
   getTotalScore() {
