@@ -335,8 +335,8 @@ export default class newCricketScene extends Phaser.Scene {
     this.params.powerUpSprite = !!this.params.powerUpSprite? this.params.powerUpSprite : '/pong/' + gameType + '/45.png';
     this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/46.png';
     this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/46.png';
-    this.params.additionalsprite3  = !!this.params.additionalsprite3 ? this.params.additionalsprite3  : '/pong/' + gameType + '/51.png';
-    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + `/p1_player_anim.png`;
+    this.params.additionalSpriteThree  = !!this.params.additionalSpriteThree ? this.params.additionalSpriteThree  : '/pong/' + gameType + '/51.png';
+    this.params.playerSprite = !!this.params.playerSprite ? this.params.playerSprite : '/pong/' + gameType + `/p1_player_anim.png`;
   }
 
   preload() {
@@ -640,7 +640,7 @@ export default class newCricketScene extends Phaser.Scene {
     this.load.image("tab-jump", '/pong/' + gameType + '/52.png');
     this.load.image("tab-ball", this.params.objectSprite);
     this.load.image("light", this.params.powerUpSprite);
-    this.load.image("goaldoor", this.params.backgroundImage);
+    this.load.image("goaldoor", this.params.additionalSpriteThree);
 
     this.load.image("target-1", this.params.additionalSpriteOne);
     this.load.image("target-2", this.params.additionalSpriteTwo);

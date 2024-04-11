@@ -210,6 +210,9 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
           powerUpSprite: data?.game?.powerUpSprite,
           additionalSpriteOne: data?.game?.additionalSpriteOne,
           additionalSpriteTwo: data?.game?.additionalSpriteTwo,
+          additionalSpriteThree: data?.game?.additionalSpriteThree,
+          additionalSpriteFour: data?.game?.additionalSpriteFour,
+          additionalSpriteFive: data?.game?.additionalSpriteFive,
           maxscore: 0,
           words: data?.game?.words || [],
         })}
