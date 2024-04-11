@@ -1,4 +1,9 @@
-import { BALLS, FLAME_BOOST_COST, FLAME_BOOST_TEXTURE, FLAME_BOOST_TRY_COUNT } from "../Consts";
+import {
+  BALLS,
+  FLAME_BOOST_COST,
+  FLAME_BOOST_TEXTURE,
+  FLAME_BOOST_TRY_COUNT,
+} from "../Consts";
 import SmashBlitzThrowing from "../app";
 import { PowerupBtn } from "./PowerupBtn";
 import { PowerupOverlay } from "./PowerupOverlay";
@@ -28,7 +33,6 @@ export class FlameBoostBtn {
       );
       _scene.events.emit("RocketBoost:boost");
 
-      
       if (this.isFirstFlameBoost) {
         this.isFirstFlameBoost = false;
         powerupOverlay.show();
@@ -39,14 +43,15 @@ export class FlameBoostBtn {
           [0.54, "#C1FF72"],
           [1, "#C1FF72"],
         ]);
-        powerupOverlay.setMsgText(`SUPER TARGETS ON YOUR NEXT ${FLAME_BOOST_TRY_COUNT} ATTEMPTS`, [
-          [0, "#C1FF72"],
-          [0.365, "#C1FF72"],
-          [0.365, "#ffffff"],
-          [1, "#ffffff"],
-        ]);
-        
-        
+        powerupOverlay.setMsgText(
+          `SUPER TARGETS ON YOUR NEXT ${FLAME_BOOST_TRY_COUNT} ATTEMPTS`,
+          [
+            [0, "#C1FF72"],
+            [0.365, "#C1FF72"],
+            [0.365, "#ffffff"],
+            [1, "#ffffff"],
+          ]
+        );
       }
     };
 

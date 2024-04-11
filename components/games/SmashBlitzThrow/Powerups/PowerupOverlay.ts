@@ -41,7 +41,7 @@ export class PowerupOverlay extends Phaser.GameObjects.Container {
     this.title = this.addText(0, 0, 60);
     this.mesg = this.addText(0, 50, 25);
 
-
+    this._show(false);
 
   }
 
