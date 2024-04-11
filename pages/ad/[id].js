@@ -176,7 +176,6 @@ export async function getServerSideProps(context) {
     const emailAddress = decryptEmail(user, platform);
     externalId = refactorEmail(emailAddress, platform);
   }
-
   if (externalId) {
     const snapshot = await getDocs(
       query(collection(firestore, "users"), where("email", "==", externalId))
