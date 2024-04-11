@@ -335,7 +335,7 @@ export default class newCricketScene extends Phaser.Scene {
     this.params.powerUpSprite = !!this.params.powerUpSprite? this.params.powerUpSprite : '/pong/' + gameType + '/45.png';
     this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/46.png';
     this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/46.png';
-    this.params.additionalSpriteThree  = !!this.params.additionalSpriteThree ? this.params.additionalSpriteThree  : '/pong/' + gameType + '/51.png';
+    this.params.additionalsprite3  = !!this.params.additionalsprite3 ? this.params.additionalsprite3  : '/pong/' + gameType + '/51.png';
     this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + `/p1_player_anim.png`;
   }
 
