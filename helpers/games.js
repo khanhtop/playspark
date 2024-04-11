@@ -279,6 +279,7 @@ export const games = [
       enemySprite: "1.0",
       additionalSpriteOne: "1.0",
       additionalSpriteTwo: "1.0",
+      additionalSpriteThree: "1.0",
     },
     backgroundSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
