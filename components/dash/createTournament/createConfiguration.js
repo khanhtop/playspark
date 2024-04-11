@@ -112,6 +112,32 @@ export default function CreateConfiguration({
           }}
         />
       )}
+      {tournament?.tags?.["additionalSpriteFour"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteFour"
+          aspectRatio={tournament?.tags?.["additionalSpriteFour"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 4`}
+          selected={tournament.additionalSpriteFour}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteFour: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["additionalSpriteFive"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteFive"
+          aspectRatio={tournament?.tags?.["additionalSpriteFive"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 5`}
+          selected={tournament.additionalSpriteFive}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteFive: a });
+          }}
+        />
+      )}
       {tournament?.words && (
         <GenWordArray
           tournament={tournament}
