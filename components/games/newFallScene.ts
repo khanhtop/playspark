@@ -709,12 +709,12 @@ export default class newFallScene extends Phaser.Scene {
     distance -= deltaDistance;
     speed += deltaSpeed;
 
-    if(this.scoreNum < 6000) {
+    if(this.scoreNum < 1000) {
       deltaBomb = 0.1;
 
-    } else if(this.scoreNum < 10000) {
+    } else if(this.scoreNum < 3000) {
       deltaBomb = ballR * 0.2;
-    } else if(this.scoreNum < 15000) {
+    } else if(this.scoreNum < 7500) {
       deltaBomb = ballR * 0.5;
     } else {
       deltaBomb = ballR * 1.3;
