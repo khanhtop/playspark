@@ -1,5 +1,5 @@
-import { GAME_STATES } from "./Consts";
-import { Global } from "./Global";
+import { GAME_STATES } from "../Consts";
+import { Global } from "../Global";
 
 export class PausePopup {
   scene: Phaser.Scene;
@@ -57,6 +57,9 @@ export class PausePopup {
 
     resume.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
       this.scene.events.emit("PauseBtn:onClick");
+      this.scene.events.emit("PAUSE_PLAY");
+
+      
     });
 
     group.add(blach_bg);

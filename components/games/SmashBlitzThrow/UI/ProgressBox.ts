@@ -1,4 +1,4 @@
-import { getValuePercentage } from "./Helper";
+import { getValuePercentage } from "../Helper";
 
 export class ProgressBox {
   scene: Phaser.Scene;
@@ -13,13 +13,13 @@ export class ProgressBox {
   private startPosX = 3;
   private endPosX = 275;
   private green_area: Phaser.GameObjects.Graphics;
+  private green_area_percent: number = 1;
   private greenAreaWidth = 50;
   private greenAreaHeight = 28;
 
   constructor(_scene: Phaser.Scene) {
     ProgressBox.instance = this;
 
-   
     this.scene = _scene;
     this.group = _scene.add.container();
 
@@ -54,17 +54,20 @@ export class ProgressBox {
       },
     });
 
-    _scene.events.on("ProgressBox:setGreenAreaWidth", (widthPercent: number) => {
-      this.greenAreaWidth =  this.moveLength * widthPercent;
-      this.setGreenAreaWidth();
-    });
+    _scene.events.on(
+      "ProgressBox:setGreenAreaWidth",
+      (widthPercent: number) => {
+        this.green_area_percent = widthPercent;
+        this.greenAreaWidth = this.moveLength * widthPercent;
+        this.setGreenAreaWidth();
+      }
+    );
 
     _scene.events.on("ProgressBox:setTimeScale", (value: number) => {
-      this.tween.setTimeScale(value)
-     // this.tween.stop()
-     // this.tween.restart()
+      this.tween.setTimeScale(value);
+      // this.tween.stop()
+      // this.tween.restart()
     });
-
   }
   setGreenAreaWidth() {
     this.green_area
@@ -93,8 +96,9 @@ export class ProgressBox {
   //this.power_effect.setFrame(Math.round(percent * 15));
   // }
   public getPercent() {
-    let p = getValuePercentage(this.currentX, this.startPosX, this.endPosX); //this.pointer.positio; //(parseInt(this.power_effect.frame.name) * (100 / 15)) / 100;
-    if (this.currentX < Math.abs(this.greenAreaWidth)) return 0.5;
+    let p = getValuePercentage(this.currentX, this.startPosX, this.endPosX); 
+    if (Math.abs(p*2) < this.green_area_percent) return 0;
+    // p is -0.5 to 0.5 we must multiple it to get range -1,1
     else return p * 2;
   }
 }

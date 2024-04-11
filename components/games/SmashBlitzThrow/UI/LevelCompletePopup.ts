@@ -1,3 +1,6 @@
+import { PlayerContainer } from "../Player/PlayerContainer";
+import { PlayerController } from "../Player/PlayerController";
+
 export class LevelCompletePopup {
   scene: Phaser.Scene;
   group: Phaser.GameObjects.Container;
@@ -48,7 +51,7 @@ export class LevelCompletePopup {
       .text(10, -70, `TARGETS HIT:`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
- 
+
       .setAlign("left")
       .setCrop(0, 0, 200, 500);
 
@@ -56,8 +59,8 @@ export class LevelCompletePopup {
       .text(115, -70, `00`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
-     
-      .setAlign("left")
+
+      .setAlign("left");
     //  .setCrop(0, 0, 200, 500);
 
     let scoreTitle = _scene.add
@@ -65,30 +68,28 @@ export class LevelCompletePopup {
       .setOrigin(0, 0.5)
       .setSize(200, 500)
       .setAlign("left")
-     
+
       .setCrop(0, 0, 200, 500);
 
     this.score = _scene.add
       .text(70, -40, `000`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
-      .setAlign("left")
-    
+      .setAlign("left");
 
     let youEarnedTitle = _scene.add
       .text(52, 0, `YOU EARNED`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
       .setAlign("left")
-  
+
       .setCrop(0, 0, 200, 500);
 
     this.earnedCoinTitle = _scene.add
       .text(75, 35, `${0}  COINS`, bebas_font)
       .setOrigin(0, 0.5)
       .setAlign("left")
-      .setColor("#E6452A")
-  
+      .setColor("#E6452A");
 
     let coins = _scene.add
       .sprite(50, 35, "coins")
@@ -117,10 +118,10 @@ export class LevelCompletePopup {
       .setOrigin(0, 0.5)
       .setSize(200, 500)
       .setFontSize(40)
-      .setAlign("left")
+      .setAlign("center")
       .setColor("#ffffff")
-      .setPadding(0, 0, 5, 0)
-      .setFontStyle("bold");
+      .setPadding(0, 0, 5, 0);
+    // .setFontStyle("bold");
     //.setPadding(0,50,0,50)
     //.setCrop(0, 0, 200, 500);
 
@@ -137,7 +138,20 @@ export class LevelCompletePopup {
 
     //this.group.add(  this.blach_bg);
     //this.blach_bg
+    //let playerCharacter =  Object.assign({}, PlayerController.instance.container);//{ ...PlayerController.instance.container } as Phaser.GameObjects.Container ;
+
+    //{ ...PlayerController.instance.container } as Phaser.GameObjects.Container ;
+    let c = _scene.add.group({
+      classType: PlayerContainer,
+      maxSize: 1,
+      runChildUpdate: true,
+    });
+    let playerCharacter = c.get();
+    playerCharacter.setScale(0.8, 0.8);
+    playerCharacter.setPosition(-120, 70);
+
     this.group.add(bg);
+    this.group.add(playerCharacter);
     this.group.add(this.title);
     this.group.add(targetHitTitle);
     this.group.add(scoreTitle);

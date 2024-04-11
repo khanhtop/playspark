@@ -1,4 +1,4 @@
-import { BALLS } from "./Consts";
+import { BALLS, FLAME_BOOST_TRY_COUNT, ROKET_BOOST_MULTIPLIER } from "../Consts";
 
 export class FlameBoost {
   scene: Phaser.Scene;
@@ -14,7 +14,7 @@ export class FlameBoost {
     this.boostCount = 0;
     this.canBoost = false;
     this.scene.events.on("FlameBoost:boost", () => {
-      this.boostCount = 3;
+      this.boostCount = FLAME_BOOST_TRY_COUNT;
       this.canBoost = true;
     });
 
@@ -26,7 +26,7 @@ export class FlameBoost {
       }
       if (this.boostCount == 0 || !this.canBoost) return;
 
-      this.scene.events.emit("ScoreManager:setMultiplier", 5);
+      this.scene.events.emit("ScoreManager:setMultiplier", ROKET_BOOST_MULTIPLIER);
       this.boostCount--;
     });
   }

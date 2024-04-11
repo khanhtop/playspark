@@ -1,5 +1,5 @@
-import { GAME_STATES } from "./Consts";
-import { Global } from "./Global";
+import { GAME_STATES } from "../Consts";
+import { Global } from "../Global";
 
 export class CountDownTimer {
   scene: Phaser.Scene;
