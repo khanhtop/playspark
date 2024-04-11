@@ -708,6 +708,7 @@ export default class newFallScene extends Phaser.Scene {
     // bb.setPosition( 0, y - distance);
     distance -= deltaDistance;
     speed += deltaSpeed;
+    let extraspeed = 0;
 
     if(this.scoreNum < 1000) {
       deltaBomb = 0.1;
@@ -716,13 +717,16 @@ export default class newFallScene extends Phaser.Scene {
       deltaBomb = ballR * 0.2;
     } else if(this.scoreNum < 7500) {
       deltaBomb = ballR * 0.5;
-    } else {
+    } else if(this.scoreNum < 10000) {
       deltaBomb = ballR * 1.3;
+    } else {
+      deltaBomb = ballR * 1.7
+      extraspeed = speed * 0.2;
     }
 
 
     distance = Math.max(200, distance);
-    speed = Math.min(500, speed);
+    speed = Math.min(500, speed + extraspeed);
 
     bb.setDisplaySize(ballR, ballR)
 
