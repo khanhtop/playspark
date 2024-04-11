@@ -10,6 +10,7 @@ export class PauseBtn {
       .setInteractive();
     btn.on("pointerdown", () => {
       this.scene.events.emit("PauseBtn:onClick");
+      this.scene.events.emit("PAUSE_PLAY");
     });
   }
 }

@@ -13,9 +13,9 @@ export class AssetsLoader {
       this.scene.load.image("ball", params.ball);
       this.scene.load.image("powerup", params.powerup);
       this.scene.load.image("bomb", params.obstacle);
-      this.scene.load.image("gold_ball", params.normal_target_1);
-      this.scene.load.image("purple_ball", params.normal_target_2);
-      this.scene.load.image("blue_ball", params.normal_target_3);
+      this.scene.load.image("gold_ball", params.normal_target);
+      this.scene.load.image("purple_ball", params.normal_target);
+      this.scene.load.image("blue_ball", params.normal_target);
       this.scene.load.image("super_gold", params.high_value_target);
 
       let shsp = params.additionalSpriteTwo == undefined ? params.shoes : params.additionalSpriteTwo;
@@ -42,10 +42,10 @@ export class AssetsLoader {
       this.scene.load.image("ball", "ball.png");
       this.scene.load.image("powerup", "powerup.png");
       this.scene.load.image("bomb", "bomb.png");
-      this.scene.load.image("gold_ball", "gold_ball.png");
+      this.scene.load.image("gold_ball", "purple_ball.png");
       this.scene.load.image("purple_ball", "purple_ball.png");
-      this.scene.load.image("blue_ball", "blue_ball.png");
-      this.scene.load.image("super_gold", "super_gold.png");
+      this.scene.load.image("blue_ball", "purple_ball.png");
+      this.scene.load.image("super_gold", "gold_ball.png");
       this.scene.load.image("shoes", "shoes.png");
       this.scene.load.image("head", "head.png");
       this.scene.load.image("right_hand", "right_hand.png");
