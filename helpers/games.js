@@ -400,4 +400,44 @@ export const games = [
       additionalSpriteTwo: "1.0",
     },
   },
+  {
+    name: "New Smash Blitz",
+    description:
+      "Smash Blitz is a high-energy arcade game where players deflect oncoming objects into colorful targets for points. As the speed increases and lives dwindle, can you keep up the pace and survive the relentless challenge?",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708641627/cjpqqvkxmkpsgajlpt9a.png",
+    screenshot: "cricketsmash.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 23,
+    landscape: true,
+    cloudinaryGameTag: "target",
+    tags: {
+      backgroundSprite: "0.6",
+      playerSprite: "body",
+      backgroundSprite: "bg",
+      objectSprite: "1.0",
+      powerUpSprite: "1.0",
+      enemySprite: "1.0",
+      additionalSpriteOne: "1.0",
+      additionalSpriteTwo: "1.0",
+      additionalSpriteThree: "1.0",
+    },
+    backgroundSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    playerSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+    powerUpSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
+    enemySprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteOne:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteTwo:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteThree:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+  },
 ];

@@ -82,7 +82,7 @@ export default function MarketPlace({}) {
             onClick={() => setDemo()}
             className="absolute top-0 left-0 h-screen w-screen bg-black/95 z-10 flex items-center justify-center"
           >
-            {(demo == 11 || demo == 17 || demo == 22 ) ? (
+            {(demo == 11 || demo == 17 || demo == 22 || demo == 20 || demo == 23 ) ? (
               <iframe src={`/demo/${demo}`} className="h-[688px] w-[1248px]" />
             ) : (
               <iframe src={`/demo/${demo}`} className="h-[663px] w-[375px]" />
