@@ -213,6 +213,7 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
           additionalSpriteThree: data?.game?.additionalSpriteThree,
           additionalSpriteFour: data?.game?.additionalSpriteFour,
           additionalSpriteFive: data?.game?.additionalSpriteFive,
+          additionalSpriteSix: data?.game?.additionalSpriteSix,
           maxscore: 0,
           words: data?.game?.words || [],
         })}
