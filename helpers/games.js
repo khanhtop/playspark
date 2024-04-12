@@ -210,13 +210,13 @@ export const games = [
       additionalSpriteOne: "parallax",
     },
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
     additionalSpriteOne:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   {
     name: "Smash Blitz Throw",
@@ -318,11 +318,11 @@ export const games = [
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
     enemySprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     playerSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
   },
   {
     name: "Fly Collect",
@@ -342,13 +342,13 @@ export const games = [
       additionalSpriteOne: "parallax",
     },
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
     additionalSpriteOne:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   {
     name: "Cricket Ball Smash",
