@@ -10,25 +10,23 @@ export class AssetsLoader {
       // console.log("----[[[ params ----", params)
  
       this.scene.load.image("bg", params.backgroundSprite);
-      this.scene.load.image("ball", params.ball);
-      this.scene.load.image("powerup", params.powerup);
-      this.scene.load.image("bomb", params.obstacle);
-      this.scene.load.image("gold_ball", params.normal_target);
-      this.scene.load.image("purple_ball", params.normal_target);
-      this.scene.load.image("blue_ball", params.normal_target);
-      this.scene.load.image("super_gold", params.high_value_target);
+      this.scene.load.image("body", params.playerSprite);
+      this.scene.load.image("bomb", params.enemySprite);
+      this.scene.load.image("ball", params.objectSprite);
+      this.scene.load.image("powerup", params.powerUpSprite);
 
-      let shsp = params.additionalSpriteTwo == undefined ? params.shoes : params.additionalSpriteTwo;
-      this.scene.load.image("shoes", shsp);
+      this.scene.load.image("gold_ball", params.additionalSpriteOne);
+      this.scene.load.image("purple_ball", params.additionalSpriteOne);
+      this.scene.load.image("blue_ball", params.additionalSpriteOne);
 
-      let hdsp = params.additionalSpriteOne == undefined ? params.head : params.additionalSpriteOne;
-      this.scene.load.image("head", hdsp);
+      this.scene.load.image("super_gold", params.additionalSpriteTwo);
+
+      this.scene.load.image("shoes", params.additionalSpriteThree);
+
+      this.scene.load.image("head", params.additionalSpriteFour);
       
-      this.scene.load.image("right_hand", params.right_hand);
-      this.scene.load.image("left_hand",params.left_hand);
-
-      let bdsp = params.playerSprite == undefined ? params.body : params.playerSprite ;
-      this.scene.load.image("body", bdsp);
+      this.scene.load.image("right_hand", params.additionalSpriteFive);
+      this.scene.load.image("left_hand",params.additionalSpriteSix);
     }
 
     let baseUrl = "/"; ///pong/${gameType}/
