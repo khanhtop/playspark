@@ -401,9 +401,9 @@ export const games = [
     },
   },
   {
-    name: "New Smash Blitz",
+    name: "Airborne Ace",
     description:
-      "Smash Blitz is a high-energy arcade game where players deflect oncoming objects into colorful targets for points. As the speed increases and lives dwindle, can you keep up the pace and survive the relentless challenge?",
+      "Airborne Ace” catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708641627/cjpqqvkxmkpsgajlpt9a.png",
     screenshot: "cricketsmash.jpg",
