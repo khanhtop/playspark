@@ -198,18 +198,11 @@ export const games = [
   },
   {
     name: "Bounce Blitz",
-<<<<<<< HEAD
     description: `"Bounce Blitz" invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_53_sel4zk.jpg",
-=======
-    description:
-      "Bounce Blitz” invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy",
-    backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
->>>>>>> newSmashBlitz
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -247,18 +240,11 @@ export const games = [
 
   {
     name: "Endzone Blitz",
-<<<<<<< HEAD
     description: `In 'Endzone Blitz,' players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!"`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152747/PlaySpark_home_screens_50_saftei.jpg",
-=======
-    description:
-      "In ‘Endzone Blitz,’ players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!",
-    backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
->>>>>>> newSmashBlitz
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -282,18 +268,10 @@ export const games = [
   },
   {
     name: "Sky Soar",
-<<<<<<< HEAD
-    description: `In 'Sky Soar,' players navigate a mesmerizing sky filled with rings, skillfully guiding their object through obstacles to score points and collecting power-ups for enhanced abilities in this addictive aerial adventure reminiscent of Flappy Bird."`,
-    gameIcon:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/Game_tiles_2_o7w5xl.png",
-    backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_55_yrqrkt.jpg",
-=======
     description:
       "In ‘Sky Soar,’ players navigate a mesmerizing sky filled with rings, skillfully guiding their object through obstacles to score points and collecting power-ups for enhanced abilities in this addictive aerial adventure reminiscent of Flappy Bird.",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/Game_tiles_2_o7w5xl.png",
->>>>>>> newSmashBlitz
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -331,15 +309,8 @@ export const games = [
     name: "Sidestep Surge",
     description:
       "In 'Sidestep Surge,' players skillfully maneuver their object across the screen, collecting items and evading enemies in a frantic race against time to achieve the highest score before running out of lives.",
-<<<<<<< HEAD
-    gameIcon:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_3_v1zfhs.png",
-    backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/PlaySpark_home_screens_56_wkzoin.jpg",
-=======
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_3_v1zfhs.png",
->>>>>>> newSmashBlitz
     screenshot: "basketball-fall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
