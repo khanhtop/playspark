@@ -34,9 +34,12 @@ import { Tutorial } from "./UI/Tutorial";
 import { Audios } from "./Audios";
 import { AudioBtn } from "./UI/AudioBtn";
 import {
+  BALLS,
+  BOMB_INDEX,
   GAME_STATES,
   LIFE_COUNT,
   PLAYER_STATES,
+  TOTAL_TARGET_COUNT,
   TUTORIAL_DURATION,
 } from "./Consts";
 import { Global } from "./Global";
@@ -47,6 +50,8 @@ import { FourNumbersContainer } from "./UI/FourNumbersContainer";
 import { PowerupOverlay } from "./Powerups/PowerupOverlay";
 import { RocketBoostBtn } from "./Powerups/RocketBoostBtn";
 import { FlameBoostBtn } from "./Powerups/FlameBoostBtn";
+import { getRandomInt } from "./Helper";
+import { Targets } from "./Targets";
 
 export default class SmashBlitzThrowing extends Phaser.Scene {
   public static instance: SmashBlitzThrowing;
@@ -165,11 +170,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       this.bypassTutorial();
     }, TUTORIAL_DURATION * 1000);
 
-    this.events.emit("Targets:setTargetTexture", 0, "powerup");
-    this.events.emit("Targets:setTargetTexture", 1, "gold_ball");
-    this.events.emit("Targets:setTargetTexture", 2, "purple_ball");
-    this.events.emit("Targets:setTargetTexture", 3, "bomb");
-    this.events.emit("Targets:setTargetTexture", 4, "purple_ball");
+ 
 
     new BallAndTargetsOverlap(this).init(ball);
     this.stretchingArrow = new StretchingArrow(this);
@@ -180,6 +181,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     let explosionEffect = new ExplosionEffect(this);
 
     new TargetReplacer(this);
+    this.events.emit("TargetReplacer:setRandomTarget");
 
     playerController.container._body.on(
       Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN,
@@ -320,6 +322,8 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
             parseFloat(data[2])
           );
           this.events.emit("ProgressBox:setTimeScale", parseFloat(data[3]));
+
+          this.events.emit("TargetReplacer:setRandomTarget");
         }
       );
     });
@@ -347,6 +351,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
     return;
   }
+  
+
+
   bypassTutorial() {
     if (Global.gameState == GAME_STATES.TUTURIAL) {
       this.events.emit("Tutorial:hide");
@@ -391,7 +398,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 }
 
 window.onload = () => {
-  /* const config = {
+ /* const config = {
     type: Phaser.AUTO,
     width: 960,
     height: 512,
@@ -404,7 +411,7 @@ window.onload = () => {
     physics: {
       default: "arcade",
       arcade: {
-         // debug: true,
+        // debug: true,
         gravity: { y: 500, x: 0 },
       },
     },
