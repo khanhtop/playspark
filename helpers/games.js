@@ -221,7 +221,7 @@ export const games = [
   {
     name: "Smash Blitz Throw",
     description: "Smash Blitz Throw is balabala bala babab",
-    backgroundImage: "/pong/smashBlitzThrow/smashBlitzThrowing.png",
+    backgroundImage: "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
