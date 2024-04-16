@@ -43,7 +43,7 @@ let STATUS = {
 };
 
 let ITEM = {
-  magnify: 5,
+  magnify: 30,
   shrink: 15,
   power: 25,
   heart: 35,
@@ -88,9 +88,7 @@ export default class FlyCollectScene extends Phaser.Scene {
       ? this.params.backgroundSprite
       : "/pong/" + gameType + "/background/bg1.jpg";
     // this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : "/pong/" + gameType + "/ball/ball1.png";
-    this.params.playerSprite = !!this.params.playerSprite
-      ? this.params.playerSprite
-      : "/pong/" + gameType + "/ball/ball-anim.png";
+    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : "/pong/" + gameType + "/ball/ball-anim.png";
     this.params.objectSprite = !!this.params.objectSprite
       ? this.params.objectSprite
       : "/pong/" + gameType + "/UI/light.png";
@@ -329,12 +327,12 @@ export default class FlyCollectScene extends Phaser.Scene {
     // END HEAD COIN MENU
 
     this.add
-      .sprite(w - 70, topOffset + 50, "score")
+      .sprite(w - 55, topOffset, "score")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(100, 50)
       .setScrollFactor(0, 0);
     this.add
-      .text(w - 70, topOffset + 40, "SCORE", {
+      .text(w - 55, topOffset - 8, "SCORE", {
         fontFamily: "TitanOne-Regular",
         fontSize: "18px",
         color: "#fff",
@@ -342,7 +340,7 @@ export default class FlyCollectScene extends Phaser.Scene {
       .setOrigin(0.5, 0.5)
       .setScrollFactor(0, 0);
     this.scoreTxt = this.add
-      .text(w - 70, topOffset + 60, "12", {
+      .text(w - 55, topOffset + 8, "12", {
         fontFamily: "TitanOne-Regular",
         fontSize: "18px",
         color: "#fff",
@@ -588,8 +586,9 @@ export default class FlyCollectScene extends Phaser.Scene {
       this.add.sprite(mW, mH, "help-board").setOrigin(0.5, 0.5).setDisplaySize(250, 100).setScrollFactor(0, 0)
     )
 
+    const bbanim = this.add.sprite(mW - 100, mH, 'ball_anim').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0).play("ball_anim");
     this.help_board.add(
-      this.add.sprite(mW - 100, mH, 'ball').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0)
+      bbanim
     )
 
     this.help_board.add(

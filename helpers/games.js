@@ -198,11 +198,18 @@ export const games = [
   },
   {
     name: "Bounce Blitz",
+<<<<<<< HEAD
     description: `"Bounce Blitz" invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_53_sel4zk.jpg",
+=======
+    description:
+      "Bounce Blitz” invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
+>>>>>>> newSmashBlitz
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -240,11 +247,18 @@ export const games = [
 
   {
     name: "Endzone Blitz",
+<<<<<<< HEAD
     description: `In 'Endzone Blitz,' players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!"`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152747/PlaySpark_home_screens_50_saftei.jpg",
+=======
+    description:
+      "In ‘Endzone Blitz,’ players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
+>>>>>>> newSmashBlitz
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -268,11 +282,18 @@ export const games = [
   },
   {
     name: "Sky Soar",
+<<<<<<< HEAD
     description: `In 'Sky Soar,' players navigate a mesmerizing sky filled with rings, skillfully guiding their object through obstacles to score points and collecting power-ups for enhanced abilities in this addictive aerial adventure reminiscent of Flappy Bird."`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/Game_tiles_2_o7w5xl.png",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_55_yrqrkt.jpg",
+=======
+    description:
+      "In ‘Sky Soar,’ players navigate a mesmerizing sky filled with rings, skillfully guiding their object through obstacles to score points and collecting power-ups for enhanced abilities in this addictive aerial adventure reminiscent of Flappy Bird.",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/Game_tiles_2_o7w5xl.png",
+>>>>>>> newSmashBlitz
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -310,10 +331,15 @@ export const games = [
     name: "Sidestep Surge",
     description:
       "In 'Sidestep Surge,' players skillfully maneuver their object across the screen, collecting items and evading enemies in a frantic race against time to achieve the highest score before running out of lives.",
+<<<<<<< HEAD
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_3_v1zfhs.png",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/PlaySpark_home_screens_56_wkzoin.jpg",
+=======
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_3_v1zfhs.png",
+>>>>>>> newSmashBlitz
     screenshot: "basketball-fall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -345,5 +371,45 @@ export const games = [
       additionalSpriteOne: "head",
       additionalSpriteTwo: "1.0",
     },
+  },
+  {
+    name: "Airborne Ace",
+    description:
+      "Airborne Ace” catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152746/Add_a_heading_4_aovot8.png",
+    screenshot: "cricketsmash.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 23,
+    landscape: true,
+    cloudinaryGameTag: "target",
+    tags: {
+      backgroundSprite: "0.6",
+      playerSprite: "body",
+      backgroundSprite: "bg",
+      objectSprite: "1.0",
+      powerUpSprite: "1.0",
+      enemySprite: "1.0",
+      additionalSpriteOne: "1.0",
+      additionalSpriteTwo: "1.0",
+      additionalSpriteThree: "1.0",
+    },
+    backgroundSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    playerSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+    powerUpSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
+    enemySprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteOne:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteTwo:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteThree:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
   },
 ];
