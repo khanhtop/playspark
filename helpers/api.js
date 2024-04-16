@@ -267,7 +267,7 @@ export function getGame(id, data, callback, params) {
         params={params}
       />
     );
-  
+
   if (id === 23)
     return (
       <Pong
@@ -518,7 +518,7 @@ export async function completeBattleForChallengee(
     doc(firestore, "users", challengeeId.toString()),
     challengeeOutputData
   );
-  return;
+  return xpStealAmount;
 }
 
 async function getDataByClientAndXP(userId) {

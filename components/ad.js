@@ -69,7 +69,7 @@ export default function Advert({
     }
   }, [score]);
 
-  const callback = (score) => {
+  const callback = (score, level = 1) => {
     scoreEvent(context, score, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
