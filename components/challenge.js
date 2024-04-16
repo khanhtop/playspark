@@ -38,6 +38,7 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
   const [shouldRotate, setShouldRotate] = useState(false);
   const [score, setScore] = useState(0);
   const [prevBest, setPrevBest] = useState();
+  const [lockedInXpStealAmount, setLockedInXpStealAmount] = useState();
 
   // Lives & Restarts
   const MAX_REVIVES = 4;
@@ -80,7 +81,7 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
     if (context?.loggedIn?.uid === data?.challengee?.id && !hasNotified) {
       console.warn("DEBUG - CHALLENGE.JS EFFECT TRIGGERED");
       setHasNotified(true);
-      await completeBattleForChallengee(
+      const result = await completeBattleForChallengee(
         id,
         score,
         data?.game?.name,
@@ -94,6 +95,7 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
         data?.game?.ownerId
       );
     }
+    setLockedInXpStealAmount(result);
   };
 
   const reset = () => {
@@ -213,12 +215,13 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
           additionalSpriteThree: data?.game?.additionalSpriteThree,
           additionalSpriteFour: data?.game?.additionalSpriteFour,
           additionalSpriteFive: data?.game?.additionalSpriteFive,
+          additionalSpriteSix: data?.game?.additionalSpriteSix,
           maxscore: 0,
           words: data?.game?.words || [],
         })}
       {stage === 2 && (
         <ChallengeOutro
-          xpStealAmount={calculateXpStealAmount()}
+          xpStealAmount={lockedInXpStealAmount || calculateXpStealAmount()}
           data={data}
           setStage={setStage}
           score={score}

@@ -1,57 +1,4 @@
 export const games = [
-  // {
-  //   name: "Touchdown Master",
-  //   description:
-  //     "Get past swarms of oncoming defenders and get the highest score in this fast-paced endless NFL runner.",
-  //   backgroundImage: "/defaults/touchdown-master.jpg",
-  //   screenshot: "touchdown-pro.png",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 7,
-  //   muxId: "kv3nafmeYitHbRztA98TfVfVLvl6GXUf2U8FCtfHUf4",
-  // },
-  // {
-  //   name: "Cricket Fall",
-  //   description:
-  //     "Quick avoid cricketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
-  //   backgroundImage: "/defaults/cricket-fall.jpg",
-  //   screenshot: "cricket-fall.jpg",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 9,
-  //   muxId: "LADl2T9sM9xKJJ6QDGG5uSidkg1xPPRJyn0002haYkTRo",
-  // },
-
-  // PREMIUM UNITY GAMES > 1000
-
-  // {
-  //   name: "Baseball Throw",
-  //   description:
-  //     "Test your throwing arm and try to hit as many targets as you can in this 3D baseball pitching game.",
-  //   backgroundImage: "/defaults/pitch-champ.jpg",
-  //   screenshot: "baseball-throw.png",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 1000,
-  //   isPremium: true,
-  //   unityBundle: "baseball-throw",
-  //   unityGameType: 0,
-  //   muxId: "XE8vut8sCeOLFibwyi2ZswYmaryJydwJnOBZkd1w9rI",
-  // },
-  // {
-  //   name: "Cricket Throw",
-  //   description:
-  //     "Line and length count in this 3D cricket game, where the objective is to accurately bowl at targets and amass a high score.",
-  //   backgroundImage: "/defaults/flick-stars.jpg",
-  //   screenshot: "baseball-throw.png",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 1001,
-  //   isPremium: true,
-  //   unityBundle: "baseball-throw",
-  //   unityGameType: 1,
-  //   muxId: "3Sai2FJp1csTqGeqdq100GaKLmwnSUPH4nH2B3aIR3EA",
-  // },
   {
     name: "Spin To Win",
     description:
@@ -81,16 +28,6 @@ export const games = [
     id: 11,
     landscape: true,
   },
-  // {
-  //   name: "Soccer Fall",
-  //   description:
-  //     "This is soccer ball game.  Try to score as many points as you can before you concede three goals!",
-  //   backgroundImage: "/defaults/soccerfall.jpg",
-  //   screenshot: "soccerfall.jpg",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 12,
-  // },
   {
     name: "Power Pong",
     description:
@@ -210,18 +147,21 @@ export const games = [
       additionalSpriteOne: "parallax",
     },
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
     additionalSpriteOne:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   {
-    name: "Smash Blitz Throw",
-    description: "Smash Blitz Throw is balabala bala babab",
-    backgroundImage: "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
+    name: "Throwdown Frenzy",
+    description: `Throwdown Frenzy propels players into an adrenaline-fueled frenzy as they hurl projectiles at targets, dodge relentless enemy obstacles, and compete for high scores in a heart-pounding test of skill and survival!`,
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_54_lnqajv.jpg",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -258,10 +198,11 @@ export const games = [
   },
   {
     name: "Bounce Blitz",
-    description:
-      "Bounce Blitz” invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy",
-    backgroundImage:
+    description: `"Bounce Blitz" invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy`,
+    gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_53_sel4zk.jpg",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -280,29 +221,30 @@ export const games = [
       additionalSpriteThree: "1.0",
     },
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
     powerUpSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
     enemySprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteOne:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteTwo:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteThree:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
   },
 
   {
     name: "Endzone Blitz",
-    description:
-      "In ‘Endzone Blitz,’ players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!",
-    backgroundImage:
+    description: `In 'Endzone Blitz,' players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!"`,
+    gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152747/PlaySpark_home_screens_50_saftei.jpg",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -318,11 +260,11 @@ export const games = [
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
     enemySprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     playerSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849124/Fall_ball_non_head_-_basketball_-_sprite_sheet_jgfrm7.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
   },
   {
     name: "Sky Soar",
@@ -342,13 +284,13 @@ export const games = [
       additionalSpriteOne: "parallax",
     },
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
     additionalSpriteOne:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   // {
   //   name: "Cricket Ball Smash",

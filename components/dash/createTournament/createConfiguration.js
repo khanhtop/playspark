@@ -138,6 +138,19 @@ export default function CreateConfiguration({
           }}
         />
       )}
+      {tournament?.tags?.["additionalSpriteSix"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteSix"
+          aspectRatio={tournament?.tags?.["additionalSpriteSix"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 6`}
+          selected={tournament.additionalSpriteSix}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteSix: a });
+          }}
+        />
+      )}
       {tournament?.words && (
         <GenWordArray
           tournament={tournament}
