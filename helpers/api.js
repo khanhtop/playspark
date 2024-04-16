@@ -239,15 +239,6 @@ export function getGame(id, data, callback, params) {
       />
     );
 
-  if (id === 20)
-    return (
-      <Pong
-        data={data}
-        gameType="newcricketball"
-        callback={callback}
-        params={params}
-      />
-    );
   if (id === 21)
     return (
       <Pong

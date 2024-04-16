@@ -156,12 +156,10 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   {
-    name: "Throwdown Frenzy",
-    description: `Throwdown Frenzy propels players into an adrenaline-fueled frenzy as they hurl projectiles at targets, dodge relentless enemy obstacles, and compete for high scores in a heart-pounding test of skill and survival!`,
-    gameIcon:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
+    name: "Smash Blitz Throw",
+    description: "Smash Blitz Throw is balabala bala babab",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_54_lnqajv.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -303,19 +301,18 @@ export const games = [
     objectSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
-  {
-    name: "Airborne Ace",
-    description: `"Airborne Ace" catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!`,
-    gameIcon:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152746/Add_a_heading_4_aovot8.png",
-    backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152746/Add_a_heading_4_aovot8.png",
-    screenshot: "cricketsmash.jpg",
-    primaryColor: "#F69B01",
-    textColor: "#FFF",
-    id: 20,
-    landscape: true,
-  },
+  // {
+  //   name: "Cricket Ball Smash",
+  //   description:
+  //     "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
+  //   backgroundImage:
+  //     "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+  //   screenshot: "cricketsmash.jpg",
+  //   primaryColor: "#F69B01",
+  //   textColor: "#FFF",
+  //   id: 20,
+  //   landscape: true,
+  // },
   {
     name: "Sidestep Surge",
     description:
