@@ -47,9 +47,9 @@ export default function GameCard({
       // setStaticImageUrl(`/screenshots/${game.screenshot}`);
       // setAnimatedImageUrl(`/screenshots/${game.screenshot}`);
       // setImageUrl(`/screenshots/${game.screenshot}`);
-      setStaticImageUrl(`${game.backgroundImage}`);
-      setAnimatedImageUrl(`${game.backgroundImage}`);
-      setImageUrl(`${game.backgroundImage}`);
+      setStaticImageUrl(`${game.gameIcon ?? game.backgroundImage}`);
+      setAnimatedImageUrl(`${game.gameIcon ?? game.backgroundImage}`);
+      setImageUrl(`${game.gameIcon ?? game.backgroundImage}`);
     }
   }, []);
 

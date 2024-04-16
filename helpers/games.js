@@ -1,57 +1,4 @@
 export const games = [
-  // {
-  //   name: "Touchdown Master",
-  //   description:
-  //     "Get past swarms of oncoming defenders and get the highest score in this fast-paced endless NFL runner.",
-  //   backgroundImage: "/defaults/touchdown-master.jpg",
-  //   screenshot: "touchdown-pro.png",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 7,
-  //   muxId: "kv3nafmeYitHbRztA98TfVfVLvl6GXUf2U8FCtfHUf4",
-  // },
-  // {
-  //   name: "Cricket Fall",
-  //   description:
-  //     "Quick avoid cricketball game using touch controls.  Try to score as many points as you can before you concede three goals!",
-  //   backgroundImage: "/defaults/cricket-fall.jpg",
-  //   screenshot: "cricket-fall.jpg",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 9,
-  //   muxId: "LADl2T9sM9xKJJ6QDGG5uSidkg1xPPRJyn0002haYkTRo",
-  // },
-
-  // PREMIUM UNITY GAMES > 1000
-
-  // {
-  //   name: "Baseball Throw",
-  //   description:
-  //     "Test your throwing arm and try to hit as many targets as you can in this 3D baseball pitching game.",
-  //   backgroundImage: "/defaults/pitch-champ.jpg",
-  //   screenshot: "baseball-throw.png",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 1000,
-  //   isPremium: true,
-  //   unityBundle: "baseball-throw",
-  //   unityGameType: 0,
-  //   muxId: "XE8vut8sCeOLFibwyi2ZswYmaryJydwJnOBZkd1w9rI",
-  // },
-  // {
-  //   name: "Cricket Throw",
-  //   description:
-  //     "Line and length count in this 3D cricket game, where the objective is to accurately bowl at targets and amass a high score.",
-  //   backgroundImage: "/defaults/flick-stars.jpg",
-  //   screenshot: "baseball-throw.png",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 1001,
-  //   isPremium: true,
-  //   unityBundle: "baseball-throw",
-  //   unityGameType: 1,
-  //   muxId: "3Sai2FJp1csTqGeqdq100GaKLmwnSUPH4nH2B3aIR3EA",
-  // },
   {
     name: "Spin To Win",
     description:
@@ -81,16 +28,6 @@ export const games = [
     id: 11,
     landscape: true,
   },
-  // {
-  //   name: "Soccer Fall",
-  //   description:
-  //     "This is soccer ball game.  Try to score as many points as you can before you concede three goals!",
-  //   backgroundImage: "/defaults/soccerfall.jpg",
-  //   screenshot: "soccerfall.jpg",
-  //   primaryColor: "#F69B01",
-  //   textColor: "#FFF",
-  //   id: 12,
-  // },
   {
     name: "Power Pong",
     description:
@@ -219,9 +156,12 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   {
-    name: "Smash Blitz Throw",
-    description: "Smash Blitz Throw is balabala bala babab",
-    backgroundImage: "/pong/smashBlitzThrow/smashBlitzThrowing.png",
+    name: "Throwdown Frenzy",
+    description: `Throwdown Frenzy propels players into an adrenaline-fueled frenzy as they hurl projectiles at targets, dodge relentless enemy obstacles, and compete for high scores in a heart-pounding test of skill and survival!`,
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_54_lnqajv.jpg",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -257,11 +197,12 @@ export const games = [
     body: "body.png",
   },
   {
-    name: "Smash Blitz",
-    description:
-      "Smash Blitz is a high-energy arcade game where players deflect oncoming objects into colorful targets for points. As the speed increases and lives dwindle, can you keep up the pace and survive the relentless challenge?",
+    name: "Bounce Blitz",
+    description: `"Bounce Blitz" invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy`,
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708641627/cjpqqvkxmkpsgajlpt9a.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_53_sel4zk.jpg",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -298,11 +239,12 @@ export const games = [
   },
 
   {
-    name: "FootBall Pass Game",
-    description:
-      "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
+    name: "Endzone Blitz",
+    description: `In 'Endzone Blitz,' players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!"`,
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152747/PlaySpark_home_screens_50_saftei.jpg",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -325,11 +267,12 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
   },
   {
-    name: "Fly Collect",
-    description:
-      "Flap, customize, conquer! Dive into an addictive, fully customizable tap-to-fly adventure for endless high-score thrills!",
+    name: "Sky Soar",
+    description: `In 'Sky Soar,' players navigate a mesmerizing sky filled with rings, skillfully guiding their object through obstacles to score points and collecting power-ups for enhanced abilities in this addictive aerial adventure reminiscent of Flappy Bird."`,
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/Game_tiles_2_o7w5xl.png",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/5_bch6hi.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_55_yrqrkt.jpg",
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -351,11 +294,12 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   {
-    name: "Cricket Ball Smash",
-    description:
-      "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
+    name: "Airborne Ace",
+    description: `"Airborne Ace" catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!`,
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152746/Add_a_heading_4_aovot8.png",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152746/Add_a_heading_4_aovot8.png",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -363,11 +307,13 @@ export const games = [
     landscape: true,
   },
   {
-    name: "Baller Faller",
+    name: "Sidestep Surge",
     description:
-      "Dodge obstacles, catch falling objects, and set high scores in this customizable and action-packed game where every move is a step closer to victory!",
+      "In 'Sidestep Surge,' players skillfully maneuver their object across the screen, collecting items and evading enemies in a frantic race against time to achieve the highest score before running out of lives.",
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_3_v1zfhs.png",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259251/4_ehxmnh.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/PlaySpark_home_screens_56_wkzoin.jpg",
     screenshot: "basketball-fall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
