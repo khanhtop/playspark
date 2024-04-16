@@ -58,9 +58,14 @@ export class PausePopup {
     resume.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
       this.scene.events.emit("PauseBtn:onClick");
       this.scene.events.emit("PAUSE_PLAY");
-
-      
     });
+
+    quit.on(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+      this.scene.events.emit("PausePopup:onQuitClick");
+    });
+
+   
+
 
     group.add(blach_bg);
     group.add(popupbg);

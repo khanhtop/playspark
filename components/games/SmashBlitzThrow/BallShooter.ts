@@ -29,6 +29,9 @@ export class BallShooter {
       angle = Phaser.Math.Angle.BetweenPoints(pointer, center);
       prevPos = pointer;
       
+
+
+
     });
 
     this.scene.events.on("Input:pointerup", (pointer: any) => {
@@ -50,6 +53,8 @@ export class BallShooter {
         10 * dist,
         ball.body.velocity
       );
+
+  
 
       this.scene.events.emit("BallShooter:onShoot");
       
