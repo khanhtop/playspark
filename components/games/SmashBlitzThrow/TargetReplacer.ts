@@ -11,6 +11,19 @@ export class TargetReplacer {
   constructor(_scene: Phaser.Scene) {
     this.scene = _scene;
 
+    this.scene.events.on("TargetReplacer:setRandomTarget", () => {
+      for (var i = 0; i < TOTAL_TARGET_COUNT; i++) {
+        let bombCount = this.getBombCount();
+        let spLength = Object.keys(BALLS).length / 2; // EXEPT SUPER GOLD BALL
+        let randomIndex = getRandomInt(spLength);
+        while(bombCount == 1 && randomIndex == BOMB_INDEX){
+          randomIndex = getRandomInt(spLength);
+        }
+        let spType = BALLS[randomIndex];
+        this.scene.events.emit("Targets:setTargetTexture", i, spType);
+      }
+    });
+
     this.scene.events.on("BallAndTargetsOverlap:onOverLap", (target: any) => {
       this.currentTarget = target;
       //console.log("-[[ gfg", this.currentTarget?.texture.key);

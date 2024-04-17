@@ -34,9 +34,12 @@ import { Tutorial } from "./UI/Tutorial";
 import { Audios } from "./Audios";
 import { AudioBtn } from "./UI/AudioBtn";
 import {
+  BALLS,
+  BOMB_INDEX,
   GAME_STATES,
   LIFE_COUNT,
   PLAYER_STATES,
+  TOTAL_TARGET_COUNT,
   TUTORIAL_DURATION,
 } from "./Consts";
 import { Global } from "./Global";
@@ -47,6 +50,8 @@ import { FourNumbersContainer } from "./UI/FourNumbersContainer";
 import { PowerupOverlay } from "./Powerups/PowerupOverlay";
 import { RocketBoostBtn } from "./Powerups/RocketBoostBtn";
 import { FlameBoostBtn } from "./Powerups/FlameBoostBtn";
+import { getRandomInt } from "./Helper";
+import { Targets } from "./Targets";
 
 export default class SmashBlitzThrowing extends Phaser.Scene {
   public static instance: SmashBlitzThrowing;
@@ -99,7 +104,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   constructor(gameType: any, _params: any) {
     super();
     SmashBlitzThrowing.instance = this;
-   // console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
+    // console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
     this.params = _params;
     this.gameType = gameType;
   }
@@ -107,9 +112,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   width: number = 1920 / 2;
   height: number = 1024 / 2;
 
-  init() {
-
-  }
+  init() {}
   preload() {
     loading(this);
 
@@ -143,7 +146,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     new BackGroundManager(this, backgroundSprite, this.width, this.height); //this.params.backgroundSprite);
     let throwingCenterX = this.widthFactor * 1.6;
     let throwingCenterY = this.heightFactor * 7.3;
-    new TargetFactory(this, this.width, this.height, 70).init();
+    new TargetFactory(this, this.width, this.height, 128).init();
     var ball: Phaser.Types.Physics.Arcade.ImageWithDynamicBody = new Ball(
       this
     ).init(throwingCenterX, throwingCenterY, "ball");
@@ -167,11 +170,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       this.bypassTutorial();
     }, TUTORIAL_DURATION * 1000);
 
-    this.events.emit("Targets:setTargetTexture", 0, "powerup");
-    this.events.emit("Targets:setTargetTexture", 1, "gold_ball");
-    this.events.emit("Targets:setTargetTexture", 2, "purple_ball");
-    this.events.emit("Targets:setTargetTexture", 3, "bomb");
-    this.events.emit("Targets:setTargetTexture", 4, "purple_ball");
+ 
 
     new BallAndTargetsOverlap(this).init(ball);
     this.stretchingArrow = new StretchingArrow(this);
@@ -182,6 +181,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     let explosionEffect = new ExplosionEffect(this);
 
     new TargetReplacer(this);
+    this.events.emit("TargetReplacer:setRandomTarget");
 
     playerController.container._body.on(
       Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN,
@@ -277,7 +277,6 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     new RocketBoostBtn(this, this.widthFactor * 5.5, this.heightFactor * 9);
     new FlameBoostBtn(this, this.widthFactor * 4.4, this.heightFactor * 9);
 
-
     let progressBox = new ProgressBox(this);
     progressBox.setPos(this.widthFactor * 2, this.heightFactor * 9.35);
     let ballGravity = new BallGravity(this);
@@ -291,6 +290,12 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     this.levelCompletePopup.hide();
 
     this.events.on("LoseManager:onLose", () => {
+      this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
+        if (this.scoreHandler) this.scoreHandler(totalScore);
+      });
+    });
+
+    this.events.on("PausePopup:onQuitClick", () => {
       this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
         if (this.scoreHandler) this.scoreHandler(totalScore);
       });
@@ -317,6 +322,8 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
             parseFloat(data[2])
           );
           this.events.emit("ProgressBox:setTimeScale", parseFloat(data[3]));
+
+          this.events.emit("TargetReplacer:setRandomTarget");
         }
       );
     });
@@ -342,10 +349,11 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     this.powerupOverlay = PowerupOverlay.getInstance(this);
     this.add.container(this.width / 2, this.height / 2, this.powerupOverlay);
 
-
     return;
-
   }
+  
+
+
   bypassTutorial() {
     if (Global.gameState == GAME_STATES.TUTURIAL) {
       this.events.emit("Tutorial:hide");
@@ -354,7 +362,6 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   }
 
   update(t: number, dt: number) {
-
     if (this.stretchingArrow) this.stretchingArrow.update();
     return;
     this.physics.world.collide(this.sprite, this.group);
@@ -389,9 +396,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     );
   }
 }
-/*
+
 window.onload = () => {
-  const config = {
+  /*const config = {
     type: Phaser.AUTO,
     width: 960,
     height: 512,
@@ -404,12 +411,11 @@ window.onload = () => {
     physics: {
       default: "arcade",
       arcade: {
-        //  debug: true,
+        // debug: true,
         gravity: { y: 500, x: 0 },
       },
     },
   };
 
-  const game = new Phaser.Game(config);
+  const game = new Phaser.Game(config);*/
 };
-*/
