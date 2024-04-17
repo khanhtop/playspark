@@ -1236,7 +1236,7 @@ export default class newCricketSmashScene extends Phaser.Scene {
   
         this.player
           .setTexture(`p${author_id}_player_ready`)
-          .setPosition(h * 0.47, h / 2 - 20 * h  / 688)
+          .setPosition(h * 0.47, h / 2 - 120 * h  / 688)
           .setVisible(true);
         this.auth_country.setText(player_name[author_id - 1]);
         this.player.play(`p${author_id}_ready_animation`);
@@ -1261,6 +1261,13 @@ export default class newCricketSmashScene extends Phaser.Scene {
       .setGravityY(1500)
       .setInteractive({ cursor: 'pointer' })
       .setVisible(false);
+    
+      const bottom = this.physics.add.sprite(h * 0.47 + 100, h - 50, 'score')
+        .setDisplaySize(100, 10)
+        .setPushable(false)
+        .setVisible(false)
+
+      this.physics.add.collider(this.player, bottom)
 
     this.auth_select_btn.on('pointerup', () => {
       this.auth_select_group.setVisible(false);
