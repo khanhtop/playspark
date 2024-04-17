@@ -6,6 +6,7 @@ import { decryptEmail, refactorEmail } from "@/helpers/crypto";
 import { auth, firestore } from "@/helpers/firebase";
 import { generateProfile } from "@/helpers/profileGen";
 import { useAppContext } from "@/helpers/store";
+import { determineStreak } from "@/helpers/streaks";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -20,7 +21,7 @@ import {
   where,
 } from "firebase/firestore";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { isIOS, isAndroid, isSafari } from "react-device-detect";
 
 export default function Ad({
@@ -96,19 +97,26 @@ export default function Ad({
     }
   };
 
-  useEffect(() => {
-    // if (context.isAuthed) {
-    //   if (!context.loggedIn?.uid && externalId && externalPass) {
-    //     setSigingIn(0);
-    //     handleAutomatedSignin();
-    //   }
-    // }
-  }, [context?.loggedIn, context.isAuthed]);
+  const [hasLoggedStreak, setHasLoggedStreak] = useState(false);
 
-  // if (externalId && signingIn === 0) {
-  //   setSigingIn(1);
-  //   handleAutomatedSignin();
-  // }
+  useMemo(() => {
+    if (context.profile && !hasLoggedStreak) {
+      setHasLoggedStreak(true);
+      const streak = determineStreak(
+        context.profile,
+        context?.loggedIn?.uid,
+        ad
+      ).then((result) => {
+        console.log(result);
+        if (result.trigger && result.value > 1) {
+          context.setEvent({
+            title: `+ ${result.value * 10}XP`,
+            text: `Streak of ${result.value}`,
+          });
+        }
+      });
+    }
+  }, [context]);
 
   return (
     <>
@@ -190,18 +198,19 @@ export async function getServerSideProps(context) {
 
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);
+
   return {
     props: {
       id: id,
       ad: {
         ...ad,
-        xpWebhook: client.xpWebhook,
+        xpWebhook: client?.xpWebhook || null,
       },
       email: email || null,
       xp: xp || null,
       coins: coins || null,
       userId: userId || null,
-      xpWebhook: client.xpWebhook,
+      xpWebhook: client?.xpWebhook || null,
       externalId: externalId,
       externalPass: externalPass,
     },
