@@ -398,7 +398,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 }
 
 window.onload = () => {
- /* const config = {
+  /*const config = {
     type: Phaser.AUTO,
     width: 960,
     height: 512,
