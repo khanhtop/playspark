@@ -262,6 +262,7 @@ export default function Advert({
           ball: data?.ball,
           powerup: data?.powerup,
           obstacle: data?.obstacle,
+          landscape: data?.landscape || false,
           normal_target_1: data?.normal_target_1,
           normal_target_2: data?.normal_target_2,
           normal_target_3: data?.normal_target_3,

@@ -56,7 +56,7 @@ const PongClientComponent = forwardRef(
               // debug: true,
               gravity: { y: 0 },
             },
-          }
+          },
         };
 
         if (
@@ -113,7 +113,12 @@ const PongClientComponent = forwardRef(
     }, []);
 
     return (
-      <div id="game" className={`w-full flex-grow justify-center items-center`}>
+      <div
+        id="game"
+        className={`${
+          params.landscape ? "h-full" : "w-full"
+        } flex-grow justify-center items-center`}
+      >
         {" "}
       </div>
     );
