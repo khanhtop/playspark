@@ -71,6 +71,7 @@ export default class FlyCollectScene extends Phaser.Scene {
   wings: Phaser.GameObjects.Sprite[];
   obstacles: any;
   items: any;
+  enemies: any;
   emitter: Phaser.GameObjects.Particles.ParticleEmitter;
   snowEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
   popUpTexts: any;
@@ -95,6 +96,8 @@ export default class FlyCollectScene extends Phaser.Scene {
     this.params.sponsorLogo = !!this.params.sponsorLogo
       ? this.params.sponsorLogo
       : "/pong/" + gameType + "/fence.png";
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : "/pong/" + gameType + "/enemy.png"
+
   }
 
   preload() {
@@ -123,6 +126,7 @@ export default class FlyCollectScene extends Phaser.Scene {
 
     this.load.image("hoop_t", "/pong/" + gameType + "/UI/hoop_t.png");
     this.load.image("hoop_d", "/pong/" + gameType + "/UI/hoop_d.png");
+    this.load.image("enemy", this.params.enemySprite);
 
     this.load.image("fx", "/pong/" + gameType + "/UI/fx.png");
     this.load.image("snow", "/pong/" + gameType + "/UI/snow.png");
@@ -647,7 +651,7 @@ export default class FlyCollectScene extends Phaser.Scene {
   initObstacle() {
     lastPos.id++;
 
-    const isLevelUp = lastPos.id % 5 == 0;
+    const isLevelUp = lastPos.id % 10 == 0;
     // LEVEL PART OBSTACLE
 
     let obstacle_dis = 400;
@@ -912,6 +916,13 @@ export default class FlyCollectScene extends Phaser.Scene {
     // ITEM INIT (percent)
     this.items.push(this.initItem(x, y));
 
+
+    if(GAME.level >= 4 && lastPos.id % 2 == 0) {
+      this.enemies.push(
+        this.initEnemy(x, y, col_l, col_r, col_last, col_last_b, col_tb, col_db, group)
+      )
+    }
+
     // MOVE OBSTACLE...
     if (isMove) {
       // const tw = this.tweens.add({
@@ -963,6 +974,53 @@ export default class FlyCollectScene extends Phaser.Scene {
     );
     return item;
   }
+
+  initEnemy(x: any, y: any, col_l, col_r, col_last, col_last_b, col_tb, col_db, group) {
+    x += (0.5 - Math.random()) * 200;
+    y += (0.5 - Math.random()) * 300;
+
+    let speed = 90;
+    let radius = 50;
+
+    if(GAME.level >= 5) {
+      speed *= 1.2;
+    }
+    if (GAME.level >= 7) {
+      radius *= 1.2;
+    }
+    if (GAME.level >= 8) {
+      speed *= 2;
+    }
+
+    const enemy = this.physics.add.sprite(x, y, "enemy").setDisplaySize(radius, radius);
+    const col = this.physics.add.overlap(this.ball, enemy, () => {
+
+      this.physics.world.removeCollider(col_l);
+      this.physics.world.removeCollider(col_r);
+      this.physics.world.removeCollider(col_last);
+      this.physics.world.removeCollider(col_last_b);
+      this.physics.world.removeCollider(col_tb);
+      this.physics.world.removeCollider(col_db);
+      this.removeObstacle(group);
+      lastPos.ballPos.x = x;
+      lastPos.ballPos.y = y;
+      this.physics.world.removeCollider(col);
+      enemy.destroy(true);
+      this.loseLife();
+    }, null, this)
+
+
+
+
+    enemy.range = 100;
+    enemy.rangeAngle = 0;
+    enemy.angleSpeed = speed;
+    enemy.originPosX = x;
+    enemy.originPosY = y;
+
+    return enemy;
+  }
+
 
   addItemText(x, y, text, type) {
     const itemW = 32;
@@ -1092,6 +1150,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     lastPos.ballPos.x = this.ball.x;
     this.obstacles = [];
     this.items = [];
+    this.enemies = [];
 
     this.startRound();
   }
@@ -1151,6 +1210,10 @@ export default class FlyCollectScene extends Phaser.Scene {
 
     this.items.forEach((item) => {
       item.destroy(true);
+    });
+    
+    this.enemies.forEach(enemy => {
+      enemy.destroy(true);
     });
 
     this.obstacles = [];
@@ -1295,5 +1358,21 @@ export default class FlyCollectScene extends Phaser.Scene {
     this.setBackgroundPos();
 
     this.lastangle = this.ball.angle;
+
+    this.enemies.forEach(enemy => {
+      const range = enemy.range;
+      const rangeAngle = enemy.rangeAngle;
+      const angleSpeed = enemy.angleSpeed;
+      const originX = enemy.originPosX;
+      const originY = enemy.originPosY;
+
+      enemy.setPosition(
+        originX,
+        originY + range * Math.sin((rangeAngle + angleSpeed * delta / 1000) / 180),
+      )
+
+      enemy.rangeAngle += angleSpeed * delta / 1000;
+
+    });
   }
 }

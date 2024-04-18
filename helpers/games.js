@@ -156,10 +156,12 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
   },
   {
-    name: "Smash Blitz Throw",
-    description: "Smash Blitz Throw is balabala bala babab",
-    backgroundImage:
+    name: "Throwdown Frenzy",
+    description: `Throwdown Frenzy propels players into an adrenaline-fueled frenzy as they hurl projectiles at targets, dodge relentless enemy obstacles, and compete for high scores in a heart-pounding test of skill and survival!`,
+    gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_54_lnqajv.jpg",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
