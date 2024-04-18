@@ -590,7 +590,7 @@ export default class FlyCollectScene extends Phaser.Scene {
       this.add.sprite(mW, mH, "help-board").setOrigin(0.5, 0.5).setDisplaySize(250, 100).setScrollFactor(0, 0)
     )
 
-    const bbanim = this.add.sprite(mW - 100, mH, 'ball_anim').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0).play("ball_anim");
+    const bbanim = this.add.sprite(mW - 100, mH, 'light').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0)
     this.help_board.add(
       bbanim
     )
@@ -704,8 +704,8 @@ export default class FlyCollectScene extends Phaser.Scene {
       .setAngle(angle);
 
     if (isLevelUp) {
-      top.setTint(0x00ff00);
-      down.setTint(0x00ff00);
+      top.setTintFill(0xffff00);
+      down.setTintFill(0xffff00);
     }
 
     const lb = this.physics.add
@@ -743,8 +743,8 @@ export default class FlyCollectScene extends Phaser.Scene {
         "ball"
       )
       .setOrigin(0.5, 0.5)
-      .setDisplaySize(30, 30)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setDisplaySize(objW * 0.6, 30)
+      // .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
       .setVisible(false);
 
@@ -755,8 +755,8 @@ export default class FlyCollectScene extends Phaser.Scene {
         "ball"
       )
       .setOrigin(0.5, 0.5)
-      .setDisplaySize(30, 30)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setDisplaySize(objW * 0.6, 30)
+      // .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
       .setVisible(false);
 
@@ -976,7 +976,7 @@ export default class FlyCollectScene extends Phaser.Scene {
   }
 
   initEnemy(x: any, y: any, col_l, col_r, col_last, col_last_b, col_tb, col_db, group) {
-    x += (0.5 - Math.random()) * 200;
+    x += (0.5) * 200;
     y += (0.5 - Math.random()) * 300;
 
     let speed = 90;
@@ -1174,7 +1174,7 @@ export default class FlyCollectScene extends Phaser.Scene {
   }
 
   startRound() {
-    GAME.level = 1;
+    // GAME.level = 1;
     GAME.ring = 1;
     GAME.sequence = 0;
     // GAME.ball = 30;
