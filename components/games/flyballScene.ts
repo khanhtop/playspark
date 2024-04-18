@@ -441,7 +441,7 @@ export default class FlyBallScene extends Phaser.Scene {
     )
 
     this.help_board.add(
-      this.add.sprite(mW - 100, mH, 'ball').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0)
+      this.add.sprite(mW - 100, mH, 'light').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0)
     )
 
     this.help_board.add(
@@ -540,8 +540,8 @@ export default class FlyBallScene extends Phaser.Scene {
     const down = this.add.sprite(x, y, 'hoop_d').setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(12).setAngle(angle)
 
     if(isLevelUp) {
-      top.setTint(0x00ff00)
-      down.setTint(0x00ff00)
+      top.setTintFill(0xFFFF00)
+      down.setTintFill(0xFFFF00)
     }
 
     const lb = this.physics.add.sprite(x + radius * sizeRate * Math.cos(angle * Math.PI / 180), y + radius * sizeRate * Math.sin(angle * Math.PI / 180), 'ball').setOrigin(0.5, 0.5)

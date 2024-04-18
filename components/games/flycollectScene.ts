@@ -590,7 +590,7 @@ export default class FlyCollectScene extends Phaser.Scene {
       this.add.sprite(mW, mH, "help-board").setOrigin(0.5, 0.5).setDisplaySize(250, 100).setScrollFactor(0, 0)
     )
 
-    const bbanim = this.add.sprite(mW - 100, mH, 'ball_anim').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0).play("ball_anim");
+    const bbanim = this.add.sprite(mW - 100, mH, 'light').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0)
     this.help_board.add(
       bbanim
     )
@@ -704,8 +704,8 @@ export default class FlyCollectScene extends Phaser.Scene {
       .setAngle(angle);
 
     if (isLevelUp) {
-      top.setTint(0x00ff00);
-      down.setTint(0x00ff00);
+      top.setTintFill(0xffff00);
+      down.setTintFill(0xffff00);
     }
 
     const lb = this.physics.add
