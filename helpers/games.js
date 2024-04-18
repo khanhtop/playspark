@@ -168,33 +168,44 @@ export const games = [
     id: 22,
     landscape: true,
     cloudinaryGameTag: "smash-blitz",
-    playerSprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273756/ggm9gp0ksw4krnjwbgu3.png",
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273756/ggm9gp0ksw4krnjwbgu3.png",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249177/ob0f8ej3o5cj1rdlmjuv.png",
+    objectSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249300/shfamltfjjp6qj4bikwy.png",
+    powerUpSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249398/v0vwyytupq6ayphvqwal.png",
     additionalSpriteOne:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273662/gniqllcbuvpxpjyv7ccf.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249708/uxum6njt4ldbvmtxqozp.png",
     additionalSpriteTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249541/ouvmlngfwezf0ysjsep6.png",
+    additionalSpriteThree:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273812/t5dhqvsulaqxnbkmdbab.png",
+    additionalSpriteFour:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712273662/gniqllcbuvpxpjyv7ccf.png",
+    additionalSpriteFive:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249771/k95x9isnc50ppqza3ktl.png",
+    additionalSpriteSix:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249828/rgbbbdo99hcj3pij6o6u.png",
     tags: {
-      playerSprite: "body",
       backgroundSprite: "0.6",
-      additionalSpriteOne: "head",
-      additionalSpriteTwo: "shoes",
+      playerSprite: "body",
+      enemySprite: "1.0",
+      objectSprite: "1.0",
+      powerUpSprite: "1.0",
+      additionalSpriteOne: "1.0",
+      additionalSpriteTwo: "1.0",
+      additionalSpriteThree: "shoes",
+      additionalSpriteFour: "head",
+      additionalSpriteFive: "right-hand",
+      additionalSpriteSix: "left-hand",
     },
     lives: 3,
     score: 0,
     level: 1,
-    ball: "ball.png",
-    powerup: "powerup.png",
-    obstacle: "bomb.png",
-    normal_target: "purple_ball.png",
-    high_value_target: "super_gold.png",
-    shoes: "shoes.png",
-    head: "head.png",
-    right_hand: "right_hand.png",
-    left_hand: "left_hand.png",
-    body: "body.png",
   },
   {
     name: "Bounce Blitz",

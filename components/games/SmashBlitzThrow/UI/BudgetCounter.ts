@@ -23,6 +23,8 @@ export class BudgetCounter {
       .setPadding(50, 50, 50, 50)
       .setCrop(0, 0, 200, 200)
 
+
+
       
 
     let bg = _scene.add
@@ -30,10 +32,13 @@ export class BudgetCounter {
       .setOrigin(0.5, 0.5)
       .setDisplaySize(200, 80)
       .setAlpha(0.7);
+      
     this.icon = _scene.add
       .sprite(-50, 0, "powerup")
       .setOrigin(0.5, 0.5)
-      .setDisplaySize(70, 70);
+      .setDisplaySize(70, 70)
+
+
 
     this.group.add(bg);
     this.group.add(this.counter);
@@ -58,5 +63,6 @@ export class BudgetCounter {
   }
   public setTexture(textureName: string) {
     this.icon.setTexture(textureName);
+    this.icon.setDisplaySize(70, 70);
   }
 }
