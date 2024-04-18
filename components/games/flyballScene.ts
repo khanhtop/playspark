@@ -562,14 +562,14 @@ export default class FlyBallScene extends Phaser.Scene {
       rb.radius = radius;
 
     const tb = this.physics.add.sprite(x + radius * Math.cos(angle * Math.PI / 180 + Math.PI / 2), y + radius * Math.sin(angle * Math.PI / 180 + Math.PI / 2), 'ball').setOrigin(0.5, 0.5)
-      .setDisplaySize(30, 30)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setDisplaySize(objW * 0.6, 30)
+      // .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
       .setVisible(false)
     
     const db = this.physics.add.sprite(x - radius * Math.cos(angle * Math.PI / 180 + Math.PI / 2), y - radius * Math.sin(angle * Math.PI / 180 + Math.PI / 2), 'ball').setOrigin(0.5, 0.5)
-      .setDisplaySize(30, 30)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setDisplaySize(objW * 0.6, 30)
+      // .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
       .setVisible(false)
 
@@ -775,7 +775,7 @@ export default class FlyBallScene extends Phaser.Scene {
   }
 
   initEnemy(x: any, y: any, col_l, col_r, col_last, col_last_b, col_tb, col_db, group) {
-    x += (0.5 - Math.random()) * 200;
+    x += (0.5) * 200;
     y += (0.5 - Math.random()) * 300;
 
     let speed = 90;
@@ -961,7 +961,7 @@ export default class FlyBallScene extends Phaser.Scene {
   }
 
   startRound() {
-    GAME.level = 1;
+    // GAME.level = 1;
     GAME.ring = 1;
     GAME.sequence = 0;
     // GAME.ball = 30;

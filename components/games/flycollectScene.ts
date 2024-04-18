@@ -743,8 +743,8 @@ export default class FlyCollectScene extends Phaser.Scene {
         "ball"
       )
       .setOrigin(0.5, 0.5)
-      .setDisplaySize(30, 30)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setDisplaySize(objW * 0.6, 30)
+      // .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
       .setVisible(false);
 
@@ -755,8 +755,8 @@ export default class FlyCollectScene extends Phaser.Scene {
         "ball"
       )
       .setOrigin(0.5, 0.5)
-      .setDisplaySize(30, 30)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setDisplaySize(objW * 0.6, 30)
+      // .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
       .setVisible(false);
 
@@ -976,7 +976,7 @@ export default class FlyCollectScene extends Phaser.Scene {
   }
 
   initEnemy(x: any, y: any, col_l, col_r, col_last, col_last_b, col_tb, col_db, group) {
-    x += (0.5 - Math.random()) * 200;
+    x += (0.5) * 200;
     y += (0.5 - Math.random()) * 300;
 
     let speed = 90;
@@ -1174,7 +1174,7 @@ export default class FlyCollectScene extends Phaser.Scene {
   }
 
   startRound() {
-    GAME.level = 1;
+    // GAME.level = 1;
     GAME.ring = 1;
     GAME.sequence = 0;
     // GAME.ball = 30;
