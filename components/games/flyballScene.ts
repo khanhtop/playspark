@@ -40,7 +40,7 @@ let STATUS = {
 }
 
 let ITEM = {
-  magnify: 5,
+  magnify: 30,
   shrink: 15,
   power: 25,
   heart: 35
@@ -260,14 +260,14 @@ export default class FlyBallScene extends Phaser.Scene {
 
     // END HEAD COIN MENU
 
-    this.add.sprite(w - 70, topOffset + 50, 'score').setOrigin(0.5, 0.5).setDisplaySize(100, 50).setScrollFactor(0, 0);
-    this.add.text(w - 70, topOffset + 40, 'SCORE', {
+    this.add.sprite(w - 55, topOffset, 'score').setOrigin(0.5, 0.5).setDisplaySize(100, 50).setScrollFactor(0, 0);
+    this.add.text(w - 55, topOffset - 8, 'SCORE', {
       fontFamily: "TitanOne-Regular",
       fontSize: "18px",
       color: "#fff",
     })
     .setOrigin(0.5, 0.5).setScrollFactor(0, 0);
-    this.scoreTxt = this.add.text(w - 70, topOffset + 60, '12', {
+    this.scoreTxt = this.add.text(w - 55, topOffset + 8, '12', {
       fontFamily: "TitanOne-Regular",
       fontSize: "18px",
       color: "#fff",
