@@ -52,11 +52,10 @@ body {
   padding-left: 10%;
   padding-right: 10%;
   border-radius: 100px;
-  background-color: #EEE;
+  background-color: #eee;
   margin-left: 5px;
   margin-right: 5px;
 }
-
 
 .swiper-pagination-bullet-active {
   background-color: cyan;
@@ -69,6 +68,11 @@ body {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.font-stroke {
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: black;
 }

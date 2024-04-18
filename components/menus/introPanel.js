@@ -22,9 +22,9 @@ export default function IntroPanel({ data }) {
 
   return (
     <div
-      style={{ height: open ? 170 : 90, transition: "height 0.5s" }}
+      style={{ height: open ? 180 : 90, transition: "height 0.5s" }}
       onClick={() => setOpen(!open)}
-      className="w-[200px] px-2 pt-2 pb-1 flex flex-col bg-white/20 backdrop-blur rounded-2xl shadow-lg border-2 border-white/20"
+      className="w-[200px] px-2 pt-2 pb-1 flex flex-col bg-black/30 backdrop-blur rounded-2xl shadow-lg border-2 border-white/20"
     >
       <div className="h-12 flex gap-2">
         <div className="h-full aspect-square rounded-2xl border-white border-2 overflow-hidden">
@@ -34,8 +34,10 @@ export default function IntroPanel({ data }) {
           />
         </div>
         <div className="font-octo ">
-          <p className="text-lg">{context?.profile?.companyName}</p>
-          <p className="font-roboto text-sm">XP: {xp}</p>
+          <p className="font-titan font-stroke">
+            {context?.profile?.companyName}
+          </p>
+          <p className="font-titan font-stroke">XP: {xp}</p>
         </div>
       </div>
       <div
@@ -47,9 +49,15 @@ export default function IntroPanel({ data }) {
         className="flex-1 flex-col overflow-hidden"
       >
         <div className="px-1 py-3">
-          <p className="font-roboto text-sm">Play Count: {playCount}</p>
-          <p className="font-roboto text-sm">Top Score: {tournamentScore}</p>
-          <p className="font-roboto text-sm">Best Streak: {maxStreak}</p>
+          <p className="font-titan font-stroke text-md">
+            Play Count: {playCount}
+          </p>
+          <p className="font-titan font-stroke text-md">
+            Top Score: {tournamentScore}
+          </p>
+          <p className="font-titan font-stroke text-md">
+            Best Streak: {maxStreak}
+          </p>
         </div>
       </div>
 
