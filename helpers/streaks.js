@@ -10,6 +10,7 @@ export const determineStreak = async (profile, uid, tournament) => {
         [tournament.tournamentId]: {
           timestamp: Date.now().toString(),
           streak: 1,
+          maxStreak: 1,
         },
       },
     });
@@ -20,6 +21,7 @@ export const determineStreak = async (profile, uid, tournament) => {
   } else {
     const streakData = lastStreak?.[tournament.tournamentId];
     const streakAmount = streakData?.streak;
+    const maxStreak = streakData?.maxStreak || 0;
     const streakTimestamp = parseInt(streakData?.timestamp);
     const delta = Math.floor((Date.now() - streakTimestamp) / 1000);
     const streakPeriod = 3600; // seconds
@@ -35,6 +37,10 @@ export const determineStreak = async (profile, uid, tournament) => {
                 ? Date.now().toString()
                 : streakTimestamp.toString(),
             streak: streakAmount + (delta > streakPeriod ? 1 : 0),
+            maxStreak:
+              streakAmount + (delta > streakPeriod ? 1 : 0) > maxStreak
+                ? streakAmount + (delta > streakPeriod ? 1 : 0)
+                : maxStreak,
           },
         },
       });
@@ -49,6 +55,7 @@ export const determineStreak = async (profile, uid, tournament) => {
           [tournament.tournamentId]: {
             timestamp: Date.now().toString(),
             streak: 1,
+            maxStreak: maxStreak === 0 ? 1 : maxStreak,
           },
         },
       });

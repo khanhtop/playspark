@@ -6,6 +6,7 @@ import GameButton from "./uiv2/gameButton";
 import { useEffect } from "react";
 import useMusic from "@/helpers/useMusic";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import IntroPanel from "./menus/introPanel";
 
 export default function Intro({ data, setStage, premium, ready, signingIn }) {
   const context = useAppContext();
@@ -22,7 +23,12 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
         src={data?.backgroundImage}
         className="absolute top-0 left-0 h-full w-full object-cover"
       />
-      <div className="text-white items-center justify-end absolute top-0 left-0 h-full w-full  flex flex-col p-8">
+
+      <div className="text-white items-center justify-end h-full  flex flex-col pb-8 px-4 pt-4">
+        <div className="w-full flex h-full items-start">
+          <div className="flex-1 h-12 z-10"></div>
+          <IntroPanel data={data} />
+        </div>
         {(!premium || ready) && (
           <GameButton
             bgColor={data.primaryColor}
@@ -36,6 +42,7 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
           </GameButton>
         )}
       </div>
+
       {signingIn === 1 && (
         <div className="absolute top-0 left-0 bg-black/60 backdrop-blur h-full w-full flex items-center justify-center">
           <ArrowPathIcon className="h-12 w-12 animate-spin" />
