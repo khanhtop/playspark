@@ -961,7 +961,7 @@ export default class FlyCollectScene extends Phaser.Scene {
       )
     }
 
-    if(GAME.level == 1 && !isLevelReached) {
+    if(GAME.level == 4 && !isLevelReached) {
       isLevelReached = true;
       isPaused = true;
       this.physics.pause();

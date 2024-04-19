@@ -762,7 +762,7 @@ export default class FlyBallScene extends Phaser.Scene {
       )
     }
 
-    if(GAME.level == 2 && !isLevelReached) {
+    if(GAME.level == 4 && !isLevelReached) {
       isLevelReached = true;
       isPaused = true;
       this.physics.pause();
