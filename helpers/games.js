@@ -143,11 +143,14 @@ export const games = [
     tags: {
       playerSprite: "1.0",
       objectSprite: "1.0",
+      enemySprite: "1.0",
       backgroundSprite: "bg",
       additionalSpriteOne: "parallax",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     additionalSpriteOne:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
     playerSprite:
@@ -290,6 +293,7 @@ export const games = [
     cloudinaryGameTag: "fly",
     tags: {
       playerSprite: "1.0",
+      enemySprite: "1.0",
       objectSprite: "1.0",
       backgroundSprite: "bg",
       additionalSpriteOne: "parallax",
@@ -299,6 +303,8 @@ export const games = [
     additionalSpriteOne:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706229721/8_wy0ezs.png",
     playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
+    enemySprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     objectSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
