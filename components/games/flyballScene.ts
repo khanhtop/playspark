@@ -46,6 +46,9 @@ let ITEM = {
   heart: 35
 }
 
+let isLevelReached = false;
+let isPaused = false;
+
 let gameType = "football";
 
 const SCORE_PER_RING = 1
@@ -76,6 +79,7 @@ export default class FlyBallScene extends Phaser.Scene {
   help_board: any;
   text_main_style: any;
 
+  help_extra_board: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -470,6 +474,31 @@ export default class FlyBallScene extends Phaser.Scene {
       }).setScrollFactor(0, 0)
     )
 
+    this.help_extra_board = this.add.group();
+    this.help_extra_board.add(
+      this.add.sprite(mW, mH - 30, "help-board").setOrigin(0.5, 0.5).setDisplaySize(300, 360).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board.add(
+      this.add.sprite(mW, mH - 100, "enemy").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board.add(
+      this.add.text(mW, mH - 20, "Watch Out!").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "35" + "px",
+        fill: "#FFCC4D"
+      }).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board.add(
+      this.add.text(mW, mH + 50, "Avoid the enemies\nat your peril!").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "25" + "px",
+      }).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board.setVisible(false).setDepth(100);
 
     this.initGame();
   }
@@ -539,9 +568,18 @@ export default class FlyBallScene extends Phaser.Scene {
     const top = this.add.sprite(x, y, 'hoop_t').setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle)
     const down = this.add.sprite(x, y, 'hoop_d').setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(12).setAngle(angle)
 
+    const group = this.add.group();
+
     if(isLevelUp) {
-      top.setTintFill(0xFFFF00)
-      down.setTintFill(0xFFFF00)
+      top.setTintFill(0xFFCC4D)
+      down.setTintFill(0xFFCC4D)
+
+      group.add(
+        this.add.sprite(x, y + 20, "hoop_t").setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle).setTintFill(0xFFCC4D)
+      )
+      group.add(
+        this.add.sprite(x, y + 20, "hoop_d").setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle).setTintFill(0xFFCC4D)
+      )
     }
 
     const lb = this.physics.add.sprite(x + radius * sizeRate * Math.cos(angle * Math.PI / 180), y + radius * sizeRate * Math.sin(angle * Math.PI / 180), 'ball').setOrigin(0.5, 0.5)
@@ -582,7 +620,6 @@ export default class FlyBallScene extends Phaser.Scene {
       .setDisplaySize(w * 0.9, 60)
       .setPushable(false)
       .setVisible(false)
-    const group = this.add.group();
     group.add(top);
     group.add(down);
     group.add(lb);
@@ -725,6 +762,18 @@ export default class FlyBallScene extends Phaser.Scene {
       )
     }
 
+    if(GAME.level == 2 && !isLevelReached) {
+      isLevelReached = true;
+      isPaused = true;
+      this.physics.pause();
+      this.help_extra_board.setVisible(true);
+      this.time.delayedCall(3000, () => {
+        isPaused = false;
+        this.physics.resume()
+        this.help_extra_board.setVisible(false);
+      }, [], this);
+    }
+
 
     // MOVE OBSTACLE...
     if(isMove) {
@@ -800,7 +849,7 @@ export default class FlyBallScene extends Phaser.Scene {
       this.physics.world.removeCollider(col_last_b);
       this.physics.world.removeCollider(col_tb);
       this.physics.world.removeCollider(col_db);
-      this.removeObstacle(group);
+      //this.removeObstacle(group);
       lastPos.ballPos.x = x;
       lastPos.ballPos.y = y;
       this.physics.world.removeCollider(col);
@@ -1110,6 +1159,8 @@ export default class FlyBallScene extends Phaser.Scene {
 
   private lastangle = 0;
   update(time, delta) {
+    if(isPaused) return;
+
     const deltaangle = this.ball.angle - this.lastangle;
     this.ballGroup.setXY(this.ball.x, this.ball.y);
     this.ballGroup.angle(deltaangle)
