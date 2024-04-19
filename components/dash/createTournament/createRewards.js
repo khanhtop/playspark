@@ -1,0 +1,243 @@
+import ImagePicker from "@/components/forms/imagePicker";
+import Input from "@/components/forms/input";
+import UIButton from "@/components/ui/button";
+import Text from "@/components/ui/text";
+import {
+  PlusCircleIcon,
+  XCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/solid";
+
+const inputs = [
+  {
+    text: "Score",
+    value: "score",
+  },
+  {
+    text: "XP",
+    value: "xp",
+  },
+  {
+    text: "Level",
+    value: "level",
+  },
+];
+
+const operands = [
+  {
+    text: "=",
+    value: "==",
+  },
+  {
+    text: ">=",
+    value: ">=",
+  },
+  {
+    text: ">",
+    value: ">",
+  },
+];
+
+const outputs = [
+  {
+    text: "XP",
+    value: "xp",
+  },
+  {
+    text: "Digital Reward",
+    value: "digital",
+  },
+];
+
+const outputOperands = [
+  {
+    text: "Increase By",
+    value: "+=",
+  },
+  {
+    text: "Decrease By",
+    value: "-=",
+  },
+  {
+    text: "URL",
+    value: "url",
+  },
+];
+
+export default function CreateRewards({ tournament, setTournament }) {
+  console.log(tournament.rewards);
+
+  return (
+    <div className="text-white flex flex-col gap-2 w-full items-start">
+      {tournament?.rewards?.map((item, key) => (
+        <RewardRow
+          item={item}
+          key={key}
+          index={key}
+          onDelete={() => {
+            let rewards = [...tournament.rewards];
+            rewards.splice(key, 1);
+            setTournament({
+              ...tournament,
+              rewards: rewards || null,
+            });
+          }}
+          onChange={(e) => {
+            let rewards = [...tournament.rewards];
+            rewards[key] = e;
+            setTournament({
+              ...tournament,
+              rewards: rewards,
+            });
+          }}
+        />
+      ))}
+      <button
+        onClick={() =>
+          setTournament({
+            ...tournament,
+            rewards: [
+              ...(tournament?.rewards ?? []),
+              {
+                name: "New Reward",
+                description: "My awesome reward",
+                image: null,
+                input: "score",
+                inputOperand: "==",
+                inputValue: 10,
+                output: "xp",
+                outputOperand: "+=",
+                outputValue: 100,
+              },
+            ],
+          })
+        }
+        className="flex px-8 py-2 rounded-lg bg-cyan-500 gap-2 mt-4"
+      >
+        <PlusCircleIcon className="h-6 w-6" />
+        <p>Add Reward</p>
+      </button>
+    </div>
+  );
+}
+
+function RewardRow({ item, onChange, onDelete, index }) {
+  return (
+    <div className="w-full bg-white/10 px-4 pt-5 pb-3 rounded-lg relative">
+      <div className="flex gap-4 mb-0 pr-0">
+        <ImagePicker
+          cover
+          id={`rwd-img-${index}`}
+          width={112}
+          height={112}
+          label="Reward Image"
+          image={item.image}
+          onChange={(e) => onChange({ ...item, image: e })}
+        />
+        <div className="flex flex-col flex-1">
+          <Input
+            label="Reward Name"
+            containerClassName="flex-1"
+            className="bg-white/5 w-full py-2 mb-4 text-white"
+            placeHolder={item?.name}
+            value={item?.name}
+            labelColor="text-white/70"
+            onChange={(e) => onChange({ ...item, name: e.target.value })}
+          />
+          <Input
+            label="Reward Description"
+            containerClassName="flex-1"
+            className="bg-white/5 w-full py-2 mb-4 text-white"
+            placeHolder={item?.description}
+            value={item?.description}
+            labelColor="text-white/70"
+            onChange={(e) => onChange({ ...item, description: e.target.value })}
+          />
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <LabelledSelect
+          label="Input"
+          value={item.input}
+          onChange={(e) => onChange({ ...item, input: e })}
+          options={inputs}
+          className="flex-1"
+        />
+        <LabelledSelect
+          label="Operand"
+          value={item.inputOperand}
+          onChange={(e) => onChange({ ...item, inputOperand: e })}
+          options={operands}
+          className="flex-1"
+        />
+        <Input
+          label="Value"
+          type="number"
+          className="bg-white/5 w-full py-2 text-white"
+          placeHolder="Value"
+          value={item?.inputValue}
+          labelColor="text-white/70"
+          onChange={(e) =>
+            onChange({ ...item, inputValue: parseInt(e.target.value) })
+          }
+        />
+      </div>
+      <div className="flex gap-2 mt-4">
+        <LabelledSelect
+          label="Output"
+          value={item.output}
+          onChange={(e) => onChange({ ...item, output: e })}
+          options={outputs}
+          className="flex-1"
+        />
+        <LabelledSelect
+          label="Action"
+          value={item.outputOperand}
+          onChange={(e) => onChange({ ...item, outputOperand: e })}
+          options={outputOperands}
+          className="flex-1"
+        />
+        <Input
+          label="Value"
+          type={item.output === "digital" ? "text" : "number"}
+          className="bg-white/5 w-full py-2 text-white"
+          placeHolder="Value"
+          value={item?.outputValue}
+          labelColor="text-white/70"
+          onChange={(e) =>
+            onChange({
+              ...item,
+              outputValue:
+                item.output === "digital"
+                  ? e.target.value
+                  : parseInt(e.target.value),
+            })
+          }
+        />
+      </div>
+      <XMarkIcon
+        onClick={onDelete}
+        className="absolute top-2 right-2 h-6 w-6 text-white/50 cursor-pointer hover:text-white/100 transition"
+      />
+    </div>
+  );
+}
+
+function LabelledSelect({ options, onChange, value, label, className }) {
+  return (
+    <div className={className}>
+      <p className="text-xs text-white/70 mb-1">{label}</p>
+      <select
+        value={value}
+        className="bg-white/5 appearance-none px-4 text-white w-full h-10"
+        onChange={(e) => onChange(e.target.value)}
+      >
+        {options.map((item, key) => (
+          <option key={key} value={item.value}>
+            {item.text}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}

@@ -35,7 +35,7 @@ export default function ImagePicker({
   };
 
   return (
-    <div>
+    <div className="">
       <p className="text-white/70 text-xs mb-2">
         {label}
         <a

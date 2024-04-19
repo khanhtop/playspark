@@ -20,7 +20,7 @@ export default function CreateWrapper({
           {children}
           <div className="h-8" />
         </div>
-        {(stage === 0 || stage === 3) && (
+        {(stage === 0 || stage === 4) && (
           <CreatePreview tournament={tournament} />
         )}
       </div>
