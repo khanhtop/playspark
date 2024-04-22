@@ -82,7 +82,7 @@ export default class WordleScene extends Phaser.Scene {
 
     this.params = newParams;
     console.log("word from server: ", this.params.words);
-    if (this.params.words.length == 0){
+    if (this.params.words.length != 0){
       // this.params.words = ["TOUCH", "COUCH", "TOUCH"];
      /* sampleWords = Helper.shuffle([
         ...(this.params.words?.length > 0 ? this.params.words : sampleWords),
@@ -307,6 +307,8 @@ export default class WordleScene extends Phaser.Scene {
     const word = GAME.TYPING;
 
     const compare_word = sampleWords[GAME.STREAK].toLocaleUpperCase();
+
+    console.log("compare", word, compare_word);
 
     const result = Helper.compareWords(word, compare_word);
 
