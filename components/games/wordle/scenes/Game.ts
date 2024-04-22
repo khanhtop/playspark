@@ -308,8 +308,6 @@ export default class WordleScene extends Phaser.Scene {
 
     const compare_word = sampleWords[GAME.STREAK].toLocaleUpperCase();
 
-    console.log("compare", word, compare_word);
-
     const result = Helper.compareWords(word, compare_word);
 
     let isSuccess = 0;
