@@ -12,7 +12,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function TopNav({
   data,
@@ -23,6 +23,8 @@ export default function TopNav({
   setScreen,
   prizes,
 }) {
+  const [shouldBounce, setShouldBounce] = useState(false);
+
   return (
     <div
       style={{ backgroundColor: data.primaryColor, color: data.textColor }}
@@ -61,10 +63,21 @@ export default function TopNav({
               data={data}
               onClick={() => setScreen("coins")}
             />
-            {/* <BellIcon
-              onClick={() => setScreen("notifications")}
-              className="h-full pb-0 opacity-20"
-            /> */}
+            <div className="h-full relative">
+              <BellIcon
+                onClick={() => {
+                  setScreen("notifications");
+                  context.setHasNewNotification(false);
+                }}
+                className={`h-full pb-0 opacity-20 ${
+                  context.hasNewNotification && "animate-bounce"
+                }`}
+              />
+              <div className="absolute bg-black/80 -top-2 -right-1 h-6 w-6 text-xs flex items-center justify-center border-2 border-white rounded-full">
+                {context?.notifications?.filter((a) => !a.read)?.length}
+              </div>
+            </div>
+
             <Avatar
               context={context}
               onClick={() => setScreen("profile")}

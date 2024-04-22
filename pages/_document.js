@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import { useRouter } from "next/router";
 import Script from "next/script";
 
 export default function Document() {
@@ -7,6 +8,9 @@ export default function Document() {
       <Head>
         <link rel="icon" href="/favicon.png" sizes="any" />
         <link rel="icon" href="/icon.png" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#000000" />
+        <link rel="manifest" href="/manifest.json" id="manifest" />
         <meta
           property="description"
           content="Dynamic playable ads that generate a higher ROI and engagement for

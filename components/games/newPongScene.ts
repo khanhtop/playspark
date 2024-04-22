@@ -42,6 +42,9 @@ export default class NewPongScene extends Phaser.Scene {
   private booster: any;
   private boosterAudio: any;
   private powerup: any;
+  text_main_style: any;
+  help_board: any;
+  isStart: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -111,6 +114,29 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.audio("lost", "/pong/" + gameType + "/sfx/goalConceded.mp3");
     this.load.audio("final", "/pong/" + gameType + "/sfx/finalWhistle.mp3");
 
+    this.load.image("help-board", "/pong/help-board.png");
+    this.load.image("arrow", "/pong/arrow.png");
+    
+    let fontUrl = '/pong/TitanOne-Regular.ttf';
+    const font = new FontFace('customFont', `url(${fontUrl})`);
+    font
+      .load()
+      .then(() => {
+        // Font loaded successfully
+        document.fonts.add(font);
+      })
+      .catch((error) => {
+        // Font failed to load
+        console.log('Failed to load font:', error);
+      });
+
+      this.text_main_style = {
+        fontFamily: 'customFont',
+        fontSize: 24 + 'px',
+        align: 'center',
+        fill: '#ffffff',
+      }
+
   }
 
   // 400 800
@@ -124,6 +150,8 @@ export default class NewPongScene extends Phaser.Scene {
   private lost: any;
 
   create() {
+    this.isStart = false;
+
     this.sound.add("bg").setLoop(true).play();
     this.whistle = this.sound.add("whistle");
     this.ballHit = this.sound.add("ballHit");
@@ -143,7 +171,13 @@ export default class NewPongScene extends Phaser.Scene {
       false,
       false
     );
-    this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h);
+    const bg = this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h).setInteractive().on("pointerup", () => {
+      if(!this.isStart) {
+        this.startRound();
+        this.isStart = false;
+        this.help_board.setVisible(false);
+      }
+    });
     this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
     //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
 
@@ -532,6 +566,78 @@ export default class NewPongScene extends Phaser.Scene {
 
     this.ball.setMaxVelocity(ballVX * 3, ballVY * 3);
 
+    this.help_board = this.add.group();
+
+    const first = this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height)
+    .setInteractive()
+    .on("pointerup", (pointer) => {
+      console.log("___click___")
+      this.startRound();
+    })
+    this.help_board.add(first)
+
+    this.help_board.add(
+      this.add.text(mW, mH, "CLICK TO PLAY").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      )
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW, mH - 200, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 100)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW - 130, mH - 150, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(90)
+    )
+
+    this.help_board.add(
+      this.add.text(mW,  mH - 200, "Click here for\npower ups").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "16" + "px",
+      })
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW, mH - 50, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(60)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW + 80, mH - 100, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 80)
+    )
+
+
+
+    this.help_board.add(
+      this.add.text(mW + 80,  mH - 100, "Hit the object\ninto the target").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "16" + "px",
+      })
+    )
+
+
+    this.help_board.add(
+      this.add.sprite(mW - 70, mH + 150, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 80)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW - 70, mH + 200, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(-20)
+    )
+
+    this.help_board.add(
+      this.add.text(mW - 70, mH + 150, "Click and drag\nplayer to move").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "20" + "px",
+      })
+    )
+
+
+
     this.initGame();
   }
 
@@ -620,7 +726,7 @@ export default class NewPongScene extends Phaser.Scene {
     }
     this.setPowerUps();
     this.randomBoosterPos();
-    setTimeout(() => this.startRound(), 2500);
+    //setTimeout(() => this.startRound(), 2500);
   }
 
   loseGame() {

@@ -1,16 +1,22 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { auth, firestore } from "./firebase";
 import {
+  FieldPath,
   collection,
   doc,
+  documentId,
+  limit,
   onSnapshot,
+  or,
   orderBy,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { isIOS, isAndroid, isSafari } from "react-device-detect";
 import { getSubscriptionType } from "./tiers";
+import { playNotificationSound } from "./audio";
 
 export const AppContext = createContext();
 
@@ -21,6 +27,9 @@ export function AppWrapper({ children }) {
   const [myGames, setMyGames] = useState();
   const [rewards, setRewards] = useState();
   const [prizes, setPrizes] = useState();
+  const [battles, setBattles] = useState();
+  const [notifications, setNotifications] = useState();
+  const [hasNewNotification, setHasNewNotification] = useState(false);
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
   const [event, showEvent] = useState(false);
@@ -62,17 +71,32 @@ export function AppWrapper({ children }) {
 
   // Profile
 
+  const patchProfileWithEmail = async () => {
+    if (loggedIn.uid) {
+      setDoc(
+        doc(firestore, "users", loggedIn.uid),
+        {
+          email: loggedIn.email,
+        },
+        { merge: true }
+      );
+    }
+  };
+
   useEffect(() => {
     // Listen To Profile
     let _profileUnsub = () => null;
     let _myGamesUnsub = () => null;
     let _rewardsUnsub = () => null;
     let _prizesUnsub = () => null;
+    let _notificationsUnsub = () => null;
+    let _battleUnsub = () => null;
     if (loggedIn && !profile) {
       _profileUnsub = onSnapshot(
         doc(firestore, "users", loggedIn.uid),
         (doc) => {
           const data = doc.data();
+          if (!data?.email) patchProfileWithEmail();
           setProfile(
             { ...data, subscription: getSubscriptionType(data?.tier ?? 0) } || {
               subscription: getSubscriptionType(data?.tier ?? 0),
@@ -123,15 +147,60 @@ export function AppWrapper({ children }) {
       });
     }
 
+    if (loggedIn && !notifications) {
+      const q = query(
+        collection(firestore, "notifications"),
+        where("uid", "==", loggedIn.uid),
+        orderBy("timestamp", "desc"),
+        limit(30)
+      );
+      _notificationsUnsub = onSnapshot(q, (querySnapshot) => {
+        if (notifications) {
+          playNotificationSound();
+          setHasNewNotification(true);
+        }
+        const _notifications = [];
+        querySnapshot.forEach((doc) => {
+          _notifications.push({ ...doc.data(), id: doc.id });
+        });
+        setNotifications(_notifications);
+      });
+    }
+
+    if (loggedIn && !battles) {
+      const q = query(
+        collection(firestore, "challenges"),
+        or(
+          where("challenger.id", "==", loggedIn.uid),
+          where("challengee.id", "==", loggedIn.uid)
+        ),
+        limit(30)
+      );
+      _battleUnsub = onSnapshot(q, (querySnapshot) => {
+        const _battles = [];
+        querySnapshot.forEach((doc) => {
+          _battles.push({ ...doc.data(), id: doc.id });
+        });
+        setBattles(
+          _battles.sort((a, b) => {
+            return b.id - a.id;
+          })
+        );
+      });
+    }
+
     return () => {
       _profileUnsub();
       _myGamesUnsub();
       _rewardsUnsub();
       _prizesUnsub();
+      _battleUnsub();
+      _notificationsUnsub();
       setProfile();
       setMyGames();
       setRewards();
       setPrizes();
+      setNotifications();
     };
   }, [loggedIn]);
 
@@ -161,6 +230,7 @@ export function AppWrapper({ children }) {
     myGames,
     rewards,
     prizes,
+    notifications,
     device,
     hasSeenSurvey,
     setHasSeenSurvey,
@@ -179,6 +249,9 @@ export function AppWrapper({ children }) {
     fetchAvatars,
     webhookBasePayload,
     setWebhookBasePayload,
+    battles,
+    hasNewNotification,
+    setHasNewNotification,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

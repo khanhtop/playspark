@@ -99,6 +99,58 @@ export default function CreateConfiguration({
           }}
         />
       )}
+      {tournament?.tags?.["additionalSpriteThree"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteThree"
+          aspectRatio={tournament?.tags?.["additionalSpriteThree"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 3`}
+          selected={tournament.additionalSpriteThree}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteThree: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["additionalSpriteFour"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteFour"
+          aspectRatio={tournament?.tags?.["additionalSpriteFour"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 4`}
+          selected={tournament.additionalSpriteFour}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteFour: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["additionalSpriteFive"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteFive"
+          aspectRatio={tournament?.tags?.["additionalSpriteFive"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 5`}
+          selected={tournament.additionalSpriteFive}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteFive: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["additionalSpriteSix"] && (
+        <CreateImageSlider
+          isAdmin={isAdmin}
+          dimension="additionalSpriteSix"
+          aspectRatio={tournament?.tags?.["additionalSpriteSix"]}
+          gameTag={tournament?.cloudinaryGameTag}
+          title={`Additional Sprite 6`}
+          selected={tournament.additionalSpriteSix}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, additionalSpriteSix: a });
+          }}
+        />
+      )}
       {tournament?.words && (
         <GenWordArray
           tournament={tournament}

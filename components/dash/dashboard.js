@@ -58,7 +58,7 @@ export default function Dashboard({}) {
   }, [context?.myGames]);
 
   return (
-    <div className="text-white grid grid-cols-1 xl:grid-cols-2 gap-8">
+    <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div>
         <h2 className="mb-4">Impressions Per Game</h2>
         {impressions && <BarChart chartData={impressions} />}
@@ -71,14 +71,14 @@ export default function Dashboard({}) {
         <h2 className="mb-4">Click Through Rate (CTR)</h2>
         {ctr && <BarChart chartData={ctr} />}
       </div>
-      <div>
+      {/* <div>
         <h2 className="mb-4">Email Opt Ins</h2>
         {ctr && <BarChart chartData={optins} />}
       </div>
       <div>
         <h2 className="mb-4">Playable Ad Views</h2>
         {ctr && <BarChart chartData={playableAds} />}
-      </div>
+      </div> */}
     </div>
   );
 }

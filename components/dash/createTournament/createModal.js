@@ -7,12 +7,20 @@ import { useAppContext } from "@/helpers/store";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import CreateConfiguration from "./createConfiguration";
+import CreateConfigReimage from "./createConfigReimage";
+import CreateRewards from "./createRewards";
 
 export default function CreateModal({ data, hide }) {
   const context = useAppContext();
-  const stages = ["Design", "Game Configuration", "Marketing", "Summary"];
+  const stages = [
+    "Design",
+    "Game Configuration",
+    "Marketing",
+    "Rewards",
+    "Summary",
+  ];
   const [stage, setStage] = useState(0);
-  const [tournament, setTournament] = useState({ ...data });
+  const [tournament, setTournament] = useState({ ...data, rewards: [] });
   const [adding, setAdding] = useState(false);
   const [imageLibrary, setImageLibrary] = useState();
 
@@ -63,12 +71,19 @@ export default function CreateModal({ data, hide }) {
               setTournament={setTournament}
             />
           )}
-          {stage === 1 && (
-            <CreateConfiguration
-              isAdmin={true}
+          {stage === 1 && data.useReimage ? (
+            <CreateConfigReimage
               tournament={tournament}
               setTournament={setTournament}
             />
+          ) : (
+            stage === 1 && (
+              <CreateConfiguration
+                isAdmin={true}
+                tournament={tournament}
+                setTournament={setTournament}
+              />
+            )
           )}
           {stage === 2 && (
             <CreateMarketing
@@ -77,6 +92,12 @@ export default function CreateModal({ data, hide }) {
             />
           )}
           {stage === 3 && (
+            <CreateRewards
+              tournament={tournament}
+              setTournament={setTournament}
+            />
+          )}
+          {stage === 4 && (
             <CreateSummary
               tournament={tournament}
               setTournament={setTournament}

@@ -26,7 +26,7 @@ let HIT_STATUS = {
 let GAME = {
   level: 1,
   ball: 3,
-  light: 100,
+  light: 0,
   coin: 0,
   ring: 0,
   passRing: 0,
@@ -40,11 +40,14 @@ let STATUS = {
 }
 
 let ITEM = {
-  magnify: 5,
+  magnify: 30,
   shrink: 15,
   power: 25,
   heart: 35
 }
+
+let isLevelReached = false;
+let isPaused = false;
 
 let gameType = "football";
 
@@ -68,10 +71,15 @@ export default class FlyBallScene extends Phaser.Scene {
   wings: Phaser.GameObjects.Sprite[];
   obstacles: any;
   items: any;
+  enemies: any;
   emitter: Phaser.GameObjects.Particles.ParticleEmitter;
   snowEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
   popUpTexts: any;
   leftStatus: any;
+  help_board: any;
+  text_main_style: any;
+
+  help_extra_board: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -83,14 +91,17 @@ export default class FlyBallScene extends Phaser.Scene {
     this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : "/pong/" + gameType + "/ball/ball1.png";
     this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite : "/pong/" + gameType + "/UI/light.png";
     this.params.sponsorLogo = !!this.params.sponsorLogo? this.params.sponsorLogo : "/pong/" + gameType + "/fence.png";
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : "/pong/" + gameType + "/enemy.png"
+
   }
 
   preload() {
 
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
-    ballR = 40;
-    wingR = 25;
+    console.log(w)
+    ballR = 50 * w / 375;
+    wingR = 30 * w / 375;
     scr = h * 0.08;
     mW = w / 2;
     mH = (h - scr) / 2 + scr;
@@ -122,6 +133,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.image("ball", getImageWithSize(this.params.playerSprite, ballR, ballR));
 
 
+    this.load.image("enemy", this.params.enemySprite);
     this.load.image("ball", "/pong/" + gameType + "/ball.png");
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
@@ -140,8 +152,28 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.audio("jump", "/pong/" + gameType + "/sound/jump.mp3");
     this.load.audio("die", "/pong/" + gameType + "/sound/die.mp3");
 
+    this.load.image("help-board", "/pong/help-board.png");
+    this.load.image("arrow", "/pong/arrow.png");
 
+    let fontUrl = '/pong/TitanOne-Regular.ttf';
+    const font = new FontFace('customFont', `url(${fontUrl})`);
+    font
+      .load()
+      .then(() => {
+        // Font loaded successfully
+        document.fonts.add(font);
+      })
+      .catch((error) => {
+        // Font failed to load
+        console.log('Failed to load font:', error);
+      });
 
+      this.text_main_style = {
+        fontFamily: 'customFont',
+        fontSize: 24 + 'px',
+        align: 'center',
+        fill: '#ffffff',
+      }
 
   }
 
@@ -220,23 +252,26 @@ export default class FlyBallScene extends Phaser.Scene {
       color: "#000",
     }).setOrigin(0, 0.5).setScrollFactor(0, 0)
 
-    this.add.sprite(headerW * 2.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40).setScrollFactor(0, 0);
-    this.add.sprite(headerW * 2 + 90, topOffset - 5, 'coin' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
-    this.coinTxt = this.add
-    .text(headerW * 2 + 120, topOffset - 5, "2", {
-      fontFamily: "TitanOne-Regular",
-      fontSize: "18px",
-      color: "#000",
-    }).setOrigin(0, 0.5).setScrollFactor(0, 0)
+    // HEAD COIN MENU
+    // this.add.sprite(headerW * 2.5 + 80, topOffset, 'header').setOrigin(0.5, 0.5).setDisplaySize(headerW, 40).setScrollFactor(0, 0);
+    // this.add.sprite(headerW * 2 + 90, topOffset - 5, 'coin' ).setOrigin(0, 0.5).setDisplaySize(25, 25).setScrollFactor(0, 0)
+    // this.coinTxt = this.add
+    // .text(headerW * 2 + 120, topOffset - 5, "2", {
+    //   fontFamily: "TitanOne-Regular",
+    //   fontSize: "18px",
+    //   color: "#000",
+    // }).setOrigin(0, 0.5).setScrollFactor(0, 0)
 
-    this.add.sprite(w - 70, topOffset + 50, 'score').setOrigin(0.5, 0.5).setDisplaySize(100, 50).setScrollFactor(0, 0);
-    this.add.text(w - 70, topOffset + 40, 'SCORE', {
+    // END HEAD COIN MENU
+
+    this.add.sprite(w - 55, topOffset, 'score').setOrigin(0.5, 0.5).setDisplaySize(100, 50).setScrollFactor(0, 0);
+    this.add.text(w - 55, topOffset - 8, 'SCORE', {
       fontFamily: "TitanOne-Regular",
       fontSize: "18px",
       color: "#fff",
     })
     .setOrigin(0.5, 0.5).setScrollFactor(0, 0);
-    this.scoreTxt = this.add.text(w - 70, topOffset + 60, '12', {
+    this.scoreTxt = this.add.text(w - 55, topOffset + 8, '12', {
       fontFamily: "TitanOne-Regular",
       fontSize: "18px",
       color: "#fff",
@@ -386,10 +421,92 @@ export default class FlyBallScene extends Phaser.Scene {
 
     this.cameras.main.startFollow(this.ball, false, 1, 0, -0.1 * w, -0.1 * h);
 
+
+    this.help_board = this.add.group();
+
+    const first = this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0)
+
+    this.help_board.add(first)
+
+    this.help_board.add(
+      this.add.text(mW, mH - 150, "CLICK TO PLAY").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      ).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW, mH, "help-board").setOrigin(0.5, 0.5).setDisplaySize(250, 100).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW - 100, mH, 'light').setOrigin(0.5, 0.5).setDisplaySize(40, 40).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW - 90, mH + 80, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(0).setFlipX(true).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.text(mW + 20, mH, "Collect power ups\nto buy boosters.").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "17" + "px",
+      }).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW + 70, mH + 150, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 80).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.sprite(mW + 130, mH + 80, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(-80).setScrollFactor(0, 0)
+    )
+
+    this.help_board.add(
+      this.add.text(mW + 70, mH + 150, "Enter rings to\nscore.").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "20" + "px",
+      }).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board = this.add.group();
+    this.help_extra_board.add(
+      this.add.sprite(mW, mH - 30, "help-board").setOrigin(0.5, 0.5).setDisplaySize(300, 360).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board.add(
+      this.add.sprite(mW, mH - 100, "enemy").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board.add(
+      this.add.text(mW, mH - 20, "Watch Out!").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "35" + "px",
+        fill: "#FFCC4D"
+      }).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board.add(
+      this.add.text(mW, mH + 50, "Avoid the enemies\nat your peril!").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "25" + "px",
+      }).setScrollFactor(0, 0)
+    )
+
+    this.help_extra_board.setVisible(false).setDepth(100);
+
     this.initGame();
   }
 
   setBallAction() {
+
+    this.help_board.setVisible(false)
+
     this.wings.forEach(wing => {
       wing.setAngle(50);
       this.tweens.add({
@@ -410,7 +527,7 @@ export default class FlyBallScene extends Phaser.Scene {
   initObstacle() {
     lastPos.id++;
 
-    const isLevelUp = lastPos.id % 5 == 0;
+    const isLevelUp = lastPos.id % 10 == 0;
     // LEVEL PART OBSTACLE
 
     let obstacle_dis = 400;
@@ -445,15 +562,24 @@ export default class FlyBallScene extends Phaser.Scene {
     const isMove = true;
 
     const sizeRate = STATUS.magnify? 1.3 : 1;
-    const objW = 100 * sizeRate;
-    const objH = 60 * sizeRate;
-    const radius = objH / 1.8;
+    const objW = 120 * sizeRate * w / 375;
+    const objH = 60 * sizeRate * w / 375;
+    const radius = objH / 1.8 * w / 375;
     const top = this.add.sprite(x, y, 'hoop_t').setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle)
     const down = this.add.sprite(x, y, 'hoop_d').setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(12).setAngle(angle)
 
+    const group = this.add.group();
+
     if(isLevelUp) {
-      top.setTint(0x00ff00)
-      down.setTint(0x00ff00)
+      top.setTintFill(0xFFCC4D)
+      down.setTintFill(0xFFCC4D)
+
+      group.add(
+        this.add.sprite(x, y + 20, "hoop_t").setOrigin(0.5, 1).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle).setTintFill(0xFFCC4D)
+      )
+      group.add(
+        this.add.sprite(x, y + 20, "hoop_d").setOrigin(0.5, 0).setDisplaySize(objW, objH / 2).setDepth(8).setAngle(angle).setTintFill(0xFFCC4D)
+      )
     }
 
     const lb = this.physics.add.sprite(x + radius * sizeRate * Math.cos(angle * Math.PI / 180), y + radius * sizeRate * Math.sin(angle * Math.PI / 180), 'ball').setOrigin(0.5, 0.5)
@@ -474,14 +600,14 @@ export default class FlyBallScene extends Phaser.Scene {
       rb.radius = radius;
 
     const tb = this.physics.add.sprite(x + radius * Math.cos(angle * Math.PI / 180 + Math.PI / 2), y + radius * Math.sin(angle * Math.PI / 180 + Math.PI / 2), 'ball').setOrigin(0.5, 0.5)
-      .setDisplaySize(30, 30)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setDisplaySize(objW * 0.6, 30)
+      // .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
       .setVisible(false)
     
     const db = this.physics.add.sprite(x - radius * Math.cos(angle * Math.PI / 180 + Math.PI / 2), y - radius * Math.sin(angle * Math.PI / 180 + Math.PI / 2), 'ball').setOrigin(0.5, 0.5)
-      .setDisplaySize(30, 30)
-      .setCircle(this.textures.get("ball").getSourceImage().width / 2)
+      .setDisplaySize(objW * 0.6, 30)
+      // .setCircle(this.textures.get("ball").getSourceImage().width / 2)
       .setPushable(false)
       .setVisible(false)
 
@@ -494,7 +620,6 @@ export default class FlyBallScene extends Phaser.Scene {
       .setDisplaySize(w * 0.9, 60)
       .setPushable(false)
       .setVisible(false)
-    const group = this.add.group();
     group.add(top);
     group.add(down);
     group.add(lb);
@@ -631,6 +756,25 @@ export default class FlyBallScene extends Phaser.Scene {
       this.initItem(x, y)
     )
 
+    if(GAME.level >= 4 && lastPos.id % 2 == 0) {
+      this.enemies.push(
+        this.initEnemy(x, y, col_l, col_r, col_last, col_last_b, col_tb, col_db, group)
+      )
+    }
+
+    if(GAME.level == 4 && !isLevelReached) {
+      isLevelReached = true;
+      isPaused = true;
+      this.physics.pause();
+      this.help_extra_board.setVisible(true);
+      this.time.delayedCall(3000, () => {
+        isPaused = false;
+        this.physics.resume()
+        this.help_extra_board.setVisible(false);
+      }, [], this);
+    }
+
+
     // MOVE OBSTACLE...
     if(isMove) {
       // const tw = this.tweens.add({
@@ -660,7 +804,8 @@ export default class FlyBallScene extends Phaser.Scene {
   initItem(x, y) {
     x += (0.5 - Math.random()) * 300;
     y += (0.5 - Math.random()) * 300;
-    const type = (Math.random() < 0.5)? "light" : "coin"
+    // const type = (Math.random() < 0.5)? "light" : "coin"
+    const type = "light";
     const item = this.physics.add.sprite(x, y, type).setDisplaySize(40, 40)
     const col = this.physics.add.overlap(this.ball, item, () => {
       if(type == "light") {
@@ -676,6 +821,52 @@ export default class FlyBallScene extends Phaser.Scene {
 
     }, null, this)
     return item;
+  }
+
+  initEnemy(x: any, y: any, col_l, col_r, col_last, col_last_b, col_tb, col_db, group) {
+    x += (0.5) * 200;
+    y += (0.5 - Math.random()) * 300;
+
+    let speed = 90;
+    let radius = 50;
+
+    if(GAME.level >= 5) {
+      speed *= 1.2;
+    }
+    if (GAME.level >= 7) {
+      radius *= 1.2;
+    }
+    if (GAME.level >= 8) {
+      speed *= 2;
+    }
+
+    const enemy = this.physics.add.sprite(x, y, "enemy").setDisplaySize(radius, radius);
+    const col = this.physics.add.overlap(this.ball, enemy, () => {
+
+      this.physics.world.removeCollider(col_l);
+      this.physics.world.removeCollider(col_r);
+      this.physics.world.removeCollider(col_last);
+      this.physics.world.removeCollider(col_last_b);
+      this.physics.world.removeCollider(col_tb);
+      this.physics.world.removeCollider(col_db);
+      //this.removeObstacle(group);
+      lastPos.ballPos.x = x;
+      lastPos.ballPos.y = y;
+      this.physics.world.removeCollider(col);
+      enemy.destroy(true);
+      this.loseLife();
+    }, null, this)
+
+
+
+
+    enemy.range = 100;
+    enemy.rangeAngle = 0;
+    enemy.angleSpeed = speed;
+    enemy.originPosX = x;
+    enemy.originPosY = y;
+
+    return enemy;
   }
 
   addItemText(x, y, text, type) {
@@ -795,7 +986,8 @@ export default class FlyBallScene extends Phaser.Scene {
     lastPos.ballPos.x = this.ball.x;
     this.obstacles = [];
     this.items = [];
-    
+    this.enemies = [];
+
     this.startRound()
   }
 
@@ -818,7 +1010,7 @@ export default class FlyBallScene extends Phaser.Scene {
   }
 
   startRound() {
-    GAME.level = 1;
+    // GAME.level = 1;
     GAME.ring = 1;
     GAME.sequence = 0;
     // GAME.ball = 30;
@@ -851,9 +1043,14 @@ export default class FlyBallScene extends Phaser.Scene {
       item.destroy(true)
     });
 
+    this.enemies.forEach(enemy => {
+      enemy.destroy(true);
+    });
+
     this.obstacles = [];
     this.items = [];
-    
+    this.enemies = [];
+
     for(let i = 0; i < 3; i++) {
       this.obstacles.push(
         this.initObstacle()
@@ -937,7 +1134,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.levelTxt.setText(GAME.level.toString());
     this.ballTxt.setText(GAME.ball.toString());
     this.lightTxt.setText(GAME.light.toString());
-    this.coinTxt.setText(GAME.coin.toString());
+    // this.coinTxt.setText(GAME.coin.toString());
     this.scoreTxt.setText((GAME.passRing * SCORE_PER_RING).toString());
   }
 
@@ -962,12 +1159,30 @@ export default class FlyBallScene extends Phaser.Scene {
 
   private lastangle = 0;
   update(time, delta) {
+    if(isPaused) return;
+
     const deltaangle = this.ball.angle - this.lastangle;
     this.ballGroup.setXY(this.ball.x, this.ball.y);
     this.ballGroup.angle(deltaangle)
     this.setBackgroundPos()
 
     this.lastangle = this.ball.angle;
+
+    this.enemies.forEach(enemy => {
+      const range = enemy.range;
+      const rangeAngle = enemy.rangeAngle;
+      const angleSpeed = enemy.angleSpeed;
+      const originX = enemy.originPosX;
+      const originY = enemy.originPosY;
+
+      enemy.setPosition(
+        originX,
+        originY + range * Math.sin((rangeAngle + angleSpeed * delta / 1000) / 180),
+      )
+
+      enemy.rangeAngle += angleSpeed * delta / 1000;
+
+    });
 
   }
 

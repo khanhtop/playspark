@@ -96,7 +96,7 @@ export default class newFallScene extends Phaser.Scene {
     heartR = w * 0.0625;
     distance = 500;
     speed = 200;
-    deltaSpeed = 15;
+    deltaSpeed = 7;
     deltaDistance = 15;
     deltaBomb = 0.1;
     boosterNum = 0;
@@ -626,7 +626,7 @@ export default class newFallScene extends Phaser.Scene {
       });
 
       let combo = which === 2 ? 1 : comboNum;
-      let score = which === 2 ? 10 : combo * 100;
+      let score = which === 2 ? 10 : combo * 10;
       this.scoreNum += score;
       // this.goal.play();
       this.scoreText.text = this.scoreNum.toString().padStart(4, "0");
@@ -668,14 +668,13 @@ export default class newFallScene extends Phaser.Scene {
     .setBounce(1, 1);
 
     if(bball.type != 'bomb') {
-      this.tweens.add({
+      bball.tween = this.tweens.add({
         targets: bball,
         duration: 50000,
         rotation: 360,
         repeat: -1,
       })
     }
-
 
     this.physics.add.overlap(
       this.boosterGroup,
@@ -709,21 +708,25 @@ export default class newFallScene extends Phaser.Scene {
     // bb.setPosition( 0, y - distance);
     distance -= deltaDistance;
     speed += deltaSpeed;
+    let extraspeed = 0;
 
-    if(this.scoreNum < 6000) {
+    if(this.scoreNum < 1000) {
       deltaBomb = 0.1;
 
-    } else if(this.scoreNum < 10000) {
+    } else if(this.scoreNum < 3000) {
       deltaBomb = ballR * 0.2;
-    } else if(this.scoreNum < 15000) {
+    } else if(this.scoreNum < 7500) {
       deltaBomb = ballR * 0.5;
-    } else {
+    } else if(this.scoreNum < 10000) {
       deltaBomb = ballR * 1.3;
+    } else {
+      deltaBomb = ballR * 1.7
+      extraspeed = speed * 0.2;
     }
 
 
-    distance = Math.max(100, distance);
-    speed = Math.min(500, speed);
+    distance = Math.max(200, distance);
+    speed = Math.min(500, speed + extraspeed);
 
     bb.setDisplaySize(ballR, ballR)
 
@@ -732,6 +735,9 @@ export default class newFallScene extends Phaser.Scene {
       bb.setTexture('bomb');
       bb.type = 'bomb';
       bb.setDisplaySize(Math.min(ballR + deltaBomb, ballR * 2.3), Math.min(ballR + deltaBomb, ballR * 2.3))
+      if(!!bb.tween) {
+        bb.tween.stop();
+      }
     } else if(rate < 0.8 && rate >= 0.55) {
       bb.setTexture('ball').setDisplaySize(ballR, ballR);
       bb.type = 'ball';

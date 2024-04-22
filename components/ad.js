@@ -29,8 +29,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 export default function Advert({
   data,
   withPopoutBackNav,
-  coins,
-  xp,
+  signingIn,
   userId,
   email,
 }) {
@@ -70,7 +69,7 @@ export default function Advert({
     }
   }, [score]);
 
-  const callback = (score) => {
+  const callback = (score, level = null, boostCredits = null) => {
     scoreEvent(context, score, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
@@ -215,13 +214,13 @@ export default function Advert({
     >
       <NotificationBar notification={context.event} />
       {withPopoutBackNav && <PopoutBackNav action={withPopoutBackNav} />}
-      {stage === 0 && context?.loggedIn?.uid && (
+      {/* {stage === 0 && context?.loggedIn?.uid && (
         <img
           onClick={() => logout()}
           className="absolute bottom-4 left-4 text-black z-20 underline h-10 w-10"
           src="/clientPages/signout.png"
         />
-      )}
+      )} */}
 
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">
@@ -230,6 +229,7 @@ export default function Advert({
       )}
       {stage === 0 && (
         <Intro
+          signingIn={signingIn}
           data={data}
           setStage={(a) => {
             setStage(a);
@@ -253,8 +253,26 @@ export default function Advert({
           powerUpSprite: data?.powerUpSprite,
           additionalSpriteOne: data?.additionalSpriteOne,
           additionalSpriteTwo: data?.additionalSpriteTwo,
+          additionalSpriteThree: data?.additionalSpriteThree,
+          additionalSpriteFour: data?.additionalSpriteFour,
+          additionalSpriteFive: data?.additionalSpriteFive,
+          additionalSpriteSix: data?.additionalSpriteSix,
           maxscore: prevBest ?? 0,
           words: data?.words || [],
+          ball: data?.ball,
+          powerup: data?.powerup,
+          obstacle: data?.obstacle,
+          landscape: data?.landscape || false,
+          normal_target_1: data?.normal_target_1,
+          normal_target_2: data?.normal_target_2,
+          normal_target_3: data?.normal_target_3,
+          high_value_target: data?.high_value_target,
+          level: data?.level,
+          shoes: data?.shoes,
+          head: data?.head,
+          right_hand: data?.right_hand,
+          left_hand: data?.left_hand,
+          body: data?.body,
         })}
       {stage === 2 && (
         <Outro

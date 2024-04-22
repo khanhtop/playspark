@@ -329,12 +329,14 @@ export default class newCricketScene extends Phaser.Scene {
     console.log(newParams, "----------")
     this.params.maxscore = !!this.params.maxscore? this.params.maxscore : 0;
 
-    this.params.additionalSpriteOne = !!this.params.additionalSpriteOne? this.params.additionalSpriteOne : '/pong/' + gameType + '/51.png';
+    this.params.additionalSpriteTwo = !!this.params.additionalSpriteTwo? this.params.additionalSpriteTwo : '/pong/' + gameType + '/50.png';
+    this.params.additionalSpriteOne = !!this.params.additionalSpriteOne? this.params.additionalSpriteOne : '/pong/' + gameType + '/49.png';
     this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/background.jpg';
     this.params.powerUpSprite = !!this.params.powerUpSprite? this.params.powerUpSprite : '/pong/' + gameType + '/45.png';
     this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/46.png';
-    this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite : '/pong/' + gameType + '/ball.png';
-    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + `/p1_player_anim.png`;
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : '/pong/' + gameType + '/46.png';
+    this.params.additionalSpriteThree  = !!this.params.additionalSpriteThree ? this.params.additionalSpriteThree  : '/pong/' + gameType + '/51.png';
+    this.params.playerSprite = !!this.params.playerSprite ? this.params.playerSprite : '/pong/' + gameType + `/p1_player_anim.png`;
   }
 
   preload() {
@@ -638,10 +640,10 @@ export default class newCricketScene extends Phaser.Scene {
     this.load.image("tab-jump", '/pong/' + gameType + '/52.png');
     this.load.image("tab-ball", this.params.objectSprite);
     this.load.image("light", this.params.powerUpSprite);
-    this.load.image("goaldoor", this.params.additionalSpriteOne);
+    this.load.image("goaldoor", this.params.additionalSpriteThree);
 
-    this.load.image("target-1", '/pong/' + gameType + '/49.png');
-    this.load.image("target-2", '/pong/' + gameType + '/50.png');
+    this.load.image("target-1", this.params.additionalSpriteOne);
+    this.load.image("target-2", this.params.additionalSpriteTwo);
     this.load.image("target-3", this.params.enemySprite);
     this.load.image("target-4", this.params.powerUpSprite);
 
@@ -1168,7 +1170,7 @@ export default class newCricketScene extends Phaser.Scene {
     };
 
     this.auth_country = this.add
-      .text(w / 2, h / 2 - 100 * w / 1248, 'Striker Steve', {
+      .text(w / 2, h / 2 - 100 * w / 1248, 'Select Player', {
         ...this.country_text_style,
         // wordWrap: { width: 100 },
         align: "center",
@@ -1454,6 +1456,7 @@ export default class newCricketScene extends Phaser.Scene {
 
       this.pause_group.setVisible(true);
       this.pause_player.setTexture(`p${author_id}_player_ready`).setDisplaySize(140 * w / 1248, 180 * w / 1248);
+      this.pause_player.play(`p${author_id}_ready_animation`)
       this.player_country.setText(player_name[author_id - 1]);
       this.current_score.setText(
         'SCORE : ' + this.scorePanel.totalScore.toString()
@@ -1481,13 +1484,13 @@ export default class newCricketScene extends Phaser.Scene {
       .setOrigin(0, 0.5)
       .setDisplaySize(w * 0.1, w * 0.06)
       .setInteractive({ cursor: 'pointer' });
-    this.add
-      .sprite(w / 28, h / 4.5, 'light')
+    const ll = this.add
+      .sprite(w / 28 + 5, h / 4.5, 'light')
       .setOrigin(0, 0.5)
       .setDisplaySize(w * 0.04, w * 0.04)
       .setInteractive({ cursor: 'pointer' });
     
-    this.lightNumText = this.add.text(w / 28 + w * 0.07 * w / 1248, h / 4.5 , this.scorePanel.light, {...this.country_text_style, 
+    this.lightNumText = this.add.text(ll.x + w * 0.06, h / 4.5 , this.scorePanel.light, {...this.country_text_style, 
         fill: '#fff',
         fontSize: 32 * w / 1248 + 'px',
         align: 'left'
@@ -2942,7 +2945,7 @@ export default class newCricketScene extends Phaser.Scene {
       .setDisplaySize(w * 0.05, w * 0.03)
       .setInteractive({ cursor: 'pointer' });
     this.add
-      .sprite(x, y - w * 0.025, 'light')
+      .sprite(x + 2, y - w * 0.025, 'light')
       .setOrigin(0, 0.5)
       .setDisplaySize(w * 0.02, w * 0.02)
       .setInteractive({ cursor: 'pointer' });
@@ -2969,7 +2972,7 @@ export default class newCricketScene extends Phaser.Scene {
       .on('pointerup', () => {
         console.log("-----item rocket----")
 
-        if(this.scorePanel.light > 3) {
+        if(this.scorePanel.light >= 3) {
           this.scorePanel.light -= 3;
           this.lightNumText.setText(this.scorePanel.light);
     
@@ -3001,7 +3004,7 @@ export default class newCricketScene extends Phaser.Scene {
       .setDisplaySize(w * 0.05, w * 0.03)
       .setInteractive({ cursor: 'pointer' });
     this.add
-      .sprite(x, y - w * 0.025, 'light')
+      .sprite(x + 2, y - w * 0.025, 'light')
       .setOrigin(0, 0.5)
       .setDisplaySize(w * 0.02, w * 0.02)
       .setInteractive({ cursor: 'pointer' });
@@ -3531,6 +3534,8 @@ export default class newCricketScene extends Phaser.Scene {
           this
         );
       }
+
+      this.ball.setPosition(-500, -500).setVelocity(0, 0);
 
     }
 
