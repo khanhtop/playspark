@@ -178,9 +178,7 @@ export default class WordleScene extends Phaser.Scene {
     heartR = w * 0.0625;
     heartNum = this.params.lives
     
-    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + "/bg.jpg";
-
-    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + "/bg.jpg";
+    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, 2 * w, 2 * h) : "/pong/" + gameType + "/bg.jpg";
 
     this.load.image("bg", this.params.backgroundSprite);
     this.load.image("main-btn-bg", "/pong/" + gameType + "/main-btn-bg.png");
@@ -829,7 +827,7 @@ export default class WordleScene extends Phaser.Scene {
     const word = GAME.TYPING;
     const compare_word = sampleWords[GAME.STREAK].toLocaleUpperCase();
 
-    console.log(word, compare_word)
+    console.log("compare mode ", word, compare_word)
 
     const result = this.compareWords(word, compare_word);
     console.log(result)
