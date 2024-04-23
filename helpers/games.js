@@ -52,12 +52,15 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169546/kq9vyx4g4f9it6ct361b.png",
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/ko4so2my2vcmedrjf604.mp3",
     tags: {
       playerSprite: "1.0",
       objectSprite: "1.0",
       backgroundSprite: "0.6",
       enemySprite: "1.0",
       powerUpSprite: "1.0",
+      backgroundMusic: "bgm",
     },
     // useReimage: true,
     reimageSprites: [
