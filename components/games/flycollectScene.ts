@@ -168,7 +168,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     );
 
     // AUDIO
-    this.load.audio("bg", "/pong/" + gameType + "/sound/bg.mp3");
+    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sound/bg.mp3"));
     this.load.audio(
       "item_coin",
       "/pong/" + gameType + "/sound/collectcoin.mp3"
