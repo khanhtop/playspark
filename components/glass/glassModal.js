@@ -10,6 +10,7 @@ export default function GlassModal({
   textColor,
 }) {
   if (!showWhen) return <div />;
+  console.log(showWhen);
   return (
     <div
       style={{
@@ -35,6 +36,7 @@ export default function GlassModal({
             <XMarkIcon className="h-8 w-8" />
           </div>
         </div>
+        <showWhen.content data={showWhen.data} />
       </div>
     </div>
   );

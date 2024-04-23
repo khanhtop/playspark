@@ -13,6 +13,9 @@ import {
 } from "@heroicons/react/24/solid";
 import IntroPanel from "./menus/introPanel";
 import GlassModal from "./glass/glassModal";
+import ModalRewards from "./dash/modals/rewards";
+import ModalSettings from "./dash/modals/settings";
+import ModalLeaderboard from "./dash/modals/leaderboard";
 
 export default function Intro({ data, setStage, premium, ready, signingIn }) {
   const context = useAppContext();
@@ -58,6 +61,8 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
                 onClick={() =>
                   setShowModal({
                     title: "Settings",
+                    content: ModalSettings,
+                    data: data,
                   })
                 }
               />
@@ -66,6 +71,8 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
                 onClick={() =>
                   setShowModal({
                     title: "Rewards",
+                    content: ModalRewards,
+                    data: data,
                   })
                 }
               />
@@ -74,6 +81,8 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
                 onClick={() =>
                   setShowModal({
                     title: "Leaderboard",
+                    content: ModalLeaderboard,
+                    data: data,
                   })
                 }
               />

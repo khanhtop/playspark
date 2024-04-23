@@ -44,7 +44,7 @@ const outputs = [
     value: "xp",
   },
   {
-    text: "Digital Reward",
+    text: "URL",
     value: "digital",
   },
 ];
@@ -61,6 +61,10 @@ const outputOperands = [
   {
     text: "URL",
     value: "url",
+  },
+  {
+    text: "Promo Code",
+    value: "promocode",
   },
 ];
 
