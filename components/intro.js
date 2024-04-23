@@ -55,22 +55,40 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
             <div className="bg-black/30 shadow-lg border-2 border-white/20 h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-2 rounded-full">
               <IconButton
                 Icon={Cog6ToothIcon}
-                onClick={() => setShowModal(true)}
+                onClick={() =>
+                  setShowModal({
+                    title: "Settings",
+                  })
+                }
               />
               <IconButton
                 Icon={TrophyIcon}
-                onClick={() => setShowModal(true)}
+                onClick={() =>
+                  setShowModal({
+                    title: "Rewards",
+                  })
+                }
               />
               <IconButton
                 Icon={ChartBarIcon}
-                onClick={() => setShowModal(true)}
+                onClick={() =>
+                  setShowModal({
+                    title: "Leaderboard",
+                  })
+                }
               />
             </div>
           </div>
         )}
       </div>
 
-      <GlassModal showWhen={showModal} onClose={() => setShowModal(false)} />
+      <GlassModal
+        showWhen={showModal}
+        onClose={() => setShowModal(false)}
+        title={showModal?.title ?? "Modal"}
+        primaryColor={data.primaryColor}
+        textColor={data.textColor}
+      />
 
       {signingIn === 1 && (
         <div className="absolute top-0 left-0 bg-black/60 backdrop-blur h-full w-full flex items-center justify-center">
@@ -82,9 +100,12 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
 }
 
 function IconButton({ Icon, onClick }) {
+  const context = useAppContext();
   return (
     <div
-      onClick={onClick}
+      onClick={() => {
+        if (context?.loggedIn?.uid) onClick();
+      }}
       className="h-full aspect-square bg-black/30 hover:bg-black/100 transition shadow-lg border-2 border-white/20 rounded-full backdrop-blur flex items-center justify-center"
     >
       <Icon className="h-8 w-8" />
