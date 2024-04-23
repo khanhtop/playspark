@@ -166,7 +166,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
 
 
-    this.load.audio("bg", "/pong/" + gameType + "/sfx/crowd.mp3");
+    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sfx/crowd.mp3"));
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
