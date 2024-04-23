@@ -88,7 +88,7 @@ export default class FallScene extends Phaser.Scene {
 
     this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
 
-    this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
+    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sfx/bgNoise.mp3"));
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");

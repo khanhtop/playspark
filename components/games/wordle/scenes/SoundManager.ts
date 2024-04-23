@@ -11,7 +11,7 @@ export class SoundManager {
 
   public loadAudios(app: Scene, gameType: string) {
     console.log("000000 load soubds");
-    app.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
+    app.load.audio("bg", app.params.backgroundMusic ?? ("/pong/" + gameType + "/sfx/bgNoise.mp3"));
     app.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     app.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     app.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");

@@ -143,7 +143,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.image("fence", this.params.sponsorLogo);
 
     // AUDIO
-    this.load.audio("bg", "/pong/" + gameType + "/sound/bg.mp3");
+    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sound/bg.mp3"));
     this.load.audio("item_coin", "/pong/" + gameType + "/sound/collectcoin.mp3");
     this.load.audio("levelup", "/pong/" + gameType + "/sound/game-level-complete-trial.mp3");
     this.load.audio("item_light", "/pong/" + gameType + "/sound/item-pick-up.mp3");
