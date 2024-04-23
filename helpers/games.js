@@ -104,6 +104,8 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849184/Fall_-_head_-_basketball_yqri0q.png",
     additionalSpriteTwo:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704931110/iiukoen08wivafjit9kr.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/ko4so2my2vcmedrjf604.mp3",
     tags: {
       playerSprite: "body",
       objectSprite: "1.0",
@@ -112,6 +114,7 @@ export const games = [
       powerUpSprite: "1.0",
       additionalSpriteOne: "head",
       additionalSpriteTwo: "1.0",
+      backgroundMusic: "bgm",
     },
   },
   {
@@ -120,6 +123,8 @@ export const games = [
       "Experience a new twist in Wordle with AI-generated puzzles! Test your word skills against machine-crafted challenges for a thrilling and compact guessing game!",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/6_cty2qu.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/ko4so2my2vcmedrjf604.mp3",
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -128,6 +133,7 @@ export const games = [
     cloudinaryGameTag: "wordle",
     tags: {
       backgroundSprite: "0.6",
+      backgroundMusic: "bgm",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
@@ -149,6 +155,7 @@ export const games = [
       enemySprite: "1.0",
       backgroundSprite: "bg",
       additionalSpriteOne: "parallax",
+      backgroundMusic: "bgm",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
@@ -160,6 +167,8 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704930814/cch9su02kpncntxslm8d.png",
     objectSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/ko4so2my2vcmedrjf604.mp3",
   },
   {
     name: "Throwdown Frenzy",
