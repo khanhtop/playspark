@@ -258,6 +258,7 @@ export default function Advert({
           additionalSpriteFour: data?.additionalSpriteFour,
           additionalSpriteFive: data?.additionalSpriteFive,
           additionalSpriteSix: data?.additionalSpriteSix,
+          backgroundMusic: data?.backgroundMusic,
           maxscore: prevBest ?? 0,
           words: data?.words || [],
           ball: data?.ball,
