@@ -81,7 +81,7 @@ export default class WordleScene extends Phaser.Scene {
     gameType = newGameType;
 
     this.params = newParams;
-    console.log("word from server: ", this.params.words);
+    // console.log("word from server: ", this.params.words);
     if (this.params.words.length != 0){
       // this.params.words = ["TOUCH", "COUCH", "TOUCH"];
      /* sampleWords = Helper.shuffle([
@@ -283,6 +283,8 @@ export default class WordleScene extends Phaser.Scene {
   public initGame(lives = 3) {
     this.cameras.main.fadeIn(1200);
     GAME.SCORE = this.params.score;
+    GAME.LEVEL = this.params.level ?? 1;
+
     (UI as any)[CONSTS.UI_KEYS.SCORE_GAME].setText(GAME.SCORE);
     GAME.STREAK = 0;
     // setTimeout(() => this.startRound(), 2500);
@@ -293,7 +295,7 @@ export default class WordleScene extends Phaser.Scene {
 
     Observer.emitter.emit("onLoseGame");
 
-    if (this.scoreHandler != undefined) this.scoreHandler(GAME.SCORE);
+    if (this.scoreHandler != undefined) this.scoreHandler(GAME.SCORE, GAME.LEVEL);
     // game is lost
     //reza uncommented
     //this.initGame();
@@ -325,7 +327,7 @@ export default class WordleScene extends Phaser.Scene {
     });
     if (isSuccess == 5) {
       GAME.STREAK++;
-
+      GAME.LEVEL++;
       if (GAME.STREAK == sampleWords.length) {
         Helper.addScreen(LAYOUT, CONSTS.LAYOUT_KEYS.GAME_COMPLETE);
         GAME.PAUSE = true;

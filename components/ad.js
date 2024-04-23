@@ -70,6 +70,7 @@ export default function Advert({
   }, [score]);
 
   const callback = (score, level = null, boostCredits = null) => {
+    // console.log(`save level: ${level} boostCredits: ${boostCredits}`)
     scoreEvent(context, score, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
