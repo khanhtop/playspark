@@ -1197,6 +1197,8 @@ export default class FlyCollectScene extends Phaser.Scene {
     GAME.ring = 0;
     GAME.ball = this.params.lives;
     GAME.passRing = this.params.score;
+    GAME.light = this.params.boostCredits ?? 0;
+    GAME.level = this.params.level ?? 1;
     lastPos.ballPos.x = this.ball.x;
     this.obstacles = [];
     this.items = [];
@@ -1207,7 +1209,7 @@ export default class FlyCollectScene extends Phaser.Scene {
 
   loseGame() {
     this.cameras.main.fadeOut(1000);
-    this.scoreHandler(GAME.passRing * SCORE_PER_RING);
+    this.scoreHandler(GAME.passRing * SCORE_PER_RING, GAME.level, GAME.light);
 
     // game is lost
     //this.initGame();

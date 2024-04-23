@@ -1499,6 +1499,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     heartNum = this.params.lives
     this.scoreNum = this.params.score;
+    completedLevel = this.params.level ?? 0;
 
     completedLevel = this.getLevelFromScore(this.scoreNum);
 
@@ -1600,7 +1601,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.cameras.main.fadeOut(1000);
     this.final.play();
     this.scoreNum += this.getTotalScore();
-    this.scoreHandler(this.scoreNum);
+    this.scoreHandler(this.scoreNum, completedLevel);
     // game is lost
     //this.initGame();
   }
