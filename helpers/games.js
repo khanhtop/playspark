@@ -53,7 +53,7 @@ export const games = [
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
     backgroundMusic:
-      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/ko4so2my2vcmedrjf604.mp3",
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/8bit-uptempo1.mp3",
     tags: {
       playerSprite: "1.0",
       objectSprite: "1.0",
@@ -105,7 +105,7 @@ export const games = [
     additionalSpriteTwo:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704931110/iiukoen08wivafjit9kr.png",
     backgroundMusic:
-      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/ko4so2my2vcmedrjf604.mp3",
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713843011/8bit-uptempo-haunting.mp3",
     tags: {
       playerSprite: "body",
       objectSprite: "1.0",
@@ -124,7 +124,7 @@ export const games = [
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/6_cty2qu.png",
     backgroundMusic:
-      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/ko4so2my2vcmedrjf604.mp3",
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713844318/thinking-midtempo.mp3",
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -144,6 +144,7 @@ export const games = [
       "Flap, customize, conquer! Dive into an addictive, fully customizable tap-to-fly adventure for endless high-score thrills!",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/5_bch6hi.png",
+
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -168,7 +169,7 @@ export const games = [
     objectSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704870421/jigav6bmcbmyl3jupwyi.png",
     backgroundMusic:
-      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713842033/ko4so2my2vcmedrjf604.mp3",
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713844335/happy-game-bright.mp3",
   },
   {
     name: "Throwdown Frenzy",
@@ -205,6 +206,8 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249771/k95x9isnc50ppqza3ktl.png",
     additionalSpriteSix:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713249828/rgbbbdo99hcj3pij6o6u.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713930357/crowd-loop-talking.mp3",
     tags: {
       backgroundSprite: "0.6",
       playerSprite: "body",
@@ -217,6 +220,7 @@ export const games = [
       additionalSpriteFour: "head",
       additionalSpriteFive: "right-hand",
       additionalSpriteSix: "left-hand",
+      backgroundMusic: "bgm",
     },
     lives: 3,
     score: 0,
@@ -229,6 +233,8 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/PlaySpark_home_screens_53_sel4zk.jpg",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713930357/crowd-loop-talking.mp3",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -245,6 +251,7 @@ export const games = [
       additionalSpriteOne: "1.0",
       additionalSpriteTwo: "1.0",
       additionalSpriteThree: "1.0",
+      backgroundMusic: "bgm",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
@@ -271,6 +278,8 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152747/PlaySpark_home_screens_50_saftei.jpg",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713930357/crowd-loop-talking.mp3",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -282,6 +291,7 @@ export const games = [
       playerSprite: "spritesheet",
       objectSprite: "spritesheet",
       enemySprite: "spritesheet",
+      backgroundMusic: "bgm",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704168028/jrjo3jm0an4r6eesrvwc.png",
@@ -298,6 +308,8 @@ export const games = [
       "In ‘Sky Soar,’ players navigate a mesmerizing sky filled with rings, skillfully guiding their object through obstacles to score points and collecting power-ups for enhanced abilities in this addictive aerial adventure reminiscent of Flappy Bird.",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152736/Game_tiles_2_o7w5xl.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713844335/happy-game-bright.mp3",
     screenshot: "soccerfall.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -309,6 +321,7 @@ export const games = [
       objectSprite: "1.0",
       backgroundSprite: "bg",
       additionalSpriteOne: "parallax",
+      backgroundMusic: "bgm",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706226062/7_rbf1rh.png",
@@ -361,6 +374,8 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704849184/Fall_-_head_-_basketball_yqri0q.png",
     additionalSpriteTwo:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704931110/iiukoen08wivafjit9kr.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713843011/8bit-uptempo-haunting.mp3",
     tags: {
       playerSprite: "body",
       objectSprite: "1.0",
@@ -369,6 +384,7 @@ export const games = [
       powerUpSprite: "1.0",
       additionalSpriteOne: "head",
       additionalSpriteTwo: "1.0",
+      backgroundMusic: "bgm",
     },
   },
   {
@@ -377,6 +393,8 @@ export const games = [
       "Airborne Ace” catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152746/Add_a_heading_4_aovot8.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713930357/crowd-loop-talking.mp3",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     textColor: "#FFF",
@@ -393,6 +411,7 @@ export const games = [
       additionalSpriteOne: "1.0",
       additionalSpriteTwo: "1.0",
       additionalSpriteThree: "1.0",
+      backgroundMusic: "bgm",
     },
     backgroundSprite:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",

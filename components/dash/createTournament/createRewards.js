@@ -38,25 +38,10 @@ const operands = [
   },
 ];
 
-const outputs = [
+const outputOperands = [
   {
     text: "XP",
     value: "xp",
-  },
-  {
-    text: "URL",
-    value: "digital",
-  },
-];
-
-const outputOperands = [
-  {
-    text: "Increase By",
-    value: "+=",
-  },
-  {
-    text: "Decrease By",
-    value: "-=",
   },
   {
     text: "URL",
@@ -104,13 +89,13 @@ export default function CreateRewards({ tournament, setTournament }) {
               ...(tournament?.rewards ?? []),
               {
                 name: "New Reward",
+                id: Date.now().toString(),
                 description: "My awesome reward",
                 image: null,
                 input: "score",
                 inputOperand: "==",
                 inputValue: 10,
-                output: "xp",
-                outputOperand: "+=",
+                outputAction: "xp",
                 outputValue: 100,
               },
             ],
@@ -187,23 +172,23 @@ function RewardRow({ item, onChange, onDelete, index }) {
         />
       </div>
       <div className="flex gap-2 mt-4">
-        <LabelledSelect
+        {/* <LabelledSelect
           label="Output"
           value={item.output}
           onChange={(e) => onChange({ ...item, output: e })}
           options={outputs}
           className="flex-1"
-        />
+        /> */}
         <LabelledSelect
           label="Action"
-          value={item.outputOperand}
-          onChange={(e) => onChange({ ...item, outputOperand: e })}
+          value={item.outputAction}
+          onChange={(e) => onChange({ ...item, outputAction: e })}
           options={outputOperands}
           className="flex-1"
         />
         <Input
           label="Value"
-          type={item.output === "digital" ? "text" : "number"}
+          type={item.outputAction !== "xp" ? "text" : "number"}
           className="bg-white/5 w-full py-2 text-white"
           placeHolder="Value"
           value={item?.outputValue}
@@ -212,7 +197,7 @@ function RewardRow({ item, onChange, onDelete, index }) {
             onChange({
               ...item,
               outputValue:
-                item.output === "digital"
+                item.outputAction !== "xp"
                   ? e.target.value
                   : parseInt(e.target.value),
             })
