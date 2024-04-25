@@ -44,6 +44,10 @@ const outputOperands = [
     value: "xp",
   },
   {
+    text: "Coins",
+    value: "coins",
+  },
+  {
     text: "URL",
     value: "url",
   },
@@ -188,7 +192,11 @@ function RewardRow({ item, onChange, onDelete, index }) {
         />
         <Input
           label="Value"
-          type={item.outputAction !== "xp" ? "text" : "number"}
+          type={
+            item.outputAction !== "xp" && item.outputAction !== "number"
+              ? "text"
+              : "number"
+          }
           className="bg-white/5 w-full py-2 text-white"
           placeHolder="Value"
           value={item?.outputValue}
@@ -197,7 +205,7 @@ function RewardRow({ item, onChange, onDelete, index }) {
             onChange({
               ...item,
               outputValue:
-                item.outputAction !== "xp"
+                item.outputAction !== "xp" && item.outputAction !== "coins"
                   ? e.target.value
                   : parseInt(e.target.value),
             })

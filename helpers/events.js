@@ -69,6 +69,63 @@ export function scoreEvent(context, score, data) {
   fireXpWebhook(context, data, Math.floor(score / 10));
 }
 
+export async function rewardWithXP(xp, context, data) {
+  context.setEvent({
+    title: `+ ${xp}XP`,
+    text: `Reward Claimed`,
+  });
+  await setDoc(
+    doc(firestore, "users", context.loggedIn.uid.toString()),
+    {
+      totalXp: increment(xp),
+      memberOf: arrayUnion(data.ownerId.toString()),
+      dataByClient: {
+        [data.ownerId]: {
+          coins: increment(0),
+          xp: increment(xp),
+        },
+      },
+    },
+    { merge: true }
+  );
+  sendSupabaseEvent(
+    context.loggedIn.uid,
+    data.ownerId,
+    data.tournamentId,
+    "reward_claimed",
+    data.ownerCompanyName
+  );
+  fireXpWebhook(context, data, xp);
+}
+
+export async function rewardWithCoins(coins, context, data) {
+  context.setEvent({
+    title: `+ ${coins} Coins`,
+    text: `Reward Claimed`,
+  });
+  await setDoc(
+    doc(firestore, "users", context.loggedIn.uid.toString()),
+    {
+      totalCoins: increment(coins),
+      memberOf: arrayUnion(data.ownerId.toString()),
+      dataByClient: {
+        [data.ownerId]: {
+          coins: increment(coins),
+          xp: increment(0),
+        },
+      },
+    },
+    { merge: true }
+  );
+  sendSupabaseEvent(
+    context.loggedIn.uid,
+    data.ownerId,
+    data.tournamentId,
+    "reward_claimed",
+    data.ownerCompanyName
+  );
+}
+
 export function emailAddedCTA(context, data) {
   allocateXp(context, 300, 30, "Email Bonus", "emailAdds", data.ownerId);
   sendSupabaseEvent(

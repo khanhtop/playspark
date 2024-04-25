@@ -1,7 +1,8 @@
 import GameButton from "@/components/uiv2/gameButton";
 import { firestore } from "@/helpers/firebase";
+import { claimReward } from "@/helpers/rewards";
 import { useAppContext } from "@/helpers/store";
-import { LockClosedIcon } from "@heroicons/react/24/solid";
+import { ArrowPathIcon, LockClosedIcon } from "@heroicons/react/24/solid";
 import {
   addDoc,
   collection,
@@ -15,8 +16,8 @@ import { useEffect, useState } from "react";
 export default function ModalRewards({ data }) {
   const context = useAppContext();
   const [rewards, setRewards] = useState();
+  const [loading, setLoading] = useState([]);
 
-  console.log("RWDS", rewards);
   const tournamentScore =
     data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
     0;
@@ -26,15 +27,6 @@ export default function ModalRewards({ data }) {
       return tournamentScore >= item.inputValue;
     }
     return false;
-  };
-
-  const claimReward = (reward) => {
-    addDoc(collection(firestore, "users", context?.loggedIn?.uid, "rewards"), {
-      ...reward,
-      tournamentId: data.tournamentId,
-      ownerId: data.ownerId,
-    });
-    fetchRewards();
   };
 
   const fetchRewards = async () => {
@@ -70,7 +62,16 @@ export default function ModalRewards({ data }) {
           claimed={
             rewards && rewards?.findIndex((a) => a.id === item.id) !== -1
           }
-          onClaim={(reward) => claimReward(reward)}
+          loading={loading.includes(item.id)}
+          onClaim={(reward) => {
+            setLoading([...loading, reward.id]);
+            claimReward(reward, data, context).then(() => {
+              fetchRewards();
+              setTimeout(() => {
+                setLoading([...rewards.filter((a) => a !== reward.id)]);
+              }, 1000);
+            });
+          }}
         />
       ))}
     </div>
@@ -84,11 +85,16 @@ function RewardRow({
   unlocked,
   onClaim,
   claimed,
+  loading,
 }) {
-  console.log(claimed);
+  function isInteractableAfterClaim() {
+    if (item.outputAction === "promocode" || item.outputAction === "url")
+      return true;
+    return false;
+  }
   return (
-    <div className="flex h-16 text-black/70 font-octo gap-2 text-sm">
-      <div className="bg-white/50 backdrop-blur flex-1 flex items-center rounded-full overflow-hidden px-4">
+    <div className="flex h-24 text-black/70 font-octo gap-2 text-sm">
+      <div className="bg-white/100 border-4 border-black/10 backdrop-blur flex-1 flex items-center rounded-2xl overflow-hidden px-4">
         <div className="flex-1 flex items-center justify-center capitalize text-center text-black/70 ">
           <p>
             {item.input} {item.inputOperand === "==" ? " " : "More Than "}
@@ -111,17 +117,22 @@ function RewardRow({
             backgroundColor: unlocked ? primaryColor : "#EEE",
             color: unlocked ? textColor : "#AAA",
           }}
-          className="h-full w-20 border-4 rounded-full"
+          disabled={typeof claimed === "undefined" || loading}
+          className="h-full w-20 border-4 rounded-2xl"
           onClick={() => {
             if (unlocked && !claimed) {
               onClaim(item);
-            } else if (claimed) {
+            } else if (claimed && isInteractableAfterClaim()) {
               alert(item.outputValue);
             }
           }}
         >
-          {claimed ? (
+          {typeof claimed === "undefined" || loading ? (
+            <ArrowPathIcon className="h-6 w-full animate-spin" />
+          ) : claimed && !isInteractableAfterClaim() ? (
             "Claimed"
+          ) : claimed && isInteractableAfterClaim() ? (
+            "View"
           ) : unlocked ? (
             "Claim"
           ) : (
