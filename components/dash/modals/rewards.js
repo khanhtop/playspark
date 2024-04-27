@@ -1,22 +1,39 @@
+import TapHold from "@/components/ui/tapHold";
 import GameButton from "@/components/uiv2/gameButton";
 import { firestore } from "@/helpers/firebase";
 import { claimReward } from "@/helpers/rewards";
 import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon, LockClosedIcon } from "@heroicons/react/24/solid";
 import {
-  addDoc,
   collection,
   doc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function ModalRewards({ data }) {
   const context = useAppContext();
+  const [modalState, setModalState] = useState(null);
   const [rewards, setRewards] = useState();
   const [loading, setLoading] = useState([]);
+
+  const redeemInFirebase = () => {
+    const index = rewards.find((a) => a.id === modalState.id);
+    index.isRedeemed = true;
+    updateDoc(
+      doc(
+        firestore,
+        "users",
+        context.loggedIn.uid,
+        "rewards",
+        index.firebaseId
+      ),
+      index
+    );
+  };
 
   const tournamentScore =
     data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
@@ -38,7 +55,7 @@ export default function ModalRewards({ data }) {
     ).then((snapshot) => {
       let rwd = [];
       for (let doc of snapshot.docs) {
-        rwd.push(doc.data());
+        rwd.push({ ...doc.data(), firebaseId: doc.id });
       }
       setRewards(rwd);
     });
@@ -50,32 +67,75 @@ export default function ModalRewards({ data }) {
     }
   }, [data]);
 
-  return (
-    <div className="pt-12 pb-4 px-4 flex flex-col gap-4">
-      {data?.rewards?.map((item, key) => (
-        <RewardRow
-          item={item}
-          key={key}
-          primaryColor={data.primaryColor}
+  if (!modalState)
+    return (
+      <div className="pt-12 pb-4 px-4 flex flex-col gap-4">
+        {data?.rewards?.map((item, key) => (
+          <RewardRow
+            onFlipCard={(a) => setModalState(a)}
+            // isRedeemed={
+            //   rewards && rewards?.find((a) => a.id === item.id)?.isRedeemed
+            // }
+            item={item}
+            key={key}
+            primaryColor={data.primaryColor}
+            textColor={data.textColor}
+            unlocked={isUnlocked(item)}
+            claimed={
+              rewards && rewards?.findIndex((a) => a.id === item.id) !== -1
+            }
+            loading={loading.includes(item.id)}
+            onClaim={(reward) => {
+              setLoading([...loading, reward.id]);
+              claimReward(reward, data, context).then(() => {
+                fetchRewards();
+                setTimeout(() => {
+                  setLoading([...rewards.filter((a) => a !== reward.id)]);
+                }, 1000);
+              });
+            }}
+          />
+        ))}
+      </div>
+    );
+
+  console.log(modalState);
+
+  if (modalState)
+    return (
+      <div className="pt-12 pb-4 px-4 flex flex-col gap-4 items-center font-octo text-black">
+        <p className="text-3xl uppercase font-bold">{modalState.name}</p>
+        <p className="text-xl">{modalState.description}</p>
+        {modalState.outputAction === "promocode" ? (
+          <div className="text-3xl text-center mt-4 mb-8">
+            <p>Your Promo Code</p>
+            <p className="p-4 bg-white rounded-3xl mt-2">
+              {modalState.outputValue}
+            </p>
+          </div>
+        ) : (
+          <TapHold
+            bgColor={data.primaryColor}
+            textColor={data.textColor}
+            onComplete={() => {
+              redeemInFirebase();
+            }}
+          />
+        )}
+        <GameButton
+          className="w-[330px]"
+          bgColor="red"
           textColor={data.textColor}
-          unlocked={isUnlocked(item)}
-          claimed={
-            rewards && rewards?.findIndex((a) => a.id === item.id) !== -1
-          }
-          loading={loading.includes(item.id)}
-          onClaim={(reward) => {
-            setLoading([...loading, reward.id]);
-            claimReward(reward, data, context).then(() => {
-              fetchRewards();
-              setTimeout(() => {
-                setLoading([...rewards.filter((a) => a !== reward.id)]);
-              }, 1000);
-            });
+          onClick={() => {
+            setModalState();
           }}
-        />
-      ))}
-    </div>
-  );
+        >
+          {modalState.outputAction === "promocode" ? "Close" : "Redeem Later"}
+        </GameButton>
+      </div>
+    );
+
+  return <div />;
 }
 
 function RewardRow({
@@ -86,12 +146,15 @@ function RewardRow({
   onClaim,
   claimed,
   loading,
+  onFlipCard,
+  isRedeemed,
 }) {
   function isInteractableAfterClaim() {
     if (item.outputAction === "promocode" || item.outputAction === "url")
       return true;
     return false;
   }
+  console.log(isRedeemed);
   return (
     <div className="flex h-24 text-black/70 font-octo gap-2 text-sm">
       <div className="bg-white/100 border-4 border-black/10 backdrop-blur flex-1 flex items-center rounded-2xl overflow-hidden px-4">
@@ -120,19 +183,23 @@ function RewardRow({
           disabled={typeof claimed === "undefined" || loading}
           className="h-full w-20 border-4 rounded-2xl"
           onClick={() => {
-            if (unlocked && !claimed) {
+            if (isRedeemed) {
+              null;
+            } else if (unlocked && !claimed) {
               onClaim(item);
             } else if (claimed && isInteractableAfterClaim()) {
-              alert(item.outputValue);
+              onFlipCard(item);
             }
           }}
         >
           {typeof claimed === "undefined" || loading ? (
             <ArrowPathIcon className="h-6 w-full animate-spin" />
+          ) : isRedeemed ? (
+            "Redeemed"
           ) : claimed && !isInteractableAfterClaim() ? (
             "Claimed"
           ) : claimed && isInteractableAfterClaim() ? (
-            "View"
+            "Redeem"
           ) : unlocked ? (
             "Claim"
           ) : (

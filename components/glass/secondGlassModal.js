@@ -1,7 +1,7 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 
-export default function GlassModal({
+export default function SecondGlassModal({
   showWhen,
   onClose,
   title,
@@ -17,9 +17,9 @@ export default function GlassModal({
         backgroundColor: showWhen ? "rgba(0,0,0,0.3)" : "rgba(0,0,0,0)",
         transition: "0.25s all",
       }}
-      className="absolute top-0 left-0 h-full w-full flex items-center justify-center hover:translateY-200"
+      className="absolute top-0 left-0 h-full w-full flex items-center justify-center z-20"
     >
-      <div className="h-[80%] w-[90%] bg-white/50 backdrop-blur z-30 rounded-3xl relative border-2 ">
+      <div className="h-[80%] w-[90%] bg-white/50 backdrop-blur z-30 rounded-3xl relative border-2">
         <div className="flex justify-center absolute w-full -mt-6">
           <div
             style={{ backgroundColor: primaryColor, color: textColor }}
