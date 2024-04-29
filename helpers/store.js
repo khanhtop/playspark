@@ -35,6 +35,9 @@ export function AppWrapper({ children }) {
   const [event, showEvent] = useState(false);
   const [eventQueue, setEventQueue] = useState([]);
 
+  // Chat
+  const [latestChat, setLatestChat] = useState();
+
   // For Webhooks
   const [webhookBasePayload, setWebhookBasePayload] = useState({
     userId: null,
@@ -252,6 +255,8 @@ export function AppWrapper({ children }) {
     battles,
     hasNewNotification,
     setHasNewNotification,
+    latestChat,
+    setLatestChat,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>
