@@ -48,12 +48,12 @@ const outputOperands = [
     value: "coins",
   },
   {
-    text: "URL",
-    value: "url",
-  },
-  {
     text: "Promo Code",
     value: "promocode",
+  },
+  {
+    text: "Physical Item",
+    value: "physical",
   },
 ];
 
@@ -101,6 +101,8 @@ export default function CreateRewards({ tournament, setTournament }) {
                 inputValue: 10,
                 outputAction: "xp",
                 outputValue: 100,
+                outputLocation: null,
+                outputInstructions: null,
               },
             ],
           })
@@ -157,7 +159,7 @@ function RewardRow({ item, onChange, onDelete, index }) {
           className="flex-1"
         />
         <LabelledSelect
-          label="Operand"
+          label="Condition"
           value={item.inputOperand}
           onChange={(e) => onChange({ ...item, inputOperand: e })}
           options={operands}
@@ -191,7 +193,13 @@ function RewardRow({ item, onChange, onDelete, index }) {
           className="flex-1"
         />
         <Input
-          label="Value"
+          label={
+            item.outputAction === "xp" || item.outputAction === "coins"
+              ? "Amount"
+              : item.outputAction === "promocode"
+              ? "Code"
+              : "Item Name"
+          }
           type={
             item.outputAction !== "xp" && item.outputAction !== "number"
               ? "text"
@@ -212,6 +220,51 @@ function RewardRow({ item, onChange, onDelete, index }) {
           }
         />
       </div>
+      {(item.outputAction === "physical" ||
+        item.outputAction === "promocode") && (
+        <div className="mt-4">
+          <Input
+            label="Redemption Instructions"
+            className="bg-white/5 w-full py-2 text-white"
+            placeHolder="Instructions for a user to redeem the reward"
+            value={item?.outputInstructions}
+            labelColor="text-white/70"
+            onChange={(e) =>
+              onChange({
+                ...item,
+                outputInstructions: e.target.value,
+              })
+            }
+          />
+        </div>
+      )}
+      {(item.outputAction === "physical" ||
+        item.outputAction === "promocode") && (
+        <div className="mt-4">
+          <Input
+            label={
+              item.outputAction === "physical"
+                ? "Location or Redemption Address"
+                : "Redemption URL"
+            }
+            className="bg-white/5 w-full py-2 text-white"
+            placeHolder={
+              item.outputAction === "physical"
+                ? "101 King Street, Sydney"
+                : "https://"
+            }
+            value={item?.outputLocation}
+            labelColor="text-white/70"
+            onChange={(e) =>
+              onChange({
+                ...item,
+                outputLocation: e.target.value,
+              })
+            }
+          />
+        </div>
+      )}
+
       <XMarkIcon
         onClick={onDelete}
         className="absolute top-2 right-2 h-6 w-6 text-white/50 cursor-pointer hover:text-white/100 transition"

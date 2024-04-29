@@ -3,7 +3,12 @@ import GameButton from "@/components/uiv2/gameButton";
 import { firestore } from "@/helpers/firebase";
 import { claimReward } from "@/helpers/rewards";
 import { useAppContext } from "@/helpers/store";
-import { ArrowPathIcon, LockClosedIcon } from "@heroicons/react/24/solid";
+import {
+  ArrowPathIcon,
+  LinkIcon,
+  LockClosedIcon,
+  MapPinIcon,
+} from "@heroicons/react/24/solid";
 import {
   collection,
   doc,
@@ -103,11 +108,36 @@ export default function ModalRewards({ data }) {
 
   if (modalState)
     return (
-      <div className="pt-12 pb-4 px-4 flex flex-col gap-4 items-center font-octo text-black">
+      <div className="pt-12 pb-4 px-4 flex flex-col gap-2 items-center font-octo text-black">
         <p className="text-3xl uppercase font-bold">{modalState.name}</p>
-        <p className="text-xl">{modalState.description}</p>
+        <p className="text-xl font-light">{modalState.description}</p>
+        <img src={modalState.image} className="h-20 rounded-3xl" />
+        {modalState.outputAction === "promocode" && (
+          <div
+            onClick={() => window.open(modalState.outputLocation, "__blank")}
+            className="flex items-center gap-1 my-2 cursor-pointer"
+          >
+            <LinkIcon className="h-5" />
+            <p className="text-lg uppercase font-light">
+              {modalState.outputLocation}
+            </p>
+          </div>
+        )}
+        {modalState.outputAction === "physical" && (
+          <div className="flex items-center gap-1 my-2">
+            <MapPinIcon className="h-5" />
+            <p className="text-lg uppercase font-light">
+              {modalState.outputLocation}
+            </p>
+          </div>
+        )}
+        <div className="mb-2">
+          <p className="text-lg uppercase font-light max-w-[400px] text-center">
+            {modalState.outputInstructions}
+          </p>
+        </div>
         {modalState.outputAction === "promocode" ? (
-          <div className="text-3xl text-center mt-4 mb-8">
+          <div className="text-3xl text-center mb-4">
             <p>Your Promo Code</p>
             <p className="p-4 bg-white rounded-3xl mt-2">
               {modalState.outputValue}
@@ -150,7 +180,7 @@ function RewardRow({
   isRedeemed,
 }) {
   function isInteractableAfterClaim() {
-    if (item.outputAction === "promocode" || item.outputAction === "url")
+    if (item.outputAction === "promocode" || item.outputAction === "physical")
       return true;
     return false;
   }
