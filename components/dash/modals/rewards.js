@@ -78,9 +78,9 @@ export default function ModalRewards({ data }) {
         {data?.rewards?.map((item, key) => (
           <RewardRow
             onFlipCard={(a) => setModalState(a)}
-            // isRedeemed={
-            //   rewards && rewards?.find((a) => a.id === item.id)?.isRedeemed
-            // }
+            isRedeemed={
+              rewards && rewards?.find((a) => a.id === item.id)?.isRedeemed
+            }
             item={item}
             key={key}
             primaryColor={data.primaryColor}
