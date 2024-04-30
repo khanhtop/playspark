@@ -1,3 +1,4 @@
+import { playClickSound } from "@/helpers/audio";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 
@@ -30,7 +31,10 @@ export default function GlassModal({
         </div>
         <div className="flex justify-center absolute w-full -bottom-6">
           <div
-            onClick={onClose}
+            onClick={() => {
+              playClickSound();
+              onClose();
+            }}
             className="bg-red-500 hover:bg-red-600 transition cursor-pointer text-white h-12 w-12 rounded-full flex items-center justify-center border-2"
           >
             <XMarkIcon className="h-8 w-8" />

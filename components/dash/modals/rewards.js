@@ -1,5 +1,6 @@
 import TapHold from "@/components/ui/tapHold";
 import GameButton from "@/components/uiv2/gameButton";
+import { playClickSound } from "@/helpers/audio";
 import { firestore } from "@/helpers/firebase";
 import { claimReward } from "@/helpers/rewards";
 import { useAppContext } from "@/helpers/store";
@@ -207,7 +208,11 @@ function RewardRow({
       <div className="px-0 py-2">
         <button
           style={{
-            backgroundColor: unlocked ? primaryColor : "#EEE",
+            backgroundColor: isRedeemed
+              ? "rgb(239, 68, 68)"
+              : unlocked
+              ? primaryColor
+              : "#EEE",
             color: unlocked ? textColor : "#AAA",
           }}
           disabled={typeof claimed === "undefined" || loading}
@@ -218,6 +223,7 @@ function RewardRow({
             } else if (unlocked && !claimed) {
               onClaim(item);
             } else if (claimed && isInteractableAfterClaim()) {
+              playClickSound();
               onFlipCard(item);
             }
           }}

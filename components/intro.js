@@ -16,6 +16,7 @@ import GlassModal from "./glass/glassModal";
 import ModalRewards from "./dash/modals/rewards";
 import ModalSettings from "./dash/modals/settings";
 import ModalLeaderboard from "./dash/modals/leaderboard";
+import { playClickSound } from "@/helpers/audio";
 
 export default function Intro({ data, setStage, premium, ready, signingIn }) {
   const context = useAppContext();
@@ -58,33 +59,36 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
             <div className="bg-black/30 shadow-lg border-2 border-white/20 h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-2 rounded-full">
               <IconButton
                 Icon={Cog6ToothIcon}
-                onClick={() =>
+                onClick={() => {
+                  playClickSound();
                   setShowModal({
                     title: "Settings",
                     content: ModalSettings,
                     data: data,
-                  })
-                }
+                  });
+                }}
               />
               <IconButton
                 Icon={TrophyIcon}
-                onClick={() =>
+                onClick={() => {
+                  playClickSound();
                   setShowModal({
                     title: "Rewards",
                     content: ModalRewards,
                     data: data,
-                  })
-                }
+                  });
+                }}
               />
               <IconButton
                 Icon={ChartBarIcon}
-                onClick={() =>
+                onClick={() => {
+                  playClickSound();
                   setShowModal({
                     title: "Leaderboard",
                     content: ModalLeaderboard,
                     data: data,
-                  })
-                }
+                  });
+                }}
               />
             </div>
           </div>
