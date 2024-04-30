@@ -20,7 +20,7 @@ import ModalLeaderboard from "./dash/modals/leaderboard";
 export default function Intro({ data, setStage, premium, ready, signingIn }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
-  // useMusic("/uisounds/intro.mp3", 0.5);
+  useMusic("/uisounds/intro.mp3", 0.5);
 
   return (
     <div
