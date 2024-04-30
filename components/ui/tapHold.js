@@ -43,21 +43,26 @@ export default function TapHold({
         backgroundColor: bgColor,
         color: textColor,
         width: width,
+        userSelect: "none",
+        WebkitUserSelect: "none",
       }}
       onMouseDown={() => setIsHolding(true)}
       onMouseUp={() => setIsHolding(false)}
       onMouseLeave={() => setIsHolding(false)}
+      onTouchStart={() => setIsHolding(true)}
+      onTouchEnd={() => setIsHolding(false)}
+      onTouchCancel={() => setIsHolding(false)}
       className="relative h-16 rounded-3xl overflow-hidden border-4 border-white"
     >
       <div
         ref={resizeDivRef}
         style={{
           width: isComplete ? width : isHolding ? width : 0,
-          transition: "2s width",
+          transition: "4s width",
         }}
         className={`absolute h-full bg-black`}
       ></div>
-      <div className="absolute w-full h-full font-octo text-3xl flex items-center justify-center">
+      <div className="absolute w-full h-full font-octo text-3xl flex items-center justify-center pointer-events-none">
         {isComplete ? (
           <p>Redeemed!</p>
         ) : isHolding ? (
