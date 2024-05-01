@@ -4,12 +4,15 @@ import { createChatName } from "@/helpers/chat";
 import { useEffect, useRef, useState } from "react";
 import {
   collection,
+  doc,
   limit,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
+import { timeAgo } from "@/helpers/datetime";
 
 export default function DMMessages({ chatter }) {
   const context = useAppContext();
@@ -49,16 +52,38 @@ export default function DMMessages({ chatter }) {
   console.log(chats);
 
   return (
-    <div className="flex-1 bg-white/40 rounded-xl flex flex-col">
-      <div className="flex-1">
+    <div className="flex-1 bg-white/5 rounded-xl flex flex-col">
+      <div className="flex-1 px-4 py-4 flex flex-col-reverse gap-4">
         {chats?.map((item, key) => (
-          <p>{item.content}</p>
+          <ChatBubble item={item} key={key} mine={true} />
         ))}
       </div>
       <DMPost
         chatId={createChatName(context?.loggedIn?.uid, chatter.id)}
         chatter={chatter}
       />
+    </div>
+  );
+}
+
+function ChatBubble({ item, mine }) {
+  console.log(item);
+  return (
+    <div className={`flex ${mine ? "justify-end" : "justify-start"}`}>
+      <div
+        className={`max-w-[50%] flex flex-col ${
+          mine ? "items-end" : "items-start"
+        }`}
+      >
+        <div
+          className={`rounded-lg px-4 py-1 ${
+            mine ? "bg-green-500" : "bg-white/5"
+          }`}
+        >
+          <p>{item.content}</p>
+        </div>
+        <p className="text-xs mt-1 text-white/50">{timeAgo(item.timestamp)}</p>
+      </div>
     </div>
   );
 }

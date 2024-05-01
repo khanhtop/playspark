@@ -25,20 +25,23 @@ export default function ClientChat({ user, screen, setScreen }) {
 
   return (
     <ClientPageWrapper
-      withBackNav="Direct Messages"
-      onBackNav={() => setScreen("home")}
+      withBackNav={
+        selectedChatter ? selectedChatter.companyName : "Direct Messages"
+      }
+      onBackNav={() => {
+        if (selectedChatter) {
+          context.setLatestChat();
+          setSelectedChatter();
+          setPhase("list");
+        } else {
+          setScreen("home");
+        }
+      }}
       user={user}
     >
       <div className="text-xl px-6 h-full">
         {phase === "dm" ? (
           <div className="flex flex-col h-full pb-4 gap-2">
-            <DMHeader
-              onBack={() => {
-                context.setLatestChat();
-                setPhase("list");
-              }}
-              chatter={selectedChatter}
-            />
             <DMMessages chatter={selectedChatter} />
           </div>
         ) : (
