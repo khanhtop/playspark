@@ -54,6 +54,8 @@ export default function Advert({
     });
   }, [userId, email]);
 
+  console.log(context);
+
   useMemo(() => {
     if (!data.tournamentId || !context.loggedIn?.uid) return;
     getHighScore(data.tournamentId, context?.loggedIn?.uid).then(
