@@ -23,6 +23,7 @@ import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 import Modal from "./ui/modal";
 import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
+import { useRouter } from "next/router";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -216,7 +217,7 @@ export default function Advert({
       }}
     >
       <NotificationBar notification={context.event} />
-      {withPopoutBackNav && <PopoutBackNav action={withPopoutBackNav} />}
+      <PopoutBackNav action={withPopoutBackNav} />
       {/* {stage === 0 && context?.loggedIn?.uid && (
         <img
           onClick={() => logout()}
