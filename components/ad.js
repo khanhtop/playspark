@@ -23,6 +23,7 @@ import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 import Modal from "./ui/modal";
 import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
+import { useRouter } from "next/router";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -54,6 +55,8 @@ export default function Advert({
     });
   }, [userId, email]);
 
+  console.log(context);
+
   useMemo(() => {
     if (!data.tournamentId || !context.loggedIn?.uid) return;
     getHighScore(data.tournamentId, context?.loggedIn?.uid).then(
@@ -70,6 +73,7 @@ export default function Advert({
   }, [score]);
 
   const callback = (score, level = null, boostCredits = null) => {
+    // console.log(`save level: ${level} boostCredits: ${boostCredits}`)
     scoreEvent(context, score, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
@@ -213,7 +217,7 @@ export default function Advert({
       }}
     >
       <NotificationBar notification={context.event} />
-      {withPopoutBackNav && <PopoutBackNav action={withPopoutBackNav} />}
+      <PopoutBackNav action={withPopoutBackNav} />
       {/* {stage === 0 && context?.loggedIn?.uid && (
         <img
           onClick={() => logout()}
@@ -257,6 +261,7 @@ export default function Advert({
           additionalSpriteFour: data?.additionalSpriteFour,
           additionalSpriteFive: data?.additionalSpriteFive,
           additionalSpriteSix: data?.additionalSpriteSix,
+          backgroundMusic: data?.backgroundMusic,
           maxscore: prevBest ?? 0,
           words: data?.words || [],
           ball: data?.ball,

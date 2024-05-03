@@ -62,7 +62,9 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
   );
 
   const [hasNotified, setHasNotified] = useState(false);
-  const callback = async (score) => {
+  const callback = async (score, level = null, boostCredits = null) => {
+    // console.log(`save---- level: ${level} boostCredits: ${boostCredits}`)
+
     setScore(score);
     setStage(2);
     if (context?.loggedIn?.uid === data?.challenger?.id && !hasNotified) {

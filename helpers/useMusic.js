@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { isIOS, isAndroid } from "react-device-detect";
 
 const useMusic = (fileName, maxVolume) => {
   useEffect(() => {
@@ -19,6 +20,9 @@ const useMusic = (fileName, maxVolume) => {
 
     return () => {
       let fadeOutRequestId;
+      if (isIOS || isAndroid) {
+        audio.pause();
+      }
       const fadeOut = (timestamp) => {
         audio.volume = Math.max(audio.volume - 0.05, 0); // Decrease volume gradually
         if (audio.volume > 0) {

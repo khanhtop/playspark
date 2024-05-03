@@ -397,7 +397,7 @@ export default class NewCricketBall extends Phaser.Scene {
     //load images
     this.load.audio(
       'Crowd_Cheers_v1_wav',
-      '/pong/' + gameType + '/Crowd_Cheers_v1_wav.wav'
+      this.params.backgroundMusic ?? ('/pong/' + gameType + '/Crowd_Cheers_v1_wav.wav')
     );
     this.load.audio(
       'Crowd_Loop_v1_wav',
@@ -736,7 +736,7 @@ export default class NewCricketBall extends Phaser.Scene {
       },
     };
     this.ui_item = {};
-    this.level = 0;
+    this.level = this.params.level ?? 0;
     this.flag = false;
     this.is_audio_setting = true;
     this.power_flag = false;
@@ -3373,7 +3373,7 @@ export default class NewCricketBall extends Phaser.Scene {
 
   endRound() {
     this.cameras.main.fadeOut(1000);
-    this.scoreHandler(this.scorePanel.totalScore);
+    this.scoreHandler(this.scorePanel.totalScore, this.level);
   }
 
   startRound() {

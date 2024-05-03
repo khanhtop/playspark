@@ -88,7 +88,7 @@ export default class FallScene extends Phaser.Scene {
 
     this.load.image("middleAd", "/pong/" + gameType + "/middleAd.png");
 
-    this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
+    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sfx/bgNoise.mp3"));
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
@@ -500,6 +500,7 @@ export default class FallScene extends Phaser.Scene {
 
     heartNum = this.params.lives;
     this.scoreNum = this.params.score;
+    boosterNum = this.params.light ?? 1;
     this.scoreText.text = this.params.score.toString()?.padStart(4, "0");
     this.hearts.forEach((h) => h.destroy);
     this.hearts.length = 0;
@@ -523,7 +524,7 @@ export default class FallScene extends Phaser.Scene {
     this.cameras.main.fadeOut(1000);
     this.lose.play();
 
-    this.scoreHandler(this.scoreNum);
+    this.scoreHandler(this.scoreNum, null, boosterNum);
 
     this.player.setVisible(false);
     this.bombSprite.setDisplaySize(150, 150);

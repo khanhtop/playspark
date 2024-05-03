@@ -107,7 +107,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.load.audio("powerup", "/pong/pongassets/audio/powerup.mp3");
 
 
-    this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
+    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sfx/bgNoise.mp3"));
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
@@ -718,7 +718,7 @@ export default class NewPongScene extends Phaser.Scene {
     this.aiIsMoving = false;
     this.aiMoveTime = 0;
 
-    boosterNum = 0;
+    boosterNum = this.params.boostCredits ?? 0;
     STATUS = {
       FREEZE : false,
       MAGNIFY : false,
@@ -732,7 +732,7 @@ export default class NewPongScene extends Phaser.Scene {
   loseGame() {
     this.cameras.main.fadeOut(1000);
     this.final.play();
-    this.scoreHandler(this.scoreNum);
+    this.scoreHandler(this.scoreNum, null, boosterNum);
     // game is lost
     //this.initGame();
   }

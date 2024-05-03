@@ -1,8 +1,10 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function PopoutBackNav({ action }) {
   const [left, setLeft] = useState(40);
+  const router = useRouter();
 
   const updateLeft = () => {
     setLeft(80);
@@ -16,7 +18,17 @@ export default function PopoutBackNav({ action }) {
       style={{ width: left, transition: "0.5s width" }}
       onClick={() => {
         if (left > 40) {
-          action();
+          () => {
+            window.parent.postMessage(
+              { type: "game_event", data: { action: "game_end" } },
+              "*"
+            );
+          };
+          if (action) {
+            action();
+          } else {
+            router.back();
+          }
         } else {
           updateLeft();
         }

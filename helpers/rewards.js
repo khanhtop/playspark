@@ -1,4 +1,7 @@
 import e from "cors";
+import { addDoc, collection } from "firebase/firestore";
+import { firestore } from "./firebase";
+import { rewardWithCoins, rewardWithXP } from "./events";
 
 export function groupRewards(rewards) {
   if (!rewards) return [];
@@ -61,3 +64,22 @@ export function getAvailableReward(rewards) {
   }
   return out;
 }
+
+// In Game Rewards
+
+export const claimReward = async (reward, data, context) => {
+  console.log(reward);
+  if (reward.outputAction === "xp")
+    rewardWithXP(reward.outputValue, context, data);
+  if (reward.outputAction === "coins")
+    rewardWithCoins(reward.outputValue, context, data);
+  await addDoc(
+    collection(firestore, "users", context.loggedIn.uid, "rewards"),
+    {
+      ...reward,
+      tournamentId: data.tournamentId,
+      ownerId: data.ownerId,
+    }
+  );
+  return;
+};

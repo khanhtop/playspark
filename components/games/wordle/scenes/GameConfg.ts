@@ -6,6 +6,7 @@ export let GAME = {
     TYPING: "",
     LINE: 0,
     SCORE: 0,
+    LEVEL: 1,
     STREAK: 0,
     COIN: 0,
     CUR_COIN: 0,

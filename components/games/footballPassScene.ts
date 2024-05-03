@@ -166,7 +166,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
 
 
-    this.load.audio("bg", "/pong/" + gameType + "/sfx/crowd.mp3");
+    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sfx/crowd.mp3"));
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
@@ -1499,6 +1499,7 @@ export default class FootballPassScene extends Phaser.Scene {
 
     heartNum = this.params.lives
     this.scoreNum = this.params.score;
+    completedLevel = this.params.level ?? 0;
 
     completedLevel = this.getLevelFromScore(this.scoreNum);
 
@@ -1600,7 +1601,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.cameras.main.fadeOut(1000);
     this.final.play();
     this.scoreNum += this.getTotalScore();
-    this.scoreHandler(this.scoreNum);
+    this.scoreHandler(this.scoreNum, completedLevel);
     // game is lost
     //this.initGame();
   }

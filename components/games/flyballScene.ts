@@ -143,7 +143,7 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.image("fence", this.params.sponsorLogo);
 
     // AUDIO
-    this.load.audio("bg", "/pong/" + gameType + "/sound/bg.mp3");
+    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sound/bg.mp3"));
     this.load.audio("item_coin", "/pong/" + gameType + "/sound/collectcoin.mp3");
     this.load.audio("levelup", "/pong/" + gameType + "/sound/game-level-complete-trial.mp3");
     this.load.audio("item_light", "/pong/" + gameType + "/sound/item-pick-up.mp3");
@@ -983,6 +983,8 @@ export default class FlyBallScene extends Phaser.Scene {
     GAME.ring = 0;
     GAME.ball = this.params.lives;
     GAME.passRing = this.params.score;
+    GAME.light = this.params.boostCredits ?? 0;
+    GAME.level = this.params.level ?? 1;
     lastPos.ballPos.x = this.ball.x;
     this.obstacles = [];
     this.items = [];
@@ -993,7 +995,7 @@ export default class FlyBallScene extends Phaser.Scene {
 
   loseGame() {
     this.cameras.main.fadeOut(1000);
-    this.scoreHandler(GAME.passRing * SCORE_PER_RING);
+    this.scoreHandler(GAME.passRing * SCORE_PER_RING, GAME.level, GAME.light);
 
     // game is lost
     //this.initGame();

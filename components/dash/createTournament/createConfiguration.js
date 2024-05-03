@@ -1,3 +1,4 @@
+import CreateAudioPicker from "./createAudioPicker";
 import CreateImageSlider from "./createImageSlider";
 import GenWordArray from "./genWordArray";
 
@@ -148,6 +149,18 @@ export default function CreateConfiguration({
           selected={tournament.additionalSpriteSix}
           updateSprite={(a) => {
             setTournament({ ...tournament, additionalSpriteSix: a });
+          }}
+        />
+      )}
+      {tournament?.tags?.["backgroundMusic"] && (
+        <CreateAudioPicker
+          isAdmin={isAdmin}
+          dimension="backgroundMusic"
+          gameTag={"bgm"}
+          title={`Background Music`}
+          selected={tournament.backgroundMusic}
+          updateAudio={(a) => {
+            setTournament({ ...tournament, backgroundMusic: a });
           }}
         />
       )}

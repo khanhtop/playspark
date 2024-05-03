@@ -38,29 +38,22 @@ const operands = [
   },
 ];
 
-const outputs = [
+const outputOperands = [
   {
     text: "XP",
     value: "xp",
   },
   {
-    text: "Digital Reward",
-    value: "digital",
-  },
-];
-
-const outputOperands = [
-  {
-    text: "Increase By",
-    value: "+=",
+    text: "Coins",
+    value: "coins",
   },
   {
-    text: "Decrease By",
-    value: "-=",
+    text: "Promo Code",
+    value: "promocode",
   },
   {
-    text: "URL",
-    value: "url",
+    text: "Physical Item",
+    value: "physical",
   },
 ];
 
@@ -100,14 +93,16 @@ export default function CreateRewards({ tournament, setTournament }) {
               ...(tournament?.rewards ?? []),
               {
                 name: "New Reward",
+                id: Date.now().toString(),
                 description: "My awesome reward",
                 image: null,
                 input: "score",
                 inputOperand: "==",
                 inputValue: 10,
-                output: "xp",
-                outputOperand: "+=",
+                outputAction: "xp",
                 outputValue: 100,
+                outputLocation: null,
+                outputInstructions: null,
               },
             ],
           })
@@ -164,7 +159,7 @@ function RewardRow({ item, onChange, onDelete, index }) {
           className="flex-1"
         />
         <LabelledSelect
-          label="Operand"
+          label="Condition"
           value={item.inputOperand}
           onChange={(e) => onChange({ ...item, inputOperand: e })}
           options={operands}
@@ -183,23 +178,33 @@ function RewardRow({ item, onChange, onDelete, index }) {
         />
       </div>
       <div className="flex gap-2 mt-4">
-        <LabelledSelect
+        {/* <LabelledSelect
           label="Output"
           value={item.output}
           onChange={(e) => onChange({ ...item, output: e })}
           options={outputs}
           className="flex-1"
-        />
+        /> */}
         <LabelledSelect
           label="Action"
-          value={item.outputOperand}
-          onChange={(e) => onChange({ ...item, outputOperand: e })}
+          value={item.outputAction}
+          onChange={(e) => onChange({ ...item, outputAction: e })}
           options={outputOperands}
           className="flex-1"
         />
         <Input
-          label="Value"
-          type={item.output === "digital" ? "text" : "number"}
+          label={
+            item.outputAction === "xp" || item.outputAction === "coins"
+              ? "Amount"
+              : item.outputAction === "promocode"
+              ? "Code"
+              : "Item Name"
+          }
+          type={
+            item.outputAction !== "xp" && item.outputAction !== "number"
+              ? "text"
+              : "number"
+          }
           className="bg-white/5 w-full py-2 text-white"
           placeHolder="Value"
           value={item?.outputValue}
@@ -208,13 +213,58 @@ function RewardRow({ item, onChange, onDelete, index }) {
             onChange({
               ...item,
               outputValue:
-                item.output === "digital"
+                item.outputAction !== "xp" && item.outputAction !== "coins"
                   ? e.target.value
                   : parseInt(e.target.value),
             })
           }
         />
       </div>
+      {(item.outputAction === "physical" ||
+        item.outputAction === "promocode") && (
+        <div className="mt-4">
+          <Input
+            label="Redemption Instructions"
+            className="bg-white/5 w-full py-2 text-white"
+            placeHolder="Instructions for a user to redeem the reward"
+            value={item?.outputInstructions}
+            labelColor="text-white/70"
+            onChange={(e) =>
+              onChange({
+                ...item,
+                outputInstructions: e.target.value,
+              })
+            }
+          />
+        </div>
+      )}
+      {(item.outputAction === "physical" ||
+        item.outputAction === "promocode") && (
+        <div className="mt-4">
+          <Input
+            label={
+              item.outputAction === "physical"
+                ? "Location or Redemption Address"
+                : "Redemption URL"
+            }
+            className="bg-white/5 w-full py-2 text-white"
+            placeHolder={
+              item.outputAction === "physical"
+                ? "101 King Street, Sydney"
+                : "https://"
+            }
+            value={item?.outputLocation}
+            labelColor="text-white/70"
+            onChange={(e) =>
+              onChange({
+                ...item,
+                outputLocation: e.target.value,
+              })
+            }
+          />
+        </div>
+      )}
+
       <XMarkIcon
         onClick={onDelete}
         className="absolute top-2 right-2 h-6 w-6 text-white/50 cursor-pointer hover:text-white/100 transition"

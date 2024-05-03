@@ -8,6 +8,8 @@ export default function GameButton({
   onClick,
   badge,
   disabled,
+  onMouseDown,
+  onMouseUp,
 }) {
   const audioRef = useRef(null);
 
@@ -25,6 +27,9 @@ export default function GameButton({
   return (
     <div
       onClick={handleClick}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseUp}
       style={{
         backgroundColor: disabled ? "#DDD" : bgColor || "cyan",
         color: textColor || "white",
