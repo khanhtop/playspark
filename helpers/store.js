@@ -35,6 +35,12 @@ export function AppWrapper({ children }) {
   const [event, showEvent] = useState(false);
   const [eventQueue, setEventQueue] = useState([]);
 
+  // Settings
+  const [settings, setSettings] = useState({
+    bgm: true,
+    soundFx: true,
+  });
+
   // For Webhooks
   const [webhookBasePayload, setWebhookBasePayload] = useState({
     userId: null,
@@ -252,6 +258,8 @@ export function AppWrapper({ children }) {
     battles,
     hasNewNotification,
     setHasNewNotification,
+    settings,
+    setSettings,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

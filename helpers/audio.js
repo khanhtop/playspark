@@ -23,7 +23,8 @@ export const playNotificationSound = () => {
   }
 };
 
-export const playClickSound = () => {
+export const playClickSound = (context) => {
+  if (!context?.settings?.soundFx) return;
   // Check if window is defined (to ensure we're in the browser environment)
   if (typeof window !== "undefined" && window.Audio) {
     // Create a new Audio object

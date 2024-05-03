@@ -180,12 +180,13 @@ function RewardRow({
   onFlipCard,
   isRedeemed,
 }) {
+  const context = useAppContext();
   function isInteractableAfterClaim() {
     if (item.outputAction === "promocode" || item.outputAction === "physical")
       return true;
     return false;
   }
-  console.log(isRedeemed);
+
   return (
     <div className="flex h-24 text-black/70 font-octo gap-2 text-sm">
       <div className="bg-white/100 border-4 border-black/10 backdrop-blur flex-1 flex items-center rounded-2xl overflow-hidden px-4">
@@ -223,7 +224,7 @@ function RewardRow({
             } else if (unlocked && !claimed) {
               onClaim(item);
             } else if (claimed && isInteractableAfterClaim()) {
-              playClickSound();
+              playClickSound(context);
               onFlipCard(item);
             }
           }}

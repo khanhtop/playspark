@@ -1,4 +1,5 @@
 import { playClickSound } from "@/helpers/audio";
+import { useAppContext } from "@/helpers/store";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 
@@ -10,8 +11,8 @@ export default function GlassModal({
   primaryColor,
   textColor,
 }) {
+  const context = useAppContext();
   if (!showWhen) return <div />;
-  console.log(showWhen);
   return (
     <div
       style={{
@@ -32,7 +33,7 @@ export default function GlassModal({
         <div className="flex justify-center absolute w-full -bottom-6">
           <div
             onClick={() => {
-              playClickSound();
+              playClickSound(context);
               onClose();
             }}
             className="bg-red-500 hover:bg-red-600 transition cursor-pointer text-white h-12 w-12 rounded-full flex items-center justify-center border-2"

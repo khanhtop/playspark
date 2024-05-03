@@ -21,7 +21,11 @@ import { playClickSound } from "@/helpers/audio";
 export default function Intro({ data, setStage, premium, ready, signingIn }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
-  useMusic("/uisounds/intro.mp3", 0.5);
+  useMusic(
+    data?.homescreenMusic ?? "/uisounds/intro.mp3",
+    0.5,
+    context.settings.bgm
+  );
 
   return (
     <div
@@ -54,13 +58,13 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
           </GameButton>
         )}
 
-        {data?.rewards?.length > 0 && (
+        {context?.loggedIn?.uid && (
           <div className="w-full h-20 z-10 flex justify-center mt-4">
             <div className="bg-black/30 shadow-lg border-2 border-white/20 h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-2 rounded-full">
               <IconButton
                 Icon={Cog6ToothIcon}
                 onClick={() => {
-                  playClickSound();
+                  playClickSound(context);
                   setShowModal({
                     title: "Settings",
                     content: ModalSettings,
@@ -71,7 +75,7 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
               <IconButton
                 Icon={TrophyIcon}
                 onClick={() => {
-                  playClickSound();
+                  playClickSound(context);
                   setShowModal({
                     title: "Rewards",
                     content: ModalRewards,
@@ -82,7 +86,7 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
               <IconButton
                 Icon={ChartBarIcon}
                 onClick={() => {
-                  playClickSound();
+                  playClickSound(context);
                   setShowModal({
                     title: "Leaderboard",
                     content: ModalLeaderboard,

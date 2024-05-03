@@ -1,14 +1,18 @@
 import { useRef } from "react";
+import { useAppContext } from "./store";
 
 const withClickSound = (onClick) => {
   const audioRef = useRef();
+  const context = useAppContext();
   useEffect(() => {
     audioRef.current = new Audio("/uisounds/click.wav");
     audioRef.current.load();
   }, []);
 
   const playClickSound = () => {
-    audioRef.current.play();
+    if (context.settings.soundFx) {
+      audioRef.current.play();
+    }
   };
 
   const handleClick = (event) => {
