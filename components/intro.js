@@ -17,6 +17,7 @@ import ModalRewards from "./dash/modals/rewards";
 import ModalSettings from "./dash/modals/settings";
 import ModalLeaderboard from "./dash/modals/leaderboard";
 import { playClickSound } from "@/helpers/audio";
+import ModalAuth from "./dash/modals/auth";
 
 export default function Intro({ data, setStage, premium, ready, signingIn }) {
   const context = useAppContext();
@@ -42,7 +43,16 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
       <div className="text-white items-center justify-end h-full flex flex-col pb-8 px-4 pt-4">
         <div className="w-full flex h-full items-start">
           <div className="flex-1 h-12 z-10"></div>
-          <IntroPanel data={data} />
+          <IntroPanel
+            data={data}
+            onAuthClick={() => {
+              setShowModal({
+                title: "Sign Up",
+                content: ModalAuth,
+                data: { ...data, onClose: () => setShowModal(false) },
+              });
+            }}
+          />
         </div>
 
         {(!premium || ready) && (

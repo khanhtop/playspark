@@ -2,11 +2,22 @@ import { useAppContext } from "@/helpers/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-export default function IntroPanel({ data }) {
+export default function IntroPanel({ data, onAuthClick }) {
   const context = useAppContext();
   const [open, setOpen] = useState(false);
 
-  if (!context.profile) return <div />;
+  if (!context.profile)
+    return (
+      <div
+        onClick={onAuthClick}
+        className="w-[200px] font-octo px-2 pt-2 pb-1 flex flex-col bg-black/30 hover:bg-black/50 transition cursor-pointer backdrop-blur rounded-2xl shadow-lg border-2 border-white/20 items-center justify-center"
+      >
+        <p className="text-xl">Sign In</p>
+        <p className="font-roboto text-white/50 text-center text-sm">
+          To access rewards and rank on leaderboards.
+        </p>
+      </div>
+    );
 
   const tournamentScore =
     data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
