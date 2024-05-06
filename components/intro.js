@@ -17,8 +17,16 @@ import ModalRewards from "./dash/modals/rewards";
 import ModalSettings from "./dash/modals/settings";
 import ModalLeaderboard from "./dash/modals/leaderboard";
 import { playClickSound } from "@/helpers/audio";
+import ModalGameOver from "./dash/modals/gameOver";
 
-export default function Intro({ data, setStage, premium, ready, signingIn }) {
+export default function Intro({
+  data,
+  setStage,
+  premium,
+  ready,
+  signingIn,
+  gameOver,
+}) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
   useMusic(
@@ -26,6 +34,23 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
     0.5,
     context.settings.bgm
   );
+
+  useEffect(() => {
+    if (gameOver.score !== null) {
+      setShowModal({
+        title: "Game Over",
+        content: ModalGameOver,
+        data: {
+          data,
+          gameOverScore: gameOver?.score,
+          gameOverRevives: gameOver?.reviveCount,
+          onRevive: () => {
+            setStage(1);
+          },
+        },
+      });
+    }
+  }, [gameOver.score]);
 
   return (
     <div
@@ -51,7 +76,7 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
             textColor={data.textColor}
             onClick={() => {
               playEvent(context, data);
-              setStage(1);
+              setStage(1, true);
             }}
           >
             START

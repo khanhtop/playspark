@@ -39,7 +39,7 @@ export default function Advert({
   const [lockX, setLockX] = useState();
   const [lockY, setLockY] = useState();
   const [shouldRotate, setShouldRotate] = useState(false);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(null);
   const [prevBest, setPrevBest] = useState();
 
   // Lives & Restarts
@@ -54,8 +54,6 @@ export default function Advert({
       email: email,
     });
   }, [userId, email]);
-
-  console.log(context);
 
   useMemo(() => {
     if (!data.tournamentId || !context.loggedIn?.uid) return;
@@ -73,17 +71,17 @@ export default function Advert({
   }, [score]);
 
   const callback = (score, level = null, boostCredits = null) => {
-    // console.log(`save level: ${level} boostCredits: ${boostCredits}`)
+    console.log(`save level: ${level} boostCredits: ${boostCredits}`);
     scoreEvent(context, score, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
       setScore(score);
-      setStage(2);
+      setStage(0);
       setReviveCount(reviveCount + 1);
     } else {
       setLives(data.id === 11 ? 10 : 3);
       setScore(0);
-      setStage(2);
+      setStage(0);
     }
   };
 
@@ -235,11 +233,16 @@ export default function Advert({
         <Intro
           signingIn={signingIn}
           data={data}
-          setStage={(a) => {
+          setStage={(a, withReset = false) => {
+            if (withReset) reset();
             setStage(a);
             if (!data.demo) {
               incrementPlayCount(data?.tournamentId?.toString(), "freemium");
             }
+          }}
+          gameOver={{
+            score: score,
+            reviveCount: MAX_REVIVES - reviveCount,
           }}
         />
       )}
