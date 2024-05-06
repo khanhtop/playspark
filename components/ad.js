@@ -19,7 +19,11 @@ import { isIOS, isAndroid } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
 import { getHighScore } from "@/helpers/leaderboard";
 import NotificationBar from "./ui/notification";
-import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
+import {
+  levelEvent,
+  playableAdFinishedCTA,
+  scoreEvent,
+} from "@/helpers/events";
 import Modal from "./ui/modal";
 import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
@@ -57,8 +61,6 @@ export default function Advert({
     });
   }, [userId, email]);
 
-  console.log(score, level, boostCredits);
-
   useMemo(() => {
     if (!data.tournamentId || !context.loggedIn?.uid) return;
     getHighScore(data.tournamentId, context?.loggedIn?.uid).then(
@@ -77,6 +79,7 @@ export default function Advert({
   const callback = (score, level = null, boostCredits = null) => {
     console.log(`save level: ${level} boostCredits: ${boostCredits}`);
     scoreEvent(context, score, data);
+    levelEvent(context, level, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
       setScore(score);

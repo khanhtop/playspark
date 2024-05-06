@@ -45,9 +45,15 @@ export default function ModalRewards({ data }) {
     data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
     0;
 
+  const tournamentLevel =
+    context?.profile?.tournamentSpecificData?.[data.tournamentId]?.level || 0;
+
   const isUnlocked = (item) => {
     if (item.input === "score") {
       return tournamentScore >= item.inputValue;
+    }
+    if (item.input === "level") {
+      return tournamentLevel >= item.inputValue;
     }
     return false;
   };
