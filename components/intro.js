@@ -28,7 +28,7 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
     context.settings.bgm
   );
 
-  const theme = "default";
+  const theme = data?.theme || "default";
 
   return (
     <div
@@ -64,19 +64,22 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
 
         {context?.loggedIn?.uid && (
           <div className="w-full h-20 z-10 flex justify-center mt-4">
-            <div
-              className={`bg-black/30 shadow-lg border-2 border-white/20 h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-2 rounded-full`}
+            <IconTray
+              bgColor={data.primaryColor}
+              textColor={data.textColor}
+              theme={theme}
             >
               <IconButton
                 Icon={Cog6ToothIcon}
                 bgColor={data.primaryColor}
                 textColor={data.textColor}
+                theme={theme}
                 onClick={() => {
                   playClickSound(context);
                   setShowModal({
                     title: "Settings",
                     content: ModalSettings,
-                    data: data,
+                    data: { ...data, theme: theme },
                   });
                 }}
               />
@@ -84,12 +87,13 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
                 Icon={TrophyIcon}
                 bgColor={data.primaryColor}
                 textColor={data.textColor}
+                theme={theme}
                 onClick={() => {
                   playClickSound(context);
                   setShowModal({
                     title: "Rewards",
                     content: ModalRewards,
-                    data: data,
+                    data: { ...data, theme: theme },
                   });
                 }}
               />
@@ -97,16 +101,17 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
                 Icon={ChartBarIcon}
                 bgColor={data.primaryColor}
                 textColor={data.textColor}
+                theme={theme}
                 onClick={() => {
                   playClickSound(context);
                   setShowModal({
                     title: "Leaderboard",
                     content: ModalLeaderboard,
-                    data: data,
+                    data: { ...data, theme: theme },
                   });
                 }}
               />
-            </div>
+            </IconTray>
           </div>
         )}
       </div>
@@ -117,6 +122,7 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
         title={showModal?.title ?? "Modal"}
         primaryColor={data.primaryColor}
         textColor={data.textColor}
+        theme={theme}
       />
 
       {signingIn === 1 && (
@@ -128,14 +134,34 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
   );
 }
 
-function IconButton({ Icon, onClick, bgColor, textColor }) {
+function IconTray({ children, theme, bgColor, textColor }) {
+  return (
+    <div
+      style={{
+        backgroundColor:
+          theme === "default" ? "rgba(255,255,255,0.3)" : bgColor,
+      }}
+      className={`${
+        theme === "pixel" ? "rounded-none" : "rounded-full"
+      } relative shadow-lg border-2 border-white/20 h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-2`}
+    >
+      {children}
+    </div>
+  );
+}
+
+function IconButton({ Icon, theme, onClick, bgColor, textColor }) {
   const context = useAppContext();
   return (
     <div
       onClick={() => {
         if (context?.loggedIn?.uid) onClick();
       }}
-      className={`h-full aspect-square bg-black/30 hover:bg-black/100 transition shadow-lg border-2 border-white/20 rounded-full backdrop-blur flex items-center justify-center`}
+      className={`${
+        theme === "pixel"
+          ? "rounded-none bg-[#000]"
+          : "rounded-full bg-black/80"
+      } h-full cursor-pointer aspect-square transition shadow-lg border-2 border-white/20  backdrop-blur flex items-center justify-center`}
     >
       <Icon className="h-8 w-8" />
     </div>
