@@ -68,6 +68,7 @@ export default class newFallGameScene extends Phaser.Scene {
   text_main_style: any;
   help_board: any;
   isStart: any;
+  gameover_board: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -563,6 +564,24 @@ export default class newFallGameScene extends Phaser.Scene {
       .brightness(0.9);
     this.player.preFX.addShadow();
 
+    this.gameover_board = this.add.group();
+    this.gameover_board.add(
+      this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0).setDepth(200)
+    )
+    this.gameover_board.add(
+      this.add.text(mW, mH - 150, "GAME OVER").setOrigin(0.5, 0.5).setStyle({
+        align: 'center',
+        fill: '#ffffff',
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      ).setScrollFactor(0, 0).setDepth(201)
+    )
+    this.gameover_board.setVisible(false)
+
     this.initGame();
   }
 
@@ -612,7 +631,7 @@ export default class newFallGameScene extends Phaser.Scene {
   }
 
   loseGame() {
-    this.cameras.main.fadeOut(1000);
+    this.cameras.main.fadeOut(3000);
     this.lose.play();
 
     this.scoreHandler(this.scoreNum, null, boosterNum);
@@ -620,9 +639,15 @@ export default class newFallGameScene extends Phaser.Scene {
     this.player.setVisible(false);
     this.bombSprite.setDisplaySize(150, 150);
     this.playBombEffect(this.player.x, this.player.y)
+    this.gameover_board.setVisible(true)
 
+    this.time.delayedCall(3000, this.gameEnd, [], this);
     // game is lost
     //this.initGame();
+  }
+
+  gameEnd() {
+    this.scoreHandler(this.scoreNum, null, boosterNum);
   }
 
   loseLife(): boolean {

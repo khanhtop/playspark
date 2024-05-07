@@ -79,6 +79,8 @@ export default class FlyBallScene extends Phaser.Scene {
   help_board: any;
   text_main_style: any;
 
+  gameover_board: any;
+
   help_extra_board: any;
 
   constructor(newGameType: string, newParams: any) {
@@ -499,6 +501,24 @@ export default class FlyBallScene extends Phaser.Scene {
     )
 
     this.help_extra_board.setVisible(false).setDepth(100);
+
+    this.gameover_board = this.add.group();
+    this.gameover_board.add(
+      this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0).setDepth(200)
+    )
+    this.gameover_board.add(
+      this.add.text(mW, mH - 150, "GAME OVER").setOrigin(0.5, 0.5).setStyle({
+        ...this.text_main_style,
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      ).setScrollFactor(0, 0).setDepth(201)
+    )
+    this.gameover_board.setVisible(false)
+
 
     this.initGame();
   }
@@ -994,11 +1014,16 @@ export default class FlyBallScene extends Phaser.Scene {
   }
 
   loseGame() {
-    this.cameras.main.fadeOut(1000);
-    this.scoreHandler(GAME.passRing * SCORE_PER_RING, GAME.level, GAME.light);
+    this.cameras.main.fadeOut(3000);
+    this.gameover_board.setVisible(true)
 
+    this.time.delayedCall(3000, this.gameEnd, [], this);
     // game is lost
     //this.initGame();
+  }
+
+  gameEnd() {
+    this.scoreHandler(GAME.passRing * SCORE_PER_RING, GAME.level, GAME.light);
   }
 
   loseLife(): void {

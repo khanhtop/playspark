@@ -100,6 +100,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   };
 
   private params: any;
+  gameover_board: any;
 
   constructor(gameType: any, _params: any) {
     super();
@@ -348,7 +349,23 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
     this.powerupOverlay = PowerupOverlay.getInstance(this);
     this.add.container(this.width / 2, this.height / 2, this.powerupOverlay);
-
+    this.gameover_board = this.add.group();
+    this.gameover_board.add(
+      this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0).setDepth(200)
+    )
+    this.gameover_board.add(
+      this.add.text(this.width / 2, this.height / 2, "GAME OVER").setOrigin(0.5, 0.5).setStyle({
+        align: 'center',
+        fill: '#ffffff',
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      ).setScrollFactor(0, 0).setDepth(201)
+    )
+    this.gameover_board.setVisible(false)
     return;
   }
   
