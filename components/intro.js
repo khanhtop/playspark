@@ -17,6 +17,7 @@ import ModalRewards from "./dash/modals/rewards";
 import ModalSettings from "./dash/modals/settings";
 import ModalLeaderboard from "./dash/modals/leaderboard";
 import { playClickSound } from "@/helpers/audio";
+import { themes } from "@/helpers/theming";
 
 export default function Intro({ data, setStage, premium, ready, signingIn }) {
   const context = useAppContext();
@@ -26,6 +27,8 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
     0.5,
     context.settings.bgm
   );
+
+  const theme = "default";
 
   return (
     <div
@@ -42,13 +45,14 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
       <div className="text-white items-center justify-end h-full flex flex-col pb-8 px-4 pt-4">
         <div className="w-full flex h-full items-start">
           <div className="flex-1 h-12 z-10"></div>
-          <IntroPanel data={data} />
+          <IntroPanel data={data} theme={theme} />
         </div>
 
         {(!premium || ready) && (
           <GameButton
             bgColor={data.primaryColor}
             textColor={data.textColor}
+            theme={theme}
             onClick={() => {
               playEvent(context, data);
               setStage(1);
@@ -60,9 +64,13 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
 
         {context?.loggedIn?.uid && (
           <div className="w-full h-20 z-10 flex justify-center mt-4">
-            <div className="bg-black/30 shadow-lg border-2 border-white/20 h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-2 rounded-full">
+            <div
+              className={`bg-black/30 shadow-lg border-2 border-white/20 h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-2 rounded-full`}
+            >
               <IconButton
                 Icon={Cog6ToothIcon}
+                bgColor={data.primaryColor}
+                textColor={data.textColor}
                 onClick={() => {
                   playClickSound(context);
                   setShowModal({
@@ -74,6 +82,8 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
               />
               <IconButton
                 Icon={TrophyIcon}
+                bgColor={data.primaryColor}
+                textColor={data.textColor}
                 onClick={() => {
                   playClickSound(context);
                   setShowModal({
@@ -85,6 +95,8 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
               />
               <IconButton
                 Icon={ChartBarIcon}
+                bgColor={data.primaryColor}
+                textColor={data.textColor}
                 onClick={() => {
                   playClickSound(context);
                   setShowModal({
@@ -116,14 +128,14 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
   );
 }
 
-function IconButton({ Icon, onClick }) {
+function IconButton({ Icon, onClick, bgColor, textColor }) {
   const context = useAppContext();
   return (
     <div
       onClick={() => {
         if (context?.loggedIn?.uid) onClick();
       }}
-      className="h-full aspect-square bg-black/30 hover:bg-black/100 transition shadow-lg border-2 border-white/20 rounded-full backdrop-blur flex items-center justify-center"
+      className={`h-full aspect-square bg-black/30 hover:bg-black/100 transition shadow-lg border-2 border-white/20 rounded-full backdrop-blur flex items-center justify-center`}
     >
       <Icon className="h-8 w-8" />
     </div>
