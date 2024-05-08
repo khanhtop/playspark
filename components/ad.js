@@ -77,7 +77,7 @@ export default function Advert({
   }, [score]);
 
   const callback = (score, level = null, boostCredits = null) => {
-    console.log(`save level: ${level} boostCredits: ${boostCredits}`);
+    console.log(`in ad files save level: ${level} boostCredits: ${boostCredits}`);
     scoreEvent(context, score, data);
     levelEvent(context, level, data);
     if (reviveCount - MAX_REVIVES) {

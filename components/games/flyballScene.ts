@@ -1004,6 +1004,7 @@ export default class FlyBallScene extends Phaser.Scene {
     GAME.ball = this.params.lives;
     GAME.passRing = this.params.score;
     GAME.light = this.params.boostCredits ?? 0;
+    console.log("level: ----------- ", this.params.level)
     GAME.level = this.params.level ?? 1;
     lastPos.ballPos.x = this.ball.x;
     this.obstacles = [];
