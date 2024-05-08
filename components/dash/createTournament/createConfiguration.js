@@ -9,6 +9,13 @@ export default function CreateConfiguration({
 }) {
   return (
     <div className="flex flex-col">
+      <p className="text-white/70 text-sm mb-2">Game Instructions</p>
+      <textarea
+        onChange={(e) =>
+          setTournament({ ...tournament, instructions: e.target.value })
+        }
+        className="bg-white/10 text-white rounded-xl p-4 mb-4"
+      ></textarea>
       {tournament?.tags?.["backgroundSprite"] && (
         <CreateImageSlider
           isAdmin={isAdmin}
