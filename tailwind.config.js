@@ -10,6 +10,7 @@ module.exports = {
       fontFamily: {
         titan: ["var(--font-titan)"],
         roboto: ["var(--font-roboto)"],
+        neon: ["var(--font-tilt-neon)"],
         pixel: ["var(--font-pixel)"],
         anton: ["var(--font-anton)"],
         octo: ["var(--font-octo)"],

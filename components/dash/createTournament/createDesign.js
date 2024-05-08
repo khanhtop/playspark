@@ -36,6 +36,7 @@ export default function CreateDesign({ tournament, setTournament }) {
           Default
         </option>
         <option value="pixel">Pixel</option>
+        <option value="neon">Neon</option>
       </select>
       <BrandingComponent>
         <div className="mt-4">
