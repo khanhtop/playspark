@@ -29,6 +29,7 @@ export function AppWrapper({ children }) {
   const [prizes, setPrizes] = useState();
   const [battles, setBattles] = useState();
   const [notifications, setNotifications] = useState();
+  const [chats, setChats] = useState();
   const [hasNewNotification, setHasNewNotification] = useState(false);
   const [device, setDevice] = useState("desktop");
   const [modal, setModal] = useState(false);
@@ -40,6 +41,7 @@ export function AppWrapper({ children }) {
     bgm: true,
     soundFx: true,
   });
+  const [latestChat, setLatestChat] = useState();
 
   // For Webhooks
   const [webhookBasePayload, setWebhookBasePayload] = useState({
@@ -96,6 +98,7 @@ export function AppWrapper({ children }) {
     let _rewardsUnsub = () => null;
     let _prizesUnsub = () => null;
     let _notificationsUnsub = () => null;
+    let _chatsUnsub = () => null;
     let _battleUnsub = () => null;
     if (loggedIn && !profile) {
       _profileUnsub = onSnapshot(
@@ -170,6 +173,25 @@ export function AppWrapper({ children }) {
           _notifications.push({ ...doc.data(), id: doc.id });
         });
         setNotifications(_notifications);
+      });
+    }
+
+    if (loggedIn && !chats) {
+      const q = query(
+        collection(firestore, "chats"),
+        or(
+          where("chatterA.id", "==", loggedIn.uid),
+          where("chatterB.id", "==", loggedIn.uid)
+        ),
+        orderBy("updatedAt", "desc"),
+        limit(30)
+      );
+      _chatsUnsub = onSnapshot(q, (querySnapshot) => {
+        const _chats = [];
+        querySnapshot.forEach((doc) => {
+          _chats.push({ ...doc.data(), id: doc.id });
+        });
+        setChats(_chats);
       });
     }
 
@@ -258,8 +280,14 @@ export function AppWrapper({ children }) {
     battles,
     hasNewNotification,
     setHasNewNotification,
+<<<<<<< HEAD
     settings,
     setSettings,
+=======
+    chats,
+    latestChat,
+    setLatestChat,
+>>>>>>> may/dynamic-pages
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

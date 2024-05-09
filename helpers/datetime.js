@@ -50,3 +50,21 @@ export function formatTimeDifference(time) {
     }
   return time;
 }
+
+export function timeAgo(timestamp) {
+  const d2 = new Date(timestamp);
+  const d1 = new Date();
+  let seconds = Math.round((d1.getTime() - d2.getTime()) / 1000);
+  let minutes = Math.round(seconds / 60);
+  let hours = Math.round(minutes / 60);
+  let days = Math.round(hours / 24);
+  if (seconds < 60) {
+    return "Just now";
+  } else if (minutes < 60) {
+    return minutes.toString() + " minutes ago";
+  } else if (hours < 24) {
+    return hours.toString() + " hours ago";
+  } else {
+    return days.toString() + " days ago";
+  }
+}

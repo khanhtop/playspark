@@ -4,6 +4,7 @@ import {
   BellAlertIcon,
   BellIcon,
   CurrencyDollarIcon,
+  EnvelopeIcon,
   PlayIcon,
   PlusCircleIcon,
   PowerIcon,
@@ -63,6 +64,18 @@ export default function TopNav({
               data={data}
               onClick={() => setScreen("coins")}
             />
+            <div className="h-full relative">
+              <EnvelopeIcon
+                onClick={() => {
+                  setScreen("chat");
+                }}
+                className={`h-full pb-0 opacity-20`}
+              />
+              <div className="absolute bg-black/80 -top-2 -right-1 h-6 w-6 text-xs flex items-center justify-center border-2 border-white rounded-full">
+                0
+              </div>
+            </div>
+
             <div className="h-full relative">
               <BellIcon
                 onClick={() => {

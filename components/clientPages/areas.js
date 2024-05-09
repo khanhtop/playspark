@@ -14,6 +14,7 @@ export default function Areas({
   playGame,
   totalXp,
   viewAchievements,
+  setScreen,
 }) {
   const context = useAppContext();
   const [tab, setTab] = useState("games");
@@ -85,6 +86,7 @@ export default function Areas({
             totalXp={totalXp}
             lb={aggregateLeaderboard}
             tournaments={tournaments}
+            setScreen={setScreen}
           />
         </div>
       )}
