@@ -1,7 +1,7 @@
 import { AppWrapper } from "@/helpers/store";
 import "@/styles/globals.css";
 import localFont from "@next/font/local";
-import { Roboto } from "next/font/google";
+import { Roboto, Tilt_Neon } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -62,6 +62,13 @@ const roboto = Roboto({
   display: "swap",
 });
 
+const tiltneon = Tilt_Neon({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-tilt-neon",
+  display: "swap",
+});
+
 export default function App({ Component, pageProps }) {
   const router = useRouter();
   const path = router.asPath;
@@ -83,7 +90,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <main
-      className={`${titan.variable} ${roboto.variable} ${pixel.variable} ${anton.variable} ${octomed.variable} ${octolight.variable} font-sans font-roboto`}
+      className={`${titan.variable} ${roboto.variable} ${tiltneon.variable} ${pixel.variable} ${anton.variable} ${octomed.variable} ${octolight.variable} font-sans font-roboto`}
     >
       <AppWrapper>
         <Component {...pageProps} />

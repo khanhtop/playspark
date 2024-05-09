@@ -45,9 +45,15 @@ export default function ModalRewards({ data }) {
     data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
     0;
 
+  const tournamentLevel =
+    context?.profile?.tournamentSpecificData?.[data.tournamentId]?.level || 0;
+
   const isUnlocked = (item) => {
     if (item.input === "score") {
       return tournamentScore >= item.inputValue;
+    }
+    if (item.input === "level") {
+      return tournamentLevel >= item.inputValue;
     }
     return false;
   };
@@ -180,12 +186,13 @@ function RewardRow({
   onFlipCard,
   isRedeemed,
 }) {
+  const context = useAppContext();
   function isInteractableAfterClaim() {
     if (item.outputAction === "promocode" || item.outputAction === "physical")
       return true;
     return false;
   }
-  console.log(isRedeemed);
+
   return (
     <div className="flex h-24 text-black/70 font-octo gap-2 text-sm">
       <div className="bg-white/100 border-4 border-black/10 backdrop-blur flex-1 flex items-center rounded-2xl overflow-hidden px-4">
@@ -223,7 +230,7 @@ function RewardRow({
             } else if (unlocked && !claimed) {
               onClaim(item);
             } else if (claimed && isInteractableAfterClaim()) {
-              playClickSound();
+              playClickSound(context);
               onFlipCard(item);
             }
           }}

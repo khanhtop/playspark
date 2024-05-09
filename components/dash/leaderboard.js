@@ -12,6 +12,8 @@ export default function Leaderboard({ score, gameData }) {
   const [data, setData] = useState();
   const context = useAppContext();
 
+  console.log(context);
+
   useMemo(() => {
     if (!gameData.tournamentId || !context?.profile?.companyName) return;
     getLeaderboard(gameData.tournamentId).then(async (lb) => {
@@ -20,7 +22,8 @@ export default function Leaderboard({ score, gameData }) {
         context.loggedIn?.uid,
         score,
         context.loggedIn?.email,
-        context?.profile?.companyName || ""
+        context?.profile?.companyName || "",
+        context?.profile?.profilePhoto
       );
       await updateScoreAndXP(context?.loggedIn?.uid, score, gameData.ownerId);
       if (mutated) {

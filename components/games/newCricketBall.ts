@@ -309,6 +309,7 @@ export default class NewCricketBall extends Phaser.Scene {
   private hit6_sounds: any;
   backgroundAudio: Phaser.Sound.NoAudioSound | Phaser.Sound.HTML5AudioSound | Phaser.Sound.WebAudioSound;
   score_out1: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  gameover_board: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -3166,6 +3167,24 @@ export default class NewCricketBall extends Phaser.Scene {
       .polaroid()
       .brightness(0.9);
 
+    this.gameover_board = this.add.group();
+    this.gameover_board.add(
+      this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0).setDepth(200)
+    )
+    this.gameover_board.add(
+      this.add.text(w / 2, h / 2, "GAME OVER").setOrigin(0.5, 0.5).setStyle({
+        align: 'center',
+        fill: '#ffffff',
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      ).setScrollFactor(0, 0).setDepth(201)
+    )
+    this.gameover_board.setVisible(false)
+
     this.initGame();
   }
   public fire_ball() {
@@ -3372,8 +3391,14 @@ export default class NewCricketBall extends Phaser.Scene {
   }
 
   endRound() {
-    this.cameras.main.fadeOut(1000);
-    this.scoreHandler(this.scorePanel.totalScore, this.level);
+    this.cameras.main.fadeOut(3000);
+    this.gameover_board.setVisible(true)
+
+    this.time.delayedCall(3000, this.gameEnd, [], this);
+  }
+
+  gameEnd() {
+    this.scoreHandler(this.scorePanel.totalScore, this.level);  
   }
 
   startRound() {

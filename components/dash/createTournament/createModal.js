@@ -20,7 +20,12 @@ export default function CreateModal({ data, hide }) {
     "Summary",
   ];
   const [stage, setStage] = useState(0);
-  const [tournament, setTournament] = useState({ ...data, rewards: [] });
+  const [tournament, setTournament] = useState({
+    ...data,
+    homescreenMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713844467/slowtempo-softrock-intro.mp3",
+    rewards: [],
+  });
   const [adding, setAdding] = useState(false);
   const [imageLibrary, setImageLibrary] = useState();
 

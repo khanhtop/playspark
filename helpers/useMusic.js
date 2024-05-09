@@ -1,11 +1,16 @@
 import { useEffect } from "react";
 import { isIOS, isAndroid } from "react-device-detect";
+import { useAppContext } from "./store";
 
-const useMusic = (fileName, maxVolume) => {
+const useMusic = (fileName, maxVolume, play) => {
+  const context = useAppContext();
+
   useEffect(() => {
     const audio = new Audio(fileName);
     audio.volume = 0;
-    audio.play();
+    if (play) {
+      audio.play();
+    }
 
     let fadeInRequestId;
     const fadeIn = (timestamp) => {
@@ -35,7 +40,7 @@ const useMusic = (fileName, maxVolume) => {
       };
       fadeOutRequestId = requestAnimationFrame(fadeOut);
     };
-  }, [fileName, maxVolume]);
+  }, [fileName, maxVolume, play]);
 };
 
 export default useMusic;

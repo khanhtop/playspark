@@ -2,6 +2,7 @@ import Input from "@/components/forms/input";
 import CreateColorPicker from "./createColorPicker";
 import ImagePicker from "@/components/forms/imagePicker";
 import { BrandingComponent } from "../unlocksWithTier";
+import CreateAudioPicker from "./createAudioPicker";
 
 export default function CreateDesign({ tournament, setTournament }) {
   return (
@@ -35,6 +36,7 @@ export default function CreateDesign({ tournament, setTournament }) {
           Default
         </option>
         <option value="pixel">Pixel</option>
+        <option value="neon">Neon</option>
       </select>
       <BrandingComponent>
         <div className="mt-4">
@@ -78,6 +80,16 @@ export default function CreateDesign({ tournament, setTournament }) {
         value={tournament.textColor}
         onSelect={(a) => {
           setTournament({ ...tournament, textColor: a.hex });
+        }}
+      />
+      <div className="h-4" />
+      <CreateAudioPicker
+        dimension="homescreenMusic"
+        gameTag={"homescreen-bgm"}
+        title={`Homescreen Music`}
+        selected={tournament.homescreenMusic}
+        updateAudio={(a) => {
+          setTournament({ ...tournament, homescreenMusic: a });
         }}
       />
     </>

@@ -66,6 +66,7 @@ export default function ClientHome({
           setScreen("game");
         }}
         viewAchievements={() => setScreen("achievements")}
+        setScreen={setScreen}
       />
     </ClientPageWrapper>
   );

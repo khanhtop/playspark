@@ -2,7 +2,7 @@ import { useAppContext } from "@/helpers/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-export default function IntroPanel({ data }) {
+export default function IntroPanel({ data, theme }) {
   const context = useAppContext();
   const [open, setOpen] = useState(false);
 
@@ -34,10 +34,28 @@ export default function IntroPanel({ data }) {
           />
         </div>
         <div className="font-octo ">
-          <p className="font-titan font-stroke">
+          <p
+            className={
+              theme === "default"
+                ? "font-titan font-stroke"
+                : theme === "neon"
+                ? "font-neon"
+                : "font-pixel uppercase text-3xl -my-1 font-stroke"
+            }
+          >
             {context?.profile?.companyName}
           </p>
-          <p className="font-titan font-stroke">XP: {xp}</p>
+          <p
+            className={
+              theme === "default"
+                ? "font-titan font-stroke"
+                : theme === "neon"
+                ? "font-neon"
+                : "font-pixel uppercase text-2xl -my-2 -mt-3 font-stroke"
+            }
+          >
+            XP: {xp}
+          </p>
         </div>
       </div>
       <div
@@ -46,16 +64,40 @@ export default function IntroPanel({ data }) {
           opacity: open ? 1 : 0,
           transition: "0.5s all",
         }}
-        className="flex-1 flex-col overflow-hidden"
+        className="flex-1 flex-col overflow-hidden font-stroke"
       >
         <div className="px-1 py-3">
-          <p className="font-titan font-stroke text-md">
+          <p
+            className={
+              theme === "default"
+                ? "font-titan font-stroke"
+                : theme === "neon"
+                ? "font-neon"
+                : "font-pixel uppercase text-2xl -my-2 font-stroke"
+            }
+          >
             Play Count: {playCount}
           </p>
-          <p className="font-titan font-stroke text-md">
+          <p
+            className={
+              theme === "default"
+                ? "font-titan font-stroke"
+                : theme === "neon"
+                ? "font-neon"
+                : "font-pixel uppercase text-2xl -my-2 font-stroke"
+            }
+          >
             Top Score: {tournamentScore}
           </p>
-          <p className="font-titan font-stroke text-md">
+          <p
+            className={
+              theme === "default"
+                ? "font-titan font-stroke"
+                : theme === "neon"
+                ? "font-neon"
+                : "font-pixel uppercase text-2xl -my-2 font-stroke"
+            }
+          >
             Best Streak: {maxStreak}
           </p>
         </div>

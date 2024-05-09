@@ -19,7 +19,11 @@ import { isIOS, isAndroid } from "react-device-detect";
 import { WinModal } from "./ui/modalTypes";
 import { getHighScore } from "@/helpers/leaderboard";
 import NotificationBar from "./ui/notification";
-import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
+import {
+  levelEvent,
+  playableAdFinishedCTA,
+  scoreEvent,
+} from "@/helpers/events";
 import Modal from "./ui/modal";
 import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
@@ -40,6 +44,8 @@ export default function Advert({
   const [lockY, setLockY] = useState();
   const [shouldRotate, setShouldRotate] = useState(false);
   const [score, setScore] = useState(0);
+  const [level, setLevel] = useState(1);
+  const [boostCredits, setBoostCredits] = useState(0);
   const [prevBest, setPrevBest] = useState();
 
   // Lives & Restarts
@@ -54,8 +60,6 @@ export default function Advert({
       email: email,
     });
   }, [userId, email]);
-
-  console.log(context);
 
   useMemo(() => {
     if (!data.tournamentId || !context.loggedIn?.uid) return;
@@ -73,16 +77,23 @@ export default function Advert({
   }, [score]);
 
   const callback = (score, level = null, boostCredits = null) => {
-    // console.log(`save level: ${level} boostCredits: ${boostCredits}`)
+    console.log(
+      `in ad files save level: ${level} boostCredits: ${boostCredits}`
+    );
     scoreEvent(context, score, data);
+    levelEvent(context, level, data);
     if (reviveCount - MAX_REVIVES) {
       setLives(data.id === 11 ? 3 : 1);
       setScore(score);
+      setLevel(level);
+      setBoostCredits(boostCredits);
       setStage(2);
       setReviveCount(reviveCount + 1);
     } else {
       setLives(data.id === 11 ? 10 : 3);
       setScore(0);
+      setLevel(1);
+      setBoostCredits(0);
       setStage(2);
     }
   };
@@ -91,6 +102,8 @@ export default function Advert({
     setReviveCount(0);
     setLives(data.id === 11 ? 10 : 3);
     setScore(0);
+    setLevel(1);
+    setBoostCredits(0);
     setStage(1);
   };
 
@@ -248,6 +261,8 @@ export default function Advert({
         getGame(data.id, data, callback, {
           lives: lives,
           score: score,
+          level: level,
+          boostCredits: boostCredits,
           brandLogo: data?.brandLogo,
           sponsorLogo: data?.sponsorLogo,
           backgroundSprite: data?.backgroundSprite,
@@ -272,7 +287,6 @@ export default function Advert({
           normal_target_2: data?.normal_target_2,
           normal_target_3: data?.normal_target_3,
           high_value_target: data?.high_value_target,
-          level: data?.level,
           shoes: data?.shoes,
           head: data?.head,
           right_hand: data?.right_hand,
