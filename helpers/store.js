@@ -280,14 +280,11 @@ export function AppWrapper({ children }) {
     battles,
     hasNewNotification,
     setHasNewNotification,
-<<<<<<< HEAD
     settings,
     setSettings,
-=======
     chats,
     latestChat,
     setLatestChat,
->>>>>>> may/dynamic-pages
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>
