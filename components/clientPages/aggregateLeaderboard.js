@@ -10,6 +10,7 @@ export default function AggregateLeaderboard({
   user,
   tournaments,
   totalXp,
+  setScreen,
 }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState();
@@ -37,6 +38,7 @@ export default function AggregateLeaderboard({
         userData={showModal}
         onClose={() => setShowModal()}
         totalXp={totalXp}
+        setScreen={setScreen}
       />
     </div>
   );

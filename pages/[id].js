@@ -4,6 +4,7 @@ import Hero from "@/components/clientPages/hero";
 import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
 import ProfileWrapper from "@/components/clientPages/profileWrapper";
 import ClientAchievements from "@/components/clientPages/subpages/clientAchievements";
+import ClientChat from "@/components/clientPages/subpages/clientChat";
 import ClientCoins from "@/components/clientPages/subpages/clientCoins";
 import ClientEmbeddedGame from "@/components/clientPages/subpages/clientEmbeddedGame";
 import ClientHome from "@/components/clientPages/subpages/clientHome";
@@ -165,6 +166,7 @@ export default function PageHandler({
         {screen === "game" && <ClientEmbeddedGame {...data} />}
         {screen === "achievements" && <ClientAchievements {...data} />}
         {screen === "prizes" && <ClientPrizes {...data} />}
+        {screen === "chat" && <ClientChat {...data} />}
       </ProfileWrapper>
       {showLogin && (
         <AuthModal user={user} closeModal={() => setShowLogin(false)} />
