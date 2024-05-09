@@ -2009,6 +2009,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.physics.pause()
       this.levelBoard.setVisible(true)
 
+      this.gameoverTexts["reachlevel"].setText(`LEVEL REACHED: ${level}`);
       this.levelBoardText.setText(`YOU COMPLETED LEVEL ${level}`);
       this.levelScoreText.setText(`SCORE: ${score}\nTOUCHDOWNS: ${this.status["score"].touchDown}`);
     }
