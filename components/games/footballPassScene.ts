@@ -1502,7 +1502,7 @@ export default class FootballPassScene extends Phaser.Scene {
     this.scoreNum = this.params.score;
     completedLevel = this.params.level ?? 0;
 
-    completedLevel = this.getLevelFromScore(this.scoreNum);
+    //completedLevel = this.getLevelFromScore(this.scoreNum);
 
     this.gameover_board = this.add.group();
     this.gameover_board.add(

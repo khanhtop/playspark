@@ -769,7 +769,7 @@ export default class newCricketScene extends Phaser.Scene {
 
     this.game_pause = false;
     this.scorePanel = {
-      fire_count: 0,
+      fire_count: this.params.level ?? 0,
       score_count: 0,
       missFire: 0,
       light: this.params.boostCredits ?? 0,
@@ -781,7 +781,7 @@ export default class newCricketScene extends Phaser.Scene {
       },
     };
     this.ui_item = {};
-    this.level = this.params.level ?? 0;
+    this.level = Math.min(Math.ceil(this.params.level ?? 0 / 6), 10);
     this.flag = false;
     this.is_audio_setting = true;
     this.power_flag = false;
@@ -3416,7 +3416,7 @@ export default class newCricketScene extends Phaser.Scene {
   }
 
   gameEnd() {
-    this.scoreHandler(this.scorePanel.totalScore, this.level, this.scorePanel.light);
+    this.scoreHandler(this.scorePanel.totalScore, this.scorePanel.fire_count, this.scorePanel.light);
   }
 
   startRound() {
