@@ -3049,7 +3049,7 @@ export default class newCricketScene extends Phaser.Scene {
       // } else if(author_id == 2) {
       //   this.player.play('paki_fire_ready_animation');
       // } else {
-        this.player.play(`p${author_id}_fire_ready_animation`);
+        this.player.play(`p${author_id}_ready_animation`);
         // this.player.play(`p${author_id}_fire_animation`);
       // }
     }
