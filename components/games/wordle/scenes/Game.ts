@@ -305,7 +305,7 @@ export default class WordleScene extends Phaser.Scene {
     GAME.LEVEL = this.params.level ?? 1;
 
     (UI as any)[CONSTS.UI_KEYS.SCORE_GAME].setText(GAME.SCORE);
-    GAME.STREAK = this.params.level-1 ?? 0;
+    GAME.STREAK = (this.params.level-1) % sampleWords.length ?? 0;
     // setTimeout(() => this.startRound(), 2500);
   }
 
