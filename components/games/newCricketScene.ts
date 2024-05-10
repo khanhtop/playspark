@@ -412,11 +412,11 @@ export default class newCricketScene extends Phaser.Scene {
     //load images
     this.load.audio(
       'Crowd_Cheers_v1_wav',
-      this.params.backgroundMusic ?? ('/pong/' + gameType + '/Crowd_Cheers_v1_wav.wav')
+      ('/pong/' + gameType + '/Crowd_Cheers_v1_wav.wav')
     );
     this.load.audio(
       'Crowd_Loop_v1_wav',
-      '/pong/' + gameType + '/background.wav'
+      this.params.backgroundMusic ?? ('/pong/' + gameType + '/background.wav')
     );
     this.load.audio(
       'Crowd_v1_Booing_wav',
