@@ -106,7 +106,14 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     SmashBlitzThrowing.instance = this;
     // console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
     this.params = _params;
-    this.gameType = gameType;
+    if (gameType) this.gameType = gameType;
+
+    // test
+    //this.params = {}
+    //this.params.level = 8;
+    //this.params.boostCredits = 7;
+    //this.params.lives = 6;
+    //this.params.score = 5;
   }
 
   width: number = 1920 / 2;
@@ -242,7 +249,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     let _lives = this.params ? this.params.lives : LIFE_COUNT;
     new LivesHandler(this, _lives);
 
-    this.boostCredits = this.params ? this.params.level ?? 0 : 0;
+    this.boostCredits = this.params
+      ? this.params.boostCredits ?? this.params.boostCredits
+      : 0;
     let powerupCounter = new BudgetCounter(this);
     powerupCounter.setPos(this.widthFactor * 0.9, this.heightFactor * 3.1);
     powerupCounter.instance.setScale(0.7, 0.7);
