@@ -9,8 +9,15 @@ import { useAppContext } from "@/helpers/store";
 import Button from "../forms/button";
 import { createChallenge } from "@/helpers/api";
 import { useRouter } from "next/router";
+import DMButton from "./directMessaging/dmButton";
 
-export default function UserModal({ userData, onClose, tournaments, totalXp }) {
+export default function UserModal({
+  userData,
+  onClose,
+  tournaments,
+  totalXp,
+  setScreen,
+}) {
   if (!userData) return <div />;
   const context = useAppContext();
   const router = useRouter();
@@ -151,6 +158,9 @@ export default function UserModal({ userData, onClose, tournaments, totalXp }) {
               client={client}
               onChallengeButtonClick={() => setIsChallenging(true)}
             />
+            <div className="flex justify-end mt-3">
+              <DMButton userData={userData} setScreen={setScreen} />
+            </div>
           </>
         )}
         <div

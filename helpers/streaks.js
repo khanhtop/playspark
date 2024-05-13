@@ -24,8 +24,8 @@ export const determineStreak = async (profile, uid, tournament) => {
     const maxStreak = streakData?.maxStreak || 0;
     const streakTimestamp = parseInt(streakData?.timestamp);
     const delta = Math.floor((Date.now() - streakTimestamp) / 1000);
-    const streakPeriod = 3600; // seconds
-    const streakExpiry = 7200; // seconds
+    const streakPeriod = 86400; // seconds
+    const streakExpiry = 172800; // seconds
 
     if (delta < streakExpiry) {
       await updateDoc(doc(firestore, "users", uid), {

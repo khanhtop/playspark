@@ -84,6 +84,7 @@ export default class FootballPassScene extends Phaser.Scene {
   private levelBoard: Phaser.GameObjects.Group;
   private levelBoardText: Phaser.GameObjects.Text;
   private levelScoreText: Phaser.GameObjects.Text;
+  gameover_board: any;
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -1501,7 +1502,25 @@ export default class FootballPassScene extends Phaser.Scene {
     this.scoreNum = this.params.score;
     completedLevel = this.params.level ?? 0;
 
-    completedLevel = this.getLevelFromScore(this.scoreNum);
+    //completedLevel = this.getLevelFromScore(this.scoreNum);
+
+    this.gameover_board = this.add.group();
+    this.gameover_board.add(
+      this.add.graphics()
+    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0).setDepth(200)
+    )
+    this.gameover_board.add(
+      this.add.text(mW, mH - 150, "GAME OVER").setOrigin(0.5, 0.5).setStyle({
+        align: 'center',
+        fill: '#ffffff',
+        fontSize: "35" + "px",
+      }).setStroke(
+        "#5b6437",
+        5
+      ).setScrollFactor(0, 0).setDepth(201)
+    )
+    this.gameover_board.setVisible(false)
 
     this.initGame();
 
@@ -1598,12 +1617,17 @@ export default class FootballPassScene extends Phaser.Scene {
   }
 
   loseGame() {
-    this.cameras.main.fadeOut(1000);
+    this.cameras.main.fadeOut(3000);
     this.final.play();
     this.scoreNum += this.getTotalScore();
-    this.scoreHandler(this.scoreNum, completedLevel);
+    this.gameover_board.setVisible(true)
+    this.time.delayedCall(3000, this.gameEnd, [], this);
     // game is lost
     //this.initGame();
+  }
+
+  gameEnd() {
+    this.scoreHandler(this.scoreNum, completedLevel);
   }
 
   loseLife(): boolean {
@@ -1985,6 +2009,7 @@ export default class FootballPassScene extends Phaser.Scene {
       this.physics.pause()
       this.levelBoard.setVisible(true)
 
+      this.gameoverTexts["reachlevel"].setText(`LEVEL REACHED: ${level}`);
       this.levelBoardText.setText(`YOU COMPLETED LEVEL ${level}`);
       this.levelScoreText.setText(`SCORE: ${score}\nTOUCHDOWNS: ${this.status["score"].touchDown}`);
     }

@@ -69,6 +69,22 @@ export function scoreEvent(context, score, data) {
   fireXpWebhook(context, data, Math.floor(score / 10));
 }
 
+export async function levelEvent(context, level, data) {
+  if (!level || level < 2) return;
+  let gameSpecificData = context?.profile?.gameSpecificData || {};
+  gameSpecificData[data.tournamentId] = {
+    ...gameSpecificData[data.tournamentId],
+    level: level,
+  };
+  await setDoc(
+    doc(firestore, "users", context.loggedIn.uid.toString()),
+    {
+      tournamentSpecificData: gameSpecificData,
+    },
+    { merge: true }
+  );
+}
+
 export async function rewardWithXP(xp, context, data) {
   context.setEvent({
     title: `+ ${xp}XP`,
