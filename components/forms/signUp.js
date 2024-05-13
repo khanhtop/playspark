@@ -181,7 +181,7 @@ export default function SignUp({ data, closeDialog }) {
   return (
     <div className="flex-1 pb-8 w-full h-full flex rounded-2xl   flex-col items-center justify-center relative ">
       {loading && (
-        <div className="absolute h-full w-full bg-white/90 flex items-center justify-center z-30">
+        <div className="absolute h-full w-full flex items-center justify-center z-30">
           <ArrowPathIcon className="h-12 w-12 animate-spin" />
         </div>
       )}
@@ -205,7 +205,7 @@ export default function SignUp({ data, closeDialog }) {
             }}
             className={`${
               phase === "signup" ? "text-white" : "text-black"
-            } flex-1 py-2 text-center cursor-pointer font-octo text-xl`}
+            } flex-1 py-2 text-center cursor-pointer font-octo text-xl rounded-full`}
           >
             Sign Up
           </p>
@@ -224,7 +224,7 @@ export default function SignUp({ data, closeDialog }) {
             }}
             className={`${
               phase === "login" ? "text-white" : "text-black"
-            } flex-1 text-center py-2 cursor-pointer font-octo text-xl`}
+            } flex-1 text-center py-2 cursor-pointer font-octo text-xl rounded-full`}
           >
             Login
           </p>
@@ -243,7 +243,7 @@ export default function SignUp({ data, closeDialog }) {
             <input
               className={`${
                 errorSource.email ? "border-red-500/50" : "border-transparent"
-              } border-2 bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]`}
+              } border-2 bg-black/20 placeholder-white/30 text-white px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]`}
               placeholder="Email"
               onChange={(e) => {
                 setErrorSource({ ...errorSource, email: false });
@@ -256,7 +256,7 @@ export default function SignUp({ data, closeDialog }) {
                   errorSource.password
                     ? "border-red-500/50"
                     : "border-transparent"
-                } border-2 bg-gray-200 px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]`}
+                } border-2 bg-black/20 placeholder-white/30 text-white px-2 py-2 mt-2 font-sans  rounded-lg  w-[90%]`}
                 placeholder="Password"
                 type="password"
                 onChange={(e) => {
