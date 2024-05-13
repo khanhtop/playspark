@@ -88,7 +88,8 @@ export default class WordleScene extends Phaser.Scene {
      /* sampleWords = Helper.shuffle([
         ...(this.params.words?.length > 0 ? this.params.words : sampleWords),
       ]); *///Helper.shuffle(["TOUCH", "COUCH", "TOUCH", "TOUCH", "TOUCH"]); //reza [...this.params.words])
-      sampleWords = Helper.shuffle([...(this.params.words)]); 
+      //sampleWords = Helper.shuffle([...(this.params.words)]); 
+      sampleWords = [...(this.params.words)]; 
     }
   }
 
