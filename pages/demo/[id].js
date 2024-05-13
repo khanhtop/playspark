@@ -29,6 +29,7 @@ export default function Demo({ ad, id }) {
 
 export async function getServerSideProps(context) {
   // Get the ad from the id here:
+  // For push
   const ad = await getDemo(context.query?.id);
   return {
     props: {
