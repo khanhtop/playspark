@@ -1276,7 +1276,7 @@ export default class newCricketSmashScene extends Phaser.Scene {
 
       this.player
         .setTexture(`p${author_id}_player_ready`)
-        .setPosition(h * 0.47, h / 2 - 20 * h  / 688)
+        .setPosition(h * 0.47, h / 2 - 380 * h  / 688)
         .setVisible(true);
       this.auth_country.setText(player_name[author_id - 1]);
       this.player.play(`p${author_id}_ready_animation`);
@@ -3413,6 +3413,7 @@ export default class newCricketSmashScene extends Phaser.Scene {
   }
 
   endRound() {
+    this.sound.mute = true;
     this.cameras.main.fadeOut(3000);
     this.gameover_board.setVisible(true)
 
