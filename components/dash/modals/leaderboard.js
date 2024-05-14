@@ -58,7 +58,7 @@ function PositionRow({ gameData, index, item, topSlice, isMine }) {
           : "rgba(255,255,255,0.5)",
         color: isMine ? gameData.textColor : gameData.primaryColor,
       }}
-      className="flex w-full pl-2 pr-4 rounded-full py-1 gap-4 items-center"
+      className="flex w-full pl-2 pr-4 rounded-full py-1 gap-2 items-center"
     >
       <div
         style={{
@@ -70,6 +70,13 @@ function PositionRow({ gameData, index, item, topSlice, isMine }) {
         <Text {...gameData} className="">
           {index + 1}
         </Text>
+      </div>
+      <div className="h-10 w-10 rounded-full overflow-hidden bg-[#777]">
+        {item.avatar ? (
+          <img src={item.avatar} className="scale-110" />
+        ) : (
+          <img src={"/branding/pad.png"} className="scale-75" />
+        )}
       </div>
       <p className="flex-1 font-octo text-xl">{item?.name}</p>
       <Text {...gameData} className="font-light text-xl">
