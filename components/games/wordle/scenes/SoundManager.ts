@@ -26,7 +26,7 @@ export class SoundManager {
     console.log("000000 init soubds");
 
     //reza this.sound.add("bg").setLoop(true).play();
-    app.sound.add("bg").play();
+    app.sound.add("bg").setLoop(true).play();
 
     this.submit = app.sound.add("submit");
     this.win = app.sound.add("win");
