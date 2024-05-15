@@ -3416,7 +3416,6 @@ export default class newCricketScene extends Phaser.Scene {
   }
 
   endRound() {
-    this.sound.mute = true;
     this.cameras.main.fadeOut(3000);
     this.gameover_board.setVisible(true)
     this.tweens.add({
