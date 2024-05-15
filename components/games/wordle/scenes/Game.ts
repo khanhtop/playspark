@@ -313,6 +313,7 @@ export default class WordleScene extends Phaser.Scene {
   loseGame() {
     this.cameras.main.fadeOut(3000);
     this.gameover_board.setVisible(true)
+    this.sound.mute = true;
 
     this.time.delayedCall(3000, () => {
       if (this.scoreHandler != undefined) this.scoreHandler(GAME.SCORE, GAME.LEVEL);
