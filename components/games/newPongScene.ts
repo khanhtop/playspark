@@ -749,7 +749,12 @@ export default class NewPongScene extends Phaser.Scene {
     this.cameras.main.fadeOut(3000);
     this.final.play();
     this.gameover_board.setVisible(true)
-
+    this.tweens.add({
+      targets: this.sound,
+      volume: 0,
+      duration: 2000, // Duration of the animation in milliseconds
+      ease: 'Bounce', // Easing function for a bouncing effect
+    });
     this.time.delayedCall(3000, this.gameEnd, [], this);
     // game is lost
     //this.initGame();
