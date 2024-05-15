@@ -548,7 +548,12 @@ export default class FallScene extends Phaser.Scene {
     this.playBombEffect(this.player.x, this.player.y)
 
     this.gameover_board.setVisible(true)
-
+    this.tweens.add({
+      targets: this.sound,
+      volume: 0,
+      duration: 2000, // Duration of the animation in milliseconds
+      ease: 'Bounce', // Easing function for a bouncing effect
+    });
     this.time.delayedCall(3000, this.gameEnd, [], this);
 
     // game is lost

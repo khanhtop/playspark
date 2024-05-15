@@ -37,7 +37,7 @@ export class SoundManager {
     let eventsSounds = [
       ["win", this.win],
       ["btn_click", this.btn],
-      ["onLoseGame", this.final],
+      //["onLoseGame", this.final],
       ["onWinGame", this.win],
       ["onSubmit", this.submit],
       ["onPowerUp", this.power_up],
