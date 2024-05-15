@@ -29,8 +29,6 @@ export default function IntroPanel({ data, theme, onAuthClick }) {
 
   const xp = context.profile?.dataByClient?.[data.ownerId]?.xp || 0;
 
-  console.log(data);
-
   return (
     <div
       style={{ height: open ? 180 : 90, transition: "height 0.5s" }}

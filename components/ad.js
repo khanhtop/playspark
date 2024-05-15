@@ -43,7 +43,7 @@ export default function Advert({
   const [lockX, setLockX] = useState();
   const [lockY, setLockY] = useState();
   const [shouldRotate, setShouldRotate] = useState(false);
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(null);
   const [level, setLevel] = useState(1);
   const [boostCredits, setBoostCredits] = useState(0);
   const [prevBest, setPrevBest] = useState();
@@ -77,9 +77,6 @@ export default function Advert({
   }, [score]);
 
   const callback = (score, level = null, boostCredits = null) => {
-    console.log(
-      `in ad files save level: ${level} boostCredits: ${boostCredits}`
-    );
     scoreEvent(context, score, data);
     levelEvent(context, level, data);
     if (reviveCount - MAX_REVIVES) {
@@ -87,14 +84,14 @@ export default function Advert({
       setScore(score);
       setLevel(level);
       setBoostCredits(boostCredits);
-      setStage(2);
+      setStage(0);
       setReviveCount(reviveCount + 1);
     } else {
       setLives(data.id === 11 ? 10 : 3);
       setScore(0);
       setLevel(1);
       setBoostCredits(0);
-      setStage(2);
+      setStage(0);
     }
   };
 
@@ -248,11 +245,16 @@ export default function Advert({
         <Intro
           signingIn={signingIn}
           data={data}
-          setStage={(a) => {
+          setStage={(a, withReset = false) => {
+            if (withReset) reset();
             setStage(a);
             if (!data.demo) {
               incrementPlayCount(data?.tournamentId?.toString(), "freemium");
             }
+          }}
+          gameOver={{
+            score: score,
+            reviveCount: MAX_REVIVES - reviveCount,
           }}
         />
       )}
