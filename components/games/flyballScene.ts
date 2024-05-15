@@ -1017,6 +1017,7 @@ export default class FlyBallScene extends Phaser.Scene {
   loseGame() {
     this.cameras.main.fadeOut(3000);
     this.gameover_board.setVisible(true)
+    this.sound.mute = true;
 
     this.time.delayedCall(3000, this.gameEnd, [], this);
     // game is lost
