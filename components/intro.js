@@ -19,8 +19,16 @@ import ModalLeaderboard from "./dash/modals/leaderboard";
 import { playClickSound } from "@/helpers/audio";
 import { themes } from "@/helpers/theming";
 import ModalAuth from "./dash/modals/auth";
+import ModalGameOver from "./dash/modals/gameOver";
 
-export default function Intro({ data, setStage, premium, ready, signingIn }) {
+export default function Intro({
+  data,
+  setStage,
+  premium,
+  ready,
+  signingIn,
+  gameOver,
+}) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
   useMusic(
@@ -30,6 +38,30 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
   );
 
   const theme = data?.theme || "default";
+
+  useEffect(() => {
+    if (gameOver.score !== null) {
+      setShowModal({
+        title: "Game Over",
+        content: ModalGameOver,
+        data: {
+          data,
+          gameOverScore: gameOver?.score,
+          gameOverRevives: gameOver?.reviveCount,
+          onRevive: () => {
+            setStage(1);
+          },
+          onAuth: () => {
+            setShowModal({
+              title: "Sign Up",
+              content: ModalAuth,
+              data: { ...data, onClose: () => setShowModal(false) },
+            });
+          },
+        },
+      });
+    }
+  }, [gameOver.score]);
 
   return (
     <div
@@ -67,7 +99,7 @@ export default function Intro({ data, setStage, premium, ready, signingIn }) {
             theme={theme}
             onClick={() => {
               playEvent(context, data);
-              setStage(1);
+              setStage(1, true);
             }}
           >
             START

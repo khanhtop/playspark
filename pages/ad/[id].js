@@ -2,7 +2,7 @@ import Advert from "@/components/ad";
 import PremiumAdvert from "@/components/premiumAd";
 import Modal from "@/components/ui/modal";
 import { getAd, getClient } from "@/helpers/api";
-import { decryptEmail, refactorEmail } from "@/helpers/crypto";
+import { decryptEmail, encryptEmail, refactorEmail } from "@/helpers/crypto";
 import { auth, firestore } from "@/helpers/firebase";
 import { generateProfile } from "@/helpers/profileGen";
 import { useAppContext } from "@/helpers/store";
