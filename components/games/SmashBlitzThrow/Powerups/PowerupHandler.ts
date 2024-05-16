@@ -4,9 +4,9 @@ export class PowerupHandler {
   scene: Phaser.Scene;
   currentTarget?: Phaser.GameObjects.Sprite;
   currentPowerupCount: number = 0;
-  constructor(_scene: Phaser.Scene) {
+  constructor(_scene: Phaser.Scene, count:number) {
     this.scene = _scene;
-    this.currentPowerupCount = 0;
+    this.currentPowerupCount = count;
     this.scene.events.emit("PowerupHandler:onChange", this.currentPowerupCount);
     this.scene.events.on("PowerupHandler:setCount", (count:number)=>{
      //console.log("---22 [[ PowerupHandler:setCount",count);

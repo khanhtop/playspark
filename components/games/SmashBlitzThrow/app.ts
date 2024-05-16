@@ -82,14 +82,14 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   livesCounter!: PairNumbersContainer;
   pointsCounter!: FourNumbersContainer;
   public config = {
-    type: Phaser.AUTO,
-    width: 960,
-    height: 512,
     parent: "game",
-    autoCenter: Phaser.Scale.CENTER_BOTH,
     scale: {
       mode: Phaser.Scale.FIT,
     },
+    type: Phaser.AUTO,
+    width: 960,
+    height: 512,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
     physics: {
       default: "arcade",
       arcade: {
@@ -107,7 +107,14 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     SmashBlitzThrowing.instance = this;
     // console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
     this.params = _params;
-    this.gameType = gameType;
+    if (gameType) this.gameType = gameType;
+
+    // test
+    //this.params = {}
+    //this.params.level = 8;
+    //this.params.boostCredits = 7;
+    //this.params.lives = 6;
+    //this.params.score = 5;
   }
 
   width: number = 1920 / 2;
@@ -170,8 +177,6 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     setTimeout(() => {
       this.bypassTutorial();
     }, TUTORIAL_DURATION * 1000);
-
- 
 
     new BallAndTargetsOverlap(this).init(ball);
     this.stretchingArrow = new StretchingArrow(this);
@@ -245,17 +250,19 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     let _lives = this.params ? this.params.lives : LIFE_COUNT;
     new LivesHandler(this, _lives);
 
-    this.boostCredits = 0;
+    this.boostCredits = this.params
+      ? this.params.boostCredits ?? this.params.boostCredits
+      : 0;
     let powerupCounter = new BudgetCounter(this);
     powerupCounter.setPos(this.widthFactor * 0.9, this.heightFactor * 3.1);
     powerupCounter.instance.setScale(0.7, 0.7);
 
     this.events.on("PowerupHandler:onChange", (count: number) => {
-      //console.log("PowerupHandler:onChange");
       powerupCounter.setText(count.toString());
       this.boostCredits = count;
     });
-    new PowerupHandler(this);
+
+    new PowerupHandler(this, this.boostCredits);
 
     let goalCounterContainer = new BudgetCounter(this);
     goalCounterContainer.setPos(this.widthFactor * 0.9, this.heightFactor * 2);
@@ -330,7 +337,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     });
 
     let retrievedLevel =
-      this.params == undefined ? 0 : parseInt(this.params.level) - 1;
+      this.params == undefined ? 0 : parseInt(this.params.level ?? 1) - 1;
     this.levelManager = new LevelManager(this, retrievedLevel);
     this.events.emit(
       "LevelManager:getCurrentLevel",
@@ -368,8 +375,6 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     this.gameover_board.setVisible(false)
     return;
   }
-  
-
 
   bypassTutorial() {
     if (Global.gameState == GAME_STATES.TUTURIAL) {
@@ -420,7 +425,7 @@ window.onload = () => {
     width: 960,
     height: 512,
     scene: SmashBlitzThrowing,
-
+    parent: "game",
     autoCenter: Phaser.Scale.CENTER_BOTH,
     scale: {
       mode: Phaser.Scale.FIT,
