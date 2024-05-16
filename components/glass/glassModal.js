@@ -36,22 +36,22 @@ export default function GlassModal({
               theme === "default"
                 ? "font-titan font-stroke rounded-full"
                 : theme === "pixel"
-                ? "font-pixel font-stroke text-3xl rounded-none pb-1"
+                ? "font-pixel text-3xl rounded-none pb-1"
                 : "font-neon rounded-full "
             } h-12 w-40 flex items-center justify-center border-2`}
           >
             <p>{title}</p>
           </div>
         </div>
-        <div className="flex justify-center absolute w-full -bottom-6">
+        <div className="flex justify-center absolute w-full -bottom-8">
           <div
             onClick={() => {
               playClickSound(context);
               onClose();
             }}
-            className="bg-red-500 hover:bg-red-600 transition cursor-pointer text-white h-12 w-12 rounded-full flex items-center justify-center border-2"
+            className="transition cursor-pointer text-white h-16 w-16 flex items-center justify-center"
           >
-            <XMarkIcon className="h-8 w-8" />
+            <img src={`/theme_icons/${theme}/close.png`} />
           </div>
         </div>
         <showWhen.content data={showWhen.data} />

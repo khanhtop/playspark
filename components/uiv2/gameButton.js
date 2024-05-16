@@ -77,15 +77,27 @@ export default function GameButton({
         }}
         className={`${className} rounded-none cursor-pointer w-60 h-16 relative`}
       >
-        <div className="absolute h-full w-full bg-[#00F] -left-1 -top-1 z-0" />
-        <div className="absolute h-full w-full bg-[#F00] left-1 top-1 z-0" />
+        <div
+          style={{
+            backgroundColor: disabled ? "#DDD" : bgColor || "cyan",
+            color: textColor || "white",
+          }}
+          className="absolute h-[90%] w-[105%] -left-[2.5%] top-[5%] z-0"
+        />
+        <div
+          style={{
+            backgroundColor: disabled ? "#DDD" : bgColor || "cyan",
+            color: textColor || "white",
+          }}
+          className="absolute h-[120%] w-[90%] left-[5%] -top-[10%] z-0"
+        />
         <div
           style={{ backgroundColor: disabled ? "#AAA" : bgColor || "cyan" }}
           className="absolute h-full w-full opacity-100 z-2"
         />
 
         <div
-          className={`absolute w-full h-full flex items-center justify-center font-pixel font-stroke text-5xl pb-1`}
+          className={`absolute w-full h-full flex items-center justify-center font-pixel text-5xl pb-1`}
         >
           {children}
         </div>

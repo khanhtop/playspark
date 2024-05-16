@@ -1,7 +1,7 @@
 import { AppWrapper } from "@/helpers/store";
 import "@/styles/globals.css";
 import localFont from "@next/font/local";
-import { Roboto, Tilt_Neon } from "next/font/google";
+import { Roboto, Tilt_Neon, VT323 } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -45,14 +45,21 @@ const octolight = localFont({
   variable: "--font-octolight",
 });
 
-const pixel = localFont({
-  src: [
-    {
-      path: "../public/fonts/Gamer.ttf",
-      weight: "400",
-    },
-  ],
+// const pixel = localFont({
+//   src: [
+//     {
+//       path: "../public/fonts/Gamer.ttf",
+//       weight: "400",
+//     },
+//   ],
+//   variable: "--font-pixel",
+// });
+
+const pixel = VT323({
+  subsets: ["latin"],
+  weight: ["400"],
   variable: "--font-pixel",
+  display: "swap",
 });
 
 const roboto = Roboto({

@@ -49,7 +49,7 @@ export default function IntroPanel({ data, theme, onAuthClick }) {
                 ? "font-titan font-stroke"
                 : theme === "neon"
                 ? "font-neon"
-                : "font-pixel uppercase text-3xl -my-1 font-stroke"
+                : "font-pixel uppercase text-3xl -my-1"
             }
           >
             {context?.profile?.companyName}
@@ -60,7 +60,7 @@ export default function IntroPanel({ data, theme, onAuthClick }) {
                 ? "font-titan font-stroke"
                 : theme === "neon"
                 ? "font-neon"
-                : "font-pixel uppercase text-2xl -my-2 -mt-3 font-stroke"
+                : "font-pixel uppercase text-2xl -my-2 -mt-3"
             }
           >
             XP: {xp}
@@ -73,7 +73,7 @@ export default function IntroPanel({ data, theme, onAuthClick }) {
           opacity: open ? 1 : 0,
           transition: "0.5s all",
         }}
-        className="flex-1 flex-col overflow-hidden font-stroke"
+        className="flex-1 flex-col overflow-hidden"
       >
         <div className="px-1 py-3">
           <p
@@ -82,7 +82,7 @@ export default function IntroPanel({ data, theme, onAuthClick }) {
                 ? "font-titan font-stroke"
                 : theme === "neon"
                 ? "font-neon"
-                : "font-pixel uppercase text-2xl -my-2 font-stroke"
+                : "font-pixel uppercase text-2xl -my-2"
             }
           >
             Play Count: {playCount}
@@ -93,7 +93,7 @@ export default function IntroPanel({ data, theme, onAuthClick }) {
                 ? "font-titan font-stroke"
                 : theme === "neon"
                 ? "font-neon"
-                : "font-pixel uppercase text-2xl -my-2 font-stroke"
+                : "font-pixel uppercase text-2xl -my-2"
             }
           >
             Top Score: {tournamentScore}
@@ -104,7 +104,7 @@ export default function IntroPanel({ data, theme, onAuthClick }) {
                 ? "font-titan font-stroke"
                 : theme === "neon"
                 ? "font-neon"
-                : "font-pixel uppercase text-2xl -my-2 font-stroke"
+                : "font-pixel uppercase text-2xl -my-2"
             }
           >
             Best Streak: {maxStreak}

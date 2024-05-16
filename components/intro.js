@@ -114,8 +114,8 @@ export default function Intro({
               theme={theme}
             >
               <IconButton
-                Icon={`/themeIcons/${theme}/1.png`}
-                icon={`/themeIcons/${theme}/1.png`}
+                Icon={`/theme_icons/${theme}/settings.png`}
+                icon={`/theme_icons/${theme}/settings.png`}
                 bgColor={data.primaryColor}
                 textColor={data.textColor}
                 theme={theme}
@@ -130,7 +130,7 @@ export default function Intro({
               />
               <IconButton
                 Icon={TrophyIcon}
-                icon={`/themeIcons/${theme}/2.png`}
+                icon={`/theme_icons/${theme}/battle.png`}
                 bgColor={data.primaryColor}
                 textColor={data.textColor}
                 theme={theme}
@@ -145,7 +145,7 @@ export default function Intro({
               />
               <IconButton
                 Icon={ChartBarIcon}
-                icon={`/themeIcons/${theme}/3.png`}
+                icon={`/theme_icons/${theme}/leaderboard.png`}
                 bgColor={data.primaryColor}
                 textColor={data.textColor}
                 theme={theme}
@@ -184,13 +184,12 @@ export default function Intro({
 function IconTray({ children, theme, bgColor, textColor }) {
   return (
     <div
-      style={{
-        backgroundColor:
-          theme === "default" ? "rgba(255,255,255,0.3)" : bgColor,
-      }}
+      // style={{
+      //   backgroundColor: theme === "default" ? "rgba(255,255,255,0)" : bgColor,
+      // }}
       className={`${
         theme === "pixel" ? "rounded-none" : "rounded-full"
-      } relative shadow-lg border-2 border-white/20 h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-0`}
+      } relative  h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-0`}
     >
       {children}
     </div>
