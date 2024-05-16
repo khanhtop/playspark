@@ -296,15 +296,20 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     this.levelCompletePopup.setPos(this.width / 2, this.height / 2);
     this.levelCompletePopup.hide();
 
+    let retrievedLevel =
+      this.params == undefined ? 0 : parseInt(this.params.level ?? 1) - 1;
+
     this.events.on("LoseManager:onLose", () => {
       this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
-        if (this.scoreHandler) this.scoreHandler(totalScore);
+        if (this.scoreHandler)
+          this.scoreHandler(totalScore, retrievedLevel + 1, this.boostCredits);
       });
     });
 
     this.events.on("PausePopup:onQuitClick", () => {
       this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
-        if (this.scoreHandler) this.scoreHandler(totalScore);
+        if (this.scoreHandler)
+          this.scoreHandler(totalScore, retrievedLevel + 1, this.boostCredits);
       });
     });
 
@@ -320,6 +325,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
           // console.log(data);
           //goalCounterContainer.setText(data[0]);
           this.hitCounterClass.setGoalCount(data[0]);
+          retrievedLevel = levelNum;
           this.levelCounter.setText(levelNum + 1);
           this.countDownTimer.set(data[1]);
           this.countDownTimer.start();
@@ -335,8 +341,6 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       );
     });
 
-    let retrievedLevel =
-      this.params == undefined ? 0 : parseInt(this.params.level ?? 1) - 1;
     this.levelManager = new LevelManager(this, retrievedLevel);
     this.events.emit(
       "LevelManager:getCurrentLevel",
