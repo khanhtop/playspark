@@ -25,7 +25,7 @@ export default function GlassModal({
       <div
         className={`${
           theme === "pixel"
-            ? "rounded-none bg-white/100"
+            ? "rounded-none bg-white/100 border-8 border-black"
             : "rounded-3xl bg-white/50"
         } h-[80%] w-[90%]  backdrop-blur z-30 relative border-2 `}
       >

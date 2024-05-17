@@ -1,9 +1,15 @@
 import GameButton from "@/components/uiv2/gameButton";
 import { useAppContext } from "@/helpers/store";
+import { useEffect } from "react";
 
 export default function ModalGameOver({ data }) {
   const context = useAppContext();
-  console.log(data);
+
+  const lb = data?.data?.leaderboard?.sort((a, b) => b.score - a.score) || [];
+
+  const lbIndex = lb.findIndex((a) => a.score < data?.gameOverScore);
+  const position = lbIndex === -1 ? lb.length + 1 : lbIndex + 1;
+
   return (
     <div className="pt-12 pb-4 px-4 flex flex-col gap-2 font-octo text-black text-2xl items-center">
       <div className="flex flex-col items-center mb-4">
@@ -16,6 +22,17 @@ export default function ModalGameOver({ data }) {
         >
           {data.gameOverScore}
         </h1>
+      </div>
+      <div className="flex items-center gap-0 mb-4 max-w-[400px]">
+        <img
+          src={`/theme_icons/${data.theme}/rank.png`}
+          className="h-24 w-24"
+        />
+        <p className="font-octo text-2xl text-center text-black/100 max-w-[120px]">
+          {!context?.loggedIn?.uid
+            ? `You could be ranked #${position}`
+            : `You ranked #${position} out of ${lb?.length + 1}`}
+        </p>
       </div>
       {!context?.loggedIn?.uid && (
         <div className="flex flex-col items-center gap-2 mb-4 max-w-[400px]">

@@ -78,7 +78,10 @@ function PositionRow({ gameData, index, item, topSlice, isMine }) {
           <img src={"/branding/pad.png"} className="scale-75" />
         )}
       </div>
-      <p className="flex-1 font-octo text-xl">{item?.name}</p>
+      <Text {...gameData} className="flex-1 font-light text-xl">
+        {item?.name}
+      </Text>
+      {/* <p className="flex-1 font-octo text-xl">{item?.name}</p> */}
       <Text {...gameData} className="font-light text-xl">
         {item?.score}
       </Text>

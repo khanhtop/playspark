@@ -46,6 +46,7 @@ export default function Intro({
         content: ModalGameOver,
         data: {
           data,
+          theme: theme,
           gameOverScore: gameOver?.score,
           gameOverRevives: gameOver?.reviveCount,
           onRevive: () => {
@@ -86,7 +87,11 @@ export default function Intro({
               setShowModal({
                 title: "Sign Up",
                 content: ModalAuth,
-                data: { ...data, onClose: () => setShowModal(false) },
+                data: {
+                  ...data,
+                  theme: theme,
+                  onClose: () => setShowModal(false),
+                },
               });
             }}
           />
@@ -130,7 +135,7 @@ export default function Intro({
               />
               <IconButton
                 Icon={TrophyIcon}
-                icon={`/theme_icons/${theme}/battle.png`}
+                icon={`/theme_icons/${theme}/rewards.png`}
                 bgColor={data.primaryColor}
                 textColor={data.textColor}
                 theme={theme}

@@ -7,7 +7,7 @@ export default function Text({ className, style, children, theme }) {
 
           //   fontSize: style?.fontSize ? style.fontSize + 16 : 32,
         }}
-        className={`${className} font-pixel scale-[1.8] uppercase`}
+        className={`${className} font-pixel uppercase`}
       >
         {children}
       </p>

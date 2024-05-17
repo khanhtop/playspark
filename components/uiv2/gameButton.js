@@ -103,7 +103,11 @@ export default function GameButton({
         </div>
         {badge && (
           <div
-            className={`absolute -top-2 -right-2 bg-red-500 h-8 w-8 flex items-center font-octo text-xl justify-center rounded-full border-2 border-white`}
+            className={`${
+              theme === "pixel"
+                ? "font-pixel -top-3 -right-3"
+                : "font-octo rounded-full border-2 border-white -top-2 -right-2 "
+            } absolute bg-red-500 h-8 w-8 flex items-center text-xl justify-center`}
           >
             {badge}
           </div>
