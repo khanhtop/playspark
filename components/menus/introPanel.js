@@ -43,7 +43,7 @@ export default function IntroPanel({ data, theme }) {
                 : "font-pixel uppercase text-3xl -my-1 font-stroke"
             }
           >
-            {context?.profile?.companyName}
+            {context?.config?.name || context?.profile?.companyName}
           </p>
           <p
             className={

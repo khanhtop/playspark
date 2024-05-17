@@ -230,7 +230,9 @@ export default function Advert({
       }}
     >
       <NotificationBar notification={context.event} />
-      <PopoutBackNav action={withPopoutBackNav} />
+      {!context?.config?.hideBackButton && (
+        <PopoutBackNav action={withPopoutBackNav} />
+      )}
       {/* {stage === 0 && context?.loggedIn?.uid && (
         <img
           onClick={() => logout()}
