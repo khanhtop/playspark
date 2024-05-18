@@ -54,7 +54,7 @@ export class TutorialMessage {
 
     this.group.setPosition(x, y);
     this.scene.events.on("GoalCounter:onChange", (counter: number) => {
-      if (counter <= 0) console.log("---- you win");
+      //if (counter <= 0) console.log("---- you win");
     });
   }
   hide() {

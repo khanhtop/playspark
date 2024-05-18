@@ -21,7 +21,6 @@ export class ScoreManager {
         this.currentScore += 10 * this.multiplier;
         this.totalScore += 10 * this.multiplier;
 
-       // console.log(this.currentScore);
         this.scene.events.emit("ScoreManager:onChange", this.currentScore);
       }
       if (
@@ -32,7 +31,6 @@ export class ScoreManager {
         this.currentScore += 5 * this.multiplier;
         this.totalScore += 5 * this.multiplier;
 
-        //console.log(this.currentScore);
         this.scene.events.emit("ScoreManager:onChange", this.currentScore);
       }
     });
@@ -40,6 +38,7 @@ export class ScoreManager {
 
   setCount(count: number) {
     this.currentScore = count;
+    this.totalScore = count;
     this.scene.events.emit("ScoreManager:onChange", this.currentScore);
   }
 }

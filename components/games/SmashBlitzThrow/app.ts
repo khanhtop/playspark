@@ -100,12 +100,11 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
   };
 
   private params: any;
-  gameover_board: any;
 
   constructor(gameType: any, _params: any) {
     super();
     SmashBlitzThrowing.instance = this;
-    // console.log(`----[[[ _params \n ${gameType} \n ${_params}`);
+
     this.params = _params;
     if (gameType) this.gameType = gameType;
 
@@ -139,6 +138,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     }, 100);
   }
   initialize() {
+   
+
+
     new Audios(this);
     new GameStateCtrl(this);
 
@@ -152,6 +154,18 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       ? this.params.backgroundSprite
       : undefined;
     new BackGroundManager(this, backgroundSprite, this.width, this.height); //this.params.backgroundSprite);
+    let versiontxt = this.make.text({
+      x: this.renderer.width,
+      y: this.renderer.height,
+      origin:1,
+      text: 'v1.0',
+      
+      style: {
+        font: '20px monospace',
+      },
+    });
+    versiontxt.setStroke(`0x000000`,2)
+
     let throwingCenterX = this.widthFactor * 1.6;
     let throwingCenterY = this.heightFactor * 7.3;
     new TargetFactory(this, this.width, this.height, 128).init();
@@ -297,20 +311,19 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     this.levelCompletePopup.setPos(this.width / 2, this.height / 2);
     this.levelCompletePopup.hide();
 
-    let retrievedLevel =
-      this.params == undefined ? 0 : parseInt(this.params.level ?? 1) - 1;
+    let currentLevel =
+    this.params == undefined ? 0 : parseInt(this.params.level ?? 1) - 1;
+
 
     this.events.on("LoseManager:onLose", () => {
       this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
-        if (this.scoreHandler)
-          this.scoreHandler(totalScore, retrievedLevel + 1, this.boostCredits);
+        if (this.scoreHandler) this.scoreHandler(totalScore , currentLevel + 1 , this.boostCredits);
       });
     });
 
     this.events.on("PausePopup:onQuitClick", () => {
       this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
-        if (this.scoreHandler)
-          this.scoreHandler(totalScore, retrievedLevel + 1, this.boostCredits);
+        if (this.scoreHandler) this.scoreHandler(totalScore, currentLevel + 1, this.boostCredits);
       });
     });
 
@@ -326,7 +339,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
           // console.log(data);
           //goalCounterContainer.setText(data[0]);
           this.hitCounterClass.setGoalCount(data[0]);
-          retrievedLevel = levelNum;
+          currentLevel = levelNum;
           this.levelCounter.setText(levelNum + 1);
           this.countDownTimer.set(data[1]);
           this.countDownTimer.start();
@@ -342,7 +355,8 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       );
     });
 
-    this.levelManager = new LevelManager(this, retrievedLevel);
+
+    this.levelManager = new LevelManager(this, currentLevel);
     this.events.emit(
       "LevelManager:getCurrentLevel",
       (levelNum: number, data: any) => {
@@ -360,23 +374,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
     this.powerupOverlay = PowerupOverlay.getInstance(this);
     this.add.container(this.width / 2, this.height / 2, this.powerupOverlay);
-    this.gameover_board = this.add.group();
-    this.gameover_board.add(
-      this.add.graphics()
-    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
-    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0).setDepth(200)
-    )
-    this.gameover_board.add(
-      this.add.text(this.width / 2, this.height / 2, "GAME OVER").setOrigin(0.5, 0.5).setStyle({
-        align: 'center',
-        fill: '#ffffff',
-        fontSize: "35" + "px",
-      }).setStroke(
-        "#5b6437",
-        5
-      ).setScrollFactor(0, 0).setDepth(201)
-    )
-    this.gameover_board.setVisible(false)
+
     return;
   }
 
@@ -424,7 +422,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 }
 
 window.onload = () => {
-  /*const config = {
+  const config = {
     type: Phaser.AUTO,
     width: 960,
     height: 512,
@@ -443,5 +441,5 @@ window.onload = () => {
     },
   };
 
-  const game = new Phaser.Game(config);*/
+  const game = new Phaser.Game(config);
 };
