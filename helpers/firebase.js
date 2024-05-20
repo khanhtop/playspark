@@ -28,3 +28,7 @@ export const logout = (href) => {
   signOut(auth);
   window.location.href = href || "/";
 };
+
+export const logoutWithoutReroute = () => {
+  signOut(auth);
+};

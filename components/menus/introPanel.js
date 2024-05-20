@@ -52,7 +52,7 @@ export default function IntroPanel({ data, theme, onAuthClick }) {
                 : "font-pixel uppercase text-3xl -my-1"
             }
           >
-            {context?.profile?.companyName}
+            {context?.config?.name || context?.profile?.companyName}
           </p>
           <p
             className={

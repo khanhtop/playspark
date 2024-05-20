@@ -21,6 +21,12 @@ import { playNotificationSound } from "./audio";
 export const AppContext = createContext();
 
 export function AppWrapper({ children }) {
+  const [config, setConfig] = useState({
+    name: null,
+    hideBackButton: false,
+    hideRevive: false,
+    forceLogout: false,
+  });
   const [isAuthed, setIsAuthed] = useState(false);
   const [loggedIn, setLoggedIn] = useState();
   const [profile, setProfile] = useState();
@@ -251,7 +257,11 @@ export function AppWrapper({ children }) {
     setAvatars(json.thumbnails);
   };
 
+  console.log(config);
+
   const sharedState = {
+    config,
+    setConfig,
     isAuthed,
     loggedIn,
     profile,

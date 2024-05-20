@@ -2,8 +2,13 @@ import Advert from "@/components/ad";
 import PremiumAdvert from "@/components/premiumAd";
 import Modal from "@/components/ui/modal";
 import { getAd, getClient } from "@/helpers/api";
-import { decryptEmail, encryptEmail, refactorEmail } from "@/helpers/crypto";
-import { auth, firestore } from "@/helpers/firebase";
+import { decryptEmail, refactorEmail } from "@/helpers/crypto";
+import {
+  auth,
+  firestore,
+  logout,
+  logoutWithoutReroute,
+} from "@/helpers/firebase";
 import { generateProfile } from "@/helpers/profileGen";
 import { useAppContext } from "@/helpers/store";
 import { determineStreak } from "@/helpers/streaks";
@@ -20,6 +25,7 @@ import {
   setDoc,
   where,
 } from "firebase/firestore";
+import { setConfig } from "next/config";
 import Head from "next/head";
 import { useEffect, useState, useMemo } from "react";
 import { isIOS, isAndroid, isSafari } from "react-device-detect";
@@ -27,8 +33,7 @@ import { isIOS, isAndroid, isSafari } from "react-device-detect";
 export default function Ad({
   ad,
   id,
-  coins,
-  xp,
+  config,
   userId,
   email,
   externalId,
@@ -52,6 +57,15 @@ export default function Ad({
       }
     }
   }, [context.isAuthed, externalId, externalPass]);
+
+  // Force Logout
+  const [hasLoggedOut, setHasLoggedOut] = useState(false);
+  useEffect(() => {
+    if (config.forceLogout && !hasLoggedOut) {
+      setHasLoggedOut(true);
+      logoutWithoutReroute();
+    }
+  }, [config.forceLogout]);
 
   const handleAutomatedSignin = async () => {
     if (!externalId || !externalPass || context?.loggedIn?.uid) return;
@@ -118,6 +132,10 @@ export default function Ad({
     }
   }, [context]);
 
+  useEffect(() => {
+    context.setConfig(config);
+  }, [config]);
+
   return (
     <>
       <Head>
@@ -177,6 +195,10 @@ export default function Ad({
 export async function getServerSideProps(context) {
   // Get the ad from the id here:
   const { id, email, xp, coins, userId, user, platform } = context?.query;
+
+  // Additional parameters
+  const { name, hideback, hiderevive, forcelogout } = context?.query;
+
   let externalId = null;
   let externalPass = null;
 
@@ -214,6 +236,12 @@ export async function getServerSideProps(context) {
       xpWebhook: client?.xpWebhook || null,
       externalId: externalId,
       externalPass: externalPass,
+      config: {
+        name: name || null,
+        hideBackButton: hideback === "true" ? true : false,
+        hideRevive: hiderevive === "true" ? true : false,
+        forceLogout: forcelogout === "true" ? true : false,
+      },
     },
   };
 }
