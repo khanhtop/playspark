@@ -26,6 +26,23 @@ export class Audios {
 
     background.setLoop(true).play();
 
+    this.scene.events.on("LoseManager:onLose", () => {
+      _scene.tweens.addCounter({
+        from: 1,
+        to: 0,
+        duration: 3000,
+     
+        onUpdate: (tween) => {
+          const v = tween.getValue();
+          background.setVolume(v)
+        },
+        onComplete: () => {
+        },
+      });
+
+     
+    });
+
     this.scene.events.on("TargetHitCounter:onTargetHit", () => {
       if (!this.canPlay) return;
       point.play();

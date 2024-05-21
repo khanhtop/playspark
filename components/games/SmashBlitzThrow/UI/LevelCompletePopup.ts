@@ -1,3 +1,4 @@
+import { LevelManager } from "../LevelManager";
 import { PlayerContainer } from "../Player/PlayerContainer";
 import { PlayerController } from "../Player/PlayerController";
 
@@ -11,12 +12,14 @@ export class LevelCompletePopup {
   //blach_bg: () => Phaser.GameObjects.Graphics;
   blach_bg: Phaser.GameObjects.Graphics;
   drawBlackBg: () => void;
+  nextLevelTitle: Phaser.GameObjects.Text;
 
   constructor(_scene: Phaser.Scene, width: number, height: number) {
     this.scene = _scene;
 
     this.blach_bg = _scene.add.graphics();
 
+    let diff = 50;
     this.drawBlackBg = () => {
       this.blach_bg
         .clear()
@@ -48,7 +51,7 @@ export class LevelCompletePopup {
     //.setCrop(0, 0, 200, 500);
 
     let targetHitTitle = _scene.add
-      .text(10, -70, `TARGETS HIT:`, bebas_font)
+      .text(10 - diff, -70, `TARGETS HIT:`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
 
@@ -56,7 +59,7 @@ export class LevelCompletePopup {
       .setCrop(0, 0, 200, 500);
 
     this.targetHit = _scene.add
-      .text(115, -70, `00`, bebas_font)
+      .text(115 - diff, -70, `00`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
 
@@ -64,7 +67,7 @@ export class LevelCompletePopup {
     //  .setCrop(0, 0, 200, 500);
 
     let scoreTitle = _scene.add
-      .text(10, -40, `SCORE:`, bebas_font)
+      .text(10 - diff, -40, `SCORE:`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
       .setAlign("left")
@@ -72,13 +75,13 @@ export class LevelCompletePopup {
       .setCrop(0, 0, 200, 500);
 
     this.score = _scene.add
-      .text(70, -40, `000`, bebas_font)
+      .text(70 - diff, -40, `000`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
       .setAlign("left");
 
-    let youEarnedTitle = _scene.add
-      .text(52, 0, `YOU EARNED`, bebas_font)
+    this.nextLevelTitle = _scene.add
+      .text(8 - diff, 0, `Next Level (Level ${0})`, bebas_font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
       .setAlign("left")
@@ -86,18 +89,18 @@ export class LevelCompletePopup {
       .setCrop(0, 0, 200, 500);
 
     this.earnedCoinTitle = _scene.add
-      .text(75, 35, `${0}  COINS`, bebas_font)
+      .text(8 - diff, 35, `Hit ${0} targets in ${0} seconds`, bebas_font)
       .setOrigin(0, 0.5)
-      .setAlign("left")
-      .setColor("#E6452A");
+      .setAlign("left");
+    //.setColor("#E6452A");
 
-    let coins = _scene.add
+    /*let coins = _scene.add
       .sprite(50, 35, "coins")
       .setOrigin(0.5, 0.5)
-      .setDisplaySize(45, 45);
+      .setDisplaySize(45, 45);*/
 
     let blue_btn = _scene.add
-      .sprite(-100, 100, "blue_btn")
+      .sprite(0, 110, "blue_btn")
       .setOrigin(0.5, 0.5)
       .setInteractive()
       .setDisplaySize(120 * 1.3, 90 * 1.3);
@@ -114,8 +117,8 @@ export class LevelCompletePopup {
     );
 
     let claimTitle = _scene.add
-      .text(-139, 97, `CLAIM`, font)
-      .setOrigin(0, 0.5)
+      .text(0, 97 + 10, `CLAIM`, font)
+      .setOrigin(0.5, 0.5)
       .setSize(200, 500)
       .setFontSize(40)
       .setAlign("center")
@@ -125,11 +128,11 @@ export class LevelCompletePopup {
     //.setPadding(0,50,0,50)
     //.setCrop(0, 0, 200, 500);
 
-    let green_ads_btn = _scene.add
+    /* let green_ads_btn = _scene.add
       .sprite(80, 100, "green_ads_btn")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(120 * 1.3, 90 * 1.6);
-
+*/
     let bg = _scene.add
       .sprite(0, 0, "popup_bg")
       .setOrigin(0.5, 0.5)
@@ -155,11 +158,11 @@ export class LevelCompletePopup {
     this.group.add(this.title);
     this.group.add(targetHitTitle);
     this.group.add(scoreTitle);
-    this.group.add(youEarnedTitle);
+    this.group.add(this.nextLevelTitle);
     this.group.add(this.earnedCoinTitle);
-    this.group.add(coins);
+    //this.group.add(coins);
     this.group.add(blue_btn);
-    this.group.add(green_ads_btn);
+    //this.group.add(green_ads_btn);
     this.group.add(claimTitle);
     this.group.add(this.score);
     this.group.add(this.targetHit);
@@ -182,6 +185,19 @@ export class LevelCompletePopup {
     this.earnedCoinTitle.setText(`${coins} COINS!`);
     this.score.setText(score.toString());
     this.targetHit.setText(targetHit.toString());
+
+    let nextLevelTxt = "";
+    let tergetTxt = "";
+
+    if (level < LevelManager.instance.data.length - 1) {
+      let targetCount = LevelManager.instance.data[level][0];
+      let timer = LevelManager.instance.data[level][1];
+
+      nextLevelTxt = `Next Level (Level ${level + 1})`;
+      tergetTxt = `Hit ${targetCount} targets in ${timer} seconds`;
+    }
+    this.nextLevelTitle.setText(nextLevelTxt);
+    this.earnedCoinTitle.setText(tergetTxt);
   }
   public hide() {
     this.blach_bg.clear();
