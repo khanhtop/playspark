@@ -52,6 +52,7 @@ import { RocketBoostBtn } from "./Powerups/RocketBoostBtn";
 import { FlameBoostBtn } from "./Powerups/FlameBoostBtn";
 import { getRandomInt } from "./Helper";
 import { Targets } from "./Targets";
+import { GameOverPopup } from "./UI/GameOverPopup";
 
 export default class SmashBlitzThrowing extends Phaser.Scene {
   public static instance: SmashBlitzThrowing;
@@ -138,9 +139,6 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     }, 100);
   }
   initialize() {
-   
-
-
     new Audios(this);
     new GameStateCtrl(this);
 
@@ -157,14 +155,14 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     let versiontxt = this.make.text({
       x: this.renderer.width,
       y: this.renderer.height,
-      origin:1,
-      text: 'v1.0',
-      
+      origin: 1,
+      text: "v1.1",
+
       style: {
-        font: '20px monospace',
+        font: "20px monospace",
       },
     });
-    versiontxt.setStroke(`0x000000`,2)
+    versiontxt.setStroke(`0x000000`, 2);
 
     let throwingCenterX = this.widthFactor * 1.6;
     let throwingCenterY = this.heightFactor * 7.3;
@@ -246,6 +244,9 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     let pointPopup = new PointPopup(this);
     pointPopup.setPos(this.width / 2, this.height / 2);
 
+    let gameOverPopup = new GameOverPopup(this);
+    gameOverPopup.setPos(this.width / 2, this.height / 2);
+
     this.events.on("ScoreManager:onChange", (currentScore: number) => {
       this.pointsCounter.setText(currentScore);
       if (currentScore != 0) pointPopup.show(currentScore - this.prevScore);
@@ -312,18 +313,23 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     this.levelCompletePopup.hide();
 
     let currentLevel =
-    this.params == undefined ? 0 : parseInt(this.params.level ?? 1) - 1;
+      this.params == undefined ? 0 : parseInt(this.params.level ?? 1) - 1;
 
+    this.events.on("GameOver:onComplete", () => {
+      this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
+        if (this.scoreHandler)
+          this.scoreHandler(totalScore, currentLevel + 1, this.boostCredits);
+      });
+    });
 
     this.events.on("LoseManager:onLose", () => {
-      this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
-        if (this.scoreHandler) this.scoreHandler(totalScore , currentLevel + 1 , this.boostCredits);
-      });
+      gameOverPopup.show();
     });
 
     this.events.on("PausePopup:onQuitClick", () => {
       this.events.emit("ScoreManager:getTotalScore", (totalScore: number) => {
-        if (this.scoreHandler) this.scoreHandler(totalScore, currentLevel + 1, this.boostCredits);
+        if (this.scoreHandler)
+          this.scoreHandler(totalScore, currentLevel + 1, this.boostCredits);
       });
     });
 
@@ -354,7 +360,6 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
         }
       );
     });
-
 
     this.levelManager = new LevelManager(this, currentLevel);
     this.events.emit(
