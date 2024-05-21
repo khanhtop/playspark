@@ -6,7 +6,6 @@ export default function DMButton({ userData, setScreen }) {
   return (
     <div
       onClick={() => {
-        console.log(userData);
         context.setLatestChat(userData.id);
         setScreen("chat");
       }}

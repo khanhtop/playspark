@@ -12,8 +12,6 @@ export default function Leaderboard({ score, gameData }) {
   const [data, setData] = useState();
   const context = useAppContext();
 
-  console.log(context);
-
   useMemo(() => {
     if (!gameData.tournamentId || !context?.profile?.companyName) return;
     getLeaderboard(gameData.tournamentId).then(async (lb) => {

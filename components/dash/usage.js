@@ -40,12 +40,6 @@ export default function Usage({}) {
     setMyTournaments(out);
   }, []);
 
-  useEffect(() => {
-    if (myTournaments) {
-      console.log(myTournaments);
-    }
-  }, [myTournaments]);
-
   return (
     <div className="flex flex-wrap text-white flex-col overflow-x-hidden">
       <h1 className="text-2xl">Billing & Usage</h1>

@@ -21,8 +21,6 @@ export default function AccountInfo({
   const [avatar, setAvatar] = useState(context?.profile?.profilePhoto);
   const [loading, setLoading] = useState(false);
 
-  console.log(avatars);
-
   const updateProfile = () => {
     if (name) {
       setDoc(

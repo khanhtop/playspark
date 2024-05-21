@@ -34,8 +34,6 @@ export default function CreateConfigReimage({ tournament, setTournament }) {
     }
   }, [selectedSprite]);
 
-  console.log(images);
-
   return (
     <div className="">
       <div className="flex items-center">

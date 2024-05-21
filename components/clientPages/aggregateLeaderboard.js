@@ -48,7 +48,6 @@ function Rank({ item, pos, user, showModal, myId }) {
   const [loading, setLoading] = useState(false);
   const handleClick = async () => {
     showModal(item);
-    console.log(item);
   };
 
   return (

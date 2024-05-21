@@ -54,7 +54,6 @@ export default function SurveyInput({ survey, onChange }) {
             onDeleteResponse={(questionIndex, responseIndex) => {
               const _survey = survey;
               delete _survey[questionIndex]["responses"][responseIndex];
-              console.log(_survey);
               onChange(_survey);
             }}
             onDeleteQuestion={(questionIndex) => {

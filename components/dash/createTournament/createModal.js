@@ -25,11 +25,10 @@ export default function CreateModal({ data, hide }) {
     homescreenMusic:
       "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713844467/slowtempo-softrock-intro.mp3",
     rewards: [],
+    endDate: new Date(new Date().setMonth(new Date().getMonth() + 3)),
   });
   const [adding, setAdding] = useState(false);
   const [imageLibrary, setImageLibrary] = useState();
-
-  console.log(tournament);
 
   const createTournament = async () => {
     setAdding(true);

@@ -28,6 +28,7 @@ export default function Intro({
   ready,
   signingIn,
   gameOver,
+  endDate,
 }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
@@ -38,6 +39,8 @@ export default function Intro({
   );
 
   const theme = data?.theme || "default";
+
+  const expired = !data.isActive || (endDate && endDate < new Date());
 
   useEffect(() => {
     if (gameOver.score !== null) {
@@ -99,6 +102,7 @@ export default function Intro({
 
         {(!premium || ready) && (
           <GameButton
+            disabled={expired}
             bgColor={data.primaryColor}
             textColor={data.textColor}
             theme={theme}
@@ -107,7 +111,7 @@ export default function Intro({
               setStage(1, true);
             }}
           >
-            START
+            {expired ? "Game Ended" : "START"}
           </GameButton>
         )}
 

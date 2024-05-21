@@ -239,7 +239,6 @@ function BattleInviteCard({ tournament, me, you, battle, myUid }) {
 }
 
 function BattleCard({ battle, myUid, user }) {
-  console.log(battle);
   const hasStarted = battle?.challengerResult;
   const isComplete = battle?.challengeeResult;
   const challengerWon =

@@ -55,7 +55,6 @@ export default function PremiumAdvert({ data }) {
         }
       }
       if (!data.demo) {
-        console.log(_leaderboard);
         setDoc(
           doc(firestore, "tournaments", data.tournamentId.toString()),
           {

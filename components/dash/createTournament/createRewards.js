@@ -58,8 +58,6 @@ const outputOperands = [
 ];
 
 export default function CreateRewards({ tournament, setTournament }) {
-  console.log(tournament.rewards);
-
   return (
     <div className="text-white flex flex-col gap-2 w-full items-start">
       {tournament?.rewards?.map((item, key) => (

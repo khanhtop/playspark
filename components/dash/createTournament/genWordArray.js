@@ -27,8 +27,6 @@ export default function GenWordArray({
     setCurrentWord("");
   };
 
-  console.log(customWords, tournament.words);
-
   const generateWords = async () => {
     const messages = [
       getWordlePrompt(),
@@ -43,7 +41,6 @@ export default function GenWordArray({
     });
     const data = await response.json();
     if (data.answer) {
-      console.log(data.answer);
       const words = data.answer.filter(
         (a) => a.length === 5 && !tournament.words.includes(a)
       );

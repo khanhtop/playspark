@@ -61,6 +61,17 @@ export default function Advert({
     });
   }, [userId, email]);
 
+  const parseEndDate = (date) => {
+    if (date) {
+      const parsed = JSON.parse(date);
+      const milliseconds =
+        parsed.seconds * 1000 + Math.floor(parsed.nanoseconds / 1000000);
+      return new Date(milliseconds);
+    } else {
+      return null;
+    }
+  };
+
   useMemo(() => {
     if (!data.tournamentId || !context.loggedIn?.uid) return;
     getHighScore(data.tournamentId, context?.loggedIn?.uid).then(
@@ -245,6 +256,7 @@ export default function Advert({
       )}
       {stage === 0 && (
         <Intro
+          endDate={parseEndDate(data.endDate)}
           signingIn={signingIn}
           data={data}
           setStage={(a, withReset = false) => {

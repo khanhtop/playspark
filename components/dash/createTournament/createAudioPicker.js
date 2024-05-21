@@ -14,8 +14,6 @@ export default function CreateAudioPicker({
 }) {
   const [stateImages, setStateImages] = useState();
 
-  console.log(stateImages);
-
   useEffect(() => {
     if (!stateImages) {
       fetch(`/api/cloudinaryAudioGet?gameTag=${gameTag}`)
@@ -32,7 +30,6 @@ export default function CreateAudioPicker({
     const slashSplit = url.split("/").pop();
     const dotSplit = slashSplit.split(".")?.[0];
     const hyphenSplit = dotSplit.split("-");
-    console.log(hyphenSplit);
     return hyphenSplit;
   }
 

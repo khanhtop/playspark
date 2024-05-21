@@ -49,8 +49,6 @@ export default function DMMessages({ chatter }) {
     };
   }, []);
 
-  console.log(chats);
-
   return (
     <div className="flex-1 bg-white/5 rounded-xl flex flex-col">
       <div className="flex-1 px-4 py-4 flex flex-col-reverse gap-4">

@@ -16,8 +16,6 @@ export default function ChallengeOutro({ score, data, xpStealAmount, riskXp }) {
   const challengerWon =
     parseInt(data?.challengerResult?.score) > parseInt(score);
 
-  console.log(riskXp);
-
   return (
     <div className="relative h-full w-full flex items-center justify-center">
       <img

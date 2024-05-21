@@ -24,7 +24,6 @@ export default function OldOutro({
   onReset,
 }) {
   const context = useAppContext();
-  console.log("PREV", prevBest);
 
   const selectStage = () => {
     const possibleRouting = [];

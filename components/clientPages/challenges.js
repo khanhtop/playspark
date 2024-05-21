@@ -9,8 +9,6 @@ export default function Challenges({ data, user, viewAchievements }) {
   const nPlaysChallenge = getChallenge("nPlays", data.nPlays);
   const [showModal, setShowModal] = useState(false);
 
-  console.log(data);
-
   return (
     <>
       <EmbeddedModal

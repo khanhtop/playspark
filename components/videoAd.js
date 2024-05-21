@@ -20,7 +20,6 @@ export default function VideoAd({ data, onSkip, video }) {
   const shouldClaim = (time) => {
     setRemainingTime(Math.floor(totalLength - time - 9));
     if (time > totalLength - 10) {
-      console.log("TRIG");
       setShowClaim(true);
     }
   };

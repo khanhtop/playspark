@@ -28,8 +28,6 @@ export default function Outro({ score, setStage, data, reviveCount, onReset }) {
     }
   };
 
-  console.log(data);
-
   return (
     <div
       style={{

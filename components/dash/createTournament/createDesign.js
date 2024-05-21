@@ -3,6 +3,8 @@ import CreateColorPicker from "./createColorPicker";
 import ImagePicker from "@/components/forms/imagePicker";
 import { BrandingComponent } from "../unlocksWithTier";
 import CreateAudioPicker from "./createAudioPicker";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function CreateDesign({ tournament, setTournament }) {
   return (
@@ -38,6 +40,43 @@ export default function CreateDesign({ tournament, setTournament }) {
         <option value="pixel">Pixel</option>
         <option value="neon">Neon</option>
       </select>
+      <div className="my-4">
+        <p className="text-xs text-white/70 mt-4 mb-1">Tournament End Date</p>
+        <div className="flex gap-2">
+          {tournament?.endDate !== null && (
+            <DatePicker
+              showTimeSelect
+              className={`bg-transparent text-white ${
+                tournament?.endDate === null
+                  ? "border-cyan-500/20 text-white/20"
+                  : "border-cyan-500 text-white/100"
+              } border-2 rounded-md px-2 py-1`}
+              selected={tournament?.endDate || new Date()}
+              onChange={(date) =>
+                setTournament({ ...tournament, endDate: date })
+              }
+            />
+          )}
+          <button
+            onClick={() => {
+              if (tournament?.endDate === null) {
+                setTournament({
+                  ...tournament,
+                  endDate: new Date(
+                    new Date().setMonth(new Date().getMonth() + 3)
+                  ),
+                });
+              } else {
+                setTournament({ ...tournament, endDate: null });
+              }
+            }}
+            className="text-white/50 underline"
+          >
+            {tournament?.endDate === null ? "Add End Date" : "No End Date"}
+          </button>
+        </div>
+      </div>
+
       <BrandingComponent>
         <div className="mt-4">
           <ImagePicker

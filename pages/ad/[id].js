@@ -172,18 +172,12 @@ export default function Ad({
         className={`text-white font-bold w-[calc(100dvw)] h-[calc(100dvh)] flex items-center bg-black justify-center`}
       >
         {ad ? (
-          !ad.isActive ? (
-            <p>This tournament is not currently running.</p>
-          ) : ad.isPremium ? (
-            <PremiumAdvert data={ad} />
-          ) : (
-            <Advert
-              signingIn={signingIn}
-              data={ad}
-              userId={userId}
-              email={email}
-            />
-          )
+          <Advert
+            signingIn={signingIn}
+            data={ad}
+            userId={userId}
+            email={email}
+          />
         ) : (
           <p>{id} - AD NOT FOUND</p>
         )}
@@ -227,6 +221,7 @@ export async function getServerSideProps(context) {
       id: id,
       ad: {
         ...ad,
+        endDate: ad.endDate ? JSON.stringify(ad.endDate) : null,
         xpWebhook: client?.xpWebhook || null,
       },
       email: email || null,
@@ -234,6 +229,7 @@ export async function getServerSideProps(context) {
       coins: coins || null,
       userId: userId || null,
       xpWebhook: client?.xpWebhook || null,
+
       externalId: externalId,
       externalPass: externalPass,
       config: {
