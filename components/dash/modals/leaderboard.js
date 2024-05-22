@@ -14,16 +14,16 @@ export default function ModalLeaderboard({ data }) {
   useMemo(() => {
     if (!data.tournamentId || !context?.profile?.companyName) return;
     getLeaderboard(data.tournamentId).then(async (lb) => {
-      const { rankedBoard, mutated } = rankMe(
-        lb,
-        context.loggedIn?.uid,
-        score,
-        context.loggedIn?.email,
-        context?.profile?.companyName || ""
-      );
+      // const { rankedBoard, mutated } = rankMe(
+      //   lb,
+      //   context.loggedIn?.uid,
+      //   score,
+      //   context.loggedIn?.email,
+      //   context?.profile?.companyName || ""
+      // );
       setLeaderboard(lb);
     });
-  }, [data.tournamentId, context?.profile?.companyName, score]);
+  }, [data.tournamentId, context?.profile?.companyName]);
 
   if (!leaderboard)
     return (

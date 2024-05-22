@@ -27,6 +27,7 @@ export const rankMe = (
   const position = leaderboard?.findIndex((a) => a.uid === uid);
   if (position !== -1 && score > leaderboard[position].score) {
     leaderboard[position].score = score;
+    leaderboard[position].avatar = avatar;
   } else if (position === -1) {
     leaderboard.push({
       email: email,
