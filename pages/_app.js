@@ -25,49 +25,19 @@ const anton = localFont({
   variable: "--font-anton",
 });
 
-// const octomed = localFont({
-//   src: [
-//     {
-//       path: "../public/fonts/octomed.ttf",
-//       weight: "400",
-//     },
-//   ],
-//   variable: "--font-octo",
-// });
-
 const octomed = Play({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "700"],
   variable: "--font-octo",
   display: "swap",
 });
 
 const octolight = Play({
   subsets: ["latin"],
-  weight: ["400"],
+  weight: ["400", "700"],
   variable: "--font-octolight",
   display: "swap",
 });
-
-// const octolight = localFont({
-//   src: [
-//     {
-//       path: "../public/fonts/octolight.ttf",
-//       weight: "400",
-//     },
-//   ],
-//   variable: "--font-octolight",
-// });
-
-// const pixel = localFont({
-//   src: [
-//     {
-//       path: "../public/fonts/Gamer.ttf",
-//       weight: "400",
-//     },
-//   ],
-//   variable: "--font-pixel",
-// });
 
 const pixel = VT323({
   subsets: ["latin"],
