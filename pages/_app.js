@@ -1,7 +1,7 @@
 import { AppWrapper } from "@/helpers/store";
 import "@/styles/globals.css";
 import localFont from "@next/font/local";
-import { Roboto, Tilt_Neon, VT323 } from "next/font/google";
+import { Roboto, Tilt_Neon, VT323, Nova_Square } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -25,25 +25,39 @@ const anton = localFont({
   variable: "--font-anton",
 });
 
-const octomed = localFont({
-  src: [
-    {
-      path: "../public/fonts/octomed.ttf",
-      weight: "400",
-    },
-  ],
+// const octomed = localFont({
+//   src: [
+//     {
+//       path: "../public/fonts/octomed.ttf",
+//       weight: "400",
+//     },
+//   ],
+//   variable: "--font-octo",
+// });
+
+const octomed = Nova_Square({
+  subsets: ["latin"],
+  weight: ["400"],
   variable: "--font-octo",
+  display: "swap",
 });
 
-const octolight = localFont({
-  src: [
-    {
-      path: "../public/fonts/octolight.ttf",
-      weight: "400",
-    },
-  ],
+const octolight = Nova_Square({
+  subsets: ["latin"],
+  weight: ["400"],
   variable: "--font-octolight",
+  display: "swap",
 });
+
+// const octolight = localFont({
+//   src: [
+//     {
+//       path: "../public/fonts/octolight.ttf",
+//       weight: "400",
+//     },
+//   ],
+//   variable: "--font-octolight",
+// });
 
 // const pixel = localFont({
 //   src: [
