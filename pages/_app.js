@@ -1,7 +1,7 @@
 import { AppWrapper } from "@/helpers/store";
 import "@/styles/globals.css";
 import localFont from "@next/font/local";
-import { Roboto, Tilt_Neon, VT323, Nova_Square } from "next/font/google";
+import { Roboto, Tilt_Neon, VT323, Play } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -35,14 +35,14 @@ const anton = localFont({
 //   variable: "--font-octo",
 // });
 
-const octomed = Nova_Square({
+const octomed = Play({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-octo",
   display: "swap",
 });
 
-const octolight = Nova_Square({
+const octolight = Play({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-octolight",
