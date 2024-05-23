@@ -1,7 +1,7 @@
 import { AppWrapper } from "@/helpers/store";
 import "@/styles/globals.css";
 import localFont from "@next/font/local";
-import { Roboto, Tilt_Neon, VT323 } from "next/font/google";
+import { Roboto, Tilt_Neon, VT323, Play } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -25,35 +25,19 @@ const anton = localFont({
   variable: "--font-anton",
 });
 
-const octomed = localFont({
-  src: [
-    {
-      path: "../public/fonts/octomed.ttf",
-      weight: "400",
-    },
-  ],
+const octomed = Play({
+  subsets: ["latin"],
+  weight: ["400", "700"],
   variable: "--font-octo",
+  display: "swap",
 });
 
-const octolight = localFont({
-  src: [
-    {
-      path: "../public/fonts/octolight.ttf",
-      weight: "400",
-    },
-  ],
+const octolight = Play({
+  subsets: ["latin"],
+  weight: ["400", "700"],
   variable: "--font-octolight",
+  display: "swap",
 });
-
-// const pixel = localFont({
-//   src: [
-//     {
-//       path: "../public/fonts/Gamer.ttf",
-//       weight: "400",
-//     },
-//   ],
-//   variable: "--font-pixel",
-// });
 
 const pixel = VT323({
   subsets: ["latin"],
