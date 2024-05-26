@@ -1,6 +1,4 @@
 import { playEvent } from "@/helpers/events";
-import UIButton from "./ui/button";
-import Text from "./ui/text";
 import { useAppContext } from "@/helpers/store";
 import GameButton from "./uiv2/gameButton";
 import { useEffect, useState } from "react";
@@ -8,7 +6,6 @@ import useMusic from "@/helpers/useMusic";
 import {
   ArrowPathIcon,
   ChartBarIcon,
-  Cog6ToothIcon,
   TrophyIcon,
 } from "@heroicons/react/24/solid";
 import IntroPanel from "./menus/introPanel";
@@ -22,6 +19,7 @@ import ModalAuth from "./dash/modals/auth";
 import ModalGameOver from "./dash/modals/gameOver";
 
 export default function Intro({
+  waitOnAuth,
   data,
   setStage,
   premium,
@@ -86,6 +84,7 @@ export default function Intro({
           <IntroPanel
             theme={theme}
             data={data}
+            waitOnAuth={waitOnAuth}
             onAuthClick={() => {
               setShowModal({
                 title: "Sign Up",

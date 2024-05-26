@@ -32,6 +32,7 @@ import { useRouter } from "next/router";
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
 export default function Advert({
+  waitOnAuth,
   data,
   withPopoutBackNav,
   signingIn,
@@ -256,6 +257,7 @@ export default function Advert({
       )}
       {stage === 0 && (
         <Intro
+          waitOnAuth={waitOnAuth}
           endDate={parseEndDate(data.endDate)}
           signingIn={signingIn}
           data={data}
