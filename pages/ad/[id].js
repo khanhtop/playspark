@@ -1,46 +1,17 @@
 import Advert from "@/components/ad";
-import PremiumAdvert from "@/components/premiumAd";
-import Modal from "@/components/ui/modal";
 import { getAd, getClient } from "@/helpers/api";
 import { decryptEmail, refactorEmail } from "@/helpers/crypto";
-import {
-  auth,
-  firestore,
-  logout,
-  logoutWithoutReroute,
-} from "@/helpers/firebase";
-import { generateProfile } from "@/helpers/profileGen";
+import { auth, logoutWithoutReroute } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { determineStreak } from "@/helpers/streaks";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
-import { setConfig } from "next/config";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import Head from "next/head";
 import { useEffect, useState, useMemo } from "react";
-import { isIOS, isAndroid, isSafari } from "react-device-detect";
 
-export default function Ad({
-  ad,
-  id,
-  config,
-  userId,
-  email,
-  externalId,
-  externalPass,
-}) {
+export default function Ad({ ad, id, config, userId, email, externalId }) {
   const context = useAppContext();
   const [signingIn, setSigingIn] = useState(0);
+  const [waitOnAuth, setWaitOnAuth] = useState(false);
 
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
@@ -48,68 +19,30 @@ export default function Ad({
   };
 
   useEffect(() => {
-    if (context.isAuthed && !context?.loggedIn?.uid && signingIn === 0) {
-      setSigingIn(1);
-      if (externalId && externalPass) {
-        handleAutomatedSignin();
-      } else {
-        setSigingIn(2);
-      }
-    }
-  }, [context.isAuthed, externalId, externalPass]);
-
-  // Force Logout
-  const [hasLoggedOut, setHasLoggedOut] = useState(false);
-  useEffect(() => {
-    if (config.forceLogout && !hasLoggedOut) {
-      setHasLoggedOut(true);
+    if (externalId) {
+      setWaitOnAuth(true);
       logoutWithoutReroute();
+      fetch("http://localhost:3000/api/auth/externalUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: externalId, name: config.name }),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((json) => {
+          if (json.email && json.password) {
+            signInWithEmailAndPassword(auth, json.email, json.password);
+          }
+        });
     }
-  }, [config.forceLogout]);
+  }, [externalId]);
 
-  const handleAutomatedSignin = async () => {
-    if (!externalId || !externalPass || context?.loggedIn?.uid) return;
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        externalId,
-        externalPass
-      );
-      const user = userCredential.user;
-      const uid = user.uid;
-      if (uid) setSigingIn(2);
-    } catch (error) {
-      console.log(error);
-      if (error.code === "auth/user-not-found") {
-        try {
-          const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            externalId,
-            externalPass
-          );
-          const username = generateProfile();
-          const user = userCredential.user;
-          const uid = user.uid;
-          setDoc(
-            doc(firestore, "users", uid),
-            {
-              companyName: username,
-              pwd: externalPass,
-            },
-            { merge: true }
-          );
-          context.setEvent({
-            title: `Signed In`,
-            text: `${username}`,
-          });
-          setSigingIn(2);
-        } catch (error) {
-          console.log(error);
-          setSigingIn(2);
-        }
-      }
-    }
-  };
+  useEffect(() => {
+    if (waitOnAuth && context?.profile) setWaitOnAuth(false);
+  }, [waitOnAuth, context.profile]);
 
   const [hasLoggedStreak, setHasLoggedStreak] = useState(false);
 
@@ -173,6 +106,7 @@ export default function Ad({
       >
         {ad ? (
           <Advert
+            waitOnAuth={waitOnAuth}
             signingIn={signingIn}
             data={ad}
             userId={userId}
@@ -201,18 +135,6 @@ export async function getServerSideProps(context) {
     externalId = refactorEmail(emailAddress, platform);
   }
 
-  if (externalId) {
-    const snapshot = await getDocs(
-      query(collection(firestore, "users"), where("email", "==", externalId))
-    );
-    const pwd = snapshot.docs[0]?.data()?.pwd;
-    if (pwd) {
-      externalPass = pwd;
-    } else {
-      externalPass = Math.random().toString(36).substring(2, 14);
-    }
-  }
-
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);
 
@@ -230,8 +152,9 @@ export async function getServerSideProps(context) {
       userId: userId || null,
       xpWebhook: client?.xpWebhook || null,
 
-      externalId: externalId,
-      externalPass: externalPass,
+      externalId: externalId || null,
+      name: name || null,
+      // externalPass: externalPass,
       config: {
         name: name || null,
         hideBackButton: hideback === "true" ? true : false,

@@ -2,11 +2,13 @@ import { useAppContext } from "@/helpers/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 
-export default function IntroPanel({ data, theme, onAuthClick }) {
+export default function IntroPanel({ data, theme, onAuthClick, waitOnAuth }) {
   const context = useAppContext();
   const [open, setOpen] = useState(false);
 
-  if (!context.profile)
+  if (waitOnAuth) return <div />;
+
+  if (!context.profile && !waitOnAuth)
     return (
       <div
         onClick={onAuthClick}

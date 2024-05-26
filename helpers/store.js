@@ -255,6 +255,7 @@ export function AppWrapper({ children }) {
     });
     const json = await res.json();
     setAvatars(json.thumbnails);
+    return avatars;
   };
 
   console.log(config);
