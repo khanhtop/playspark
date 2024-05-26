@@ -22,7 +22,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
     if (externalId) {
       setWaitOnAuth(true);
       logoutWithoutReroute();
-      fetch("http://localhost:3000/api/auth/externalUser", {
+      fetch("https://playspark.co/api/auth/externalUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
