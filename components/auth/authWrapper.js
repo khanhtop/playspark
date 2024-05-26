@@ -1,6 +1,6 @@
 import { useAppContext } from "@/helpers/store";
 import { useEffect, useState } from "react";
-import { auth } from "@/helpers/firebase";
+import { auth, logout } from "@/helpers/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
+import { setDoc } from "firebase/firestore";
 
 export default function AuthWrapper({ children, action }) {
   const context = useAppContext();
@@ -59,6 +60,22 @@ export default function AuthWrapper({ children, action }) {
   // Loading
   if (!context.isAuthed) {
     return <div className="h-screen w-screen bg-white" />;
+  }
+
+  if (context.isAuthed && context.loggedIn && !context?.profile?.isAdmin) {
+    return (
+      <div className="bg-black h-screen w-screen text-white font-octo flex items-center justify-center flex-col">
+        <h1 className="text-xl mb-4">
+          You do not have permissions to access this page.
+        </h1>
+        <button
+          onClick={() => logout()}
+          className="bg-cyan-500 px-8 py-2 rounded-xl text-xl"
+        >
+          Logout
+        </button>
+      </div>
+    );
   }
 
   // Logged In
