@@ -10,6 +10,7 @@ import { archive, switchActive } from "@/helpers/api";
 import FilterPills from "./filterPills";
 import Button from "../forms/button";
 import { FolderIcon } from "@heroicons/react/24/solid";
+import CreateModal from "./createTournament/createModal";
 
 export default function MyGames({}) {
   const context = useAppContext();
@@ -18,6 +19,7 @@ export default function MyGames({}) {
   const [showAnalytics, setShowAnalytics] = useState();
   const [filter, setFilter] = useState("");
   const [isArchiving, setIsArchiving] = useState(false);
+  const [showAddTournamentModal, setShowAddTournamentModal] = useState(false);
 
   const deleteGame = async (item) => {
     if (
@@ -105,6 +107,10 @@ export default function MyGames({}) {
                   action: () => null,
                 },
                 {
+                  text: "Use As Template",
+                  action: () => setShowAddTournamentModal(item),
+                },
+                {
                   text: item.isActive ? "End Tournament" : "Restart Tournament",
                   action: () =>
                     switchActive(item.tournamentId, item?.isActive ?? false),
@@ -144,6 +150,12 @@ export default function MyGames({}) {
           <AnalyticsModal
             item={showAnalytics}
             setShowAnalytics={setShowAnalytics}
+          />
+        )}
+        {showAddTournamentModal && (
+          <CreateModal
+            hide={() => setShowAddTournamentModal(false)}
+            data={showAddTournamentModal}
           />
         )}
       </div>
