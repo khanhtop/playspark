@@ -191,7 +191,7 @@ function BattleInviteCard({ tournament, me, you, battle, myUid }) {
   const context = useAppContext();
   const router = useRouter();
   return (
-    <div className="inline-block h-48 w-72 relative rounded-3xl overflow-hidden">
+    <div className="inline-block h-48 w-72 relative rounded-3xl overflow-hidden text-xs">
       <img src="/battle/vsbg.jpg" className="h-full w-full object-cover" />
       <div className="absolute top-0 left-0 bg-black/70 h-full w-full px-4 py-4 flex flex-col">
         <div className="flex gap-2 items-start">
@@ -199,11 +199,13 @@ function BattleInviteCard({ tournament, me, you, battle, myUid }) {
             src={tournament?.backgroundImage}
             className="h-8 w-8 rounded-full object-cover"
           />
-          <p className="font-octo mt-[4px]">Battle | {tournament?.name}</p>
+          <p className="font-octo mt-[4px] text-base">
+            Battle | {tournament?.name}
+          </p>
         </div>
         <div className="flex-1 flex items-center justify-center">
           <Battler data={me} isComplete={false} myUid={myUid} won={false} />
-          <p className="font-octo text-3xl">VS</p>
+          <p className="font-octo text-base">VS</p>
           <Battler data={you} isComplete={false} myUid={myUid} won={false} />
         </div>
         <div className="flex gap-2 items-start">
@@ -223,12 +225,12 @@ function BattleInviteCard({ tournament, me, you, battle, myUid }) {
                 router.push("/battle/" + id);
                 setLoading(false);
               }}
-              className="bg-purple-500 px-4 h-6 rounded-xl"
+              className="bg-purple-500 px-4 h-6 rounded-xl text-base"
             >
               {loading ? (
                 <ArrowPathIcon className="h-4 w-4 animate-spin " />
               ) : (
-                `Battle ${you?.companyName} at ${tournament?.name}`
+                `Battle ${you?.companyName}`
               )}
             </button>
           </div>
@@ -248,7 +250,7 @@ function BattleCard({ battle, myUid, user }) {
     parseInt(battle?.challengeeResult?.score) >
     parseInt(battle?.challengerResult?.score);
   return (
-    <div className="inline-block h-48 w-72 relative rounded-3xl overflow-hidden">
+    <div className="inline-block h-48 w-72 relative rounded-3xl overflow-hidden text-sm">
       <img src="/battle/vsbg.jpg" className="h-full w-full object-cover" />
       <div className="absolute top-0 left-0 bg-black/70 h-full w-full px-4 py-4 flex flex-col">
         <div className="flex gap-2 items-start">
@@ -256,7 +258,9 @@ function BattleCard({ battle, myUid, user }) {
             src={battle?.game?.backgroundImage}
             className="h-8 w-8 rounded-full object-cover"
           />
-          <p className="font-octo mt-[4px]">Battle | {battle.game.name}</p>
+          <p className="font-octo mt-[4px] text-base">
+            Battle | {battle.game.name}
+          </p>
         </div>
         <div className="flex-1 flex items-center justify-center">
           <Battler
@@ -265,7 +269,7 @@ function BattleCard({ battle, myUid, user }) {
             myUid={myUid}
             won={challengerWon}
           />
-          <p className="font-octo text-3xl">
+          <p className="font-octo text-base">
             {!isComplete ? "VS" : challengerWon ? "Defeated" : "Lost to"}
           </p>
           <Battler
@@ -297,11 +301,11 @@ function Battler({ data, myUid, won, isComplete, withScore }) {
           className="h-full w-full object-cover scale-110"
         />
       </div>
-      <p className="font-octo text-sm">
+      <p className="font-octo text-xs mt-1">
         {data?.id === myUid ? "You" : data?.companyName}
       </p>
       {typeof withScore !== "undefined" && (
-        <p className={`text-2xl ${won ? "text-green-500" : "text-red-500"} `}>
+        <p className={`text-xl ${won ? "text-green-500" : "text-red-500"} `}>
           {withScore}
         </p>
       )}

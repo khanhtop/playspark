@@ -62,7 +62,7 @@ export default function TapHold({
         }}
         className={`absolute h-full bg-black`}
       ></div>
-      <div className="absolute w-full h-full font-octo text-3xl flex items-center justify-center pointer-events-none">
+      <div className="absolute w-full h-full font-octo text-2xl flex items-center justify-center pointer-events-none">
         {isComplete ? (
           <p>Redeemed!</p>
         ) : isHolding ? (

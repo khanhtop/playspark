@@ -138,7 +138,7 @@ export default function GameButton({
       />
 
       <div
-        className={`absolute w-full h-full flex items-center justify-center font-octo text-4xl`}
+        className={`absolute w-full h-full flex items-center justify-center font-octo text-2xl`}
       >
         {children}
       </div>

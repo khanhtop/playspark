@@ -25,14 +25,14 @@ export default function Hero({ data, context, totalXp }) {
       >
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex justify-between">
-            <div className="font-octo text-2xl md:text-4xl flex gap-2 items-center">
+            <div className="font-octo text-xl md:text-3xl flex gap-2 items-center">
               <img
                 src={`/level-badges/${calculateLevel(totalXp) + 8}.png`}
-                className="h-14 w-14 mb-1"
+                className="h-14 w-14"
               />
               <p>Level {calculateLevel(totalXp)}</p>
             </div>
-            <div className="flex pr-1 items-center font-octo md:text-2xl gap-2 h-full">
+            <div className="flex pr-1 items-center font-octo md:text-xl gap-2 h-full">
               <img src="/clientPages/xp.png" className="h-12" />
               <p>
                 {totalXp} / {getRank(totalXp).xpToNextTier + totalXp}
