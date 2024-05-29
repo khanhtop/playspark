@@ -157,8 +157,8 @@ export async function getServerSideProps(context) {
       // externalPass: externalPass,
       config: {
         name: name || null,
-        hideBackButton: hideback === "true" ? true : false,
-        hideRevive: hiderevive === "true" ? true : false,
+        hideBackButton: ad.hideBack ? true : false,
+        hideRevive: ad.disableRevive ? true : false,
         forceLogout: forcelogout === "true" ? true : false,
       },
     },

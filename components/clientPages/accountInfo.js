@@ -131,7 +131,7 @@ function ParameterBox({ image, title, value, item }) {
       <img src={image} className="h-10 md:h-16" />
       <div>
         <p className="md:text-lg opacity-70">{title}</p>
-        <p className="md:text-3xl">{value}</p>
+        <p className="md:text-2xl">{value}</p>
       </div>
     </div>
   );

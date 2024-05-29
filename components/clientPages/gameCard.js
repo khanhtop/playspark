@@ -39,7 +39,7 @@ export default function ClientGameCard({ data, item, playGame, inSlider }) {
         <h3 className="text-base">{item.name}</h3>
         <div className="flex">
           <Stat
-            text="Your Top Score"
+            text="Your Score"
             value={
               item?.leaderboard?.find((a) => a.uid === context.loggedIn?.uid)
                 ?.score || "-"
@@ -58,7 +58,10 @@ export default function ClientGameCard({ data, item, playGame, inSlider }) {
                   ) + 1
             }
           />
-          <Stat text="Top Score" value={item?.leaderboard?.[0]?.score} />
+          <Stat
+            text="High Score"
+            value={item?.leaderboard?.[0]?.score || "-"}
+          />
         </div>
       </div>
     </div>
@@ -67,9 +70,9 @@ export default function ClientGameCard({ data, item, playGame, inSlider }) {
 
 function Stat({ text, value }) {
   return (
-    <div className="flex flex-col items-center justify-center flex-1">
+    <div className="flex flex-col items-center justify-center flex-1 text-xs">
       <p>{value}</p>
-      <p className="opacity-50 text-sm">{text}</p>
+      <p className="opacity-50 text-xs text-center">{text}</p>
     </div>
   );
 }

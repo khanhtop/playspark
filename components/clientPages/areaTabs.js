@@ -23,7 +23,7 @@ function Tab({ item, selected, accent, onClick }) {
         color: selected ? accent : "",
         borderBottomColor: selected ? accent : "transparent",
       }}
-      className="cursor-pointer transition border-b-4 h-12 md:h-16 text-lg md:text-2xl flex-1 flex items-center justify-center"
+      className="cursor-pointer transition border-b-4 h-12 md:h-16 text-lg md:text-xl flex-1 flex items-center justify-center"
     >
       <p>{item.text}</p>
     </div>

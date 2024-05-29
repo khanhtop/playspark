@@ -116,8 +116,12 @@ export default function ModalRewards({ data }) {
   if (modalState)
     return (
       <div className="pt-12 pb-4 px-4 flex flex-col gap-2 items-center font-octo text-black">
-        <p className="text-3xl uppercase font-bold">{modalState.name}</p>
-        <p className="text-xl font-light">{modalState.description}</p>
+        <p className="text-2xl uppercase font-bold text-center">
+          {modalState.name}
+        </p>
+        <p className="text-lg font-light text-center">
+          {modalState.description}
+        </p>
         <img src={modalState.image} className="h-20 rounded-3xl" />
         {modalState.outputAction === "promocode" && (
           <div
@@ -125,7 +129,7 @@ export default function ModalRewards({ data }) {
             className="flex items-center gap-1 my-2 cursor-pointer"
           >
             <LinkIcon className="h-5" />
-            <p className="text-lg uppercase font-light">
+            <p className="text-lg text-center uppercase font-light">
               {modalState.outputLocation}
             </p>
           </div>
@@ -133,7 +137,7 @@ export default function ModalRewards({ data }) {
         {modalState.outputAction === "physical" && (
           <div className="flex items-center gap-1 my-2">
             <MapPinIcon className="h-5" />
-            <p className="text-lg uppercase font-light">
+            <p className="text-lg uppercase font-light text-center">
               {modalState.outputLocation}
             </p>
           </div>

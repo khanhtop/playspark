@@ -9,6 +9,7 @@ import { firestore } from "@/helpers/firebase";
 import CreateConfiguration from "./createConfiguration";
 import CreateConfigReimage from "./createConfigReimage";
 import CreateRewards from "./createRewards";
+import CreateAdvanced from "./createAdvanced";
 
 export default function CreateModal({ data, hide }) {
   const context = useAppContext();
@@ -17,6 +18,7 @@ export default function CreateModal({ data, hide }) {
     "Game Configuration",
     "Marketing",
     "Rewards",
+    "Advanced",
     "Summary",
   ];
   const [stage, setStage] = useState(0);
@@ -102,6 +104,12 @@ export default function CreateModal({ data, hide }) {
             />
           )}
           {stage === 4 && (
+            <CreateAdvanced
+              tournament={tournament}
+              setTournament={setTournament}
+            />
+          )}
+          {stage === 5 && (
             <CreateSummary
               tournament={tournament}
               setTournament={setTournament}

@@ -159,7 +159,7 @@ function Pill({ value, Icon, image, data, onClick, colorA, colorB }) {
       ) : (
         <Icon style={{ color: data.accentColor }} className="h-full" />
       )}
-      <p className="font-octo md:text-2xl">{value}</p>
+      <p className="font-octo md:text-lg">{value}</p>
       <PlusCircleIcon
         onClick={onClick}
         style={{ color: colorA }}

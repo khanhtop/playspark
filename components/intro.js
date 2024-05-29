@@ -40,6 +40,20 @@ export default function Intro({
 
   const expired = !data.isActive || (endDate && endDate < new Date());
 
+  const selectStage = () => {
+    const possibleRouting = [];
+    if (data.demo) return 1;
+    if (data.sponsoredVideo) possibleRouting.push(3);
+    if (data.survey && !context.hasSeenSurvey) possibleRouting.push(4);
+    if (data.playableAd) possibleRouting.push(5);
+    if (possibleRouting.length > 0) {
+      const randomIndex = Math.floor(Math.random() * possibleRouting.length);
+      return possibleRouting[randomIndex];
+    } else {
+      return 1;
+    }
+  };
+
   useEffect(() => {
     if (gameOver.score !== null) {
       setShowModal({
