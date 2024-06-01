@@ -33,41 +33,56 @@ export default function IntroPanel({ data, theme, onAuthClick, waitOnAuth }) {
 
   return (
     <div
-      style={{ height: open ? 180 : 90, transition: "height 0.5s" }}
+      style={{
+        height: open ? 180 : 90,
+        width: open ? 200 : 80,
+        transition: "height 0.5s",
+      }}
       onClick={() => setOpen(!open)}
-      className="w-[200px] px-2 pt-2 pb-1 flex flex-col bg-black/30 backdrop-blur rounded-2xl shadow-lg border-2 border-white/20"
+      className="px-2 pt-2 pb-1 flex flex-col bg-black/30 backdrop-blur rounded-2xl shadow-lg border-2 border-white/20"
     >
-      <div className="h-12 flex gap-2">
+      <div
+        className={`h-12 flex ${
+          open ? "justify-start" : "justify-center"
+        } gap-2`}
+      >
         <div className="h-full aspect-square rounded-2xl border-white border-2 overflow-hidden">
           <img
             src={context?.profile?.profilePhoto}
             className="h-full scale-110 object-cover"
           />
         </div>
-        <div className="font-octo ">
-          <p
-            className={
-              theme === "default"
-                ? "font-titan font-stroke"
-                : theme === "neon"
-                ? "font-neon"
-                : "font-pixel uppercase text-3xl -my-1"
-            }
+        {open && (
+          <div
+            style={{
+              opacity: open ? 1 : 0,
+            }}
+            className="font-octo "
           >
-            {context?.config?.name || context?.profile?.companyName}
-          </p>
-          <p
-            className={
-              theme === "default"
-                ? "font-titan font-stroke"
-                : theme === "neon"
-                ? "font-neon"
-                : "font-pixel uppercase text-2xl -my-2 -mt-3"
-            }
-          >
-            XP: {xp}
-          </p>
-        </div>
+            <p
+              className={
+                theme === "default"
+                  ? "font-titan font-stroke"
+                  : theme === "neon"
+                  ? "font-neon"
+                  : "font-pixel uppercase text-3xl -my-1"
+              }
+            >
+              {context?.config?.name || context?.profile?.companyName}
+            </p>
+            <p
+              className={
+                theme === "default"
+                  ? "font-titan font-stroke"
+                  : theme === "neon"
+                  ? "font-neon"
+                  : "font-pixel uppercase text-2xl -my-2 -mt-3"
+              }
+            >
+              XP: {xp}
+            </p>
+          </div>
+        )}
       </div>
       <div
         style={{
