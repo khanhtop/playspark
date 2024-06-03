@@ -1,4 +1,4 @@
-import { games } from "@/helpers/games";
+import { games, sanitiseGameObject } from "@/helpers/games";
 import { useState } from "react";
 import GameCard from "./gameCard";
 import { useAppContext } from "@/helpers/store";
@@ -108,7 +108,10 @@ export default function MyGames({}) {
                 },
                 {
                   text: "Use As Template",
-                  action: () => setShowAddTournamentModal(item),
+                  action: () => {
+                    const templateGame = sanitiseGameObject(item);
+                    setShowAddTournamentModal(templateGame);
+                  },
                 },
                 {
                   text: item.isActive ? "End Tournament" : "Restart Tournament",

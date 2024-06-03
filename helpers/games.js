@@ -431,3 +431,21 @@ export const games = [
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
   },
 ];
+
+export const sanitiseGameObject = (_game) => {
+  const game = { ..._game };
+  delete game["tournamentId"];
+  delete game["endDate"];
+  delete game["freemiumPlayCount"];
+  delete game["impressions"];
+  delete game["isActive"];
+  delete game["leaderboard"];
+  delete game["ownerCompanyName"];
+  delete game["ownerId"];
+  delete game["playCount"];
+  delete game["reimageSprites"];
+  delete game["tournamentId"];
+  delete game["videoViews"];
+  console.log(game);
+  return game;
+};

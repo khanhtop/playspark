@@ -5,13 +5,15 @@ import {
   updateLeaderboard,
 } from "@/helpers/leaderboard";
 import { useAppContext } from "@/helpers/store";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useEffect, useMemo, useState } from "react";
 
 export default function ModalGameOver({ data }) {
   const context = useAppContext();
+  const [loading, setLoading] = useState(true);
   const [leaderboard, setLeaderboard] = useState({
-    position: 1,
-    length: 1,
+    position: 0,
+    length: 0,
   });
 
   console.log(leaderboard);
@@ -27,8 +29,34 @@ export default function ModalGameOver({ data }) {
       context?.profile?.companyName,
       data?.gameOverScore
     );
-    if (!data.data?.tournamentId || !context?.profile?.companyName) return;
+
+    if (data.gameOverScore === 0) {
+      setLoading(false);
+      return;
+    }
+
     getLeaderboard(data?.data?.tournamentId).then(async (lb) => {
+      // If leaderboard is empty
+      if (lb.length === 0) {
+        setLeaderboard({
+          position: 1,
+          length: 1,
+        });
+        return;
+      }
+      // If not logged in
+      if (!context?.loggedIn?.uid) {
+        const pos = lb
+          .sort((a, b) => b.score - a.score)
+          ?.findIndex((a) => a.score < data?.gameOverScore);
+        setLeaderboard({
+          position: pos === -1 ? lb.length + 1 : pos,
+          length: lb.length + (pos === -1 ? 1 : 0),
+        });
+        setLoading(false);
+        return;
+      }
+      // Otherwise rank the player
       const { rankedBoard, mutated } = rankMe(
         lb,
         context.loggedIn?.uid,
@@ -37,19 +65,16 @@ export default function ModalGameOver({ data }) {
         context?.profile?.companyName || "",
         context?.profile?.profilePhoto
       );
-
       const lbIndex = rankedBoard.findIndex(
         (a) => a.uid === context?.loggedIn?.uid
       );
-      let position = lbIndex + 1;
-      if (lbIndex === -1) {
-        position = rankedBoard.findIndex((a) => a.score < data?.gameOverScore);
-      }
       setLeaderboard({
-        position: position,
-        length: rankedBoard.length + (lbIndex > -1 ? 0 : 1),
+        position: lbIndex + 1,
+        length: rankedBoard.length,
       });
       if (mutated) updateLeaderboard(data.data?.tournamentId, rankedBoard);
+      setLoading(false);
+      return;
     });
   }, [
     data.data?.tournamentId,
@@ -70,17 +95,23 @@ export default function ModalGameOver({ data }) {
           {data.gameOverScore}
         </h1>
       </div>
-      <div className="flex items-center gap-0 mb-4 max-w-[400px]">
-        <img
-          src={`/theme_icons/${data.theme}/rank.png`}
-          className="h-24 w-24"
-        />
-        <p className="font-octo text-2xl text-center text-black/100 max-w-[120px]">
-          {!context?.loggedIn?.uid
-            ? `You could be ranked #${leaderboard.position}`
-            : `You ranked #${leaderboard.position} out of ${leaderboard.length}`}
-        </p>
-      </div>
+      {loading ? (
+        <ArrowPathIcon className="h-10 w-10 mb-4 text-white animate-spin" />
+      ) : (
+        <div className="flex items-center gap-2 mb-4 max-w-[400px]">
+          <img
+            src={`/theme_icons/${data.theme}/rank.png`}
+            className="h-24 w-24"
+          />
+          <p className="font-octo text-xl text-center text-black/100 max-w-[120px]">
+            {data?.gameOverScore === 0
+              ? `Try again to rank on the leaderboard!`
+              : !context?.loggedIn?.uid
+              ? `You could be ranked #${leaderboard.position}`
+              : `You ranked #${leaderboard.position} out of ${leaderboard.length}`}
+          </p>
+        </div>
+      )}
       {!context?.loggedIn?.uid && (
         <div className="flex flex-col items-center gap-2 mb-4 max-w-[400px]">
           <p className="font-roboto text-lg text-center text-black/50">

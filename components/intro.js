@@ -65,7 +65,8 @@ export default function Intro({
           gameOverScore: gameOver?.score,
           gameOverRevives: gameOver?.reviveCount,
           onRevive: () => {
-            setStage(1);
+            const stage = selectStage();
+            setStage(stage);
           },
           onAuth: () => {
             setShowModal({
