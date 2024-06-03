@@ -238,7 +238,10 @@ export default function Advert({
         position: "relative",
       }}
     >
-      <NotificationBar notification={context.event} />
+      <NotificationBar
+        notification={context.event}
+        theme={data?.theme ?? "default"}
+      />
       {!context?.config?.hideBackButton && (
         <PopoutBackNav action={withPopoutBackNav} />
       )}

@@ -87,7 +87,7 @@ export async function levelEvent(context, level, data) {
 
 export async function rewardWithXP(xp, context, data) {
   context.setEvent({
-    title: `+ ${xp}XP`,
+    title: `${xp} XP`,
     text: `Reward Claimed`,
   });
   await setDoc(
@@ -116,7 +116,7 @@ export async function rewardWithXP(xp, context, data) {
 
 export async function rewardWithCoins(coins, context, data) {
   context.setEvent({
-    title: `+ ${coins} Coins`,
+    title: `${coins} Coins`,
     text: `Reward Claimed`,
   });
   await setDoc(
@@ -259,11 +259,11 @@ export async function allocateXp(
 ) {
   if (!context.loggedIn?.uid || xp === 0) return;
   context.setEvent({
-    title: `+ ${xp}XP`,
+    title: `${xp} XP`,
     text: `${eventName}`,
   });
   context.setEvent({
-    title: `+ ${coins} Coins`,
+    title: `${coins} Coins`,
     text: `${eventName}`,
   });
   const aO = getAnalyticsObject(context, incrementCount);
