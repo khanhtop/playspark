@@ -31,7 +31,9 @@ export default function Modal({ primaryColor, landscape }) {
             landscape ? "pt-4 pb-0" : "pt-12 pb-12"
           } px-4`}
         >
-          <div className="h-full w-full text-black flex flex-col items-center">
+          <div
+            className={`h-full w-full text-black flex flex-col items-center`}
+          >
             {context?.modal?.contents}
           </div>
         </div>
