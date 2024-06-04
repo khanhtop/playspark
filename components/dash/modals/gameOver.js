@@ -15,8 +15,7 @@ export default function ModalGameOver({ data }) {
     position: 0,
     length: 0,
   });
-
-  console.log(leaderboard);
+  const [didNotBeat, setDidNotBeat] = useState(null);
 
   const lb = data?.data?.leaderboard?.sort((a, b) => b.score - a.score) || [];
 
@@ -42,6 +41,18 @@ export default function ModalGameOver({ data }) {
           position: 1,
           length: 1,
         });
+        if (context?.loggedIn?.uid) {
+          updateLeaderboard(data.data?.tournamentId, [
+            {
+              email: context?.profile?.email || null,
+              score: data.gameOverScore,
+              uid: context?.loggedIn?.uid,
+              name: context?.profile?.companyName || null,
+              avatar: context?.profile?.profilePhoto || null,
+            },
+          ]);
+        }
+        setLoading(false);
         return;
       }
       // If not logged in
@@ -68,6 +79,12 @@ export default function ModalGameOver({ data }) {
       const lbIndex = rankedBoard.findIndex(
         (a) => a.uid === context?.loggedIn?.uid
       );
+      if (rankedBoard[lbIndex].score > data.gameOverScore) {
+        setDidNotBeat({
+          previous: rankedBoard[lbIndex].score,
+          current: data.gameOverScore,
+        });
+      }
       setLeaderboard({
         position: lbIndex + 1,
         length: rankedBoard.length,
@@ -84,7 +101,7 @@ export default function ModalGameOver({ data }) {
 
   return (
     <div className="pt-12 pb-4 px-4 flex flex-col gap-2 font-octo text-black text-2xl items-center">
-      <div className="flex flex-col items-center mb-4">
+      <div className="flex flex-col items-center mb-2">
         <h1 className="">Your Score</h1>
         <h1
           className="text-4xl font-titan"
@@ -95,6 +112,13 @@ export default function ModalGameOver({ data }) {
           {data.gameOverScore}
         </h1>
       </div>
+      {didNotBeat && (
+        <div>
+          <p className="font-octo text-xl text-center text-black/100 max-w-[200px] mb-2">
+            Previous Best {didNotBeat.previous}
+          </p>
+        </div>
+      )}
       {loading ? (
         <ArrowPathIcon className="h-10 w-10 mb-4 text-white animate-spin" />
       ) : (
@@ -108,7 +132,9 @@ export default function ModalGameOver({ data }) {
               ? `Try again to rank on the leaderboard!`
               : !context?.loggedIn?.uid
               ? `You could be ranked #${leaderboard.position}`
-              : `You ranked #${leaderboard.position} out of ${leaderboard.length}`}
+              : `You ${didNotBeat ? "are still ranked" : "ranked"} #${
+                  leaderboard.position
+                }`}
           </p>
         </div>
       )}
