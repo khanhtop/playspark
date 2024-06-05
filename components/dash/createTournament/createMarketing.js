@@ -92,13 +92,34 @@ export default function CreateMarketing({ tournament, setTournament }) {
                 labelColor="text-white/70"
                 placeHolder="https://"
                 label="Enter URL for Call To Action (Leave blank for none)"
-                className="bg-white/5 w-full py-2 text-white mb-6"
+                className="bg-white/5 w-full py-2 text-white mb-4"
                 onChange={(url) => {
                   setTournament({
                     ...tournament,
                     sponsoredVideoCtaUrl: url.target.value,
                   });
                 }}
+              />
+            </div>
+            <div className="text-white mb-6">
+              <p className="text-xs mb-2 mt-0 text-white/70">
+                Percentage Until Claim (
+                {tournament?.sponsoredVideoClaimPercentage || 80}%)
+              </p>
+              <input
+                className="w-[300px] appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-cyan-400/95 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-black"
+                type="range"
+                id="slider"
+                min={0}
+                max={100}
+                step={0.01} // You can adjust the step size based on your preference
+                value={tournament?.sponsoredVideoClaimPercentage || 80}
+                onChange={(e) =>
+                  setTournament({
+                    ...tournament,
+                    sponsoredVideoClaimPercentage: Math.floor(e.target.value),
+                  })
+                }
               />
             </div>
           </VideoPicker>
