@@ -18,8 +18,9 @@ export default function VideoAd({ data, onSkip, video }) {
   const [right, setRight] = useState(-260);
 
   const shouldClaim = (time) => {
-    setRemainingTime(Math.floor(totalLength - time - 9));
-    if (time > totalLength - 10) {
+    const pc = data.sponsoredVideoClaimPercentage || 80;
+    setRemainingTime(Math.floor(totalLength * (pc / 100) - time));
+    if (time > totalLength * (pc / 100)) {
       setShowClaim(true);
     }
   };
