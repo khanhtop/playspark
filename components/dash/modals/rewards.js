@@ -2,6 +2,7 @@ import TapHold from "@/components/ui/tapHold";
 import GameButton from "@/components/uiv2/gameButton";
 import { playClickSound } from "@/helpers/audio";
 import { firestore } from "@/helpers/firebase";
+import { getLeaderboard } from "@/helpers/leaderboard";
 import { claimReward } from "@/helpers/rewards";
 import { useAppContext } from "@/helpers/store";
 import {
@@ -25,6 +26,7 @@ export default function ModalRewards({ data }) {
   const [modalState, setModalState] = useState(null);
   const [rewards, setRewards] = useState();
   const [loading, setLoading] = useState([]);
+  const [maxScore, setMaxScore] = useState(null);
 
   const redeemInFirebase = () => {
     const index = rewards.find((a) => a.id === modalState.id);
@@ -45,12 +47,14 @@ export default function ModalRewards({ data }) {
     data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
     0;
 
+  console.log(tournamentScore);
+
   const tournamentLevel =
     context?.profile?.tournamentSpecificData?.[data.tournamentId]?.level || 0;
 
   const isUnlocked = (item) => {
     if (item.input === "score") {
-      return tournamentScore >= item.inputValue;
+      return maxScore >= item.inputValue;
     }
     if (item.input === "level") {
       return tournamentLevel >= item.inputValue;
@@ -76,6 +80,13 @@ export default function ModalRewards({ data }) {
   useEffect(() => {
     if (data && !rewards) {
       fetchRewards();
+    }
+    if (!maxScore) {
+      getLeaderboard(data.tournamentId).then(async (lb) => {
+        setMaxScore(
+          lb.find((a) => a.uid === context?.loggedIn?.uid)?.score || 0
+        );
+      });
     }
   }, [data]);
 
