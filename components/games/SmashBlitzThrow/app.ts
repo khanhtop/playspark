@@ -152,7 +152,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       ? this.params.backgroundSprite
       : undefined;
     new BackGroundManager(this, backgroundSprite, this.width, this.height); //this.params.backgroundSprite);
-    let versiontxt = this.make.text({
+   /* let versiontxt = this.make.text({
       x: this.renderer.width,
       y: this.renderer.height,
       origin: 1,
@@ -161,8 +161,8 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       style: {
         font: "20px monospace",
       },
-    });
-    versiontxt.setStroke(`0x000000`, 2);
+    });*/
+   // versiontxt.setStroke(`0x000000`, 2);
 
     let throwingCenterX = this.widthFactor * 1.6;
     let throwingCenterY = this.heightFactor * 7.3;
@@ -427,7 +427,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 }
 
 window.onload = () => {
-  const config = {
+ /* const config = {
     type: Phaser.AUTO,
     width: 960,
     height: 512,
@@ -446,5 +446,5 @@ window.onload = () => {
     },
   };
 
-  const game = new Phaser.Game(config);
+  const game = new Phaser.Game(config);*/
 };
