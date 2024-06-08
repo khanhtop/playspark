@@ -1,7 +1,8 @@
-export default function StripeSelectCredits({ onSelect }) {
+export default function StripeSelectCredits({ onSelect, currentCredits }) {
   return (
     <div className="min-w-[400px]">
       <p>Select the number of credits to add</p>
+      <p className="text-sm text-black/60">Current Balance: {currentCredits}</p>
       <div className="flex flex-col gap-4 mt-4">
         <CreditRow first />
         <CreditRow amount={250} price={22} discount={10} onSelect={onSelect} />
