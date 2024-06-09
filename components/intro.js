@@ -130,7 +130,13 @@ export default function Intro({
         )}
 
         {context?.loggedIn?.uid && (
-          <div className="absolute w-[68px] bottom-[28px] right-6 z-10 flex justify-center mt-4">
+          <div
+            style={{
+              bottom: data?.landscape ? 28 : 160,
+              right: data?.landscape ? 16 : 8,
+            }}
+            className="absolute w-[68px] right-2 z-10 flex justify-center mt-4"
+          >
             <IconTray
               bgColor={data.primaryColor}
               textColor={data.textColor}
@@ -212,7 +218,7 @@ function IconTray({ children, theme, bgColor, textColor }) {
       // }}
       className={`${
         theme === "pixel" ? "rounded-none" : "rounded-full"
-      } relative  h-full backdrop-blur flex items-center justify-center flex-col py-0`}
+      } relative  h-full flex items-center justify-center flex-col py-0`}
     >
       {children}
     </div>
