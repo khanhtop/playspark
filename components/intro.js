@@ -130,7 +130,13 @@ export default function Intro({
         )}
 
         {context?.loggedIn?.uid && (
-          <div className="w-full h-20 z-10 flex justify-center mt-4">
+          <div
+            style={{
+              bottom: data?.landscape ? 28 : 160,
+              right: data?.landscape ? 16 : 8,
+            }}
+            className="absolute w-[68px] right-2 z-10 flex justify-center mt-4"
+          >
             <IconTray
               bgColor={data.primaryColor}
               textColor={data.textColor}
@@ -212,7 +218,7 @@ function IconTray({ children, theme, bgColor, textColor }) {
       // }}
       className={`${
         theme === "pixel" ? "rounded-none" : "rounded-full"
-      } relative  h-full gap-4 px-4 backdrop-blur flex items-center justify-center py-0`}
+      } relative  h-full flex items-center justify-center flex-col py-0`}
     >
       {children}
     </div>
@@ -228,7 +234,7 @@ function IconButton({ icon, theme, onClick, bgColor, textColor }) {
       }}
       className={`h-full cursor-pointer aspect-square transition flex items-center justify-center`}
     >
-      <img src={icon} className="h-full" />
+      <img src={icon} className="w-full" />
       {/* <Icon className="h-8 w-8" /> */}
     </div>
   );
