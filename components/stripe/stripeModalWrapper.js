@@ -3,29 +3,25 @@ import { getStripeCustomer } from "@/helpers/stripe";
 import { XCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import StripeSelectCredits from "./stripeSelectCredits";
+import StripeConfirmCredits from "./stripeConfirmCredits";
+import StripeCheckout from "./stripeCheckout";
+import StripeSuccess from "./stripeSuccess";
 
 export default function StripeModalWrapper({ children }) {
   const context = useAppContext();
 
   if (!context.showStripe) return <div />;
   const [phase, setPhase] = useState(0);
-  const [customerId, setCustomerId] = useState(null);
   const [stripePayload, setStripePayload] = useState(null);
 
-  useEffect(() => {
-    if (!customerId && context.profile?.email) {
-      getStripeCustomer(context.profile.email).then((cId) => {
-        console.log(cId);
-        setCustomerId(cId);
-      });
-    }
-  }, [customerId]);
+  const currentCredits = context?.profile?.creditBalance || 0;
 
   const flow = [
     {
       title: "Add Credits",
       component: (
         <StripeSelectCredits
+          currentCredits={currentCredits}
           onSelect={(payload) => {
             setStripePayload(payload);
             setPhase(1);
@@ -35,7 +31,35 @@ export default function StripeModalWrapper({ children }) {
     },
     {
       title: "Confirm Selection",
-      component: <div className="min-w-[400px]">{stripePayload?.amount}</div>,
+      component: (
+        <StripeConfirmCredits
+          currentCredits={currentCredits}
+          stripePayload={stripePayload}
+          onConfirm={() => setPhase(2)}
+        />
+      ),
+    },
+    {
+      title: "Checkout",
+      component: (
+        <StripeCheckout
+          currentCredits={currentCredits}
+          stripePayload={stripePayload}
+          onSuccess={() => {
+            setPhase(3);
+          }}
+        />
+      ),
+    },
+    {
+      title: "Success!",
+      component: (
+        <StripeSuccess
+          currentCredits={currentCredits}
+          stripePayload={stripePayload}
+          onClose={() => context.setShowStripe(false)}
+        />
+      ),
     },
   ];
 
