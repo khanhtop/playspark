@@ -1,6 +1,7 @@
 export const games = [
   {
     name: "Spin To Win",
+    creditConsumption: 1,
     description:
       "Spin your way to victory in our game of chance! Every turn unlocks a world of rewards, making every moment a winning sensation!",
     backgroundImage:
@@ -18,6 +19,7 @@ export const games = [
   },
   {
     name: "Cricket Smash",
+    creditConsumption: 2,
     description:
       "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
     backgroundImage:
@@ -30,6 +32,7 @@ export const games = [
   },
   {
     name: "Power Pong",
+    creditConsumption: 2,
     description:
       "Customize your Pong experience, choose your graphics, and compete for glory on the leaderboard in this sleek and stylish arcade game!",
     backgroundImage:
@@ -78,6 +81,7 @@ export const games = [
   },
   {
     name: "Baller Faller",
+    creditConsumption: 2,
     description:
       "Dodge obstacles, catch falling objects, and set high scores in this customizable and action-packed game where every move is a step closer to victory!",
     backgroundImage:
@@ -119,6 +123,7 @@ export const games = [
   },
   {
     name: "Wordle",
+    creditConsumption: 1,
     description:
       "Experience a new twist in Wordle with AI-generated puzzles! Test your word skills against machine-crafted challenges for a thrilling and compact guessing game!",
     backgroundImage:
@@ -140,6 +145,7 @@ export const games = [
   },
   {
     name: "Fly Ball",
+    creditConsumption: 2,
     description:
       "Flap, customize, conquer! Dive into an addictive, fully customizable tap-to-fly adventure for endless high-score thrills!",
     backgroundImage:
@@ -173,6 +179,7 @@ export const games = [
   },
   {
     name: "Throwdown Frenzy",
+    creditConsumption: 2,
     description: `Throwdown Frenzy propels players into an adrenaline-fueled frenzy as they hurl projectiles at targets, dodge relentless enemy obstacles, and compete for high scores in a heart-pounding test of skill and survival!`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
@@ -228,6 +235,7 @@ export const games = [
   },
   {
     name: "Bounce Blitz",
+    creditConsumption: 2,
     description: `"Bounce Blitz" invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
@@ -273,6 +281,7 @@ export const games = [
 
   {
     name: "Endzone Blitz",
+    creditConsumption: 2,
     description: `In 'Endzone Blitz,' players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!"`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
@@ -304,6 +313,7 @@ export const games = [
   },
   {
     name: "Sky Soar",
+    creditConsumption: 2,
     description:
       "In ‘Sky Soar,’ players navigate a mesmerizing sky filled with rings, skillfully guiding their object through obstacles to score points and collecting power-ups for enhanced abilities in this addictive aerial adventure reminiscent of Flappy Bird.",
     backgroundImage:
@@ -348,6 +358,7 @@ export const games = [
   // },
   {
     name: "Sidestep Surge",
+    creditConsumption: 2,
     description:
       "In 'Sidestep Surge,' players skillfully maneuver their object across the screen, collecting items and evading enemies in a frantic race against time to achieve the highest score before running out of lives.",
     backgroundImage:
@@ -389,6 +400,7 @@ export const games = [
   },
   {
     name: "Airborne Ace",
+    creditConsumption: 2,
     description:
       "Airborne Ace” catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!",
     backgroundImage:

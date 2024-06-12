@@ -17,6 +17,11 @@ import { playClickSound } from "@/helpers/audio";
 import { themes } from "@/helpers/theming";
 import ModalAuth from "./dash/modals/auth";
 import ModalGameOver from "./dash/modals/gameOver";
+import {
+  deductCredits,
+  getGameCreditConsumption,
+  shutoffBalance,
+} from "@/helpers/credits";
 
 export default function Intro({
   waitOnAuth,
@@ -27,6 +32,7 @@ export default function Intro({
   signingIn,
   gameOver,
   endDate,
+  clientCredits,
 }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
@@ -116,16 +122,22 @@ export default function Intro({
 
         {(!premium || ready) && (
           <GameButton
-            disabled={expired}
+            disabled={
+              !clientCredits || expired || clientCredits < shutoffBalance
+            }
             bgColor={data.primaryColor}
             textColor={data.textColor}
             theme={theme}
-            onClick={() => {
+            onClick={async () => {
+              const creditAmount = getGameCreditConsumption(
+                data?.creditConsumption
+              );
+              deductCredits(data.ownerId, clientCredits || 0, creditAmount);
               playEvent(context, data);
               setStage(1, true);
             }}
           >
-            {expired ? "Game Ended" : "START"}
+            {expired || clientCredits < shutoffBalance ? "Game Ended" : "START"}
           </GameButton>
         )}
 
