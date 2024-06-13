@@ -91,7 +91,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
         console.log(result);
         if (result.trigger && result.value > 1) {
           context.setEvent({
-            title: `+ ${result.value * 10}XP`,
+            title: `${result.value * 10} XP`,
             text: `Streak of ${result.value}`,
           });
         }
