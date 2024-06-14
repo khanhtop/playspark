@@ -55,6 +55,10 @@ const outputOperands = [
     text: "Physical Item",
     value: "physical",
   },
+  {
+    text: "HTTPS Webhook",
+    value: "webhook",
+  },
 ];
 
 export default function CreateRewards({ tournament, setTournament }) {
@@ -196,6 +200,8 @@ function RewardRow({ item, onChange, onDelete, index }) {
               ? "Amount"
               : item.outputAction === "promocode"
               ? "Code"
+              : item.outputAction === "webhook"
+              ? "Webhook URL"
               : "Item Name"
           }
           type={
@@ -219,7 +225,8 @@ function RewardRow({ item, onChange, onDelete, index }) {
         />
       </div>
       {(item.outputAction === "physical" ||
-        item.outputAction === "promocode") && (
+        item.outputAction === "promocode" ||
+        item.outputAction === "webhook") && (
         <div className="mt-4">
           <Input
             label="Redemption Instructions"
