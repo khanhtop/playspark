@@ -42,6 +42,9 @@ export function AppWrapper({ children }) {
   const [event, showEvent] = useState(false);
   const [eventQueue, setEventQueue] = useState([]);
 
+  // Stripe
+  const [showStripe, setShowStripe] = useState(false);
+
   // Settings
   const [settings, setSettings] = useState({
     bgm: true,
@@ -296,6 +299,8 @@ export function AppWrapper({ children }) {
     chats,
     latestChat,
     setLatestChat,
+    showStripe,
+    setShowStripe,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

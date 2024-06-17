@@ -47,8 +47,6 @@ export default function ModalRewards({ data }) {
     data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
     0;
 
-  console.log(tournamentScore);
-
   const tournamentLevel =
     context?.profile?.tournamentSpecificData?.[data.tournamentId]?.level || 0;
 

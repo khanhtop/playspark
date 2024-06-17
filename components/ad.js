@@ -38,6 +38,7 @@ export default function Advert({
   signingIn,
   userId,
   email,
+  clientCredits,
 }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
@@ -238,7 +239,10 @@ export default function Advert({
         position: "relative",
       }}
     >
-      <NotificationBar notification={context.event} />
+      <NotificationBar
+        notification={context.event}
+        theme={data?.theme ?? "default"}
+      />
       {!context?.config?.hideBackButton && (
         <PopoutBackNav action={withPopoutBackNav} />
       )}
@@ -257,6 +261,7 @@ export default function Advert({
       )}
       {stage === 0 && (
         <Intro
+          clientCredits={clientCredits}
           waitOnAuth={waitOnAuth}
           endDate={parseEndDate(data.endDate)}
           signingIn={signingIn}

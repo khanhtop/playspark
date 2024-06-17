@@ -2,6 +2,7 @@ import e from "cors";
 import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { rewardWithCoins, rewardWithXP } from "./events";
+import { fireHook } from "./webhooks";
 
 export function groupRewards(rewards) {
   if (!rewards) return [];
@@ -68,11 +69,21 @@ export function getAvailableReward(rewards) {
 // In Game Rewards
 
 export const claimReward = async (reward, data, context) => {
-  console.log(reward);
   if (reward.outputAction === "xp")
     rewardWithXP(reward.outputValue, context, data);
   if (reward.outputAction === "coins")
     rewardWithCoins(reward.outputValue, context, data);
+  if (reward.outputAction === "webhook") {
+    fireHook(reward.outputValue, {
+      hookType: "REWARD CLAIMED",
+      rewardName: reward.name,
+      rewardInput: reward.input,
+      rewardValue: reward.inputValue,
+      rewardId: reward.id,
+      userName: context?.profile?.companyName || null,
+      userEmail: context?.profile?.email || null,
+    });
+  }
   await addDoc(
     collection(firestore, "users", context.loggedIn.uid, "rewards"),
     {

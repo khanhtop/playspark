@@ -1,17 +1,51 @@
 import Advert from "@/components/ad";
 import { getAd, getClient } from "@/helpers/api";
+import { deductCredits, getGameCreditConsumption } from "@/helpers/credits";
 import { decryptEmail, refactorEmail } from "@/helpers/crypto";
-import { auth, logoutWithoutReroute } from "@/helpers/firebase";
+import { auth, firestore, logoutWithoutReroute } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { determineStreak } from "@/helpers/streaks";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
 import Head from "next/head";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 
 export default function Ad({ ad, id, config, userId, email, externalId }) {
   const context = useAppContext();
   const [signingIn, setSigingIn] = useState(0);
   const [waitOnAuth, setWaitOnAuth] = useState(false);
+  const [clientCredits, setClientCredits] = useState();
+  const subscriptionRef = useRef(null);
+
+  // LISTEN TO CLIENT CREDITS
+
+  useEffect(() => {
+    if (ad.ownerId && !clientCredits && !subscriptionRef?.current) {
+      subscriptionRef.current = onSnapshot(
+        doc(firestore, "users", ad.ownerId),
+        (doc) => {
+          console.log("SHOULD LISTEN");
+          if (doc.exists()) {
+            setClientCredits(() => {
+              const newCreditBalance = doc.data().creditBalance;
+              return newCreditBalance;
+            });
+          }
+        },
+        (error) => {
+          console.log("Error getting document:", error);
+        }
+      );
+    }
+  }, [ad.ownerId, clientCredits]);
+
+  useEffect(() => {
+    if (subscriptionRef.current) {
+      return () => subscriptionRef?.current();
+    }
+  }, []);
+
+  // END LISTEN
 
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
@@ -57,7 +91,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
         console.log(result);
         if (result.trigger && result.value > 1) {
           context.setEvent({
-            title: `+ ${result.value * 10}XP`,
+            title: `${result.value * 10} XP`,
             text: `Streak of ${result.value}`,
           });
         }
@@ -111,6 +145,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
             data={ad}
             userId={userId}
             email={email}
+            clientCredits={clientCredits}
           />
         ) : (
           <p>{id} - AD NOT FOUND</p>
@@ -128,7 +163,6 @@ export async function getServerSideProps(context) {
   const { name, hideback, hiderevive, forcelogout } = context?.query;
 
   let externalId = null;
-  let externalPass = null;
 
   if (user && platform) {
     const emailAddress = decryptEmail(user, platform);

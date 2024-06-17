@@ -11,6 +11,7 @@ import Sidebar from "@/components/dash/sidebar";
 import Usage from "@/components/dash/usage";
 import Users from "@/components/dash/users";
 import OnboardWrapper from "@/components/onboard/onboardWrapper";
+import StripeModalWrapper from "@/components/stripe/stripeModalWrapper";
 import { useAppContext } from "@/helpers/store";
 import { useState } from "react";
 
@@ -65,6 +66,7 @@ export default function Application() {
             <Pane />
           )}
         </div>
+        <StripeModalWrapper />
       </OnboardWrapper>
     </AuthWrapper>
   );

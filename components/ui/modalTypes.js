@@ -12,7 +12,7 @@ export function WinModal({ data, onClaim }) {
     <div
       className={`flex flex-1 ${
         data?.landscape ? "flex-row" : "flex-col"
-      } w-full h-full items-center`}
+      } w-full h-full items-center font-octo`}
     >
       <audio ref={audioRef} src="/branding/fanfare.mp3" />
       <div className="flex-1 w-full max-h-[160px] flex justify-center">
