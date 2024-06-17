@@ -36,7 +36,7 @@ export default function Profile() {
         }
         label="Sportzfan Platform URL (Lowercase and No Spaces)"
       />
-      <Input
+      {/* <Input
         value={profile.creditBalance}
         type="number"
         labelColor="text-white"
@@ -44,7 +44,7 @@ export default function Profile() {
           setProfile({ ...profile, creditBalance: parseInt(e.target.value) })
         }
         label="Credits --- MUST REMOVE LATER AFTER TESTING"
-      />
+      /> */}
       <ImagePicker
         width={100}
         height={100}
