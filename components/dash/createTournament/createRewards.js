@@ -21,6 +21,14 @@ const inputs = [
     text: "Level",
     value: "level",
   },
+  {
+    text: "Game End Rank",
+    value: "rank",
+  },
+  {
+    text: "Game End XP",
+    value: "endxp",
+  },
 ];
 
 const operands = [

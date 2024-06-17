@@ -22,7 +22,7 @@ const BarChart = ({ chartData }) => {
             {
               label: chartData.line1Name,
               data: chartData.line1Data,
-              borderColor: "rgb(75, 192, 192)",
+              borderColor: "blue",
               borderWidth: 2,
               fill: false,
             },

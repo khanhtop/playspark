@@ -3,6 +3,7 @@ import LineChart from "./charts/lineChart";
 import { useAppContext } from "@/helpers/store";
 import BarChart from "./charts/barChart";
 import CreditsPanel from "./panels/creditsPanel";
+import Panel from "./panels/panel";
 
 export default function Dashboard({}) {
   const context = useAppContext();
@@ -59,20 +60,20 @@ export default function Dashboard({}) {
   }, [context?.myGames]);
 
   return (
-    <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-4 pb-8">
       <CreditsPanel />
-      <div>
+      <Panel>
         <h2 className="mb-4">Impressions Per Game</h2>
         {impressions && <BarChart chartData={impressions} />}
-      </div>
-      <div>
+      </Panel>
+      <Panel>
         <h2 className="mb-4">Plays Per Game</h2>
         {plays && <BarChart chartData={plays} />}
-      </div>
-      <div>
+      </Panel>
+      <Panel>
         <h2 className="mb-4">Click Through Rate (CTR)</h2>
         {ctr && <BarChart chartData={ctr} />}
-      </div>
+      </Panel>
       {/* <div>
         <h2 className="mb-4">Email Opt Ins</h2>
         {ctr && <BarChart chartData={optins} />}

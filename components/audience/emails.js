@@ -26,15 +26,15 @@ export function AudienceEmails({}) {
 
   return (
     <>
-      <p className="text-white/70 text-sm">
+      <p className="text-black/70 text-sm">
         Explore and export email addresses that have been captured through
         PlaySpark. We will soon be launching direct integration into your email
         marketing platforms, such as MailChimp and Klaviyo.
       </p>
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap mt-4">
         {emails?.map((item, key) => (
-          <div key={key} className="bg-white/10 px-4 py-1 rounded-full">
-            <p className="text-white/80">{item}</p>
+          <div key={key} className="bg-white/80 px-4 py-1 rounded-full">
+            <p className="text-black/70">{item}</p>
           </div>
         ))}
       </div>

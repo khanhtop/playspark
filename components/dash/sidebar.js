@@ -1,24 +1,21 @@
 import { useAppContext } from "@/helpers/store";
 import {
   ChartBarIcon,
-  ChevronRightIcon,
   Cog6ToothIcon,
   GiftIcon,
-  ScaleIcon,
   ShoppingCartIcon,
   Squares2X2Icon,
   TrophyIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid";
-import Button from "../forms/button";
-import { logout } from "@/helpers/firebase";
 import { switchTier } from "@/helpers/api";
 import Avatar from "./avatar";
 
 export default function Sidebar({ selectedPane, setSelectedPane }) {
   const context = useAppContext();
+  console.log(context.profile);
   return (
-    <div className="w-[300px] h-full bg-[#364153] flex flex-col items-center px-8 pb-8 text-white">
+    <div className="w-[300px] h-full rounded-r-2xl bg-[#FFF] flex flex-col items-center px-8 pb-8 text-[#364153]">
       <img src="/branding/logo2.png" className="-mb-2" />
 
       <div className="flex-1 w-full overflow-y-scroll">
@@ -98,7 +95,9 @@ function Row({ text, selected, setSelectedPane, icon }) {
     <div
       onClick={setSelectedPane}
       className={`${
-        selected ? "text-cyan-500" : "text-white hover:text-white/50"
+        selected
+          ? "text-[#364153]"
+          : "text-[#364153]/50 hover:text-[#364153]/80"
       } flex h-8 mb-3 justify-between cursor-pointer transition  items-center w-full`}
     >
       {icon}
