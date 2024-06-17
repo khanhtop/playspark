@@ -66,12 +66,6 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
         />
       </div>
       <div
-        onClick={() => context.setShowStripe(true)}
-        className="mb-4 cursor-pointer"
-      >
-        Add Credits
-      </div>
-      <div
         onClick={() => setSelectedPane(3)}
         className="flex items-center gap-4 "
       >

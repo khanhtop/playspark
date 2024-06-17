@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import LineChart from "./charts/lineChart";
 import { useAppContext } from "@/helpers/store";
 import BarChart from "./charts/barChart";
+import CreditsPanel from "./panels/creditsPanel";
 
 export default function Dashboard({}) {
   const context = useAppContext();
@@ -59,6 +60,7 @@ export default function Dashboard({}) {
 
   return (
     <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <CreditsPanel />
       <div>
         <h2 className="mb-4">Impressions Per Game</h2>
         {impressions && <BarChart chartData={impressions} />}
