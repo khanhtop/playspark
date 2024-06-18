@@ -5,7 +5,15 @@ import { firestore } from "./firebase";
 import { sendSupabaseEvent } from "./analytics";
 
 export function playEvent(context, data) {
-  allocateXp(context, 30, 3, "New Game Bonus", "playCount", data.ownerId);
+  allocateXp(
+    context,
+    30,
+    3,
+    "New Game Bonus",
+    "playCount",
+    data.ownerId,
+    data.tournamentId
+  );
   console.log(data);
   sendSupabaseEvent(
     context?.loggedIn?.uid,
@@ -17,7 +25,15 @@ export function playEvent(context, data) {
 }
 
 export function loginEvent(context, data) {
-  allocateXp(context, 100, 10, "Login Bonus", "loginCount", data.ownerId);
+  allocateXp(
+    context,
+    100,
+    10,
+    "Login Bonus",
+    "loginCount",
+    data.ownerId,
+    data.tournamentId
+  );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
     data.ownerId,
@@ -28,7 +44,14 @@ export function loginEvent(context, data) {
 }
 
 export function signupEvent(context, data) {
-  allocateXp(context, 300, 30, "Sign Up Bonus", data.ownerId);
+  allocateXp(
+    context,
+    300,
+    30,
+    "Sign Up Bonus",
+    data.ownerId,
+    data.tournamentId
+  );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
     data.ownerId,
@@ -39,7 +62,15 @@ export function signupEvent(context, data) {
 }
 
 export function restartEvent(context, data) {
-  allocateXp(context, 30, 3, "Replay Bonus", "playCount", data.ownerId);
+  allocateXp(
+    context,
+    30,
+    3,
+    "Replay Bonus",
+    "playCount",
+    data.ownerId,
+    data.tournamentId
+  );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
     data.ownerId,
@@ -57,7 +88,8 @@ export function scoreEvent(context, score, data) {
     coinsBonus,
     "Score Bonus",
     null,
-    data.ownerId
+    data.ownerId,
+    data.tournamentId
   );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
@@ -99,6 +131,12 @@ export async function rewardWithXP(xp, context, data) {
         [data.ownerId]: {
           coins: increment(0),
           xp: increment(xp),
+        },
+      },
+      dataByTournament: {
+        [data.tournamentId]: {
+          xp: increment(xp),
+          coins: increment(0),
         },
       },
     },
@@ -143,7 +181,15 @@ export async function rewardWithCoins(coins, context, data) {
 }
 
 export function emailAddedCTA(context, data) {
-  allocateXp(context, 300, 30, "Email Bonus", "emailAdds", data.ownerId);
+  allocateXp(
+    context,
+    300,
+    30,
+    "Email Bonus",
+    "emailAdds",
+    data.ownerId,
+    data.tournamentId
+  );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
     data.ownerId,
@@ -160,7 +206,8 @@ export function playableAdFinishedCTA(context, data) {
     10,
     "Winning Minigame Bonus",
     "playableAds",
-    data.ownerId
+    data.ownerId,
+    data.tournamentId
   );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
@@ -178,7 +225,8 @@ export function surveyResponseCTA(context, data) {
     20,
     "Survey Response Bonus",
     "surveyResponses",
-    data.ownerId
+    data.ownerId,
+    data.tournamentId
   );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
@@ -196,7 +244,8 @@ export function surveyCompleteCTA(context, data) {
     10,
     "Survey Submission Bonus",
     "surveySubmissions",
-    data.ownerId
+    data.ownerId,
+    data.tournamentId
   );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
@@ -208,7 +257,14 @@ export function surveyCompleteCTA(context, data) {
 }
 
 export function videoSkippedCTA(context, data) {
-  allocateXp(context, 0, 0, "Video Skipped Bonus", data.ownerId);
+  allocateXp(
+    context,
+    0,
+    0,
+    "Video Skipped Bonus",
+    data.ownerId,
+    data.tournamentId
+  );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
     data.ownerId,
@@ -219,7 +275,15 @@ export function videoSkippedCTA(context, data) {
 }
 
 export function videoClickedCTA(context, data) {
-  allocateXp(context, 400, 40, "Video Ad Bonus", "videoClicks", data.ownerId);
+  allocateXp(
+    context,
+    400,
+    40,
+    "Video Ad Bonus",
+    "videoClicks",
+    data.ownerId,
+    data.tournamentId
+  );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
     data.ownerId,
@@ -236,7 +300,8 @@ export function videoCompletedCTA(context, data) {
     20,
     "Video Watched Bonus",
     "videoCompletions",
-    data.ownerId
+    data.ownerId,
+    data.tournamentId
   );
   sendSupabaseEvent(
     context?.loggedIn?.uid,
@@ -255,7 +320,8 @@ export async function allocateXp(
   coins,
   eventName,
   incrementCount = null,
-  ownerId = null
+  ownerId = null,
+  tournamentId = null
 ) {
   if (!context.loggedIn?.uid || xp === 0) return;
   context.setEvent({
@@ -267,7 +333,7 @@ export async function allocateXp(
     text: `${eventName}`,
   });
   const aO = getAnalyticsObject(context, incrementCount);
-  updateAnalytics(context, xp, coins, aO, ownerId);
+  updateAnalytics(context, xp, coins, aO, ownerId, tournamentId);
 }
 
 function getAnalyticsObject(context, keyToIncrement) {
@@ -295,7 +361,8 @@ async function updateAnalytics(
   xp,
   coins,
   analytics = null,
-  ownerId = null
+  ownerId = null,
+  tournamentId = null
 ) {
   const uid = context?.loggedIn?.uid;
   const dataArray = getDataByOwner(
@@ -316,6 +383,12 @@ async function updateAnalytics(
         [ownerId]: {
           coins: increment(coins),
           xp: increment(xp),
+        },
+      },
+      dataByTournament: {
+        [tournamentId]: {
+          xp: increment(xp),
+          coins: increment(coins),
         },
       },
     },

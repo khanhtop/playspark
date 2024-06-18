@@ -49,6 +49,7 @@ export function AppWrapper({ children }) {
   const [settings, setSettings] = useState({
     bgm: true,
     soundFx: true,
+    notifications: true,
   });
   const [latestChat, setLatestChat] = useState();
 

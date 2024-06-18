@@ -18,6 +18,12 @@ export default function ModalSettings({ data }) {
         changeKey="soundFx"
         theme={data.theme}
       />
+      <ToggleRow
+        title="Game Notifications"
+        parameter={context?.settings?.notifications}
+        changeKey="notifications"
+        theme={data.theme}
+      />
     </div>
   );
 }

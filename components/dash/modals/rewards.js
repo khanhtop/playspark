@@ -27,6 +27,9 @@ export default function ModalRewards({ data }) {
   const [rewards, setRewards] = useState();
   const [loading, setLoading] = useState([]);
   const [maxScore, setMaxScore] = useState(null);
+  const [tab, setTab] = useState("intragame");
+
+  const expired = !data.isActive || (data.endDate && data.endDate < new Date());
 
   const redeemInFirebase = () => {
     const index = rewards.find((a) => a.id === modalState.id);
@@ -47,6 +50,10 @@ export default function ModalRewards({ data }) {
     data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
     0;
 
+  const tournamentRank = data?.leaderboard?.findIndex(
+    (a) => a.uid === context?.loggedIn?.uid
+  );
+
   const tournamentLevel =
     context?.profile?.tournamentSpecificData?.[data.tournamentId]?.level || 0;
 
@@ -56,6 +63,9 @@ export default function ModalRewards({ data }) {
     }
     if (item.input === "level") {
       return tournamentLevel >= item.inputValue;
+    }
+    if (item.input === "rank") {
+      return expired && tournamentRank + 1 === item.inputValue;
     }
     return false;
   };
@@ -91,32 +101,50 @@ export default function ModalRewards({ data }) {
   if (!modalState)
     return (
       <div className="pt-12 pb-4 px-4 flex flex-col gap-4">
-        {data?.rewards?.map((item, key) => (
-          <RewardRow
-            onFlipCard={(a) => setModalState(a)}
-            isRedeemed={
-              rewards && rewards?.find((a) => a.id === item.id)?.isRedeemed
+        <Tabs onChange={(a) => setTab(a)} tab={tab} />
+        {!expired && tab === "postgame" && (
+          <p className="text-center font-light py-2">
+            Come back after the game finishes to claim these rewards!
+          </p>
+        )}
+        {data?.rewards
+          ?.filter((a) => {
+            if (tab === "intragame") {
+              if (a.input !== "rank" && a.input !== "endxp") {
+                return a;
+              }
+            } else {
+              if (a.input === "rank" || a.input === "endxp") {
+                return a;
+              }
             }
-            item={item}
-            key={key}
-            primaryColor={data.primaryColor}
-            textColor={data.textColor}
-            unlocked={isUnlocked(item)}
-            claimed={
-              rewards && rewards?.findIndex((a) => a.id === item.id) !== -1
-            }
-            loading={loading.includes(item.id)}
-            onClaim={(reward) => {
-              setLoading([...loading, reward.id]);
-              claimReward(reward, data, context).then(() => {
-                fetchRewards();
-                setTimeout(() => {
-                  setLoading([...rewards.filter((a) => a !== reward.id)]);
-                }, 1000);
-              });
-            }}
-          />
-        ))}
+          })
+          ?.map((item, key) => (
+            <RewardRow
+              onFlipCard={(a) => setModalState(a)}
+              isRedeemed={
+                rewards && rewards?.find((a) => a.id === item.id)?.isRedeemed
+              }
+              item={item}
+              key={key}
+              primaryColor={data.primaryColor}
+              textColor={data.textColor}
+              unlocked={isUnlocked(item)}
+              claimed={
+                rewards && rewards?.findIndex((a) => a.id === item.id) !== -1
+              }
+              loading={loading.includes(item.id)}
+              onClaim={(reward) => {
+                setLoading([...loading, reward.id]);
+                claimReward(reward, data, context).then(() => {
+                  fetchRewards();
+                  setTimeout(() => {
+                    setLoading([...rewards.filter((a) => a !== reward.id)]);
+                  }, 1000);
+                });
+              }}
+            />
+          ))}
       </div>
     );
 
@@ -262,6 +290,33 @@ function RewardRow({
             <LockClosedIcon className="h-6 w-full" />
           )}
         </button>
+      </div>
+    </div>
+  );
+}
+
+function Tabs({ tab, onChange }) {
+  return (
+    <div className="flex px-4 gap-4">
+      <div
+        onClick={() => onChange("intragame")}
+        className={`${
+          tab === "intragame"
+            ? "border-b-white text-white"
+            : "border-b-transparent text-white/50 cursor-pointer"
+        } flex-1 border-b-4 flex justify-center py-2`}
+      >
+        <p>In Game</p>
+      </div>
+      <div
+        onClick={() => onChange("postgame")}
+        className={`${
+          tab === "postgame"
+            ? "border-b-white text-white"
+            : "border-b-transparent text-white/50 cursor-pointer"
+        } flex-1 border-b-4 flex justify-center py-2`}
+      >
+        <p>Post Game</p>
       </div>
     </div>
   );
