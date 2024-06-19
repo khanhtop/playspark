@@ -106,7 +106,7 @@ export default function ModalGameOver({ data }) {
         <h1
           className="text-4xl font-titan"
           style={{
-            color: data.data?.primaryColor,
+            color: "black",
           }}
         >
           {data.gameOverScore}

@@ -57,6 +57,8 @@ export default function ModalRewards({ data }) {
   const tournamentLevel =
     context?.profile?.tournamentSpecificData?.[data.tournamentId]?.level || 0;
 
+  const xp = context.profile?.dataByTournament?.[data.tournamentId]?.xp || 0;
+
   const isUnlocked = (item) => {
     if (item.input === "score") {
       return maxScore >= item.inputValue;
@@ -66,6 +68,9 @@ export default function ModalRewards({ data }) {
     }
     if (item.input === "rank") {
       return expired && tournamentRank + 1 === item.inputValue;
+    }
+    if (item.input === "endxp") {
+      return expired && xp >= item.inputValue;
     }
     return false;
   };
@@ -100,10 +105,10 @@ export default function ModalRewards({ data }) {
 
   if (!modalState)
     return (
-      <div className="pt-12 pb-4 px-4 flex flex-col gap-4">
-        <Tabs onChange={(a) => setTab(a)} tab={tab} />
+      <div className="pt-12 pb-4 px-4 flex flex-col gap-4 h-full overflow-y-scroll">
+        <Tabs onChange={(a) => setTab(a)} tab={tab} data={data} />
         {!expired && tab === "postgame" && (
-          <p className="text-center font-light py-2">
+          <p className="text-center font-bold py-2 px-12">
             Come back after the game finishes to claim these rewards!
           </p>
         )}
@@ -191,7 +196,7 @@ export default function ModalRewards({ data }) {
               {modalState.outputValue}
             </p>
           </div>
-        ) : (
+        ) : modalState.outputAction === "physical" ? (
           <TapHold
             bgColor={data.primaryColor}
             textColor={data.textColor}
@@ -199,6 +204,8 @@ export default function ModalRewards({ data }) {
               redeemInFirebase();
             }}
           />
+        ) : (
+          <div />
         )}
         <GameButton
           className="w-[330px]"
@@ -208,7 +215,10 @@ export default function ModalRewards({ data }) {
             setModalState();
           }}
         >
-          {modalState.outputAction === "promocode" ? "Close" : "Redeem Later"}
+          {modalState.outputAction === "promocode" ||
+          modalState.outputAction === "webhook"
+            ? "Close"
+            : "Redeem Later"}
         </GameButton>
       </div>
     );
@@ -229,19 +239,52 @@ function RewardRow({
 }) {
   const context = useAppContext();
   function isInteractableAfterClaim() {
-    if (item.outputAction === "promocode" || item.outputAction === "physical")
+    if (
+      item.outputAction === "promocode" ||
+      item.outputAction === "physical" ||
+      item.outputAction === "webhook"
+    )
       return true;
     return false;
   }
 
+  function parseInput(input, operand, value) {
+    if (input === "endxp") {
+      if (operand === ">=") {
+        return `End with more than ${value} XP`;
+      } else {
+        return `End with ${value} XP`;
+      }
+    }
+
+    if (input === "score") {
+      return `Score at least ${value} points`;
+    }
+
+    if (input === "xp") {
+      return `Earn at least ${value} XP`;
+    }
+
+    if (input === "level") {
+      return `Reach level ${value}`;
+    }
+
+    if (input === "rank") {
+      if (operand === "==") {
+        return `Rank ${value} on the leaderboard`;
+      } else {
+        return `Rank higher than ${value} on the leaderboard`;
+      }
+    }
+
+    return `Earn at least ${value}`;
+  }
+
   return (
-    <div className="flex h-24 text-black/70 font-octo gap-2 text-sm">
+    <div className="flex h-24 text-black/70 font-octo gap-2 text-sm flex-shrink-0">
       <div className="bg-white/100 border-4 border-black/10 backdrop-blur flex-1 flex items-center rounded-2xl overflow-hidden px-4">
         <div className="flex-1 flex items-center justify-center capitalize text-center text-black/70 ">
-          <p>
-            {item.input} {item.inputOperand === "==" ? " " : "More Than "}
-            {item.inputValue.toString()}
-          </p>
+          <p>{parseInput(item.input, item.inputOperand, item.inputValue)} </p>
         </div>
         <div>
           <img src={item.image} className="w-12 p-2" />
@@ -295,26 +338,30 @@ function RewardRow({
   );
 }
 
-function Tabs({ tab, onChange }) {
+function Tabs({ data, tab, onChange }) {
   return (
-    <div className="flex px-4 gap-4">
+    <div className="flex px-4 gap-4 rounded-full">
       <div
         onClick={() => onChange("intragame")}
+        style={{
+          borderBottomColor:
+            tab === "intragame" ? data.primaryColor : "transparent",
+        }}
         className={`${
-          tab === "intragame"
-            ? "border-b-white text-white"
-            : "border-b-transparent text-white/50 cursor-pointer"
-        } flex-1 border-b-4 flex justify-center py-2`}
+          tab === "intragame" ? "text-white" : "text-white/50 cursor-pointer"
+        } flex-1 border-b-8 flex justify-center py-2`}
       >
         <p>In Game</p>
       </div>
       <div
         onClick={() => onChange("postgame")}
+        style={{
+          borderBottomColor:
+            tab === "postgame" ? data.primaryColor : "transparent",
+        }}
         className={`${
-          tab === "postgame"
-            ? "border-b-white text-white"
-            : "border-b-transparent text-white/50 cursor-pointer"
-        } flex-1 border-b-4 flex justify-center py-2`}
+          tab === "postgame" ? "text-white" : "text-white/50 cursor-pointer"
+        } flex-1 border-b-8 flex justify-center py-2`}
       >
         <p>Post Game</p>
       </div>

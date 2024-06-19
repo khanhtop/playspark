@@ -121,6 +121,9 @@ export function AppWrapper({ children }) {
               subscription: getSubscriptionType(data?.tier ?? 0),
             }
           );
+          if (data?.gameConfig) {
+            setSettings(data.gameConfig);
+          }
         }
       );
     }
