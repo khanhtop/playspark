@@ -49,6 +49,7 @@ export function AppWrapper({ children }) {
   const [settings, setSettings] = useState({
     bgm: true,
     soundFx: true,
+    notifications: true,
   });
   const [latestChat, setLatestChat] = useState();
 
@@ -120,6 +121,9 @@ export function AppWrapper({ children }) {
               subscription: getSubscriptionType(data?.tier ?? 0),
             }
           );
+          if (data?.gameConfig) {
+            setSettings(data.gameConfig);
+          }
         }
       );
     }

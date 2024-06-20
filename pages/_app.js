@@ -1,7 +1,7 @@
 import { AppWrapper } from "@/helpers/store";
 import "@/styles/globals.css";
 import localFont from "@next/font/local";
-import { Roboto, Tilt_Neon, VT323, Play } from "next/font/google";
+import { Roboto, Tilt_Neon, VT323, Play, DM_Sans } from "next/font/google";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -46,7 +46,7 @@ const pixel = VT323({
   display: "swap",
 });
 
-const roboto = Roboto({
+const roboto = DM_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "700"],
   variable: "--font-roboto",

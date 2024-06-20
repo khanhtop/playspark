@@ -1,6 +1,8 @@
+import { useAppContext } from "@/helpers/store";
 import { useEffect, useState } from "react";
 
 export default function NotificationBar({ notification, theme }) {
+  const context = useAppContext();
   const [open, setOpen] = useState(false);
 
   const determineIcon = (title) => {
@@ -18,6 +20,11 @@ export default function NotificationBar({ notification, theme }) {
       }, 3000);
     }
   }, [notification]);
+
+  if (!context.settings.notifications) {
+    return <div />;
+  }
+
   return (
     <div
       style={{

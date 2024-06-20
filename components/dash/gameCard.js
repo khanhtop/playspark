@@ -60,11 +60,13 @@ export default function GameCard({
       className={`${
         game.isPremium
           ? "bg-gradient-to-b from-amber-400 to-amber-600 text-black"
-          : "bg-[#364153] text-white"
+          : "bg-white text-black/40 border-[1px] border-black/5 shadow-md"
       } rounded-lg  basis-[350px] p-4`}
     >
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-lg font-titan uppercase">{game.name}</h3>
+        <h3 className="text-lg font-titan uppercase text-black/80">
+          {game.name}
+        </h3>
         {!game.isActive && onDelete && (
           <XMarkIcon
             onClick={() => onDelete()}
@@ -108,7 +110,9 @@ export default function GameCard({
           }
           disabled={added || saving}
           className={`w-full ${
-            added || saving ? "bg-gray-500" : "bg-cyan-400 hover:bg-cyan-600"
+            added || saving
+              ? "bg-gray-500"
+              : "bg-indigo-900 hover:bg-indigo-800"
           } text-white rounded-md mt-4 py-3 transition flex items-center justify-center`}
         >
           {saving ? (
@@ -122,7 +126,7 @@ export default function GameCard({
         {onDemo && (
           <button
             onClick={() => onDemo()}
-            className="w-[100px] bg-cyan-400 text-white rounded-md mt-4 py-3  hover:bg-cyan-600 transition"
+            className="w-[100px] bg-indigo-700 text-white rounded-md mt-4 py-3  hover:bg-indigo-600 transition"
           >
             Demo
           </button>
@@ -132,7 +136,7 @@ export default function GameCard({
             <button
               onClick={() => setShowMenu(showMenu ? false : onShowInfo)}
               className={`h-[50px] mt-4 ${
-                !showMenu ? "bg-[#222]" : "bg-cyan-500"
+                !showMenu ? "bg-indigo-700" : "bg-indigo-600"
               } rounded-lg transition`}
             >
               <EllipsisVerticalIcon className={`text-white w-8`} />

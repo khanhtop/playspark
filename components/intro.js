@@ -180,7 +180,7 @@ export default function Intro({
                   setShowModal({
                     title: "Rewards",
                     content: ModalRewards,
-                    data: { ...data, theme: theme },
+                    data: { ...data, theme: theme, endDate: endDate },
                   });
                 }}
               />

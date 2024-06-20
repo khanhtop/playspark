@@ -22,7 +22,8 @@ const BarChart = ({ chartData }) => {
             {
               label: chartData.line1Name,
               data: chartData.line1Data,
-              borderColor: "rgb(75, 192, 192)",
+              borderColor: "rgba(67, 56, 202, 1)",
+              backgroundColor: "rgba(67, 56, 202, 1)",
               borderWidth: 2,
               fill: false,
             },

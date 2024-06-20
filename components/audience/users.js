@@ -37,14 +37,14 @@ export function AudienceUsers({}) {
 
   return (
     <>
-      <h2 className="text-white/70 mb-4">
+      <h2 className="text-black/70 mb-4">
         List of users who have created accounts for any of your tournaments.
       </h2>
-      <h2 className="text-white/70 mb-4">Total: {users?.length || 0}</h2>
+      <h2 className="text-black/70 mb-4">Total: {users?.length || 0}</h2>
 
       {users?.map((item, key) => (
-        <div className="text-white flex gap-2 mb-2">
-          <div className="bg-cyan-400 text-black h-6 w-6 rounded-full flex items-center justify-center text-xs">
+        <div className="text-black/70 flex gap-2 mb-2">
+          <div className="bg-indigo-700 text-white h-6 w-6 rounded-full flex items-center justify-center text-xs">
             {key + 1}
           </div>
           {item.email} {item.name !== "" ? `(${item.name})` : ""}

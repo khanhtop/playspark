@@ -14,13 +14,6 @@ export default function ModalLeaderboard({ data }) {
   useMemo(() => {
     if (!data.tournamentId || !context?.profile?.companyName) return;
     getLeaderboard(data.tournamentId).then(async (lb) => {
-      // const { rankedBoard, mutated } = rankMe(
-      //   lb,
-      //   context.loggedIn?.uid,
-      //   score,
-      //   context.loggedIn?.email,
-      //   context?.profile?.companyName || ""
-      // );
       setLeaderboard(lb);
     });
   }, [data.tournamentId, context?.profile?.companyName]);
@@ -33,7 +26,7 @@ export default function ModalLeaderboard({ data }) {
     );
 
   return (
-    <div className="pt-12 pb-4 px-4 flex flex-col gap-4">
+    <div className="pt-12 pb-4 px-4 flex flex-col gap-4 overflow-y-scroll h-full">
       {leaderboard
         ?.sort((a, b) => b.score - a.score)
         ?.map((item, key) => (

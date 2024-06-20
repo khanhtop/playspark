@@ -1,4 +1,6 @@
+import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
+import { doc, setDoc } from "firebase/firestore";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 
@@ -18,23 +20,41 @@ export default function ModalSettings({ data }) {
         changeKey="soundFx"
         theme={data.theme}
       />
+      <ToggleRow
+        title="Game Notifications"
+        parameter={context?.settings?.notifications}
+        changeKey="notifications"
+        theme={data.theme}
+      />
     </div>
   );
 }
 
 function ToggleRow({ parameter, changeKey, title, theme }) {
   const context = useAppContext();
-  return (
-    <div className={`flex gap-2 text-black/60`}>
-      <Toggle
-        checked={parameter}
-        onChange={() =>
-          context.setSettings({
+
+  const updateFirebase = async () => {
+    context.setSettings({
+      ...context.settings,
+      [changeKey]: !context.settings[changeKey],
+    });
+    if (context.loggedIn?.uid) {
+      await setDoc(
+        doc(firestore, "users", context.loggedIn.uid),
+        {
+          gameConfig: {
             ...context.settings,
             [changeKey]: !context.settings[changeKey],
-          })
-        }
-      />
+          },
+        },
+        { merge: true }
+      );
+    }
+  };
+
+  return (
+    <div className={`flex gap-2 text-black/60`}>
+      <Toggle checked={parameter} onChange={() => updateFirebase()} />
       <p
         className={`${
           theme === "pixel"

@@ -29,7 +29,7 @@ export default function IntroPanel({ data, theme, onAuthClick, waitOnAuth }) {
 
   const playCount = context.profile?.analytics?.playCount || 0;
 
-  const xp = context.profile?.dataByClient?.[data.ownerId]?.xp || 0;
+  const xp = context.profile?.dataByTournament?.[data.tournamentId]?.xp || 0;
 
   return (
     <div
