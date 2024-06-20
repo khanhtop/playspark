@@ -22,6 +22,7 @@ import {
   getGameCreditConsumption,
   shutoffBalance,
 } from "@/helpers/credits";
+import IntroModal from "./dash/modals/introModal";
 
 export default function Intro({
   waitOnAuth,
@@ -85,6 +86,14 @@ export default function Intro({
       });
     }
   }, [gameOver.score]);
+
+  useEffect(() => {
+    setShowModal({
+      title: "Welcome",
+      content: IntroModal,
+      data: { ...data, theme: theme },
+    });
+  }, []);
 
   return (
     <div

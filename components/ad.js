@@ -28,6 +28,8 @@ import Modal from "./ui/modal";
 import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
 import { useRouter } from "next/router";
+import ModalRewards from "./dash/modals/rewards";
+import IntroModal from "./dash/modals/introModal";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
