@@ -17,6 +17,8 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
   const [clientCredits, setClientCredits] = useState();
   const subscriptionRef = useRef(null);
 
+  console.log("CREDS", clientCredits);
+
   // LISTEN TO CLIENT CREDITS
 
   useEffect(() => {

@@ -47,6 +47,10 @@ export default function Intro({
 
   const expired = !data.isActive || (endDate && endDate < new Date());
 
+  console.log(endDate);
+
+  console.log(clientCredits);
+
   const selectStage = () => {
     const possibleRouting = [];
     if (data.demo) return 1;
