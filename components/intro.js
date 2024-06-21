@@ -91,13 +91,13 @@ export default function Intro({
     }
   }, [gameOver.score]);
 
-  useEffect(() => {
-    setShowModal({
-      title: "Welcome",
-      content: IntroModal,
-      data: { ...data, theme: theme },
-    });
-  }, []);
+  // useEffect(() => {
+  //   setShowModal({
+  //     title: "Welcome",
+  //     content: IntroModal,
+  //     data: { ...data, theme: theme },
+  //   });
+  // }, []);
 
   return (
     <div
