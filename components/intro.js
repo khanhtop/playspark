@@ -91,13 +91,25 @@ export default function Intro({
     }
   }, [gameOver.score]);
 
-  // useEffect(() => {
-  //   setShowModal({
-  //     title: "Welcome",
-  //     content: IntroModal,
-  //     data: { ...data, theme: theme },
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (
+      context.loggedIn?.uid &&
+      !context.profile?.termsAgreed?.includes(data.tournamentId)
+    ) {
+      setShowModal({
+        title: "Welcome",
+        content: IntroModal,
+        data: {
+          ...data,
+          hideClose: true,
+          theme: theme,
+          onClose: () => setShowModal(false),
+        },
+      });
+    }
+  }, [context.profile]);
+
+  console.log(context.loggedIn, context.profile);
 
   return (
     <div
@@ -218,6 +230,7 @@ export default function Intro({
       </div>
 
       <GlassModal
+        hideClose={showModal?.data?.hideClose}
         showWhen={showModal}
         onClose={() => setShowModal(false)}
         title={showModal?.title ?? "Modal"}
