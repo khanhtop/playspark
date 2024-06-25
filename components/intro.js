@@ -166,67 +166,92 @@ export default function Intro({
           </GameButton>
         )}
 
-        {context?.loggedIn?.uid && (
-          <div
-            style={{
-              bottom: data?.landscape ? 28 : 160,
-              right: data?.landscape ? 16 : 8,
-            }}
-            className="absolute w-[68px] right-2 z-10 flex justify-center mt-4"
+        <div
+          style={{
+            bottom: data?.landscape ? 28 : 160,
+            right: data?.landscape ? 16 : 8,
+          }}
+          className="absolute w-[68px] right-2 z-10 flex justify-center mt-4"
+        >
+          <IconTray
+            bgColor={data.primaryColor}
+            textColor={data.textColor}
+            theme={theme}
           >
-            <IconTray
+            <IconButton
+              Icon={`/theme_icons/${theme}/settings.png`}
+              icon={`/theme_icons/${theme}/settings.png`}
               bgColor={data.primaryColor}
               textColor={data.textColor}
               theme={theme}
-            >
-              <IconButton
-                Icon={`/theme_icons/${theme}/settings.png`}
-                icon={`/theme_icons/${theme}/settings.png`}
-                bgColor={data.primaryColor}
-                textColor={data.textColor}
-                theme={theme}
-                onClick={() => {
-                  playClickSound(context);
-                  setShowModal({
-                    title: "Settings",
-                    content: ModalSettings,
-                    data: { ...data, theme: theme },
-                  });
-                }}
-              />
-              <IconButton
-                Icon={TrophyIcon}
-                icon={`/theme_icons/${theme}/rewards.png`}
-                bgColor={data.primaryColor}
-                textColor={data.textColor}
-                theme={theme}
-                onClick={() => {
-                  playClickSound(context);
-                  setShowModal({
-                    title: "Rewards",
-                    content: ModalRewards,
-                    data: { ...data, theme: theme, endDate: endDate },
-                  });
-                }}
-              />
-              <IconButton
-                Icon={ChartBarIcon}
-                icon={`/theme_icons/${theme}/leaderboard.png`}
-                bgColor={data.primaryColor}
-                textColor={data.textColor}
-                theme={theme}
-                onClick={() => {
-                  playClickSound(context);
-                  setShowModal({
-                    title: "Leaderboard",
-                    content: ModalLeaderboard,
-                    data: { ...data, theme: theme },
-                  });
-                }}
-              />
-            </IconTray>
-          </div>
-        )}
+              onClick={() => {
+                playClickSound(context);
+                setShowModal({
+                  title: "Settings",
+                  content: ModalSettings,
+                  data: { ...data, theme: theme },
+                });
+              }}
+            />
+            <IconButton
+              Icon={TrophyIcon}
+              icon={`/theme_icons/${theme}/rewards.png`}
+              bgColor={data.primaryColor}
+              textColor={data.textColor}
+              theme={theme}
+              onClick={() => {
+                playClickSound(context);
+                setShowModal({
+                  title: "Rewards",
+                  content: ModalRewards,
+                  data: {
+                    ...data,
+                    theme: theme,
+                    endDate: endDate,
+                    onAuthClick: () =>
+                      setShowModal({
+                        title: "Sign Up",
+                        content: ModalAuth,
+                        data: {
+                          ...data,
+                          theme: theme,
+                          onClose: () => setShowModal(false),
+                        },
+                      }),
+                  },
+                });
+              }}
+            />
+            <IconButton
+              Icon={ChartBarIcon}
+              icon={`/theme_icons/${theme}/leaderboard.png`}
+              bgColor={data.primaryColor}
+              textColor={data.textColor}
+              theme={theme}
+              onClick={() => {
+                playClickSound(context);
+                setShowModal({
+                  title: "Leaderboard",
+                  content: ModalLeaderboard,
+                  data: {
+                    ...data,
+                    theme: theme,
+                    onAuthClick: () =>
+                      setShowModal({
+                        title: "Sign Up",
+                        content: ModalAuth,
+                        data: {
+                          ...data,
+                          theme: theme,
+                          onClose: () => setShowModal(false),
+                        },
+                      }),
+                  },
+                });
+              }}
+            />
+          </IconTray>
+        </div>
       </div>
 
       <GlassModal
@@ -267,13 +292,10 @@ function IconButton({ icon, theme, onClick, bgColor, textColor }) {
   const context = useAppContext();
   return (
     <div
-      onClick={() => {
-        if (context?.loggedIn?.uid) onClick();
-      }}
+      onClick={onClick}
       className={`h-full cursor-pointer aspect-square transition flex items-center justify-center`}
     >
       <img src={icon} className="w-full" />
-      {/* <Icon className="h-8 w-8" /> */}
     </div>
   );
 }

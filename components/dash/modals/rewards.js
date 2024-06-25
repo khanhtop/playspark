@@ -76,6 +76,7 @@ export default function ModalRewards({ data }) {
   };
 
   const fetchRewards = async () => {
+    if (!context?.loggedIn?.uid) return;
     getDocs(
       query(
         collection(firestore, "users", context?.loggedIn?.uid, "rewards"),
@@ -296,44 +297,46 @@ function RewardRow({
           {item.description}
         </div>
       </div>
-      <div className="px-0 py-2">
-        <button
-          style={{
-            backgroundColor: isRedeemed
-              ? "rgb(239, 68, 68)"
-              : unlocked
-              ? primaryColor
-              : "#EEE",
-            color: unlocked ? textColor : "#AAA",
-          }}
-          disabled={typeof claimed === "undefined" || loading}
-          className="h-full w-20 border-4 rounded-2xl"
-          onClick={() => {
-            if (isRedeemed) {
-              null;
-            } else if (unlocked && !claimed) {
-              onClaim(item);
-            } else if (claimed && isInteractableAfterClaim()) {
-              playClickSound(context);
-              onFlipCard(item);
-            }
-          }}
-        >
-          {typeof claimed === "undefined" || loading ? (
-            <ArrowPathIcon className="h-6 w-full animate-spin" />
-          ) : isRedeemed ? (
-            "Redeemed"
-          ) : claimed && !isInteractableAfterClaim() ? (
-            "Claimed"
-          ) : claimed && isInteractableAfterClaim() ? (
-            "Redeem"
-          ) : unlocked ? (
-            "Claim"
-          ) : (
-            <LockClosedIcon className="h-6 w-full" />
-          )}
-        </button>
-      </div>
+      {context?.loggedIn?.uid && (
+        <div className="px-0 py-2">
+          <button
+            style={{
+              backgroundColor: isRedeemed
+                ? "rgb(239, 68, 68)"
+                : unlocked
+                ? primaryColor
+                : "#EEE",
+              color: unlocked ? textColor : "#AAA",
+            }}
+            disabled={typeof claimed === "undefined" || loading}
+            className="h-full w-20 border-4 rounded-2xl"
+            onClick={() => {
+              if (isRedeemed) {
+                null;
+              } else if (unlocked && !claimed) {
+                onClaim(item);
+              } else if (claimed && isInteractableAfterClaim()) {
+                playClickSound(context);
+                onFlipCard(item);
+              }
+            }}
+          >
+            {typeof claimed === "undefined" || loading ? (
+              <ArrowPathIcon className="h-6 w-full animate-spin" />
+            ) : isRedeemed ? (
+              "Redeemed"
+            ) : claimed && !isInteractableAfterClaim() ? (
+              "Claimed"
+            ) : claimed && isInteractableAfterClaim() ? (
+              "Redeem"
+            ) : unlocked ? (
+              "Claim"
+            ) : (
+              <LockClosedIcon className="h-6 w-full" />
+            )}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

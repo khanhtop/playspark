@@ -45,7 +45,7 @@ export default function GlassModal({
           </div>
         </div>
         {!hideClose && (
-          <div className="flex justify-center absolute right-2 top-2">
+          <div className="flex justify-center absolute -right-4 -top-4">
             <div
               onClick={() => {
                 playClickSound(context);
