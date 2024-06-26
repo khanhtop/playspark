@@ -44,9 +44,44 @@ export default function IntroModal({ data }) {
             type="checkbox"
             className="scale-[200%] mt-1"
           />
-          <p className="text-xs ml-8 text-black">
-            By checking this box, I agree to the contest's terms and conditions,
-            terms of use and privacy policy.
+          <p className="text-sm ml-8 text-black">
+            By checking this box, I agree to the contest's{" "}
+            <span
+              className="underline cursor-pointer"
+              onClick={() =>
+                data.onLegalClick({
+                  title: "Terms",
+                  url: "/legal/terms.pdf",
+                })
+              }
+            >
+              terms and conditions
+            </span>
+            ,{" "}
+            <span
+              className="underline cursor-pointer"
+              onClick={() =>
+                data.onLegalClick({
+                  title: "Terms",
+                  url: "/legal/terms.pdf",
+                })
+              }
+            >
+              terms of use
+            </span>{" "}
+            and{" "}
+            <span
+              className="underline cursor-pointer"
+              onClick={() =>
+                data.onLegalClick({
+                  title: "Privacy",
+                  url: "/legal/privacy.pdf",
+                })
+              }
+            >
+              privacy policy
+            </span>
+            .
           </p>
         </div>
         <div className="mt-4">

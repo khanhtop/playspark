@@ -23,6 +23,7 @@ import {
   shutoffBalance,
 } from "@/helpers/credits";
 import IntroModal from "./dash/modals/introModal";
+import LegalModal from "./dash/modals/legalModal";
 
 export default function Intro({
   waitOnAuth,
@@ -37,6 +38,7 @@ export default function Intro({
 }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
   useMusic(
     data?.homescreenMusic ?? "/uisounds/intro.mp3",
     0.5,
@@ -104,6 +106,12 @@ export default function Intro({
           hideClose: true,
           theme: theme,
           onClose: () => setShowModal(false),
+          onLegalClick: (document) =>
+            setShowLegalModal({
+              title: document.title || "Legal",
+              content: LegalModal,
+              data: { ...data, url: document.url, hideClose: false },
+            }),
         },
       });
     }
@@ -259,6 +267,16 @@ export default function Intro({
         showWhen={showModal}
         onClose={() => setShowModal(false)}
         title={showModal?.title ?? "Modal"}
+        primaryColor={data.primaryColor}
+        textColor={data.textColor}
+        theme={theme}
+      />
+
+      <GlassModal
+        hideClose={false}
+        showWhen={showLegalModal}
+        onClose={() => setShowLegalModal(false)}
+        title={showLegalModal?.title ?? "Modal"}
         primaryColor={data.primaryColor}
         textColor={data.textColor}
         theme={theme}
