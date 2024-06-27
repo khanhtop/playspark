@@ -96,7 +96,7 @@ export default function Intro({
   useEffect(() => {
     if (
       context.loggedIn?.uid &&
-      context.profile?.termsAgreed?.includes(data.tournamentId)
+      !context.profile?.termsAgreed?.includes(data.tournamentId)
     ) {
       setShowModal({
         title: "Welcome",
