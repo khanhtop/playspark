@@ -51,7 +51,7 @@ export default function IntroModal({ data }) {
               onClick={() =>
                 data.onLegalClick({
                   title: "Terms",
-                  url: "/legal/terms.pdf",
+                  url: "https://drive.google.com/file/d/1H0wpj8pEn1LuZLtq7MjS2PLjEV6FPYzw/preview",
                 })
               }
             >
@@ -63,7 +63,7 @@ export default function IntroModal({ data }) {
               onClick={() =>
                 data.onLegalClick({
                   title: "Terms",
-                  url: "/legal/terms.pdf",
+                  url: "https://drive.google.com/file/d/1H0wpj8pEn1LuZLtq7MjS2PLjEV6FPYzw/preview",
                 })
               }
             >
@@ -75,7 +75,7 @@ export default function IntroModal({ data }) {
               onClick={() =>
                 data.onLegalClick({
                   title: "Privacy",
-                  url: "/legal/privacy.pdf",
+                  url: "https://drive.google.com/file/d/1H0wpj8pEn1LuZLtq7MjS2PLjEV6FPYzw/preview",
                 })
               }
             >
