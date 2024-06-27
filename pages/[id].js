@@ -196,6 +196,7 @@ export async function getServerSideProps(context) {
       const tournamentsData = tournamentsSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        endDate: doc.data().endDate ? JSON.stringify(doc.data().endDate) : null,
       }));
 
       const tournamentsByPlayCount = tournamentsData
