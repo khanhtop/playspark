@@ -75,7 +75,7 @@ export default function IntroModal({ data }) {
               onClick={() =>
                 data.onLegalClick({
                   title: "Privacy",
-                  url: "https://drive.google.com/file/d/1H0wpj8pEn1LuZLtq7MjS2PLjEV6FPYzw/preview",
+                  url: "https://drive.google.com/file/d/1nD9gqFa1hE10HPhpYtKLlO2saQpqXoD2/preview",
                 })
               }
             >
