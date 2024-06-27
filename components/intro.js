@@ -110,7 +110,12 @@ export default function Intro({
             setShowLegalModal({
               title: document.title || "Legal",
               content: LegalModal,
-              data: { ...data, url: document.url, hideClose: false },
+              data: {
+                ...data,
+                url: document.url,
+                hideClose: false,
+                isTermsOfUse: document.isTermsOfUse,
+              },
             }),
         },
       });

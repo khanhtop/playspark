@@ -63,6 +63,7 @@ export default function IntroModal({ data }) {
               onClick={() =>
                 data.onLegalClick({
                   title: "Terms",
+                  isTermsOfUse: true,
                   url: "https://drive.google.com/file/d/1H0wpj8pEn1LuZLtq7MjS2PLjEV6FPYzw/preview",
                 })
               }
