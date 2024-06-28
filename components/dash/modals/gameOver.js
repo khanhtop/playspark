@@ -101,70 +101,90 @@ export default function ModalGameOver({ data }) {
 
   return (
     <div className="pt-12 pb-4 px-4 flex flex-col gap-2 font-octo text-black text-2xl items-center">
-      <div className="flex flex-col items-center mb-2">
-        <h1 className="">Your Score</h1>
-        <h1
-          className="text-4xl font-titan"
-          style={{
-            color: "black",
-          }}
-        >
-          {data.gameOverScore}
-        </h1>
-      </div>
-      {didNotBeat && (
-        <div>
-          <p className="font-octo text-xl text-center text-black/100 max-w-[200px] mb-2">
-            Previous Best {didNotBeat.previous}
-          </p>
-        </div>
-      )}
-      {loading ? (
-        <ArrowPathIcon className="h-10 w-10 mb-4 text-white animate-spin" />
-      ) : (
-        <div className="flex items-center gap-2 mb-4 max-w-[400px]">
-          <img
-            src={`/theme_icons/${data.theme}/rank.png`}
-            className="h-24 w-24"
-          />
-          <p className="font-octo text-xl text-center text-black/100 max-w-[120px]">
-            {data?.gameOverScore === 0
-              ? `Try again to rank on the leaderboard!`
-              : !context?.loggedIn?.uid
-              ? `You could be ranked #${leaderboard.position}`
-              : `You ${didNotBeat ? "are still ranked" : "ranked"} #${
-                  leaderboard.position
-                }`}
-          </p>
-        </div>
-      )}
-      {!context?.loggedIn?.uid && (
-        <div className="flex flex-col items-center gap-2 mb-4 max-w-[400px]">
-          <p className="font-roboto text-lg text-center text-black/50">
-            Signup or login to get your score on the leaderboard + access to
-            prizes
-          </p>
-          <GameButton
-            onClick={() => data.onAuth()}
-            bgColor="red"
-            textColor="white"
-            theme={data?.theme}
-          >
-            Sign Up / Login
-          </GameButton>
-        </div>
-      )}
-
-      <GameButton
-        disabled={data?.gameOverRevives === 0}
-        bgColor="blue"
-        textColor="white"
-        theme={data?.theme}
-        badge={data.gameOverRevives}
-        onClick={() => data?.onRevive()}
+      <div
+        className={`flex gap-2 ${
+          data?.data?.landscape ? "flex-row" : "flex-col"
+        }`}
       >
-        Revive
-      </GameButton>
+        <div className="flex flex-col items-center mb-2">
+          <h1 className="">Your Score</h1>
+          <h1
+            className="text-4xl font-titan"
+            style={{
+              color: "black",
+            }}
+          >
+            {data.gameOverScore}
+          </h1>
+        </div>
+        {didNotBeat && (
+          <div>
+            <p className="font-octo text-xl text-center text-black/100 max-w-[200px] mb-2">
+              Previous Best {didNotBeat.previous}
+            </p>
+          </div>
+        )}
+        {loading ? (
+          <ArrowPathIcon className="h-10 w-10 mb-4 text-white animate-spin" />
+        ) : (
+          <div className="flex items-center gap-2 mb-4 max-w-[400px]">
+            <img
+              src={`/theme_icons/${data.theme}/rank.png`}
+              className="h-24 w-24"
+            />
+            <p className="font-octo text-base text-center text-black/100 max-w-[120px]">
+              {data?.gameOverScore === 0
+                ? `Try again to rank on the leaderboard!`
+                : !context?.loggedIn?.uid
+                ? `You could be ranked #${leaderboard.position}`
+                : `You ${didNotBeat ? "are still ranked" : "ranked"} #${
+                    leaderboard.position
+                  }`}
+            </p>
+          </div>
+        )}
+      </div>
+      <div
+        className={`flex gap-2 items-center ${
+          data?.data?.landscape ? "flex-row" : "flex-col"
+        }`}
+      >
+        {!context?.loggedIn?.uid && (
+          <div
+            style={{
+              marginBottom: data?.data?.landscape ? 0 : 20,
+              maxWidth: !data?.data?.landscape && 400,
+            }}
+            className={`flex ${
+              data?.data?.landscape ? "flex-row" : "flex-col"
+            } items-center gap-8  `}
+          >
+            <p className="font-roboto text-base text-center text-black/50">
+              Signup or login to get your score on the leaderboard + access to
+              prizes
+            </p>
+            <GameButton
+              onClick={() => data.onAuth()}
+              bgColor="red"
+              textColor="white"
+              theme={data?.theme}
+            >
+              Sign In
+            </GameButton>
+          </div>
+        )}
+
+        <GameButton
+          disabled={data?.gameOverRevives === 0}
+          bgColor="blue"
+          textColor="white"
+          theme={data?.theme}
+          badge={data.gameOverRevives}
+          onClick={() => data?.onRevive()}
+        >
+          Revive
+        </GameButton>
+      </div>
     </div>
   );
 }

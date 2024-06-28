@@ -1,4 +1,5 @@
 import TapHold from "@/components/ui/tapHold";
+import Text from "@/components/ui/text";
 import GameButton from "@/components/uiv2/gameButton";
 import { playClickSound } from "@/helpers/audio";
 import { firestore } from "@/helpers/firebase";
@@ -347,24 +348,28 @@ function Tabs({ data, tab, onChange }) {
       <div
         onClick={() => onChange("intragame")}
         style={{
+          opacity: tab === "intragame" ? 1 : 0.5,
+          color: data.theme === "pixel" ? "black" : "white",
           borderBottomColor:
             tab === "intragame" ? data.primaryColor : "transparent",
         }}
         className={`${
-          tab === "intragame" ? "text-white" : "text-white/50 cursor-pointer"
-        } flex-1 border-b-8 flex justify-center py-2`}
+          data.theme === "pixel" ? "font-pixel text-2xl" : ""
+        } flex-1 border-b-8 flex justify-center py-2 cursor-pointer`}
       >
-        <p>In Game</p>
+        <p>Intragame</p>
       </div>
       <div
         onClick={() => onChange("postgame")}
         style={{
+          opacity: tab === "postgame" ? 1 : 0.5,
+          color: data.theme === "pixel" ? "black" : "white",
           borderBottomColor:
             tab === "postgame" ? data.primaryColor : "transparent",
         }}
         className={`${
-          tab === "postgame" ? "text-white" : "text-white/50 cursor-pointer"
-        } flex-1 border-b-8 flex justify-center py-2`}
+          data.theme === "pixel" ? "font-pixel text-2xl" : ""
+        } flex-1 border-b-8 flex justify-center py-2 cursor-pointer`}
       >
         <p>Post Game</p>
       </div>
