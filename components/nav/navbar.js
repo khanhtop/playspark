@@ -6,7 +6,7 @@ export default function Navbar() {
   const [navOpen, setNavOpen] = useState(false);
   return (
     <>
-      <div className="fixed top-0 left-0 w-full h-24 text-black hidden lg:flex items-center justify-between px-8 bg-white/100 backdrop-blur">
+      <div className="z-20 fixed top-0 left-0 w-full h-24 text-black hidden lg:flex items-center justify-between px-8 bg-white/100 backdrop-blur">
         <img src="/ui/logo.png" className="h-full" />
         <div className="flex gap-4 font-bold">
           <Link className="hover:text-sky-600" href="/">
