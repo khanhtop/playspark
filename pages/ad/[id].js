@@ -16,8 +16,69 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
   const [waitOnAuth, setWaitOnAuth] = useState(false);
   const [clientCredits, setClientCredits] = useState();
   const subscriptionRef = useRef(null);
+  const [deviceId, setDeviceId] = useState(null);
 
-  console.log("CREDS", clientCredits);
+  function generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0,
+          v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
+
+  // Function to create a fingerprint from browser details
+  function createFingerprint() {
+    const navigatorInfo = window.navigator;
+    const screenInfo = window.screen;
+    const fingerprint = [
+      navigatorInfo.userAgent,
+      navigatorInfo.language,
+      screenInfo.colorDepth,
+      new Date().getTimezoneOffset(),
+      navigatorInfo.platform,
+      navigatorInfo.doNotTrack,
+      screenInfo.height,
+      screenInfo.width,
+    ].join("");
+    return fingerprint;
+  }
+
+  // Simple hash function to create a 16-bit hash
+  function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return (hash & 0xffff).toString(16).padStart(4, "0"); // Return 16-bit hash
+  }
+
+  // Function to get or generate a device ID
+  function getDeviceID() {
+    // Check if a device ID is already stored
+    let deviceID = localStorage.getItem("psUUID");
+    if (!deviceID) {
+      // Create a fingerprint and generate a UUID
+      const fingerprint = createFingerprint();
+      const uuid = generateUUID();
+      // Hash the fingerprint with a simple hash function
+      const hashedFingerprint = simpleHash(fingerprint);
+      // Combine the hashed fingerprint with the UUID to create the device ID
+      deviceID = `${hashedFingerprint}-${uuid}`;
+      // Store the device ID in localStorage
+      localStorage.setItem("psUUID", deviceID);
+    }
+    return deviceID;
+  }
+
+  useEffect(() => {
+    const uuid = getDeviceID();
+    setDeviceId(uuid);
+  }, []);
 
   // LISTEN TO CLIENT CREDITS
 
@@ -148,6 +209,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
             userId={userId}
             email={email}
             clientCredits={clientCredits}
+            uuid={deviceId}
           />
         ) : (
           <p>{id} - AD NOT FOUND</p>
