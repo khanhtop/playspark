@@ -131,7 +131,10 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
             signInWithEmailAndPassword(auth, json.email, json.password);
           }
         });
-    } else if (externalId && externalId === "override") {
+    } else if (
+      (externalId && externalId === "override") ||
+      ad.ownerId === "xwMcL84YdoRXAV52oNjmhVhCHD63"
+    ) {
       const uuid = getDeviceID();
       if (uuid !== null) {
         const emailStructure = uuid + "@playspark.co";
