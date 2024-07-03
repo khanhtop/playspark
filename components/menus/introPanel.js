@@ -14,28 +14,28 @@ export default function IntroPanel({
 
   if (waitOnAuth) return <div />;
 
-  if (!context.profile && !waitOnAuth && data.tournamentId === 1719467034841) {
-    return (
-      <div
-        onClick={onAuthClick}
-        className="w-[200px] font-octo px-2 pt-2 pb-1 flex flex-col bg-black/30 hover:bg-black/50 transition cursor-pointer backdrop-blur rounded-2xl shadow-lg border-2 border-white/20 items-center justify-center"
-      >
-        {/* <p className="text-xl">Sign In</p> */}
-        <p className="font-roboto text-white/50 text-center text-sm">{uuid}</p>
-      </div>
-    );
-  }
-  return (
-    <div
-      onClick={onAuthClick}
-      className="w-[200px] font-octo px-2 pt-2 pb-1 flex flex-col bg-black/30 hover:bg-black/50 transition cursor-pointer backdrop-blur rounded-2xl shadow-lg border-2 border-white/20 items-center justify-center"
-    >
-      <p className="text-xl">Sign In</p>
-      <p className="font-roboto text-white/50 text-center text-sm">
-        To access rewards and rank on leaderboards.
-      </p>
-    </div>
-  );
+  // if (!context.profile && !waitOnAuth && data.tournamentId === 1719467034841) {
+  //   return (
+  //     <div
+  //       onClick={onAuthClick}
+  //       className="w-[200px] font-octo px-2 pt-2 pb-1 flex flex-col bg-black/30 hover:bg-black/50 transition cursor-pointer backdrop-blur rounded-2xl shadow-lg border-2 border-white/20 items-center justify-center"
+  //     >
+  //       {/* <p className="text-xl">Sign In</p> */}
+  //       <p className="font-roboto text-white/50 text-center text-sm">{uuid}</p>
+  //     </div>
+  //   );
+  // }
+  // return (
+  //   <div
+  //     onClick={onAuthClick}
+  //     className="w-[200px] font-octo px-2 pt-2 pb-1 flex flex-col bg-black/30 hover:bg-black/50 transition cursor-pointer backdrop-blur rounded-2xl shadow-lg border-2 border-white/20 items-center justify-center"
+  //   >
+  //     <p className="text-xl">Sign In</p>
+  //     <p className="font-roboto text-white/50 text-center text-sm">
+  //       To access rewards and rank on leaderboards.
+  //     </p>
+  //   </div>
+  // );
 
   if (!context.profile && !waitOnAuth)
     return (
@@ -64,7 +64,7 @@ export default function IntroPanel({
     <div
       style={{
         height: open ? 180 : 90,
-        width: open ? 200 : 80,
+        width: open ? 360 : 80,
         transition: "height 0.5s",
       }}
       onClick={() => setOpen(!open)}

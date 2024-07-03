@@ -75,11 +75,6 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
     return deviceID;
   }
 
-  useEffect(() => {
-    const uuid = getDeviceID();
-    setDeviceId(uuid);
-  }, []);
-
   // LISTEN TO CLIENT CREDITS
 
   useEffect(() => {
@@ -115,8 +110,10 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
     return "https://playspark.co" + url;
   };
 
+  // AUTO-SIGN IN WITH PROVIDED EMAIL
+
   useEffect(() => {
-    if (externalId) {
+    if (externalId && externalId !== "override") {
       setWaitOnAuth(true);
       logoutWithoutReroute();
       fetch("https://playspark.co/api/auth/externalUser", {
@@ -134,6 +131,28 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
             signInWithEmailAndPassword(auth, json.email, json.password);
           }
         });
+    } else if (externalId && externalId === "override") {
+      const uuid = getDeviceID();
+      if (uuid !== null) {
+        const emailStructure = uuid + "@playspark.co";
+        setWaitOnAuth(true);
+        logoutWithoutReroute();
+        fetch("https://playspark.co/api/auth/externalUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: emailStructure, name: config.name }),
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((json) => {
+            if (json.email && json.password) {
+              signInWithEmailAndPassword(auth, json.email, json.password);
+            }
+          });
+      }
     }
   }, [externalId]);
 
@@ -226,12 +245,16 @@ export async function getServerSideProps(context) {
   // Additional parameters
   const { name, hideback, hiderevive, forcelogout } = context?.query;
 
+  const { deviceIdSignIn } = context?.query;
+
   let externalId = null;
 
   if (user && platform) {
     const emailAddress = decryptEmail(user, platform);
     externalId = refactorEmail(emailAddress, platform);
   }
+
+  if (deviceIdSignIn) externalId = "override";
 
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);
