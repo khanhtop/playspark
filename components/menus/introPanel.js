@@ -64,7 +64,7 @@ export default function IntroPanel({
     <div
       style={{
         height: open ? 180 : 90,
-        width: open ? 360 : 80,
+        width: open ? "90%" : 80,
         transition: "height 0.5s",
       }}
       onClick={() => setOpen(!open)}
