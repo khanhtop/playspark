@@ -1,0 +1,140 @@
+import * as GUI from "@babylonjs/gui";
+import { EventTypes, Events } from "../Events";
+import { Tutorial1 } from "./Tutorial1";
+import { BlackBG } from "./BlackBG";
+import { Utils } from "../Utils";
+import { Tutorial2 } from "./Tutorial2";
+import { Tutorial3 } from "./Tutorial3";
+import { Timer } from "../Timer";
+import {
+  BALL_RESET_POS_TIME,
+  CAN_REAPPEAR_TIME,
+  ON_POWERUP_ENABLED,
+} from "../Consts";
+import { Images } from "../Images";
+import { LevelCreator } from "../LevelCreator";
+import { Vector3 } from "@babylonjs/core";
+
+export class TutorialManager {
+  constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
+    let tutorial1 = new Tutorial1(advancedTexture);
+    tutorial1.hide();
+
+    let tutorial2 = new Tutorial2(advancedTexture);
+    tutorial2.hide();
+
+    let tutorial3 = new Tutorial3(advancedTexture);
+    tutorial3.hide();
+
+    let tutorialStep = 1;
+
+ 
+
+    let ph = Events.powerup.add((data: any) => {
+      if (data.type != ON_POWERUP_ENABLED) return;
+      BlackBG.instance.show(Images.data.blackbg3);
+      tutorial3.show();
+      setTimeout(() => {
+        Utils.pause(true);
+      }, 1000);
+
+      Events.powerup.remove(ph);
+    });
+
+    if (tutorialStep <= 2) {
+      let ghs = Events.gamePlay.add((data: any) => {
+        if (data.type != EventTypes.ON_BALL_SHOOT) return;
+        switch (tutorialStep) {
+          case 2:
+            Timer.Instance.add(
+              BALL_RESET_POS_TIME,
+              () => {
+                this.showTutorial2(tutorial2);
+              },
+              this
+            );
+      
+            break;
+          case 3:
+           
+            Events.gamePlay.remove(ghs);
+            break;
+        }
+      });
+    }
+    /* Utils.pause(true);
+    setTimeout(() => {
+      Utils.pause(false);
+    }, 1000);*/
+
+    switch (tutorialStep) {
+      case 1:
+        BlackBG.instance.show(Images.data.blackbg1);
+        tutorial1.show();
+        setTimeout(() => {
+          Utils.pause(true);
+        }, 1000);
+
+        break;
+      case 2:
+        this.showTutorial2(tutorial2);
+      
+        break;
+      case 3:
+        BlackBG.instance.show(Images.data.blackbg3);
+        tutorial3.show();
+        setTimeout(() => {
+          Utils.pause(true);
+        }, 1000);
+        break;
+    }
+
+    Events.ui.add((data: any) => {
+      if (data.type != EventTypes.TUTORIAL_CLOSE_BTN_CLICKED) return;
+      tutorial1.hide();
+      tutorial2.hide();
+      tutorial3.hide();
+      Events.input.notifyObservers({
+        name: "BallPicker:setActive",
+        state: true,
+      });
+      BlackBG.instance.hide();
+      Utils.pause(false);
+      tutorialStep++;
+    });
+  }
+
+  private showTutorial2(tutorial2: Tutorial2) {
+    // dont remove this line
+    //  Utils.isgamePaused = true;
+
+    LevelCreator.instane.cansPool.forEach((can)=>{
+      can.setPosition(
+        new Vector3(
+          can.defaultPos.x +
+            LevelCreator.platforms[can.platformIndex].position.x,
+          can.defaultPos.y +
+            LevelCreator.platforms[can.platformIndex].position.y +
+            0.4,
+          can.defaultPos.z +
+            LevelCreator.platforms[can.platformIndex].position.z
+        )
+      );
+    })
+
+
+    Events.input.notifyObservers({
+      name: "BallPicker:setActive",
+      state: false,
+    });
+
+    BlackBG.instance.show(Images.data.blackbg2);
+    tutorial2.show();
+    setTimeout(() => {
+      Utils.pause(true);
+    }, 1000);
+  }
+
+  hide() {}
+  show(step: number) {}
+}

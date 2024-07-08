@@ -1,0 +1,12 @@
+export const EACH_CAN_SCORE:number = 25;
+export const ENEMY_REDUCE_SCORE:number = 1;
+export const POWERUP_CREDIT_COUNT:number = 1;
+export const CAN_REAPPEAR_TIME:number = 5;// sec
+export const POWERUP_REAPPEAR_TIME:number = 5; // sec
+export const BIGBALL_POWERUP_COST:number = 3;
+export const SHIELD_POWERUP_COST:number = 2;
+export const BIGBALL_POWERUP_TIMER:number = 5;//sec
+export const SHIELD_POWERUP_TIMER:number = 5; // sec
+export const BALL_RESET_POS_TIME:number = 2; // sec
+export const DEFAULT_POWERUP_COUNT:number = 0; 
+export const ON_POWERUP_ENABLED:number = 101010; 
