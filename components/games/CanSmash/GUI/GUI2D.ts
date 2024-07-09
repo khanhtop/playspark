@@ -107,7 +107,9 @@ export class GUI2D {
       let currentLevel = GameData.instance.getCurrentLevel();
       let currentScore = GameData.instance.getTotalScore();
       // currentLevel: number,currentScore: number,targetHits:
+
       gameOverUI.showPopup(currentLevel, currentScore, data.data.targetsHits);
+
       Utils.pause(true);
     });
 

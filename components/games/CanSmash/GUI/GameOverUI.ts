@@ -89,9 +89,11 @@ export class GameOverUI {
     close_btn.onPointerClickObservable.add(() => {
       self.hidePopup();
       //console.log("Restart Level");
-      LevelCreator.instane.restart();
+     // LevelCreator.instane.restart();
       // temporary
       Utils.pause(false);
+      Events.gamePlay.notifyObservers({name:"gameOverClose"});
+        
     });
     advancedTexture.addControl(this.container);
   }
@@ -130,6 +132,10 @@ export class GameOverUI {
     this.yourScore_count.text = currentScore.toString();
     this.levelReached_count.text = currentLevel.toString();
     this.targetshits_count.text = targetHits.toString();
+
+  
+    Events.gamePlay.notifyObservers({name:"gameOver"});
+
   }
   hidePopup() {
     this.container.isEnabled = false;

@@ -34,9 +34,48 @@ import { DEFAULT_POWERUP_COUNT } from "./Consts";
 import { ParticleManager } from "./ParticleManager";
 import { Images } from "./Images";
 import { Sounds } from "./Sounds";
+import { Events, EventTypes } from "./Events";
 
-const CanSmash = () => {
+const CanSmash = (data: any) => {
+  //   ball,
+  //   brandLogo,
+  //   high_value_target,
+  //   landscape,
+  //   maxscore,
+  //   normal_target_1,
+  //   normal_target_2,
+  //   normal_target_3,
+  //   objectSprite,
+  //   obstacle,
+  //   playerSprite,
+  //   powerup,
+  //   sponsorLogo;
+
   useEffect(() => {
+    // console.log("CanSmash2:", data.callback);
+    console.log("CanSmash4:", data);
+
+    // data.callback(totalScore, currentLevel + 1, this.boostCredits);
+
+    let timerHandle = null;
+    Events.gamePlay.add((_data: any) => {
+      if (_data.name == "gameOverClose" || _data.name == "gameOver") {
+        let timer = 0;
+        timer = _data.name == "gameOver" ? 5000 : 0;
+        clearTimeout(timerHandle);
+        timerHandle = setTimeout(() => {
+          let currentLevel = GameData.instance.getCurrentLevel();
+          let currentScore = GameData.instance.getTotalScore();
+          data.callback(currentScore, currentLevel, 2);
+        }, timer);
+      }
+    });
+
+    let score = 0;
+    let level = 1;
+    let lives = 2;
+    let boostCredits = 0;
+
     var div = document.createElement("div");
     div.id = "game";
     //document.body.appendChild(div);
@@ -89,17 +128,27 @@ const CanSmash = () => {
     });
 
     let baseUrl = "/pong/canSmash/";
-    loader.loadMesh(baseUrl , "can.glb");
-    loader.loadMesh(baseUrl , "barrel.glb");
-    loader.loadMesh(baseUrl,"ledges.glb");
+    loader.loadMesh(baseUrl, "can.glb");
+    loader.loadMesh(baseUrl, "barrel.glb");
+    loader.loadMesh(baseUrl, "ledges.glb");
     loader.loadFont(baseUrl, "PeaceSans", "PeaceSansWebfont.ttf");
 
     Object.keys(Sounds.data).forEach((key) => {
       Sounds.data[key] = baseUrl + Sounds.data[key];
     });
-
     Object.keys(Images.data).forEach((key) => {
       Images.data[key] = baseUrl + Images.data[key];
+    });
+
+    ({ score, level, lives, boostCredits } = initParams(
+      data,
+      score,
+      level,
+      lives,
+      boostCredits
+    ));
+
+    Object.keys(Images.data).forEach((key) => {
       loader.loadImage(Images.data[key]);
     });
 
@@ -125,9 +174,10 @@ const CanSmash = () => {
       new ImagePopupManager();
       new PowerupManager(scene);
       new GUI2D();
-      new LiveManager(2);
-      new ScoreManager(0);
-      new PowerupCreditManager(DEFAULT_POWERUP_COUNT);
+
+      new LiveManager(lives);
+      new ScoreManager(score);
+      new PowerupCreditManager(boostCredits);
       new ParticleManager();
 
       function animate(time) {
@@ -139,7 +189,7 @@ const CanSmash = () => {
       new CanManager(scene);
       new LevelManager(scene);
       const levelCreator = new LevelCreator();
-      levelCreator.create(0);
+      levelCreator.create(level - 1);
       new ComboBonus();
       new TimeBonus();
 
@@ -160,3 +210,54 @@ const CanSmash = () => {
 };
 
 export default CanSmash;
+function initParams(
+  data: any,
+  score: number,
+  level: number,
+  lives: number,
+  boostCredits: number
+) {
+  if (data == undefined) return { score, level, lives, boostCredits };
+  if (data.params == undefined) return { score, level, lives, boostCredits };
+
+  if (data.params.backgroundMusic != undefined)
+    Sounds.data.music = data.params.backgroundMusic;
+
+  if (data.params.backgroundSprite != undefined)
+    Images.data.background = data.params.backgroundSprite;
+
+  if (data.params.enemySprite != undefined)
+    Images.data.enemy = data.params.enemySprite;
+
+  if (data.params.powerupSprite != undefined)
+    Images.data.powerup_credit = data.params.powerupSprite;
+
+  if (data.params.additionalSpriteOne != undefined)
+    Images.data.logo1 = data.params.additionalSpriteOne;
+
+  if (data.params.additionalSpriteTwo != undefined)
+    Images.data.logo2 = data.params.additionalSpriteTwo;
+
+  if (data.params.additionalSpriteThree != undefined)
+    Images.data.logo3 = data.params.additionalSpriteThree;
+
+  if (data.params.additionalSpriteFour != undefined)
+    Images.data.logo4 = data.params.additionalSpriteFour;
+
+  if (data.params.additionalSpriteFive != undefined)
+    Images.data.barrel = data.params.additionalSpriteFive;
+
+  if (data.params.additionalSpriteSix != undefined)
+    Images.data.greengrass = data.params.additionalSpriteSix;
+
+  if (data.params.score != undefined) score = parseInt(data.params.score);
+
+  if (data.params.level != undefined) level = parseInt(data.params.level);
+
+  if (data.params.lives != undefined) lives = parseInt(data.params.lives);
+
+  if (data.params.boostCredits != undefined)
+    boostCredits = parseInt(data.params.boostCredits);
+
+  return { score, level, lives, boostCredits };
+}

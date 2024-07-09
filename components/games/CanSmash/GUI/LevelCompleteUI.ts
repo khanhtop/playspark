@@ -87,8 +87,11 @@ export class LevelCompleteUI {
 
     this.next_level_bg = new GUI.Image();
     this.next_level_bg.source = Images.data.nextlvl_bg;
-    this.next_level_bg.widthInPixels = 431 / 1.18;
-    this.next_level_bg.heightInPixels = 128 / 1.18;
+    this.next_level_bg.widthInPixels = 365;
+    this.next_level_bg.heightInPixels = 108;
+    this.next_level_bg.sourceWidth = 365;
+    this.next_level_bg.sourceHeight = 108;
+
     this.next_level_bg.topInPixels = 140;
     this.next_level_bg.horizontalAlignment =
       GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
