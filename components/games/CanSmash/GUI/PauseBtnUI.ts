@@ -12,7 +12,7 @@ export class PauseBtnUI {
     container.adaptWidthToChildren = true;
     container.heightInPixels = 70 ;
     container.widthInPixels = 70 ;
-    container.adaptWidthToChildren = true;
+   // container.adaptWidthToChildren = true;
     container.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     container.topInPixels = 25;
@@ -23,7 +23,7 @@ export class PauseBtnUI {
     img.source = Images.data.pause_button;
     img.widthInPixels = 60;
     img.heightInPixels = 60;
-    img.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+   // img.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     container.addControl(img);
 
 

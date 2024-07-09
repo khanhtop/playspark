@@ -22,8 +22,12 @@ export class GameOverUI {
 
     var img = new GUI.Image();
     img.source =  Images.data.LosePopup;
+
     img.widthInPixels = 480;
     img.heightInPixels = 420;
+    img.sourceWidth = 480;
+    img.sourceHeight = 420;
+
     img.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(img);

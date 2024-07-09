@@ -28,14 +28,22 @@ export class PauseUI {
     this.container = new GUI.Container();
     this.container.adaptWidthToChildren = true;
     this.container.adaptHeightToChildren = true;
+    this.container.clipChildren = false;
+    this.container.clipContent = false;
+
     this.container.horizontalAlignment =
       GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     this.container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
     var img = new GUI.Image();
+    img.clipChildren = false;
+    img.clipContent = false;
     img.source = Images.data.PopupBig;
     img.widthInPixels = 480;
     img.heightInPixels = 600;
+    img.sourceWidth = 480;
+    img.sourceHeight = 600;
+
     img.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(img);

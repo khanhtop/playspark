@@ -2,6 +2,7 @@ import { Engine, Scene, Sound } from "@babylonjs/core";
 import { EventTypes, Events } from "./Events";
 import { GameData } from "./GameData";
 import { ICan } from "./Can/ICan";
+import { Sounds } from "./Sounds";
 
 export class AudioManager {
   private isSfxOn: boolean = true;
@@ -26,20 +27,24 @@ export class AudioManager {
 
     Engine.audioEngine.useCustomUnlockedButton = true;
 
-    var music = new Sound("Music", "music.mp3", scene, null, {
+    var music = new Sound("Music", Sounds.data.music, scene, null, {
       loop: true,
       autoplay: this.isMusicOn,
     });
 
-    var click = new Sound("Click", "click.mp3", scene);
-    var powerUpUiActiveClick = new Sound("Click", "powerupClick.mp3", scene);
-    var canHit = new Sound("canHit", "can_hit.wav", scene);
-    var powerupHit = new Sound("powerupHit", "powerup_hit.wav", scene);
-    var enemyHit = new Sound("enemyHit", "enemy_hit.mp3", scene);
-    var lose = new Sound("lose", "lose.wav", scene);
-    var win = new Sound("win", "win.wav", scene);
-    var combo = new Sound("combo", "booster-collect.mp3", scene);
-    var targetReach = new Sound("combo", "targetReach.mp3", scene);
+    var click = new Sound("Click", Sounds.data.click, scene);
+    var powerUpUiActiveClick = new Sound(
+      "Click",
+      Sounds.data.powerUpUiActiveClick,
+      scene
+    );
+    var canHit = new Sound("canHit", Sounds.data.canHit, scene);
+    var powerupHit = new Sound("powerupHit", Sounds.data.powerupHit, scene);
+    var enemyHit = new Sound("enemyHit", Sounds.data.enemyHit, scene);
+    var lose = new Sound("lose", Sounds.data.lose, scene);
+    var win = new Sound("win", Sounds.data.win, scene);
+    var combo = new Sound("combo", Sounds.data.combo, scene);
+    var targetReach = new Sound("combo", Sounds.data.targetReach, scene);
 
     Events.ui.add((data: any) => {
       this.isMusicOn = GameData.instance.getMusicState();

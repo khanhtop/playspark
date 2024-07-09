@@ -20,9 +20,9 @@ export class Loader {
     Loader.instance = this;
     this.callBack = callBack;
   }
-  loadFont(name :string,url: string) {
+  loadFont(baseUrl:string, name :string,url: string) {
     this.loadCount++;
-    const font = new FontFace(name, `url(${url})`, {
+    const font = new FontFace(name, `url(${baseUrl+url})`, {
       style: "normal",
       weight: "400",
       stretch: "condensed",
@@ -51,9 +51,9 @@ export class Loader {
    // console.log("image loded",url)
     this.checkLoadComplete();
   }
-  loadMesh(name: string) {
+  loadMesh(baseUrl:string,name: string) {
     this.loadCount++;
-    const resultPromise = SceneLoader.ImportMeshAsync("", "./", name);
+    const resultPromise = SceneLoader.ImportMeshAsync("", baseUrl, name);
 
     // Result has meshes, particleSystems, skeletons, animationGroups and transformNodes
     resultPromise.then((result) => {

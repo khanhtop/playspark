@@ -1,45 +1,53 @@
-import { useEffect } from 'react';
-import { Engine, Scene } from '@babylonjs/core';
-import '@babylonjs/core/Debug/debugLayer';
-import ('@babylonjs/inspector');
-import '@babylonjs/loaders/glTF';
-import * as TWEEN from '@tweenjs/tween.js';
+import { useEffect } from "react";
+import { Engine, Scene } from "@babylonjs/core";
+import "@babylonjs/core/Debug/debugLayer";
+import("@babylonjs/inspector");
+import "@babylonjs/loaders/glTF";
+import * as TWEEN from "@tweenjs/tween.js";
 
-import { CameraController } from './CameraController';
-import { LightController } from './LightController';
-import { BallManager } from './Ball/BallManager';
-import { Inputs } from './Inputs';
-import { BallPicker } from './Ball/BallPicker';
-import { Ground } from './Environment/Ground';
-import { Background } from './Environment/Background';
-import { PowerupManager } from './Powerups/PowerupManager';
-import { GUI2D } from './GUI/GUI2D';
-import { LevelCreator } from './LevelCreator';
-import { Materials } from './Materials';
-import { Loader } from './Loader';
-import { LiveManager } from './GUI_EVENTTS/LiveManager';
-import { ScoreManager } from './GUI_EVENTTS/ScoreManager';
-import { PowerupCreditManager } from './Powerups/PowerupCreditManager';
-import { TextPopupManager } from './GUI/TextPopupManager';
-import { CanManager } from './Can/CanManager';
-import { LevelManager } from './LevelManager';
-import { GameData } from './GameData';
-import { ImagePopupManager } from './GUI/ImagePopupManager';
-import { ComboBonus } from './Combo/ComboBonus';
-import { TimeBonus } from './Combo/TimeBonus';
-import { Timer } from './Timer';
-import { AudioManager } from './AudioManager';
-import { SaveLoadData } from './SaveLoadData.';
-import { DEFAULT_POWERUP_COUNT } from './Consts';
-import { ParticleManager } from './ParticleManager';
-import { Images } from './Images';
+import { CameraController } from "./CameraController";
+import { LightController } from "./LightController";
+import { BallManager } from "./Ball/BallManager";
+import { Inputs } from "./Inputs";
+import { BallPicker } from "./Ball/BallPicker";
+import { Ground } from "./Environment/Ground";
+import { Background } from "./Environment/Background";
+import { PowerupManager } from "./Powerups/PowerupManager";
+import { GUI2D } from "./GUI/GUI2D";
+import { LevelCreator } from "./LevelCreator";
+import { Materials } from "./Materials";
+import { Loader } from "./Loader";
+import { LiveManager } from "./GUI_EVENTTS/LiveManager";
+import { ScoreManager } from "./GUI_EVENTTS/ScoreManager";
+import { PowerupCreditManager } from "./Powerups/PowerupCreditManager";
+import { TextPopupManager } from "./GUI/TextPopupManager";
+import { CanManager } from "./Can/CanManager";
+import { LevelManager } from "./LevelManager";
+import { GameData } from "./GameData";
+import { ImagePopupManager } from "./GUI/ImagePopupManager";
+import { ComboBonus } from "./Combo/ComboBonus";
+import { TimeBonus } from "./Combo/TimeBonus";
+import { Timer } from "./Timer";
+import { AudioManager } from "./AudioManager";
+import { SaveLoadData } from "./SaveLoadData.";
+import { DEFAULT_POWERUP_COUNT } from "./Consts";
+import { ParticleManager } from "./ParticleManager";
+import { Images } from "./Images";
+import { Sounds } from "./Sounds";
 
 const CanSmash = () => {
   useEffect(() => {
+    var div = document.createElement("div");
+    div.id = "game";
+    //document.body.appendChild(div);
+    //.appendChild(div);
+    let mainElement = document.getElementsByTagName("main")[0];
+    mainElement.insertBefore(div, mainElement.firstChild);
+
     // create the canvas html element and attach it to the webpage
-    const canvas = document.createElement('canvas');
-    canvas.id = 'gameCanvas';
-    document.body.appendChild(canvas);
+    const canvas = document.createElement("canvas");
+    canvas.id = "gameCanvas";
+    div.appendChild(canvas);
 
     // initialize babylon scene and engine
     const engine = new Engine(canvas, true);
@@ -48,7 +56,6 @@ const CanSmash = () => {
     new GameData(scene, engine, canvas);
     new SaveLoadData();
     new Timer(scene, engine);
-    new AudioManager(scene);
 
     const resize = () => {
       let width = window.innerWidth;
@@ -64,11 +71,11 @@ const CanSmash = () => {
     };
 
     resize();
-    window.addEventListener('resize', resize);
+    window.addEventListener("resize", resize);
 
     // hide/show the Inspector
-    window.addEventListener('keydown', (ev) => {
-      if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === 'i') {
+    window.addEventListener("keydown", (ev) => {
+      if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === "i") {
         if (scene.debugLayer.isVisible()) {
           scene.debugLayer.hide();
         } else {
@@ -81,16 +88,23 @@ const CanSmash = () => {
       init();
     });
 
-    loader.loadMesh('can.glb');
-    loader.loadMesh('barrel.glb');
-    loader.loadMesh('ledges.glb');
-    loader.loadFont('PeaceSans', 'PeaceSansWebfont.ttf');
+    let baseUrl = "/pong/canSmash/";
+    loader.loadMesh(baseUrl , "can.glb");
+    loader.loadMesh(baseUrl , "barrel.glb");
+    loader.loadMesh(baseUrl,"ledges.glb");
+    loader.loadFont(baseUrl, "PeaceSans", "PeaceSansWebfont.ttf");
+
+    Object.keys(Sounds.data).forEach((key) => {
+      Sounds.data[key] = baseUrl + Sounds.data[key];
+    });
 
     Object.keys(Images.data).forEach((key) => {
+      Images.data[key] = baseUrl + Images.data[key];
       loader.loadImage(Images.data[key]);
     });
 
     loader.loadPhysic();
+    new AudioManager(scene);
 
     const init = () => {
       new CameraController(scene, canvas);
@@ -135,8 +149,8 @@ const CanSmash = () => {
     };
 
     return () => {
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('keydown', null);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("keydown", null);
       engine.dispose();
       canvas.remove();
     };

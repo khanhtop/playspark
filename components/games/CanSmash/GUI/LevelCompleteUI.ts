@@ -39,6 +39,9 @@ export class LevelCompleteUI {
     img.source = Images.data.PopupBig;
     img.widthInPixels = 480;
     img.heightInPixels = 600;
+    img.sourceWidth = 480;
+    img.sourceHeight = 600;
+
     img.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(img);
