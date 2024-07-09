@@ -16,8 +16,64 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
   const [waitOnAuth, setWaitOnAuth] = useState(false);
   const [clientCredits, setClientCredits] = useState();
   const subscriptionRef = useRef(null);
+  const [deviceId, setDeviceId] = useState(null);
 
-  console.log("CREDS", clientCredits);
+  function generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0,
+          v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
+
+  // Function to create a fingerprint from browser details
+  function createFingerprint() {
+    const navigatorInfo = window.navigator;
+    const screenInfo = window.screen;
+    const fingerprint = [
+      navigatorInfo.userAgent,
+      navigatorInfo.language,
+      screenInfo.colorDepth,
+      new Date().getTimezoneOffset(),
+      navigatorInfo.platform,
+      navigatorInfo.doNotTrack,
+      screenInfo.height,
+      screenInfo.width,
+    ].join("");
+    return fingerprint;
+  }
+
+  // Simple hash function to create a 16-bit hash
+  function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return (hash & 0xffff).toString(16).padStart(4, "0"); // Return 16-bit hash
+  }
+
+  // Function to get or generate a device ID
+  function getDeviceID() {
+    // Check if a device ID is already stored
+    let deviceID = localStorage.getItem("psUUID");
+    if (!deviceID) {
+      // Create a fingerprint and generate a UUID
+      const fingerprint = createFingerprint();
+      const uuid = generateUUID();
+      // Hash the fingerprint with a simple hash function
+      const hashedFingerprint = simpleHash(fingerprint);
+      // Combine the hashed fingerprint with the UUID to create the device ID
+      deviceID = `${hashedFingerprint}-${uuid}`;
+      // Store the device ID in localStorage
+      localStorage.setItem("psUUID", deviceID);
+    }
+    return deviceID;
+  }
 
   // LISTEN TO CLIENT CREDITS
 
@@ -54,8 +110,10 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
     return "https://playspark.co" + url;
   };
 
+  // AUTO-SIGN IN WITH PROVIDED EMAIL
+
   useEffect(() => {
-    if (externalId) {
+    if (externalId && externalId !== "override") {
       setWaitOnAuth(true);
       logoutWithoutReroute();
       fetch("https://playspark.co/api/auth/externalUser", {
@@ -73,6 +131,31 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
             signInWithEmailAndPassword(auth, json.email, json.password);
           }
         });
+    } else if (
+      (externalId && externalId === "override") ||
+      ad.ownerId === "xwMcL84YdoRXAV52oNjmhVhCHD63"
+    ) {
+      const uuid = getDeviceID();
+      if (uuid !== null) {
+        const emailStructure = uuid + "@playspark.co";
+        setWaitOnAuth(true);
+        logoutWithoutReroute();
+        fetch("https://playspark.co/api/auth/externalUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: emailStructure, name: config.name }),
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((json) => {
+            if (json.email && json.password) {
+              signInWithEmailAndPassword(auth, json.email, json.password);
+            }
+          });
+      }
     }
   }, [externalId]);
 
@@ -148,6 +231,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
             userId={userId}
             email={email}
             clientCredits={clientCredits}
+            uuid={deviceId}
           />
         ) : (
           <p>{id} - AD NOT FOUND</p>
@@ -164,12 +248,16 @@ export async function getServerSideProps(context) {
   // Additional parameters
   const { name, hideback, hiderevive, forcelogout } = context?.query;
 
+  const { deviceIdSignIn } = context?.query;
+
   let externalId = null;
 
   if (user && platform) {
     const emailAddress = decryptEmail(user, platform);
     externalId = refactorEmail(emailAddress, platform);
   }
+
+  if (deviceIdSignIn) externalId = "override";
 
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);

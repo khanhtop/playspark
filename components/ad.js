@@ -41,6 +41,7 @@ export default function Advert({
   userId,
   email,
   clientCredits,
+  uuid,
 }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
@@ -264,6 +265,7 @@ export default function Advert({
       {stage === 0 && (
         <Intro
           clientCredits={clientCredits}
+          uuid={uuid}
           waitOnAuth={waitOnAuth}
           endDate={parseEndDate(data.endDate)}
           signingIn={signingIn}
