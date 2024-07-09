@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import { firestore } from "./firebase";
 import { games } from "./games";
 import Runner from "@/components/runnergame/runner";
+import CanSmashGame from "@/components/games/CanSmash/CanSmash";
 const Pong = dynamic(() => import("@/components/games/pong"), { ssr: false });
 
 export async function getAd(id) {
@@ -262,6 +263,16 @@ export function getGame(id, data, callback, params) {
   if (id === 23)
     return (
       <Pong
+        data={data}
+        gameType="newcricketsmash"
+        callback={callback}
+        params={params}
+      />
+    );
+
+  if (id === 24)
+    return (
+      <CanSmashGame
         data={data}
         gameType="newcricketsmash"
         callback={callback}

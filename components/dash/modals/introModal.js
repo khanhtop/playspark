@@ -13,9 +13,12 @@ export default function IntroModal({ data }) {
 
   const agree = async () => {
     setLoading(true);
-    await updateDoc(doc(firestore, "users", context?.loggedIn?.uid), {
-      termsAgreed: arrayUnion(data.tournamentId),
-    });
+    if (context?.loggedIn?.uid) {
+      await updateDoc(doc(firestore, "users", context?.loggedIn?.uid), {
+        termsAgreed: data.tournamentId ? arrayUnion(data.tournamentId) : "demo",
+      });
+    }
+
     setLoading(false);
     data.onClose();
   };

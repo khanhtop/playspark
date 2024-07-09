@@ -442,6 +442,50 @@ export const games = [
     additionalSpriteThree:
       "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
   },
+  {
+    name: "Can Smash",
+    creditConsumption: 2,
+    description:
+      "Airborne Ace” catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152746/Add_a_heading_4_aovot8.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713930357/crowd-loop-talking.mp3",
+    screenshot: "cricketsmash.jpg",
+    primaryColor: "#F69B01",
+    textColor: "#FFF",
+    id: 24,
+    landscape: true,
+    cloudinaryGameTag: "target",
+    tags: {
+      backgroundSprite: "0.6",
+      playerSprite: "body",
+      backgroundSprite: "bg",
+      objectSprite: "1.0",
+      powerUpSprite: "1.0",
+      enemySprite: "1.0",
+      additionalSpriteOne: "1.0",
+      additionalSpriteTwo: "1.0",
+      additionalSpriteThree: "1.0",
+      backgroundMusic: "bgm",
+    },
+    backgroundSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+    playerSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+    objectSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+    powerUpSprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
+    enemySprite:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteOne:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteTwo:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+    additionalSpriteThree:
+      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+  },
 ];
 
 export const sanitiseGameObject = (_game) => {

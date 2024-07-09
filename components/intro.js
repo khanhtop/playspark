@@ -119,7 +119,7 @@ export default function Intro({
     }
   }, [context.profile]);
 
-  console.log(context.loggedIn, context.profile);
+  console.log(clientCredits, expired);
 
   return (
     <div
