@@ -45,7 +45,7 @@ export default function Hero({ page }) {
           Start Creating Your Game
         </button>
       </div>
-      <div className="flex flex-col items-center lg:items-start justify-center mb-12 lg:mb-0">
+      <div className="flex flex-col lg:flex-1 items-center lg:items-start justify-center mb-12 lg:mb-0">
         <video className="rounded-xl" controls>
           <source src={page.hero_video?.url} type="video/mp4" />
           Your browser does not support the video tag.
