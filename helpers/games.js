@@ -426,65 +426,73 @@ export const games = [
       backgroundMusic: "bgm",
     },
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
     powerUpSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
     enemySprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteOne:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteTwo:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteThree:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
   },
   {
     name: "Can Smash",
     creditConsumption: 2,
     description:
-      "Airborne Ace” catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!",
+      "Hit cans to earn points, avoid enemy targets, and collect power-ups to progress through increasingly challenging levels.",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152746/Add_a_heading_4_aovot8.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720584857/PlaySpark_home_screens_72_lftntd.jpg",
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720584857/Playspark_game_tiles_14_rckz5w.png",
     backgroundMusic:
       "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713930357/crowd-loop-talking.mp3",
     screenshot: "cricketsmash.jpg",
-    primaryColor: "#F69B01",
+    primaryColor: "#0693E3",
     textColor: "#FFF",
     id: 24,
     landscape: false,
-    cloudinaryGameTag: "target",
+    cloudinaryGameTag: "can",
     tags: {
-      backgroundSprite: "0.6",
+      backgroundSprite: "2.0",
       playerSprite: "body",
-      backgroundSprite: "bg",
+      backgroundSprite: "2.0",
       objectSprite: "1.0",
       powerUpSprite: "1.0",
-      enemySprite: "1.0",
-      additionalSpriteOne: "1.0",
-      additionalSpriteTwo: "1.0",
-      additionalSpriteThree: "1.0",
+      enemySprite: "3.0",
+      additionalSpriteOne: "3.0",
+      additionalSpriteTwo: "3.0",
+      additionalSpriteThree: "3.0",
+      additionalSpriteFour: "3.0",
+      additionalSpriteSix: "2.0",
       backgroundMusic: "bgm",
     },
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598346/ximczgxkmelka6qdaxqh.jpg",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
     powerUpSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720599031/iugbeqzkx9fz3rpnlaws.jpg",
     enemySprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598801/etewwvsoa3sia2sds5pv.jpg",
     additionalSpriteOne:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598520/ocv8kvkpebkqadziabgi.jpg",
     additionalSpriteTwo:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598564/vg7tbebocusrpiiiibdx.jpg",
     additionalSpriteThree:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598635/rsc2ystqxjmrkpo6j9ad.jpg",
+    additionalSpriteFour:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598666/aor7gghouc2httpydiux.jpg",
+    additionalSpriteSix:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598969/wyzu0lrhbqiiznczuo6t.jpg",
   },
 ];
 
