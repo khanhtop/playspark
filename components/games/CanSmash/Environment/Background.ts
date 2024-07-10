@@ -16,11 +16,10 @@ import { Materials } from "../Materials";
 export class Background {
   constructor(scene: Scene) {
  
-    let factor = 150;
-    let width = 1960/factor;
-    let height = 816/factor;
+    let width = 7.64;
+    let height = 3;
     var plan: Mesh = MeshBuilder.CreatePlane("plan", { width: width, height: height });
-    plan.position = new Vector3(0, 1, 14);
+    plan.position = new Vector3(0, 0.2, 14);
     plan.rotation = new Vector3(0, 0, 0);
 
     plan.material = Materials.instance.background;
