@@ -455,7 +455,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     id: 24,
-    landscape: true,
+    landscape: false,
     cloudinaryGameTag: "target",
     tags: {
       backgroundSprite: "0.6",

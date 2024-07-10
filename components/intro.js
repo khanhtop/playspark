@@ -168,7 +168,9 @@ export default function Intro({
               const creditAmount = getGameCreditConsumption(
                 data?.creditConsumption
               );
-              deductCredits(data.ownerId, clientCredits || 0, creditAmount);
+              if (data.tournamentId) {
+                deductCredits(data.ownerId, clientCredits || 0, creditAmount);
+              }
               playEvent(context, data);
               setStage(1, true);
             }}
