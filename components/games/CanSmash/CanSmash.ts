@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Engine, Scene } from "@babylonjs/core";
 import "@babylonjs/core/Debug/debugLayer";
-import("@babylonjs/inspector");
+// import("@babylonjs/inspector");
 import "@babylonjs/loaders/glTF";
 import * as TWEEN from "@tweenjs/tween.js";
 
@@ -113,15 +113,15 @@ const CanSmash = (data: any) => {
     window.addEventListener("resize", resize);
 
     // hide/show the Inspector
-    window.addEventListener("keydown", (ev) => {
-      if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === "i") {
-        if (scene.debugLayer.isVisible()) {
-          scene.debugLayer.hide();
-        } else {
-          scene.debugLayer.show();
-        }
-      }
-    });
+    // window.addEventListener("keydown", (ev) => {
+    //   if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === "i") {
+    //     if (scene.debugLayer.isVisible()) {
+    //       scene.debugLayer.hide();
+    //     } else {
+    //       scene.debugLayer.show();
+    //     }
+    //   }
+    // });
 
     const loader = new Loader(scene, () => {
       init();
