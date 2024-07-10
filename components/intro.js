@@ -36,6 +36,7 @@ export default function Intro({
   endDate,
   clientCredits,
   uuid,
+  demo,
 }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
@@ -93,6 +94,7 @@ export default function Intro({
   useEffect(() => {
     if (
       context.loggedIn?.uid &&
+      !demo &&
       !context.profile?.termsAgreed?.includes(data.tournamentId)
     ) {
       setShowModal({

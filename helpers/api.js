@@ -274,7 +274,7 @@ export function getGame(id, data, callback, params) {
     return (
       <CanSmashGame
         data={data}
-        gameType="newcricketsmash"
+        gameType="cansmash"
         callback={callback}
         params={params}
       />
