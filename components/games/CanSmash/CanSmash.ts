@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Engine, Scene } from "@babylonjs/core";
+import { Engine, Mesh, Scene } from "@babylonjs/core";
 import "@babylonjs/core/Debug/debugLayer";
 // import("@babylonjs/inspector");
 import "@babylonjs/loaders/glTF";
@@ -35,6 +35,7 @@ import { ParticleManager } from "./ParticleManager";
 import { Images } from "./Images";
 import { Sounds } from "./Sounds";
 import { Events, EventTypes } from "./Events";
+import { Meshs } from "./Meshs";
 
 const CanSmash = (data: any) => {
   //   ball,
@@ -128,9 +129,9 @@ const CanSmash = (data: any) => {
     });
 
     let baseUrl = "/pong/canSmash/";
-    loader.loadMesh(baseUrl, "can.glb");
-    loader.loadMesh(baseUrl, "barrel.glb");
-    loader.loadMesh(baseUrl, "ledges.glb");
+    loader.loadMesh(baseUrl, Meshs.data.can);
+    loader.loadMesh(baseUrl, Meshs.data.barrel);
+    loader.loadMesh(baseUrl, Meshs.data.ledges);
     loader.loadFont(baseUrl, "PeaceSans", "PeaceSansWebfont.ttf");
 
     Object.keys(Sounds.data).forEach((key) => {
@@ -140,13 +141,18 @@ const CanSmash = (data: any) => {
       Images.data[key] = baseUrl + Images.data[key];
     });
 
-    ({ score, level, lives, boostCredits } = initParams(
+    let ballBaseUrl = baseUrl;
+    console.log(ballBaseUrl);
+    ({ score, level, lives, boostCredits, ballBaseUrl } = initParams(
       data,
       score,
       level,
       lives,
-      boostCredits
+      boostCredits,
+      ballBaseUrl
     ));
+
+    loader.loadMesh(ballBaseUrl, Meshs.data.ball);
 
     Object.keys(Images.data).forEach((key) => {
       loader.loadImage(Images.data[key]);
@@ -215,13 +221,24 @@ function initParams(
   score: number,
   level: number,
   lives: number,
-  boostCredits: number
+  boostCredits: number,
+  ballBaseUrl: string
 ) {
-  if (data == undefined) return { score, level, lives, boostCredits };
-  if (data.params == undefined) return { score, level, lives, boostCredits };
+  if (data == undefined)
+    return { score, level, lives, boostCredits, ballBaseUrl };
+  if (data.params == undefined)
+    return { score, level, lives, boostCredits, ballBaseUrl };
 
   if (data.params.backgroundMusic != undefined)
     Sounds.data.music = data.params.backgroundMusic;
+
+  if (data.params.objectSprite != undefined) {
+    const result = extractFileAndBase(data.params.objectSprite);
+    ballBaseUrl = result.baseUrl;
+    console.log(`file: ${result.file}`);
+    console.log(`base url: ${result.baseUrl}`);
+    Meshs.data.ball = result.file;
+  }
 
   if (data.params.backgroundSprite != undefined)
     Images.data.background = data.params.backgroundSprite;
@@ -259,5 +276,21 @@ function initParams(
   if (data.params.boostCredits != undefined)
     boostCredits = parseInt(data.params.boostCredits);
 
-  return { score, level, lives, boostCredits };
+  return { score, level, lives, boostCredits, ballBaseUrl };
+}
+
+function extractFileAndBase(url) {
+  const urlObj = new URL(url);
+
+  const pathSegments = urlObj.pathname.split("/");
+
+  const file = pathSegments.pop();
+
+  const baseUrl = url.replace(file,"");
+
+
+  return {
+    file: file,
+    baseUrl: baseUrl,
+  };
 }

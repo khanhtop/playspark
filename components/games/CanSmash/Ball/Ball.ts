@@ -1,7 +1,6 @@
 import {
   ActionManager,
   Color3,
-  Color4,
   CombineAction,
   DoNothingAction,
   InterpolateValueAction,
@@ -10,16 +9,15 @@ import {
   PhysicsAggregate,
   PhysicsShapeType,
   PointLight,
+  Quaternion,
   Scene,
   SetStateAction,
   SetValueAction,
-  StandardMaterial,
-  Texture,
   Vector3,
-  Vector4,
 } from "@babylonjs/core";
 import { Materials } from "../Materials";
-import { Events } from "../Events";
+import { CloneMesh } from "../CloneMesh";
+import { Meshs } from "../Meshs";
 
 export class Ball {
   ball: Mesh;
@@ -31,7 +29,15 @@ export class Ball {
     this.ball = MeshBuilder.CreateSphere("ball", { diameter: 0.1 }, scene);
     this.defaultPos = defaultPos;
     this.ball.position = this.defaultPos.clone();
-    this.ball.material = Materials.instance.redMat;
+    this.ball.material = Materials.instance.transparentMaterial;
+
+    let cloneMesh = new CloneMesh();
+    const result = cloneMesh.get(Meshs.data.ball);
+
+    result.meshes.forEach((element) => {
+      element.parent = this.ball;
+      element.material =  Materials.instance.redMat;
+    });
 
     var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
 
@@ -108,6 +114,8 @@ export class Ball {
 
   resetPos() {
     this.ball.position = this.defaultPos.clone();
+    this.ball.rotation = Vector3.Zero();
+    this.ball.rotationQuaternion = Quaternion.Identity();
   }
 
   setPhysicBody() {

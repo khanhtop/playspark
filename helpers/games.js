@@ -478,7 +478,7 @@ export const games = [
     playerSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
     objectSprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+      "https://res.cloudinary.com/dnnp8gmvx/image/upload/v1720643737/ball_nvx8ya.glb",
     powerUpSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720599031/iugbeqzkx9fz3rpnlaws.jpg",
     enemySprite:

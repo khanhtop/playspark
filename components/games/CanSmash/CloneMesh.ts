@@ -7,7 +7,7 @@ export class CloneMesh {
     let result = Loader.instance.meshLoaderResult[name]; //ISceneLoaderAsyncResult
     let clonedResult = null;
 
-    if (result.isCloned) {
+   if (result.isCloned) {
       clonedResult = {
         animationGroups: result.animationGroups.map((ag) => ag.clone()),
         geometries: result.geometries.slice(), // geometries are usually shared and don't need cloning

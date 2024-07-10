@@ -19,6 +19,7 @@ import { CloneMesh } from "./CloneMesh";
 import { PlatformMovmentTypes } from "./PlatformTypes";
 import { GameData } from "./GameData";
 import { Timer } from "./Timer";
+import { Meshs } from "./Meshs";
 
 export class Ledges {
   defaultRot = new Vector3(0, Utils.DToR(190), 0);
@@ -162,13 +163,13 @@ export class Ledges {
 
       //let defaultRot = new Vector3(0, Utils.DToR(190), 0);
       this.canContainer.position = this.defaultPos.clone();
-      this.canContainer.material = Materials.instance.canMaterial;
+      this.canContainer.material = Materials.instance.transparentMaterial;
       this.canContainer.rotation = this.defaultRot;
 
 
 
       let cloneMesh = new CloneMesh();
-      const result = cloneMesh.get("ledges.glb");
+      const result = cloneMesh.get(Meshs.data.ledges);
 
 
       result.meshes.forEach((element) => {

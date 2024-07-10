@@ -3,7 +3,7 @@ import { Images } from "./Images";
 
 export class Materials {
   static #instance: Materials;
-  canMaterial: StandardMaterial;
+  transparentMaterial: StandardMaterial;
   cans: StandardMaterial[];
   canUp: StandardMaterial;
   bg: StandardMaterial;
@@ -17,9 +17,9 @@ export class Materials {
   barrelUp: StandardMaterial;
   constructor(cansTextures: string[]) {
     Materials.#instance = this;
-    this.canMaterial = new StandardMaterial("canMat");
+    this.transparentMaterial = new StandardMaterial("canMat");
     //this.canMaterial.diffuseTexture = new Texture(Images.data.logo_label);
-    this.canMaterial.alpha = 0;
+    this.transparentMaterial.alpha = 0;
 
     let diffuseColor = new Color3(3, 3, 3);
     this.cans = [];

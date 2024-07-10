@@ -17,6 +17,7 @@ import { Events } from "../Events";
 import { IPoolable } from "../IPoolable";
 import { Loader } from "../Loader";
 import { CloneMesh } from "../CloneMesh";
+import { Meshs } from "../Meshs";
 
 export class Can implements IPoolable {
   defaultRot = new Vector3(0, Utils.DToR(190), 0);
@@ -111,11 +112,11 @@ export class Can implements IPoolable {
 
       //let defaultRot = new Vector3(0, Utils.DToR(190), 0);
       this.canContainer.position = this.defaultPos.clone();
-      this.canContainer.material = Materials.instance.canMaterial;
+      this.canContainer.material = Materials.instance.transparentMaterial;
       this.canContainer.rotation = this.defaultRot;
 
       let cloneMesh = new CloneMesh();
-      const result = cloneMesh.get("can.glb");
+      const result = cloneMesh.get(Meshs.data.can);
 
       result.transformNodes.forEach((element) => {
         element.parent = this.canContainer;

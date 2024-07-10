@@ -62,7 +62,7 @@ export default function AuthWrapper({ children, action }) {
     return <div className="h-screen w-screen bg-white" />;
   }
 
-  if (context.isAuthed && context.loggedIn && !context?.profile?.isAdmin) {
+ if (context.isAuthed && context.loggedIn && !context?.profile?.isAdmin) {
     return (
       <div className="bg-black h-screen w-screen text-white font-octo flex items-center justify-center flex-col">
         <h1 className="text-xl mb-4">
