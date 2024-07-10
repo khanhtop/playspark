@@ -22,6 +22,10 @@ export default function Home({ page, url }) {
         <title>{page.seo_title}</title>
         <meta property="description" content={page.seo_description} />
       </Head>
+      <Script
+        src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
+        strategy="afterInteractive"
+      />
       <div className="snap-y snap-mandatory h-screen overflow-y-scroll">
         <Navbar />
 
@@ -50,6 +54,7 @@ export default function Home({ page, url }) {
 
 import { createClient } from "../helpers/prismic";
 import Head from "next/head";
+import Script from "next/script";
 
 export async function getServerSideProps(context) {
   const client = createClient();

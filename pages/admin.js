@@ -12,6 +12,7 @@ import Usage from "@/components/dash/usage";
 import Users from "@/components/dash/users";
 import OnboardWrapper from "@/components/onboard/onboardWrapper";
 import StripeModalWrapper from "@/components/stripe/stripeModalWrapper";
+import Script from "next/script";
 import { useState } from "react";
 
 export default function Application() {
@@ -21,6 +22,10 @@ export default function Application() {
     <AuthWrapper>
       <OnboardWrapper>
         <div className="h-screen w-screen flex bg-indigo-50">
+          <Script
+            src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
+            strategy="afterInteractive"
+          />
           <Sidebar
             selectedPane={selectedPane}
             setSelectedPane={setSelectedPane}
