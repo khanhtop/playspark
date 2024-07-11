@@ -472,6 +472,7 @@ export const games = [
       additionalSpriteFour: "3.0",
       additionalSpriteSix: "2.0",
       backgroundMusic: "bgm",
+      glbOne: "ball",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598346/ximczgxkmelka6qdaxqh.jpg",
@@ -493,6 +494,8 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598666/aor7gghouc2httpydiux.jpg",
     additionalSpriteSix:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598969/wyzu0lrhbqiiznczuo6t.jpg",
+    glbOne:
+      "https://res.cloudinary.com/dnnp8gmvx/image/upload/v1720643737/ball_nvx8ya.glb",
   },
 ];
 
