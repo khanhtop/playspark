@@ -264,8 +264,8 @@ function initParams(
   if (data.params.backgroundMusic != undefined)
     Sounds.data.music = data.params.backgroundMusic;
 
-  if (data.params.objectSprite != undefined) {
-    const result = extractFileAndBase(data.params.objectSprite);
+  if (data.params.glbOne != undefined) {
+    const result = extractFileAndBase(data.params.glbOne);
     ballBaseUrl = result.baseUrl;
     console.log(`file: ${result.file}`);
     console.log(`base url: ${result.baseUrl}`);
@@ -293,12 +293,10 @@ function initParams(
   if (data.params.additionalSpriteFour != undefined)
     Images.data.logo4 = data.params.additionalSpriteFour;
 
-  console.log("-----[[[ ");
-  console.log(data.params);
-  console.log(data.params.additionalSpriteFive);
-  if (data.params.additionalSpriteFive != undefined)
-    Images.data.barrel = data.params.additionalSpriteFive;
-  console.log(Images.data.barrel);
+
+  if (data.params.objectSprite != undefined)
+    Images.data.barrel = data.params.objectSprite;
+
 
   if (data.params.additionalSpriteSix != undefined)
     Images.data.greengrass = data.params.additionalSpriteSix;
