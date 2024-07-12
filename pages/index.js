@@ -26,17 +26,17 @@ export default function Home({ page, url }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="snap-y snap-mandatory h-screen overflow-y-scroll">
+      <div className="h-screen overflow-y-scroll">
         <Navbar />
 
         <Section backgroundImage={page?.hero_background_image?.url}>
           <Hero page={page} />
         </Section>
         <Section>
-          <TextSection />
+          <WhatWeDo page={page} />
         </Section>
         <Section>
-          <VideoSection />
+          <WhoWeHelp page={page} />
         </Section>
         <Section>
           <Carousel />
@@ -55,6 +55,8 @@ export default function Home({ page, url }) {
 import { createClient } from "../helpers/prismic";
 import Head from "next/head";
 import Script from "next/script";
+import WhatWeDo from "@/components/homepage/whatWeDo";
+import WhoWeHelp from "@/components/homepage/whoWeHelp";
 
 export async function getServerSideProps(context) {
   const client = createClient();
