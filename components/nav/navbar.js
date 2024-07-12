@@ -1,8 +1,10 @@
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Navbar() {
+  const router = useRouter();
   const [navOpen, setNavOpen] = useState(false);
   return (
     <>
@@ -17,7 +19,10 @@ export default function Navbar() {
           <Link href="#">Case Studies</Link>
           <Link href="#">Blog</Link>
         </div>
-        <button className="bg-sky-500 px-4 py-2 text-white rounded-lg">
+        <button
+          onClick={() => router.push("/admin")}
+          className="bg-sky-500 px-4 py-2 text-white rounded-lg"
+        >
           Free Demo
         </button>
       </div>
@@ -63,7 +68,10 @@ export default function Navbar() {
             Blog
           </Link>
           <button
-            onClick={() => setNavOpen(false)}
+            onClick={() => {
+              router.push("/admin");
+              setNavOpen(false);
+            }}
             className="mt-2 bg-sky-500 px-4 py-2 text-white rounded-lg"
           >
             Free Demo

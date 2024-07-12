@@ -41,7 +41,10 @@ export default function Hero({ page }) {
           {page.hero_title_text}
         </h1>
         <h1 className="text-2xl xl:text-4xl font-light">{page.hero_subtext}</h1>
-        <button className="bg-blue-500 px-6 py-3 rounded-full mt-4 font-bold text-xl lg:text-2xl">
+        <button
+          onClick={() => router.push("/admin")}
+          className="bg-blue-500 px-6 py-3 rounded-full mt-4 font-bold text-xl lg:text-2xl"
+        >
           Start Creating Your Game
         </button>
       </div>
