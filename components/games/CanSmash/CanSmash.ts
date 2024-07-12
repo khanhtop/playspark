@@ -138,7 +138,7 @@ const CanSmash = (data: any) => {
 
     let baseUrl = "/pong/canSmash/";
     loader.loadMesh(baseUrl, Meshs.data.can);
-    loader.loadMesh(baseUrl, Meshs.data.barrel);
+  
     loader.loadMesh(baseUrl, Meshs.data.ledges);
     loader.loadFont(baseUrl, "PeaceSans", "PeaceSansWebfont.ttf");
 
@@ -150,17 +150,22 @@ const CanSmash = (data: any) => {
     });
 
     let ballBaseUrl = baseUrl;
+    let barrelBaseUrl = baseUrl;
+
+    
     console.log(ballBaseUrl);
-    ({ score, level, lives, boostCredits, ballBaseUrl } = initParams(
+    ({ score, level, lives, boostCredits, ballBaseUrl , barrelBaseUrl} = initParams(
       data,
       score,
       level,
       lives,
       boostCredits,
-      ballBaseUrl
+      ballBaseUrl,
+      barrelBaseUrl
     ));
 
     loader.loadMesh(ballBaseUrl, Meshs.data.ball);
+    loader.loadMesh(barrelBaseUrl, Meshs.data.barrel);
 
     Object.keys(Images.data).forEach((key) => {
       loader.loadImage(Images.data[key]);
@@ -254,12 +259,13 @@ function initParams(
   level: number,
   lives: number,
   boostCredits: number,
-  ballBaseUrl: string
+  ballBaseUrl: string,
+  barrelBaseUrl: string
 ) {
   if (data == undefined)
-    return { score, level, lives, boostCredits, ballBaseUrl };
+    return { score, level, lives, boostCredits, ballBaseUrl,barrelBaseUrl };
   if (data.params == undefined)
-    return { score, level, lives, boostCredits, ballBaseUrl };
+    return { score, level, lives, boostCredits, ballBaseUrl,barrelBaseUrl };
 
   if (data.params.backgroundMusic != undefined)
     Sounds.data.music = data.params.backgroundMusic;
@@ -267,10 +273,15 @@ function initParams(
   if (data.params.glbOne != undefined) {
     const result = extractFileAndBase(data.params.glbOne);
     ballBaseUrl = result.baseUrl;
-    console.log(`file: ${result.file}`);
-    console.log(`base url: ${result.baseUrl}`);
     Meshs.data.ball = result.file;
   }
+
+  if (data.params.glbTwo!= undefined) {
+    const result = extractFileAndBase(data.params.glbTwo);
+    barrelBaseUrl = result.baseUrl;
+    Meshs.data.barrel = result.file;
+  }
+
 
   if (data.params.backgroundSprite != undefined)
     Images.data.background = data.params.backgroundSprite;
@@ -310,7 +321,7 @@ function initParams(
   if (data.params.boostCredits != undefined)
     boostCredits = parseInt(data.params.boostCredits);
 
-  return { score, level, lives, boostCredits, ballBaseUrl };
+  return { score, level, lives, boostCredits, ballBaseUrl ,barrelBaseUrl };
 }
 
 function extractFileAndBase(url) {
