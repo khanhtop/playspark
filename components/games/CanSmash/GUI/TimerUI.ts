@@ -80,6 +80,12 @@ export class TimerUI {
       },
       this
     );
+
+    Events.ui.add((data: any) => {
+      if (data.type == "TimerUI:resetByRevive") {
+        if (this.timer < 10) this.reset(data.count);
+      }
+    });
   }
   updateTimerUi(delta: number) {
     if (this.timer <= 0) return;

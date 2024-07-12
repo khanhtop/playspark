@@ -27,18 +27,16 @@ export class CanManager {
 
     Events.gamePlay.add((data: any) => {
       if (data.type != EventTypes.LEVEL_COMPLETE) return;
-      Timer.Instance.remove(  this.timerHandle)
-      Timer.Instance.remove(  this.timerHandle2)
+      Timer.Instance.remove(this.timerHandle);
+      Timer.Instance.remove(this.timerHandle2);
     });
     this.reapearTime = CAN_REAPPEAR_TIME;
     Events.gamePlay.add((data: any) => {
-   
       if (data.name != "CanManager:setReapearTime") return;
-      console.log(data)
+      //console.log(data);
       this.reapearTime = data.time;
     });
-    
-    
+
     GameData.instance.setHitCount(hitCount);
     Events.hits.add((_data: ICan) => {
       switch (_data.name) {
@@ -53,7 +51,7 @@ export class CanManager {
             targetCount: GameData.instance.getTargetCount(),
           });
 
-          this.timerHandle =  Timer.Instance.add(
+          this.timerHandle = Timer.Instance.add(
             this.reapearTime,
             () => {
               let can = _data.data.sender;

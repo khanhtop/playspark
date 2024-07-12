@@ -28,8 +28,6 @@ export class TutorialManager {
 
     let tutorialStep = 1;
 
- 
-
     let ph = Events.powerup.add((data: any) => {
       if (data.type != ON_POWERUP_ENABLED) return;
       BlackBG.instance.show(Images.data.blackbg3);
@@ -53,10 +51,9 @@ export class TutorialManager {
               },
               this
             );
-      
+
             break;
           case 3:
-           
             Events.gamePlay.remove(ghs);
             break;
         }
@@ -78,7 +75,7 @@ export class TutorialManager {
         break;
       case 2:
         this.showTutorial2(tutorial2);
-      
+
         break;
       case 3:
         BlackBG.instance.show(Images.data.blackbg3);
@@ -108,20 +105,7 @@ export class TutorialManager {
     // dont remove this line
     //  Utils.isgamePaused = true;
 
-    LevelCreator.instane.cansPool.forEach((can)=>{
-      can.setPosition(
-        new Vector3(
-          can.defaultPos.x +
-            LevelCreator.platforms[can.platformIndex].position.x,
-          can.defaultPos.y +
-            LevelCreator.platforms[can.platformIndex].position.y +
-            0.4,
-          can.defaultPos.z +
-            LevelCreator.platforms[can.platformIndex].position.z
-        )
-      );
-    })
-
+    Events.gamePlay.notifyObservers({ type: "LevelCreator:resetCansPos" });
 
     Events.input.notifyObservers({
       name: "BallPicker:setActive",

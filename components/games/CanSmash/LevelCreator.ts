@@ -51,6 +51,23 @@ export class LevelCreator {
       );
     }
 
+    Events.gamePlay.add((_data: any) => {
+      if (_data.type != "LevelCreator:resetCansPos") return;
+      this.cansPool.forEach((can) => {
+        can.setPosition(
+          new Vector3(
+            can.defaultPos.x +
+              LevelCreator.platforms[can.platformIndex].position.x,
+            can.defaultPos.y +
+              LevelCreator.platforms[can.platformIndex].position.y +
+              0.4,
+            can.defaultPos.z +
+              LevelCreator.platforms[can.platformIndex].position.z
+          )
+        );
+      });
+    });
+
     GameData.instance.setTargetCount(levels[levelIndex].target_count);
 
     Events.ui.notifyObservers({

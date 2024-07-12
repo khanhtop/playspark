@@ -104,24 +104,29 @@ export class GUI2D {
       //   data.data.levelScore,
       //   data.data.targetsHits
       // );
-      let currentLevel = GameData.instance.getCurrentLevel();
-      let currentScore = GameData.instance.getTotalScore();
-      // currentLevel: number,currentScore: number,targetHits:
 
-      gameOverUI.showPopup(currentLevel, currentScore, data.data.targetsHits);
+      setTimeout(() => {
+        let currentLevel = GameData.instance.getCurrentLevel();
+        let currentScore = GameData.instance.getTotalScore();
+        // currentLevel: number,currentScore: number,targetHits:
+        gameOverUI.showPopup(currentLevel, currentScore, data.data.targetsHits);
+      }, 1000);
+    });
 
-      Utils.pause(true);
+    Events.gamePlay.add((data: any) => {
+      if (data.type != "GUI2D:hideGameOverUI") return;
+      gameOverUI.hidePopup();
     });
 
     Events.ui.add((data: any) => {
       if (data.type != EventTypes.ON_LIVE_LOSE) return;
 
-      let currentLevel = GameData.instance.getCurrentLevel();
-      let currentScore = GameData.instance.getTotalScore();
-      let targetsHits = GameData.instance.getHitCount();
-
-      gameOverUI.showPopup(currentLevel, currentScore, targetsHits);
-      Utils.pause(true);
+      setTimeout(() => {
+        let currentLevel = GameData.instance.getCurrentLevel();
+        let currentScore = GameData.instance.getTotalScore();
+        let targetsHits = GameData.instance.getHitCount();
+        gameOverUI.showPopup(currentLevel, currentScore, targetsHits);
+      }, 1000);
     });
 
     Events.ui.add((data: any) => {
@@ -141,8 +146,5 @@ export class GUI2D {
     });
 
     new TutorialManager(advancedTexture);
-
-
-
   }
 }

@@ -5,6 +5,13 @@ export class LiveManager {
   live: number = 0;
   canDecreaseLive: boolean = true;
 
+  private setCount(live: number) {
+    this.live = live;
+    this.notify();
+  }
+
+ 
+
   constructor(live: number) {
     this.live = live;
     this.notify();
@@ -15,6 +22,13 @@ export class LiveManager {
         self.canDecreaseLive = data.state;
       }
     });
+
+    Events.ui.add((data: any) => {
+      if (data.type == "LiveManager:setCount") {
+        self.setCount(data.count);
+      }
+    });
+
 
     Events.hits.add((data: any) => {
       switch (data.name) {
@@ -41,6 +55,7 @@ export class LiveManager {
       }
     });
   }
+
   decreaseLive() {
     if (this.live == 0) return;
 

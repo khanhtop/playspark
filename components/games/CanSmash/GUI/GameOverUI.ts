@@ -21,7 +21,7 @@ export class GameOverUI {
     this.container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
     var img = new GUI.Image();
-    img.source =  Images.data.LosePopup;
+    img.source = Images.data.LosePopup;
 
     img.widthInPixels = 480;
     img.heightInPixels = 420;
@@ -57,14 +57,13 @@ export class GameOverUI {
     let vDiff = 90;
 
     let levelReached_txt = new GUI.TextBlock();
-    this.setUpTextTitle(levelReached_txt, 120,  "Level Reached");
+    this.setUpTextTitle(levelReached_txt, 120, "Level Reached");
 
     let yourScore_txt = new GUI.TextBlock();
     this.setUpTextTitle(yourScore_txt, 80, "Your Score");
 
     let targetshits_txt = new GUI.TextBlock();
     this.setUpTextTitle(targetshits_txt, 38, "Targets Hit");
-
 
     this.levelReached_count = new GUI.TextBlock();
     this.setUpText(this.levelReached_count, 120, "400");
@@ -74,7 +73,6 @@ export class GameOverUI {
 
     this.targetshits_count = new GUI.TextBlock();
     this.setUpText(this.targetshits_count, 38, "300");
-
 
     var self = this;
     var close_btn = new GUI.Image();
@@ -89,11 +87,10 @@ export class GameOverUI {
     close_btn.onPointerClickObservable.add(() => {
       self.hidePopup();
       //console.log("Restart Level");
-     // LevelCreator.instane.restart();
+      // LevelCreator.instane.restart();
       // temporary
-      Utils.pause(false);
-      Events.gamePlay.notifyObservers({name:"gameOverClose"});
-        
+
+      Events.gamePlay.notifyObservers({ name: "gameOverClose" });
     });
     advancedTexture.addControl(this.container);
   }
@@ -126,6 +123,7 @@ export class GameOverUI {
     this.container.addControl(TextBlock);
   }
   showPopup(currentLevel: number, currentScore: number, targetHits: number) {
+
     this.container.isEnabled = true;
     this.container.isVisible = true;
 
@@ -133,8 +131,7 @@ export class GameOverUI {
     this.levelReached_count.text = currentLevel.toString();
     this.targetshits_count.text = targetHits.toString();
 
-  
-    Events.gamePlay.notifyObservers({name:"gameOver"});
+    Events.gamePlay.notifyObservers({ name: "gameOver" });
 
   }
   hidePopup() {

@@ -111,6 +111,18 @@ export class AudioManager {
       }
     });
 
+    Events.sound.add((data: any) => {
+      if (data.type != "AudioManager:setMuteState") return;
+
+      if (data.state) {
+        this.isSfxOn = false;
+        if (music.isPlaying) music.stop();
+      } else {
+        this.isSfxOn = GameData.instance.getSfxState();
+        if (!music.isPlaying && this.isMusicOn) music.play();
+      }
+    });
+
     Events.hits.add((_data: ICan) => {
       if (!this.isSfxOn) return;
       switch (_data.name) {

@@ -7,6 +7,7 @@ export class Events {
   static ui = new Observable();
   static gamePlay = new Observable();
   static powerup = new Observable();
+  static sound = new Observable();
 }
 export interface EventData {
   name: string;

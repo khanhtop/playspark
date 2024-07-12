@@ -18,6 +18,7 @@ import {
 import { Materials } from "../Materials";
 import { CloneMesh } from "../CloneMesh";
 import { Meshs } from "../Meshs";
+import { Events } from "../Events";
 
 export class Ball {
   ball: Mesh;
@@ -36,7 +37,7 @@ export class Ball {
 
     result.meshes.forEach((element) => {
       element.parent = this.ball;
-      element.material =  Materials.instance.redMat;
+      element.material = Materials.instance.redMat;
     });
 
     var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
@@ -127,7 +128,7 @@ export class Ball {
     );
   }
   disposePhysicBody() {
-    this.sphereAggregate.dispose();
+    if (this.sphereAggregate != null) this.sphereAggregate.dispose();
     this.sphereAggregate = null;
   }
 

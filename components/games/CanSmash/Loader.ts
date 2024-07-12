@@ -39,12 +39,17 @@ export class Loader {
   }
   async loadImage(url: string) {
     this.loadCount++;
-    let elem = new Image();
+    let elem:HTMLImageElement = new Image();
     async function loadImage(url, elem) {
       return new Promise((resolve, reject) => {
-        elem.onload = () => resolve(elem);
+        elem.onload = () => {
+          elem.remove();
+          resolve(elem)
+         
+        };
         elem.onerror = reject;
         elem.src = url;
+
       });
     }
     await loadImage(url, elem);

@@ -36,6 +36,7 @@ import { Images } from "./Images";
 import { Sounds } from "./Sounds";
 import { Events, EventTypes } from "./Events";
 import { Meshs } from "./Meshs";
+import { Utils } from "./Utils";
 
 const CanSmash = (data: any) => {
   //   ball,
@@ -53,21 +54,32 @@ const CanSmash = (data: any) => {
   //   sponsorLogo;
 
   useEffect(() => {
-    // console.log("CanSmash2:", data.callback);
     console.log("CanSmash4:", data);
 
-    // data.callback(totalScore, currentLevel + 1, this.boostCredits);
+    var gameDiv = document.getElementById("game");
+    if (gameDiv != null) {
+      Revive(data);
+      return;
+    }
 
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
       if (_data.name == "gameOverClose" || _data.name == "gameOver") {
+        Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
         let timer = 0;
+        Utils.pause(true);
+        
+
         timer = _data.name == "gameOver" ? 5000 : 0;
         clearTimeout(timerHandle);
         timerHandle = setTimeout(() => {
           let currentLevel = GameData.instance.getCurrentLevel();
           let currentScore = GameData.instance.getTotalScore();
           data.callback(currentScore, currentLevel, 2);
+          Events.sound.notifyObservers({
+            type: "AudioManager:setMuteState",
+            state: true,
+          });
         }, timer);
       }
     });
@@ -79,12 +91,8 @@ const CanSmash = (data: any) => {
 
     var div = document.createElement("div");
     div.id = "game";
-    //document.body.appendChild(div);
-    //.appendChild(div);
-    let mainElement = document.getElementsByTagName("main")[0];
-    mainElement.insertBefore(div, mainElement.firstChild);
+    document.querySelector("main > div > div").appendChild(div);
 
-    // create the canvas html element and attach it to the webpage
     const canvas = document.createElement("canvas");
     canvas.id = "gameCanvas";
     div.appendChild(canvas);
@@ -181,7 +189,7 @@ const CanSmash = (data: any) => {
       new PowerupManager(scene);
       new GUI2D();
 
-      new LiveManager(lives);
+      let liveManager = new LiveManager(lives);
       new ScoreManager(score);
       new PowerupCreditManager(boostCredits);
       new ParticleManager();
@@ -205,10 +213,16 @@ const CanSmash = (data: any) => {
     };
 
     return () => {
-      window.removeEventListener("resize", resize);
+      /*window.removeEventListener("resize", resize);
       window.removeEventListener("keydown", null);
       engine.dispose();
       canvas.remove();
+      Events.gamePlay.clear();
+      Events.ui.clear();
+      Events.hits.clear();
+      Events.input.clear();
+      Events.powerup.clear();
+      Events..clear();*/
     };
   }, []);
 
@@ -216,6 +230,24 @@ const CanSmash = (data: any) => {
 };
 
 export default CanSmash;
+function Revive(data: any) {
+  let lives = parseInt(data.params.lives);
+
+  Events.sound.notifyObservers({
+    type: "AudioManager:setMuteState",
+    state: false,
+  });
+
+  Events.ui.notifyObservers({ type: "LiveManager:setCount", count: lives });
+  Events.ui.notifyObservers({ type: "TimerUI:resetByRevive", count: 10 });
+  Events.gamePlay.notifyObservers({ type: "GUI2D:hideGameOverUI" });
+  // Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
+  setTimeout(() => {
+    Events.gamePlay.notifyObservers({ type: "LevelCreator:resetCansPos" });
+  }, 500);
+  Utils.pause(false);
+}
+
 function initParams(
   data: any,
   score: number,
@@ -261,8 +293,12 @@ function initParams(
   if (data.params.additionalSpriteFour != undefined)
     Images.data.logo4 = data.params.additionalSpriteFour;
 
+  console.log("-----[[[ ");
+  console.log(data.params);
+  console.log(data.params.additionalSpriteFive);
   if (data.params.additionalSpriteFive != undefined)
     Images.data.barrel = data.params.additionalSpriteFive;
+  console.log(Images.data.barrel);
 
   if (data.params.additionalSpriteSix != undefined)
     Images.data.greengrass = data.params.additionalSpriteSix;
@@ -286,8 +322,7 @@ function extractFileAndBase(url) {
 
   const file = pathSegments.pop();
 
-  const baseUrl = url.replace(file,"");
-
+  const baseUrl = url.replace(file, "");
 
   return {
     file: file,
