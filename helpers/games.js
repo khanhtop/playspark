@@ -461,9 +461,8 @@ export const games = [
     cloudinaryGameTag: "can",
     tags: {
       backgroundSprite: "2.0",
-      playerSprite: "body",
       backgroundSprite: "2.0",
-      objectSprite: "1.0",
+      objectSprite: "3.0",
       powerUpSprite: "1.0",
       enemySprite: "3.0",
       additionalSpriteOne: "3.0",
@@ -473,13 +472,12 @@ export const games = [
       additionalSpriteSix: "2.0",
       backgroundMusic: "bgm",
       glbOne: "ball",
+      glbTwo: "barrel",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598346/ximczgxkmelka6qdaxqh.jpg",
-    playerSprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
     objectSprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720584857/PlaySpark_home_screens_72_lftntd.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720768934/kro0ste33ahsakvdoeym.jpg",
     powerUpSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720599031/iugbeqzkx9fz3rpnlaws.jpg",
     enemySprite:
@@ -496,6 +494,8 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598969/wyzu0lrhbqiiznczuo6t.jpg",
     glbOne:
       "https://res.cloudinary.com/dnnp8gmvx/image/upload/v1720643737/ball_nvx8ya.glb",
+    glbTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720768611/memshy7a8wym4795nqas.glb",
   },
 ];
 

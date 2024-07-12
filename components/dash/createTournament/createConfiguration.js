@@ -28,6 +28,21 @@ export default function CreateConfiguration({
           updateSprite={(a) => {
             setTournament({ ...tournament, glbOne: a });
           }}
+          pickerZoom={0.2}
+        />
+      )}
+      {tournament?.tags?.["glbTwo"] && (
+        <CreateGlbPicker
+          isAdmin={isAdmin}
+          dimension="glbTwo"
+          gameTag={tournament?.cloudinaryGameTag}
+          aspectRatio={tournament?.tags?.["glbTwo"]}
+          title={`3D Object Two`}
+          selected={tournament.glbTwo}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, glbTwo: a });
+          }}
+          pickerZoom={0.5}
         />
       )}
       {tournament?.tags?.["backgroundSprite"] && (

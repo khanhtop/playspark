@@ -19,6 +19,7 @@ export default function CreateGlbPicker({
   dimension,
   updateSprite,
   gameTag,
+  pickerZoom,
 }) {
   const [stateImages, setStateImages] = useState();
 
@@ -51,7 +52,11 @@ export default function CreateGlbPicker({
             <p>Current</p>
           </div>
           <div className="h-[85%] py-2 px-2 ">
-            <BabylonModel modelUrl={selected} onSelect={() => null} />
+            <BabylonModel
+              modelUrl={selected}
+              onSelect={() => null}
+              pickerZoom={pickerZoom}
+            />
           </div>
         </div>
 
@@ -65,6 +70,7 @@ export default function CreateGlbPicker({
                 modelUrl={item.secure_url}
                 key={key.toString() + item.secure_url}
                 onSelect={() => updateSprite(item.secure_url)}
+                pickerZoom={pickerZoom}
               />
             ))}
           </div>
@@ -82,7 +88,7 @@ function Tag({ text }) {
   );
 }
 
-function BabylonModel({ modelUrl, selected, onSelect }) {
+function BabylonModel({ modelUrl, selected, onSelect, pickerZoom }) {
   const canvasRef = useRef(null);
   const engineRef = useRef(null);
 
@@ -98,7 +104,7 @@ function BabylonModel({ modelUrl, selected, onSelect }) {
       "camera",
       -Math.PI / 2,
       Math.PI / 2,
-      0.2,
+      pickerZoom,
       new Vector3(0, 0, 0),
       scene
     );
