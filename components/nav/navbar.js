@@ -6,17 +6,48 @@ import { useState } from "react";
 export default function Navbar() {
   const router = useRouter();
   const [navOpen, setNavOpen] = useState(false);
+
+  const isCurrent = (route) => {
+    return router.pathname === route;
+  };
+
   return (
     <>
       <div className="z-20 fixed top-0 left-0 w-full h-24 text-black hidden lg:flex items-center justify-between px-8 bg-white/100 backdrop-blur">
         <img src="/ui/logo.png" className="h-full" />
         <div className="flex gap-4 font-bold">
-          <Link className="hover:text-sky-600" href="/">
+          <Link
+            className={`${
+              isCurrent("/") ? "text-sky-600" : "text-black"
+            } hover:text-sky-600`}
+            href="/"
+          >
             Home
           </Link>
-          <Link href="#">Products</Link>
-          <Link href="#">Pricing</Link>
-          <Link href="#">Case Studies</Link>
+          <Link
+            className={`${
+              isCurrent("/products") ? "text-sky-600" : "text-black"
+            } hover:text-sky-600`}
+            href="/products"
+          >
+            Products
+          </Link>
+          <Link
+            className={`${
+              isCurrent("/pricing") ? "text-sky-600" : "text-black"
+            } hover:text-sky-600`}
+            href="/pricing"
+          >
+            Pricing
+          </Link>
+          <Link
+            className={`${
+              isCurrent("/case-studies") ? "text-sky-600" : "text-black"
+            } hover:text-sky-600`}
+            href="/case-studies"
+          >
+            Case Studies
+          </Link>
           <Link href="#">Blog</Link>
         </div>
         <button
