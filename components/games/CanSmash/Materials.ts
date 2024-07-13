@@ -45,10 +45,6 @@ export class Materials {
     this.ledgesBody.emissiveColor = Color3.Gray();
     //this.ledgesBody.diffuseColor = diffuseColor;
 
-    // this.barrelBody.diffuseTexture = new Texture(Images.data.enemy);
-    // this.barrelBody.emissiveColor = Color3.FromHexString("#4B2E1A")
-    // this.barrelBody.diffuseColor = new Color3(0.1, 0.1, 0.1);
-    //this.barrelBody.specularColor = new Color3(0.4, 0.4, 0.4);
 
     this.barrelUp = new StandardMaterial("barrel");
     this.barrelUp.diffuseTexture = new Texture(Images.data.barrel_up);
@@ -57,7 +53,7 @@ export class Materials {
     //this.barrelBody.diffuseColor = diffuseColor;
 
     this.enemy = new StandardMaterial("can2Mat");
-    this.enemy.diffuseTexture = new Texture(Images.data.danger);
+    this.enemy.diffuseTexture = new Texture(Images.data.enemy);
     this.enemy.diffuseColor = diffuseColor;
 
     this.canUp = new StandardMaterial("canUpMat");
