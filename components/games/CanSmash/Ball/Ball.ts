@@ -8,6 +8,7 @@ import {
   MeshBuilder,
   PhysicsAggregate,
   PhysicsShapeType,
+  PhysicsViewer,
   PointLight,
   Quaternion,
   Scene,
@@ -21,16 +22,21 @@ import { Meshs } from "../Meshs";
 import { Events } from "../Events";
 
 export class Ball {
+  static instance: Ball = null;
   ball: Mesh;
   defaultPos: Vector3;
   scene: Scene;
   sphereAggregate: PhysicsAggregate;
+  viewer: PhysicsViewer;
   constructor(scene: Scene, defaultPos: Vector3) {
+    Ball.instance = this;
     this.scene = scene;
     this.ball = MeshBuilder.CreateSphere("ball", { diameter: 0.1 }, scene);
     this.defaultPos = defaultPos;
     this.ball.position = this.defaultPos.clone();
     this.ball.material = Materials.instance.transparentMaterial;
+
+    //this.viewer = new PhysicsViewer();
 
     let cloneMesh = new CloneMesh();
     const result = cloneMesh.get(Meshs.data.ball);
@@ -38,6 +44,7 @@ export class Ball {
     result.meshes.forEach((element) => {
       element.parent = this.ball;
       element.material = Materials.instance.redMat;
+      element.name = "ball";
     });
 
     var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
@@ -126,6 +133,8 @@ export class Ball {
       { mass: 1, restitution: 0.0 },
       this.scene
     );
+
+    //  this.viewer.showBody(this.sphereAggregate.body);
   }
   disposePhysicBody() {
     if (this.sphereAggregate != null) this.sphereAggregate.dispose();
@@ -135,6 +144,8 @@ export class Ball {
   applyForce(dir: Vector3, force: number) {
     let diff = dir.multiply(new Vector3(force, force, force));
     this.sphereAggregate.body.applyForce(diff, this.ball.position);
+
+    this.sphereAggregate.body.applyAngularImpulse(diff);
   }
 
   setScale(scaleFactor: number) {

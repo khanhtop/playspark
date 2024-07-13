@@ -7,6 +7,7 @@ import {
 } from "@babylonjs/core";
 import { EventData, EventTypes, Events } from "../Events";
 import { Utils } from "../Utils";
+import { Ball } from "./Ball";
 
 export class BallPicker {
   ball: AbstractMesh;
@@ -66,17 +67,17 @@ export class BallPicker {
     if (!this.isActive) return;
 
     //this.ball = null;
-    // console.log("onPointerDown ----", data);
+  //  console.log("onPointerDown ----", data);
 
     // check if we are under a mesh
     var pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
 
     if (pickInfo.hit) {
       let currentMesh = pickInfo.pickedMesh;
-      // console.log("currentMesh: ----", currentMesh.name);
+     // console.log("currentMesh: ----", currentMesh.name);
       if (currentMesh.name == "ball") {
-        this.ball = currentMesh;
-        this.startPos = currentMesh.position;
+        this.ball = Ball.instance.ball;//currentMesh;
+        this.startPos = Ball.instance.ball.position;
 
         this.canDrag = true;
       }
