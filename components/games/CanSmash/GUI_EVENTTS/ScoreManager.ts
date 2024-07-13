@@ -12,6 +12,13 @@ export class ScoreManager {
     this.notify();
 
 
+    Events.gamePlay.add((data: any) => {
+      if (data.type ==  "ScoreManager:setScore"){
+        this.score = data.count;
+        this.notify();
+      }
+    });
+
     Events.ui.add((data: any) => {
       switch (data.type) {
         case EventTypes.TIMER_COMPLETE:
