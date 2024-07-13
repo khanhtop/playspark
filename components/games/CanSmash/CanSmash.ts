@@ -315,8 +315,8 @@ function initParams(
   if (data.params.enemySprite != undefined)
     Images.data.enemy = data.params.enemySprite;
 
-  if (data.params.powerupSprite != undefined)
-    Images.data.powerup_credit = data.params.powerupSprite;
+  if (data.params.powerUpSprite != undefined)
+    Images.data.powerup_credit = data.params.powerUpSprite;
 
   if (data.params.additionalSpriteOne != undefined)
     Images.data.logo1 = data.params.additionalSpriteOne;

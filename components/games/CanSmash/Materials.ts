@@ -2,7 +2,7 @@ import { Color3, Scene, StandardMaterial, Texture } from "@babylonjs/core";
 import { Images } from "./Images";
 
 export class Materials {
-  static #instance: Materials;
+  static Instance: Materials = null;
   transparentMaterial: StandardMaterial;
   cans: StandardMaterial[];
   canUp: StandardMaterial;
@@ -16,7 +16,7 @@ export class Materials {
   ledgesBody: StandardMaterial;
   barrelUp: StandardMaterial;
   constructor(cansTextures: string[]) {
-    Materials.#instance = this;
+    Materials.Instance = this;
     this.transparentMaterial = new StandardMaterial("canMat");
     //this.canMaterial.diffuseTexture = new Texture(Images.data.logo_label);
     this.transparentMaterial.alpha = 0;
@@ -81,6 +81,6 @@ export class Materials {
   }
 
   public static get instance(): Materials {
-    return Materials.#instance;
+    return Materials.Instance;
   }
 }
