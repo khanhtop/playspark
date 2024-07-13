@@ -38,6 +38,7 @@ import { Events, EventTypes } from "./Events";
 import { Meshs } from "./Meshs";
 import { Utils } from "./Utils";
 import { levels } from "./Levels/Level1";
+import { TutorialManager } from "./GUI/TutorialManager";
 
 const CanSmash = (data: any) => {
   //   ball,
@@ -65,23 +66,7 @@ const CanSmash = (data: any) => {
 
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
-      if (_data.name == "gameOverClose" || _data.name == "gameOver") {
-        Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
-        let timer = 0;
-        Utils.pause(true);
-
-        timer = _data.name == "gameOver" ? 5000 : 0;
-        clearTimeout(timerHandle);
-        timerHandle = setTimeout(() => {
-          let currentLevel = GameData.instance.getCurrentLevel();
-          let currentScore = GameData.instance.getTotalScore();
-          data.callback(currentScore, currentLevel, 2);
-          Events.sound.notifyObservers({
-            type: "AudioManager:setMuteState",
-            state: true,
-          });
-        }, timer);
-      }
+      timerHandle = ShowWraperGameOver(_data, timerHandle, data);
     });
 
     let score = 0;
@@ -199,6 +184,8 @@ const CanSmash = (data: any) => {
       new PowerupCreditManager(boostCredits);
       new ParticleManager();
 
+      if (level == 1) new TutorialManager(GUI2D.instance.advancedTexture);
+
       function animate(time) {
         window.requestAnimationFrame(animate);
         TWEEN.update(time);
@@ -235,6 +222,36 @@ const CanSmash = (data: any) => {
 };
 
 export default CanSmash;
+function ShowWraperGameOver(_data: any, timerHandle: any, data: any) {
+  if (
+    _data.name == "gameOverClose" ||
+    _data.name == "gameOver" ||
+    _data.name == "LevelManager:onLastWinPopUpShow" ||
+    _data.name == "LevelManager:onLastWinPopupClosed"
+  ) {
+    Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
+    let timer = 0;
+    Utils.pause(true);
+
+    timer =
+      _data.name == "gameOver" ||
+      _data.name == "LevelManager:onLastWinPopUpShow"
+        ? 5000
+        : 0;
+    clearTimeout(timerHandle);
+    timerHandle = setTimeout(() => {
+      let currentLevel = GameData.instance.getCurrentLevel();
+      let currentScore = GameData.instance.getTotalScore();
+      data.callback(currentScore, currentLevel, 2);
+      Events.sound.notifyObservers({
+        type: "AudioManager:setMuteState",
+        state: true,
+      });
+    }, timer);
+  }
+  return timerHandle;
+}
+
 function ReInit(data: any) {
   let lives = parseInt(data.params.lives);
   let score = parseInt(data.params.score);

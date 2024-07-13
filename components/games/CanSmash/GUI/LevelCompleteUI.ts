@@ -261,7 +261,7 @@ export class LevelCompleteUI {
     close_btn.onPointerClickObservable.add(function () {
       //
       Events.ui.notifyObservers({ type: EventTypes.ON_LEVEL_COMPLETE_UI_CLOSE_BTN_CLICKED });
-      LevelCreator.instane.restart();
+
     });
     advancedTexture.addControl(this.container);
 
