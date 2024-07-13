@@ -14,6 +14,7 @@ export default function Products({ page }) {
       />
       <div className="h-screen overflow-y-scroll">
         <Navbar />
+        <Footer />
       </div>
     </>
   );
@@ -21,6 +22,7 @@ export default function Products({ page }) {
 
 import { createClient } from "../helpers/prismic";
 import Navbar from "@/components/nav/navbar";
+import Footer from "@/components/homepage/footer";
 
 export async function getServerSideProps(context) {
   const client = createClient();

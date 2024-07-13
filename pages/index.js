@@ -38,6 +38,7 @@ export default function Home({ page, url }) {
         <Section>
           <WhoWeHelp page={page} />
         </Section>
+        <Footer />
         {/* <Section>
           <Carousel />
         </Section>
@@ -57,6 +58,7 @@ import Head from "next/head";
 import Script from "next/script";
 import WhatWeDo from "@/components/homepage/whatWeDo";
 import WhoWeHelp from "@/components/homepage/whoWeHelp";
+import Footer from "@/components/homepage/footer";
 
 export async function getServerSideProps(context) {
   const client = createClient();
