@@ -33,6 +33,7 @@
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "firebase": "^10.3.1",
+    "flowbite-react": "^0.10.1",
     "next": "13.4.19",
     "next-cloudinary": "^5.16.0",
     "next-pwa": "^5.6.0",
