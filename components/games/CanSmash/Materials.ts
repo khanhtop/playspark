@@ -15,6 +15,7 @@ export class Materials {
   barrelBody: StandardMaterial;
   ledgesBody: StandardMaterial;
   barrelUp: StandardMaterial;
+  ball: StandardMaterial;
   constructor(cansTextures: string[]) {
     Materials.Instance = this;
     this.transparentMaterial = new StandardMaterial("canMat");
@@ -70,6 +71,10 @@ export class Materials {
     this.powerup = new StandardMaterial("powerupCredit");
     this.powerup.diffuseTexture = new Texture(Images.data.powerup_credit);
     this.powerup.diffuseColor = diffuseColor;
+
+    this.ball = new StandardMaterial("ball");
+    this.ball.diffuseTexture = new Texture(Images.data.ball);
+    this.ball.diffuseColor = diffuseColor;
 
     // var redMat = new StandardMaterial("redMat", scene);
     // redMat.diffuseColor = new Color3(1, 0, 0);

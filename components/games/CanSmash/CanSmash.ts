@@ -320,6 +320,9 @@ function initParams(
     Meshs.data.ball = result.file;
   }
 
+  if (data.params.ball != undefined)
+    Images.data.ball = data.params.ball;
+
   if (data.params.glbTwo != undefined) {
     const result = extractFileAndBase(data.params.glbTwo);
     barrelBaseUrl = result.baseUrl;
@@ -352,6 +355,8 @@ function initParams(
 
   if (data.params.additionalSpriteSix != undefined)
     Images.data.greengrass = data.params.additionalSpriteSix;
+
+
 
   if (data.params.score != undefined) score = parseInt(data.params.score);
 

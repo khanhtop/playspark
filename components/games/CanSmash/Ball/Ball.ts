@@ -20,6 +20,7 @@ import { Materials } from "../Materials";
 import { CloneMesh } from "../CloneMesh";
 import { Meshs } from "../Meshs";
 import { Events } from "../Events";
+import { Utils } from "../Utils";
 
 export class Ball {
   static instance: Ball = null;
@@ -41,15 +42,17 @@ export class Ball {
     let cloneMesh = new CloneMesh();
     const result = cloneMesh.get(Meshs.data.ball);
 
+
     result.meshes.forEach((element) => {
       element.parent = this.ball;
-      element.material = Materials.instance.redMat;
+      element.material = Materials.instance.ball;
       element.name = "ball";
     });
 
-    var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
-
-    this.prepareButton(this.ball, Color3.Red(), light1, scene);
+   // var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
+   this.ball.rotation = new Vector3(Utils.DToR(10),Utils.DToR(10) ,20);
+   
+    this.prepareButton(this.ball, Color3.Red(), this.ball, scene);
     this.ball.actionManager.registerAction(
       new SetValueAction(
         ActionManager.OnPointerOutTrigger,
@@ -122,8 +125,9 @@ export class Ball {
 
   resetPos() {
     this.ball.position = this.defaultPos.clone();
-    this.ball.rotation = Vector3.Zero();
+   
     this.ball.rotationQuaternion = Quaternion.Identity();
+    this.ball.rotation = new Vector3(Utils.DToR(10),Utils.DToR(10) ,20);
   }
 
   setPhysicBody() {
