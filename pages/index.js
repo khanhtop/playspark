@@ -14,7 +14,7 @@ const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
 });
 
-export default function Home({ page, url }) {
+export default function Home({ page }) {
   console.log(page);
   return (
     <>
@@ -78,8 +78,8 @@ import PricingSection from "@/components/homepage/pricingSection";
 export async function getServerSideProps(context) {
   const client = createClient();
   const page = (await client.getSingle("homepage"))?.data;
-  const url = context.resolvedUrl;
+  const blogs = await client.getAllByType("blog_post");
   return {
-    props: { page, url },
+    props: { page, blogs },
   };
 }
