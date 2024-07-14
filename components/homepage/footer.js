@@ -71,7 +71,7 @@ export default function Footer() {
             }
           />
         </div>
-        <div className="py-8 text-white border-t-[1px] border-t-white/10 flex justify-between">
+        <div className="pt-8 pb-16 text-white border-t-[1px] border-t-white/10 flex justify-between">
           <div>
             <p>Copyright © 2024 SparkUp Studios.</p>
           </div>
