@@ -321,7 +321,7 @@ function initParams(
   }
 
   if (data.params.ball != undefined)
-    Images.data.ball = data.params.ball;
+    Images.data.ball = data.params.playerSprite;
 
   if (data.params.glbTwo != undefined) {
     const result = extractFileAndBase(data.params.glbTwo);
