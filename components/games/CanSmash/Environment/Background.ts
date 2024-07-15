@@ -16,14 +16,21 @@ import { Materials } from "../Materials";
 export class Background {
   constructor(scene: Scene) {
  
-    let width = 7.64;
-    let height = 3;
+    let width = 6.9;
+    let height = 2.4;
     var plan: Mesh = MeshBuilder.CreatePlane("plan", { width: width, height: height });
-    plan.position = new Vector3(0, 0.2, 14);
+    plan.position = new Vector3(0, 0.2, 12);
     plan.rotation = new Vector3(0, 0, 0);
 
     plan.material = Materials.instance.background;
 
+
+    width = 15;
+    height = 5;
+    var plan: Mesh = MeshBuilder.CreatePlane("plan", { width: width, height: height });
+    plan.position = new Vector3(0, 0.2, 12);
+    plan.rotation = new Vector3(0, 0, 0);
+    plan.material = Materials.instance.transparentMaterial;
     var sphereAggregate = new PhysicsAggregate(
       plan,
       PhysicsShapeType.BOX,
@@ -32,5 +39,6 @@ export class Background {
       scene
     );
     sphereAggregate.body.setMotionType(PhysicsMotionType.STATIC);
+
   }
 }

@@ -329,6 +329,8 @@ function initParams(
     Meshs.data.barrel = result.file;
   }
 
+  if (data.params.additionalSpriteSix != undefined)
+    Images.data.greengrass = data.params.additionalSpriteSix;
   if (data.params.backgroundSprite != undefined)
     Images.data.background = data.params.backgroundSprite;
 
@@ -352,11 +354,6 @@ function initParams(
 
   if (data.params.objectSprite != undefined)
     Images.data.barrel = data.params.objectSprite;
-
-  if (data.params.additionalSpriteSix != undefined)
-    Images.data.greengrass = data.params.additionalSpriteSix;
-
-
 
   if (data.params.score != undefined) score = parseInt(data.params.score);
 

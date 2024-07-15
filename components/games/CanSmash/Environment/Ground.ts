@@ -4,7 +4,7 @@ import { Materials } from "../Materials";
 
 export class Ground {
   constructor(scene:Scene) {
-    let height = 14;
+    let height = 12;
     var ground: Mesh = MeshBuilder.CreatePlane("ground", { width: 50 , height:height });
     ground.position = new Vector3(0, -1, height/2);
     ground.rotation = new Vector3(Utils.DToR(90), 0, 0);

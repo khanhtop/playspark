@@ -65,8 +65,13 @@ export class Materials {
     this.background.diffuseColor = diffuseColor;
 
     this.ground = new StandardMaterial("bgMat");
-    this.ground.diffuseTexture = new Texture(Images.data.greengrass);
+    let groundTexture = new Texture(Images.data.greengrass);
+    groundTexture.uScale = 3;
+    groundTexture.vScale = 1;
+
+    this.ground.diffuseTexture = groundTexture;
     this.ground.diffuseColor = diffuseColor;
+
 
     this.powerup = new StandardMaterial("powerupCredit");
     this.powerup.diffuseTexture = new Texture(Images.data.powerup_credit);
