@@ -73,6 +73,12 @@ export class HUD {
     let creditUI = new EntityUI(advancedTexture);
     creditUI.setTexture(Images.data.Energy);
     creditUI.setPos(-420, -80);
+    
+    Events.ui.add((data: any) => {
+      if (data.type == "EntityUI:setCreditCount")
+        creditUI.setCounterText(data.count.toString());
+    });
+
     Events.ui.add((data: any) => {
       if (data.type == EventTypes.POWERUP_CREDIT_CHANGE) {
         creditUI.setCounterText(data.count.toString());

@@ -4,6 +4,7 @@ export class Images {
     arrow_flip: "arrow_flip.png",
     arrow_up: "arrow_up.png",
     background: "background.jpg",
+    ball: "t_ball.jpg",
     barrel: "barrel.jpg",
     barrel_up: "barrel_up.jpg",
     biggerBall: "biggerBall.png",

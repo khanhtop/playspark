@@ -18,7 +18,7 @@ export class TextPopup {
     this.counter = new GUI.TextBlock();
     this.counter.text = "0";
     this.counter.color = "#FFFFFF";
-    this.counter.fontSize = 150;
+    this.counter.fontSize = 225;
     this.counter.fontStyle = "bold";
     this.counter.outlineColor = "#555555";
     this.counter.outlineWidth = 10;

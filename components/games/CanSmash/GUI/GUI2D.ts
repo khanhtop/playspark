@@ -12,21 +12,25 @@ import { BlackBG } from "./BlackBG";
 import { TutorialManager } from "./TutorialManager";
 
 export class GUI2D {
+  static instance: GUI2D = null;
+  advancedTexture: GUI.AdvancedDynamicTexture = null;
   constructor() {
-    var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    GUI2D.instance = this;
+
+    this.advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
 
     let maxTimer = 30;
     let timer = maxTimer;
 
-    advancedTexture.idealWidth = 1080 / 2;
+    this.advancedTexture.idealWidth = 1080 / 2;
     // advancedTexture.idealHeight = 1920/3;
-    advancedTexture.renderAtIdealSize = true;
+    this.advancedTexture.renderAtIdealSize = true;
 
-    let comboPopup = new ComboPopup(advancedTexture);
+    let comboPopup = new ComboPopup(this.advancedTexture);
 
-    new HUD(advancedTexture);
+    new HUD(this.advancedTexture);
 
-    let blackbg = new BlackBG(advancedTexture);
+    let blackbg = new BlackBG(this.advancedTexture);
     blackbg.hide();
 
     Events.ui.add((data: any) => {
@@ -34,7 +38,7 @@ export class GUI2D {
       comboPopup.animate(data.text);
     });
 
-    let levelCompleteUI = new LevelCompleteUI(advancedTexture);
+    let levelCompleteUI = new LevelCompleteUI(this.advancedTexture);
     /*let data: ILevelCompleteUIData = {
       levelNum: 1,
       levelScore: 100,
@@ -53,7 +57,7 @@ export class GUI2D {
       Utils.pause(true);
     });
 
-    let pauseUI = new PauseUI(advancedTexture);
+    let pauseUI = new PauseUI(this.advancedTexture);
     pauseUI.hidePopup();
 
     Events.ui.add((data: any) => {
@@ -91,7 +95,7 @@ export class GUI2D {
       pauseUI.hidePopup();
     });
 
-    let gameOverUI = new GameOverUI(advancedTexture);
+    let gameOverUI = new GameOverUI(this.advancedTexture);
     gameOverUI.hidePopup();
     Events.gamePlay.add((data: any) => {
       if (data.type != EventTypes.GAME_OVER) return;
@@ -144,7 +148,5 @@ export class GUI2D {
         count: GameData.instance.getTotalScore(),
       });
     });
-
-    new TutorialManager(advancedTexture);
   }
 }

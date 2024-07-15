@@ -37,6 +37,8 @@ import { Sounds } from "./Sounds";
 import { Events, EventTypes } from "./Events";
 import { Meshs } from "./Meshs";
 import { Utils } from "./Utils";
+import { levels } from "./Levels/Level1";
+import { TutorialManager } from "./GUI/TutorialManager";
 
 const CanSmash = (data: any) => {
   //   ball,
@@ -58,30 +60,13 @@ const CanSmash = (data: any) => {
 
     var gameDiv = document.getElementById("game");
     if (gameDiv != null) {
-      Revive(data);
+      ReInit(data);
       return;
     }
 
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
-      if (_data.name == "gameOverClose" || _data.name == "gameOver") {
-        Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
-        let timer = 0;
-        Utils.pause(true);
-        
-
-        timer = _data.name == "gameOver" ? 5000 : 0;
-        clearTimeout(timerHandle);
-        timerHandle = setTimeout(() => {
-          let currentLevel = GameData.instance.getCurrentLevel();
-          let currentScore = GameData.instance.getTotalScore();
-          data.callback(currentScore, currentLevel, 2);
-          Events.sound.notifyObservers({
-            type: "AudioManager:setMuteState",
-            state: true,
-          });
-        }, timer);
-      }
+      timerHandle = ShowWraperGameOver(_data, timerHandle, data);
     });
 
     let score = 0;
@@ -138,7 +123,7 @@ const CanSmash = (data: any) => {
 
     let baseUrl = "/pong/canSmash/";
     loader.loadMesh(baseUrl, Meshs.data.can);
-  
+
     loader.loadMesh(baseUrl, Meshs.data.ledges);
     loader.loadFont(baseUrl, "PeaceSans", "PeaceSansWebfont.ttf");
 
@@ -152,17 +137,17 @@ const CanSmash = (data: any) => {
     let ballBaseUrl = baseUrl;
     let barrelBaseUrl = baseUrl;
 
-    
     console.log(ballBaseUrl);
-    ({ score, level, lives, boostCredits, ballBaseUrl , barrelBaseUrl} = initParams(
-      data,
-      score,
-      level,
-      lives,
-      boostCredits,
-      ballBaseUrl,
-      barrelBaseUrl
-    ));
+    ({ score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl } =
+      initParams(
+        data,
+        score,
+        level,
+        lives,
+        boostCredits,
+        ballBaseUrl,
+        barrelBaseUrl
+      ));
 
     loader.loadMesh(ballBaseUrl, Meshs.data.ball);
     loader.loadMesh(barrelBaseUrl, Meshs.data.barrel);
@@ -198,6 +183,8 @@ const CanSmash = (data: any) => {
       new ScoreManager(score);
       new PowerupCreditManager(boostCredits);
       new ParticleManager();
+
+      if (level == 1) new TutorialManager(GUI2D.instance.advancedTexture);
 
       function animate(time) {
         window.requestAnimationFrame(animate);
@@ -235,21 +222,78 @@ const CanSmash = (data: any) => {
 };
 
 export default CanSmash;
-function Revive(data: any) {
-  let lives = parseInt(data.params.lives);
+function ShowWraperGameOver(_data: any, timerHandle: any, data: any) {
+  if (
+    _data.name == "gameOverClose" ||
+    _data.name == "gameOver" ||
+    _data.name == "LevelManager:onLastWinPopUpShow" ||
+    _data.name == "LevelManager:onLastWinPopupClosed"
+  ) {
+    Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
+    let timer = 0;
+    Utils.pause(true);
 
+    timer =
+      _data.name == "gameOver" ||
+      _data.name == "LevelManager:onLastWinPopUpShow"
+        ? 5000
+        : 0;
+    clearTimeout(timerHandle);
+    timerHandle = setTimeout(() => {
+      let currentLevel = GameData.instance.getCurrentLevel();
+      let currentScore = GameData.instance.getTotalScore();
+      data.callback(currentScore, currentLevel, 2);
+      Events.sound.notifyObservers({
+        type: "AudioManager:setMuteState",
+        state: true,
+      });
+    }, timer);
+  }
+  return timerHandle;
+}
+
+function ReInit(data: any) {
+  let lives = parseInt(data.params.lives);
+  let score = parseInt(data.params.score);
+  let level = parseInt(data.params.level);
+  let boostCredits = parseInt(data.params.boostCredits);
+
+  if (score == 0 && level == 1) {
+    Restart(lives, level, boostCredits);
+  } else {
+    Revive(lives);
+  }
+  //example
+  //reset
+  // lives: 3 score: 0 level: 1 boostCredits: 0
+  //revive
+  //lives: 1 score: 1225 level: 1 boostCredits: 2
+}
+
+function Restart(lives: number, level: number, boostCredits: number) {
+  Reset(lives, levels[level - 1].time);
+  Events.gamePlay.notifyObservers({ type: "ScoreManager:setScore", count: 0 });
+  Events.ui.notifyObservers({ type: "EntityUI:setCreditCount", count: 0 });
+  LevelCreator.instane.create(0);
+}
+function Revive(lives: number) {
+  Reset(lives, 10);
+  setTimeout(() => {
+    Events.gamePlay.notifyObservers({ type: "LevelCreator:resetCansPos" });
+  }, 500);
+}
+
+function Reset(lives: number, timer: number) {
   Events.sound.notifyObservers({
     type: "AudioManager:setMuteState",
     state: false,
   });
 
   Events.ui.notifyObservers({ type: "LiveManager:setCount", count: lives });
-  Events.ui.notifyObservers({ type: "TimerUI:resetByRevive", count: 10 });
+  Events.ui.notifyObservers({ type: "TimerUI:resetByRevive", count: timer });
   Events.gamePlay.notifyObservers({ type: "GUI2D:hideGameOverUI" });
   // Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
-  setTimeout(() => {
-    Events.gamePlay.notifyObservers({ type: "LevelCreator:resetCansPos" });
-  }, 500);
+
   Utils.pause(false);
 }
 
@@ -263,9 +307,9 @@ function initParams(
   barrelBaseUrl: string
 ) {
   if (data == undefined)
-    return { score, level, lives, boostCredits, ballBaseUrl,barrelBaseUrl };
+    return { score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl };
   if (data.params == undefined)
-    return { score, level, lives, boostCredits, ballBaseUrl,barrelBaseUrl };
+    return { score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl };
 
   if (data.params.backgroundMusic != undefined)
     Sounds.data.music = data.params.backgroundMusic;
@@ -276,12 +320,14 @@ function initParams(
     Meshs.data.ball = result.file;
   }
 
-  if (data.params.glbTwo!= undefined) {
+  if (data.params.ball != undefined)
+    Images.data.ball = data.params.playerSprite;
+
+  if (data.params.glbTwo != undefined) {
     const result = extractFileAndBase(data.params.glbTwo);
     barrelBaseUrl = result.baseUrl;
     Meshs.data.barrel = result.file;
   }
-
 
   if (data.params.backgroundSprite != undefined)
     Images.data.background = data.params.backgroundSprite;
@@ -289,8 +335,8 @@ function initParams(
   if (data.params.enemySprite != undefined)
     Images.data.enemy = data.params.enemySprite;
 
-  if (data.params.powerupSprite != undefined)
-    Images.data.powerup_credit = data.params.powerupSprite;
+  if (data.params.powerUpSprite != undefined)
+    Images.data.powerup_credit = data.params.powerUpSprite;
 
   if (data.params.additionalSpriteOne != undefined)
     Images.data.logo1 = data.params.additionalSpriteOne;
@@ -304,13 +350,13 @@ function initParams(
   if (data.params.additionalSpriteFour != undefined)
     Images.data.logo4 = data.params.additionalSpriteFour;
 
-
   if (data.params.objectSprite != undefined)
     Images.data.barrel = data.params.objectSprite;
 
-
   if (data.params.additionalSpriteSix != undefined)
     Images.data.greengrass = data.params.additionalSpriteSix;
+
+
 
   if (data.params.score != undefined) score = parseInt(data.params.score);
 
@@ -321,7 +367,7 @@ function initParams(
   if (data.params.boostCredits != undefined)
     boostCredits = parseInt(data.params.boostCredits);
 
-  return { score, level, lives, boostCredits, ballBaseUrl ,barrelBaseUrl };
+  return { score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl };
 }
 
 function extractFileAndBase(url) {

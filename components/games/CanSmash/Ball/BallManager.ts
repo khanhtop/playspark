@@ -51,6 +51,8 @@ export class BallManager {
     let force = 2000;
 
     ball.applyForce(dir, force);
+    
+    
 
     var self = this;
     this.ball = ball;

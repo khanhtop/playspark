@@ -2,7 +2,7 @@ import { Color3, Scene, StandardMaterial, Texture } from "@babylonjs/core";
 import { Images } from "./Images";
 
 export class Materials {
-  static #instance: Materials;
+  static Instance: Materials = null;
   transparentMaterial: StandardMaterial;
   cans: StandardMaterial[];
   canUp: StandardMaterial;
@@ -15,8 +15,9 @@ export class Materials {
   barrelBody: StandardMaterial;
   ledgesBody: StandardMaterial;
   barrelUp: StandardMaterial;
+  ball: StandardMaterial;
   constructor(cansTextures: string[]) {
-    Materials.#instance = this;
+    Materials.Instance = this;
     this.transparentMaterial = new StandardMaterial("canMat");
     //this.canMaterial.diffuseTexture = new Texture(Images.data.logo_label);
     this.transparentMaterial.alpha = 0;
@@ -45,10 +46,6 @@ export class Materials {
     this.ledgesBody.emissiveColor = Color3.Gray();
     //this.ledgesBody.diffuseColor = diffuseColor;
 
-    // this.barrelBody.diffuseTexture = new Texture(Images.data.enemy);
-    // this.barrelBody.emissiveColor = Color3.FromHexString("#4B2E1A")
-    // this.barrelBody.diffuseColor = new Color3(0.1, 0.1, 0.1);
-    //this.barrelBody.specularColor = new Color3(0.4, 0.4, 0.4);
 
     this.barrelUp = new StandardMaterial("barrel");
     this.barrelUp.diffuseTexture = new Texture(Images.data.barrel_up);
@@ -57,7 +54,7 @@ export class Materials {
     //this.barrelBody.diffuseColor = diffuseColor;
 
     this.enemy = new StandardMaterial("can2Mat");
-    this.enemy.diffuseTexture = new Texture(Images.data.danger);
+    this.enemy.diffuseTexture = new Texture(Images.data.enemy);
     this.enemy.diffuseColor = diffuseColor;
 
     this.canUp = new StandardMaterial("canUpMat");
@@ -75,6 +72,10 @@ export class Materials {
     this.powerup.diffuseTexture = new Texture(Images.data.powerup_credit);
     this.powerup.diffuseColor = diffuseColor;
 
+    this.ball = new StandardMaterial("ball");
+    this.ball.diffuseTexture = new Texture(Images.data.ball);
+    this.ball.diffuseColor = diffuseColor;
+
     // var redMat = new StandardMaterial("redMat", scene);
     // redMat.diffuseColor = new Color3(1, 0, 0);
     //redMat.alpha = 0.5;
@@ -85,6 +86,6 @@ export class Materials {
   }
 
   public static get instance(): Materials {
-    return Materials.#instance;
+    return Materials.Instance;
   }
 }

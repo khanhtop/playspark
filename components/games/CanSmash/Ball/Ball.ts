@@ -8,6 +8,7 @@ import {
   MeshBuilder,
   PhysicsAggregate,
   PhysicsShapeType,
+  PhysicsViewer,
   PointLight,
   Quaternion,
   Scene,
@@ -19,30 +20,39 @@ import { Materials } from "../Materials";
 import { CloneMesh } from "../CloneMesh";
 import { Meshs } from "../Meshs";
 import { Events } from "../Events";
+import { Utils } from "../Utils";
 
 export class Ball {
+  static instance: Ball = null;
   ball: Mesh;
   defaultPos: Vector3;
   scene: Scene;
   sphereAggregate: PhysicsAggregate;
+  viewer: PhysicsViewer;
   constructor(scene: Scene, defaultPos: Vector3) {
+    Ball.instance = this;
     this.scene = scene;
     this.ball = MeshBuilder.CreateSphere("ball", { diameter: 0.1 }, scene);
     this.defaultPos = defaultPos;
     this.ball.position = this.defaultPos.clone();
     this.ball.material = Materials.instance.transparentMaterial;
 
+    //this.viewer = new PhysicsViewer();
+
     let cloneMesh = new CloneMesh();
     const result = cloneMesh.get(Meshs.data.ball);
 
+
     result.meshes.forEach((element) => {
       element.parent = this.ball;
-      element.material = Materials.instance.redMat;
+      element.material = Materials.instance.ball;
+      element.name = "ball";
     });
 
-    var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
-
-    this.prepareButton(this.ball, Color3.Red(), light1, scene);
+   // var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
+   this.ball.rotation = new Vector3(Utils.DToR(10),Utils.DToR(10) ,20);
+   
+    this.prepareButton(this.ball, Color3.Red(), this.ball, scene);
     this.ball.actionManager.registerAction(
       new SetValueAction(
         ActionManager.OnPointerOutTrigger,
@@ -115,8 +125,9 @@ export class Ball {
 
   resetPos() {
     this.ball.position = this.defaultPos.clone();
-    this.ball.rotation = Vector3.Zero();
+   
     this.ball.rotationQuaternion = Quaternion.Identity();
+    this.ball.rotation = new Vector3(Utils.DToR(10),Utils.DToR(10) ,20);
   }
 
   setPhysicBody() {
@@ -126,6 +137,8 @@ export class Ball {
       { mass: 1, restitution: 0.0 },
       this.scene
     );
+
+    //  this.viewer.showBody(this.sphereAggregate.body);
   }
   disposePhysicBody() {
     if (this.sphereAggregate != null) this.sphereAggregate.dispose();
@@ -135,6 +148,8 @@ export class Ball {
   applyForce(dir: Vector3, force: number) {
     let diff = dir.multiply(new Vector3(force, force, force));
     this.sphereAggregate.body.applyForce(diff, this.ball.position);
+
+    this.sphereAggregate.body.applyAngularImpulse(diff);
   }
 
   setScale(scaleFactor: number) {

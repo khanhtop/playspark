@@ -18,8 +18,22 @@ export class LevelManager {
         case EventTypes.CONTINUE_BTN_CLICKED:
           this.onContinueBtnClicked();
           return;
+        case EventTypes.ON_LEVEL_COMPLETE_UI_CLOSE_BTN_CLICKED:
+          this.onCloseBtnClicked();
+          return;
       }
     });
+  }
+
+  onCloseBtnClicked() {
+    let currentLevel = GameData.instance.getCurrentLevel();
+    let totalLevel = GameData.instance.getTotalLevel();
+
+    if (currentLevel < totalLevel) LevelCreator.instane.restart();
+    else
+      Events.gamePlay.notifyObservers({
+        name: "LevelManager:onLastWinPopupClosed",
+      });
   }
   onContinueBtnClicked() {
     let currentLevel = GameData.instance.getCurrentLevel();
@@ -57,6 +71,11 @@ export class LevelManager {
         type: EventTypes.LEVEL_COMPLETE,
         data,
       });
+
+      if (currentLevel >= totalLevel)
+        Events.gamePlay.notifyObservers({
+          name: "LevelManager:onLastWinPopUpShow",
+        });
     } else {
       let data = {
         levelNum: currentLevel,
