@@ -171,13 +171,13 @@ export default function AuthModal({ action, closeModal, user }) {
               </div>
             )}
             {authState !== "forgot" ? (
-              <div className="flex gap-2 -mt-1 text-xs text-white/50 cursor-pointer">
+              <div className="flex gap-2 -mt-1 text-xs cursor-pointer">
                 <p onClick={() => setAuthState("forgot")}>
                   Forgotten your password?
                 </p>
               </div>
             ) : (
-              <div className="flex gap-2 mt-1 text-xs text-white/50 cursor-pointer">
+              <div className="flex gap-2 mt-1 text-xs cursor-pointer">
                 <p onClick={() => setAuthState("login")}>Back</p>
               </div>
             )}
