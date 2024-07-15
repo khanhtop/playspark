@@ -14,12 +14,13 @@ import ClientProfile from "@/components/clientPages/subpages/clientProfile";
 import ClientXP from "@/components/clientPages/subpages/clientXp";
 import TopNav from "@/components/clientPages/topnav";
 import UIButton from "@/components/ui/button";
-import { firestore } from "@/helpers/firebase";
+import { auth, firestore, logoutWithoutReroute } from "@/helpers/firebase";
 import {
   computeAggregateLeaderboard,
   computeTotalScore,
 } from "@/helpers/leaderboard";
 import { useAppContext } from "@/helpers/store";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import {
   query,
   collection,
@@ -40,6 +41,7 @@ export default function PageHandler({
   tournamentsByPlayCount,
   tournamentsByDate,
   leaderboard,
+  shouldAuthWithDeviceId,
 }) {
   const context = useAppContext();
   const router = useRouter();
@@ -54,6 +56,91 @@ export default function PageHandler({
   // PRIZES
   const _prizesUnsub = useRef(null);
   const [prizes, setPrizes] = useState([]);
+
+  // Device ID Auth Code
+
+  function generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+      /[xy]/g,
+      function (c) {
+        const r = (Math.random() * 16) | 0,
+          v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }
+    );
+  }
+
+  // Function to create a fingerprint from browser details
+  function createFingerprint() {
+    const navigatorInfo = window.navigator;
+    const screenInfo = window.screen;
+    const fingerprint = [
+      navigatorInfo.userAgent,
+      navigatorInfo.language,
+      screenInfo.colorDepth,
+      new Date().getTimezoneOffset(),
+      navigatorInfo.platform,
+      navigatorInfo.doNotTrack,
+      screenInfo.height,
+      screenInfo.width,
+    ].join("");
+    return fingerprint;
+  }
+
+  // Simple hash function to create a 16-bit hash
+  function simpleHash(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return (hash & 0xffff).toString(16).padStart(4, "0"); // Return 16-bit hash
+  }
+
+  // Function to get or generate a device ID
+  function getDeviceID() {
+    // Check if a device ID is already stored
+    let deviceID = localStorage.getItem("psUUID");
+    if (!deviceID) {
+      // Create a fingerprint and generate a UUID
+      const fingerprint = createFingerprint();
+      const uuid = generateUUID();
+      // Hash the fingerprint with a simple hash function
+      const hashedFingerprint = simpleHash(fingerprint);
+      // Combine the hashed fingerprint with the UUID to create the device ID
+      deviceID = `${hashedFingerprint}-${uuid}`;
+      // Store the device ID in localStorage
+      localStorage.setItem("psUUID", deviceID);
+    }
+    return deviceID;
+  }
+
+  useEffect(() => {
+    if (shouldAuthWithDeviceId) {
+      const uuid = getDeviceID();
+      if (uuid !== null) {
+        const emailStructure = uuid + "@playspark.co";
+        logoutWithoutReroute();
+        fetch("/api/auth/externalUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: emailStructure, name: null }),
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((json) => {
+            console.log(json);
+            if (json.email && json.password) {
+              signInWithEmailAndPassword(auth, json.email, json.password);
+            }
+          });
+      }
+    }
+  }, [shouldAuthWithDeviceId]);
 
   // Create Rewards Listener
   const getRewards = () => {
@@ -120,9 +207,9 @@ export default function PageHandler({
   const data = {
     user: {
       ...user,
-      primaryColor: user.primaryColor ?? "#222",
-      accentColor: user.accentColor ?? "#00DDFF",
-      textColor: user.textColor ?? "#FFF",
+      primaryColor: user?.primaryColor ?? "#222",
+      accentColor: user?.accentColor ?? "#00DDFF",
+      textColor: user?.textColor ?? "#FFF",
     },
     rewards,
     prizes,
@@ -176,7 +263,7 @@ export default function PageHandler({
 }
 
 export async function getServerSideProps(context) {
-  const { id } = context.query;
+  const { id, deviceIdSignIn } = context.query;
 
   try {
     const usersRef = query(
@@ -230,6 +317,8 @@ export async function getServerSideProps(context) {
         currentXp: doc.data()?.dataByClient?.[userDoc.id]?.xp || 0,
       }));
 
+      console.log(userData);
+
       return {
         props: {
           user: userData,
@@ -237,6 +326,8 @@ export async function getServerSideProps(context) {
           tournamentsByPlayCount: tournamentsByPlayCount,
           tournamentsByDate: tournamentsByDate,
           leaderboard: leaderboard,
+          shouldAuthWithDeviceId:
+            deviceIdSignIn || userData?.id === "xwMcL84YdoRXAV52oNjmhVhCHD63",
         },
       };
     } else {

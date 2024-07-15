@@ -24,15 +24,15 @@ export default async function handler(req, res) {
       query(collection(firestore, "users"), where("email", "==", email))
     );
     const pwd = snapshot.docs[0]?.data()?.pwd;
-    console.log(email);
     previousName = snapshot.docs[0]?.data()?.companyName;
-    console.log(pwd);
     if (pwd) {
       password = pwd;
     } else {
       password = Math.random().toString(36).substring(2, 14);
     }
   }
+
+  console.log(password);
 
   // Try and sign in
   try {
