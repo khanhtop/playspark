@@ -22,7 +22,7 @@ export class Tutorial2 {
   ref: any;
   ctx: ICanvasRenderingContext;
   advancedTexture: GUI.AdvancedDynamicTexture;
-  constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
+  constructor(advancedTexture: GUI.AdvancedDynamicTexture,  continueBtn:GUI.Image) {
     this.advancedTexture = advancedTexture;
 
     this.container = new GUI.Container();
@@ -40,23 +40,11 @@ export class Tutorial2 {
     this.createText("Hit the target to \n earn points", -150, -110);
 
 
+    continueBtn.leftInPixels = 0;
+    continueBtn.topInPixels = 170;
 
-    var close_btn = new GUI.Image();
-    close_btn.source = Images.data.CloseBtn;
-    close_btn.widthInPixels = 55;
-    close_btn.heightInPixels = 55;
-    close_btn.leftInPixels = 200;
-    close_btn.topInPixels = 130;
-    close_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    close_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
 
-    close_btn.onPointerClickObservable.add(() => {
-      Events.ui.notifyObservers({
-        type: EventTypes.TUTORIAL_CLOSE_BTN_CLICKED,
-      });
-    });
-
-    this.container.addControl(close_btn);
+    this.container.addControl(continueBtn);
     this.advancedTexture.addControl(this.container);
 
  /*   this.ctx = this.advancedTexture.getContext();

@@ -17,13 +17,17 @@ import { Vector3 } from "@babylonjs/core";
 
 export class TutorialManager {
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
-    let tutorial1 = new Tutorial1(advancedTexture);
+    let continueBtn = this.createContinueBtn();
+
+    let tutorial1 = new Tutorial1(advancedTexture, continueBtn);
     tutorial1.hide();
 
-    let tutorial2 = new Tutorial2(advancedTexture);
+    continueBtn = this.createContinueBtn();
+    let tutorial2 = new Tutorial2(advancedTexture, continueBtn);
     tutorial2.hide();
 
-    let tutorial3 = new Tutorial3(advancedTexture);
+    continueBtn = this.createContinueBtn();
+    let tutorial3 = new Tutorial3(advancedTexture, continueBtn);
     tutorial3.hide();
 
     let tutorialStep = 1;
@@ -121,4 +125,22 @@ export class TutorialManager {
 
   hide() {}
   show(step: number) {}
+
+  createContinueBtn() {
+    var close_btn = new GUI.Image();
+    close_btn.source = Images.data.tutorial_continue;
+    close_btn.widthInPixels = 120*1.2;
+    close_btn.heightInPixels = 47*1.2;
+    close_btn.leftInPixels = 150;
+    close_btn.topInPixels = 0;
+    close_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    close_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+
+    close_btn.onPointerClickObservable.add(() => {
+      Events.ui.notifyObservers({
+        type: EventTypes.TUTORIAL_CLOSE_BTN_CLICKED,
+      });
+    });
+    return close_btn;
+  }
 }

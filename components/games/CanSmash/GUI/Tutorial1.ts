@@ -20,11 +20,10 @@ export class Tutorial1 {
   setp: GUI.Container;
   tween: TWEEN.Tween<{ y: number; alpha: number }>;
   image: HTMLImageElement;
-  constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
-
-
-
-
+  constructor(
+    advancedTexture: GUI.AdvancedDynamicTexture,
+    continueBtn: GUI.Image
+  ) {
     this.setp = new GUI.Container();
     this.setp.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     this.setp.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
@@ -60,22 +59,10 @@ export class Tutorial1 {
     this.message.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.setp.addControl(this.message);
 
-    var close_btn = new GUI.Image();
-    close_btn.source = Images.data.CloseBtn;
-    close_btn.widthInPixels = 55;
-    close_btn.heightInPixels = 55;
-    close_btn.leftInPixels = 150;
-    close_btn.topInPixels = 0;
-    close_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    close_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    continueBtn.leftInPixels = 0;
+    continueBtn.topInPixels = -25;
 
-    close_btn.onPointerClickObservable.add(() => {
-      Events.ui.notifyObservers({
-        type: EventTypes.TUTORIAL_CLOSE_BTN_CLICKED,
-      });
-    });
-
-    this.setp.addControl(close_btn);
+    this.setp.addControl(continueBtn);
     advancedTexture.addControl(this.setp);
 
     const _data = {

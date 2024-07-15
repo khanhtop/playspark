@@ -2,6 +2,7 @@ export class Images {
   static data = {
     arrow: "arrow.png",
     arrow_flip: "arrow_flip.png",
+    tutorial_continue:"tutorial_continue.png",
     arrow_up: "arrow_up.png",
     background: "background.jpg",
     ball: "t_ball.jpg",
