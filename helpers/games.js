@@ -472,24 +472,27 @@ export const games = [
       additionalSpriteSix: "2.0",
       backgroundMusic: "bgm",
       glbOne: "ball",
+      playerSprite: "balltexture",
       glbTwo: "barrel",
     },
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598346/ximczgxkmelka6qdaxqh.jpg",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721085900/filkyxb3ffrxjbm9fd9s.jpg",
     objectSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720768934/kro0ste33ahsakvdoeym.jpg",
     powerUpSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720599031/iugbeqzkx9fz3rpnlaws.jpg",
     enemySprite:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598801/etewwvsoa3sia2sds5pv.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086239/dpeorrc9qdss49kis2uo.jpg",
     additionalSpriteOne:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598520/ocv8kvkpebkqadziabgi.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086240/wzj4wpptzi0zl2en88qh.jpg",
     additionalSpriteTwo:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598564/vg7tbebocusrpiiiibdx.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086240/dwqj8y9hsctdevw97rvu.jpg",
     additionalSpriteThree:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598635/rsc2ystqxjmrkpo6j9ad.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086240/qmoybmyir2y6qn4umrh2.jpg",
     additionalSpriteFour:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598666/aor7gghouc2httpydiux.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086240/tvixywic1l6rnh9ywu48.jpg",
     additionalSpriteSix:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598969/wyzu0lrhbqiiznczuo6t.jpg",
     glbOne:
