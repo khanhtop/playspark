@@ -39,6 +39,7 @@ import { Meshs } from "./Meshs";
 import { Utils } from "./Utils";
 import { levels } from "./Levels/Level1";
 import { TutorialManager } from "./GUI/TutorialManager";
+import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
   //   ball,
@@ -69,6 +70,7 @@ const CanSmash = (data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);
     });
 
+
     let score = 0;
     let level = 1;
     let lives = 2;
@@ -85,8 +87,14 @@ const CanSmash = (data: any) => {
     // initialize babylon scene and engine
     const engine = new Engine(canvas, true);
     const scene = new Scene(engine);
-
     new GameData(scene, engine, canvas);
+
+    var loadingScreen = new CustomLoadingScreen("I'm loading!!");
+    loadingScreen.loadingUIBackgroundColor = "#BB464Bcc"
+    engine.loadingScreen = loadingScreen;
+    engine.displayLoadingUI();
+
+
     new SaveLoadData();
     new Timer(scene, engine);
 
@@ -119,6 +127,7 @@ const CanSmash = (data: any) => {
 
     const loader = new Loader(scene, () => {
       init();
+      engine.hideLoadingUI();
     });
 
     let baseUrl = "/pong/canSmash/";
@@ -137,7 +146,7 @@ const CanSmash = (data: any) => {
     let ballBaseUrl = baseUrl;
     let barrelBaseUrl = baseUrl;
 
-    console.log(ballBaseUrl);
+
     ({ score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl } =
       initParams(
         data,
@@ -151,6 +160,7 @@ const CanSmash = (data: any) => {
 
     loader.loadMesh(ballBaseUrl, Meshs.data.ball);
     loader.loadMesh(barrelBaseUrl, Meshs.data.barrel);
+
 
     Object.keys(Images.data).forEach((key) => {
       loader.loadImage(Images.data[key]);
@@ -334,11 +344,9 @@ function initParams(
   if (data.params.backgroundSprite != undefined)
     Images.data.background = data.params.backgroundSprite;
 
-
   if (data.params.powerUpSprite != undefined)
     Images.data.powerup_credit = data.params.powerUpSprite;
 
-  
   if (data.params.enemySprite != undefined)
     Images.data.enemy = data.params.enemySprite;
 
