@@ -8,6 +8,7 @@ export class Events {
   static gamePlay = new Observable();
   static powerup = new Observable();
   static sound = new Observable();
+  static preload = new Observable();
 }
 export interface EventData {
   name: string;

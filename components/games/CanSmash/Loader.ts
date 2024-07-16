@@ -7,6 +7,9 @@ import {
 } from "@babylonjs/core";
 import HavokPhysics from "@babylonjs/havok";
 import * as GUI from "@babylonjs/gui";
+import { Events } from "./Events";
+import { Meshs } from "./Meshs";
+import { Images } from "./Images";
 
 export class Loader {
   static instance: Loader = null;
@@ -19,10 +22,15 @@ export class Loader {
     this.meshLoaderResult = [];
     Loader.instance = this;
     this.callBack = callBack;
+
+    Events.preload.notifyObservers({
+      name: "preload:addTotalAssetsCount",
+      count: Object.keys(Meshs.data).length + Object.keys(Images.data).length,
+    });
   }
-  loadFont(baseUrl:string, name :string,url: string) {
+  loadFont(baseUrl: string, name: string, url: string) {
     this.loadCount++;
-    const font = new FontFace(name, `url(${baseUrl+url})`, {
+    const font = new FontFace(name, `url(${baseUrl + url})`, {
       style: "normal",
       weight: "400",
       stretch: "condensed",
@@ -39,24 +47,23 @@ export class Loader {
   }
   async loadImage(url: string) {
     this.loadCount++;
-    let elem:HTMLImageElement = new Image();
+    let elem: HTMLImageElement = new Image();
     async function loadImage(url, elem) {
       return new Promise((resolve, reject) => {
         elem.onload = () => {
           elem.remove();
-          resolve(elem)
-         
+          resolve(elem);
         };
         elem.onerror = reject;
         elem.src = url;
-
       });
     }
     await loadImage(url, elem);
-   // console.log("image loded",url)
+    // console.log("image loded",url)
+
     this.checkLoadComplete();
   }
-  loadMesh(baseUrl:string,name: string) {
+  loadMesh(baseUrl: string, name: string) {
     this.loadCount++;
     const resultPromise = SceneLoader.ImportMeshAsync("", baseUrl, name);
 
@@ -88,7 +95,9 @@ export class Loader {
 
   checkLoadComplete() {
     this.loadCount--;
-
+    Events.preload.notifyObservers({
+      name: "preload:progress",
+    });
     if (this.loadCount == 0) {
       this.callBack();
     }
