@@ -9,7 +9,7 @@ import { GameData } from "../GameData";
 import { Utils } from "../Utils";
 import { SaveLoadData } from "../SaveLoadData.";
 import { BlackBG } from "./BlackBG";
-import { TutorialManager } from "./TutorialManager";
+
 
 export class GUI2D {
   static instance: GUI2D = null;

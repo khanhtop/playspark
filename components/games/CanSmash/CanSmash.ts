@@ -88,9 +88,9 @@ const CanSmash = (data: any) => {
     const engine = new Engine(canvas, true);
     const scene = new Scene(engine);
     new GameData(scene, engine, canvas);
-
+   
     var loadingScreen = new CustomLoadingScreen("I'm loading!!");
-    loadingScreen.loadingUIBackgroundColor = "#BB464Bcc"
+    loadingScreen.loadingUIBackgroundColor = "#BB464Bcc";
     engine.loadingScreen = loadingScreen;
     engine.displayLoadingUI();
 

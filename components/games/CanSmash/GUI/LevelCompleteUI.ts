@@ -4,6 +4,7 @@ import { EventTypes, Events } from "../Events";
 import { LevelCreator } from "../LevelCreator";
 import { Images } from "../Images";
 import { levels } from "../Levels/Level1";
+import { GUI2DParticle } from "./GUI2DParticle";
 
 export class LevelCompleteUI {
   fillEllipse: GUI.Ellipse;
@@ -299,6 +300,8 @@ export class LevelCompleteUI {
     this.completed_all_levels.outlineColor = "#1A1A3E";
     details.addControl(this.completed_all_levels);
 
+
+    new GUI2DParticle ();
     /* var g_img = new GUI.Image();
     g_img.source = Images.data.3;
     g_img.alpha = 0.5;
@@ -375,6 +378,8 @@ export class LevelCompleteUI {
       this.completed_all_levels.isVisible = true;
       this.greatWork.isVisible = true;
 
+      
+
     } else {
       this.btn_base.isVisible = true;
       this.next_btn.isVisible = true;
@@ -389,9 +394,14 @@ export class LevelCompleteUI {
       this.completed_all_levels.isVisible = false;
       this.greatWork.isVisible = false;
 
+      
     }
+    GUI2DParticle.instanc.animate(true);
+
+
   }
   hidePopup() {
+    GUI2DParticle.instanc.animate(false);
     this.container.isEnabled = false;
     this.container.isVisible = false;
   }
