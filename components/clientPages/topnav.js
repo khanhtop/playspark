@@ -27,85 +27,123 @@ export default function TopNav({
   const [shouldBounce, setShouldBounce] = useState(false);
 
   return (
-    <div
-      style={{ backgroundColor: data.primaryColor, color: data.textColor }}
-      className={`border-b-[1px] h-20 w-full flex py-4 px-6`}
-    >
-      <img src={data?.brandLogo} className="h-full py-0 md:py-0" />
-      <div className="h-full flex-1 flex py-2 md:py-1">
-        {context?.loggedIn?.uid ? (
-          <div className="h-full flex-1 justify-end flex items-center gap-2 md:gap-4">
-            {prizes?.length > 0 && (
-              <Pill
-                value={groupPrizes(prizes).length}
-                colorA={data.accentColor}
-                colorB={data.accentColor}
-                image="/clientPages/prizes.png"
-                Icon={XMarkIcon}
+    <div className="flex flex-col">
+      <div
+        style={{ backgroundColor: data.primaryColor, color: data.textColor }}
+        className={`border-b-[1px] h-20 w-full flex py-4 px-6`}
+      >
+        <img src={data?.brandLogo} className="h-full py-0 md:py-0" />
+        <div className="h-full flex-1 flex py-2 md:py-1">
+          {context?.loggedIn?.uid ? (
+            <div className="h-full flex-1 justify-end flex items-center gap-2 gap-4">
+              <div className="h-full flex-1 justify-end md:flex items-center gap-2 hidden">
+                {prizes?.length > 0 && (
+                  <Pill
+                    value={groupPrizes(prizes).length}
+                    colorA={data.accentColor}
+                    colorB={data.accentColor}
+                    image="/clientPages/prizes.png"
+                    Icon={XMarkIcon}
+                    data={data}
+                    onClick={() => setScreen("prizes")}
+                  />
+                )}
+                <Pill
+                  value={totalXp}
+                  colorA={data.textColor}
+                  colorB={data.accentColor}
+                  image="/clientPages/xp.png"
+                  Icon={XMarkIcon}
+                  data={data}
+                  onClick={() => setScreen("xp")}
+                />
+                <Pill
+                  value={totalScore}
+                  colorA={data.accentColor}
+                  colorB={data.accentColor}
+                  image="/clientPages/coins.png"
+                  Icon={CurrencyDollarIcon}
+                  data={data}
+                  onClick={() => setScreen("coins")}
+                />
+              </div>
+              <div className="h-full relative">
+                <EnvelopeIcon
+                  onClick={() => {
+                    setScreen("chat");
+                  }}
+                  className={`h-full pb-0 opacity-20`}
+                />
+                <div className="absolute bg-black/80 -top-2 -right-1 h-6 w-6 text-xs flex items-center justify-center border-2 border-white rounded-full text-white">
+                  0
+                </div>
+              </div>
+
+              <div className="h-full relative">
+                <BellIcon
+                  onClick={() => {
+                    setScreen("notifications");
+                    context.setHasNewNotification(false);
+                  }}
+                  className={`h-full pb-0 opacity-20 ${
+                    context.hasNewNotification && "animate-bounce"
+                  }`}
+                />
+                <div className="absolute bg-black/80 -top-2 -right-1 h-6 w-6 text-xs flex items-center justify-center border-2 border-white rounded-full text-white">
+                  {context?.notifications?.filter((a) => !a.read)?.length}
+                </div>
+              </div>
+
+              <Avatar
+                context={context}
+                onClick={() => setScreen("profile")}
+                name={context?.profile?.companyName || "?"}
                 data={data}
-                onClick={() => setScreen("prizes")}
               />
-            )}
-            <Pill
-              value={totalXp}
-              colorA={data.textColor}
-              colorB={data.accentColor}
-              image="/clientPages/xp.png"
-              Icon={XMarkIcon}
-              data={data}
-              onClick={() => setScreen("xp")}
-            />
-            <Pill
-              value={totalScore}
-              colorA={data.accentColor}
-              colorB={data.accentColor}
-              image="/clientPages/coins.png"
-              Icon={CurrencyDollarIcon}
-              data={data}
-              onClick={() => setScreen("coins")}
-            />
-            <div className="h-full relative">
-              <EnvelopeIcon
-                onClick={() => {
-                  setScreen("chat");
-                }}
-                className={`h-full pb-0 opacity-20`}
-              />
-              <div className="absolute bg-black/80 -top-2 -right-1 h-6 w-6 text-xs flex items-center justify-center border-2 border-white rounded-full">
-                0
-              </div>
             </div>
-
-            <div className="h-full relative">
-              <BellIcon
-                onClick={() => {
-                  setScreen("notifications");
-                  context.setHasNewNotification(false);
-                }}
-                className={`h-full pb-0 opacity-20 ${
-                  context.hasNewNotification && "animate-bounce"
-                }`}
-              />
-              <div className="absolute bg-black/80 -top-2 -right-1 h-6 w-6 text-xs flex items-center justify-center border-2 border-white rounded-full">
-                {context?.notifications?.filter((a) => !a.read)?.length}
-              </div>
+          ) : (
+            <div
+              onClick={showLogin}
+              className="flex-1 flex items-center justify-end font-octo text-2xl"
+            >
+              <p className="cursor-pointer hover:opacity-80">Sign In/Up</p>
             </div>
-
-            <Avatar
-              context={context}
-              onClick={() => setScreen("profile")}
-              name={context?.profile?.companyName || "?"}
-              data={data}
-            />
-          </div>
-        ) : (
-          <div
-            onClick={showLogin}
-            className="flex-1 flex items-center justify-end font-octo text-2xl"
-          >
-            <p className="cursor-pointer hover:opacity-80">Sign In/Up</p>
-          </div>
+          )}
+        </div>
+      </div>
+      <div
+        style={{ backgroundColor: data.primaryColor, color: data.textColor }}
+        className="h-16 flex px-8 py-4 gap-4 justify-end flex md:hidden border-b-[1px]"
+      >
+        {prizes?.length > 0 && (
+          <Pill
+            value={groupPrizes(prizes).length}
+            colorA={data.accentColor}
+            colorB={data.accentColor}
+            image="/clientPages/prizes.png"
+            Icon={XMarkIcon}
+            data={data}
+            onClick={() => setScreen("prizes")}
+          />
         )}
+        <Pill
+          value={totalXp}
+          colorA={data.textColor}
+          colorB={data.accentColor}
+          image="/clientPages/xp.png"
+          Icon={XMarkIcon}
+          data={data}
+          onClick={() => setScreen("xp")}
+        />
+        <Pill
+          value={totalScore}
+          colorA={data.accentColor}
+          colorB={data.accentColor}
+          image="/clientPages/coins.png"
+          Icon={CurrencyDollarIcon}
+          data={data}
+          onClick={() => setScreen("coins")}
+        />
       </div>
     </div>
   );
@@ -121,7 +159,7 @@ function Avatar({ name, context, data, onClick }) {
         color: data.textColor,
         backgroundColor: data.primaryColor,
       }}
-      className="z-10 overflow-hidden relative border-2 h-full cursor-pointer hover:opacity-80 transition aspect-square rounded-full flex items-center justify-center"
+      className="z-10 overflow-hidden relative border-2 h-full cursor-pointer hover:opacity-80 transition aspect-square rounded-full flex items-center justify-center -mt-1"
     >
       <img className="scale-110" src={context?.profile?.profilePhoto} />
       {/* <p className="font-octo md:text-2xl">{name?.substring(0, 1)}</p> */}

@@ -48,7 +48,7 @@ export default function ClientCoins({ user, rewards, setScreen }) {
               <p>{context?.profile?.dataByClient?.[user.id]?.coins || 0}</p>
             </div>
           </div>
-          <div className="grid grid-cols-2 mt-6 pb-8 px-5 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 mt-6 pb-8 px-5 gap-4">
             {rewards
               ?.filter(
                 (a) =>
@@ -80,7 +80,7 @@ export default function ClientCoins({ user, rewards, setScreen }) {
               ]}
             />
             {subTab === "offers" && (
-              <div className="grid grid-cols-2 gap-4 mt-6 pb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6 pb-8">
                 {getAvailableReward(rewards)?.map((item, key) => (
                   <RewardCard user={user} item={item} key={key} />
                 ))}
