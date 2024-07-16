@@ -3,6 +3,7 @@ import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function BattleSlider({
   clientId,
@@ -53,7 +54,11 @@ export default function BattleSlider({
       </div>
       <div className="overflow-x-scroll whitespace-nowrap px-6 no-scrollbar pb-4">
         {stage === 0 && (
-          <RandomBattles tournaments={tournaments} leaderboard={leaderboard} />
+          <RandomBattles
+            user={user}
+            tournaments={tournaments}
+            leaderboard={leaderboard}
+          />
         )}
         {stage === 1 &&
           context?.battles
@@ -122,16 +127,27 @@ export default function BattleSlider({
   );
 }
 
-function RandomBattles({ tournaments, leaderboard }) {
+function RandomBattles({ tournaments, leaderboard, user }) {
   const context = useAppContext();
+
+  let clientId = null;
+
+  if (tournaments?.length) {
+    clientId = tournaments[0]?.ownerId;
+  }
+
   const filteredPlayers = leaderboard.filter(
-    (a) => a.id !== context?.loggedIn?.uid
+    (a) =>
+      a.id !== context?.loggedIn?.uid &&
+      a?.dataByClient?.[clientId] &&
+      a?.dataByClient?.[clientId].xp > 10
   );
 
   return (
     <div className="overflow-x-scroll whitespace-nowrap no-scrollbar pb-4">
       <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8 text-white  rounded-3xl">
         <BattleInviteCard
+          client={user}
           battle={{ game: {} }}
           tournament={
             tournaments[Math.floor(Math.random() * tournaments.length)]
@@ -144,6 +160,7 @@ function RandomBattles({ tournaments, leaderboard }) {
       </div>
       <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8  rounded-3xl text-white">
         <BattleInviteCard
+          client={user}
           battle={{ game: {} }}
           tournament={
             tournaments[Math.floor(Math.random() * tournaments.length)]
@@ -156,6 +173,7 @@ function RandomBattles({ tournaments, leaderboard }) {
       </div>
       <div className="h-48 inline-block shadow-lg shadow-black/50 mr-8 text-white rounded-3xl">
         <BattleInviteCard
+          client={user}
           battle={{ game: {} }}
           tournament={
             tournaments[Math.floor(Math.random() * tournaments.length)]
@@ -186,10 +204,21 @@ function Tab({ text, selected, setSelected, color }) {
   );
 }
 
-function BattleInviteCard({ tournament, me, you, battle, myUid }) {
+function BattleInviteCard({ tournament, me, you, battle, myUid, client }) {
   const [loading, setLoading] = useState(false);
   const context = useAppContext();
   const router = useRouter();
+
+  const isNotAbleToBattle = () => {
+    if (
+      !me.dataByClient?.[tournament.ownerId]?.xp ||
+      me.dataByClient?.[tournament.ownerId]?.xp < 10
+    ) {
+      return "You do not have enough XP to start this battle, try earning at least 10 XP first and then start the battle!";
+    }
+    return false;
+  };
+
   return (
     <div className="inline-block h-48 w-72 relative rounded-3xl overflow-hidden text-xs">
       <img src="/battle/vsbg.jpg" className="h-full w-full object-cover" />
@@ -212,6 +241,16 @@ function BattleInviteCard({ tournament, me, you, battle, myUid }) {
           <div className="flex w-full justify-end gap-2 font-octo">
             <button
               onClick={async () => {
+                const error = isNotAbleToBattle();
+                if (error) {
+                  Swal.fire({
+                    title: "Oops",
+                    text: error,
+                    icon: "error",
+                    confirmButtonColor: client?.accentColor,
+                  });
+                  return;
+                }
                 setLoading(true);
                 const id = await createChallenge(
                   tournament,

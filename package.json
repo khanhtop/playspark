@@ -52,6 +52,7 @@
     "resend": "^3.2.0",
     "short-uuid": "^4.2.2",
     "stripe": "^15.10.0",
+    "sweetalert2": "^11.12.2",
     "swiper": "^11.0.3",
     "tailwindcss": "3.3.3",
     "uuid": "^9.0.1"

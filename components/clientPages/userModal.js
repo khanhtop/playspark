@@ -27,10 +27,13 @@ export default function UserModal({
   const [isConfirmingChallenge, setIsConfirmingChallenge] = useState(false);
   const [loading, setLoading] = useState(false);
   const xpSteal = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
-  const xpLose = Math.floor(context?.profile?.dataByClient[client.id]?.xp / 10);
+  const xpLose = Math.floor(
+    context?.profile?.dataByClient?.[client.id]?.xp / 10
+  );
 
   const issueChallenge = async () => {
     setLoading(true);
+
     const id = await createChallenge(
       isConfirmingChallenge,
       userData,
