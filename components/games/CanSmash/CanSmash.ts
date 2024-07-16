@@ -330,7 +330,7 @@ function initParams(
     Meshs.data.ball = result.file;
   }
 
-  if (data.params.ball != undefined)
+  if (data.params.playerSprite != undefined)
     Images.data.ball = data.params.playerSprite;
 
   if (data.params.glbTwo != undefined) {
