@@ -3,6 +3,7 @@ import { ILevelCompleteUIData } from "./LevelCompleteUIData";
 import { EventTypes, Events } from "../Events";
 import { LevelCreator } from "../LevelCreator";
 import { Images } from "../Images";
+import { levels } from "../Levels/Level1";
 
 export class LevelCompleteUI {
   fillEllipse: GUI.Ellipse;
@@ -27,6 +28,8 @@ export class LevelCompleteUI {
   target_img: any;
   hourglass_img: GUI.Image;
   next_level_bg: GUI.Image;
+  greatWork: GUI.TextBlock;
+  completed_all_levels: GUI.TextBlock;
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
     this.container = new GUI.Container();
     this.container.adaptWidthToChildren = true;
@@ -265,6 +268,37 @@ export class LevelCompleteUI {
     });
     advancedTexture.addControl(this.container);
 
+
+    this.greatWork = new GUI.TextBlock();
+    this.greatWork.fontFamily = "PeaceSans";
+    this.greatWork.text = "Great Work!";
+    this.greatWork.textHorizontalAlignment =
+      GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+      this.greatWork.fontSize = 32;
+    this.greatWork.topInPixels = 120;
+    this.greatWork.leftInPixels = 0;
+    this.greatWork.color = "#0B1B70";
+    this.greatWork.outlineColor = "#88B5DF";
+    this.greatWork.outlineWidth = 4;
+    this.container.addControl(  this.greatWork);
+
+
+    let levelCount = levels.length;
+    this.completed_all_levels = new GUI.TextBlock();
+    this.completed_all_levels.clipChildren = false;
+    this.completed_all_levels.clipContent = false;
+    this.completed_all_levels.fontFamily = "PeaceSans";
+    this.completed_all_levels.text = `You completed all ${levelCount} levels!`;
+    this.completed_all_levels.textHorizontalAlignment =
+      GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
+    this.completed_all_levels.fontSize = 23;
+    this.completed_all_levels.topInPixels = 260;
+    this.completed_all_levels.leftInPixels = 30;
+    this.completed_all_levels.color = "#FAF8F9";
+    this.completed_all_levels.outlineWidth = 4;
+    this.completed_all_levels.outlineColor = "#1A1A3E";
+    details.addControl(this.completed_all_levels);
+
     /* var g_img = new GUI.Image();
     g_img.source = Images.data.3;
     g_img.alpha = 0.5;
@@ -338,8 +372,9 @@ export class LevelCompleteUI {
       this.hourglass_img.isVisible = false;
       this.target_img.isVisible = false;
 
-      this.next_level_bg.isEnabled = false;
-      this.next_level_bg.isVisible = false;
+      this.completed_all_levels.isVisible = true;
+      this.greatWork.isVisible = true;
+
     } else {
       this.btn_base.isVisible = true;
       this.next_btn.isVisible = true;
@@ -351,8 +386,9 @@ export class LevelCompleteUI {
       this.hourglass_img.isVisible = true;
       this.target_img.isVisible = true;
 
-      this.next_level_bg.isEnabled = false;
-      this.next_level_bg.isVisible = false;
+      this.completed_all_levels.isVisible = false;
+      this.greatWork.isVisible = false;
+
     }
   }
   hidePopup() {
