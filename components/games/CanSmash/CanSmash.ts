@@ -124,6 +124,7 @@ const CanSmash = (data: any) => {
     //     }
     //   }
     // });
+    //
 
     const loader = new Loader(scene, () => {
       init();
