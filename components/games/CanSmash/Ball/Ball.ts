@@ -9,7 +9,6 @@ import {
   PhysicsAggregate,
   PhysicsShapeType,
   PhysicsViewer,
-  PointLight,
   Quaternion,
   Scene,
   SetStateAction,
@@ -19,7 +18,6 @@ import {
 import { Materials } from "../Materials";
 import { CloneMesh } from "../CloneMesh";
 import { Meshs } from "../Meshs";
-import { Events } from "../Events";
 import { Utils } from "../Utils";
 
 export class Ball {

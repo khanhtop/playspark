@@ -14,7 +14,6 @@ export class Images {
     blackbg2: "blackbg2.png",
     blackbg3: "blackbg3.png",
     Booster05: "Booster05.png",
-    BtnBase: "BtnBase.png",
     can_up: "can_up.jpg",
     CenterStar: "CenterStar.png",
     CloseBtn: "CloseBtn.png",
