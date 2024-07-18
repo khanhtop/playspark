@@ -5,7 +5,7 @@ export class Images {
     tutorial_continue:"tutorial_continue.png",
     arrow_up: "arrow_up.png",
     background: "background.jpg",
-    ball: "t_ball.jpg",
+    ball: "af_ball.jpg",
     barrel: "barrel.jpg",
     barrel_up: "barrel_up.jpg",
     biggerBall: "biggerBall.png",

@@ -3,6 +3,6 @@ export class Meshs {
     can: "can.glb",
     barrel: "barrel.glb",
     ledges: "ledges.glb",
-    ball: "t_ball.glb",
+    ball: "af_ball.glb",
   };
 }

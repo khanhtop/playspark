@@ -42,16 +42,15 @@ export class Ball {
     let cloneMesh = new CloneMesh();
     const result = cloneMesh.get(Meshs.data.ball);
 
-
     result.meshes.forEach((element) => {
       element.parent = this.ball;
       element.material = Materials.instance.ball;
       element.name = "ball";
     });
 
-   // var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
-   this.ball.rotation = new Vector3(Utils.DToR(10),Utils.DToR(10) ,20);
-   
+    // var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
+    this.resetPos();
+
     this.prepareButton(this.ball, Color3.Red(), this.ball, scene);
     this.ball.actionManager.registerAction(
       new SetValueAction(
@@ -125,9 +124,9 @@ export class Ball {
 
   resetPos() {
     this.ball.position = this.defaultPos.clone();
-   
+
     this.ball.rotationQuaternion = Quaternion.Identity();
-    this.ball.rotation = new Vector3(Utils.DToR(10),Utils.DToR(10) ,20);
+    this.ball.rotation = new Vector3(Utils.DToR(30), 0, 0);
   }
 
   setPhysicBody() {
