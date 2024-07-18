@@ -38,7 +38,7 @@ export default function Home({ page, url }) {
         <Section>
           <WhoWeHelp page={page} />
         </Section>
-        <Section>
+        {/* <Section>
           <Carousel />
         </Section>
         <Section>
@@ -46,7 +46,7 @@ export default function Home({ page, url }) {
         </Section>
         <Section>
           <PaySection />
-        </Section>
+        </Section> */}
       </div>
     </>
   );
