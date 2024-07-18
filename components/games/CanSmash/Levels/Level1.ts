@@ -145,7 +145,7 @@ export const levels = [
   // level 3
   {
     time: 30,
-    target_count: 20,
+    target_count: 15,
     platforms: [
       {
         moveType: PlatformMovmentTypes.STATIC,
