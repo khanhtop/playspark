@@ -13,6 +13,7 @@ export class Images {
     blackbg1: "blackbg1.png",
     blackbg2: "blackbg2.png",
     blackbg3: "blackbg3.png",
+    blackbg4: "blackbg4.png",
     Booster05: "Booster05.png",
     can_up: "can_up.jpg",
     CenterStar: "CenterStar.png",

@@ -12,6 +12,7 @@ import {
 import { Timer } from "../Timer";
 import { GameData } from "../GameData";
 import { Images } from "../Images";
+import { BlackBG } from "./BlackBG";
 
 export class Tutorial3 {
   container: GUI.Container;
@@ -22,7 +23,10 @@ export class Tutorial3 {
   ref: any;
   ctx: ICanvasRenderingContext;
   advancedTexture: GUI.AdvancedDynamicTexture;
-  constructor(advancedTexture: GUI.AdvancedDynamicTexture,  continueBtn:GUI.Image) {
+  constructor(
+    advancedTexture: GUI.AdvancedDynamicTexture,
+    continueBtn: GUI.Image
+  ) {
     this.advancedTexture = advancedTexture;
 
     this.container = new GUI.Container();
@@ -30,13 +34,48 @@ export class Tutorial3 {
       GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     this.container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
-    this.createArrow(Images.data.arrow_flip, 150, 730, 0);
-    this.createText("Boost active!\nTap to activate.", 100, 210);
+    let arrow = this.createArrow(Images.data.arrow_flip, 150, 730, 0);
+    let infoText = this.createText(
+      "Tap Magnify to\nincrease size x2",
+      100,
+      210
+    );
 
+    let message = new GUI.TextBlock();
+    message.text = "Boost active!";
+    message.color = "#FFFFFF";
+    message.outlineColor = "#45B1E2";
+    message.fontSize = 50;
+    message.fontFamily = "PeaceSans";
+    message.outlineWidth = 5;
+    message.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    message.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    this.container.addControl(message);
 
+    continueBtn.leftInPixels = 0;
+    continueBtn.topInPixels = 400;
+    continueBtn.isVisible = false;
 
-    continueBtn.leftInPixels = 100;
-    continueBtn.topInPixels = 130;
+    var next_btn = new GUI.Image();
+    next_btn.source = Images.data.NextBtn;
+    next_btn.widthInPixels = 120 * 1.2;
+    next_btn.heightInPixels = 47 * 1.2;
+    next_btn.leftInPixels = 0;
+    next_btn.topInPixels = 400;
+    next_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    next_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    this.container.addControl(next_btn);
+
+    next_btn.onPointerUpObservable.addOnce(() => {
+      continueBtn.isVisible = true;
+      message.isVisible = false;
+      infoText.topInPixels = 330;
+      infoText.leftInPixels = 50;
+      infoText.text = "Tap shield to blow\nup enemy cans.";
+      arrow.topInPixels = 850;
+      next_btn.isVisible = false;
+      BlackBG.instance.show(Images.data.blackbg4);
+    });
 
     this.container.addControl(continueBtn);
     this.advancedTexture.addControl(this.container);
@@ -45,8 +84,6 @@ export class Tutorial3 {
     this.scene = GameData.instance.getScene();
     this.canvas = GameData.instance.getCanvas();
     this.engine = GameData.instance.getEngine();
-
-  
   }
 
   private createArrow(img: string, x: number, y: number, rot: number) {
@@ -62,6 +99,7 @@ export class Tutorial3 {
     //arrow.scaleX = -1;
 
     this.container.addControl(arrow);
+    return arrow;
   }
 
   private createText(text: string, x: number, y: number) {
@@ -76,6 +114,7 @@ export class Tutorial3 {
     message.topInPixels = y;
     message.leftInPixels = x;
     this.container.addControl(message);
+    return message;
   }
 
   hide() {
@@ -100,7 +139,5 @@ export class Tutorial3 {
     // // }
 
     // // this.ref = this.scene.onAfterRenderObservable.add(draw);
-
-   
   }
 }
