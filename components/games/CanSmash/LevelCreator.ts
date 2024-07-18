@@ -38,6 +38,7 @@ export class LevelCreator {
 
     GameData.instance.setHitCount(0);
 
+    PowerupManager.instance.setShowCount(levels[levelIndex].powerup_appear_count);
     PowerupManager.instance.setAvilablePoses(levels[levelIndex].powerupPoses);
     PowerupManager.instance.start();
 

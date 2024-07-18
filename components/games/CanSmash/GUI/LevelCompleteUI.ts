@@ -25,7 +25,7 @@ export class LevelCompleteUI {
   container: GUI.Container;
   next_level_time: GUI.TextBlock;
   next_btn: GUI.Image;
-  btn_base: GUI.Button;
+ // btn_base: GUI.Button;
   target_img: any;
   hourglass_img: GUI.Image;
   next_level_bg: GUI.Image;
@@ -225,7 +225,7 @@ export class LevelCompleteUI {
     this.target_img.leftInPixels = -155;
     details.addControl(this.target_img);
 
-    this.btn_base = GUI.Button.CreateImageOnlyButton("but", Images.data.BtnBase);
+  /*  this.btn_base = GUI.Button.CreateImageOnlyButton("but", Images.data.BtnBase);
 
     this.btn_base.widthInPixels = 190 / 1.3;
     this.btn_base.heightInPixels = 74 / 1.3;
@@ -234,14 +234,14 @@ export class LevelCompleteUI {
     this.btn_base.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.btn_base.isPointerBlocker = false;
     //btn_base.color = "transparent";
-    this.container.addControl(this.btn_base);
+    this.container.addControl(this.btn_base);*/
 
     //var next_btn = GUI.Button.CreateImageOnlyButton("but", Images.data.NextBtn);
 
     this.next_btn = new GUI.Image();
     this.next_btn.source = Images.data.NextBtn;
     this.next_btn.widthInPixels = 190 / 1.3;
-    this.next_btn.heightInPixels = 74 / 1.3;
+    this.next_btn.heightInPixels = 80 / 1.3;
     this.next_btn.topInPixels = 230;
     this.next_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     this.next_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
@@ -365,9 +365,9 @@ export class LevelCompleteUI {
     else this.next_level_time.text = `${data.nextLevelTime} sec`;
 
     if (data.nextLevel == undefined) {
-      this.btn_base.isVisible = false;
+      //this.btn_base.isVisible = false;
       this.next_btn.isVisible = false;
-      this.btn_base.isEnabled = false;
+     // this.btn_base.isEnabled = false;
       this.next_btn.isEnabled = false;
 
       this.hourglass_img.isEnabled = false;
@@ -381,9 +381,9 @@ export class LevelCompleteUI {
       
 
     } else {
-      this.btn_base.isVisible = true;
+      //this.btn_base.isVisible = true;
       this.next_btn.isVisible = true;
-      this.btn_base.isEnabled = true;
+     // this.btn_base.isEnabled = true;
       this.next_btn.isEnabled = true;
 
       this.hourglass_img.isEnabled = true;

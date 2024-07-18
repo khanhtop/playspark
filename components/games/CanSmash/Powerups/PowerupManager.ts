@@ -15,6 +15,7 @@ export class PowerupManager {
   private index: number = 0;
   private powerupCube: PowerupCube = null;
   private timeoutHandler = null;
+  showCount: number;
   constructor(scene: Scene) {
     this.scene = scene;
     PowerupManager.instance = this;
@@ -31,15 +32,18 @@ export class PowerupManager {
       }
       var self = this;
 
-      this.timeoutHandler = Timer.Instance.add(
-        POWERUP_REAPPEAR_TIME,
-        () => {
-     
-          data.target.isVisible = true;
-          data.sender.setPosition(self.poses[self.index]);
-        },
-        this
-      );
+      this.showCount--;
+
+      if (this.showCount > 0) {
+        this.timeoutHandler = Timer.Instance.add(
+          POWERUP_REAPPEAR_TIME,
+          () => {
+            data.target.isVisible = true;
+            data.sender.setPosition(self.poses[self.index]);
+          },
+          this
+        );
+      }
     });
 
     // new PowerupCube(scene, new Vector3(-.3, 0.4, 3));
@@ -48,9 +52,12 @@ export class PowerupManager {
   setAvilablePoses(poses: Vector3[]) {
     this.poses = poses;
   }
+  setShowCount(count: number) {
+    this.showCount = count;
+  }
   start() {
     Timer.Instance.remove(this.timeoutHandler);
-   /* this.timeoutHandler = Timer.Instance.add(
+    /* this.timeoutHandler = Timer.Instance.add(
       POWERUP_REAPPEAR_TIME,
       () => {
      
@@ -63,15 +70,20 @@ export class PowerupManager {
 
     this.index = 0;
     this.poses = this.shuffleArray(this.poses);
-    if (this.powerupCube == null)
+    if (this.powerupCube == null) {
       this.powerupCube = new PowerupCube(this.scene, this.poses[0]);
+    }
+
+    console.log("set powerup cube pos", this.poses[0])
+
+    this.powerupCube.cube.isVisible = true;
+    this.powerupCube.setPosition(this.poses[0]);
   }
 
   shuffleArray(array) {
     return array
-    .map(value => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
   }
-
 }

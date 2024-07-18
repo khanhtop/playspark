@@ -6,6 +6,7 @@ export const levels = [
   {
     time: 30,
     target_count: 3,
+    powerup_appear_count: 2,
     platforms: [
       {
         moveType: PlatformMovmentTypes.STATIC,
@@ -69,7 +70,6 @@ export const levels = [
     powerupPoses: [
       new Vector3(-0.5, -0.2, 2),
       new Vector3(0.5, -0.2, 2),
-      new Vector3(0, -0.2, 4),
       new Vector3(-1, -0.2, 5),
       new Vector3(1, -0.2, 5),
     ],
@@ -79,6 +79,7 @@ export const levels = [
   {
     time: 30,
     target_count: 10,
+    powerup_appear_count: 3,
     platforms: [
       {
         moveType: PlatformMovmentTypes.STATIC,
@@ -136,7 +137,7 @@ export const levels = [
     powerupPoses: [
       new Vector3(-0.5, -0.2, 2),
       new Vector3(0.5, -0.2, 2),
-      new Vector3(0, -0.2, 4),
+      new Vector3(0, -0.2, 7),
       new Vector3(-1, -0.2, 5),
       new Vector3(1, -0.2, 5),
     ],
@@ -145,7 +146,8 @@ export const levels = [
   // level 3
   {
     time: 30,
-    target_count: 20,
+    target_count: 15,
+    powerup_appear_count: 4,
     platforms: [
       {
         moveType: PlatformMovmentTypes.STATIC,
@@ -203,15 +205,17 @@ export const levels = [
     powerupPoses: [
       new Vector3(-0.5, -0.2, 2),
       new Vector3(0.5, -0.2, 2),
-      new Vector3(0, -0.2, 4),
-      new Vector3(-1, -0.2, 5),
-      new Vector3(1, -0.2, 5),
+      new Vector3(0, -0.2, 7),
+      new Vector3(-0.5, -0.2, 5),
+      new Vector3(0.5, -0.2, 5),
     ],
+     
   },
   // level 4
   {
     time: 30,
     target_count: 10,
+    powerup_appear_count: 5,
     platforms: [
       {
         moveType: PlatformMovmentTypes.STATIC,
@@ -265,15 +269,16 @@ export const levels = [
     powerupPoses: [
       new Vector3(-0.5, -0.2, 2),
       new Vector3(0.5, -0.2, 2),
-      new Vector3(0, -0.2, 4),
-      new Vector3(-1, -0.2, 5),
-      new Vector3(1, -0.2, 5),
+      new Vector3(0, -0.2, 7),
+      new Vector3(-0.5, -0.2, 5),
+      new Vector3(0.5, -0.2, 5),
     ],
   },
   // level 5
   {
     time: 10,
     target_count: 5,
+    powerup_appear_count: 6,
     platforms: [
       {
         moveType: PlatformMovmentTypes.HORIZONTAL_MOVE,
@@ -329,7 +334,7 @@ export const levels = [
     powerupPoses: [
       new Vector3(-0.5, -0.2, 2),
       new Vector3(0.5, -0.2, 2),
-      new Vector3(0, -0.2, 4),
+      new Vector3(0, -0.2, 7),
       new Vector3(-1, -0.2, 5),
       new Vector3(1, -0.2, 5),
     ],

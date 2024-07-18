@@ -12,8 +12,6 @@ import {
   ON_POWERUP_ENABLED,
 } from "../Consts";
 import { Images } from "../Images";
-import { LevelCreator } from "../LevelCreator";
-import { Vector3 } from "@babylonjs/core";
 
 export class TutorialManager {
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
