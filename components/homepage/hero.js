@@ -34,25 +34,29 @@ export default function Hero({ page }) {
   return (
     <div
       style={{ backgroundImage: `url(${page.hero_background_image.url})` }}
-      className="min-h-screen w-full flex flex-col lg:flex-row text-white bg-cover px-8 pt-20 lg:gap-8"
+      className="min-h-[900px] w-full bg-cover flex"
     >
-      <div className="flex flex-col items-center lg:items-start justify-center flex-1 text-center lg:text-left gap-2">
-        <h1 className="text-4xl xl:text-5xl font-bold">
-          {page.hero_title_text}
-        </h1>
-        <h1 className="text-2xl xl:text-4xl font-light">{page.hero_subtext}</h1>
-        <button
-          onClick={() => router.push("/admin")}
-          className="bg-blue-500 px-6 py-3 rounded-full mt-4 font-bold text-xl lg:text-2xl"
-        >
-          Start Creating Your Game
-        </button>
-      </div>
-      <div className="flex flex-col lg:flex-1 items-center lg:items-start justify-center mb-12 lg:mb-0">
-        <video muted autoPlay className="rounded-xl" controls>
-          <source src={page.hero_video?.url} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+      <div className="flex-1 flex flex-col lg:flex-row text-white bg-cover px-8 pt-20 lg:gap-8 bg-black/0">
+        <div className="flex flex-col items-center lg:items-start justify-center flex-1 text-center lg:text-left gap-2">
+          <h1 className="text-4xl xl:text-6xl font-bold max-w-[400px]">
+            {page.hero_title_text}
+          </h1>
+          <h1 className="text-xl xl:text-3xl font-light max-w-[500px] mt-4">
+            {page.hero_subtext}
+          </h1>
+          <button
+            onClick={() => router.push("/admin")}
+            className="bg-blue-500 px-6 py-3 rounded-full mt-4 font-bold text-xl lg:text-2xl"
+          >
+            Start Creating Your Game
+          </button>
+        </div>
+        <div className="flex flex-col lg:flex-1 items-center lg:items-start justify-center mb-12 lg:mb-0">
+          <video autoPlay muted className="rounded-xl" controls>
+            <source src={page.hero_video?.url} type="video/mp4" className="" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </div>
     </div>
   );
