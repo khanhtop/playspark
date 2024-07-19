@@ -124,7 +124,7 @@ export class Ball {
     this.ball.position = this.defaultPos.clone();
 
     this.ball.rotationQuaternion = Quaternion.Identity();
-    this.ball.rotation = new Vector3(Utils.DToR(30), 0, 0);
+    this.ball.rotation = new Vector3(0, Utils.DToR(90), Utils.DToR(30));
   }
 
   setPhysicBody() {
