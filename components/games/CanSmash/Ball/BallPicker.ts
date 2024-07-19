@@ -8,6 +8,7 @@ import {
 import { EventData, EventTypes, Events } from "../Events";
 import { Utils } from "../Utils";
 import { Ball } from "./Ball";
+import { Inputs } from "../Inputs";
 
 export class BallPicker {
   ball: AbstractMesh;
@@ -17,15 +18,22 @@ export class BallPicker {
 
   canDrag: boolean = false;
   isActive: boolean = true;
+  isPonterUpFunCalled: boolean = false;
+  speed: number;
   constructor(scene: Scene) {
     this.scene = scene;
     Events.input.add((data: EventData) => {
       switch (data.name) {
         case "onPointerDown":
+          this.mouseSpeedCounnt = 0;
+          this.isPonterUpFunCalled = false;
           this.onPointerDown(data.data);
           break;
         case "onPointerUp":
-          this.onPointerUp();
+          if (!this.isPonterUpFunCalled) this.onPointerUp();
+          break;
+        case "onPointerMove":
+          this.onPointerMove(data.data);
           break;
       }
     });
@@ -36,10 +44,24 @@ export class BallPicker {
     });
 
     var self = this;
+    let prevX = 0;
+    let prevY = 0;
     function animate(time) {
       window.requestAnimationFrame(animate);
 
       if (!self.canDrag) return;
+
+      if (self.speed < 0.1 || (self.lastX == prevX && self.lastY == prevY)) {
+        self.mouseSpeedCounnt++;
+        if (self.mouseSpeedCounnt >= 30) {
+          self.mouseSpeedCounnt = 0;
+          self.isPonterUpFunCalled = true;
+          self.onPointerUp();
+        }
+      }
+
+      prevY = self.lastY;
+      prevX = self.lastX;
 
       self.dragBall();
     }
@@ -62,21 +84,46 @@ export class BallPicker {
 
     this.startPos = this.currentPos;
   }
-  onPointerDown(evt) {
+  lastTime = Date.now();
+  lastX = 0;
+  lastY = 0;
+  mouseSpeedCounnt = 0;
+  onPointerMove(event: PointerEvent) {
     if (Utils.isgamePaused) return;
+    if (this.isPonterUpFunCalled) return;
+
+    const now = Date.now();
+    const dt = now - this.lastTime; // Time difference in milliseconds
+
+    const dx = event.screenX - this.lastX; // Difference in X coordinates
+    const dy = event.screenY - this.lastY; // Difference in Y coordinates
+
+    const distance = Math.sqrt(dx * dx + dy * dy); // Euclidean distance
+    this.speed = distance / dt; // Speed in pixels per millisecond
+
+    // console.log(`Speed: ${this.speed} pixels/ms`);
+
+    this.lastTime = now;
+    this.lastX = event.screenX;
+    this.lastY = event.screenY;
+  }
+
+  onPointerDown(evt: PointerEvent) {
+    if (Utils.isgamePaused) return;
+    if (!this.isActive) return;
     if (!this.isActive) return;
 
     //this.ball = null;
-  //  console.log("onPointerDown ----", data);
+    //  console.log("onPointerDown ----", data);
 
     // check if we are under a mesh
     var pickInfo = this.scene.pick(this.scene.pointerX, this.scene.pointerY);
 
     if (pickInfo.hit) {
       let currentMesh = pickInfo.pickedMesh;
-     // console.log("currentMesh: ----", currentMesh.name);
+      // console.log("currentMesh: ----", currentMesh.name);
       if (currentMesh.name == "ball") {
-        this.ball = Ball.instance.ball;//currentMesh;
+        this.ball = Ball.instance.ball; //currentMesh;
         this.startPos = Ball.instance.ball.position;
 
         this.canDrag = true;
@@ -107,6 +154,8 @@ export class BallPicker {
       ball: this.ball,
       dir: dir,
     });
+
+    this.isPonterUpFunCalled = true;
 
     //sphereAggregate.body.applyForce(diff, this.ball.position);
   }
