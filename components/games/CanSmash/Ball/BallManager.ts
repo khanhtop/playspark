@@ -48,7 +48,7 @@ export class BallManager {
     this.canShoot = false;
     ball.setPhysicBody();
 
-    let force = 1000;
+    let force = 1500;
 
     ball.applyForce(dir, force);
     
