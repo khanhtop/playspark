@@ -15,17 +15,20 @@ export class Inputs {
   }
 
   onPointerDown(evt) {
+    evt.preventDefault();
     if (evt.button !== 0) {
       return;
     }
     Events.input.notifyObservers({ name: "onPointerDown", data: evt });
   }
 
-  onPointerUp() {
+  onPointerUp(evt) {
+    evt.preventDefault();
     Events.input.notifyObservers({ name: "onPointerUp", data: null });
   }
 
   onPointerMove(evt) {
+    evt.preventDefault();
     Events.input.notifyObservers({ name: "onPointerMove", data: evt });
   }
 }
