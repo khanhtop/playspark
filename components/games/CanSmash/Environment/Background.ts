@@ -27,20 +27,20 @@ export class Background {
     plan.material = Materials.instance.background;
 
     // background physics
-    /* width = 15;
-    height = 5;
+     width = 15;
+    height = 10;
     var plan: Mesh = MeshBuilder.CreatePlane("plan", { width: width, height: height });
     plan.position = new Vector3(0, 0.2, 12);
     plan.rotation = new Vector3(0, 0, 0);
     plan.material = Materials.instance.transparentMaterial;
-    var sphereAggregate = new PhysicsAggregate(
+  /*  var sphereAggregate = new PhysicsAggregate(
       plan,
       PhysicsShapeType.BOX,
 
       { mass: 1, restitution: 0.75, radius: 0.2 },
       scene
     );
-    sphereAggregate.body.setMotionType(PhysicsMotionType.STATIC);
-*/
+    sphereAggregate.body.setMotionType(PhysicsMotionType.STATIC);*/
+
   }
 }

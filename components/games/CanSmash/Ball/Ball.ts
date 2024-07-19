@@ -131,7 +131,7 @@ export class Ball {
     this.sphereAggregate = new PhysicsAggregate(
       this.ball,
       PhysicsShapeType.SPHERE,
-      { mass: 1, restitution: 0.0 },
+      { mass: 1, restitution: 0, friction: 1 },
       this.scene
     );
 
