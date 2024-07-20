@@ -53,7 +53,7 @@ export class BallPicker {
 
       if (self.speed < 0.1 || (self.lastX == prevX && self.lastY == prevY)) {
         self.mouseSpeedCounnt++;
-        if (self.mouseSpeedCounnt >= 30) {
+        if (self.mouseSpeedCounnt >= 5) {
           self.mouseSpeedCounnt = 0;
           self.isPonterUpFunCalled = true;
           self.onPointerUp();

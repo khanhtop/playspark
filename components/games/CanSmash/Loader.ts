@@ -6,7 +6,6 @@ import {
   Vector3,
 } from "@babylonjs/core";
 import HavokPhysics from "@babylonjs/havok";
-import * as GUI from "@babylonjs/gui";
 import { Events } from "./Events";
 import { Meshs } from "./Meshs";
 import { Images } from "./Images";
