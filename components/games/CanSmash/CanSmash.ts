@@ -70,7 +70,6 @@ const CanSmash = (data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);
     });
 
-
     let score = 0;
     let level = 1;
     let lives = 2;
@@ -88,25 +87,25 @@ const CanSmash = (data: any) => {
     const engine = new Engine(canvas, true);
     const scene = new Scene(engine);
     new GameData(scene, engine, canvas);
-   
+
     var loadingScreen = new CustomLoadingScreen("I'm loading!!");
     loadingScreen.loadingUIBackgroundColor = "#BB464Bcc";
     engine.loadingScreen = loadingScreen;
     engine.displayLoadingUI();
-
 
     new SaveLoadData();
     new Timer(scene, engine);
 
     const resize = () => {
       let width = window.innerWidth;
-      let height = width * 1.77;
+      /* let height = width * 1.77;
 
       if (height > window.innerHeight) {
         height = window.innerHeight;
         width = height / 1.77;
       }
-
+*/
+      let height = window.innerHeight;
       engine.setSize(width, height, true);
       engine.resize();
     };
@@ -147,7 +146,6 @@ const CanSmash = (data: any) => {
     let ballBaseUrl = baseUrl;
     let barrelBaseUrl = baseUrl;
 
-
     ({ score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl } =
       initParams(
         data,
@@ -161,7 +159,6 @@ const CanSmash = (data: any) => {
 
     loader.loadMesh(ballBaseUrl, Meshs.data.ball);
     loader.loadMesh(barrelBaseUrl, Meshs.data.barrel);
-
 
     Object.keys(Images.data).forEach((key) => {
       loader.loadImage(Images.data[key]);
