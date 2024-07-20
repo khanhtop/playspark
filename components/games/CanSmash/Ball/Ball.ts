@@ -19,6 +19,7 @@ import { Materials } from "../Materials";
 import { CloneMesh } from "../CloneMesh";
 import { Meshs } from "../Meshs";
 import { Utils } from "../Utils";
+import * as TWEEN from "@tweenjs/tween.js";
 
 export class Ball {
   static instance: Ball = null;
@@ -27,6 +28,7 @@ export class Ball {
   scene: Scene;
   sphereAggregate: PhysicsAggregate;
   viewer: PhysicsViewer;
+  tween: TWEEN.Tween<{ xScale: number; yScale: number; }>;
   constructor(scene: Scene, defaultPos: Vector3) {
     Ball.instance = this;
     this.scene = scene;
@@ -45,6 +47,31 @@ export class Ball {
       element.material = Materials.instance.ball;
       element.name = "ball";
     });
+
+    const _data = {
+      xScale: 1,
+      yScale: 1,
+    };
+    this.tween = new TWEEN.Tween(_data)
+      .to(
+        {
+          xScale: 1.1,
+          yScale: 1.1,
+        },
+        100
+      )
+      .easing(TWEEN.Easing.Linear.Out)
+      .onUpdate(() => {
+        this.ball.scaling = new Vector3(
+          _data.xScale,
+          _data.yScale,
+          _data.yScale
+        );
+      })
+      .onComplete(() => {})
+      .yoyo(true)
+      .repeat(5)
+
 
     // var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
     this.resetPos();
@@ -121,6 +148,8 @@ export class Ball {
   }
 
   resetPos() {
+    this.tween.start()
+
     this.ball.position = this.defaultPos.clone();
 
     this.ball.rotationQuaternion = Quaternion.Identity();

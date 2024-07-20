@@ -18,6 +18,7 @@ import { IPoolable } from "../IPoolable";
 import { Loader } from "../Loader";
 import { CloneMesh } from "../CloneMesh";
 import { Meshs } from "../Meshs";
+import * as TWEEN from "@tweenjs/tween.js";
 
 export class Can implements IPoolable {
   defaultRot = new Vector3(0, Utils.DToR(190), 0);
@@ -26,7 +27,32 @@ export class Can implements IPoolable {
   canBody: Mesh;
   meshs: Mesh[];
   sphereAggregate: PhysicsAggregate;
-  constructor() {}
+  tweenc: TWEEN.Tween<any>;
+  scaleFactor = 2;
+  constructor() {
+    const data = {
+      scale:  this.scaleFactor ,
+
+    };
+    this.tweenc = new TWEEN.Tween(data)
+      .to(
+        {
+          scale:  this.scaleFactor + 0.1 
+        },
+        100
+      )
+      .easing(TWEEN.Easing.Linear.Out)
+      .onUpdate(() => {
+        this.canContainer.scaling = new Vector3(
+          data.scale,
+          data.scale,
+          data.scale
+        );
+      })
+      .onComplete(() => {})
+      .yoyo(true)
+      .repeat(5);
+  }
   isActive: boolean;
   private isHit: boolean;
   static index = 0;
@@ -66,6 +92,8 @@ export class Can implements IPoolable {
     this.canContainer.setEnabled(true);
   }
   setPosition(pos: Vector3) {
+    this.tweenc.start()
+
     this.setHitState(false);
 
     if (!this.sphereAggregate) return;
@@ -132,7 +160,7 @@ export class Can implements IPoolable {
 
       this.meshs[1].material = Materials.instance.canUp;
 
-      this.canContainer.scaling = new Vector3(2, 2, 2);
+      this.canContainer.scaling = new Vector3(this.scaleFactor,this.scaleFactor,this.scaleFactor);
 
       let meshses = this.canContainer.getChildMeshes();
       meshses = this.meshs;

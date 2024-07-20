@@ -33,6 +33,7 @@ export class PowerupCube {
   scene: Scene;
   isHit: boolean = false;
   static instace: PowerupCube;
+  tweenc: TWEEN.Tween<{ xScale: number; yScale: number }>;
   constructor(scene: Scene, pos: Vector3) {
     this.scene = scene;
     PowerupCube.instace = this;
@@ -52,6 +53,26 @@ export class PowerupCube {
       { width: 0.25, height: 0.25, depth: 0.25 },
       scene
     );
+
+    const data = {
+      xScale: 1,
+      yScale: 1,
+    };
+    this.tweenc = new TWEEN.Tween(data)
+      .to(
+        {
+          xScale: 1.1,
+          yScale: 1.1,
+        },
+        100
+      )
+      .easing(TWEEN.Easing.Linear.Out)
+      .onUpdate(() => {
+        this.cube.scaling = new Vector3(data.xScale, data.yScale, data.yScale);
+      })
+      .onComplete(() => {})
+      .yoyo(true)
+      .repeat(5);
 
     this.cube.position = pos.clone();
 
@@ -133,6 +154,7 @@ export class PowerupCube {
     });
   }
   setPosition(pos: Vector3) {
+    this.tweenc.start();
     this.isHit = false;
 
     this.triggerBody.dispose();
