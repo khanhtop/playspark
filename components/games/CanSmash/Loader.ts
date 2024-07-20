@@ -82,11 +82,12 @@ export class Loader {
     this.loadCount++;
     const hsk = HavokPhysics().then((ksk) => {
       //  console.log(ksk);
-      var hk = new HavokPlugin(true, ksk);
+      var hk:HavokPlugin = new HavokPlugin(true, ksk);
       //@ts-ignore
       window.hk = hk;
-
+      
       this.scene.enablePhysics(new Vector3(0, -9.8, 0), hk);
+
       //this.scene.enablePhysics(new Vector3(0, -1, 0), new OimoJSPlugin());
 
       this.checkLoadComplete();

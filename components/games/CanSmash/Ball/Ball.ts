@@ -131,14 +131,17 @@ export class Ball {
     this.sphereAggregate = new PhysicsAggregate(
       this.ball,
       PhysicsShapeType.SPHERE,
-      { mass: 1, restitution: 0, friction: 1 },
+      { mass: 1, restitution: -10, friction: 100 },
       this.scene
     );
-
+    if (this.ball.physicsBody) {
+      //@ts-ignore
+      window.hk.setGravityFactor(this.ball.physicsBody, 0.7);
+    }
     //  this.viewer.showBody(this.sphereAggregate.body);
   }
   disposePhysicBody() {
-    if (this.sphereAggregate != null) this.sphereAggregate.dispose();
+    if (this.sphereAggregate) this.sphereAggregate.dispose();
     this.sphereAggregate = null;
   }
 
