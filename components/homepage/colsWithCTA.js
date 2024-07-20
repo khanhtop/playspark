@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 
 export default function ColsWithCTA({
-  page,
   image,
   title,
   boldText,
