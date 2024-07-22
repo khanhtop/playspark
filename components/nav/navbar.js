@@ -86,16 +86,16 @@ export default function Navbar() {
           >
             Home
           </Link>
-          <Link onClick={() => setNavOpen(false)} href="#">
+          <Link onClick={() => setNavOpen(false)} href="/products">
             Products
           </Link>
-          <Link onClick={() => setNavOpen(false)} href="#">
+          <Link onClick={() => setNavOpen(false)} href="/pricing">
             Pricing
           </Link>
-          <Link onClick={() => setNavOpen(false)} href="#">
+          <Link onClick={() => setNavOpen(false)} href="/case-studies">
             Case Studies
           </Link>
-          <Link onClick={() => setNavOpen(false)} href="#">
+          <Link onClick={() => setNavOpen(false)} href="/blog">
             Blog
           </Link>
           <button
