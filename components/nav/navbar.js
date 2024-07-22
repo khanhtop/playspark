@@ -48,7 +48,7 @@ export default function Navbar() {
           >
             Case Studies
           </Link>
-          <Link href="#">Blog</Link>
+          <Link href="/blog">Blog</Link>
         </div>
         <button
           onClick={() => router.push("/admin")}
