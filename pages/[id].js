@@ -117,7 +117,7 @@ export default function PageHandler({
   }
 
   useEffect(() => {
-    if (shouldAuthWithDeviceId) {
+    if (shouldAuthWithDeviceId && context && !context?.loggedIn?.uid) {
       const uuid = getDeviceID();
       if (uuid !== null) {
         const emailStructure = uuid + "@playspark.co";
@@ -140,7 +140,7 @@ export default function PageHandler({
           });
       }
     }
-  }, [shouldAuthWithDeviceId]);
+  }, [shouldAuthWithDeviceId, context]);
 
   // Create Rewards Listener
   const getRewards = () => {
