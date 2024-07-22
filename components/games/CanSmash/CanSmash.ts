@@ -79,13 +79,13 @@ const CanSmash = (data: any) => {
     div.id = "game";
     document.querySelector("main > div > div").appendChild(div);
 
-    const canvas = document.createElement("canvas");
+    let canvas = document.createElement("canvas");
     canvas.id = "gameCanvas";
     div.appendChild(canvas);
 
     // initialize babylon scene and engine
-    const engine = new Engine(canvas, true);
-    const scene = new Scene(engine);
+    let engine: Engine = new Engine(canvas, true);
+    let scene: Scene = new Scene(engine);
     new GameData(scene, engine, canvas);
 
     var loadingScreen = new CustomLoadingScreen("I'm loading!!");
@@ -123,11 +123,12 @@ const CanSmash = (data: any) => {
     // });
     //
 
-    const loader = new Loader(scene, () => {
+    let loader = new Loader(scene, () => {
       init();
       engine.hideLoadingUI();
     });
 
+    //console.log(window.location.href);
     let baseUrl = "/pong/canSmash/";
     loader.loadMesh(baseUrl, Meshs.data.can);
 
@@ -135,10 +136,12 @@ const CanSmash = (data: any) => {
     loader.loadFont(baseUrl, "PeaceSans", "PeaceSansWebfont.ttf");
 
     Object.keys(Sounds.data).forEach((key) => {
-      Sounds.data[key] = baseUrl + Sounds.data[key];
+      if (!Sounds.data[key].includes(baseUrl))
+        Sounds.data[key] = baseUrl + Sounds.data[key];
     });
     Object.keys(Images.data).forEach((key) => {
-      Images.data[key] = baseUrl + Images.data[key];
+      if (!Images.data[key].includes(baseUrl))
+        Images.data[key] = baseUrl + Images.data[key];
     });
 
     let ballBaseUrl = baseUrl;
@@ -155,6 +158,7 @@ const CanSmash = (data: any) => {
         barrelBaseUrl
       ));
 
+
     loader.loadMesh(ballBaseUrl, Meshs.data.ball);
     loader.loadMesh(barrelBaseUrl, Meshs.data.barrel);
 
@@ -163,9 +167,9 @@ const CanSmash = (data: any) => {
     });
 
     loader.loadPhysic();
-    new AudioManager(scene);
+    let audioManager = new AudioManager(scene);
 
-    const init = () => {
+    let init = () => {
       new CameraController(scene, canvas);
       new LightController(scene);
       new Materials([
@@ -200,7 +204,7 @@ const CanSmash = (data: any) => {
 
       new CanManager(scene);
       new LevelManager(scene);
-      const levelCreator = new LevelCreator();
+      let levelCreator = new LevelCreator();
       levelCreator.create(level - 1);
       new ComboBonus();
       new TimeBonus();
@@ -211,16 +215,40 @@ const CanSmash = (data: any) => {
     };
 
     return () => {
-      /*window.removeEventListener("resize", resize);
+      console.log("---[-[[ dispose component");
+      /*
+      window.removeEventListener("resize", resize);
       window.removeEventListener("keydown", null);
+      scene.dispose();
+      scene = null;
+
       engine.dispose();
+      engine = null;
+
       canvas.remove();
-      Events.gamePlay.clear();
-      Events.ui.clear();
-      Events.hits.clear();
+      canvas = null;
+
       Events.input.clear();
+      Events.instance.clear();
+      Events.hits.clear();
+      Events.ui.clear();
+      Events.gamePlay.clear();
       Events.powerup.clear();
-      Events..clear();*/
+      Events.sound.clear();
+      Events.preload.clear();
+
+      div.remove();
+      div = null;
+
+      baseUrl = "";
+      ballBaseUrl = "";
+      barrelBaseUrl = "";
+      timerHandle = null;
+
+      audioManager.dispose();
+      audioManager = null;
+
+      loader = null;*/
     };
   }, []);
 
@@ -248,8 +276,10 @@ function ShowWraperGameOver(_data: any, timerHandle: any, data: any) {
     timerHandle = setTimeout(() => {
       let currentLevel = GameData.instance.getCurrentLevel();
       let currentScore = GameData.instance.getTotalScore();
+
       data.callback(currentScore, currentLevel, 2);
-      Events.sound.notifyObservers({
+
+       Events.sound.notifyObservers({
         type: "AudioManager:setMuteState",
         state: true,
       });
@@ -264,7 +294,20 @@ function ReInit(data: any) {
   let level = parseInt(data.params.level);
   let boostCredits = parseInt(data.params.boostCredits);
 
+  let hitCount = GameData.instance.getHitCount();
+  let targetCount = GameData.instance.getTargetCount();
+
   if (score == 0 && level == 1) {
+    Restart(lives, level, boostCredits);
+  } else if (level == levels.length && hitCount >= targetCount) {
+    level = 1;
+    lives = 3;
+
+    GameData.instance.setScore(0);
+    GameData.instance.setTotalScore(0);
+
+    Events.gamePlay.notifyObservers({ type: "GUI2D:hideLevelCompleteUI" });
+
     Restart(lives, level, boostCredits);
   } else {
     Revive(lives);
@@ -290,7 +333,7 @@ function Revive(lives: number) {
 }
 
 function Reset(lives: number, timer: number) {
-  Events.sound.notifyObservers({
+   Events.sound.notifyObservers({
     type: "AudioManager:setMuteState",
     state: false,
   });

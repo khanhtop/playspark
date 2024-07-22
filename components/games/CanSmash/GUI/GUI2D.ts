@@ -10,7 +10,6 @@ import { Utils } from "../Utils";
 import { SaveLoadData } from "../SaveLoadData.";
 import { BlackBG } from "./BlackBG";
 
-
 export class GUI2D {
   static instance: GUI2D = null;
   advancedTexture: GUI.AdvancedDynamicTexture = null;
@@ -55,6 +54,11 @@ export class GUI2D {
       if (data.type != EventTypes.LEVEL_COMPLETE) return;
       levelCompleteUI.showPopup(data.data);
       Utils.pause(true);
+    });
+    Events.gamePlay.add((data: any) => {
+      if (data.type != "GUI2D:hideLevelCompleteUI") return;
+      levelCompleteUI.hidePopup();
+      Utils.pause(false);
     });
 
     let pauseUI = new PauseUI(this.advancedTexture);

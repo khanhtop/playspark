@@ -8,6 +8,7 @@ export class AudioManager {
   private isSfxOn: boolean = true;
   private isMusicOn: boolean = true;
 
+  dispose() {}
   constructor(scene: Scene) {
     this.isMusicOn = GameData.instance.getMusicState();
     this.isSfxOn = GameData.instance.getSfxState();
@@ -27,24 +28,60 @@ export class AudioManager {
 
     Engine.audioEngine.useCustomUnlockedButton = true;
 
-    var music = new Sound("Music", Sounds.data.music, scene, null, {
+    var music: Sound = new Sound("Music", Sounds.data.music, scene, null, {
       loop: true,
       autoplay: this.isMusicOn,
     });
 
-    var click = new Sound("Click", Sounds.data.click, scene);
-    var powerUpUiActiveClick = new Sound(
+    var click: Sound = new Sound("Click", Sounds.data.click, scene);
+    var powerUpUiActiveClick: Sound = new Sound(
       "Click",
       Sounds.data.powerUpUiActiveClick,
       scene
     );
-    var canHit = new Sound("canHit", Sounds.data.canHit, scene);
-    var powerupHit = new Sound("powerupHit", Sounds.data.powerupHit, scene);
-    var enemyHit = new Sound("enemyHit", Sounds.data.enemyHit, scene);
-    var lose = new Sound("lose", Sounds.data.lose, scene);
-    var win = new Sound("win", Sounds.data.win, scene);
-    var combo = new Sound("combo", Sounds.data.combo, scene);
-    var targetReach = new Sound("combo", Sounds.data.targetReach, scene);
+    var canHit: Sound = new Sound("canHit", Sounds.data.canHit, scene);
+    var powerupHit: Sound = new Sound(
+      "powerupHit",
+      Sounds.data.powerupHit,
+      scene
+    );
+    var enemyHit: Sound = new Sound("enemyHit", Sounds.data.enemyHit, scene);
+    var lose: Sound = new Sound("lose", Sounds.data.lose, scene);
+    var win: Sound = new Sound("win", Sounds.data.win, scene);
+    var combo: Sound = new Sound("combo", Sounds.data.combo, scene);
+    var targetReach: Sound = new Sound("combo", Sounds.data.targetReach, scene);
+
+    this.dispose = () => {
+      music.dispose();
+      music = null;
+
+      click.dispose();
+      click = null;
+
+      powerUpUiActiveClick.dispose();
+      powerUpUiActiveClick = null;
+
+      canHit.dispose();
+      canHit = null;
+
+      powerupHit.dispose();
+      powerupHit = null;
+
+      enemyHit.dispose();
+      enemyHit = null;
+
+      lose.dispose();
+      lose = null;
+
+      win.dispose();
+      win = null;
+
+      combo.dispose();
+      combo = null;
+
+      targetReach.dispose();
+      targetReach = null;
+    };
 
     Events.ui.add((data: any) => {
       this.isMusicOn = GameData.instance.getMusicState();
