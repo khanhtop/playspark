@@ -98,14 +98,12 @@ const CanSmash = (data: any) => {
 
     const resize = () => {
       let width = window.innerWidth;
-      /* let height = width * 1.77;
+      let height = width * 1.77;
 
       if (height > window.innerHeight) {
         height = window.innerHeight;
         width = height / 1.77;
       }
-*/
-      let height = window.innerHeight;
       engine.setSize(width, height, true);
       engine.resize();
     };
