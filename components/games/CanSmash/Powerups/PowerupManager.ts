@@ -74,7 +74,7 @@ export class PowerupManager {
       this.powerupCube = new PowerupCube(this.scene, this.poses[0]);
     }
 
-    console.log("set powerup cube pos", this.poses[0])
+    //console.log("set powerup cube pos", this.poses[0])
 
     this.powerupCube.cube.isVisible = true;
     this.powerupCube.setPosition(this.poses[0]);
