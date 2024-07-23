@@ -107,9 +107,9 @@ export default function ModalGameOver({ data }) {
         }`}
       >
         <div className="flex flex-col items-center mb-2">
-          <h1 className="">Your Score</h1>
+          <h1 className="text-base">Your Score</h1>
           <h1
-            className="text-4xl font-titan"
+            className="text-3xl font-titan"
             style={{
               color: "black",
             }}
@@ -130,7 +130,7 @@ export default function ModalGameOver({ data }) {
           <div className="flex items-center gap-2 mb-4 max-w-[400px]">
             <img
               src={`/theme_icons/${data.theme}/rank.png`}
-              className="h-24 w-24"
+              className="h-16 w-16"
             />
             <p className="font-octo text-base text-center text-black/100 max-w-[120px]">
               {data?.gameOverScore === 0
