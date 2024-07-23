@@ -21,7 +21,9 @@ export default function Dashboard({}) {
       let _plays = [];
       let _optins = [];
       let _playableads = [];
-      for (let game of context.myGames.filter((a) => !a.isArchived)) {
+      for (let game of context.myGames.filter(
+        (a) => !a.isArchived && a.isActive
+      )) {
         if (game.name) {
           _names.push(game.name);
           _impressions.push(game.impressions);
@@ -60,21 +62,22 @@ export default function Dashboard({}) {
   }, [context?.myGames]);
 
   return (
-    <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-4 pb-8">
+    <div className="pb-8">
       <CreditsPanel />
-      <Panel>
-        <h2 className="mb-4">Impressions Per Game</h2>
-        {impressions && <BarChart chartData={impressions} />}
-      </Panel>
-      <Panel>
-        <h2 className="mb-4">Plays Per Game</h2>
-        {plays && <BarChart chartData={plays} />}
-      </Panel>
-      <Panel>
-        <h2 className="mb-4">Click Through Rate (CTR)</h2>
-        {ctr && <BarChart chartData={ctr} />}
-      </Panel>
-      {/* <div>
+      <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
+        <Panel>
+          <h2 className="mb-4">Impressions Per Game</h2>
+          {impressions && <BarChart chartData={impressions} />}
+        </Panel>
+        <Panel>
+          <h2 className="mb-4">Plays Per Game</h2>
+          {plays && <BarChart chartData={plays} />}
+        </Panel>
+        <Panel>
+          <h2 className="mb-4">Click Through Rate (CTR)</h2>
+          {ctr && <BarChart chartData={ctr} />}
+        </Panel>
+        {/* <div>
         <h2 className="mb-4">Email Opt Ins</h2>
         {ctr && <BarChart chartData={optins} />}
       </div>
@@ -82,6 +85,7 @@ export default function Dashboard({}) {
         <h2 className="mb-4">Playable Ad Views</h2>
         {ctr && <BarChart chartData={playableAds} />}
       </div> */}
+      </div>
     </div>
   );
 }

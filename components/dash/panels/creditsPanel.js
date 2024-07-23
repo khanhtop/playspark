@@ -7,7 +7,7 @@ export default function CreditsPanel({}) {
   const [height, setHeight] = useState(false);
 
   return (
-    <div className="bg-white/100 text-black p-4 border-2 border-white/20 rounded-xl">
+    <div className="bg-white/100 text-black p-4 border-2 border-white/20 rounded-xl shadow-lg hover:shadow-sm transition">
       <div
         className="overflow-hidden"
         style={{ height: height ? 70 : 30, transition: "0.25s all" }}

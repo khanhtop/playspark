@@ -59,10 +59,19 @@ export default function AuthWrapper({ children, action }) {
 
   // Loading
   if (!context.isAuthed) {
-    return <div className="h-screen w-screen bg-white" />;
+    return (
+      <div className="h-screen w-screen bg-white flex items-center justify-center">
+        <ArrowPathIcon className="h-10 w-10 text-black/50 animate-spin" />
+      </div>
+    );
   }
 
- if (context.isAuthed && context.loggedIn && !context?.profile?.isAdmin) {
+  if (
+    context.isAuthed &&
+    context.loggedIn &&
+    context.profile &&
+    !context?.profile?.isAdmin
+  ) {
     return (
       <div className="bg-black h-screen w-screen text-white font-octo flex items-center justify-center flex-col">
         <h1 className="text-xl mb-4">

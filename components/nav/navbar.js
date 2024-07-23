@@ -48,7 +48,7 @@ export default function Navbar() {
           >
             Case Studies
           </Link>
-          <Link href="#">Blog</Link>
+          <Link href="/blog">Blog</Link>
         </div>
         <button
           onClick={() => router.push("/admin")}
@@ -86,16 +86,16 @@ export default function Navbar() {
           >
             Home
           </Link>
-          <Link onClick={() => setNavOpen(false)} href="#">
+          <Link onClick={() => setNavOpen(false)} href="/products">
             Products
           </Link>
-          <Link onClick={() => setNavOpen(false)} href="#">
+          <Link onClick={() => setNavOpen(false)} href="/pricing">
             Pricing
           </Link>
-          <Link onClick={() => setNavOpen(false)} href="#">
+          <Link onClick={() => setNavOpen(false)} href="/case-studies">
             Case Studies
           </Link>
-          <Link onClick={() => setNavOpen(false)} href="#">
+          <Link onClick={() => setNavOpen(false)} href="/blog">
             Blog
           </Link>
           <button
