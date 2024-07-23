@@ -4,6 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 
 export default function GlassModal({
+  hideClose,
   showWhen,
   onClose,
   title,
@@ -43,17 +44,19 @@ export default function GlassModal({
             <p>{title}</p>
           </div>
         </div>
-        <div className="flex justify-center absolute w-full -bottom-8">
-          <div
-            onClick={() => {
-              playClickSound(context);
-              onClose();
-            }}
-            className="transition cursor-pointer text-white h-16 w-16 flex items-center justify-center"
-          >
-            <img src={`/theme_icons/${theme}/close.png`} />
+        {!hideClose && (
+          <div className="flex justify-center absolute -right-4 -top-4">
+            <div
+              onClick={() => {
+                playClickSound(context);
+                onClose();
+              }}
+              className="transition cursor-pointer text-white h-12 w-12 flex items-center justify-center"
+            >
+              <img src={`/theme_icons/${theme}/close.png`} />
+            </div>
           </div>
-        </div>
+        )}
         <showWhen.content data={showWhen.data} />
       </div>
     </div>

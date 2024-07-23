@@ -17,7 +17,7 @@ export default function Demo({ ad, id }) {
         ad.isPremium ? (
           <PremiumAdvert data={ad} />
         ) : (
-          <Advert data={ad} />
+          <Advert data={ad} clientCredits={999} />
         )
       ) : (
         <p>{id} - AD NOT FOUND</p>

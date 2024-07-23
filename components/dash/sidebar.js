@@ -15,8 +15,8 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
   const context = useAppContext();
   console.log(context.profile);
   return (
-    <div className="w-[300px] h-full rounded-r-2xl bg-[#FFF] flex flex-col items-center px-8 pb-8 text-[#364153]">
-      <img src="/branding/logo2.png" className="-mb-2" />
+    <div className="w-[300px] h-full rounded-r-2xl bg-[#FFF] flex flex-col items-center px-8 pb-8 text-[#364153] shadow-xl">
+      <img src="/ui/logo.png" className="mt-3 -ml-7" />
 
       <div className="flex-1 w-full overflow-y-scroll">
         <Row

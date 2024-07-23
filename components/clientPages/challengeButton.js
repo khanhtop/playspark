@@ -1,4 +1,5 @@
 import { useAppContext } from "@/helpers/store";
+import Swal from "sweetalert2";
 
 export default function ChallengeButton({ userData, onChallengeButtonClick }) {
   const context = useAppContext();
@@ -7,10 +8,41 @@ export default function ChallengeButton({ userData, onChallengeButtonClick }) {
   const { client } = userData;
   const xpSteal = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
 
+  const isNotAbleToBattle = () => {
+    console.log(context.profile);
+    if (
+      !context?.profile?.dataByClient?.[client.id]?.xp ||
+      context?.profile?.dataByClient?.[client.id]?.xp < 10
+    ) {
+      return "You do not have enough XP to start this battle, try earning at least 10 XP first and then start the battle!";
+    } else if (xpSteal < 1) {
+      return (
+        userData.companyName +
+        " does not have enough XP for you to battle them!"
+      );
+    }
+    return false;
+  };
+
+  const handleChallengeButtonClick = () => {
+    const error = isNotAbleToBattle();
+    if (error) {
+      Swal.fire({
+        title: "Oops",
+        text: error,
+        icon: "error",
+        confirmButtonColor: client?.accentColor,
+      });
+      return;
+    } else {
+      onChallengeButtonClick();
+    }
+  };
+
   return (
     <div className="flex-1 flex justify-end mt-4">
       <div
-        onClick={onChallengeButtonClick}
+        onClick={handleChallengeButtonClick}
         style={{
           backgroundColor: client.accentColor,
           borderColor: client.accentColor,

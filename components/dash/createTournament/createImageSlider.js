@@ -21,6 +21,7 @@ export default function CreateImageSlider({
           return raw.json();
         })
         .then((json) => {
+          console.log(json);
           setStateImages(json);
         });
     }
@@ -36,12 +37,12 @@ export default function CreateImageSlider({
         <Tag text={aspectRatio} />
       </div>
 
-      <div className="flex gap-2">
-        <div className="h-48 rounded-xl bg-white/10 overflow-hidden">
+      <div className="flex gap-2 ">
+        <div className="h-48 rounded-xl bg-white/10 overflow-hidden ">
           <div className="h-[15%] flex items-center pl-2 bg-black/20 text-white/50 text-xs">
             <p>Current</p>
           </div>
-          <div className="h-[85%] py-2 px-2">
+          <div className="h-[85%] py-2 px-2 ">
             <Img item={{ secure_url: selected }} onSelect={() => null} />
           </div>
         </div>

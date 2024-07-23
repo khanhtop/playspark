@@ -1,4 +1,5 @@
 import CreateAudioPicker from "./createAudioPicker";
+import CreateGlbPicker from "./createGlbPicker";
 import CreateImageSlider from "./createImageSlider";
 import GenWordArray from "./genWordArray";
 
@@ -16,6 +17,34 @@ export default function CreateConfiguration({
         }
         className="bg-white/10 text-white rounded-xl p-4 mb-4"
       ></textarea>
+      {tournament?.tags?.["glbOne"] && (
+        <CreateGlbPicker
+          isAdmin={isAdmin}
+          dimension="glbOne"
+          gameTag={tournament?.cloudinaryGameTag}
+          aspectRatio={tournament?.tags?.["glbOne"]}
+          title={`3D Object One`}
+          selected={tournament.glbOne}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, glbOne: a });
+          }}
+          pickerZoom={0.2}
+        />
+      )}
+      {tournament?.tags?.["glbTwo"] && (
+        <CreateGlbPicker
+          isAdmin={isAdmin}
+          dimension="glbTwo"
+          gameTag={tournament?.cloudinaryGameTag}
+          aspectRatio={tournament?.tags?.["glbTwo"]}
+          title={`3D Object Two`}
+          selected={tournament.glbTwo}
+          updateSprite={(a) => {
+            setTournament({ ...tournament, glbTwo: a });
+          }}
+          pickerZoom={0.5}
+        />
+      )}
       {tournament?.tags?.["backgroundSprite"] && (
         <CreateImageSlider
           isAdmin={isAdmin}
@@ -171,6 +200,7 @@ export default function CreateConfiguration({
           }}
         />
       )}
+
       {tournament?.words && (
         <GenWordArray
           tournament={tournament}

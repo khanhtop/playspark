@@ -1,4 +1,5 @@
 import TapHold from "@/components/ui/tapHold";
+import Text from "@/components/ui/text";
 import GameButton from "@/components/uiv2/gameButton";
 import { playClickSound } from "@/helpers/audio";
 import { firestore } from "@/helpers/firebase";
@@ -76,6 +77,7 @@ export default function ModalRewards({ data }) {
   };
 
   const fetchRewards = async () => {
+    if (!context?.loggedIn?.uid) return;
     getDocs(
       query(
         collection(firestore, "users", context?.loggedIn?.uid, "rewards"),
@@ -296,44 +298,46 @@ function RewardRow({
           {item.description}
         </div>
       </div>
-      <div className="px-0 py-2">
-        <button
-          style={{
-            backgroundColor: isRedeemed
-              ? "rgb(239, 68, 68)"
-              : unlocked
-              ? primaryColor
-              : "#EEE",
-            color: unlocked ? textColor : "#AAA",
-          }}
-          disabled={typeof claimed === "undefined" || loading}
-          className="h-full w-20 border-4 rounded-2xl"
-          onClick={() => {
-            if (isRedeemed) {
-              null;
-            } else if (unlocked && !claimed) {
-              onClaim(item);
-            } else if (claimed && isInteractableAfterClaim()) {
-              playClickSound(context);
-              onFlipCard(item);
-            }
-          }}
-        >
-          {typeof claimed === "undefined" || loading ? (
-            <ArrowPathIcon className="h-6 w-full animate-spin" />
-          ) : isRedeemed ? (
-            "Redeemed"
-          ) : claimed && !isInteractableAfterClaim() ? (
-            "Claimed"
-          ) : claimed && isInteractableAfterClaim() ? (
-            "Redeem"
-          ) : unlocked ? (
-            "Claim"
-          ) : (
-            <LockClosedIcon className="h-6 w-full" />
-          )}
-        </button>
-      </div>
+      {context?.loggedIn?.uid && (
+        <div className="px-0 py-2">
+          <button
+            style={{
+              backgroundColor: isRedeemed
+                ? "rgb(239, 68, 68)"
+                : unlocked
+                ? primaryColor
+                : "#EEE",
+              color: unlocked ? textColor : "#AAA",
+            }}
+            disabled={typeof claimed === "undefined" || loading}
+            className="h-full w-20 border-4 rounded-2xl"
+            onClick={() => {
+              if (isRedeemed) {
+                null;
+              } else if (unlocked && !claimed) {
+                onClaim(item);
+              } else if (claimed && isInteractableAfterClaim()) {
+                playClickSound(context);
+                onFlipCard(item);
+              }
+            }}
+          >
+            {typeof claimed === "undefined" || loading ? (
+              <ArrowPathIcon className="h-6 w-full animate-spin" />
+            ) : isRedeemed ? (
+              "Redeemed"
+            ) : claimed && !isInteractableAfterClaim() ? (
+              "Claimed"
+            ) : claimed && isInteractableAfterClaim() ? (
+              "Redeem"
+            ) : unlocked ? (
+              "Claim"
+            ) : (
+              <LockClosedIcon className="h-6 w-full" />
+            )}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
@@ -344,24 +348,28 @@ function Tabs({ data, tab, onChange }) {
       <div
         onClick={() => onChange("intragame")}
         style={{
+          opacity: tab === "intragame" ? 1 : 0.5,
+          color: data.theme === "pixel" ? "black" : "white",
           borderBottomColor:
             tab === "intragame" ? data.primaryColor : "transparent",
         }}
         className={`${
-          tab === "intragame" ? "text-white" : "text-white/50 cursor-pointer"
-        } flex-1 border-b-8 flex justify-center py-2`}
+          data.theme === "pixel" ? "font-pixel text-2xl" : ""
+        } flex-1 border-b-8 flex justify-center py-2 cursor-pointer`}
       >
-        <p>In Game</p>
+        <p>Intragame</p>
       </div>
       <div
         onClick={() => onChange("postgame")}
         style={{
+          opacity: tab === "postgame" ? 1 : 0.5,
+          color: data.theme === "pixel" ? "black" : "white",
           borderBottomColor:
             tab === "postgame" ? data.primaryColor : "transparent",
         }}
         className={`${
-          tab === "postgame" ? "text-white" : "text-white/50 cursor-pointer"
-        } flex-1 border-b-8 flex justify-center py-2`}
+          data.theme === "pixel" ? "font-pixel text-2xl" : ""
+        } flex-1 border-b-8 flex justify-center py-2 cursor-pointer`}
       >
         <p>Post Game</p>
       </div>

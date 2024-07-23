@@ -68,3 +68,55 @@ export function timeAgo(timestamp) {
     return days.toString() + " days ago";
   }
 }
+
+export function formatDate(dateString) {
+  const date = new Date(dateString);
+
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  // Create an array of month names
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  // Get the day, month, and year
+  const day = date.getDate();
+  const month = date.getMonth();
+  const year = date.getFullYear();
+
+  // Create a suffix for the day (e.g., "st", "nd", "rd", "th")
+  let daySuffix;
+  if (day === 1 || day === 21 || day === 31) {
+    daySuffix = "st";
+  } else if (day === 2 || day === 22) {
+    daySuffix = "nd";
+  } else if (day === 3 || day === 23) {
+    daySuffix = "rd";
+  } else {
+    daySuffix = "th";
+  }
+
+  // Format the date string
+  const formattedDate = `${day} ${months[month]} ${year}`;
+
+  return formattedDate;
+}

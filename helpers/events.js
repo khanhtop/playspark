@@ -102,6 +102,7 @@ export function scoreEvent(context, score, data) {
 }
 
 export async function levelEvent(context, level, data) {
+  if (!context?.loggedIn?.uid) return;
   if (!level || level < 2) return;
   let gameSpecificData = context?.profile?.gameSpecificData || {};
   gameSpecificData[data.tournamentId] = {
@@ -118,6 +119,7 @@ export async function levelEvent(context, level, data) {
 }
 
 export async function rewardWithXP(xp, context, data) {
+  if (!context?.loggedIn?.uid) return;
   context.setEvent({
     title: `${xp} XP`,
     text: `Reward Claimed`,
@@ -153,6 +155,7 @@ export async function rewardWithXP(xp, context, data) {
 }
 
 export async function rewardWithCoins(coins, context, data) {
+  if (!context?.loggedIn?.uid) return;
   context.setEvent({
     title: `${coins} Coins`,
     text: `Reward Claimed`,

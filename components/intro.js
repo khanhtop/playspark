@@ -23,6 +23,7 @@ import {
   shutoffBalance,
 } from "@/helpers/credits";
 import IntroModal from "./dash/modals/introModal";
+import LegalModal from "./dash/modals/legalModal";
 
 export default function Intro({
   waitOnAuth,
@@ -35,9 +36,11 @@ export default function Intro({
   endDate,
   clientCredits,
   uuid,
+  demo,
 }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
+  const [showLegalModal, setShowLegalModal] = useState(false);
   useMusic(
     data?.homescreenMusic ?? "/uisounds/intro.mp3",
     0.5,
@@ -88,13 +91,37 @@ export default function Intro({
     }
   }, [gameOver.score]);
 
-  // useEffect(() => {
-  //   setShowModal({
-  //     title: "Welcome",
-  //     content: IntroModal,
-  //     data: { ...data, theme: theme },
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (
+      context.loggedIn?.uid &&
+      !demo &&
+      !context.profile?.termsAgreed?.includes(data.tournamentId)
+    ) {
+      setShowModal({
+        title: "Welcome",
+        content: IntroModal,
+        data: {
+          ...data,
+          hideClose: true,
+          theme: theme,
+          onClose: () => setShowModal(false),
+          onLegalClick: (document) =>
+            setShowLegalModal({
+              title: document.title || "Legal",
+              content: LegalModal,
+              data: {
+                ...data,
+                url: document.url,
+                hideClose: false,
+                isTermsOfUse: document.isTermsOfUse,
+              },
+            }),
+        },
+      });
+    }
+  }, [context.profile]);
+
+  console.log(clientCredits, expired);
 
   return (
     <div
@@ -143,7 +170,9 @@ export default function Intro({
               const creditAmount = getGameCreditConsumption(
                 data?.creditConsumption
               );
-              deductCredits(data.ownerId, clientCredits || 0, creditAmount);
+              if (data.tournamentId) {
+                deductCredits(data.ownerId, clientCredits || 0, creditAmount);
+              }
               playEvent(context, data);
               setStage(1, true);
             }}
@@ -152,73 +181,109 @@ export default function Intro({
           </GameButton>
         )}
 
-        {context?.loggedIn?.uid && (
-          <div
-            style={{
-              bottom: data?.landscape ? 28 : 160,
-              right: data?.landscape ? 16 : 8,
-            }}
-            className="absolute w-[68px] right-2 z-10 flex justify-center mt-4"
+        <div
+          style={{
+            bottom: data?.landscape ? 28 : 160,
+            right: data?.landscape ? 16 : 8,
+          }}
+          className="absolute w-[68px] right-2 z-10 flex justify-center mt-4"
+        >
+          <IconTray
+            bgColor={data.primaryColor}
+            textColor={data.textColor}
+            theme={theme}
           >
-            <IconTray
+            <IconButton
+              Icon={`/theme_icons/${theme}/settings.png`}
+              icon={`/theme_icons/${theme}/settings.png`}
               bgColor={data.primaryColor}
               textColor={data.textColor}
               theme={theme}
-            >
-              <IconButton
-                Icon={`/theme_icons/${theme}/settings.png`}
-                icon={`/theme_icons/${theme}/settings.png`}
-                bgColor={data.primaryColor}
-                textColor={data.textColor}
-                theme={theme}
-                onClick={() => {
-                  playClickSound(context);
-                  setShowModal({
-                    title: "Settings",
-                    content: ModalSettings,
-                    data: { ...data, theme: theme },
-                  });
-                }}
-              />
-              <IconButton
-                Icon={TrophyIcon}
-                icon={`/theme_icons/${theme}/rewards.png`}
-                bgColor={data.primaryColor}
-                textColor={data.textColor}
-                theme={theme}
-                onClick={() => {
-                  playClickSound(context);
-                  setShowModal({
-                    title: "Rewards",
-                    content: ModalRewards,
-                    data: { ...data, theme: theme, endDate: endDate },
-                  });
-                }}
-              />
-              <IconButton
-                Icon={ChartBarIcon}
-                icon={`/theme_icons/${theme}/leaderboard.png`}
-                bgColor={data.primaryColor}
-                textColor={data.textColor}
-                theme={theme}
-                onClick={() => {
-                  playClickSound(context);
-                  setShowModal({
-                    title: "Leaderboard",
-                    content: ModalLeaderboard,
-                    data: { ...data, theme: theme },
-                  });
-                }}
-              />
-            </IconTray>
-          </div>
-        )}
+              onClick={() => {
+                playClickSound(context);
+                setShowModal({
+                  title: "Settings",
+                  content: ModalSettings,
+                  data: { ...data, theme: theme },
+                });
+              }}
+            />
+            <IconButton
+              Icon={TrophyIcon}
+              icon={`/theme_icons/${theme}/rewards.png`}
+              bgColor={data.primaryColor}
+              textColor={data.textColor}
+              theme={theme}
+              onClick={() => {
+                playClickSound(context);
+                setShowModal({
+                  title: "Rewards",
+                  content: ModalRewards,
+                  data: {
+                    ...data,
+                    theme: theme,
+                    endDate: endDate,
+                    onAuthClick: () =>
+                      setShowModal({
+                        title: "Sign Up",
+                        content: ModalAuth,
+                        data: {
+                          ...data,
+                          theme: theme,
+                          onClose: () => setShowModal(false),
+                        },
+                      }),
+                  },
+                });
+              }}
+            />
+            <IconButton
+              Icon={ChartBarIcon}
+              icon={`/theme_icons/${theme}/leaderboard.png`}
+              bgColor={data.primaryColor}
+              textColor={data.textColor}
+              theme={theme}
+              onClick={() => {
+                playClickSound(context);
+                setShowModal({
+                  title: "Leaderboard",
+                  content: ModalLeaderboard,
+                  data: {
+                    ...data,
+                    theme: theme,
+                    onAuthClick: () =>
+                      setShowModal({
+                        title: "Sign Up",
+                        content: ModalAuth,
+                        data: {
+                          ...data,
+                          theme: theme,
+                          onClose: () => setShowModal(false),
+                        },
+                      }),
+                  },
+                });
+              }}
+            />
+          </IconTray>
+        </div>
       </div>
 
       <GlassModal
+        hideClose={showModal?.data?.hideClose}
         showWhen={showModal}
         onClose={() => setShowModal(false)}
         title={showModal?.title ?? "Modal"}
+        primaryColor={data.primaryColor}
+        textColor={data.textColor}
+        theme={theme}
+      />
+
+      <GlassModal
+        hideClose={false}
+        showWhen={showLegalModal}
+        onClose={() => setShowLegalModal(false)}
+        title={showLegalModal?.title ?? "Modal"}
         primaryColor={data.primaryColor}
         textColor={data.textColor}
         theme={theme}
@@ -252,13 +317,10 @@ function IconButton({ icon, theme, onClick, bgColor, textColor }) {
   const context = useAppContext();
   return (
     <div
-      onClick={() => {
-        if (context?.loggedIn?.uid) onClick();
-      }}
+      onClick={onClick}
       className={`h-full cursor-pointer aspect-square transition flex items-center justify-center`}
     >
       <img src={icon} className="w-full" />
-      {/* <Icon className="h-8 w-8" /> */}
     </div>
   );
 }

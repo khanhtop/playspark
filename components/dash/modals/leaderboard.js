@@ -12,11 +12,11 @@ export default function ModalLeaderboard({ data }) {
   const score = 100;
 
   useMemo(() => {
-    if (!data.tournamentId || !context?.profile?.companyName) return;
+    if (!data.tournamentId) return;
     getLeaderboard(data.tournamentId).then(async (lb) => {
       setLeaderboard(lb);
     });
-  }, [data.tournamentId, context?.profile?.companyName]);
+  }, [data.tournamentId]);
 
   if (!leaderboard)
     return (
@@ -27,6 +27,18 @@ export default function ModalLeaderboard({ data }) {
 
   return (
     <div className="pt-12 pb-4 px-4 flex flex-col gap-4 overflow-y-scroll h-full">
+      {!context?.loggedIn?.uid && (
+        <div
+          onClick={() => data.onAuthClick()}
+          className="w-full bg-white/30 cursor-pointer backdrop-blur text-center py-4 px-8 border-2 border-white/50 rounded-2xl text-black/50 flex flex-col"
+        >
+          <p className="font-bold text-xl mb-1 text-black/70">Sign Up</p>
+          <p className="text-sm">
+            If you sign up, you can rank your best scores on the leaderboard and
+            win prizes!
+          </p>
+        </div>
+      )}
       {leaderboard
         ?.sort((a, b) => b.score - a.score)
         ?.map((item, key) => (

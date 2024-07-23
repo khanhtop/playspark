@@ -2,7 +2,7 @@ import { ArrowPathIcon, ArrowRightCircleIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function Hero() {
+export default function Hero({ page }) {
   const router = useRouter();
   const [reveal, setReveal] = useState(false);
 
@@ -32,58 +32,31 @@ export default function Hero() {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-[url('/homepage/hero.png')] bg-cover">
-      <div className="w-full min-h-screen flex flex-col items-center justify-center bg-[#000123]/90">
-        <div className="max-w-[50%] relative z-0">
-          <img
-            src="/homepage/star.png"
-            className="absolute w-10 lg:w-24 bottom-[40%] -left-12 md:-left-24 -z-1"
-          />
-          <img
-            src="/homepage/1up.png"
-            className="absolute w-16 lg:w-36 bottom-[80%] -right-16 lg:-right-40 z-10"
-          />
-          <h1 className="font-anton text-[40px] leading-[45px] lg:text-[120px] lg:leading-[140px] text-center mb-4 md:mb-8">
-            <span className="text-cyan-500">Level Up</span>
-            {` `} Your Fan Activation
+    <div
+      style={{ backgroundImage: `url(${page.hero_background_image.url})` }}
+      className="min-h-[900px] w-full bg-cover flex"
+    >
+      <div className="flex-1 flex flex-col lg:flex-row text-white bg-cover px-8 pt-20 lg:gap-8 bg-black/0">
+        <div className="flex flex-col items-center lg:items-start justify-center flex-1 text-center lg:text-left gap-2">
+          <h1 className="text-4xl xl:text-6xl font-bold max-w-[400px]">
+            {page.hero_title_text}
           </h1>
-        </div>
-
-        <h3 className="max-w-[60%] font-octolight text-sm md:text-3xl">
-          Plug and play rewarded mobile games that generate higher acquisition,
-          retention and advertising revenue for sports media, sports team and
-          athlete platforms.
-        </h3>
-        {reveal ? (
-          <div className="flex h-12 mt-8">
-            <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeHolder="Enter Email"
-              className="flex-1 h-full px-6 rounded-tl-full rounded-bl-full text-black"
-            />
-
-            <button
-              disabled={loading}
-              onClick={() => addToList()}
-              className="flex items-center justify-center w-24 bg-cyan-400 hover:bg-sky-900 hover:text-white  transition text-black py-2 uppercase font-bold tracking-wide rounded-tr-full rounded-br-full h-full"
-            >
-              {!loading ? (
-                <p className="text-sm">Submit</p>
-              ) : (
-                <ArrowPathIcon className="animate-spin h-6 w-6 text-white" />
-              )}
-            </button>
-          </div>
-        ) : (
+          <h1 className="text-xl xl:text-3xl font-light max-w-[500px] mt-4">
+            {page.hero_subtext}
+          </h1>
           <button
             onClick={() => router.push("/admin")}
-            className="font-anton text-xl bg-cyan-500 px-8 py-2 rounded-full flex items-center justify-center gap-4 mt-8"
+            className="bg-blue-500 px-6 py-3 rounded-full mt-4 font-bold text-xl lg:text-2xl"
           >
-            Get Started For Free
-            <ArrowRightCircleIcon className="h-8 w-8" />
+            Start Creating Your Game
           </button>
-        )}
+        </div>
+        <div className="flex flex-col lg:flex-1 items-center lg:items-start justify-center mb-12 lg:mb-0">
+          <video autoPlay muted className="rounded-xl" controls>
+            <source src={page.hero_video?.url} type="video/mp4" className="" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
       </div>
     </div>
   );

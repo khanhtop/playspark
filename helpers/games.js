@@ -426,21 +426,79 @@ export const games = [
       backgroundMusic: "bgm",
     },
     backgroundSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389315/ac62ds7jkvvnnhehvgxp.jpg",
     playerSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1708389314/k9rfipxwbcjuq9zyoq7s.png",
     objectSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706661086/xg4oimm5lqgrjwpma8af.png",
     powerUpSprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712712992/bkiobenpts9ivhvi1zoq.png",
     enemySprite:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteOne:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteTwo:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
     additionalSpriteThree:
-      "http://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1712713078/mmiruz3tgcdaznvedr6f.png",
+  },
+  {
+    name: "Can Smash",
+    creditConsumption: 2,
+    description:
+      "Hit cans to earn points, avoid enemy targets, and collect power-ups to progress through increasingly challenging levels.",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720584857/PlaySpark_home_screens_72_lftntd.jpg",
+    gameIcon:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720584857/Playspark_game_tiles_14_rckz5w.png",
+    backgroundMusic:
+      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713930357/crowd-loop-talking.mp3",
+    screenshot: "cricketsmash.jpg",
+    primaryColor: "#0693E3",
+    textColor: "#FFF",
+    id: 24,
+    landscape: false,
+    cloudinaryGameTag: "can",
+    tags: {
+      backgroundSprite: "2.0",
+      backgroundSprite: "2.0",
+      objectSprite: "3.0",
+      powerUpSprite: "1.0",
+      enemySprite: "3.0",
+      additionalSpriteOne: "3.0",
+      additionalSpriteTwo: "3.0",
+      additionalSpriteThree: "3.0",
+      additionalSpriteFour: "3.0",
+      additionalSpriteSix: "2.0",
+      backgroundMusic: "bgm",
+      glbOne: "ball",
+      playerSprite: "balltexture",
+      glbTwo: "barrel",
+    },
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598346/ximczgxkmelka6qdaxqh.jpg",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721085900/filkyxb3ffrxjbm9fd9s.jpg",
+    objectSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720768934/kro0ste33ahsakvdoeym.jpg",
+    powerUpSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720599031/iugbeqzkx9fz3rpnlaws.jpg",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086239/dpeorrc9qdss49kis2uo.jpg",
+    additionalSpriteOne:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086240/wzj4wpptzi0zl2en88qh.jpg",
+    additionalSpriteTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086240/dwqj8y9hsctdevw97rvu.jpg",
+    additionalSpriteThree:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086240/qmoybmyir2y6qn4umrh2.jpg",
+    additionalSpriteFour:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1721086240/tvixywic1l6rnh9ywu48.jpg",
+    additionalSpriteSix:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720598969/wyzu0lrhbqiiznczuo6t.jpg",
+    glbOne:
+      "https://res.cloudinary.com/dnnp8gmvx/image/upload/v1720643737/ball_nvx8ya.glb",
+    glbTwo:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1720768611/memshy7a8wym4795nqas.glb",
   },
 ];
 

@@ -33,6 +33,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  touch-action: pan-x pan-y;
 }
 
 @font-face {

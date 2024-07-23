@@ -265,6 +265,7 @@ export default function Advert({
       {stage === 0 && (
         <Intro
           clientCredits={clientCredits}
+          demo={data.demo}
           uuid={uuid}
           waitOnAuth={waitOnAuth}
           endDate={parseEndDate(data.endDate)}
@@ -304,6 +305,8 @@ export default function Advert({
           additionalSpriteFive: data?.additionalSpriteFive,
           additionalSpriteSix: data?.additionalSpriteSix,
           backgroundMusic: data?.backgroundMusic,
+          glbOne: data?.glbOne,
+          glbTwo: data?.glbTwo,
           maxscore: prevBest ?? 0,
           words: data?.words || [],
           ball: data?.ball,

@@ -59,6 +59,22 @@ export default function AuthModal({ action, closeModal, user }) {
       });
   };
 
+  const forgot = () => {
+    setLoading(true);
+    if (email.length < 3 || !email.includes("@")) {
+      setError("Please enter a valid email address");
+      setLoading(false);
+      return;
+    }
+    sendPasswordResetEmail(auth, email).then(() => {
+      alert(
+        "A link has been sent to your email address, please ensure you check your spam folder if you cannot find it. "
+      );
+      closeModal();
+      setLoading(false);
+    });
+  };
+
   // Requires Auth
   return (
     <div
@@ -126,22 +142,45 @@ export default function AuthModal({ action, closeModal, user }) {
                   Register
                 </StyledButton>
               )}
+              {authState === "forgot" && (
+                <StyledButton
+                  reduceTop
+                  user={user}
+                  isLoading={loading}
+                  onClick={() => forgot()}
+                >
+                  Send Reset Link
+                </StyledButton>
+              )}
             </div>
-            <div className="flex gap-2">
-              <p>
-                {authState === "register"
-                  ? "Already have an account?"
-                  : "Don't have an account"}
-              </p>
-              <p
-                onClick={() =>
-                  setAuthState(authState === "login" ? "register" : "login")
-                }
-                className="text-cyan-400 cursor-pointer"
-              >
-                {authState === "register" ? "Login" : "Sign Up"}
-              </p>
-            </div>
+            {authState !== "forgot" && (
+              <div className="flex gap-2">
+                <p>
+                  {authState === "register"
+                    ? "Already have an account?"
+                    : "Don't have an account"}
+                </p>
+                <p
+                  onClick={() =>
+                    setAuthState(authState === "login" ? "register" : "login")
+                  }
+                  className="text-cyan-400 cursor-pointer"
+                >
+                  {authState === "register" ? "Login" : "Sign Up"}
+                </p>
+              </div>
+            )}
+            {authState !== "forgot" ? (
+              <div className="flex gap-2 -mt-1 text-xs cursor-pointer">
+                <p onClick={() => setAuthState("forgot")}>
+                  Forgotten your password?
+                </p>
+              </div>
+            ) : (
+              <div className="flex gap-2 mt-1 text-xs cursor-pointer">
+                <p onClick={() => setAuthState("login")}>Back</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -165,7 +204,7 @@ function LabeledInput({ onChange, secure, label, placeholder }) {
   );
 }
 
-function StyledButton({ onClick, children, isLoading, user }) {
+function StyledButton({ onClick, children, isLoading, user, reduceTop }) {
   return (
     <button
       disabled={isLoading}
@@ -177,7 +216,9 @@ function StyledButton({ onClick, children, isLoading, user }) {
       }}
       className={`${
         isLoading ? "cursor-wait" : "hover:opacity-90 transition"
-      }  border-2 rounded-xl text-xl font-slab py-4 mt-12 gap-2 flex items-center justify-center`}
+      }  border-2 rounded-xl text-xl font-slab py-4 ${
+        reduceTop ? "mt-2" : "mt-12"
+      }  gap-2 flex items-center justify-center`}
       onClick={onClick}
     >
       {isLoading && (

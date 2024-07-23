@@ -1,6 +1,7 @@
+import { getLeaderboard } from "@/helpers/leaderboard";
 import { useAppContext } from "@/helpers/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 export default function IntroPanel({
   data,
@@ -11,8 +12,19 @@ export default function IntroPanel({
 }) {
   const context = useAppContext();
   const [open, setOpen] = useState(false);
+  const [rank, setRank] = useState(null);
 
   if (waitOnAuth) return <div />;
+
+  useMemo(() => {
+    if (!data?.tournamentId || !context?.loggedIn?.uid) return;
+    getLeaderboard(data?.tournamentId).then(async (lb) => {
+      const index = lb.findIndex((a) => a.uid === context.loggedIn.uid);
+      if (index > -1) {
+        setRank(index + 1);
+      }
+    });
+  }, [data.tournamentId, context?.loggedIn]);
 
   // if (!context.profile && !waitOnAuth && data.tournamentId === 1719467034841) {
   //   return (
@@ -131,7 +143,7 @@ export default function IntroPanel({
                 : "font-pixel uppercase text-2xl -my-2"
             }
           >
-            Play Count: {playCount}
+            Rank: {rank ? `#${rank}` : "_"}
           </p>
           <p
             className={
