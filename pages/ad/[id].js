@@ -133,7 +133,9 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
         });
     } else if (
       (externalId && externalId === "override") ||
-      ad.ownerId === "xwMcL84YdoRXAV52oNjmhVhCHD63"
+      (ad.ownerId === "xwMcL84YdoRXAV52oNjmhVhCHD63" &&
+        context.hasAuthed &&
+        !context.profile.isAdmin)
     ) {
       const uuid = getDeviceID();
       if (uuid !== null) {
@@ -157,7 +159,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
           });
       }
     }
-  }, [externalId]);
+  }, [externalId, context]);
 
   useEffect(() => {
     if (waitOnAuth && context?.profile) setWaitOnAuth(false);
