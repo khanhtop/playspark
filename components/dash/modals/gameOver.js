@@ -106,24 +106,27 @@ export default function ModalGameOver({ data }) {
           data?.data?.landscape ? "flex-row" : "flex-col"
         }`}
       >
-        <div className="flex flex-col items-center mb-2">
-          <h1 className="text-base">Your Score</h1>
-          <h1
-            className="text-3xl font-titan"
-            style={{
-              color: "black",
-            }}
-          >
-            {data.gameOverScore}
-          </h1>
-        </div>
-        {didNotBeat && (
-          <div>
-            <p className="font-octo text-xl text-center text-black/100 max-w-[200px] mb-2">
-              Previous Best {didNotBeat.previous}
-            </p>
+        <div className="flex flex-col">
+          <div className="flex flex-col items-center mb-2">
+            <h1 className="text-base">Your Score</h1>
+            <h1
+              className="text-3xl font-titan"
+              style={{
+                color: "black",
+              }}
+            >
+              {data.gameOverScore}
+            </h1>
           </div>
-        )}
+          {didNotBeat && (
+            <div>
+              <p className="font-octo text-xl text-center text-black/100 max-w-[200px] mb-2">
+                Previous Best {didNotBeat?.previous}
+              </p>
+            </div>
+          )}
+        </div>
+
         {loading ? (
           <ArrowPathIcon className="h-10 w-10 mb-4 text-white animate-spin" />
         ) : (
