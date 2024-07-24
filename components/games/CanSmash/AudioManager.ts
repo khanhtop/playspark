@@ -34,6 +34,9 @@ export class AudioManager {
     });
 
     var click: Sound = new Sound("Click", Sounds.data.click, scene);
+    var beep1: Sound = new Sound("Beep1", Sounds.data.beep1, scene);
+    var beep2: Sound = new Sound("Beep2", Sounds.data.beep2, scene);
+    var beep3: Sound = new Sound("Beep3", Sounds.data.beep3, scene);
     var powerUpUiActiveClick: Sound = new Sound(
       "Click",
       Sounds.data.powerUpUiActiveClick,
@@ -57,6 +60,15 @@ export class AudioManager {
 
       click.dispose();
       click = null;
+
+      beep1.dispose();
+      beep1 = null;
+
+      beep2.dispose();
+      beep2 = null;
+
+      beep3.dispose();
+      beep3 = null;
 
       powerUpUiActiveClick.dispose();
       powerUpUiActiveClick = null;
@@ -157,6 +169,20 @@ export class AudioManager {
       } else {
         this.isSfxOn = GameData.instance.getSfxState();
         if (!music.isPlaying && this.isMusicOn) music.play();
+      }
+    });
+
+    Events.sound.add((data: any) => {
+      switch (data.type) {
+        case "AudioManager:beep0":
+          beep1.play();
+          break;
+        case "AudioManager:beep1":
+          beep2.play();
+          break;
+        case "AudioManager:beep2":
+          beep3.play();
+          break;
       }
     });
 
