@@ -13,6 +13,7 @@ export class TimerUI {
   private timerHander = null;
   static instance: TimerUI = null;
   delta: number;
+  lastCount: string = "4";
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
     let size = 100 + "px";
     TimerUI.instance = this;
@@ -97,7 +98,15 @@ export class TimerUI {
       Events.ui.notifyObservers({ type: EventTypes.TIMER_COMPLETE });
     }
     this.setFillArc(this.timer / this.maxTime);
-    this.setCounterText(this.timer.toFixed());
+    let fixedTime = this.timer.toFixed();
+    this.setCounterText(fixedTime);
+
+    if (fixedTime == this.lastCount && fixedTime != "0") {
+      Events.sound.notifyObservers({
+        type: `AudioManager:beep${(parseInt(this.lastCount) - 1)}`,
+      });
+      this.lastCount = (parseInt(this.lastCount) - 1).toString();
+    }
 
     this.timerHander = Timer.Instance.add(
       delta,
@@ -108,6 +117,7 @@ export class TimerUI {
     );
   }
   reset(count: number) {
+    this.lastCount = "4";
     this.maxTime = count;
     this.timer = this.maxTime;
     Timer.Instance.remove(this.timerHander);

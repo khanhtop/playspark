@@ -14,6 +14,7 @@ import {
 import { Images } from "../Images";
 
 export class TutorialManager {
+  tutotial2TimerHandle: NodeJS.Timeout;
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
     let continueBtn = this.createContinueBtn();
 
@@ -116,7 +117,7 @@ export class TutorialManager {
 
     BlackBG.instance.show(Images.data.blackbg2);
     tutorial2.show();
-    setTimeout(() => {
+   this.tutotial2TimerHandle = setTimeout(() => {
       Utils.pause(true);
     }, 1000);
   }
@@ -135,6 +136,7 @@ export class TutorialManager {
     close_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
     close_btn.onPointerClickObservable.add(() => {
+      clearTimeout(this.tutotial2TimerHandle );
       Events.ui.notifyObservers({
         type: EventTypes.TUTORIAL_CLOSE_BTN_CLICKED,
       });

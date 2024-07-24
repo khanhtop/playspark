@@ -28,7 +28,7 @@ export class Ball {
   scene: Scene;
   sphereAggregate: PhysicsAggregate;
   viewer: PhysicsViewer;
-  tween: TWEEN.Tween<{ xScale: number; yScale: number; }>;
+  tween: TWEEN.Tween<{ scale: number}>;
   constructor(scene: Scene, defaultPos: Vector3) {
     Ball.instance = this;
     this.scene = scene;
@@ -48,29 +48,7 @@ export class Ball {
       element.name = "ball";
     });
 
-    const _data = {
-      xScale: 1,
-      yScale: 1,
-    };
-    this.tween = new TWEEN.Tween(_data)
-      .to(
-        {
-          xScale: 1.1,
-          yScale: 1.1,
-        },
-        100
-      )
-      .easing(TWEEN.Easing.Linear.Out)
-      .onUpdate(() => {
-        this.ball.scaling = new Vector3(
-          _data.xScale,
-          _data.yScale,
-          _data.yScale
-        );
-      })
-      .onComplete(() => {})
-      .yoyo(true)
-      .repeat(5)
+   
 
 
     // var light1 = new PointLight("omni", new Vector3(0, 50, 0), scene);
@@ -148,6 +126,29 @@ export class Ball {
   }
 
   resetPos() {
+
+    let _data = {
+      scale:  this.ball.scaling.x
+    };
+    this.tween = new TWEEN.Tween(_data)
+      .to(
+        {
+          scale: _data.scale + .1
+        },
+        100
+      )
+      .easing(TWEEN.Easing.Linear.Out)
+      .onUpdate(() => {
+        this.ball.scaling = new Vector3(
+          _data.scale,
+          _data.scale,
+          _data.scale
+        );
+      })
+      .onComplete(() => {})
+      .yoyo(true)
+      .repeat(5)
+
     this.tween.start()
 
     this.ball.position = this.defaultPos.clone();

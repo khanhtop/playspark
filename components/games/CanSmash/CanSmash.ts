@@ -158,7 +158,6 @@ const CanSmash = (data: any) => {
         barrelBaseUrl
       ));
 
-
     loader.loadMesh(ballBaseUrl, Meshs.data.ball);
     loader.loadMesh(barrelBaseUrl, Meshs.data.barrel);
 
@@ -251,7 +250,6 @@ const CanSmash = (data: any) => {
       loader = null;*/
     };
   }, []);
-
   return null;
 };
 
@@ -276,10 +274,11 @@ function ShowWraperGameOver(_data: any, timerHandle: any, data: any) {
     timerHandle = setTimeout(() => {
       let currentLevel = GameData.instance.getCurrentLevel();
       let currentScore = GameData.instance.getTotalScore();
+      let boostCredits = GameData.instance.getPowerupCredit();
 
-      data.callback(currentScore, currentLevel, 2);
+      data.callback(currentScore, currentLevel, boostCredits);
 
-       Events.sound.notifyObservers({
+      Events.sound.notifyObservers({
         type: "AudioManager:setMuteState",
         state: true,
       });
@@ -310,7 +309,7 @@ function ReInit(data: any) {
 
     Restart(lives, level, boostCredits);
   } else {
-    Revive(lives);
+    Revive(lives, boostCredits);
   }
   //example
   //reset
@@ -320,26 +319,30 @@ function ReInit(data: any) {
 }
 
 function Restart(lives: number, level: number, boostCredits: number) {
-  Reset(lives, levels[level - 1].time);
+  Reset(lives, levels[level - 1].time, boostCredits);
   Events.gamePlay.notifyObservers({ type: "ScoreManager:setScore", count: 0 });
   Events.ui.notifyObservers({ type: "EntityUI:setCreditCount", count: 0 });
   LevelCreator.instane.create(0);
 }
-function Revive(lives: number) {
-  Reset(lives, 10);
+function Revive(lives: number, boostCredits: number) {
+  Reset(lives, 10, boostCredits);
   setTimeout(() => {
     Events.gamePlay.notifyObservers({ type: "LevelCreator:resetCansPos" });
   }, 500);
 }
 
-function Reset(lives: number, timer: number) {
-   Events.sound.notifyObservers({
+function Reset(lives: number, timer: number, boostCredits: number) {
+  Events.sound.notifyObservers({
     type: "AudioManager:setMuteState",
     state: false,
   });
 
   Events.ui.notifyObservers({ type: "LiveManager:setCount", count: lives });
   Events.ui.notifyObservers({ type: "TimerUI:resetByRevive", count: timer });
+  Events.ui.notifyObservers({
+    type: "EntityUI:setCreditCount",
+    count: boostCredits,
+  });
   Events.gamePlay.notifyObservers({ type: "GUI2D:hideGameOverUI" });
   // Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
 
