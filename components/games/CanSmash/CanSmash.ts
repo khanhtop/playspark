@@ -250,7 +250,6 @@ const CanSmash = (data: any) => {
       loader = null;*/
     };
   }, []);
-
   return null;
 };
 
