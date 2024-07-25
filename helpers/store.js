@@ -45,6 +45,9 @@ export function AppWrapper({ children }) {
   // Stripe
   const [showStripe, setShowStripe] = useState(false);
 
+  // Is BG Audio Plating
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+
   // Settings
   const [settings, setSettings] = useState({
     bgm: true,
@@ -305,6 +308,8 @@ export function AppWrapper({ children }) {
     setLatestChat,
     showStripe,
     setShowStripe,
+    isAudioPlaying,
+    setIsAudioPlaying,
   };
   return (
     <AppContext.Provider value={sharedState}>{children}</AppContext.Provider>

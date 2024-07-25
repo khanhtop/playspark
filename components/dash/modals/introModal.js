@@ -6,7 +6,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 
-export default function IntroModal({ data }) {
+export default function IntroModal({ data, playAudio }) {
   const context = useAppContext();
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -92,7 +92,12 @@ export default function IntroModal({ data }) {
           <GameButton
             disabled={!checked}
             isLoading={loading}
-            onClick={() => agree()}
+            onClick={() => {
+              if (!context.isAudioPlaying && context.settings.bgm) {
+                data.playAudio();
+              }
+              agree();
+            }}
             bgColor={data.primaryColor}
             textColor={data.textColor}
             theme={data?.theme}

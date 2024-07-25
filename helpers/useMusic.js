@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isIOS, isAndroid } from "react-device-detect";
 import { useAppContext } from "./store";
 
@@ -14,6 +14,7 @@ const useMusic = (fileName, maxVolume, play) => {
 
     let fadeInRequestId;
     const fadeIn = (timestamp) => {
+      if (audio?.played?.length === 1) context.setIsAudioPlaying(true);
       audio.volume = Math.min(audio.volume + 0.01, maxVolume); // Increase volume gradually
       if (audio.volume < maxVolume) {
         fadeInRequestId = requestAnimationFrame(fadeIn);

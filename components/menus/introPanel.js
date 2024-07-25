@@ -14,10 +14,8 @@ export default function IntroPanel({
   const [open, setOpen] = useState(false);
   const [rank, setRank] = useState(null);
 
-  if (waitOnAuth) return <div />;
-
   useMemo(() => {
-    if (!data?.tournamentId || !context?.loggedIn?.uid) return;
+    if (!data?.tournamentId || !context?.loggedIn?.uid || waitOnAuth) return;
     getLeaderboard(data?.tournamentId).then(async (lb) => {
       const index = lb.findIndex((a) => a.uid === context.loggedIn.uid);
       if (index > -1) {
@@ -48,6 +46,8 @@ export default function IntroPanel({
   //     </p>
   //   </div>
   // );
+
+  if (waitOnAuth) return <div />;
 
   if (!context.profile && !waitOnAuth)
     return (
