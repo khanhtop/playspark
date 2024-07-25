@@ -10,5 +10,8 @@ export class Sounds {
     win: "win.wav",
     combo: "booster-collect.mp3",
     targetReach: "targetReach.mp3",
+    beep3: "beep1.mp3",
+    beep2: "beep2.mp3",
+    beep1: "beep3.mp3",
   };
 }

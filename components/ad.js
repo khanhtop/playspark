@@ -101,7 +101,7 @@ export default function Advert({
       setLevel(level);
       setBoostCredits(boostCredits);
       setStage(0);
-      setReviveCount(reviveCount + 1);
+      setReviveCount(prevReviveCount => prevReviveCount + 1);
     } else {
       setLives(data.id === 11 ? 10 : 3);
       setScore(0);

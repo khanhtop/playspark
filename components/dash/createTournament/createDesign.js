@@ -77,6 +77,44 @@ export default function CreateDesign({ tournament, setTournament }) {
         </div>
       </div>
 
+      <div className="my-2">
+        <p className="text-xs text-white/70 mt-0 mb-1">Tournament Credit Cap</p>
+        <div className="flex gap-2">
+          {tournament?.creditCap && tournament?.creditCap !== 0 && (
+            <Input
+              type="number"
+              className="bg-white/5 w-full py-2 text-white"
+              placeHolder={tournament.creditCap}
+              value={tournament.creditCap || 1000}
+              labelColor="text-white/70"
+              onChange={(e) =>
+                setTournament({
+                  ...tournament,
+                  creditCap: parseInt(e.target.value) || 0,
+                })
+              }
+            />
+          )}
+          <button
+            onClick={() => {
+              if (tournament?.creditCap === 0 || !tournament?.creditCap) {
+                setTournament({
+                  ...tournament,
+                  creditCap: 1000,
+                });
+              } else {
+                setTournament({ ...tournament, creditCap: 0 });
+              }
+            }}
+            className="text-white/50 underline"
+          >
+            {!tournament?.creditCap || tournament?.creditCap === 0
+              ? "Add Credits Cap"
+              : "No Credits Cap"}
+          </button>
+        </div>
+      </div>
+
       <BrandingComponent>
         <div className="mt-4">
           <ImagePicker

@@ -121,8 +121,6 @@ export default function Intro({
     }
   }, [context.profile]);
 
-  console.log(clientCredits, expired);
-
   return (
     <div
       style={{ width: "100%" }}

@@ -6,6 +6,7 @@ import {
   SHIELD_POWERUP_TIMER,
 } from "../Consts";
 import { EventData, EventTypes, Events } from "../Events";
+import { GameData } from "../GameData";
 
 export class PowerupCreditManager {
   powerupCredit: number = 0;
@@ -65,6 +66,7 @@ export class PowerupCreditManager {
   }
 
   notify() {
+    GameData.instance.setPowerupCredit(this.powerupCredit);
     Events.ui.notifyObservers({
       type: EventTypes.POWERUP_CREDIT_CHANGE,
       count: this.powerupCredit,

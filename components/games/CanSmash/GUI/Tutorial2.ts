@@ -95,7 +95,7 @@ export class Tutorial2 {
   show() {
     setTimeout(() => {
       PowerupCube.instace.setPosition(new Vector3(0, 0, 7));
-    }, 1000);
+    }, 500);
     
     this.container.isEnabled = true;
     this.container.isVisible = true;

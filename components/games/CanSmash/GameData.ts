@@ -16,6 +16,7 @@ export class GameData {
   private canvas = null;
   musicState: boolean;
   sfxState: boolean;
+  boostCredits: any;
   constructor(scene: Scene, engine: Engine, canvas: HTMLCanvasElement) {
     this.scene = scene;
     this.engine = engine;
@@ -95,5 +96,11 @@ export class GameData {
   }
   getTotalLevel() {
     return this.totalLevel;
+  }
+  getPowerupCredit() {
+    return this.boostCredits;
+  }
+  setPowerupCredit(boostCredits: number) {
+    this.boostCredits = boostCredits;
   }
 }

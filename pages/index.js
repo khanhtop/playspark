@@ -14,7 +14,7 @@ const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
 });
 
-export default function Home({ page }) {
+export default function Home({ page, blogs }) {
   console.log(page);
   return (
     <>
@@ -50,6 +50,9 @@ export default function Home({ page }) {
         <Section>
           <PricingSection page={page} />
         </Section>
+        <Section>
+          <BlogsSection blogs={blogs} />
+        </Section>
         <Footer />
         {/* <Section>
           <Carousel />
@@ -74,11 +77,18 @@ import Footer from "@/components/homepage/footer";
 import ClientsSection from "@/components/homepage/clientsSection";
 import TestimonialsSection from "@/components/homepage/testimonialsSection";
 import PricingSection from "@/components/homepage/pricingSection";
+import BlogsSection from "@/components/homepage/blogsSection";
 
 export async function getServerSideProps(context) {
   const client = createClient();
   const page = (await client.getSingle("homepage"))?.data;
-  const blogs = await client.getAllByType("blog_post");
+  const blogs = await client.getAllByType("blog-post", {
+    orderings: {
+      field: "document.first_publication_date",
+      direction: "desc",
+    },
+    limit: 4,
+  });
   return {
     props: { page, blogs },
   };
