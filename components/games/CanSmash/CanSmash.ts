@@ -1,7 +1,6 @@
 import { useEffect } from "react";
-import { Engine, Mesh, Scene } from "@babylonjs/core";
+import { Engine, Scene } from "@babylonjs/core";
 import "@babylonjs/core/Debug/debugLayer";
-// import("@babylonjs/inspector");
 import "@babylonjs/loaders/glTF";
 import * as TWEEN from "@tweenjs/tween.js";
 
@@ -30,11 +29,10 @@ import { TimeBonus } from "./Combo/TimeBonus";
 import { Timer } from "./Timer";
 import { AudioManager } from "./AudioManager";
 import { SaveLoadData } from "./SaveLoadData.";
-import { DEFAULT_POWERUP_COUNT } from "./Consts";
 import { ParticleManager } from "./ParticleManager";
 import { Images } from "./Images";
 import { Sounds } from "./Sounds";
-import { Events, EventTypes } from "./Events";
+import { Events } from "./Events";
 import { Meshs } from "./Meshs";
 import { Utils } from "./Utils";
 import { levels } from "./Levels/Level1";
@@ -42,52 +40,32 @@ import { TutorialManager } from "./GUI/TutorialManager";
 import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
-  //   ball,
-  //   brandLogo,
-  //   high_value_target,
-  //   landscape,
-  //   maxscore,
-  //   normal_target_1,
-  //   normal_target_2,
-  //   normal_target_3,
-  //   objectSprite,
-  //   obstacle,
-  //   playerSprite,
-  //   powerup,
-  //   sponsorLogo;
 
   useEffect(() => {
-    console.log("CanSmash4:", data);
-
-    var gameDiv = document.getElementById("game");
-    if (gameDiv != null) {
-      ReInit(data);
-      return;
-    }
 
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);
     });
 
-    let score = 0;
-    let level = 1;
-    let lives = 2;
-    let boostCredits = 0;
+    // Utilise parameters from the input payload
 
-    var div = document.createElement("div");
-    div.id = "game";
-    document.querySelector("main > div > div").appendChild(div);
+    let score = data.score;
+    let level = data.level;
+    let lives = data.lives;
+    let boostCredits = data.boostCredits;
 
-    let canvas = document.createElement("canvas");
-    canvas.id = "gameCanvas";
-    div.appendChild(canvas);
+    // Obtain the reference to the canvas from babylonGame.js
+
+    let canvas = data.canvasRef.current
 
     // initialize babylon scene and engine
     let engine: Engine = new Engine(canvas, true);
     let scene: Scene = new Scene(engine);
     new GameData(scene, engine, canvas);
 
+    // TODO - this needs some work
+    // Perhaps it can the div passed in as data.containerRef.current?
     var loadingScreen = new CustomLoadingScreen("I'm loading!!");
     loadingScreen.loadingUIBackgroundColor = "#BB464Bcc";
     engine.loadingScreen = loadingScreen;
@@ -96,14 +74,11 @@ const CanSmash = (data: any) => {
     new SaveLoadData();
     new Timer(scene, engine);
 
+    // Assume this is needed for Babylon to conform to the size?
+    // I modified this slightly to conform to the size of the container
     const resize = () => {
       let width = window.innerWidth;
-      let height = width * 1.77;
-
-      if (height > window.innerHeight) {
-        height = window.innerHeight;
-        width = height / 1.77;
-      }
+      let height = window.innerHeight;
       engine.setSize(width, height, true);
       engine.resize();
     };
@@ -111,24 +86,12 @@ const CanSmash = (data: any) => {
     resize();
     window.addEventListener("resize", resize);
 
-    // hide/show the Inspector
-    // window.addEventListener("keydown", (ev) => {
-    //   if (ev.shiftKey && ev.ctrlKey && ev.altKey && ev.key === "i") {
-    //     if (scene.debugLayer.isVisible()) {
-    //       scene.debugLayer.hide();
-    //     } else {
-    //       scene.debugLayer.show();
-    //     }
-    //   }
-    // });
-    //
-
     let loader = new Loader(scene, () => {
       init();
       engine.hideLoadingUI();
     });
 
-    //console.log(window.location.href);
+    // This all appears to be related to loading assets
     let baseUrl = "/pong/canSmash/";
     loader.loadMesh(baseUrl, Meshs.data.can);
 
@@ -213,9 +176,9 @@ const CanSmash = (data: any) => {
       });
     };
 
+    // I added this cleanup back, it was commented before
     return () => {
       console.log("---[-[[ dispose component");
-      /*
       window.removeEventListener("resize", resize);
       window.removeEventListener("keydown", null);
       scene.dispose();
@@ -236,8 +199,6 @@ const CanSmash = (data: any) => {
       Events.sound.clear();
       Events.preload.clear();
 
-      div.remove();
-      div = null;
 
       baseUrl = "";
       ballBaseUrl = "";
@@ -247,7 +208,7 @@ const CanSmash = (data: any) => {
       audioManager.dispose();
       audioManager = null;
 
-      loader = null;*/
+      loader = null;
     };
   }, []);
   return null;
@@ -287,6 +248,7 @@ function ShowWraperGameOver(_data: any, timerHandle: any, data: any) {
   return timerHandle;
 }
 
+// Not sure this is necessary any more
 function ReInit(data: any) {
   let lives = parseInt(data.params.lives);
   let score = parseInt(data.params.score);
@@ -311,13 +273,9 @@ function ReInit(data: any) {
   } else {
     Revive(lives, boostCredits);
   }
-  //example
-  //reset
-  // lives: 3 score: 0 level: 1 boostCredits: 0
-  //revive
-  //lives: 1 score: 1225 level: 1 boostCredits: 2
 }
 
+// Probably not this either
 function Restart(lives: number, level: number, boostCredits: number) {
   Reset(lives, levels[level - 1].time, boostCredits);
   Events.gamePlay.notifyObservers({ type: "ScoreManager:setScore", count: 0 });
@@ -331,6 +289,7 @@ function Revive(lives: number, boostCredits: number) {
   }, 500);
 }
 
+// Not sure what this is for either
 function Reset(lives: number, timer: number, boostCredits: number) {
   Events.sound.notifyObservers({
     type: "AudioManager:setMuteState",
@@ -344,7 +303,6 @@ function Reset(lives: number, timer: number, boostCredits: number) {
     count: boostCredits,
   });
   Events.gamePlay.notifyObservers({ type: "GUI2D:hideGameOverUI" });
-  // Events.gamePlay.notifyObservers({ type: "BallManager:resetPos" });
 
   Utils.pause(false);
 }
