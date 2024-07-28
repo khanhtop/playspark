@@ -61,12 +61,12 @@ const CanSmash = (data: any) => {
 
     // initialize babylon scene and engine
     let engine: Engine = new Engine(canvas, true);
-    let scene: Scene = new Scene(engine);
+    let scene: Scene = new Scene(engine);    
     new GameData(scene, engine, canvas);
 
     // TODO - this needs some work
     // Perhaps it can the div passed in as data.containerRef.current?
-    var loadingScreen = new CustomLoadingScreen("I'm loading!!");
+    var loadingScreen = new CustomLoadingScreen("I'm loading!!",canvas.parentNode);
     loadingScreen.loadingUIBackgroundColor = "#BB464Bcc";
     engine.loadingScreen = loadingScreen;
     engine.displayLoadingUI();
