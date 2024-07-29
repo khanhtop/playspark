@@ -62,7 +62,7 @@ const CanSmash = (data: any) => {
     let scene: Scene = new Scene(engine);
     new GameData(scene, engine, canvas);
 
-    // TODO - this needs some work
+    // TODO - this needs some work -
     // Perhaps it can the div passed in as data.containerRef.current?
     var loadingScreen = new CustomLoadingScreen(
       "I'm loading!!",
