@@ -5,6 +5,7 @@ import { BrandingComponent } from "../unlocksWithTier";
 import CreateAudioPicker from "./createAudioPicker";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import FontPicker from "./fontPicker";
 
 export default function CreateDesign({ tournament, setTournament }) {
   return (
@@ -40,6 +41,7 @@ export default function CreateDesign({ tournament, setTournament }) {
         <option value="pixel">Pixel</option>
         <option value="neon">Neon</option>
       </select>
+      <FontPicker tournament={tournament} setTournament={setTournament} />
       <div className="my-4">
         <p className="text-xs text-white/70 mt-4 mb-1">Tournament End Date</p>
         <div className="flex gap-2">

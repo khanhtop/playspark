@@ -24,6 +24,7 @@ import {
 } from "@/helpers/credits";
 import IntroModal from "./dash/modals/introModal";
 import LegalModal from "./dash/modals/legalModal";
+import useGoogleFont from "@/helpers/useGoogleFont";
 
 export default function Intro({
   waitOnAuth,
@@ -47,6 +48,7 @@ export default function Intro({
     0.5,
     context.settings.bgm
   );
+  useGoogleFont(data.font || "Play");
 
   const playAudio = () => {
     const fileName = context?.data?.homescreenMusic ?? "/uisounds/intro.mp3";
@@ -170,7 +172,6 @@ export default function Intro({
             }}
           />
         </div>
-
         {(!premium || ready) && (
           <GameButton
             disabled={

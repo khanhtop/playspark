@@ -11,6 +11,7 @@ export default function GameButton({
   onMouseDown,
   onMouseUp,
   theme,
+  style,
 }) {
   const audioRef = useRef(null);
 
@@ -35,8 +36,9 @@ export default function GameButton({
         style={{
           backgroundColor: disabled ? "#DDD" : bgColor || "cyan",
           color: textColor || "white",
+          ...style,
         }}
-        className={`${className} rounded-3xl border-4 cursor-pointer w-60 h-16 relative`}
+        className={`rounded-3xl border-4 cursor-pointer w-60 ${className}  h-16 relative`}
       >
         <div
           style={{ backgroundColor: bgColor }}
@@ -49,7 +51,7 @@ export default function GameButton({
         />
 
         <div
-          className={`absolute w-full h-full flex items-center justify-center font-neon font-stroke text-4xl`}
+          className={`custom-font absolute w-full h-full flex items-center justify-center text-2xl`}
         >
           {children}
         </div>
@@ -74,6 +76,7 @@ export default function GameButton({
         style={{
           backgroundColor: disabled ? "#DDD" : bgColor || "cyan",
           color: textColor || "white",
+          ...style,
         }}
         className={`${className} rounded-none cursor-pointer w-60 h-16 relative`}
       >
@@ -97,7 +100,7 @@ export default function GameButton({
         />
 
         <div
-          className={`absolute w-full h-full flex items-center justify-center font-pixel text-5xl pb-1`}
+          className={`custom-font absolute w-full h-full flex items-center justify-center text-2xl pb-1`}
         >
           {children}
         </div>
@@ -125,8 +128,9 @@ export default function GameButton({
       style={{
         backgroundColor: disabled ? "#DDD" : bgColor || "cyan",
         color: textColor || "white",
+        ...style,
       }}
-      className={`${className} rounded-3xl border-white border-4 cursor-pointer w-60 h-16 relative`}
+      className={`rounded-3xl border-white border-4 cursor-pointer w-60 ${className} h-16 relative`}
     >
       <img
         src="/buttons/button_stripes.png"
@@ -138,7 +142,7 @@ export default function GameButton({
       />
 
       <div
-        className={`absolute w-full h-full flex items-center justify-center font-octo text-2xl`}
+        className={`custom-font absolute w-full h-full flex items-center justify-center text-2xl`}
       >
         {children}
       </div>
