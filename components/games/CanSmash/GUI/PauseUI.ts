@@ -3,6 +3,8 @@ import { ILevelCompleteUIData } from "./LevelCompleteUIData";
 import { EventTypes, Events } from "../Events";
 import { LevelCreator } from "../LevelCreator";
 import { Images } from "../Images";
+import { Color4, EngineStore, IImage } from "@babylonjs/core";
+import { GameData } from "../GameData";
 
 export class PauseUI {
   fillEllipse: GUI.Ellipse;
@@ -48,6 +50,28 @@ export class PauseUI {
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(img);
 
+    var modal_header = new TintedImage();
+    modal_header.clipChildren = false;
+    modal_header.clipContent = false;
+    modal_header.source = Images.data.ModalHeader;
+    modal_header.sourceWidth = 430;
+    modal_header.sourceHeight = 84;
+    modal_header.widthInPixels = 460;
+    modal_header.heightInPixels = 100;
+    modal_header.setWFactor(2);
+
+    modal_header.onImageLoadedObservable.addOnce(() => {
+      modal_header.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+    //  modal_header.topInPixels = 0;
+    modal_header.leftInPixels = -10;
+    modal_header.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    modal_header.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    this.container.addControl(modal_header);
+
     this.level_title_txt = new GUI.TextBlock();
     this.level_title_txt.fontFamily = "PeaceSans";
     this.level_title_txt.text = "Level 3";
@@ -58,7 +82,7 @@ export class PauseUI {
     //this.level_title_txt.fontStyle = "bold";
     this.level_title_txt.topInPixels = -200;
     //this.level_title_txt.leftInPixels = -20;
-    this.level_title_txt.color = "#117FB2";
+    this.level_title_txt.color = GameData.instance.getTextColor();//"#117FB2";
     this.level_title_txt.outlineWidth = 0;
     this.container.addControl(this.level_title_txt);
 
@@ -90,8 +114,8 @@ export class PauseUI {
     score_txt.fontSize = 30;
 
     score_txt.topInPixels = -40;
-    score_txt.leftInPixels = 45;
-    score_txt.color = "#1979B3";
+    score_txt.leftInPixels = 57;
+    score_txt.color = GameData.instance.getTextColor();//"#1979B3";
     score_txt.outlineWidth = 0;
     details.addControl(score_txt);
 
@@ -118,27 +142,44 @@ export class PauseUI {
     timeBonus_txt.fontStyle = "bold";
     timeBonus_txt.topInPixels = 20;
     timeBonus_txt.leftInPixels = 55;
-    timeBonus_txt.color = "#1979B3";
+    timeBonus_txt.color = GameData.instance.getTextColor(); // "#1979B3";
     timeBonus_txt.outlineWidth = 0;
     details.addControl(timeBonus_txt);
 
-    var switch_bg = new GUI.Image();
+    var switch_bg = new TintedImage();
     switch_bg.source = Images.data.switch;
-    switch_bg.widthInPixels = 431 / 1.8;
-    switch_bg.heightInPixels = 128 / 1.8;
-    switch_bg.topInPixels = -10;
+
+    switch_bg.onImageLoadedObservable.addOnce(() => {
+      switch_bg.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+    // getTextColor() {
+    //   return this.textColor;
+    // }
+
+    switch_bg.widthInPixels = 230;
+    switch_bg.heightInPixels = 70;
+    switch_bg.topInPixels = -12;
     switch_bg.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     switch_bg.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(switch_bg);
 
-    var switch_bg = new GUI.Image();
-    switch_bg.source = Images.data.switch;
-    switch_bg.widthInPixels = 431 / 1.8;
-    switch_bg.heightInPixels = 128 / 1.8;
-    switch_bg.topInPixels = 80;
-    switch_bg.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    switch_bg.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-    this.container.addControl(switch_bg);
+    var switch_bg1 = new TintedImage();
+    switch_bg1.onImageLoadedObservable.addOnce(() => {
+      switch_bg1.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+    switch_bg1.source = Images.data.switch;
+    switch_bg1.widthInPixels = 230;
+    switch_bg1.heightInPixels = 70;
+    switch_bg1.topInPixels = 78;
+    switch_bg1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    switch_bg1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    this.container.addControl(switch_bg1);
 
     var audio_icon = new GUI.Image();
     audio_icon.source = Images.data.SoundIcon;
@@ -291,5 +332,79 @@ export class PauseUI {
   hidePopup() {
     this.container.isEnabled = false;
     this.container.isVisible = false;
+  }
+}
+
+class TintedImage extends GUI.Image {
+  private _tint: Color4;
+  private _originalDomImage: IImage;
+  private wFactor: number = 1;
+  private hFactor: number = 1;
+  constructor(name?: string, url?: string) {
+    super(name, url);
+  }
+
+  setWFactor(factor: number) {
+    this.wFactor = factor;
+  }
+  setHFactor(factor: number) {
+    this.hFactor = factor;
+  }
+
+  get tint() {
+    return this._tint;
+  }
+  set tint(value: Color4) {
+    if (this._originalDomImage == undefined) {
+      this._originalDomImage = this.domImage;
+    }
+    this._tint = value;
+
+    // create a temp context to tint the image
+    // 1: draw the tint color on the image canvas
+    // 2: draw the greyscale image ontop, this will create a solid tint color cutout of the greyscale image
+    //   destination-atop
+    //   The existing canvas is only kept where it overlaps the new shape. The new shape is drawn behind the canvas content.
+    // 3: draw the color image back onto the dom image, multiply seems to work better since in color white stays white and we want white to become the new color
+    // color
+    //  Preserves the luma of the bottom layer, while adopting the hue and chroma of the top layer.
+    // multiply
+    //  The pixels of the top layer are multiplied with the corresponding pixel of the bottom layer. A darker picture is the result.
+    let cutoutCanvas = document.createElement("canvas");
+    let cutoutContext = cutoutCanvas.getContext("2d");
+    cutoutCanvas.width = this.imageWidth * this.wFactor;
+    cutoutCanvas.height = this.imageHeight * this.hFactor;
+    // fill offscreen buffer with the tint color
+    cutoutContext.fillStyle = this._tint.toHexString();
+    cutoutContext.fillRect(0, 0, cutoutCanvas.width, cutoutCanvas.height);
+
+    // now we have a context filled with the tint color
+    cutoutContext.globalCompositeOperation = "destination-atop";
+    cutoutContext.drawImage(this._originalDomImage as CanvasImageSource, 0, 0);
+
+    // now we cut out the greyscale image and have just the cutout left
+    let imageCanvas = document.createElement("canvas");
+    let imageCanvasContext = imageCanvas.getContext("2d");
+    imageCanvas.width = this.imageWidth * this.wFactor;
+    imageCanvas.height = this.imageHeight * this.hFactor;
+    imageCanvasContext.drawImage(
+      this._originalDomImage as CanvasImageSource,
+      0,
+      0
+    );
+
+    // now we have the greyscale on the image canvas
+    imageCanvasContext.globalCompositeOperation = "multiply";
+    // imageCanvasContext.fillStyle = this._tint.toHexString();
+    // imageCanvasContext.fillRect(0,0,imageCanvas.width,imageCanvas.height);
+    imageCanvasContext.drawImage(cutoutCanvas, 0, 0);
+    // now we have a tinted image on the image canvas
+    // is there no faster way than this?
+    // Stolen from GUI.Image
+    const engine =
+      this._host?.getScene()?.getEngine() || EngineStore.LastCreatedEngine;
+    this.domImage = engine.createCanvasImage();
+
+    this.domImage.src = imageCanvas.toDataURL();
   }
 }

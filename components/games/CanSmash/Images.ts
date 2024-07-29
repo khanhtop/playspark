@@ -53,5 +53,6 @@ export class Images {
     switch_base: "switch_base.png",
     thunder: "thunder.png",
     TopPanel: "TopPanel.png",
+    ModalHeader:"ModalHeader.png"
   };
 }

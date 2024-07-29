@@ -40,9 +40,7 @@ import { TutorialManager } from "./GUI/TutorialManager";
 import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
-
   useEffect(() => {
-
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);
@@ -57,16 +55,19 @@ const CanSmash = (data: any) => {
 
     // Obtain the reference to the canvas from babylonGame.js
 
-    let canvas = data.canvasRef.current
+    let canvas = data.canvasRef.current;
 
     // initialize babylon scene and engine
     let engine: Engine = new Engine(canvas, true);
-    let scene: Scene = new Scene(engine);    
+    let scene: Scene = new Scene(engine);
     new GameData(scene, engine, canvas);
 
     // TODO - this needs some work
     // Perhaps it can the div passed in as data.containerRef.current?
-    var loadingScreen = new CustomLoadingScreen("I'm loading!!",canvas.parentNode);
+    var loadingScreen = new CustomLoadingScreen(
+      "I'm loading!!",
+      canvas.parentNode
+    );
     loadingScreen.loadingUIBackgroundColor = "#BB464Bcc";
     engine.loadingScreen = loadingScreen;
     engine.displayLoadingUI();
@@ -151,6 +152,8 @@ const CanSmash = (data: any) => {
       new PowerupManager(scene);
       new GUI2D();
 
+      console.log("-----[[ lives: ", lives, data.params.lives);
+
       let liveManager = new LiveManager(lives);
       new ScoreManager(score);
       new PowerupCreditManager(boostCredits);
@@ -198,7 +201,6 @@ const CanSmash = (data: any) => {
       Events.powerup.clear();
       Events.sound.clear();
       Events.preload.clear();
-
 
       baseUrl = "";
       ballBaseUrl = "";
@@ -320,6 +322,12 @@ function initParams(
     return { score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl };
   if (data.params == undefined)
     return { score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl };
+
+  if (data.params.primaryColor != undefined)
+    GameData.instance.setPrimaryColor(data.params.primaryColor);
+
+  if (data.params.textColor != undefined)
+    GameData.instance.setTextColor(data.params.textColor);
 
   if (data.params.backgroundMusic != undefined)
     Sounds.data.music = data.params.backgroundMusic;
