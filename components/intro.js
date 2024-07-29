@@ -1,7 +1,7 @@
 import { playEvent } from "@/helpers/events";
 import { useAppContext } from "@/helpers/store";
 import GameButton from "./uiv2/gameButton";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useMusic from "@/helpers/useMusic";
 import {
   ArrowPathIcon,
@@ -24,6 +24,7 @@ import {
 } from "@/helpers/credits";
 import IntroModal from "./dash/modals/introModal";
 import LegalModal from "./dash/modals/legalModal";
+import useGoogleFont from "@/helpers/useGoogleFont";
 
 export default function Intro({
   waitOnAuth,
@@ -41,11 +42,26 @@ export default function Intro({
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
+  const audio = useRef(null);
   useMusic(
-    data?.homescreenMusic ?? "/uisounds/intro.mp3",
+    context?.data?.homescreenMusic ?? "/uisounds/intro.mp3",
     0.5,
     context.settings.bgm
   );
+  useGoogleFont(data.font || "Play");
+
+  const playAudio = () => {
+    const fileName = context?.data?.homescreenMusic ?? "/uisounds/intro.mp3";
+    audio.current = new Audio(fileName);
+    audio.current.play();
+    context.setIsAudioPlaying(true);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (audio.current) audio.current.pause();
+    };
+  }, []);
 
   const theme = data?.theme || "default";
 
@@ -104,6 +120,7 @@ export default function Intro({
           ...data,
           hideClose: true,
           theme: theme,
+          playAudio: () => playAudio(),
           onClose: () => setShowModal(false),
           onLegalClick: (document) =>
             setShowLegalModal({
@@ -155,7 +172,6 @@ export default function Intro({
             }}
           />
         </div>
-
         {(!premium || ready) && (
           <GameButton
             disabled={
