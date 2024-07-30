@@ -62,7 +62,7 @@ export class HUD {
 
     let heartUI = new EntityUI(advancedTexture);
     heartUI.setTexture(Images.data.heart);
-    heartUI.setPos(-420, 50);
+    heartUI.setPos(20, -160);
 
     Events.ui.add((data: any) => {
       if (data.name == "live") {
@@ -72,8 +72,8 @@ export class HUD {
 
     let creditUI = new EntityUI(advancedTexture);
     creditUI.setTexture(Images.data.Energy);
-    creditUI.setPos(-420, -80);
-    
+    creditUI.setPos(20, -290);
+
     Events.ui.add((data: any) => {
       if (data.type == "EntityUI:setCreditCount")
         creditUI.setCounterText(data.count.toString());
@@ -93,7 +93,8 @@ export class HUD {
 
     let remainingTargetUI = new EntityUI(advancedTexture, 140);
     remainingTargetUI.setTexture(Images.data.Booster05);
-    remainingTargetUI.setPos(-420, 180);
+    remainingTargetUI.setPos(20, -10);
+
     Events.ui.add((data: any) => {
       if (data.type != EventTypes.REMAINING_TARGET_UI) return;
       remainingTargetUI.setCounterText(`${data.hitCount}/${data.targetCount}`);
