@@ -8,6 +8,9 @@ import { EventTypes, Events } from "../Events";
 import { BIGBALL_POWERUP_COST, SHIELD_POWERUP_COST } from "../Consts";
 import { Timer } from "../Timer";
 import { Images } from "../Images";
+import { TintedImage } from "./TintedImage";
+import { GameData } from "../GameData";
+import { Color4 } from "@babylonjs/core";
 
 export class HUD {
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
@@ -15,11 +18,19 @@ export class HUD {
     let timer = maxTimer;
 
     var self = this;
-    var top_panel = new GUI.Image();
+    var top_panel = new TintedImage();
     top_panel.source = Images.data.TopPanel;
     top_panel.heightInPixels = 130;
     top_panel.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    top_panel.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    top_panel.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;+
+
+    top_panel.onImageLoadedObservable.addOnce(() => {
+      top_panel.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+
     advancedTexture.addControl(top_panel);
 
     let shieldGUI1 = new PowerupUI(

@@ -5,6 +5,9 @@ import { LevelCreator } from "../LevelCreator";
 import { Images } from "../Images";
 import { levels } from "../Levels/Level1";
 import { GUI2DParticle } from "./GUI2DParticle";
+import { Color4 } from "@babylonjs/core";
+import { TintedImage } from "./TintedImage";
+import { GameData } from "../GameData";
 
 export class LevelCompleteUI {
   fillEllipse: GUI.Ellipse;
@@ -25,10 +28,11 @@ export class LevelCompleteUI {
   container: GUI.Container;
   next_level_time: GUI.TextBlock;
   next_btn: GUI.Image;
- // btn_base: GUI.Button;
+  // btn_base: GUI.Button;
   target_img: any;
   hourglass_img: GUI.Image;
-  next_level_bg: GUI.Image;
+  next_level_bg: TintedImage;
+
   greatWork: GUI.TextBlock;
   completed_all_levels: GUI.TextBlock;
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
@@ -49,6 +53,9 @@ export class LevelCompleteUI {
     img.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(img);
+
+    this.createHeader();
+
 
     var img = new GUI.Image();
     img.source = Images.data.starsBg;
@@ -89,7 +96,14 @@ export class LevelCompleteUI {
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     this.container.addControl(img);
 
-    this.next_level_bg = new GUI.Image();
+   
+    this.next_level_bg = new TintedImage();
+    this.next_level_bg.setWFactor(2);
+    this.next_level_bg.onImageLoadedObservable.addOnce(() => {
+      this.next_level_bg.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
     this.next_level_bg.source = Images.data.nextlvl_bg;
     this.next_level_bg.widthInPixels = 365;
     this.next_level_bg.heightInPixels = 108;
@@ -141,26 +155,22 @@ export class LevelCompleteUI {
     let targetshits_txt = new GUI.TextBlock();
     this.setUpTextTitle(targetshits_txt, -56, "Targets Hit");
     this.targetshits_count = new GUI.TextBlock();
-    this.setUpText( this.targetshits_count ,-56, "32");
-
+    this.setUpText(this.targetshits_count, -56, "32");
 
     let timeBonus_txt = new GUI.TextBlock();
     this.setUpTextTitle(timeBonus_txt, -18, "Time Bonus");
     this.timeBonus_count = new GUI.TextBlock();
-    this.setUpText( this.timeBonus_count ,-18, "5");
-
+    this.setUpText(this.timeBonus_count, -18, "5");
 
     let levelScore_txt = new GUI.TextBlock();
     this.setUpTextTitle(levelScore_txt, 18, "Level Score");
     this.levelScore_count = new GUI.TextBlock();
-    this.setUpText( this.levelScore_count ,18, "1,000");
-
+    this.setUpText(this.levelScore_count, 18, "1,000");
 
     let totalScore_txt = new GUI.TextBlock();
     this.setUpTextTitle(totalScore_txt, 55, "Total Score");
     this.totalScore_count = new GUI.TextBlock();
-    this.setUpText( this.totalScore_count ,55, "12,000");
-
+    this.setUpText(this.totalScore_count, 55, "12,000");
 
     this.nextLevel_txt = new GUI.TextBlock();
     this.nextLevel_txt.fontFamily = "PeaceSans";
@@ -225,7 +235,7 @@ export class LevelCompleteUI {
     this.target_img.leftInPixels = -155;
     details.addControl(this.target_img);
 
-  /*  this.btn_base = GUI.Button.CreateImageOnlyButton("but", Images.data.BtnBase);
+    /*  this.btn_base = GUI.Button.CreateImageOnlyButton("but", Images.data.BtnBase);
 
     this.btn_base.widthInPixels = 190 / 1.3;
     this.btn_base.heightInPixels = 74 / 1.3;
@@ -264,25 +274,24 @@ export class LevelCompleteUI {
     this.container.addControl(close_btn);
     close_btn.onPointerClickObservable.add(function () {
       //
-      Events.ui.notifyObservers({ type: EventTypes.ON_LEVEL_COMPLETE_UI_CLOSE_BTN_CLICKED });
-
+      Events.ui.notifyObservers({
+        type: EventTypes.ON_LEVEL_COMPLETE_UI_CLOSE_BTN_CLICKED,
+      });
     });
     advancedTexture.addControl(this.container);
-
 
     this.greatWork = new GUI.TextBlock();
     this.greatWork.fontFamily = "PeaceSans";
     this.greatWork.text = "Great Work!";
     this.greatWork.textHorizontalAlignment =
       GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-      this.greatWork.fontSize = 32;
+    this.greatWork.fontSize = 32;
     this.greatWork.topInPixels = 120;
     this.greatWork.leftInPixels = 0;
     this.greatWork.color = "#0B1B70";
     this.greatWork.outlineColor = "#88B5DF";
     this.greatWork.outlineWidth = 4;
-    this.container.addControl(  this.greatWork);
-
+    this.container.addControl(this.greatWork);
 
     let levelCount = levels.length;
     this.completed_all_levels = new GUI.TextBlock();
@@ -300,8 +309,7 @@ export class LevelCompleteUI {
     this.completed_all_levels.outlineColor = "#1A1A3E";
     details.addControl(this.completed_all_levels);
 
-
-    new GUI2DParticle ();
+    new GUI2DParticle();
     /* var g_img = new GUI.Image();
     g_img.source = Images.data.3;
     g_img.alpha = 0.5;
@@ -314,15 +322,40 @@ export class LevelCompleteUI {
     //advancedTexture.addControl(container);
   }
 
+  private createHeader() {
+    var modal_header = new TintedImage();
+    modal_header.clipChildren = false;
+    modal_header.clipContent = false;
+    modal_header.source = Images.data.ModalHeader;
+    modal_header.sourceWidth = 430;
+    modal_header.sourceHeight = 84;
+    modal_header.widthInPixels = 460;
+    modal_header.heightInPixels = 100;
+    modal_header.setWFactor(2);
+
+    modal_header.onImageLoadedObservable.addOnce(() => {
+      modal_header.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+    modal_header.topInPixels = -10;
+    modal_header.leftInPixels = -11.5;
+    modal_header.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    modal_header.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    this.container.addControl(modal_header);
+  }
+
   setUpTextTitle(textBlock: GUI.TextBlock, topInPixels: number, txt: string) {
     textBlock.fontFamily = "PeaceSans";
     textBlock.text = txt;
     textBlock.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock.fontSize = 30;
-   // textBlock.fontStyle = "bold";
+    // textBlock.fontStyle = "bold";
     textBlock.topInPixels = topInPixels;
     textBlock.leftInPixels = 67;
-    textBlock.color = "#1979B3";
+    //textBlock.color = "#1979B3";
+    textBlock.color = GameData.instance.getTextColor()
     textBlock.outlineWidth = 0;
     this.container.addControl(textBlock);
   }
@@ -367,7 +400,7 @@ export class LevelCompleteUI {
     if (data.nextLevel == undefined) {
       //this.btn_base.isVisible = false;
       this.next_btn.isVisible = false;
-     // this.btn_base.isEnabled = false;
+      // this.btn_base.isEnabled = false;
       this.next_btn.isEnabled = false;
 
       this.hourglass_img.isEnabled = false;
@@ -377,13 +410,10 @@ export class LevelCompleteUI {
 
       this.completed_all_levels.isVisible = true;
       this.greatWork.isVisible = true;
-
-      
-
     } else {
       //this.btn_base.isVisible = true;
       this.next_btn.isVisible = true;
-     // this.btn_base.isEnabled = true;
+      // this.btn_base.isEnabled = true;
       this.next_btn.isEnabled = true;
 
       this.hourglass_img.isEnabled = true;
@@ -393,12 +423,8 @@ export class LevelCompleteUI {
 
       this.completed_all_levels.isVisible = false;
       this.greatWork.isVisible = false;
-
-      
     }
     GUI2DParticle.instanc.animate(true);
-
-
   }
   hidePopup() {
     GUI2DParticle.instanc.animate(false);
