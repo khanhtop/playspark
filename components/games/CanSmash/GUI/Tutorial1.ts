@@ -126,6 +126,7 @@ export class Tutorial1 {
   hide() {
     this.setp.isEnabled = false;
     this.setp.isVisible = false;
+    this.setp.isPointerBlocker = false;
   }
   show() {
     this.setp.isEnabled = true;
