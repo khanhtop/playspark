@@ -14,7 +14,9 @@ export class GameData {
   private nextLevelTime = 0;
   private primaryColor = "#0693E3";
   private textColor = "#117FB2";
+  private accentColor = "#117FB2";
 
+  
   
   private nextLevelHitCount = 0;
   private canvas = null;
@@ -27,6 +29,13 @@ export class GameData {
     this.canvas = canvas;
     GameData.instance = this;
   }
+  getAccentColor() {
+    return this.accentColor;
+  }
+  setAccentColor(accentColor:string) {
+     this.accentColor = accentColor;
+  }
+
   getPrimaryColor() {
     return this.primaryColor;
   }

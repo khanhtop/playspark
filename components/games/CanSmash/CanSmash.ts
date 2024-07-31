@@ -329,6 +329,9 @@ function initParams(
   if (data.params.textColor != undefined)
     GameData.instance.setTextColor(data.params.textColor);
 
+  if (data.params.accentColor != undefined)
+    GameData.instance.setAccentColor(data.params.accentColor);
+
   if (data.params.backgroundMusic != undefined)
     Sounds.data.music = data.params.backgroundMusic;
 

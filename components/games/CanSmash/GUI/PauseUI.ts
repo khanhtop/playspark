@@ -81,7 +81,7 @@ export class PauseUI {
     //this.level_title_txt.fontStyle = "bold";
     this.level_title_txt.topInPixels = -200;
     //this.level_title_txt.leftInPixels = -20;
-    this.level_title_txt.color = GameData.instance.getTextColor();//"#117FB2";
+    this.level_title_txt.color = GameData.instance.getAccentColor();//"#117FB2";
     this.level_title_txt.outlineWidth = 0;
     this.container.addControl(this.level_title_txt);
 
@@ -114,7 +114,7 @@ export class PauseUI {
 
     score_txt.topInPixels = -40;
     score_txt.leftInPixels = 57;
-    score_txt.color = GameData.instance.getTextColor();//"#1979B3";
+    score_txt.color = GameData.instance.getAccentColor();//"#1979B3";
     score_txt.outlineWidth = 0;
     details.addControl(score_txt);
 
@@ -141,7 +141,7 @@ export class PauseUI {
     timeBonus_txt.fontStyle = "bold";
     timeBonus_txt.topInPixels = 20;
     timeBonus_txt.leftInPixels = 55;
-    timeBonus_txt.color = GameData.instance.getTextColor(); // "#1979B3";
+    timeBonus_txt.color = GameData.instance.getAccentColor(); // "#1979B3";
     timeBonus_txt.outlineWidth = 0;
     details.addControl(timeBonus_txt);
 
