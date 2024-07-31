@@ -49,7 +49,9 @@ export default function Intro({
     0.5,
     context.settings.bgm
   );
-  useGoogleFont("Anton");
+
+  useGoogleFont(data.font || "Play", "custom-font");
+  useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
     const fileName = context?.data?.homescreenMusic ?? "/uisounds/intro.mp3";

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const useGoogleFont = (fontName) => {
+const useGoogleFont = (fontName, cssTag = "custom-font") => {
   useEffect(() => {
     if (fontName) {
       const link = document.createElement("link");
@@ -14,20 +14,20 @@ const useGoogleFont = (fontName) => {
       // Create a style element to define the custom CSS class
       const style = document.createElement("style");
       style.innerHTML = `
-        .custom-font {
+        .${cssTag} {
           font-family: '${fontName}', sans-serif;
         }
       `;
       document.head.appendChild(style);
 
       // Add the class to the body
-      document.body.classList.add("custom-font");
+      document.body.classList.add(cssTag);
 
       return () => {
         // Cleanup: Remove the link and style elements, and remove the class from the body
         document.head.removeChild(link);
         document.head.removeChild(style);
-        document.body.classList.remove("custom-font");
+        document.body.classList.remove(cssTag);
       };
     }
   }, [fontName]);

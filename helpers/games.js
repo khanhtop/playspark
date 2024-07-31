@@ -15,6 +15,7 @@ export const games = [
       backgroundSprite: "0.6",
     },
     font: "Play",
+    bodyFont: "Roboto",
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
   },
@@ -30,6 +31,7 @@ export const games = [
     textColor: "#FFF",
     id: 11,
     font: "Play",
+    bodyFont: "Roboto",
     landscape: true,
   },
   {
@@ -44,6 +46,7 @@ export const games = [
     textColor: "#FFF",
     id: 13,
     font: "Play",
+    bodyFont: "Roboto",
     //
     // Configurable Parameters
     //
@@ -94,6 +97,7 @@ export const games = [
     textColor: "#FFF",
     id: 14,
     font: "Play",
+    bodyFont: "Roboto",
     //
     // Configurable Parameters
     //
@@ -138,6 +142,7 @@ export const games = [
     primaryColor: "#F69B01",
     textColor: "#FFF",
     font: "Play",
+    bodyFont: "Roboto",
     id: 15,
     words: ["SCORE", "GOALS", "CATCH", "BLITZ"],
     cloudinaryGameTag: "wordle",
@@ -152,6 +157,7 @@ export const games = [
     name: "Fly Ball",
     creditConsumption: 2,
     font: "Play",
+    bodyFont: "Roboto",
     description:
       "Flap, customize, conquer! Dive into an addictive, fully customizable tap-to-fly adventure for endless high-score thrills!",
     backgroundImage:
@@ -187,6 +193,7 @@ export const games = [
     name: "Throwdown Frenzy",
     creditConsumption: 2,
     font: "Play",
+    bodyFont: "Roboto",
     description: `Throwdown Frenzy propels players into an adrenaline-fueled frenzy as they hurl projectiles at targets, dodge relentless enemy obstacles, and compete for high scores in a heart-pounding test of skill and survival!`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152738/Game_tiles_1_pdiyee.png",
@@ -244,6 +251,7 @@ export const games = [
     name: "Bounce Blitz",
     creditConsumption: 2,
     font: "Play",
+    bodyFont: "Roboto",
     description: `"Bounce Blitz" invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152737/Game_tiles_z3u1kz.png",
@@ -291,6 +299,7 @@ export const games = [
     name: "Endzone Blitz",
     creditConsumption: 2,
     font: "Play",
+    bodyFont: "Roboto",
     description: `In 'Endzone Blitz,' players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!"`,
     gameIcon:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1713152745/Add_a_heading_5_yojsxi.png",
@@ -324,6 +333,7 @@ export const games = [
     name: "Sky Soar",
     creditConsumption: 2,
     font: "Play",
+    bodyFont: "Roboto",
     description:
       "In ‘Sky Soar,’ players navigate a mesmerizing sky filled with rings, skillfully guiding their object through obstacles to score points and collecting power-ups for enhanced abilities in this addictive aerial adventure reminiscent of Flappy Bird.",
     backgroundImage:
@@ -370,6 +380,7 @@ export const games = [
     name: "Sidestep Surge",
     creditConsumption: 2,
     font: "Play",
+    bodyFont: "Roboto",
     description:
       "In 'Sidestep Surge,' players skillfully maneuver their object across the screen, collecting items and evading enemies in a frantic race against time to achieve the highest score before running out of lives.",
     backgroundImage:
@@ -413,6 +424,7 @@ export const games = [
     name: "Airborne Ace",
     creditConsumption: 2,
     font: "Play",
+    bodyFont: "Roboto",
     description:
       "Airborne Ace” catapults players into an exhilarating sky-high showdown, tasking them with precision strikes as they unleash a ball into the air, skillfully aiming to hit targets amidst a flurry of challenges, all in a quest for ultimate mastery and glory!",
     backgroundImage:
@@ -458,6 +470,7 @@ export const games = [
     name: "Can Smash",
     creditConsumption: 2,
     font: "Play",
+    bodyFont: "Roboto",
     description:
       "Hit cans to earn points, avoid enemy targets, and collect power-ups to progress through increasingly challenging levels.",
     backgroundImage:

@@ -4,7 +4,8 @@ import GameButton from "@/components/uiv2/gameButton";
 import useGoogleFont from "@/helpers/useGoogleFont";
 
 export default function CreatePreview({ tournament }) {
-  useGoogleFont(tournament.font || "Play");
+  useGoogleFont(tournament.font || "Play", "custom-font");
+  useGoogleFont(tournament.bodyFont || "Roboto", "primary-font");
   return (
     <div
       style={{ backgroundColor: tournament.primaryColor }}
@@ -17,6 +18,10 @@ export default function CreatePreview({ tournament }) {
       <div className="text-white z-20 flex flex-col items-center mb-12">
         {/* <Text {...tournament}>{tournament.name}</Text> */}
         {/* <UIButton {...tournament} className="mt-2 custom-font" text="Start" /> */}
+        <div className="bg-white/70 p-2 rounded-xl mb-2">
+          <p className="primary-font">{tournament.name}</p>
+        </div>
+
         <GameButton
           style={{ width: 140, height: 50 }}
           bgColor={tournament.primaryColor}
