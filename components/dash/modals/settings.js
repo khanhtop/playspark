@@ -53,19 +53,9 @@ function ToggleRow({ parameter, changeKey, title, theme }) {
   };
 
   return (
-    <div className={`flex gap-2 text-black/60`}>
+    <div className={`flex items-center gap-2 text-black/60`}>
       <Toggle checked={parameter} onChange={() => updateFirebase()} />
-      <p
-        className={`${
-          theme === "pixel"
-            ? "font-pixel text-2xl -mt-[5px]"
-            : theme === "default"
-            ? "font-light font-octo text-xl"
-            : "font-neon font-octo text-xl"
-        }`}
-      >
-        {title}
-      </p>
+      <p className={`primary-font text-sm mt-1 ml-1`}>{title}</p>
     </div>
   );
 }

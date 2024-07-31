@@ -25,6 +25,7 @@ import {
 import IntroModal from "./dash/modals/introModal";
 import LegalModal from "./dash/modals/legalModal";
 import useGoogleFont from "@/helpers/useGoogleFont";
+import WelcomeModal from "./dash/modals/welcomeModal";
 
 export default function Intro({
   waitOnAuth,
@@ -48,7 +49,7 @@ export default function Intro({
     0.5,
     context.settings.bgm
   );
-  useGoogleFont(data.font || "Play");
+  useGoogleFont("Anton");
 
   const playAudio = () => {
     const fileName = context?.data?.homescreenMusic ?? "/uisounds/intro.mp3";
@@ -133,6 +134,22 @@ export default function Intro({
                 isTermsOfUse: document.isTermsOfUse,
               },
             }),
+        },
+      });
+    } else if (
+      context.loggedIn?.uid &&
+      !demo &&
+      context.profile?.termsAgreed?.includes(data.tournamentId)
+    ) {
+      setShowModal({
+        title: "Welcome",
+        content: WelcomeModal,
+        data: {
+          ...data,
+          hideClose: true,
+          theme: theme,
+          playAudio: () => playAudio(),
+          onClose: () => setShowModal(false),
         },
       });
     }

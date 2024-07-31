@@ -100,7 +100,7 @@ export default function ModalGameOver({ data }) {
   ]);
 
   return (
-    <div className="pt-12 pb-4 px-4 flex flex-col gap-2 font-octo text-black text-2xl items-center">
+    <div className="pt-12 pb-4 px-4 flex flex-col gap-2 custom-font text-black text-2xl items-center">
       <div
         className={`flex gap-2 ${
           data?.data?.landscape ? "flex-row" : "flex-col"
@@ -110,7 +110,7 @@ export default function ModalGameOver({ data }) {
           <div className="flex flex-col items-center mb-2">
             <h1 className="text-base">Your Score</h1>
             <h1
-              className="text-3xl font-titan"
+              className="text-3xl custom-font"
               style={{
                 color: "black",
               }}
@@ -120,7 +120,7 @@ export default function ModalGameOver({ data }) {
           </div>
           {didNotBeat && (
             <div>
-              <p className="font-octo text-xl text-center text-black/100 max-w-[200px] mb-2">
+              <p className="custom-font text-xl text-center text-black/100 max-w-[200px] mb-2">
                 Previous Best {didNotBeat?.previous}
               </p>
             </div>
@@ -135,7 +135,7 @@ export default function ModalGameOver({ data }) {
               src={`/theme_icons/${data.theme}/rank.png`}
               className="h-16 w-16"
             />
-            <p className="font-octo text-base text-center text-black/100 max-w-[120px]">
+            <p className="primary-font text-base text-center text-black/100 max-w-[120px]">
               {data?.gameOverScore === 0
                 ? `Try again to rank on the leaderboard!`
                 : !context?.loggedIn?.uid
@@ -162,7 +162,7 @@ export default function ModalGameOver({ data }) {
               data?.data?.landscape ? "flex-row" : "flex-col"
             } items-center gap-8  `}
           >
-            <p className="font-roboto text-base text-center text-black/50">
+            <p className="primary-font text-base text-center text-black/50">
               Signup or login to get your score on the leaderboard + access to
               prizes
             </p>

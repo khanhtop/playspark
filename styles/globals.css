@@ -128,3 +128,8 @@ body {
 .flip-card-back {
   transform: rotateY(180deg);
 }
+
+.primary-font {
+  font-family: "Roboto", sans-serif;
+  color: #222;
+}

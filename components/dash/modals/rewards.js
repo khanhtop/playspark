@@ -110,7 +110,7 @@ export default function ModalRewards({ data }) {
       <div className="pt-12 pb-4 px-4 flex flex-col gap-4 h-full overflow-y-scroll">
         <Tabs onChange={(a) => setTab(a)} tab={tab} data={data} />
         {!expired && tab === "postgame" && (
-          <p className="text-center font-bold py-2 px-12">
+          <p className="text-center primary-font font-bold py-2 px-12">
             Come back after the game finishes to claim these rewards!
           </p>
         )}
@@ -155,11 +155,9 @@ export default function ModalRewards({ data }) {
       </div>
     );
 
-  console.log(modalState);
-
   if (modalState)
     return (
-      <div className="pt-12 pb-4 px-4 flex flex-col gap-2 items-center font-octo text-black">
+      <div className="pt-12 pb-4 px-4 flex flex-col gap-2 items-center primary-font text-black">
         <p className="text-2xl uppercase font-bold text-center">
           {modalState.name}
         </p>
@@ -283,7 +281,7 @@ function RewardRow({
   }
 
   return (
-    <div className="flex h-24 text-black/70 font-octo gap-2 text-sm flex-shrink-0">
+    <div className="flex h-24 text-black/70 custom-font gap-2 text-sm flex-shrink-0">
       <div className="bg-white/100 border-4 border-black/10 backdrop-blur flex-1 flex items-center rounded-2xl overflow-hidden px-4">
         <div className="flex-1 flex items-center justify-center capitalize text-center text-black/70 ">
           <p>{parseInput(item.input, item.inputOperand, item.inputValue)} </p>
@@ -353,9 +351,7 @@ function Tabs({ data, tab, onChange }) {
           borderBottomColor:
             tab === "intragame" ? data.primaryColor : "transparent",
         }}
-        className={`${
-          data.theme === "pixel" ? "font-pixel text-2xl" : ""
-        } flex-1 border-b-8 flex justify-center py-2 cursor-pointer`}
+        className={`custom-font flex-1 border-b-8 flex justify-center py-2 cursor-pointer`}
       >
         <p>Intragame</p>
       </div>
@@ -367,9 +363,7 @@ function Tabs({ data, tab, onChange }) {
           borderBottomColor:
             tab === "postgame" ? data.primaryColor : "transparent",
         }}
-        className={`${
-          data.theme === "pixel" ? "font-pixel text-2xl" : ""
-        } flex-1 border-b-8 flex justify-center py-2 cursor-pointer`}
+        className={`custom-font flex-1 border-b-8 flex justify-center py-2 cursor-pointer`}
       >
         <p>Post Game</p>
       </div>

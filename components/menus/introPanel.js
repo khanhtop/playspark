@@ -24,29 +24,6 @@ export default function IntroPanel({
     });
   }, [data.tournamentId, context?.loggedIn]);
 
-  // if (!context.profile && !waitOnAuth && data.tournamentId === 1719467034841) {
-  //   return (
-  //     <div
-  //       onClick={onAuthClick}
-  //       className="w-[200px] font-octo px-2 pt-2 pb-1 flex flex-col bg-black/30 hover:bg-black/50 transition cursor-pointer backdrop-blur rounded-2xl shadow-lg border-2 border-white/20 items-center justify-center"
-  //     >
-  //       {/* <p className="text-xl">Sign In</p> */}
-  //       <p className="font-roboto text-white/50 text-center text-sm">{uuid}</p>
-  //     </div>
-  //   );
-  // }
-  // return (
-  //   <div
-  //     onClick={onAuthClick}
-  //     className="w-[200px] font-octo px-2 pt-2 pb-1 flex flex-col bg-black/30 hover:bg-black/50 transition cursor-pointer backdrop-blur rounded-2xl shadow-lg border-2 border-white/20 items-center justify-center"
-  //   >
-  //     <p className="text-xl">Sign In</p>
-  //     <p className="font-roboto text-white/50 text-center text-sm">
-  //       To access rewards and rank on leaderboards.
-  //     </p>
-  //   </div>
-  // );
-
   if (waitOnAuth) return <div />;
 
   if (!context.profile && !waitOnAuth)
@@ -100,26 +77,10 @@ export default function IntroPanel({
             }}
             className="font-octo "
           >
-            <p
-              className={
-                theme === "default"
-                  ? "font-titan font-stroke"
-                  : theme === "neon"
-                  ? "font-neon"
-                  : "font-pixel uppercase text-3xl -my-1"
-              }
-            >
+            <p style={{ color: "white" }} className="custom-font font-light">
               {context?.config?.name || context?.profile?.companyName}
             </p>
-            <p
-              className={
-                theme === "default"
-                  ? "font-titan font-stroke"
-                  : theme === "neon"
-                  ? "font-neon"
-                  : "font-pixel uppercase text-2xl -my-2 -mt-3"
-              }
-            >
+            <p style={{ color: "white" }} className="custom-font font-light">
               XP: {xp}
             </p>
           </div>
@@ -134,37 +95,13 @@ export default function IntroPanel({
         className="flex-1 flex-col overflow-hidden"
       >
         <div className="px-1 py-3">
-          <p
-            className={
-              theme === "default"
-                ? "font-titan font-stroke"
-                : theme === "neon"
-                ? "font-neon"
-                : "font-pixel uppercase text-2xl -my-2"
-            }
-          >
+          <p style={{ color: "white" }} className="custom-font font-light">
             Rank: {rank ? `#${rank}` : "_"}
           </p>
-          <p
-            className={
-              theme === "default"
-                ? "font-titan font-stroke"
-                : theme === "neon"
-                ? "font-neon"
-                : "font-pixel uppercase text-2xl -my-2"
-            }
-          >
+          <p style={{ color: "white" }} className="custom-font font-light">
             Top Score: {tournamentScore}
           </p>
-          <p
-            className={
-              theme === "default"
-                ? "font-titan font-stroke"
-                : theme === "neon"
-                ? "font-neon"
-                : "font-pixel uppercase text-2xl -my-2"
-            }
-          >
+          <p style={{ color: "white" }} className="custom-font font-light">
             Best Streak: {maxStreak}
           </p>
         </div>

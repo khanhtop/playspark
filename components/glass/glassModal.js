@@ -34,12 +34,8 @@ export default function GlassModal({
           <div
             style={{ backgroundColor: primaryColor, color: textColor }}
             className={`${
-              theme === "default"
-                ? "font-titan font-stroke rounded-full"
-                : theme === "pixel"
-                ? "font-pixel text-3xl rounded-none pb-1"
-                : "font-neon rounded-full "
-            } h-12 w-40 flex items-center justify-center border-2`}
+              theme === "pixel" ? "rounded-none" : "rounded-full"
+            } custom-font text-xl h-12 w-40 flex items-center justify-center border-2`}
           >
             <p>{title}</p>
           </div>
