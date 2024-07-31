@@ -13,11 +13,29 @@ const useGoogleFont = (fontName, cssTag = "custom-font") => {
 
       // Create a style element to define the custom CSS class
       const style = document.createElement("style");
-      style.innerHTML = `
+      let styleCode = `
         .${cssTag} {
           font-family: '${fontName}', sans-serif;
         }
       `;
+      if (fontName === "Lexend Zetta") {
+        styleCode = `.${cssTag} {
+          font-family: '${fontName}', sans-serif;
+          letter-spacing: -3px;
+          font-size: 1em;
+          font-weight: 200;
+        }`;
+      } else {
+        styleCode = `
+        .${cssTag} {
+          font-family: '${fontName}', sans-serif;
+          letter-spacing: normal;
+          font-size: medium;
+          font-weight: normal;
+        }
+      `;
+      }
+      style.innerHTML = styleCode;
       document.head.appendChild(style);
 
       // Add the class to the body

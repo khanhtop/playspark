@@ -101,7 +101,7 @@ export default function Advert({
       setLevel(level);
       setBoostCredits(boostCredits);
       setStage(0);
-      setReviveCount(prevReviveCount => prevReviveCount + 1);
+      setReviveCount((prevReviveCount) => prevReviveCount + 1);
     } else {
       setLives(data.id === 11 ? 10 : 3);
       setScore(0);
@@ -322,6 +322,9 @@ export default function Advert({
           right_hand: data?.right_hand,
           left_hand: data?.left_hand,
           body: data?.body,
+          primaryColor: data?.primaryColor,
+          textColor: data?.textColor,
+          accentColor: data?.accentColor,
         })}
       {stage === 2 && (
         <Outro
