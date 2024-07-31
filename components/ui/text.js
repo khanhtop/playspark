@@ -7,7 +7,7 @@ export default function Text({ className, style, children, theme }) {
 
           //   fontSize: style?.fontSize ? style.fontSize + 16 : 32,
         }}
-        className={`${className} font-pixel uppercase`}
+        className={`${className} custom-font uppercase`}
       >
         {children}
       </p>
@@ -15,7 +15,7 @@ export default function Text({ className, style, children, theme }) {
   }
 
   return (
-    <p style={style} className={`${className} font-titan`}>
+    <p style={style} className={`${className} custom-font`}>
       {children}
     </p>
   );

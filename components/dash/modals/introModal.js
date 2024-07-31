@@ -31,23 +31,35 @@ export default function IntroModal({ data, playAudio }) {
       <div className="flex items-center flex-col">
         <div className="max-w-[360px] flex flex-col">
           <IntroRow
+            primaryColor={data.primaryColor}
+            textColor={data.textColor}
             text="PLAY"
             description={
               data.instructions ||
               "Go for the high score and compete on the leaderboard!"
             }
           />
-          <IntroRow text="EARN" description="Earn and collect in-game items" />
-          <IntroRow text="WIN" description="Win great prizes!" />
+          <IntroRow
+            primaryColor={data.primaryColor}
+            textColor={data.textColor}
+            text="EARN"
+            description="Earn and collect in-game items"
+          />
+          <IntroRow
+            primaryColor={data.primaryColor}
+            textColor={data.textColor}
+            text="WIN"
+            description="Win great prizes!"
+          />
         </div>
-        <div className="flex max-w-[350px] my-4">
+        <div className="flex max-w-[350px] my-4 primary-font text-xs px-3">
           <input
             value={checked}
             onChange={() => setChecked(!checked)}
             type="checkbox"
-            className="scale-[200%] mt-1"
+            className="scale-[150%] mt-1"
           />
-          <p className="text-sm ml-8 text-black">
+          <p className="ml-4">
             By checking this box, I agree to the contest's{" "}
             <span
               className="underline cursor-pointer"
@@ -114,16 +126,19 @@ export default function IntroModal({ data, playAudio }) {
   );
 }
 
-function IntroRow({ text, description }) {
+function IntroRow({ text, description, primaryColor, textColor }) {
   return (
-    <div className="flex gap-4 items-center h-20">
+    <div className="flex gap-4 items-center h-16">
       <div className="w-[70px] flex items-start mt-1 flex-shrink-0">
-        <div className="bg-orange-400 px-2 rounded-lg">
-          <p className="text-xl font-titan font-light text-black">{text}</p>
+        <div
+          style={{ backgroundColor: primaryColor, color: textColor }}
+          className="bg-orange-400 w-24 flex justify-center px-2 rounded-lg border-2 border-white/40 pt-[2px]"
+        >
+          <p className="text-xl custom-font font-light">{text}</p>
         </div>
       </div>
 
-      <p className="text-base font-octo text-light text-black/60 line-clamp-3">
+      <p className="text-sm primary-font text-light text-black/60 line-clamp-3">
         {description}
       </p>
     </div>
