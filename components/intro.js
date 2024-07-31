@@ -136,23 +136,25 @@ export default function Intro({
             }),
         },
       });
-    } else if (
-      context.loggedIn?.uid &&
-      !demo &&
-      context.profile?.termsAgreed?.includes(data.tournamentId)
-    ) {
-      setShowModal({
-        title: "Welcome",
-        content: WelcomeModal,
-        data: {
-          ...data,
-          hideClose: true,
-          theme: theme,
-          playAudio: () => playAudio(),
-          onClose: () => setShowModal(false),
-        },
-      });
     }
+
+    // else if (
+    //   context.loggedIn?.uid &&
+    //   !demo &&
+    //   context.profile?.termsAgreed?.includes(data.tournamentId)
+    // ) {
+    //   setShowModal({
+    //     title: "Welcome",
+    //     content: WelcomeModal,
+    //     data: {
+    //       ...data,
+    //       hideClose: true,
+    //       theme: theme,
+    //       playAudio: () => playAudio(),
+    //       onClose: () => setShowModal(false),
+    //     },
+    //   });
+    // }
   }, [context.profile]);
 
   return (
