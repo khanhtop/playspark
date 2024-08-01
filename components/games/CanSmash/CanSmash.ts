@@ -41,7 +41,7 @@ import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
   useEffect(() => {
-    Utils.pause(false);
+   
     
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
@@ -76,7 +76,7 @@ const CanSmash = (data: any) => {
 
     new SaveLoadData();
     new Timer(scene, engine);
-
+    Utils.pause(false);
     // Assume this is needed for Babylon to conform to the size?
     // I modified this slightly to conform to the size of the container
     const resize = () => {
