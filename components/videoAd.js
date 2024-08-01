@@ -31,6 +31,7 @@ export default function VideoAd({ data, onSkip, video }) {
       title: "You Win",
       contents: (
         <WinModal
+          data={data}
           onClaim={() => {
             context.setModal();
             context.setHasSeenVideo(true);

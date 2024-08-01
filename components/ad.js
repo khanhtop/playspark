@@ -384,6 +384,7 @@ export default function Advert({
               title: "You Win",
               contents: (
                 <WinModal
+                  data={data}
                   onClaim={() => {
                     context.setModal();
                     setStage(1);
