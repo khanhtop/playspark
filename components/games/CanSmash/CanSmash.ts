@@ -41,6 +41,8 @@ import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
   useEffect(() => {
+    Utils.pause(false);
+    
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);
@@ -181,6 +183,7 @@ const CanSmash = (data: any) => {
 
     // I added this cleanup back, it was commented before
     return () => {
+      Utils.pause(false);
       console.log("---[-[[ dispose component");
       window.removeEventListener("resize", resize);
       window.removeEventListener("keydown", null);
