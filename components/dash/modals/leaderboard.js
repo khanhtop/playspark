@@ -58,17 +58,17 @@ function PositionRow({ gameData, index, item, topSlice, isMine }) {
   return (
     <div
       style={{
-        backgroundColor: isMine
-          ? gameData.primaryColor
-          : "rgba(255,255,255,0.5)",
-        color: isMine ? gameData.textColor : gameData.primaryColor,
+        backgroundColor: gameData.primaryColor,
+        color: gameData.textColor,
       }}
-      className="flex w-full pl-2 pr-4 rounded-full py-1 gap-2 items-center"
+      className={`flex w-full pl-2 pr-4 rounded-full py-1 gap-2 items-center border-2 ${
+        !isMine ? "border-transparent" : "animate-pulse border-yellow-400"
+      }`}
     >
       <div
         style={{
-          backgroundColor: isMine ? gameData.textColor : gameData.primaryColor,
-          color: isMine ? gameData.primaryColor : gameData.textColor,
+          backgroundColor: "rgba(255,255,255,0.8)",
+          color: "#333",
         }}
         className="w-10 h-10 rounded-full flex items-center justify-center"
       >
