@@ -355,7 +355,7 @@ export class LevelCompleteUI {
     textBlock.topInPixels = topInPixels;
     textBlock.leftInPixels = 67;
     //textBlock.color = "#1979B3";
-    textBlock.color = GameData.instance.getTextColor()
+    textBlock.color = GameData.instance.getAccentColor()
     textBlock.outlineWidth = 0;
     this.container.addControl(textBlock);
   }

@@ -11,7 +11,7 @@ export class Inputs {
       ev.preventDefault();
     });
     canvas.addEventListener("touchstart", (ev) => {
-      ev.preventDefault();
+     // ev.preventDefault();
     });
     canvas.addEventListener("dragstart", (event) => {
       event.preventDefault();
@@ -34,12 +34,12 @@ export class Inputs {
   }
 
   onPointerUp(evt: PointerEvent) {
-    evt.preventDefault();
+  //  evt.preventDefault();
     Events.input.notifyObservers({ name: "onPointerUp", data: null });
   }
 
   onPointerMove(evt: PointerEvent) {
-    evt.preventDefault();
+  //  evt.preventDefault();
     Events.input.notifyObservers({ name: "onPointerMove", data: evt });
   }
 }
