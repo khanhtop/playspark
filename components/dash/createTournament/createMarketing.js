@@ -9,6 +9,7 @@ import { useRef } from "react";
 export default function CreateMarketing({ tournament, setTournament }) {
   const context = useAppContext();
   const surveyId = useRef(Date.now().toString());
+  console.log(tournament);
   return (
     <>
       {/* Email CTA */}
@@ -71,6 +72,38 @@ export default function CreateMarketing({ tournament, setTournament }) {
                 setTournament({
                   ...tournament,
                   canShareURL: e.target.value,
+                });
+              }}
+            />
+          )}
+        </div>
+      </BrandingComponent>
+      <BrandingComponent>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2 mb-4">
+            <p className="text-white/70">
+              Encourage Users To Like / Follow Social Account
+            </p>
+            <Toggle
+              checked={tournament?.socialCta !== null}
+              onChange={() =>
+                setTournament({
+                  ...tournament,
+                  socialCta: tournament?.socialCta != null ? null : "",
+                })
+              }
+            />
+          </div>
+          {tournament.socialCta !== null && (
+            <Input
+              label="Target URL"
+              labelColor="text-white/70"
+              placeHolder="https://"
+              className="bg-white/5 w-full py-2 text-white mb-6"
+              onChange={(e) => {
+                setTournament({
+                  ...tournament,
+                  socialCta: e.target.value,
                 });
               }}
             />
