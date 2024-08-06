@@ -17,7 +17,9 @@ export class EntityUI {
     this.container.adaptWidthToChildren = true;
     this.container.heightInPixels = 60;
     this.container.widthInPixels = 120;
-
+    this.container.horizontalAlignment =
+      GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+    this.container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     advancedTexture.addControl(this.container);
 
     let bg = new GUI.Image();

@@ -20,9 +20,9 @@ export function WinModal({ data, onClaim }) {
       </div>
 
       <div className="w-full flex-1 flex flex-col gap-0 items-center">
-        <ModalText>1 x Revive</ModalText>
-        <ModalText>+ Last Score Reviver</ModalText>
-        <ModalButton onClick={onClaim} text="Claim" />
+        <ModalText data={data}>1 x Revive</ModalText>
+        <ModalText data={data}>+ Last Score Reviver</ModalText>
+        <ModalButton data={data} onClick={onClaim} text="Claim" />
       </div>
     </div>
   );

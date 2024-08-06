@@ -8,6 +8,9 @@ import { EventTypes, Events } from "../Events";
 import { BIGBALL_POWERUP_COST, SHIELD_POWERUP_COST } from "../Consts";
 import { Timer } from "../Timer";
 import { Images } from "../Images";
+import { TintedImage } from "./TintedImage";
+import { GameData } from "../GameData";
+import { Color4 } from "@babylonjs/core";
 
 export class HUD {
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
@@ -15,11 +18,19 @@ export class HUD {
     let timer = maxTimer;
 
     var self = this;
-    var top_panel = new GUI.Image();
+    var top_panel = new TintedImage();
     top_panel.source = Images.data.TopPanel;
     top_panel.heightInPixels = 130;
     top_panel.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    top_panel.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    top_panel.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;+
+
+    top_panel.onImageLoadedObservable.addOnce(() => {
+      top_panel.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+
     advancedTexture.addControl(top_panel);
 
     let shieldGUI1 = new PowerupUI(
@@ -62,7 +73,7 @@ export class HUD {
 
     let heartUI = new EntityUI(advancedTexture);
     heartUI.setTexture(Images.data.heart);
-    heartUI.setPos(-420, 50);
+    heartUI.setPos(20, -160);
 
     Events.ui.add((data: any) => {
       if (data.name == "live") {
@@ -72,8 +83,8 @@ export class HUD {
 
     let creditUI = new EntityUI(advancedTexture);
     creditUI.setTexture(Images.data.Energy);
-    creditUI.setPos(-420, -80);
-    
+    creditUI.setPos(20, -290);
+
     Events.ui.add((data: any) => {
       if (data.type == "EntityUI:setCreditCount")
         creditUI.setCounterText(data.count.toString());
@@ -93,7 +104,8 @@ export class HUD {
 
     let remainingTargetUI = new EntityUI(advancedTexture, 140);
     remainingTargetUI.setTexture(Images.data.Booster05);
-    remainingTargetUI.setPos(-420, 180);
+    remainingTargetUI.setPos(20, -10);
+
     Events.ui.add((data: any) => {
       if (data.type != EventTypes.REMAINING_TARGET_UI) return;
       remainingTargetUI.setCounterText(`${data.hitCount}/${data.targetCount}`);

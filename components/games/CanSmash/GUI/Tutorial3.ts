@@ -33,13 +33,12 @@ export class Tutorial3 {
     this.container.horizontalAlignment =
       GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     this.container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    this.container.isPointerBlocker = false;
 
-    let arrow = this.createArrow(Images.data.arrow_flip, 150, 730, 0);
-    let infoText = this.createText(
-      "Tap Magnify to\nincrease size x2",
-      100,
-      210
-    );
+    let arrow = this.createArrow(Images.data.arrow_flip, 150, -150, 0);
+    let infoText = this.createText("Tap Magnify to\nincrease size x2", -50, -60);
+    arrow.addControl(infoText);
+
 
     let message = new GUI.TextBlock();
     message.text = "Boost active!";
@@ -49,11 +48,12 @@ export class Tutorial3 {
     message.fontFamily = "PeaceSans";
     message.outlineWidth = 5;
     message.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    message.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-    this.container.addControl(message);
+    message.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    message.isPointerBlocker = false;
 
     continueBtn.leftInPixels = 0;
-    continueBtn.topInPixels = 400;
+    continueBtn.topInPixels = -50;
+    continueBtn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
     continueBtn.isVisible = false;
 
     var next_btn = new GUI.Image();
@@ -61,23 +61,32 @@ export class Tutorial3 {
     next_btn.widthInPixels = 120 * 1.2;
     next_btn.heightInPixels = 47 * 1.2;
     next_btn.leftInPixels = 0;
-    next_btn.topInPixels = 400;
+    next_btn.topInPixels = -50;
     next_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    next_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-    this.container.addControl(next_btn);
+    next_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    next_btn.isEnabled = true;
+
 
     next_btn.onPointerUpObservable.addOnce(() => {
+      console.log("hello");
+      
       continueBtn.isVisible = true;
       message.isVisible = false;
-      infoText.topInPixels = 330;
-      infoText.leftInPixels = 50;
+      //infoText.topInPixels = -50;
+      //infoText.leftInPixels =  -60;
+      //infoText.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+
       infoText.text = "Tap shield to blow\nup enemy cans.";
-      arrow.topInPixels = 850;
+      arrow.topInPixels = -50;
       next_btn.isVisible = false;
       BlackBG.instance.show(Images.data.blackbg4);
     });
 
+  
+
+    this.container.addControl(message);
     this.container.addControl(continueBtn);
+    this.container.addControl(next_btn);
     this.advancedTexture.addControl(this.container);
 
     this.ctx = this.advancedTexture.getContext();
@@ -86,20 +95,28 @@ export class Tutorial3 {
     this.engine = GameData.instance.getEngine();
   }
 
-  private createArrow(img: string, x: number, y: number, rot: number) {
+  private createArrow(img: string, x: number, y: number, rot: number): GUI.Container {
+    let arrowContainer = new GUI.Container();
+    arrowContainer.horizontalAlignment =
+      GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    arrowContainer.verticalAlignment =  GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    arrowContainer.topInPixels = y;
+    arrowContainer.leftInPixels = x;
+    arrowContainer.isPointerBlocker = false;
+
     let arrow = new GUI.Image();
     arrow.source = img;
     arrow.widthInPixels = 117 * 0.4;
     arrow.heightInPixels = 154 * 0.4;
-    arrow.topInPixels = y;
-    arrow.leftInPixels = x;
     arrow.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    arrow.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    arrow.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
     arrow.rotation = rot;
+    arrow.isPointerBlocker = false;
     //arrow.scaleX = -1;
 
-    this.container.addControl(arrow);
-    return arrow;
+    arrowContainer.addControl(arrow);
+    this.container.addControl(arrowContainer);
+    return arrowContainer;
   }
 
   private createText(text: string, x: number, y: number) {
@@ -110,10 +127,12 @@ export class Tutorial3 {
     message.fontFamily = "PeaceSans";
     message.outlineWidth = 0;
     message.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    message.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    message.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
     message.topInPixels = y;
     message.leftInPixels = x;
-    this.container.addControl(message);
+    message.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    message.isPointerBlocker = false;
+  //  this.container.addControl(message);
     return message;
   }
 

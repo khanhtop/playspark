@@ -49,7 +49,9 @@ export default function Intro({
     0.5,
     context.settings.bgm
   );
-  useGoogleFont("Anton");
+
+  useGoogleFont("Lexend Zetta", "custom-font");
+  useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
     const fileName = context?.data?.homescreenMusic ?? "/uisounds/intro.mp3";
@@ -136,23 +138,25 @@ export default function Intro({
             }),
         },
       });
-    } else if (
-      context.loggedIn?.uid &&
-      !demo &&
-      context.profile?.termsAgreed?.includes(data.tournamentId)
-    ) {
-      setShowModal({
-        title: "Welcome",
-        content: WelcomeModal,
-        data: {
-          ...data,
-          hideClose: true,
-          theme: theme,
-          playAudio: () => playAudio(),
-          onClose: () => setShowModal(false),
-        },
-      });
     }
+
+    // else if (
+    //   context.loggedIn?.uid &&
+    //   !demo &&
+    //   context.profile?.termsAgreed?.includes(data.tournamentId)
+    // ) {
+    //   setShowModal({
+    //     title: "Welcome",
+    //     content: WelcomeModal,
+    //     data: {
+    //       ...data,
+    //       hideClose: true,
+    //       theme: theme,
+    //       playAudio: () => playAudio(),
+    //       onClose: () => setShowModal(false),
+    //     },
+    //   });
+    // }
   }, [context.profile]);
 
   return (

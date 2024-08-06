@@ -29,6 +29,7 @@ export default function CreateModal({ data, hide }) {
     rewards: [],
     endDate: new Date(new Date().setMonth(new Date().getMonth() + 3)),
     creditCap: 1000,
+    socialCta: null,
   });
   const [adding, setAdding] = useState(false);
   const [imageLibrary, setImageLibrary] = useState();

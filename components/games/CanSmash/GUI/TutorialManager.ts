@@ -117,7 +117,7 @@ export class TutorialManager {
 
     BlackBG.instance.show(Images.data.blackbg2);
     tutorial2.show();
-   this.tutotial2TimerHandle = setTimeout(() => {
+    this.tutotial2TimerHandle = setTimeout(() => {
       Utils.pause(true);
     }, 1000);
   }
@@ -125,18 +125,20 @@ export class TutorialManager {
   hide() {}
   show(step: number) {}
 
-  createContinueBtn() {
+  createContinueBtn(
+    
+  ) {
     var close_btn = new GUI.Image();
     close_btn.source = Images.data.tutorial_continue;
-    close_btn.widthInPixels = 120*1.2;
-    close_btn.heightInPixels = 47*1.2;
+    close_btn.widthInPixels = 120 * 1.2;
+    close_btn.heightInPixels = 47 * 1.2;
     close_btn.leftInPixels = 150;
     close_btn.topInPixels = 0;
     close_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     close_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
     close_btn.onPointerClickObservable.add(() => {
-      clearTimeout(this.tutotial2TimerHandle );
+      clearTimeout(this.tutotial2TimerHandle);
       Events.ui.notifyObservers({
         type: EventTypes.TUTORIAL_CLOSE_BTN_CLICKED,
       });

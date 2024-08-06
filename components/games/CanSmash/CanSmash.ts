@@ -41,6 +41,8 @@ import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
   useEffect(() => {
+   
+    
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);
@@ -74,7 +76,7 @@ const CanSmash = (data: any) => {
 
     new SaveLoadData();
     new Timer(scene, engine);
-
+    Utils.pause(false);
     // Assume this is needed for Babylon to conform to the size?
     // I modified this slightly to conform to the size of the container
     const resize = () => {
@@ -152,6 +154,8 @@ const CanSmash = (data: any) => {
       new PowerupManager(scene);
       new GUI2D();
 
+      console.log("-----[[ lives: ", lives, data.params.lives);
+
       let liveManager = new LiveManager(lives);
       new ScoreManager(score);
       new PowerupCreditManager(boostCredits);
@@ -179,6 +183,7 @@ const CanSmash = (data: any) => {
 
     // I added this cleanup back, it was commented before
     return () => {
+      Utils.pause(false);
       console.log("---[-[[ dispose component");
       window.removeEventListener("resize", resize);
       window.removeEventListener("keydown", null);
@@ -320,6 +325,15 @@ function initParams(
     return { score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl };
   if (data.params == undefined)
     return { score, level, lives, boostCredits, ballBaseUrl, barrelBaseUrl };
+
+  if (data.params.primaryColor != undefined)
+    GameData.instance.setPrimaryColor(data.params.primaryColor);
+
+  if (data.params.textColor != undefined)
+    GameData.instance.setTextColor(data.params.textColor);
+
+  if (data.params.accentColor != undefined)
+    GameData.instance.setAccentColor(data.params.accentColor);
 
   if (data.params.backgroundMusic != undefined)
     Sounds.data.music = data.params.backgroundMusic;

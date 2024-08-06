@@ -1,8 +1,9 @@
 import * as GUI from "@babylonjs/gui";
-import { ILevelCompleteUIData } from "./LevelCompleteUIData";
 import { EventTypes, Events } from "../Events";
-import { LevelCreator } from "../LevelCreator";
 import { Images } from "../Images";
+import { Color4} from "@babylonjs/core";
+import { GameData } from "../GameData";
+import { TintedImage } from "./TintedImage";
 
 export class PauseUI {
   fillEllipse: GUI.Ellipse;
@@ -48,6 +49,28 @@ export class PauseUI {
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(img);
 
+    var modal_header = new TintedImage();
+    modal_header.clipChildren = false;
+    modal_header.clipContent = false;
+    modal_header.source = Images.data.ModalHeader;
+    modal_header.sourceWidth = 430;
+    modal_header.sourceHeight = 84;
+    modal_header.widthInPixels = 460;
+    modal_header.heightInPixels = 100;
+    modal_header.setWFactor(2);
+
+    modal_header.onImageLoadedObservable.addOnce(() => {
+      modal_header.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+    //  modal_header.topInPixels = 0;
+    modal_header.leftInPixels = -10;
+    modal_header.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    modal_header.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    this.container.addControl(modal_header);
+
     this.level_title_txt = new GUI.TextBlock();
     this.level_title_txt.fontFamily = "PeaceSans";
     this.level_title_txt.text = "Level 3";
@@ -58,7 +81,7 @@ export class PauseUI {
     //this.level_title_txt.fontStyle = "bold";
     this.level_title_txt.topInPixels = -200;
     //this.level_title_txt.leftInPixels = -20;
-    this.level_title_txt.color = "#117FB2";
+    this.level_title_txt.color = GameData.instance.getAccentColor();//"#117FB2";
     this.level_title_txt.outlineWidth = 0;
     this.container.addControl(this.level_title_txt);
 
@@ -90,8 +113,8 @@ export class PauseUI {
     score_txt.fontSize = 30;
 
     score_txt.topInPixels = -40;
-    score_txt.leftInPixels = 45;
-    score_txt.color = "#1979B3";
+    score_txt.leftInPixels = 57;
+    score_txt.color = GameData.instance.getAccentColor();//"#1979B3";
     score_txt.outlineWidth = 0;
     details.addControl(score_txt);
 
@@ -118,27 +141,44 @@ export class PauseUI {
     timeBonus_txt.fontStyle = "bold";
     timeBonus_txt.topInPixels = 20;
     timeBonus_txt.leftInPixels = 55;
-    timeBonus_txt.color = "#1979B3";
+    timeBonus_txt.color = GameData.instance.getAccentColor(); // "#1979B3";
     timeBonus_txt.outlineWidth = 0;
     details.addControl(timeBonus_txt);
 
-    var switch_bg = new GUI.Image();
+    var switch_bg = new TintedImage();
     switch_bg.source = Images.data.switch;
-    switch_bg.widthInPixels = 431 / 1.8;
-    switch_bg.heightInPixels = 128 / 1.8;
-    switch_bg.topInPixels = -10;
+
+    switch_bg.onImageLoadedObservable.addOnce(() => {
+      switch_bg.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+    // getTextColor() {
+    //   return this.textColor;
+    // }
+
+    switch_bg.widthInPixels = 230;
+    switch_bg.heightInPixels = 70;
+    switch_bg.topInPixels = -12;
     switch_bg.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     switch_bg.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(switch_bg);
 
-    var switch_bg = new GUI.Image();
-    switch_bg.source = Images.data.switch;
-    switch_bg.widthInPixels = 431 / 1.8;
-    switch_bg.heightInPixels = 128 / 1.8;
-    switch_bg.topInPixels = 80;
-    switch_bg.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    switch_bg.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-    this.container.addControl(switch_bg);
+    var switch_bg1 = new TintedImage();
+    switch_bg1.onImageLoadedObservable.addOnce(() => {
+      switch_bg1.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+    switch_bg1.source = Images.data.switch;
+    switch_bg1.widthInPixels = 230;
+    switch_bg1.heightInPixels = 70;
+    switch_bg1.topInPixels = 78;
+    switch_bg1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    switch_bg1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    this.container.addControl(switch_bg1);
 
     var audio_icon = new GUI.Image();
     audio_icon.source = Images.data.SoundIcon;

@@ -1,7 +1,9 @@
 import { getLeaderboard } from "@/helpers/leaderboard";
 import { useAppContext } from "@/helpers/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
+
+//
 
 export default function IntroPanel({
   data,

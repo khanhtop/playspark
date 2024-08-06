@@ -12,6 +12,12 @@ export class GameData {
   private totalLevel = 0;
   private totalScore = 0;
   private nextLevelTime = 0;
+  private primaryColor = "#0693E3";
+  private textColor = "#117FB2";
+  private accentColor = "#117FB2";
+
+  
+  
   private nextLevelHitCount = 0;
   private canvas = null;
   musicState: boolean;
@@ -22,6 +28,25 @@ export class GameData {
     this.engine = engine;
     this.canvas = canvas;
     GameData.instance = this;
+  }
+  getAccentColor() {
+    return this.accentColor;
+  }
+  setAccentColor(accentColor:string) {
+     this.accentColor = accentColor;
+  }
+
+  getPrimaryColor() {
+    return this.primaryColor;
+  }
+  setPrimaryColor(primaryColor:string) {
+     this.primaryColor = primaryColor;
+  }
+  getTextColor() {
+    return this.textColor;
+  }
+  setTextColor(textColor:string) {
+     this.textColor = textColor;
   }
   getEngine() {
     return this.engine;
