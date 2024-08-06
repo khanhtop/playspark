@@ -3,6 +3,8 @@ import { useAppContext } from "@/helpers/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
 import { useState, useMemo } from "react";
 
+//
+
 export default function IntroPanel({
   data,
   theme,
