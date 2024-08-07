@@ -1,3 +1,4 @@
+import Button from "@/components/forms/button";
 import ImagePicker from "@/components/forms/imagePicker";
 import Input from "@/components/forms/input";
 import UIButton from "@/components/ui/button";
@@ -7,6 +8,7 @@ import {
   XCircleIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
+import WebhookRewardsTestButton from "./webhookRewardTestButton";
 
 const inputs = [
   {
@@ -202,6 +204,7 @@ function RewardRow({ item, onChange, onDelete, index }) {
           options={outputOperands}
           className="flex-1"
         />
+        <WebhookRewardsTestButton rewards={item} />
         <Input
           label={
             item.outputAction === "xp" || item.outputAction === "coins"
