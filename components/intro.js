@@ -51,7 +51,7 @@ export default function Intro({
     context.settings.bgm
   );
 
-  useGoogleFont("Lexend Zetta", "custom-font");
+  useGoogleFont(data.font || "Anton", "custom-font");
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
