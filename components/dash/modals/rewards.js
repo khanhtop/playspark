@@ -1,5 +1,4 @@
 import TapHold from "@/components/ui/tapHold";
-import Text from "@/components/ui/text";
 import GameButton from "@/components/uiv2/gameButton";
 import { playClickSound } from "@/helpers/audio";
 import { firestore } from "@/helpers/firebase";
@@ -46,10 +45,6 @@ export default function ModalRewards({ data }) {
       index
     );
   };
-
-  const tournamentScore =
-    data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
-    0;
 
   const tournamentRank = data?.leaderboard?.findIndex(
     (a) => a.uid === context?.loggedIn?.uid
@@ -105,13 +100,28 @@ export default function ModalRewards({ data }) {
     }
   }, [data]);
 
+  const hasIntraGameRewards =
+    data?.rewards?.filter((a) => a.input !== "rank" || a.input !== "endxp")
+      .length > 0;
+
+  const hasPostGameRewards =
+    data?.rewards?.filter((a) => a.input === "rank" || a.input === "endxp")
+      .length > 0;
+
   if (!modalState)
     return (
       <div className="pt-12 pb-4 px-4 flex flex-col gap-4 h-full overflow-y-scroll">
         <Tabs onChange={(a) => setTab(a)} tab={tab} data={data} />
         {!expired && tab === "postgame" && (
           <p className="text-center primary-font font-bold py-2 px-12">
-            Come back after the game finishes to claim these rewards!
+            {hasPostGameRewards
+              ? "Come back after the game finishes to claim these rewards!"
+              : "There are no tournament based prizes available"}
+          </p>
+        )}
+        {tab === "intragame" && !hasIntraGameRewards && (
+          <p className="text-center primary-font font-bold py-2 px-12">
+            There are no in-game prizes available
           </p>
         )}
         {data?.rewards
@@ -293,13 +303,7 @@ function RewardRow({
             </p>
           </div>
 
-          <div
-            // style={{ color: primaryColor }}
-            className="line-clamp-2 primary-font"
-            // className="flex-1  flex items-center justify-center text-center"
-          >
-            {item.description}
-          </div>
+          <div className="line-clamp-2 primary-font">{item.description}</div>
         </div>
       </div>
       {context?.loggedIn?.uid && (

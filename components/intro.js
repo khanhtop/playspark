@@ -210,7 +210,7 @@ export default function Intro({
             disabled={
               !clientCredits || expired || clientCredits < shutoffBalance
             }
-            bgColor={data.primaryColor}
+            bgColor={data.accentColor || data.primaryColor || "black"}
             textColor={data.textColor}
             theme={theme}
             onClick={async () => {

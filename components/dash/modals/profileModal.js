@@ -18,8 +18,8 @@ export default function ProfileModal({ data }) {
   const [loadingRight, setLoadingRight] = useState(false);
 
   useEffect(() => {
-    context.fetchAvatars();
-  }, []);
+    if (context) context.fetchAvatars();
+  }, [context]);
 
   const changeImage = async (isRight = false) => {
     if (loadingLeft || loadingRight) return;

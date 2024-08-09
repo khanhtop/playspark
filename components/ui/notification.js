@@ -28,10 +28,10 @@ export default function NotificationBar({ notification, theme }) {
   return (
     <div
       style={{
-        top: open ? 0 : -100,
-        transition: "0.25s top",
+        left: open ? 0 : -300,
+        transition: "0.25s left",
       }}
-      className="animate-pulse text-white absolute bg-black/50 rounded-bl-md rounded-br-md backdrop-blur z-50 w-full py-2 px-4"
+      className="animate-pulse text-white absolute bg-black/50 top-32 rounded-br-md rounded-tr-md backdrop-blur z-50 w-[200px] py-2 px-4"
     >
       <div className="h-[32px] flex gap-2 items-center">
         <img
