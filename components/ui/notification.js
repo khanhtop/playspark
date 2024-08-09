@@ -28,14 +28,14 @@ export default function NotificationBar({ notification, theme }) {
   return (
     <div
       style={{
-        right: open ? 0 : "-50%",
-        transition: "0.25s right",
+        top: open ? 0 : -100,
+        transition: "0.25s top",
       }}
-      className="text-white absolute top-12 bg-black z-50 w-1/2 py-2 px-4 rounded-tl-lg rounded-bl-lg border-t-[1px] border-l-[1px] border-b-[1px] border-cyan-500/30"
+      className="animate-pulse text-white absolute bg-black/50 rounded-bl-md rounded-br-md backdrop-blur z-50 w-full py-2 px-4"
     >
-      <div className="h-8 flex gap-2 items-center">
+      <div className="h-[32px] flex gap-2 items-center">
         <img
-          className="h-full"
+          className="h-full mt-2"
           src={determineIcon(notification?.title?.toLowerCase())}
         />
         <h3 style={{ lineHeight: 1 }} className="font-octo font-bold text-lg">

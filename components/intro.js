@@ -26,6 +26,7 @@ import IntroModal from "./dash/modals/introModal";
 import LegalModal from "./dash/modals/legalModal";
 import useGoogleFont from "@/helpers/useGoogleFont";
 import WelcomeModal from "./dash/modals/welcomeModal";
+import ProfileModal from "./dash/modals/profileModal";
 
 export default function Intro({
   waitOnAuth,
@@ -176,6 +177,17 @@ export default function Intro({
           <div className="flex-1 h-12 z-10"></div>
 
           <IntroPanel
+            onAvatarClick={() => {
+              setShowModal({
+                title: "Avatar",
+                content: ProfileModal,
+                data: {
+                  ...data,
+                  theme: theme,
+                  onClose: () => setShowModal(false),
+                },
+              });
+            }}
             theme={theme}
             data={data}
             uuid={uuid}
