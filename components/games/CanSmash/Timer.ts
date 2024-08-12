@@ -1,4 +1,4 @@
-import { Engine, Scene } from "@babylonjs/core";
+import { Engine, Scene, setAndStartTimer } from "@babylonjs/core";
 
 export class Timer {
   private _timers = {};
@@ -39,18 +39,43 @@ export class Timer {
     }
   }
 
-
-
   Pause(state) {
     this.pause = state;
   }
   constructor(scene: Scene, engine: Engine) {
     Timer.Instance = this;
 
-    scene.onAfterRenderObservable.add(() => {
+    setAndStartTimer({
+      timeout: Infinity,
+      contextObservable: scene.onBeforeRenderObservable,
+      breakCondition: () => {
+        // this will check if we need to break before the timeout has reached
+        return scene.isDisposed;
+      },
+      onEnded: (data) => {
+        console.log("Hello");
+
+        // this will run when the timeout has passed
+      },
+      onTick: (data) => {
+        console.log();
+
+        if (!this.pause) {
+          let deltaTime = engine.getDeltaTime() / 1000;
+          deltaTime /= scene.getAnimationRatio();
+          this.update(deltaTime);
+        }
+        // this will run
+      },
+      onAborted: (data) => {
+        // this function will run when the break condition has met (premature ending)
+      },
+    });
+
+    /*  scene.onBeforeRenderObservable.add(() => {
       if (this.pause) return;
       const delta = engine.getDeltaTime() * 0.001;
       this.update(delta);
-    });
+    });*/
   }
 }
