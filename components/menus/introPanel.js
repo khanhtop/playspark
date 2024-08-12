@@ -10,6 +10,7 @@ export default function IntroPanel({
   theme,
   onAuthClick,
   waitOnAuth,
+  onAvatarClick,
   uuid,
 }) {
   const context = useAppContext();
@@ -69,7 +70,10 @@ export default function IntroPanel({
         <div className="h-full aspect-square rounded-2xl border-white border-2 overflow-hidden">
           <img
             src={context?.profile?.profilePhoto}
-            className="h-full scale-110 object-cover"
+            onClick={() => {
+              if (open) onAvatarClick();
+            }}
+            className="h-full scale-110 object-cover hover:opacity-80 transition cursor-pointer"
           />
         </div>
         {open && (

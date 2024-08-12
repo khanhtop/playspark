@@ -1,5 +1,5 @@
-export const fireHook = (url, payload) => {
-  fetch(url, {
+export const fireHook = async (url, payload) => {
+  await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,4 +18,5 @@ export const fireHook = (url, payload) => {
     .catch((error) => {
       console.error("Error:", error);
     });
+  return;
 };

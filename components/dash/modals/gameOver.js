@@ -113,6 +113,7 @@ export default function ModalGameOver({ data }) {
               className="text-3xl custom-font"
               style={{
                 color: "black",
+                fontSize: 28,
               }}
             >
               {data.gameOverScore}

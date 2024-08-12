@@ -23,7 +23,7 @@ const useGoogleFont = (fontName, cssTag = "custom-font") => {
           font-family: '${fontName}', sans-serif;
           letter-spacing: -3px;
           font-size: 1em;
-          font-weight: 200;
+          font-weight: 700;
         }`;
       } else {
         styleCode = `

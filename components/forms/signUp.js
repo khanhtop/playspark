@@ -319,7 +319,7 @@ export default function SignUp({ data, closeDialog }) {
             )}
           </div>
         </div>
-        <p className="text-xs mt-2">
+        {/* <p className="text-xs mt-2">
           By signing up, you are agreeing to our{" "}
           <a
             target="__blank"
@@ -338,7 +338,7 @@ export default function SignUp({ data, closeDialog }) {
           >
             Privacy Policy
           </a>
-        </p>
+        </p> */}
       </div>
     </div>
   );
