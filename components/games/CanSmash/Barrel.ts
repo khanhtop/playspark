@@ -52,8 +52,11 @@ export class Barrel {
   }
   onUpdate() {
     if (!this.canMove) return;
-    const delta = this.engine.getDeltaTime() * 0.001;
-    this.timer += delta;
+    // const delta = this.engine.getDeltaTime() * 0.001;
+    // this.timer += delta;
+    let deltaTime = this.engine.getDeltaTime() / 1000;
+    deltaTime /= this.scene.getAnimationRatio();
+    this.timer += deltaTime;
 
     if (
       this.type == PlatformMovmentTypes.HORIZONTAL_MOVE ||
@@ -81,7 +84,7 @@ export class Barrel {
       this
     );
   }
-  
+
   isActive: boolean;
   private isHit: boolean;
 
@@ -151,7 +154,12 @@ export class Barrel {
   getHitState() {
     return this.isHit;
   }
-  init(pos: Vector3, type: PlatformMovmentTypes, range: number = 0, speed: number = 0) {
+  init(
+    pos: Vector3,
+    type: PlatformMovmentTypes,
+    range: number = 0,
+    speed: number = 0
+  ) {
     this.defaultPos = pos;
     this.speed = speed;
     this.type = type;
@@ -167,8 +175,6 @@ export class Barrel {
       this.canContainer.position = this.defaultPos.clone();
       this.canContainer.material = Materials.instance.transparentMaterial;
       this.canContainer.rotation = this.defaultRot;
-
-    
 
       let cloneMesh = new CloneMesh();
       const result = cloneMesh.get(Meshs.data.barrel);
@@ -200,7 +206,7 @@ export class Barrel {
     );
     this.sphereAggregate.body.setMotionType(PhysicsMotionType.ANIMATED);
 
-   // viewer.showBody(this.sphereAggregate.body);
+    // viewer.showBody(this.sphereAggregate.body);
 
     this.sphereAggregate.body.disablePreStep = false;
 

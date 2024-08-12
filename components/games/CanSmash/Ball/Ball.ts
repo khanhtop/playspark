@@ -183,6 +183,8 @@ export class Ball {
   }
 
   setScale(scaleFactor: number) {
+    this.tween.stop()
+
     this.ball.scaling = Vector3.One().multiplyByFloats(
       scaleFactor,
       scaleFactor,

@@ -68,9 +68,12 @@ export class CanManager {
                 )
               );
 
-              ranIndex = Utils.getRandomInt(Materials.instance.cans.length);
+              do {
+                ranIndex = Utils.getRandomInt(Materials.instance.cans.length);
+              } while (ranIndex == can.materialIndex);
+
               // if (ranIndex > 3) ranIndex = 0;
-              can.setMaterial(Materials.instance.cans[ranIndex]);
+              can.setMaterial(Materials.instance.cans[ranIndex], ranIndex);
               can.setHitState(false);
             },
             this
