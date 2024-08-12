@@ -17,7 +17,7 @@ export default function WelcomeModal({ data, playAudio }) {
             <GameButton
               className="w-full"
               onClick={() => {
-                if (!context.isAudioPlaying && context.settings.bgm) {
+                if (context.settings.bgm) {
                   data.playAudio();
                   data.onClose();
                 }

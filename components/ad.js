@@ -42,6 +42,8 @@ export default function Advert({
   email,
   clientCredits,
   uuid,
+  hasInitialisedAudio,
+  setHasInitialisedAudio,
 }) {
   const context = useAppContext();
   const [stage, setStage] = useState(0);
@@ -127,13 +129,11 @@ export default function Advert({
       return;
     }
     if (window?.frameElement?.offsetHeight) {
-      console.log("IN FRAME");
       setLockX(window.frameElement?.offsetWidth);
       setLockY(window.frameElement?.offsetHeight);
       return;
     }
     if (data.landscape) {
-      console.log("NOT IN FRAME");
       setLockY(window.innerWidth * 0.9 * 0.58);
       setLockX(window.innerWidth * 0.9);
       return;
@@ -264,6 +264,8 @@ export default function Advert({
       )}
       {stage === 0 && (
         <Intro
+          hasInitialisedAudio={hasInitialisedAudio}
+          setHasInitialisedAudio={setHasInitialisedAudio}
           clientCredits={clientCredits}
           demo={data.demo}
           uuid={uuid}

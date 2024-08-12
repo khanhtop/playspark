@@ -12,6 +12,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 
 export default function Ad({ ad, id, config, userId, email, externalId }) {
   const context = useAppContext();
+  const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
   const [signingIn, setSigingIn] = useState(0);
   const [waitOnAuth, setWaitOnAuth] = useState(false);
   const [clientCredits, setClientCredits] = useState();
@@ -82,7 +83,6 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
       subscriptionRef.current = onSnapshot(
         doc(firestore, "users", ad.ownerId),
         (doc) => {
-          console.log("SHOULD LISTEN");
           if (doc.exists()) {
             setClientCredits(() => {
               const newCreditBalance = doc.data().creditBalance;
@@ -175,7 +175,6 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
         context?.loggedIn?.uid,
         ad
       ).then((result) => {
-        console.log(result);
         if (result.trigger && result.value > 1) {
           context.setEvent({
             title: `${result.value * 10} XP`,
@@ -227,6 +226,8 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
       >
         {ad ? (
           <Advert
+            hasInitialisedAudio={hasInitialisedAudio}
+            setHasInitialisedAudio={setHasInitialisedAudio}
             waitOnAuth={waitOnAuth}
             signingIn={signingIn}
             data={ad}

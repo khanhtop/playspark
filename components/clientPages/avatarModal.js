@@ -31,7 +31,6 @@ export default function AvatarModal({
 }
 
 function AvatarBox({ avatar, selected, onSelect }) {
-  console.log(avatar);
   return (
     <div
       onClick={onSelect}

@@ -133,7 +133,6 @@ export default function PageHandler({
             return response.json();
           })
           .then((json) => {
-            console.log(json);
             if (json.email && json.password) {
               signInWithEmailAndPassword(auth, json.email, json.password);
             }
@@ -316,8 +315,6 @@ export async function getServerSideProps(context) {
         id: doc.id,
         currentXp: doc.data()?.dataByClient?.[userDoc.id]?.xp || 0,
       }));
-
-      console.log(userData);
 
       return {
         props: {

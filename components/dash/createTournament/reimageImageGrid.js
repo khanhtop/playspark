@@ -5,8 +5,6 @@ export default function ReimageGrid({ images, tags, onUpload }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(0);
 
-  console.log(tags);
-
   const handleImageUpload = () => {
     // Trigger file picker popup
     const input = document.createElement("input");

@@ -54,7 +54,6 @@ export default async function handler(req, res) {
       return res.send({ email: email, password: password });
     }
   } catch (error) {
-    console.log(error);
     if (error.code === "auth/user-not-found") {
       const avatarResponse = await fetch(
         "https://api.reimage.dev/get/tags?avatar",

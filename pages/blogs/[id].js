@@ -2,7 +2,6 @@ import { PrismicRichText } from "@prismicio/react";
 import Head from "next/head";
 
 export default function BlogPost({ blogPost, url }) {
-  console.log(blogPost);
   const router = useRouter();
   return (
     <>

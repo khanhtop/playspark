@@ -61,7 +61,6 @@ export default function Redeem({ status, data, id }) {
 export async function getServerSideProps(context) {
   const { id } = context.query;
   const { itemId } = context.query;
-  console.log(id, itemId);
 
   const docs = await getDocs(
     query(

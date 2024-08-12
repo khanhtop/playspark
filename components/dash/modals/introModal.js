@@ -105,7 +105,7 @@ export default function IntroModal({ data, playAudio }) {
             disabled={!checked}
             isLoading={loading}
             onClick={() => {
-              if (!context.isAudioPlaying && context.settings.bgm) {
+              if (context.settings.bgm) {
                 data.playAudio();
               }
               agree();

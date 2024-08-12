@@ -10,7 +10,6 @@ cloudinary.v2.config({
 export default async function handler(req, res) {
   try {
     const { aspectRatio, gameTag } = req.query;
-    console.log("QUERY", aspectRatio, gameTag);
 
     if (!aspectRatio) {
       return res.status(400).json({ error: "Missing aspectRatio parameter" });
@@ -19,8 +18,6 @@ export default async function handler(req, res) {
     const expression = `resource_type:image AND tags=${aspectRatio}${
       gameTag ? ` AND tags=${gameTag}` : ``
     }`;
-
-    console.log(expression);
 
     cloudinary.v2.search
       .expression(expression)

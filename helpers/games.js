@@ -555,6 +555,5 @@ export const sanitiseGameObject = (_game) => {
   delete game["reimageSprites"];
   delete game["tournamentId"];
   delete game["videoViews"];
-  console.log(game);
   return game;
 };

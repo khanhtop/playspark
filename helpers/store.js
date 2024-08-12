@@ -268,8 +268,6 @@ export function AppWrapper({ children }) {
     return avatars;
   };
 
-  console.log(config);
-
   const sharedState = {
     config,
     setConfig,

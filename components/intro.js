@@ -40,12 +40,15 @@ export default function Intro({
   clientCredits,
   uuid,
   demo,
+  hasInitialisedAudio,
+  setHasInitialisedAudio,
 }) {
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
   const audio = useRef(null);
   useMusic(
+    hasInitialisedAudio,
     context?.data?.homescreenMusic ?? "/uisounds/intro.mp3",
     0.5,
     context.settings.bgm
@@ -117,6 +120,7 @@ export default function Intro({
       !demo &&
       !context.profile?.termsAgreed?.includes(data.tournamentId)
     ) {
+      setHasInitialisedAudio(true);
       setShowModal({
         title: "Welcome",
         content: IntroModal,
@@ -139,25 +143,25 @@ export default function Intro({
             }),
         },
       });
+    } else if (
+      context.loggedIn?.uid &&
+      !demo &&
+      context.profile?.termsAgreed?.includes(data.tournamentId) &&
+      !hasInitialisedAudio
+    ) {
+      setHasInitialisedAudio(true);
+      setShowModal({
+        title: "Welcome",
+        content: WelcomeModal,
+        data: {
+          ...data,
+          hideClose: true,
+          theme: theme,
+          playAudio: () => playAudio(),
+          onClose: () => setShowModal(false),
+        },
+      });
     }
-
-    // else if (
-    //   context.loggedIn?.uid &&
-    //   !demo &&
-    //   context.profile?.termsAgreed?.includes(data.tournamentId)
-    // ) {
-    //   setShowModal({
-    //     title: "Welcome",
-    //     content: WelcomeModal,
-    //     data: {
-    //       ...data,
-    //       hideClose: true,
-    //       theme: theme,
-    //       playAudio: () => playAudio(),
-    //       onClose: () => setShowModal(false),
-    //     },
-    //   });
-    // }
   }, [context.profile]);
 
   return (

@@ -1,7 +1,6 @@
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
 
 export default function CreateSummary({ tournament, setTournament }) {
-  console.log(tournament);
   return (
     <div className="text-white flex flex-col gap-2">
       <TextSummary title="Game Name" text={tournament.name} />
