@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { doc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import AvatarModal from "./avatarModal";
 
 export default function AccountInfo({
   data,
@@ -20,6 +21,7 @@ export default function AccountInfo({
   const [name, setName] = useState(context?.profile?.companyName);
   const [avatar, setAvatar] = useState(context?.profile?.profilePhoto);
   const [loading, setLoading] = useState(false);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   const updateProfile = () => {
     if (name) {
@@ -34,6 +36,7 @@ export default function AccountInfo({
   };
 
   useEffect(() => {
+    // context.fetchAvatars();
     if (context.profile) {
       setName(context?.profile?.companyName);
     }
@@ -42,20 +45,14 @@ export default function AccountInfo({
     }
   }, [context.profile]);
 
-  const changeImage = async (reverse = false) => {
-    if (!loading) {
-      setLoading(true);
-      const av = avatars[Math.floor(Math.random() * avatars.length)];
-      setAvatar(av);
-      await setDoc(
-        doc(firestore, "users", context?.loggedIn?.uid),
-        {
-          profilePhoto: av,
-        },
-        { merge: true }
-      );
-      setLoading(false);
-    }
+  const changeImage = async (av) => {
+    await setDoc(
+      doc(firestore, "users", context?.loggedIn?.uid),
+      {
+        profilePhoto: av,
+      },
+      { merge: true }
+    );
   };
 
   if (context.loggedIn?.uid)
@@ -72,12 +69,12 @@ export default function AccountInfo({
           } gap-2 md:gap-4 flex-1 justify-center md:justify-start  md:items-center`}
         >
           <div className="flex items-center gap-2">
-            {vertical && (
+            {/* {vertical && (
               <ChevronLeftIcon
                 onClick={() => changeImage(true)}
                 className="cursor-pointer h-12 w-12 text-[#999] hover:text-black transition"
               />
-            )}
+            )} */}
             <div
               src={context?.profile?.profilePhoto}
               style={{ borderColor: data.accentColor }}
@@ -88,16 +85,17 @@ export default function AccountInfo({
               } rounded-full`}
             >
               <img
+                onClick={() => setShowAvatarModal(true)}
                 src={avatar}
-                className="h-full w-full object-cover scale-110"
+                className="h-full w-full object-cover scale-110 hover:opacity-90 transition cursor-pointer"
               />
             </div>
-            {vertical && (
+            {/* {vertical && (
               <ChevronRightIcon
                 onClick={() => changeImage()}
                 className="cursor-pointer h-12 w-12 text-[#999] hover:text-black transition"
               />
-            )}
+            )} */}
           </div>
           <EditableNameBox
             data={data}
@@ -121,6 +119,13 @@ export default function AccountInfo({
             image="/clientPages/coins.png"
           />
         </div>
+        <AvatarModal
+          show={showAvatarModal}
+          close={() => setShowAvatarModal(false)}
+          avatars={context.avatars}
+          currentAvatar={context?.profile?.profilePhoto}
+          onSelect={(img) => changeImage(img)}
+        />
       </div>
     );
 }

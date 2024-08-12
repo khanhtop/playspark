@@ -26,6 +26,7 @@ import IntroModal from "./dash/modals/introModal";
 import LegalModal from "./dash/modals/legalModal";
 import useGoogleFont from "@/helpers/useGoogleFont";
 import WelcomeModal from "./dash/modals/welcomeModal";
+import ProfileModal from "./dash/modals/profileModal";
 
 export default function Intro({
   waitOnAuth,
@@ -50,7 +51,7 @@ export default function Intro({
     context.settings.bgm
   );
 
-  useGoogleFont("Lexend Zetta", "custom-font");
+  useGoogleFont(data.font || "Anton", "custom-font");
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
@@ -176,6 +177,17 @@ export default function Intro({
           <div className="flex-1 h-12 z-10"></div>
 
           <IntroPanel
+            onAvatarClick={() => {
+              setShowModal({
+                title: "Avatar",
+                content: ProfileModal,
+                data: {
+                  ...data,
+                  theme: theme,
+                  onClose: () => setShowModal(false),
+                },
+              });
+            }}
             theme={theme}
             data={data}
             uuid={uuid}
@@ -198,7 +210,7 @@ export default function Intro({
             disabled={
               !clientCredits || expired || clientCredits < shutoffBalance
             }
-            bgColor={data.primaryColor}
+            bgColor={data.accentColor || data.primaryColor || "black"}
             textColor={data.textColor}
             theme={theme}
             onClick={async () => {

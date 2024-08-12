@@ -157,6 +157,13 @@ export default function CreateDesign({ tournament, setTournament }) {
         }}
       />
       <CreateColorPicker
+        label="Accent Color"
+        value={tournament.accentColor || "#000000"}
+        onSelect={(a) => {
+          setTournament({ ...tournament, accentColor: a.hex });
+        }}
+      />
+      <CreateColorPicker
         label="Text Color"
         value={tournament.textColor}
         onSelect={(a) => {
