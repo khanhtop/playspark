@@ -62,7 +62,7 @@ export class Timer {
 
         if (!this.pause) {
           let deltaTime = engine.getDeltaTime() / 1000;
-          deltaTime /= scene.getAnimationRatio();
+          if (scene.getAnimationRatio() == 0) deltaTime = 0; //scene.getAnimationRatio();
           this.update(deltaTime);
         }
         // this will run
