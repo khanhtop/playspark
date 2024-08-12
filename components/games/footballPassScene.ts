@@ -92,19 +92,19 @@ export default class FootballPassScene extends Phaser.Scene {
     gameType = newGameType;
     this.params = newParams;
 
-    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + '/player.png';
-    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite :'/pong/' + gameType + '/enemy.png';
+    // this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : '/pong/' + gameType + '/player.png';
+    // this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite :'/pong/' + gameType + '/enemy.png';
 
-    this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/bg.png';
+    // this.params.backgroundSprite = !!this.params.backgroundSprite? this.params.backgroundSprite : '/pong/' + gameType + '/bg.png';
     
-    this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite: "/pong/" + gameType + "/ball-anim.png";
+    // this.params.objectSprite = !!this.params.objectSprite? this.params.objectSprite: "/pong/" + gameType + "/ball-anim.png";
 
-    // this.params.playerSprite = '/pong/' + gameType + '/player.png';
-    // this.params.enemySprite = '/pong/' + gameType + '/enemy.png';
+    this.params.playerSprite = '/pong/' + gameType + '/player.png';
+    this.params.enemySprite = '/pong/' + gameType + '/enemy.png';
 
-    // this.params.backgroundSprite = '/pong/' + gameType + '/bg.png';
+    this.params.backgroundSprite = '/pong/' + gameType + '/bg.png';
     
-    // this.params.objectSprite = "/pong/" + gameType + "/ball-anim.png";
+    this.params.objectSprite = "/pong/" + gameType + "/ball-anim.png";
 
 
   }
@@ -1799,10 +1799,10 @@ export default class FootballPassScene extends Phaser.Scene {
     this.ball.setCircle(this.textures.get("ball").getSourceImage().width / 2);
 
     this.aiEnemies.forEach(e => {
-      e.setVelocity(0, 0).setAngle(0).play("enemy_idle_anim");
+      e.setVelocity(0, 0).play("enemy_idle_anim");
     });
     this.aiPlayers.forEach(p => {
-      p.setVelocity(0, 0).setAngle(0).play("player_idle_anim");
+      p.setVelocity(0, 0).play("player_idle_anim");
     })
 
   }
@@ -1895,7 +1895,7 @@ export default class FootballPassScene extends Phaser.Scene {
         if(this.posObject[plans[this.status.planIdx]].targets[i][0].y == 0 && this.posObject[plans[this.status.planIdx]].targets[i][1].y == 0) {
           targetX = enemy.x + 30;
           targetY = enemy.y;
-          rate = 0.35
+          // rate = 0.35
         }
 
         let dx = targetX - player.x;
@@ -1914,7 +1914,11 @@ export default class FootballPassScene extends Phaser.Scene {
         let vx = Math.cos(angle) * velocity;
         let vy = Math.sin(angle) * velocity;
 
-        player.setAngle(angle * 180 / Math.PI + 90)
+        let curAngle = player.angle;
+        if(distance > 3) {
+          curAngle = Phaser.Math.Angle.RotateTo(curAngle, angle * 180 / Math.PI + 90, 0);
+        }
+        player.setAngle(curAngle)
         player.setVelocity(vx, vy)
 
         // AI ENEMEY
@@ -1922,7 +1926,7 @@ export default class FootballPassScene extends Phaser.Scene {
         targetX = player.x;
         targetY = player.y - 50;
 
-        if(first == 160 || this.status.isThrowBall || this.posObject[plans[this.status.planIdx]].targets[i][0].y == 0 && this.posObject[plans[this.status.planIdx]].targets[i][1].y == 0) {
+        if(first == 160 || this.status.isThrowBall || (this.posObject[plans[this.status.planIdx]].targets[i][0].y == 0 && this.posObject[plans[this.status.planIdx]].targets[i][1].y == 0)) {
           targetX = this.ball.x;
           targetY = this.ball.y;
           // if(player.anims.getName() != "smoke_anim") {
@@ -1943,7 +1947,11 @@ export default class FootballPassScene extends Phaser.Scene {
         vx = Math.cos(angle) * velocity;
         vy = Math.sin(angle) * velocity;
 
-        enemy.setAngle(angle * 180 / Math.PI - 90)
+        curAngle = enemy.angle;
+        if(distance > 3) {
+          curAngle = Phaser.Math.Angle.RotateTo(curAngle, angle * 180 / Math.PI - 90, 0);
+        }
+        enemy.setAngle(curAngle)
         enemy.setVelocity(vx, vy)
 
       }
