@@ -53,7 +53,8 @@ export default function ModalRewards({ data }) {
   const tournamentLevel =
     context?.profile?.tournamentSpecificData?.[data.tournamentId]?.level || 0;
 
-  const xp = context.profile?.dataByTournament?.[data.tournamentId]?.xp || 0;
+  const xp =
+    context.profile?.tournamentSpecificData?.[data.tournamentId]?.xp || 0;
 
   const isUnlocked = (item) => {
     if (item.input === "score") {
