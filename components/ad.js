@@ -60,6 +60,8 @@ export default function Advert({
   const [lives, setLives] = useState(data.id === 11 ? 10 : 3);
   const [reviveCount, setReviveCount] = useState(0);
 
+  console.log(data);
+
   useEffect(() => {
     // For Sportzfan Only
     context.setWebhookBasePayload({

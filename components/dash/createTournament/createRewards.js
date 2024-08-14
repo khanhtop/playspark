@@ -131,6 +131,15 @@ export default function CreateRewards({ tournament, setTournament }) {
 function RewardRow({ item, onChange, onDelete, index }) {
   return (
     <div className="w-full bg-white/10 px-4 pt-5 pb-3 rounded-lg relative">
+      <div className="mb-4 text-sm font-bold flex gap-4 items-center h-6 ">
+        <div className="bg-cyan-500 rounded-full flex h-full  px-3 items-center justify-center">
+          Reward #{index + 1}
+        </div>
+        <p>
+          ID: <span>{item.id}</span>
+        </p>
+      </div>
+
       <div className="flex gap-4 mb-0 pr-0">
         <ImagePicker
           cover
