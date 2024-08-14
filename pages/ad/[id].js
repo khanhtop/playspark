@@ -113,7 +113,6 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
   // AUTO-SIGN IN WITH PROVIDED EMAIL
 
   useEffect(() => {
-    console.log(ad.ownerId);
     if (externalId && externalId !== "override") {
       setWaitOnAuth(true);
       logoutWithoutReroute();
@@ -139,6 +138,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
         !context?.profile?.isAdmin)
     ) {
       const uuid = getDeviceID();
+      console.log(uuid);
 
       if (uuid !== null) {
         const emailStructure = uuid + "@playspark.co";

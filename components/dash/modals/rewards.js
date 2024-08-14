@@ -296,9 +296,9 @@ function RewardRow({
         <div className="h-full flex items-center justify-center flex-shrink-0 mr-4">
           <img src={item.image} className="w-12 p-2" />
         </div>
-        <div className="flex flex-col items-start">
-          <div className="flex-1 flex items-center justify-center capitalize text-center text-black/70 ">
-            <p className="custom-font text-center w-full">
+        <div className="flex flex-col items-start w-full">
+          <div className="flex-1 w-full flex items-center justify-center capitalize text-center text-black/70 ">
+            <p className="custom-font text-center w-full line-clamp-1">
               {parseInput(item.input, item.inputOperand, item.inputValue)}{" "}
             </p>
           </div>
@@ -306,9 +306,9 @@ function RewardRow({
           {/* <div className="line-clamp-2 primary-font">{item.description}</div> */}
           <div
             style={{ fontWeight: 700, color: primaryColor }}
-            className="text-center w-full custom-font"
+            className="text-center w-full custom-font "
           >
-            {item.name}
+            <p className="line-clamp-1 w-full">{item.name}</p>
           </div>
           <div className="flex justify-center w-full mt-1">
             {context?.loggedIn?.uid && (
@@ -321,6 +321,7 @@ function RewardRow({
                       ? primaryColor
                       : "#EEE",
                     color: unlocked ? textColor : "#AAA",
+                    width: "100%",
                   }}
                   disabled={typeof claimed === "undefined" || loading}
                   className="h-full w-20 border-4 rounded-2xl"

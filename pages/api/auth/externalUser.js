@@ -32,8 +32,6 @@ export default async function handler(req, res) {
     }
   }
 
-  console.log(password);
-
   // Try and sign in
   try {
     const userCredential = await signInWithEmailAndPassword(
