@@ -49,7 +49,7 @@ export default function Intro({
   const audio = useRef(null);
   useMusic(
     hasInitialisedAudio,
-    context?.data?.homescreenMusic ?? "/uisounds/intro.mp3",
+    data?.homescreenMusic ?? "/uisounds/intro.mp3",
     0.5,
     context.settings.bgm
   );
@@ -58,7 +58,7 @@ export default function Intro({
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
-    const fileName = context?.data?.homescreenMusic ?? "/uisounds/intro.mp3";
+    const fileName = data?.homescreenMusic ?? "/uisounds/intro.mp3";
     audio.current = new Audio(fileName);
     audio.current.play();
     context.setIsAudioPlaying(true);
