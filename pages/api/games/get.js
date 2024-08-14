@@ -10,8 +10,6 @@ import {
 
 export default async function handler(req, res) {
   // Handle different HTTP methods
-
-  console.log("Received Headers:", req.headers);
   if (req.method === "OPTIONS") {
     res.setHeader(
       "Access-Control-Allow-Headers",
@@ -51,7 +49,6 @@ export default async function handler(req, res) {
         } else {
           let out = [];
           gamesSnapshot.forEach((doc) => {
-            // console.log(doc.data());
             out.push({
               id: doc.id,
               ...doc.data(),

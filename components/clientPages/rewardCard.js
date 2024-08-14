@@ -25,9 +25,6 @@ export default function RewardCard({ user, item, isRedeem }) {
   };
 
   const redeemReward = async () => {
-    console.log(
-      `https://dev.playspark.com/redeem/${item.ownerId}?itemId=${item.rewardId}`
-    );
     setShowModal(true);
   };
 

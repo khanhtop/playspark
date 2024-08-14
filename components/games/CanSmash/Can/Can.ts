@@ -29,6 +29,7 @@ export class Can implements IPoolable {
   sphereAggregate: PhysicsAggregate;
   tweenc: TWEEN.Tween<any>;
   scaleFactor = 2;
+  materialIndex:number = 0;
   constructor() {
     const data = {
       scale:  this.scaleFactor ,
@@ -66,7 +67,8 @@ export class Can implements IPoolable {
     //console.log("set active",      this.canContainer.getChildren()[0].getChildren());
   }
 
-  setMaterial(_material: StandardMaterial) {
+  setMaterial(_material: StandardMaterial,index:number) {
+    this.materialIndex = index;
     // this.canBody.material = _material;
     //this.canContainer.dispose();
 

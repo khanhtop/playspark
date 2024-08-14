@@ -298,54 +298,62 @@ function RewardRow({
         </div>
         <div className="flex flex-col items-start">
           <div className="flex-1 flex items-center justify-center capitalize text-center text-black/70 ">
-            <p className="custom-font">
+            <p className="custom-font text-center w-full">
               {parseInput(item.input, item.inputOperand, item.inputValue)}{" "}
             </p>
           </div>
 
-          <div className="line-clamp-2 primary-font">{item.description}</div>
+          {/* <div className="line-clamp-2 primary-font">{item.description}</div> */}
+          <div
+            style={{ fontWeight: 700, color: primaryColor }}
+            className="text-center w-full custom-font"
+          >
+            {item.name}
+          </div>
+          <div className="flex justify-center w-full mt-1">
+            {context?.loggedIn?.uid && (
+              <div className="px-0">
+                <button
+                  style={{
+                    backgroundColor: isRedeemed
+                      ? "rgb(239, 68, 68)"
+                      : unlocked
+                      ? primaryColor
+                      : "#EEE",
+                    color: unlocked ? textColor : "#AAA",
+                  }}
+                  disabled={typeof claimed === "undefined" || loading}
+                  className="h-full w-20 border-4 rounded-2xl"
+                  onClick={() => {
+                    if (isRedeemed) {
+                      null;
+                    } else if (unlocked && !claimed) {
+                      onClaim(item);
+                    } else if (claimed && isInteractableAfterClaim()) {
+                      playClickSound(context);
+                      onFlipCard(item);
+                    }
+                  }}
+                >
+                  {typeof claimed === "undefined" || loading ? (
+                    <ArrowPathIcon className="h-6 w-full animate-spin" />
+                  ) : isRedeemed ? (
+                    "Redeemed"
+                  ) : claimed && !isInteractableAfterClaim() ? (
+                    "Claimed"
+                  ) : claimed && isInteractableAfterClaim() ? (
+                    "Redeem"
+                  ) : unlocked ? (
+                    "Claim"
+                  ) : (
+                    <LockClosedIcon className="h-6 w-full" />
+                  )}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      {context?.loggedIn?.uid && (
-        <div className="px-0">
-          <button
-            style={{
-              backgroundColor: isRedeemed
-                ? "rgb(239, 68, 68)"
-                : unlocked
-                ? primaryColor
-                : "#EEE",
-              color: unlocked ? textColor : "#AAA",
-            }}
-            disabled={typeof claimed === "undefined" || loading}
-            className="h-full w-20 border-4 rounded-2xl"
-            onClick={() => {
-              if (isRedeemed) {
-                null;
-              } else if (unlocked && !claimed) {
-                onClaim(item);
-              } else if (claimed && isInteractableAfterClaim()) {
-                playClickSound(context);
-                onFlipCard(item);
-              }
-            }}
-          >
-            {typeof claimed === "undefined" || loading ? (
-              <ArrowPathIcon className="h-6 w-full animate-spin" />
-            ) : isRedeemed ? (
-              "Redeemed"
-            ) : claimed && !isInteractableAfterClaim() ? (
-              "Claimed"
-            ) : claimed && isInteractableAfterClaim() ? (
-              "Redeem"
-            ) : unlocked ? (
-              "Claim"
-            ) : (
-              <LockClosedIcon className="h-6 w-full" />
-            )}
-          </button>
-        </div>
-      )}
     </div>
   );
 }

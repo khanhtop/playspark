@@ -314,7 +314,6 @@ export async function incrementPlayableAdCount(tournamentId) {
 }
 
 export async function incrementOptInCount(tournamentId) {
-  console.log(tournamentId);
   updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
     optInCount: increment(1),
   });

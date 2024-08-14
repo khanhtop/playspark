@@ -30,7 +30,6 @@ export default function CreateGlbPicker({
           return raw.json();
         })
         .then((json) => {
-          console.log(json);
           setStateImages(json);
         });
     }

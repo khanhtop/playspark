@@ -19,8 +19,6 @@ export default function ClientHome({
 }) {
   const context = useAppContext();
 
-  console.log(context?.loggedIn);
-
   return (
     <ClientPageWrapper user={user}>
       <AccountInfo

@@ -14,7 +14,6 @@ export function playEvent(context, data) {
     data.ownerId,
     data.tournamentId
   );
-  console.log(data);
   sendSupabaseEvent(
     context?.loggedIn?.uid,
     data.ownerId,
@@ -415,7 +414,6 @@ async function fireXpWebhook(context, data, value) {
   })
     .then((res) => res.json())
     .then((json) => {
-      console.log(json);
       console.log("WEBHOOK FIRED");
     })
     .catch((error) =>

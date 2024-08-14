@@ -3,9 +3,11 @@ import PremiumAdvert from "@/components/premiumAd";
 import Modal from "@/components/ui/modal";
 import { getDemo } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
+import { useState } from "react";
 
 export default function Demo({ ad, id }) {
   const context = useAppContext();
+  const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
 
   return (
     <div
@@ -17,7 +19,12 @@ export default function Demo({ ad, id }) {
         ad.isPremium ? (
           <PremiumAdvert data={ad} />
         ) : (
-          <Advert data={ad} clientCredits={999} />
+          <Advert
+            hasInitialisedAudio={hasInitialisedAudio}
+            setHasInitialisedAudio={setHasInitialisedAudio}
+            data={ad}
+            clientCredits={999}
+          />
         )
       ) : (
         <p>{id} - AD NOT FOUND</p>

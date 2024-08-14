@@ -63,8 +63,6 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
 
   const [hasNotified, setHasNotified] = useState(false);
   const callback = async (score, level = null, boostCredits = null) => {
-    // console.log(`save---- level: ${level} boostCredits: ${boostCredits}`)
-
     setScore(score);
     setStage(2);
     if (context?.loggedIn?.uid === data?.challenger?.id && !hasNotified) {
@@ -114,13 +112,11 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
       return;
     }
     if (window?.frameElement?.offsetHeight) {
-      console.log("IN FRAME");
       setLockX(window.frameElement?.offsetWidth);
       setLockY(window.frameElement?.offsetHeight);
       return;
     }
     if (data.landscape) {
-      console.log("NOT IN FRAME");
       setLockY(window.innerWidth * 0.9 * 0.58);
       setLockX(window.innerWidth * 0.9);
       return;

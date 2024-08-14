@@ -12,6 +12,7 @@ import { useEffect, useState, useMemo, useRef } from "react";
 
 export default function Ad({ ad, id, config, userId, email, externalId }) {
   const context = useAppContext();
+  const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
   const [signingIn, setSigingIn] = useState(0);
   const [waitOnAuth, setWaitOnAuth] = useState(false);
   const [clientCredits, setClientCredits] = useState();
@@ -82,7 +83,6 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
       subscriptionRef.current = onSnapshot(
         doc(firestore, "users", ad.ownerId),
         (doc) => {
-          console.log("SHOULD LISTEN");
           if (doc.exists()) {
             setClientCredits(() => {
               const newCreditBalance = doc.data().creditBalance;
@@ -113,6 +113,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
   // AUTO-SIGN IN WITH PROVIDED EMAIL
 
   useEffect(() => {
+    console.log(ad.ownerId);
     if (externalId && externalId !== "override") {
       setWaitOnAuth(true);
       logoutWithoutReroute();
@@ -134,15 +135,16 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
     } else if (
       (externalId && externalId === "override") ||
       (ad.ownerId === "xwMcL84YdoRXAV52oNjmhVhCHD63" &&
-        context.hasAuthed &&
-        !context.profile.isAdmin)
+        // context.loggedIn?.uid &&
+        !context?.profile?.isAdmin)
     ) {
       const uuid = getDeviceID();
+
       if (uuid !== null) {
         const emailStructure = uuid + "@playspark.co";
         setWaitOnAuth(true);
         logoutWithoutReroute();
-        fetch("https://playspark.co/api/auth/externalUser", {
+        fetch("/api/auth/externalUser", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -153,13 +155,14 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
             return response.json();
           })
           .then((json) => {
+            console.log(json);
             if (json.email && json.password) {
               signInWithEmailAndPassword(auth, json.email, json.password);
             }
           });
       }
     }
-  }, [externalId, context]);
+  }, [externalId, ad]);
 
   useEffect(() => {
     if (waitOnAuth && context?.profile) setWaitOnAuth(false);
@@ -175,7 +178,6 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
         context?.loggedIn?.uid,
         ad
       ).then((result) => {
-        console.log(result);
         if (result.trigger && result.value > 1) {
           context.setEvent({
             title: `${result.value * 10} XP`,
@@ -227,6 +229,8 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
       >
         {ad ? (
           <Advert
+            hasInitialisedAudio={hasInitialisedAudio}
+            setHasInitialisedAudio={setHasInitialisedAudio}
             waitOnAuth={waitOnAuth}
             signingIn={signingIn}
             data={ad}

@@ -9,7 +9,6 @@ import { useRef } from "react";
 export default function CreateMarketing({ tournament, setTournament }) {
   const context = useAppContext();
   const surveyId = useRef(Date.now().toString());
-  console.log(tournament);
   return (
     <>
       {/* Email CTA */}

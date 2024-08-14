@@ -51,8 +51,6 @@ export default function CreateTournamentModal({ data, hide }) {
 
   const surveyId = useRef(Date.now().toString());
 
-  console.log(tournament);
-
   return (
     <div
       onClick={() => hide()}

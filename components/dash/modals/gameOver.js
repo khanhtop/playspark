@@ -23,12 +23,6 @@ export default function ModalGameOver({ data }) {
   const position = lbIndex === -1 ? lb.length + 1 : lbIndex + 1;
 
   useMemo(() => {
-    console.log(
-      data.data?.tournamentId,
-      context?.profile?.companyName,
-      data?.gameOverScore
-    );
-
     if (data.gameOverScore === 0) {
       setLoading(false);
       return;

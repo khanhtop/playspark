@@ -13,7 +13,6 @@ import Avatar from "./avatar";
 
 export default function Sidebar({ selectedPane, setSelectedPane }) {
   const context = useAppContext();
-  console.log(context.profile);
   return (
     <div className="w-[300px] h-full rounded-r-2xl bg-[#FFF] flex flex-col items-center px-8 pb-8 text-[#364153] shadow-xl">
       <img src="/ui/logo.png" className="mt-3 -ml-7" />

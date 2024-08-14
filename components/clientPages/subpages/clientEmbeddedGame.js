@@ -1,7 +1,9 @@
 import Advert from "@/components/ad";
 import ClientPageWrapper from "../clientPageWrapper";
+import { useState } from "react";
 
 export default function ClientEmbeddedGame({ user, setScreen, activeGame }) {
+  const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
   return (
     <ClientPageWrapper
       user={user}
@@ -12,6 +14,8 @@ export default function ClientEmbeddedGame({ user, setScreen, activeGame }) {
     >
       <div className="bg-black h-full flex items-center justify-center">
         <Advert
+          hasInitialisedAudio={hasInitialisedAudio}
+          setHasInitialisedAudio={setHasInitialisedAudio}
           data={activeGame}
           clientCredits={999}
           withPopoutBackNav={() => setScreen("home")}

@@ -65,7 +65,6 @@ export default function DMMessages({ chatter }) {
 }
 
 function ChatBubble({ item, mine }) {
-  console.log(item);
   return (
     <div className={`flex ${mine ? "justify-end" : "justify-start"}`}>
       <div

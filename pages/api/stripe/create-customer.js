@@ -35,7 +35,6 @@ export default async function handler(req, res) {
 
     // Access the customer ID
     const customerId = customer.id;
-    console.log("New customer created. Customer ID:", customerId);
 
     res.status(200).json({ customerId });
   } catch (error) {

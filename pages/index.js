@@ -15,7 +15,6 @@ const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
 });
 
 export default function Home({ page, blogs }) {
-  console.log(page);
   return (
     <>
       <Head>

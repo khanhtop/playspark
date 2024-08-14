@@ -17,10 +17,10 @@ export default function WelcomeModal({ data, playAudio }) {
             <GameButton
               className="w-full"
               onClick={() => {
-                if (!context.isAudioPlaying && context.settings.bgm) {
-                  data.playAudio();
-                  data.onClose();
+                if (context.settings.bgm) {
+                  // data.playAudio();
                 }
+                data.onClose();
               }}
               bgColor={data.primaryColor}
               textColor={data.textColor}

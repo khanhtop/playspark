@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { isIOS, isAndroid } from "react-device-detect";
 import { useAppContext } from "./store";
 
-const useMusic = (fileName, maxVolume, play) => {
+const useMusic = (hasInitialisedAudio, fileName, maxVolume, play) => {
   const context = useAppContext();
 
   useEffect(() => {
+    if (!hasInitialisedAudio) return;
     const audio = new Audio(fileName);
     audio.volume = 0;
     if (play) {

@@ -87,35 +87,6 @@ export default function CreateAudioPicker({
             ))}
           </div>
         </div>
-
-        {/* <WidgetLoader />
-        <Widget
-          cropping={true}
-          croppingDefaultSelectionRatio={0.5}
-          sources={["local", "camera", "unsplash"]}
-          resourceType={"image"}
-          cloudName={"dmj6utxgp"}
-          style={{ backgroundColor: "transparent" }}
-          uploadPreset={"pfnzmu6k"}
-          buttonText={
-            <div className="text-white/20 hover:text-white/30 cursor-pointer transition w-40 h-48 border-4 border-white/10 bg-black/10 rounded-xl flex flex-col items-center justify-center">
-              <CloudArrowDownIcon className="w-20 h-20" />
-              <h3>Upload</h3>
-            </div>
-          }
-          autoClose={false}
-          onSuccess={({ event, info }) => {
-            if (event === "success") {
-              setTimeout(() => {
-                setStateImages([info, ...stateImages]);
-              }, 2000);
-            }
-          }}
-          onFailure={(a) => console.log(a)}
-          customPublicId={"sample"}
-          use_filename={false}
-          destroy={false}
-        /> */}
       </div>
     </>
   );

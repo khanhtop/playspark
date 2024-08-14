@@ -9,7 +9,6 @@ export default function ChallengeButton({ userData, onChallengeButtonClick }) {
   const xpSteal = Math.floor(userData?.dataByClient[client.id]?.xp / 10);
 
   const isNotAbleToBattle = () => {
-    console.log(context.profile);
     if (
       !context?.profile?.dataByClient?.[client.id]?.xp ||
       context?.profile?.dataByClient?.[client.id]?.xp < 10
