@@ -1,6 +1,9 @@
 import * as GUI from "@babylonjs/gui";
 import * as TWEEN from "@tweenjs/tween.js";
 import { Images } from "../Images";
+import { TintedImage } from "./TintedImage";
+import { Color4 } from "@babylonjs/core";
+import { GameData } from "../GameData";
 
 export class EntityUI {
   counter: GUI.TextBlock;
@@ -22,11 +25,16 @@ export class EntityUI {
     this.container.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     advancedTexture.addControl(this.container);
 
-    let bg = new GUI.Image();
+    let bg = new TintedImage();
     bg.source =  Images.data.items_bg;
     bg.widthInPixels = width;
     bg.heightInPixels = 45;
     this.container.addControl(bg);
+    bg.onImageLoadedObservable.addOnce(() => {
+      bg.tint = Color4.FromHexString(
+        GameData.instance.getSecondaryColor()
+      );
+    });
 
     this.img = new GUI.Image();
     this.img.source =  Images.data.heart;

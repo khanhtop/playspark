@@ -1,6 +1,9 @@
 import * as GUI from "@babylonjs/gui";
 import { Events } from "../Events";
 import { Images } from "../Images";
+import { Color4 } from "@babylonjs/core";
+import { GameData } from "../GameData";
+import { TintedImage } from "./TintedImage";
 
 export class ScoreUI {
   counter: GUI.TextBlock;
@@ -21,11 +24,18 @@ export class ScoreUI {
     container.topInPixels = 90;
     advancedTexture.addControl(container);
 
-    var img = new GUI.Image();
+    var img = new TintedImage();
     img.source = Images.data.scorebg;
     img.widthInPixels = size;
     img.heightInPixels = height - diff;
     container.addControl(img);
+    img.onImageLoadedObservable.addOnce(() => {
+      img.tint = Color4.FromHexString(
+        GameData.instance.getSecondaryColor()
+      );
+    });
+
+
 
     this.counter = new GUI.TextBlock();
     this.counter.fontFamily = "PeaceSans";
