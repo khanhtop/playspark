@@ -113,6 +113,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
   // AUTO-SIGN IN WITH PROVIDED EMAIL
 
   useEffect(() => {
+    console.log(ad.ownerId);
     if (externalId && externalId !== "override") {
       setWaitOnAuth(true);
       logoutWithoutReroute();
@@ -134,15 +135,16 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
     } else if (
       (externalId && externalId === "override") ||
       (ad.ownerId === "xwMcL84YdoRXAV52oNjmhVhCHD63" &&
-        context.hasAuthed &&
-        !context.profile.isAdmin)
+        // context.loggedIn?.uid &&
+        !context?.profile?.isAdmin)
     ) {
       const uuid = getDeviceID();
+
       if (uuid !== null) {
         const emailStructure = uuid + "@playspark.co";
         setWaitOnAuth(true);
         logoutWithoutReroute();
-        fetch("https://playspark.co/api/auth/externalUser", {
+        fetch("/api/auth/externalUser", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -153,13 +155,14 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
             return response.json();
           })
           .then((json) => {
+            console.log(json);
             if (json.email && json.password) {
               signInWithEmailAndPassword(auth, json.email, json.password);
             }
           });
       }
     }
-  }, [externalId, context]);
+  }, [externalId, ad]);
 
   useEffect(() => {
     if (waitOnAuth && context?.profile) setWaitOnAuth(false);

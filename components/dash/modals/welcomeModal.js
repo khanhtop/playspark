@@ -18,9 +18,9 @@ export default function WelcomeModal({ data, playAudio }) {
               className="w-full"
               onClick={() => {
                 if (context.settings.bgm) {
-                  data.playAudio();
-                  data.onClose();
+                  // data.playAudio();
                 }
+                data.onClose();
               }}
               bgColor={data.primaryColor}
               textColor={data.textColor}
