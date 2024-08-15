@@ -42,6 +42,7 @@ import { CustomLoadingScreen } from "./CustomLoadingScreen";
 const CanSmash = (data: any) => {
   useEffect(() => {
    
+    console.log(data);
     
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
@@ -331,6 +332,10 @@ function initParams(
 
   if (data.params.textColor != undefined)
     GameData.instance.setTextColor(data.params.textColor);
+
+  if (data.params.secondaryColor != undefined)
+    GameData.instance.setSecondaryColor(data.params.secondaryColor);
+
 
   if (data.params.accentColor != undefined)
     GameData.instance.setAccentColor(data.params.accentColor);
