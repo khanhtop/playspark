@@ -107,7 +107,7 @@ export class GameOverUI {
     textBlock.fontSize = 30;
     textBlock.topInPixels = topInPixels;
     textBlock.leftInPixels = 80;
-    textBlock.color = "#1979B3";
+    textBlock.color = GameData.instance.getAccentColor();
     textBlock.outlineWidth = 0;
     this.container.addControl(textBlock);
   }
@@ -128,7 +128,6 @@ export class GameOverUI {
     this.container.addControl(TextBlock);
   }
   showPopup(currentLevel: number, currentScore: number, targetHits: number) {
-
     this.container.isEnabled = true;
     this.container.isVisible = true;
 
@@ -137,7 +136,6 @@ export class GameOverUI {
     this.targetshits_count.text = targetHits.toString();
 
     Events.gamePlay.notifyObservers({ name: "gameOver" });
-
   }
   hidePopup() {
     this.container.isEnabled = false;
