@@ -27,7 +27,7 @@ export class LevelCompleteUI {
   level_title_txt: GUI.TextBlock;
   container: GUI.Container;
   next_level_time: GUI.TextBlock;
-  next_btn: GUI.Image;
+  next_btn: TintedImage;
   // btn_base: GUI.Button;
   target_img: any;
   hourglass_img: GUI.Image;
@@ -35,6 +35,7 @@ export class LevelCompleteUI {
 
   greatWork: GUI.TextBlock;
   completed_all_levels: GUI.TextBlock;
+  next_btn_base: GUI.Image;
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
     this.container = new GUI.Container();
     this.container.adaptWidthToChildren = true;
@@ -150,7 +151,7 @@ export class LevelCompleteUI {
     //   image2.onImageLoadedObservable.add(() => {
     //     image2.widthInPixels = image2.domImage.naturalWidth;
     //     image2.heightInPixels = image2.domImage.naturalHeight;
-        
+
     //   });
     //   advancedTexture.addControl(image2);*/
     // });
@@ -186,7 +187,8 @@ export class LevelCompleteUI {
     this.level_title_txt.text = "Level 3 Complete!";
     this.level_title_txt.textHorizontalAlignment =
       GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-    this.level_title_txt.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    this.level_title_txt.textVerticalAlignment =
+      GUI.Control.VERTICAL_ALIGNMENT_TOP;
 
     this.level_title_txt.fontSize = 32;
     //this.level_title_txt.fontStyle = "bold";
@@ -314,7 +316,20 @@ export class LevelCompleteUI {
 
     //var next_btn = GUI.Button.CreateImageOnlyButton("but", Images.data.NextBtn);
 
-    this.next_btn = new GUI.Image();
+    this.next_btn_base = new GUI.Image();
+    this.next_btn_base.source = Images.data.btnBase;
+    this.next_btn_base.widthInPixels = 190 / 1.3;
+    this.next_btn_base.heightInPixels = 80 / 1.3;
+    this.next_btn_base.topInPixels = 235;
+    this.next_btn_base.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    this.next_btn_base.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+    this.next_btn_base.isPointerBlocker = false;
+    this.next_btn_base.color = "transparent";
+    this.container.addControl(this.next_btn_base);
+
+
+
+    this.next_btn = new TintedImage();
     this.next_btn.source = Images.data.NextBtn;
     this.next_btn.widthInPixels = 190 / 1.3;
     this.next_btn.heightInPixels = 80 / 1.3;
@@ -326,6 +341,11 @@ export class LevelCompleteUI {
     this.container.addControl(this.next_btn);
     this.next_btn.onPointerClickObservable.add(function () {
       Events.ui.notifyObservers({ type: EventTypes.CONTINUE_BTN_CLICKED });
+    });
+    this.next_btn.onImageLoadedObservable.addOnce(() => {
+      this.next_btn.tint = Color4.FromHexString(
+        GameData.instance.getSecondaryColor()
+      );
     });
 
     var self = this;

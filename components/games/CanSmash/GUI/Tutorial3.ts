@@ -3,6 +3,7 @@ import * as TWEEN from "@tweenjs/tween.js";
 import { EventTypes, Events } from "../Events";
 import { PowerupCube } from "../Powerups/PowerupCube";
 import {
+  Color4,
   Engine,
   ICanvas,
   ICanvasRenderingContext,
@@ -13,6 +14,7 @@ import { Timer } from "../Timer";
 import { GameData } from "../GameData";
 import { Images } from "../Images";
 import { BlackBG } from "./BlackBG";
+import { TintedImage } from "./TintedImage";
 
 export class Tutorial3 {
   container: GUI.Container;
@@ -56,15 +58,33 @@ export class Tutorial3 {
     continueBtn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
     continueBtn.isVisible = false;
 
-    var next_btn = new GUI.Image();
+
+    var next_btn_base = new GUI.Image();
+    next_btn_base.source = Images.data.btnBase;
+    next_btn_base.widthInPixels = 104 * 1.3;
+    next_btn_base.heightInPixels = 43 * 1.3;
+    next_btn_base.leftInPixels = 0;
+    next_btn_base.topInPixels = -46;
+    next_btn_base.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    next_btn_base.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+    next_btn_base.isEnabled = true;
+
+
+    var next_btn = new TintedImage();
     next_btn.source = Images.data.NextBtn;
-    next_btn.widthInPixels = 120 * 1.2;
-    next_btn.heightInPixels = 47 * 1.2;
+    next_btn.widthInPixels = 104 * 1.3;
+    next_btn.heightInPixels = 43 * 1.3;
     next_btn.leftInPixels = 0;
     next_btn.topInPixels = -50;
     next_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     next_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
     next_btn.isEnabled = true;
+
+    next_btn.onImageLoadedObservable.addOnce(() => {
+      next_btn.tint = Color4.FromHexString(
+        GameData.instance.getSecondaryColor()
+      );
+    });
 
 
     next_btn.onPointerUpObservable.addOnce(() => {
@@ -79,6 +99,7 @@ export class Tutorial3 {
       infoText.text = "Tap shield to blow\nup enemy cans.";
       arrow.topInPixels = -50;
       next_btn.isVisible = false;
+      next_btn_base.isVisible = false;
       BlackBG.instance.show(Images.data.blackbg4);
     });
 
@@ -86,6 +107,7 @@ export class Tutorial3 {
 
     this.container.addControl(message);
     this.container.addControl(continueBtn);
+    this.container.addControl(next_btn_base);
     this.container.addControl(next_btn);
     this.advancedTexture.addControl(this.container);
 
