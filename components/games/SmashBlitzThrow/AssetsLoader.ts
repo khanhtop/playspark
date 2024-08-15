@@ -62,6 +62,8 @@ export class AssetsLoader {
     this.scene.load.image("rounded_rectangle2", "rounded_rectangle2.png");
     this.scene.load.image("goal", "goal.png");
     this.scene.load.image("popup_bg", "popup_bg.png");
+    this.scene.load.image("popup_bg_white", "popup_bg_white.png");
+    this.scene.load.image("popup_bg_btns", "popup_bg_btns.png");
     this.scene.load.image("blue_btn", "blue_btn.png");
     this.scene.load.image("coins", "coins.png");
     this.scene.load.image("green_ads_btn", "green_ads_btn.png");

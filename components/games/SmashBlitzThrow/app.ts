@@ -152,7 +152,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
       ? this.params.backgroundSprite
       : undefined;
     new BackGroundManager(this, backgroundSprite, this.width, this.height); //this.params.backgroundSprite);
-   /* let versiontxt = this.make.text({
+    /* let versiontxt = this.make.text({
       x: this.renderer.width,
       y: this.renderer.height,
       origin: 1,
@@ -162,7 +162,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
         font: "20px monospace",
       },
     });*/
-   // versiontxt.setStroke(`0x000000`, 2);
+    // versiontxt.setStroke(`0x000000`, 2);
 
     let throwingCenterX = this.widthFactor * 1.6;
     let throwingCenterY = this.heightFactor * 7.3;
@@ -304,10 +304,13 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
     progressBox.setPos(this.widthFactor * 2, this.heightFactor * 9.35);
     let ballGravity = new BallGravity(this);
 
+    let primaryColor = this.params ? this.params.primaryColor : "#1B61D4";
+
     this.levelCompletePopup = new LevelCompletePopup(
       this,
       this.width,
-      this.height
+      this.height,
+      primaryColor
     );
     this.levelCompletePopup.setPos(this.width / 2, this.height / 2);
     this.levelCompletePopup.hide();
@@ -375,7 +378,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 
     new LoseManager(this);
     new WinManager(this);
-    new PausePopup(this);
+    new PausePopup(this,primaryColor);
 
     this.powerupOverlay = PowerupOverlay.getInstance(this);
     this.add.container(this.width / 2, this.height / 2, this.powerupOverlay);
@@ -427,7 +430,7 @@ export default class SmashBlitzThrowing extends Phaser.Scene {
 }
 
 window.onload = () => {
- /* const config = {
+  /* const config = {
     type: Phaser.AUTO,
     width: 960,
     height: 512,

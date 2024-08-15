@@ -3,7 +3,7 @@ import { Global } from "../Global";
 
 export class PausePopup {
   scene: Phaser.Scene;
-  constructor(_scene: Phaser.Scene) {
+  constructor(_scene: Phaser.Scene, colorString: string) {
     this.scene = _scene;
     let centerX = _scene.renderer.width / 2;
     let centerY = _scene.renderer.height / 2;
@@ -27,18 +27,32 @@ export class PausePopup {
       )
       .setInteractive();
 
-      let gamePausedTitle = _scene.add
+    let gamePausedTitle = _scene.add
       .text(-145, -60, `GAME PAUSED`, font)
       .setOrigin(0, 0.5)
       .setSize(200, 500)
       .setFontSize(40)
       .setAlign("left")
       .setColor("#000050")
-      .setPadding(0, 0, 5, 0)
+      .setPadding(0, 0, 5, 0);
     //  .setFontStyle("bold");
-
+    let primaryColor =
+      Phaser.Display.Color.HexStringToColor(colorString).color32;
     let popupbg = _scene.add
       .sprite(0, 0, "popup_bg")
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(500, 500)
+      .setInteractive()
+      .setTint(primaryColor);
+
+    let popup_bg_btns = _scene.add
+      .sprite(0, 0, "popup_bg_btns")
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(500, 500)
+      .setInteractive();
+
+    let popup_bg_white = _scene.add
+      .sprite(0, 0, "popup_bg_white")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(500, 500)
       .setInteractive();
@@ -50,7 +64,7 @@ export class PausePopup {
       .setDisplaySize(150, 60);
 
     let resume = _scene.add
-      .sprite(-80,70, "resume")
+      .sprite(-80, 70, "resume")
       .setOrigin(0.5, 0.5)
       .setInteractive()
       .setDisplaySize(150, 60);
@@ -64,13 +78,13 @@ export class PausePopup {
       this.scene.events.emit("PausePopup:onQuitClick");
     });
 
-   
-
-
     group.add(blach_bg);
     group.add(popupbg);
+    group.add(popup_bg_btns);
+    group.add(popup_bg_white);
+
+
     group.add(gamePausedTitle);
-    
 
     group.add(quit);
     group.add(resume);
