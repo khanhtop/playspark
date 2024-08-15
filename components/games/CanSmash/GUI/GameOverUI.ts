@@ -4,6 +4,9 @@ import { EventTypes, Events } from "../Events";
 import { LevelCreator } from "../LevelCreator";
 import { Utils } from "../Utils";
 import { Images } from "../Images";
+import { Color4 } from "@babylonjs/core";
+import { GameData } from "../GameData";
+import { TintedImage } from "./TintedImage";
 
 export class GameOverUI {
   targetshits_count: GUI.TextBlock;
@@ -31,6 +34,8 @@ export class GameOverUI {
     img.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
     this.container.addControl(img);
+
+    this.createHeader();
 
     var sad_img = new GUI.Image();
     sad_img.source = Images.data.sad;
@@ -79,8 +84,8 @@ export class GameOverUI {
     close_btn.source = Images.data.CloseBtn;
     close_btn.widthInPixels = 55;
     close_btn.heightInPixels = 55;
-    close_btn.leftInPixels = -18;
-    close_btn.topInPixels = 5;
+    close_btn.leftInPixels = -50;
+    close_btn.topInPixels = 10;
     close_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
     close_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     this.container.addControl(close_btn);
@@ -101,7 +106,7 @@ export class GameOverUI {
     textBlock.textHorizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_LEFT;
     textBlock.fontSize = 30;
     textBlock.topInPixels = topInPixels;
-    textBlock.leftInPixels = 50;
+    textBlock.leftInPixels = 80;
     textBlock.color = "#1979B3";
     textBlock.outlineWidth = 0;
     this.container.addControl(textBlock);
@@ -115,7 +120,7 @@ export class GameOverUI {
     TextBlock.clipContent = false;
     TextBlock.fontSize = 35;
     TextBlock.topInPixels = topInPixels;
-    TextBlock.leftInPixels = -80;
+    TextBlock.leftInPixels = -90;
     TextBlock.color = "#FAF8F9";
 
     TextBlock.outlineWidth = 4;
@@ -137,5 +142,30 @@ export class GameOverUI {
   hidePopup() {
     this.container.isEnabled = false;
     this.container.isVisible = false;
+  }
+
+  private createHeader() {
+    var modal_header = new TintedImage();
+    modal_header.clipChildren = false;
+    modal_header.clipContent = false;
+    modal_header.source = Images.data.ModalHeader;
+    modal_header.sourceWidth = 500;
+    modal_header.sourceHeight = 100;
+    modal_header.widthInPixels = 570;
+    modal_header.heightInPixels = 150;
+    modal_header.setWFactor(2);
+    modal_header.setHFactor(4);
+
+    modal_header.onImageLoadedObservable.addOnce(() => {
+      modal_header.tint = Color4.FromHexString(
+        GameData.instance.getPrimaryColor()
+      );
+    });
+
+    modal_header.topInPixels = -10;
+    modal_header.leftInPixels = 40;
+    modal_header.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    modal_header.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    this.container.addControl(modal_header);
   }
 }
