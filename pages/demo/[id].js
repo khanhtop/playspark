@@ -3,6 +3,7 @@ import PremiumAdvert from "@/components/premiumAd";
 import Modal from "@/components/ui/modal";
 import { getDemo } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
+import React, { useEffect, useState } from "react";
 
 export default function Demo({ ad, id }) {
   const context = useAppContext();

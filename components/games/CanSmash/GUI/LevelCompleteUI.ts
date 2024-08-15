@@ -56,8 +56,7 @@ export class LevelCompleteUI {
 
     this.createHeader();
 
-
-    var img = new GUI.Image();
+    /*var img = new GUI.Image();
     img.source = Images.data.starsBg;
     img.widthInPixels = 200 * 1.15;
     img.heightInPixels = 76 * 1.15;
@@ -66,7 +65,7 @@ export class LevelCompleteUI {
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     this.container.addControl(img);
 
-    var img = new GUI.Image();
+      var img = new GUI.Image();
     img.source = Images.data.CenterStar;
     img.widthInPixels = 193 * 0.3;
     img.heightInPixels = 189 * 0.3;
@@ -95,8 +94,73 @@ export class LevelCompleteUI {
     img.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     img.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
     this.container.addControl(img);
+*/
 
+    /*  let scene = GameData.instance.getScene();
+    let canvas = GameData.instance.getCanvas();
+
+    var _advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    const ctx = _advancedTexture.getContext();*/
+
+    // var image1 = new GUI.Image("image1", Images.data.logo1);
+    // image1.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    // image1.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    // image1.topInPixels = 190;
+
+    // image1.onImageLoadedObservable.add(() => {
+    //   image1.widthInPixels = image1.domImage.naturalWidth;
+    //   image1.heightInPixels = image1.domImage.naturalHeight;
+    //   image1.sourceWidth = image1.domImage.naturalWidth*2;
+    //   image1.sourceHeight = image1.domImage.naturalHeight;
+    //   image1.clipChildren = true;
+    //   image1.clipContent = true;
+
+    //   image1.scaleX =
+    //     image1.widthInPixels / 3220 / (image1.widthInPixels / 644);
+    //   image1.scaleY =
+    //     image1.heightInPixels / 1500 / (image1.heightInPixels / 300);
+
+    //   console.log(image1.widthInPixels);
+    //   console.log(image1.heightInPixels);
+
+    //   advancedTexture.addControl(image1);
+
+    //   /*const centerX = canvas.width / 2;
+    //   const centerY = canvas.height / 2;
+    //   const radius = 30;
+
+    //   ctx.beginPath();
+    //   ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+    //   ctx.closePath();
+
+    //   ctx.clip();
+
+    //   ctx.clearRect(0, 0, canvas.width, canvas.height);*/
+
+    //   /* let imgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+
+    //   const _canvas = document.createElement('canvas');
+    //   _canvas.getContext("2d").putImageData(imgData,0,0)
+
+    //   var image2 = new GUI.Image("image2",_canvas.toDataURL());
+    //   image2.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    //   image2.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+
+    //   image2.onImageLoadedObservable.add(() => {
+    //     image2.widthInPixels = image2.domImage.naturalWidth;
+    //     image2.heightInPixels = image2.domImage.naturalHeight;
+        
+    //   });
+    //   advancedTexture.addControl(image2);*/
+    // });
+
+    /*  scene.onBeforeRenderObservable.add(() => {
    
+
+      //  advancedTexture.update();
+    });*/
+
     this.next_level_bg = new TintedImage();
     this.next_level_bg.setWFactor(2);
     this.next_level_bg.onImageLoadedObservable.addOnce(() => {
@@ -122,9 +186,11 @@ export class LevelCompleteUI {
     this.level_title_txt.text = "Level 3 Complete!";
     this.level_title_txt.textHorizontalAlignment =
       GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+    this.level_title_txt.textVerticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+
     this.level_title_txt.fontSize = 32;
     //this.level_title_txt.fontStyle = "bold";
-    this.level_title_txt.topInPixels = -95;
+    this.level_title_txt.topInPixels = 90;
     this.level_title_txt.leftInPixels = 0;
     this.level_title_txt.color = "#0B1B70";
     this.level_title_txt.outlineColor = "#88B5DF";
@@ -321,7 +387,75 @@ export class LevelCompleteUI {
 
     //advancedTexture.addControl(container);
   }
+  drawSvgPath(ctx, pathData) {
+    const commands = pathData.match(/[a-zA-Z][^a-zA-Z]*/g); // Split commands
+    let x = 0,
+      y = 0,
+      startX = 0,
+      startY = 0;
 
+    ctx.beginPath(); // Start drawing
+
+    commands.forEach((command) => {
+      const type = command[0];
+      const params = command
+        .slice(1)
+        .trim()
+        .split(/[\s,]+/)
+        .map(Number);
+
+      switch (type) {
+        case "M": // Move to
+          x = params[0];
+          y = params[1];
+          startX = x;
+          startY = y;
+          ctx.moveTo(x, y);
+          break;
+        case "L": // Line to
+          x = params[0];
+          y = params[1];
+          ctx.lineTo(x, y);
+          break;
+        case "H": // Horizontal line to
+          x = params[0];
+          ctx.lineTo(x, y);
+          break;
+        case "V": // Vertical line to
+          y = params[0];
+          ctx.lineTo(x, y);
+          break;
+        case "C": // Cubic Bezier curve
+          ctx.bezierCurveTo(
+            params[0],
+            params[1],
+            params[2],
+            params[3],
+            params[4],
+            params[5]
+          );
+          x = params[4];
+          y = params[5];
+          break;
+        case "Q": // Quadratic Bezier curve
+          ctx.quadraticCurveTo(params[0], params[1], params[2], params[3]);
+          x = params[2];
+          y = params[3];
+          break;
+        case "Z": // Close path
+          ctx.closePath();
+          break;
+      }
+    });
+
+    // Optional: Set the fill color or stroke
+    ctx.fillStyle = "rgba(0, 150, 255, 0.5)"; // Fill color
+    ctx.fill(); // Fill the path with the color
+
+    ctx.strokeStyle = "black"; // Stroke color
+    ctx.lineWidth = 2;
+    ctx.stroke(); // Draw the outline of the path
+  }
   private createHeader() {
     var modal_header = new TintedImage();
     modal_header.clipChildren = false;
@@ -355,7 +489,7 @@ export class LevelCompleteUI {
     textBlock.topInPixels = topInPixels;
     textBlock.leftInPixels = 67;
     //textBlock.color = "#1979B3";
-    textBlock.color = GameData.instance.getAccentColor()
+    textBlock.color = GameData.instance.getAccentColor();
     textBlock.outlineWidth = 0;
     this.container.addControl(textBlock);
   }
@@ -377,6 +511,26 @@ export class LevelCompleteUI {
     this.container.addControl(TextBlock);
   }
 
+  drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+    let rot = (Math.PI / 2) * 3;
+    let x = cx;
+    let y = cy;
+    let step = Math.PI / spikes;
+
+    ctx.moveTo(cx, cy - outerRadius);
+    for (let i = 0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outerRadius;
+      y = cy + Math.sin(rot) * outerRadius;
+      ctx.lineTo(x, y);
+      rot += step;
+
+      x = cx + Math.cos(rot) * innerRadius;
+      y = cy + Math.sin(rot) * innerRadius;
+      ctx.lineTo(x, y);
+      rot += step;
+    }
+    ctx.lineTo(cx, cy - outerRadius);
+  }
   showPopup(data: ILevelCompleteUIData) {
     this.container.isEnabled = true;
     this.container.isVisible = true;
