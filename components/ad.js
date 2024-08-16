@@ -329,6 +329,7 @@ export default function Advert({
           primaryColor: data?.primaryColor,
           textColor: data?.textColor,
           accentColor: data?.accentColor,
+          secondaryColor: data?.secondaryColor,
         })}
       {stage === 2 && (
         <Outro

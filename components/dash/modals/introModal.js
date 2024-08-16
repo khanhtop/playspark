@@ -91,7 +91,9 @@ export default function IntroModal({ data, playAudio }) {
               onClick={() =>
                 data.onLegalClick({
                   title: "Privacy",
-                  url: "https://drive.google.com/file/d/1nD9gqFa1hE10HPhpYtKLlO2saQpqXoD2/preview",
+                  url:
+                    data?.privacyPolicyUrl ||
+                    "https://drive.google.com/file/d/1nD9gqFa1hE10HPhpYtKLlO2saQpqXoD2/preview",
                 })
               }
             >

@@ -150,14 +150,21 @@ export default function CreateDesign({ tournament, setTournament }) {
         </div>
       </BrandingComponent>
       <CreateColorPicker
-        label="Primary Color"
+        label="Primary Color (For Headers and Primary Elements)"
         value={tournament.primaryColor}
         onSelect={(a) => {
           setTournament({ ...tournament, primaryColor: a.hex });
         }}
       />
       <CreateColorPicker
-        label="Accent Color"
+        label="Secondary Color (Used for some buttons and UI aspects)"
+        value={tournament.secondaryColor || "#000000"}
+        onSelect={(a) => {
+          setTournament({ ...tournament, secondaryColor: a.hex });
+        }}
+      />
+      <CreateColorPicker
+        label="Accent Color (Used as an accent in areas that need it)"
         value={tournament.accentColor || "#000000"}
         onSelect={(a) => {
           setTournament({ ...tournament, accentColor: a.hex });

@@ -20,7 +20,7 @@ export default function Account() {
   const [showRewardModal, setShowRewardModal] = useState(false);
 
   // Image Assets
-  const [slug, setSlug] = useState();
+  const [privacyPolicyUrl, setPrivacyPolicyUrl] = useState();
   const [brandLogo, setBrandLogo] = useState();
   const [sponsorLogo, setSponsorLogo] = useState();
   const [primaryColor, setPrimaryColor] = useState("#222");
@@ -34,8 +34,8 @@ export default function Account() {
     if (context?.profile?.sponsorLogo) {
       setSponsorLogo(context?.profile?.sponsorLogo);
     }
-    if (context?.profile?.slug) {
-      setSlug(context?.profile?.slug);
+    if (context?.profile?.privacyPolicyUrl) {
+      setPrivacyPolicyUrl(context?.profile?.privacyPolicyUrl);
     }
     if (context?.profile?.primaryColor) {
       setPrimaryColor(context?.profile?.primaryColor);
@@ -53,7 +53,7 @@ export default function Account() {
     await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
       ...(brandLogo && { brandLogo: brandLogo }),
       ...(sponsorLogo && { sponsorLogo: sponsorLogo }),
-      ...(slug && { slug: slug }),
+      ...(privacyPolicyUrl && { privacyPolicyUrl: privacyPolicyUrl }),
       ...(primaryColor && { primaryColor: primaryColor }),
       ...(accentColor && { accentColor: accentColor }),
       ...(textColor && { textColor: textColor }),
@@ -96,24 +96,23 @@ export default function Account() {
       {nav === "branding" && (
         <>
           <div className="">
-            <p className="my-0 text-white/70 text-xs mb-2">
-              Playspark Page URL
+            <p className="my-0 text-black/70 text-xs mb-2">
+              Privacy Policy URL
             </p>
-            <div className="bg-white h-10 rounded-full font-mono flex items-center overflow-hidden pl-4 pr-2">
-              <p>https://playspark.co/</p>
+            <div className="flex items-center gap-2">
+              <div>
+                <p>https://</p>
+              </div>
               <input
                 spellcheck="false"
                 autocomplete="off"
                 type="text"
-                value={slug}
+                value={privacyPolicyUrl}
                 onChange={(e) => {
-                  const sanitizedValue = e.target.value.replace(
-                    /[^a-z-_]/g,
-                    ""
-                  );
-                  setSlug(sanitizedValue?.toLowerCase());
+                  const sanitizedValue = e.target.value.trim();
+                  setPrivacyPolicyUrl(sanitizedValue?.toLowerCase());
                 }}
-                className="outline-none border-b-2 border-b-black/10 w-full mr-6"
+                className="border-2 border-b-black/90 w-full mr-6 rounded-md"
               />
             </div>
           </div>
