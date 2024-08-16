@@ -14,7 +14,12 @@ export class LevelCompletePopup {
   drawBlackBg: () => void;
   nextLevelTitle: Phaser.GameObjects.Text;
 
-  constructor(_scene: Phaser.Scene, width: number, height: number) {
+  constructor(
+    _scene: Phaser.Scene,
+    width: number,
+    height: number,
+    colorString: string
+  ) {
     this.scene = _scene;
 
     this.blach_bg = _scene.add.graphics();
@@ -98,12 +103,14 @@ export class LevelCompletePopup {
       .sprite(50, 35, "coins")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(45, 45);*/
-
+    let primaryColor =
+      Phaser.Display.Color.HexStringToColor(colorString).color32;
     let blue_btn = _scene.add
       .sprite(0, 110, "blue_btn")
       .setOrigin(0.5, 0.5)
       .setInteractive()
-      .setDisplaySize(120 * 1.3, 90 * 1.3);
+      .setDisplaySize(120 * 1.3, 90 * 1.3)
+      .setTint(primaryColor);
 
     blue_btn.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
       _scene.events.emit("LevelCompletePopup:onClaimBtnClick")
@@ -117,7 +124,7 @@ export class LevelCompletePopup {
     );
 
     let claimTitle = _scene.add
-      .text(0, 97 + 10, `CLAIM`, font)
+      .text(0, 97 + 10, `PLAY`, font)
       .setOrigin(0.5, 0.5)
       .setSize(200, 500)
       .setFontSize(40)
@@ -137,6 +144,19 @@ export class LevelCompletePopup {
       .sprite(0, 0, "popup_bg")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(500, 500)
+      .setInteractive()
+      .setTint(primaryColor);
+      
+    let popup_bg_btns = _scene.add
+      .sprite(0, 0, "popup_bg_btns")
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(500, 500)
+      .setInteractive();
+
+    let popup_bg_white = _scene.add
+      .sprite(0, 0, "popup_bg_white")
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(500, 500)
       .setInteractive();
 
     //this.group.add(  this.blach_bg);
@@ -154,6 +174,8 @@ export class LevelCompletePopup {
     playerCharacter.setPosition(-120, 70);
 
     this.group.add(bg);
+    this.group.add(popup_bg_btns);
+    this.group.add(popup_bg_white);
     this.group.add(playerCharacter);
     this.group.add(this.title);
     this.group.add(targetHitTitle);

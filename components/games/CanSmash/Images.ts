@@ -10,6 +10,7 @@ export class Images {
     barrel_up: "barrel_up.jpg",
     biggerBall: "biggerBall.png",
     blackbg: "blackbg.png",
+    btnBase: "btnBase.png",
     blackbg1: "blackbg1.png",
     blackbg2: "blackbg2.png",
     blackbg3: "blackbg3.png",

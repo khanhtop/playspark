@@ -9,6 +9,7 @@ import { GameData } from "./GameData";
 import { PowerupManager } from "./Powerups/PowerupManager";
 import { Ledges } from "./Ledges";
 import { PlatformTypes } from "./PlatformTypes";
+import { CameraController } from "./CameraController";
 
 export class LevelCreator {
   restart() {
@@ -38,7 +39,9 @@ export class LevelCreator {
 
     GameData.instance.setHitCount(0);
 
-    PowerupManager.instance.setShowCount(levels[levelIndex].powerup_appear_count);
+    PowerupManager.instance.setShowCount(
+      levels[levelIndex].powerup_appear_count
+    );
     PowerupManager.instance.setAvilablePoses(levels[levelIndex].powerupPoses);
     PowerupManager.instance.start();
 
@@ -119,11 +122,11 @@ export class LevelCreator {
       switch (canData.type) {
         case "can":
           let ranIndex = Utils.getRandomInt(Materials.instance.cans.length);
-          can.setMaterial(Materials.instance.cans[ranIndex]);
-
+          can.setMaterial(Materials.instance.cans[ranIndex], ranIndex);
+ 
           break;
         case "enemy":
-          can.setMaterial(Materials.instance.enemy);
+          can.setMaterial(Materials.instance.enemy, 0);
           break;
       }
     });

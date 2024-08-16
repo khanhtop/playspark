@@ -247,8 +247,7 @@ export class PauseUI {
     //btn_base.color = "transparent";
     this.container.addControl(btn_base);
 
-    //var next_btn = GUI.Button.CreateImageOnlyButton("but", Images.data.NextBtn);
-
+  
     var save_btn = new GUI.Image();
     save_btn.source = Images.data.SaveBtn;
     save_btn.widthInPixels = 190 / 1.3;

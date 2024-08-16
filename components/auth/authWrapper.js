@@ -66,7 +66,7 @@ export default function AuthWrapper({ children, action }) {
     );
   }
 
-  if (
+ /* if (
     context.isAuthed &&
     context.loggedIn &&
     context.profile &&
@@ -85,7 +85,7 @@ export default function AuthWrapper({ children, action }) {
         </button>
       </div>
     );
-  }
+  }*/
 
   // Logged In
   if (context.isAuthed && context.loggedIn) {
