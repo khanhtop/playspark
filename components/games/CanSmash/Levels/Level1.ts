@@ -78,7 +78,7 @@ export const levels = [
   // level 2
   {
     time: 30,
-    target_count: 10,
+    target_count: 5,
     powerup_appear_count: 3,
     platforms: [
       {
@@ -146,7 +146,7 @@ export const levels = [
   // level 3
   {
     time: 30,
-    target_count: 15,
+    target_count: 10,
     powerup_appear_count: 4,
     platforms: [
       {
@@ -277,7 +277,7 @@ export const levels = [
   // level 5
   {
     time: 10,
-    target_count: 5,
+    target_count: 10,
     powerup_appear_count: 6,
     platforms: [
       {
