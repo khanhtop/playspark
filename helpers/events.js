@@ -147,8 +147,9 @@ export async function rewardWithXP(xp, context, data) {
     context.loggedIn.uid,
     data.ownerId,
     data.tournamentId,
-    "reward_claimed",
-    data.ownerCompanyName
+    "reward_claimed_xp",
+    data.ownerCompanyName,
+    xp
   );
   fireXpWebhook(context, data, xp);
 }
@@ -177,8 +178,9 @@ export async function rewardWithCoins(coins, context, data) {
     context.loggedIn.uid,
     data.ownerId,
     data.tournamentId,
-    "reward_claimed",
-    data.ownerCompanyName
+    "reward_claimed_coins",
+    data.ownerCompanyName,
+    coins
   );
 }
 
