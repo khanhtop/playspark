@@ -2,16 +2,20 @@ import {
   ArcRotateCamera,
   Camera,
   FreeCamera,
+  Matrix,
   Scene,
   TargetCamera,
+  Tools,
   UniversalCamera,
   Vector3,
   Viewport,
 } from "@babylonjs/core";
 import * as GUI from "@babylonjs/gui";
+import { GameData } from "./GameData";
 export class CameraController {
   static camera: TargetCamera = null;
   constructor(scene: Scene, canvas: any) {
+    let engine = GameData.instance.getEngine();
     /* var camera: ArcRotateCamera = new ArcRotateCamera(
             "Camera",
             -Math.PI / 2,
@@ -31,10 +35,25 @@ export class CameraController {
     camera.setTarget(Vector3.Zero());
     camera.rotation = new Vector3(0.33, 0, 0);
 
-   // camera.speed = 0.01;
-   // camera.angularSensibility = 10000;
+    // camera.speed = 0.01;
+    // camera.angularSensibility = 10000;
+    camera.fov = 0.8;//Tools.ToRadians(60);
+    camera.viewport = new Viewport(0, 0.0, 1, 1);
 
-
+    camera.onProjectionMatrixChangedObservable.add(() => {
+      //camera._projectionMatrix.copyFrom(BABYLON.Matrix.PerspectiveLH(2, 1, camera.minZ, camera.maxZ, engine.isNDCHalfZRange, camera.projectionPlaneTilt));
+      const aspectRatio = canvas.width / canvas.height;
+      camera._projectionMatrix.copyFrom(
+        Matrix.PerspectiveFovLH(
+          camera.fov,
+          aspectRatio,
+          camera.minZ,
+          camera.maxZ,
+          engine.isNDCHalfZRange,
+          camera.projectionPlaneTilt
+        )
+      );
+    });
 
     camera.attachControl(canvas, true);
 
