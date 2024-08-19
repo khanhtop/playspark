@@ -76,7 +76,7 @@ export const claimReward = async (reward, data, context) => {
     rewardWithCoins(reward.outputValue, context, data);
   if (reward.outputAction === "webhook") {
     sendSupabaseEvent(
-      context.loggedIn.uid,
+      context?.loggedIn?.uid,
       data.ownerId,
       data.tournamentId,
       "reward_claimed_webhook",
@@ -95,7 +95,7 @@ export const claimReward = async (reward, data, context) => {
   }
   if (reward.outputAction === "physical") {
     sendSupabaseEvent(
-      context.loggedIn.uid,
+      context?.loggedIn?.uid,
       data.ownerId,
       data.tournamentId,
       "reward_claimed_physical",
@@ -105,7 +105,7 @@ export const claimReward = async (reward, data, context) => {
   }
   if (reward.outputAction === "promocode") {
     sendSupabaseEvent(
-      context.loggedIn.uid,
+      context?.loggedIn?.uid,
       data.ownerId,
       data.tournamentId,
       "reward_claimed_promocode",

@@ -40,6 +40,7 @@ export default function Intro({
   clientCredits,
   uuid,
   demo,
+  client,
   hasInitialisedAudio,
   setHasInitialisedAudio,
 }) {
@@ -333,6 +334,7 @@ export default function Intro({
         primaryColor={data.primaryColor}
         textColor={data.textColor}
         theme={theme}
+        client={client}
       />
 
       <GlassModal
@@ -343,6 +345,7 @@ export default function Intro({
         primaryColor={data.primaryColor}
         textColor={data.textColor}
         theme={theme}
+        client={client}
       />
 
       {signingIn === 1 && (

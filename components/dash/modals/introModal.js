@@ -6,7 +6,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 
-export default function IntroModal({ data, playAudio }) {
+export default function IntroModal({ data }) {
   const context = useAppContext();
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -91,9 +91,9 @@ export default function IntroModal({ data, playAudio }) {
               onClick={() =>
                 data.onLegalClick({
                   title: "Privacy",
-                  url:
-                    data?.privacyPolicyUrl ||
-                    "https://drive.google.com/file/d/1nD9gqFa1hE10HPhpYtKLlO2saQpqXoD2/preview",
+                  url: data?.client?.privacyPolicyUrl
+                    ? `https://${data?.client?.privacyPolicyUrl}`
+                    : "https://drive.google.com/file/d/1nD9gqFa1hE10HPhpYtKLlO2saQpqXoD2/preview",
                 })
               }
             >

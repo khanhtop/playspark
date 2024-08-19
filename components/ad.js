@@ -36,6 +36,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 export default function Advert({
   waitOnAuth,
   data,
+  client,
   withPopoutBackNav,
   signingIn,
   userId,
@@ -59,8 +60,6 @@ export default function Advert({
   const MAX_REVIVES = 4;
   const [lives, setLives] = useState(data.id === 11 ? 10 : 3);
   const [reviveCount, setReviveCount] = useState(0);
-
-  console.log(data);
 
   useEffect(() => {
     // For Sportzfan Only
@@ -266,6 +265,7 @@ export default function Advert({
       )}
       {stage === 0 && (
         <Intro
+          client={client}
           hasInitialisedAudio={hasInitialisedAudio}
           setHasInitialisedAudio={setHasInitialisedAudio}
           clientCredits={clientCredits}
