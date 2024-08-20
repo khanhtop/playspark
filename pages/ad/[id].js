@@ -10,7 +10,15 @@ import { doc, onSnapshot } from "firebase/firestore";
 import Head from "next/head";
 import { useEffect, useState, useMemo, useRef } from "react";
 
-export default function Ad({ ad, id, config, userId, email, externalId }) {
+export default function Ad({
+  ad,
+  client,
+  id,
+  config,
+  userId,
+  email,
+  externalId,
+}) {
   const context = useAppContext();
   const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
   const [signingIn, setSigingIn] = useState(0);
@@ -113,7 +121,6 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
   // AUTO-SIGN IN WITH PROVIDED EMAIL
 
   useEffect(() => {
-    console.log(ad.ownerId);
     if (externalId && externalId !== "override") {
       setWaitOnAuth(true);
       logoutWithoutReroute();
@@ -139,6 +146,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
         !context?.profile?.isAdmin)
     ) {
       const uuid = getDeviceID();
+      console.log(uuid);
 
       if (uuid !== null) {
         const emailStructure = uuid + "@playspark.co";
@@ -229,6 +237,7 @@ export default function Ad({ ad, id, config, userId, email, externalId }) {
       >
         {ad ? (
           <Advert
+            client={client}
             hasInitialisedAudio={hasInitialisedAudio}
             setHasInitialisedAudio={setHasInitialisedAudio}
             waitOnAuth={waitOnAuth}
@@ -271,6 +280,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       id: id,
+      client: client,
       ad: {
         ...ad,
         endDate: ad.endDate ? JSON.stringify(ad.endDate) : null,

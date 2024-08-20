@@ -12,6 +12,7 @@ export default function GlassModal({
   primaryColor,
   textColor,
   theme,
+  client,
 }) {
   const context = useAppContext();
   if (!showWhen) return <div />;
@@ -53,7 +54,7 @@ export default function GlassModal({
             </div>
           </div>
         )}
-        <showWhen.content data={showWhen.data} />
+        <showWhen.content data={{ ...showWhen.data, client: client }} />
       </div>
     </div>
   );

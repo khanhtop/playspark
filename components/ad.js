@@ -36,6 +36,7 @@ const Intro = dynamic(() => import("./intro"), { ssr: false });
 export default function Advert({
   waitOnAuth,
   data,
+  client,
   withPopoutBackNav,
   signingIn,
   userId,
@@ -264,6 +265,7 @@ export default function Advert({
       )}
       {stage === 0 && (
         <Intro
+          client={client}
           hasInitialisedAudio={hasInitialisedAudio}
           setHasInitialisedAudio={setHasInitialisedAudio}
           clientCredits={clientCredits}
@@ -327,6 +329,7 @@ export default function Advert({
           primaryColor: data?.primaryColor,
           textColor: data?.textColor,
           accentColor: data?.accentColor,
+          secondaryColor: data?.secondaryColor,
         })}
       {stage === 2 && (
         <Outro

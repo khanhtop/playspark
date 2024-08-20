@@ -40,6 +40,7 @@ export default function Intro({
   clientCredits,
   uuid,
   demo,
+  client,
   hasInitialisedAudio,
   setHasInitialisedAudio,
 }) {
@@ -49,7 +50,7 @@ export default function Intro({
   const audio = useRef(null);
   useMusic(
     hasInitialisedAudio,
-    context?.data?.homescreenMusic ?? "/uisounds/intro.mp3",
+    data?.homescreenMusic ?? "/uisounds/intro.mp3",
     0.5,
     context.settings.bgm
   );
@@ -58,7 +59,7 @@ export default function Intro({
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
-    const fileName = context?.data?.homescreenMusic ?? "/uisounds/intro.mp3";
+    const fileName = data?.homescreenMusic ?? "/uisounds/intro.mp3";
     audio.current = new Audio(fileName);
     audio.current.play();
     context.setIsAudioPlaying(true);
@@ -214,7 +215,12 @@ export default function Intro({
             disabled={
               !clientCredits || expired || clientCredits < shutoffBalance
             }
-            bgColor={data.accentColor || data.primaryColor || "black"}
+            bgColor={
+              data.secondaryColor ||
+              data.accentColor ||
+              data.primaryColor ||
+              "black"
+            }
             textColor={data.textColor}
             theme={theme}
             onClick={async () => {
@@ -328,6 +334,7 @@ export default function Intro({
         primaryColor={data.primaryColor}
         textColor={data.textColor}
         theme={theme}
+        client={client}
       />
 
       <GlassModal
@@ -338,6 +345,7 @@ export default function Intro({
         primaryColor={data.primaryColor}
         textColor={data.textColor}
         theme={theme}
+        client={client}
       />
 
       {signingIn === 1 && (

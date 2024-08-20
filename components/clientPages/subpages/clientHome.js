@@ -21,25 +21,9 @@ export default function ClientHome({
 
   return (
     <ClientPageWrapper user={user}>
-      <AccountInfo
-        data={user}
-        context={context}
-        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
-        totalCoins={context?.profile?.dataByClient?.[user.id]?.coins || 0}
-      />
-      <Hero
-        data={user}
-        context={context}
-        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
-      />
-      <BattleSlider
-        clientId={user.id}
-        user={user}
-        tournaments={tournaments}
-        leaderboard={leaderboard}
-      />
       <HorizontalGamesScroll
         prizes={prizes}
+        withBorder
         showPrizes
         first
         data={tournamentsByPlayCount}
@@ -53,6 +37,25 @@ export default function ClientHome({
           setScreen(screen);
         }}
       />
+      <AccountInfo
+        data={user}
+        context={context}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
+        totalCoins={context?.profile?.dataByClient?.[user.id]?.coins || 0}
+      />
+      <Hero
+        data={user}
+        context={context}
+        totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}
+      />
+      <div className="h-[1px] w-screen bg-black/10 mt-8" />
+      <BattleSlider
+        clientId={user.id}
+        user={user}
+        tournaments={tournaments}
+        leaderboard={leaderboard}
+      />
+
       <Areas
         aggregateLeaderboard={leaderboard}
         totalXp={context?.profile?.dataByClient?.[user.id]?.xp || 0}

@@ -20,7 +20,7 @@ export default function BattleSlider({
     <>
       <h1
         style={{ color: user.textColor }}
-        className="px-5 mt-8 font-octo text-2xl tracking-wider"
+        className="px-5 mt-4 font-octo text-2xl tracking-wider"
       >
         Battles
       </h1>

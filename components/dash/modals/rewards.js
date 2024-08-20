@@ -294,11 +294,14 @@ function RewardRow({
     <div className="flex h-24 text-black/70 custom-font gap-2 text-sm flex-shrink-0">
       <div className="bg-white/100 border-4 border-black/10 backdrop-blur flex-1 flex items-center rounded-2xl overflow-hidden px-4">
         <div className="h-full flex items-center justify-center flex-shrink-0 mr-4">
-          <img src={item.image} className="w-12 p-2" />
+          <img
+            src={item.image}
+            className="w-[70px] aspect-square object-cover"
+          />
         </div>
-        <div className="flex flex-col items-start">
-          <div className="flex-1 flex items-center justify-center capitalize text-center text-black/70 ">
-            <p className="custom-font text-center w-full">
+        <div className="flex flex-col items-start w-full">
+          <div className="flex-1 w-full flex items-center justify-center capitalize text-center text-black/70 ">
+            <p className="custom-font text-center w-full line-clamp-1">
               {parseInput(item.input, item.inputOperand, item.inputValue)}{" "}
             </p>
           </div>
@@ -306,13 +309,13 @@ function RewardRow({
           {/* <div className="line-clamp-2 primary-font">{item.description}</div> */}
           <div
             style={{ fontWeight: 700, color: primaryColor }}
-            className="text-center w-full custom-font"
+            className="text-center w-full custom-font "
           >
-            {item.name}
+            <p className="line-clamp-1 w-full">{item.name}</p>
           </div>
-          <div className="flex justify-center w-full mt-1">
+          <div className="flex justify-center w-full mt-1 h-8">
             {context?.loggedIn?.uid && (
-              <div className="px-0">
+              <div className="px-0 w-full">
                 <button
                   style={{
                     backgroundColor: isRedeemed
@@ -321,9 +324,10 @@ function RewardRow({
                       ? primaryColor
                       : "#EEE",
                     color: unlocked ? textColor : "#AAA",
+                    width: "100%",
                   }}
                   disabled={typeof claimed === "undefined" || loading}
-                  className="h-full w-20 border-4 rounded-2xl"
+                  className="h-full border-4 rounded-2xl"
                   onClick={() => {
                     if (isRedeemed) {
                       null;

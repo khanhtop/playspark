@@ -25,7 +25,8 @@ export async function sendSupabaseEvent(
   clientId,
   tournamentId,
   eventName,
-  clientName
+  clientName,
+  eventValue = null
 ) {
   if (!tournamentId || !eventName || !clientId) return;
   await supabase.from("events").insert([
@@ -35,6 +36,7 @@ export async function sendSupabaseEvent(
       event_name: eventName.toString(),
       client_id: clientId.toString(),
       client_name: clientName,
+      event_value: eventValue ?? null,
     },
   ]);
 }

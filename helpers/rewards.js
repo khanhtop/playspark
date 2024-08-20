@@ -3,6 +3,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { rewardWithCoins, rewardWithXP } from "./events";
 import { fireHook } from "./webhooks";
+import { sendSupabaseEvent } from "./analytics";
 
 export function groupRewards(rewards) {
   if (!rewards) return [];
@@ -27,6 +28,7 @@ export function groupRewards(rewards) {
 }
 
 export function groupPrizes(rewards) {
+  console.log(rewards);
   if (!rewards) return [];
   let out = [];
   for (let elem of rewards) {
@@ -45,7 +47,7 @@ export function groupPrizes(rewards) {
       });
     }
   }
-  return out;
+  return out.sort((a, b) => b.timestamp - a.timestamp);
 }
 
 export function getAvailableReward(rewards) {
@@ -74,6 +76,14 @@ export const claimReward = async (reward, data, context) => {
   if (reward.outputAction === "coins")
     rewardWithCoins(reward.outputValue, context, data);
   if (reward.outputAction === "webhook") {
+    sendSupabaseEvent(
+      context?.loggedIn?.uid,
+      data.ownerId,
+      data.tournamentId,
+      "reward_claimed_webhook",
+      data.ownerCompanyName,
+      reward.id
+    );
     fireHook(reward.outputValue, {
       hookType: "REWARD CLAIMED",
       rewardName: reward.name,
@@ -83,6 +93,26 @@ export const claimReward = async (reward, data, context) => {
       userName: context?.profile?.companyName || null,
       userEmail: context?.profile?.email || null,
     });
+  }
+  if (reward.outputAction === "physical") {
+    sendSupabaseEvent(
+      context?.loggedIn?.uid,
+      data.ownerId,
+      data.tournamentId,
+      "reward_claimed_physical",
+      data.ownerCompanyName,
+      reward.id
+    );
+  }
+  if (reward.outputAction === "promocode") {
+    sendSupabaseEvent(
+      context?.loggedIn?.uid,
+      data.ownerId,
+      data.tournamentId,
+      "reward_claimed_promocode",
+      data.ownerCompanyName,
+      reward.id
+    );
   }
   await addDoc(
     collection(firestore, "users", context.loggedIn.uid, "rewards"),

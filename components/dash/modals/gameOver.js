@@ -158,12 +158,14 @@ export default function ModalGameOver({ data }) {
             } items-center gap-8  `}
           >
             <p className="primary-font text-base text-center text-black/50">
-              Signup or login to get your score on the leaderboard + access to
+              Sign up or sign in to get your score on the leaderboard and access
               prizes
             </p>
             <GameButton
               onClick={() => data.onAuth()}
-              bgColor="red"
+              bgColor={
+                data.data?.secondaryColor || data.data?.accentColor || "red"
+              }
               textColor="white"
               theme={data?.theme}
             >
@@ -174,7 +176,7 @@ export default function ModalGameOver({ data }) {
 
         <GameButton
           disabled={data?.gameOverRevives === 0}
-          bgColor="blue"
+          bgColor={data.data?.primaryColor || data.data?.accentColor || "blue"}
           textColor="white"
           theme={data?.theme}
           badge={data.gameOverRevives}

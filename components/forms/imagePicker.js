@@ -8,11 +8,13 @@ export default function ImagePicker({
   image,
   onChange,
   label,
+  darkTheme,
   width,
   height,
   constrain,
   cover,
   landscape,
+  revertTo,
 }) {
   const context = useAppContext();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -36,14 +38,20 @@ export default function ImagePicker({
 
   return (
     <div className="">
-      <p className="text-white/70 text-xs mb-2">
+      <p
+        className={`${
+          darkTheme ? "text-black/70" : "text-white/70"
+        } text-xs mb-2`}
+      >
         {label}
         <a
           className="cursor-pointer text-cyan-500"
           onClick={() =>
-            onChange(
-              "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-            )
+            revertTo
+              ? revertTo()
+              : onChange(
+                  "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+                )
           }
         >
           {` `}Remove

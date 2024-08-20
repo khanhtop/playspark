@@ -21,8 +21,8 @@ const useGoogleFont = (fontName, cssTag = "custom-font") => {
       if (fontName === "Lexend Zetta") {
         styleCode = `.${cssTag} {
           font-family: '${fontName}', sans-serif;
-          letter-spacing: -3px;
-          font-size: 1em;
+          letter-spacing: -3.5px;
+          font-size: 0.9em;
           font-weight: 700;
         }`;
       } else {
