@@ -78,6 +78,21 @@ const CanSmash = (data: any) => {
     new Timer(scene, engine);
     Utils.pause(false);
 
+    const resize = () => {
+      //let width = window.innerWidth;
+      //let height = window.innerHeight;
+    
+      let width = window.innerWidth;
+      let height = width * 1.77;
+    
+      if (height > window.innerHeight) {
+        height = window.innerHeight;
+        width = height / 1.77;
+      }
+      engine.setSize(width, height, true);
+      engine.resize();
+    }
+
     resize();
     window.addEventListener("resize", resize);
 
@@ -289,21 +304,7 @@ function Revive(lives: number, boostCredits: number) {
 }
 // Assume this is needed for Babylon to conform to the size?
 // I modified this slightly to conform to the size of the container
-function resize() {
-  let engine = GameData.instance.getEngine();
-  //let width = window.innerWidth;
-  //let height = window.innerHeight;
 
-  let width = window.innerWidth;
-  let height = width * 1.77;
-
-  if (height > window.innerHeight) {
-    height = window.innerHeight;
-    width = height / 1.77;
-  }
-  engine.setSize(width, height, true);
-  engine.resize();
-}
 // Not sure what this is for either
 function Reset(lives: number, timer: number, boostCredits: number) {
   Events.sound.notifyObservers({
