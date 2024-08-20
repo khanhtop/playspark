@@ -41,9 +41,8 @@ import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
   useEffect(() => {
-   
     console.log(data);
-    
+
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);
@@ -78,11 +77,31 @@ const CanSmash = (data: any) => {
     new SaveLoadData();
     new Timer(scene, engine);
     Utils.pause(false);
+
     // Assume this is needed for Babylon to conform to the size?
     // I modified this slightly to conform to the size of the container
     const resize = () => {
+      //let width = window.innerWidth;
+      //let height = window.innerHeight;
+
       let width = window.innerWidth;
-      let height = window.innerHeight;
+      let height = width * 1.77;
+
+      if (height > window.innerHeight) {
+        height = window.innerHeight;
+        width = height / 1.77;
+      }
+
+     // console.log(data.canvasRef.current);
+     // console.log(   data.canvasRef.current.parentElement);
+      //console.log(   data.canvasRef.current.parentElement.nodeName);
+      data.canvasRef.current.parentElement.setAttribute("style",`display:block;width:${width}px`);
+      data.canvasRef.current.parentElement.style.width=`${width}px`;
+
+      data.canvasRef.current.parentElement.setAttribute("style",`display:block;height:${height}px`);
+      data.canvasRef.current.parentElement.style.height=`${height}px`;
+
+
       engine.setSize(width, height, true);
       engine.resize();
     };
@@ -93,6 +112,7 @@ const CanSmash = (data: any) => {
     let loader = new Loader(scene, () => {
       init();
       engine.hideLoadingUI();
+      resize();
     });
 
     // This all appears to be related to loading assets
@@ -335,7 +355,6 @@ function initParams(
 
   if (data.params.secondaryColor != undefined)
     GameData.instance.setSecondaryColor(data.params.secondaryColor);
-
 
   if (data.params.accentColor != undefined)
     GameData.instance.setAccentColor(data.params.accentColor);

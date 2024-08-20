@@ -12,12 +12,12 @@ import {
   ON_POWERUP_ENABLED,
 } from "../Consts";
 import { Images } from "../Images";
+import { Tutorial4 } from "./Tutorial4";
 
 export class TutorialManager {
   tutotial2TimerHandle: NodeJS.Timeout;
   constructor(advancedTexture: GUI.AdvancedDynamicTexture) {
     let continueBtn = this.createContinueBtn();
-
     let tutorial1 = new Tutorial1(advancedTexture, continueBtn);
     tutorial1.hide();
 
@@ -28,6 +28,10 @@ export class TutorialManager {
     continueBtn = this.createContinueBtn();
     let tutorial3 = new Tutorial3(advancedTexture, continueBtn);
     tutorial3.hide();
+
+    continueBtn = this.createContinueBtn();
+    let tutorial4 = new Tutorial4(advancedTexture, continueBtn);
+    tutorial4.hide();
 
     let tutorialStep = 1;
 
@@ -56,16 +60,12 @@ export class TutorialManager {
             );
 
             break;
-          case 3:
+          case 4:
             Events.gamePlay.remove(ghs);
             break;
         }
       });
     }
-    /* Utils.pause(true);
-    setTimeout(() => {
-      Utils.pause(false);
-    }, 1000);*/
 
     switch (tutorialStep) {
       case 1:
@@ -80,7 +80,7 @@ export class TutorialManager {
         this.showTutorial2(tutorial2);
 
         break;
-      case 3:
+      case 4:
         BlackBG.instance.show(Images.data.blackbg3);
         tutorial3.show();
         setTimeout(() => {
@@ -91,9 +91,12 @@ export class TutorialManager {
 
     Events.ui.add((data: any) => {
       if (data.type != EventTypes.TUTORIAL_CLOSE_BTN_CLICKED) return;
+      clearTimeout(this.tutotial2TimerHandle);
+
       tutorial1.hide();
       tutorial2.hide();
       tutorial3.hide();
+      tutorial4.hide();
       Events.input.notifyObservers({
         name: "BallPicker:setActive",
         state: true,
@@ -101,6 +104,11 @@ export class TutorialManager {
       BlackBG.instance.hide();
       Utils.pause(false);
       tutorialStep++;
+
+      if (tutorialStep == 3) {
+        BlackBG.instance.show(Images.data.blackbg1);
+        tutorial4.show();
+      }
     });
   }
 
@@ -125,9 +133,7 @@ export class TutorialManager {
   hide() {}
   show(step: number) {}
 
-  createContinueBtn(
-    
-  ) {
+  createContinueBtn() {
     var close_btn = new GUI.Image();
     close_btn.source = Images.data.tutorial_continue;
     close_btn.widthInPixels = 120 * 1.2;
@@ -138,7 +144,6 @@ export class TutorialManager {
     close_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
 
     close_btn.onPointerClickObservable.add(() => {
-      clearTimeout(this.tutotial2TimerHandle);
       Events.ui.notifyObservers({
         type: EventTypes.TUTORIAL_CLOSE_BTN_CLICKED,
       });
