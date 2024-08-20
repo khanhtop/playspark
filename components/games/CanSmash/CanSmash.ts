@@ -79,27 +79,37 @@ const CanSmash = (data: any) => {
     Utils.pause(false);
 
     // Assume this is needed for Babylon to conform to the size?
-// I modified this slightly to conform to the size of the container
+    // I modified this slightly to conform to the size of the container
     const resize = () => {
       //let width = window.innerWidth;
       //let height = window.innerHeight;
-    
+
       let width = window.innerWidth;
       let height = width * 1.77;
-    
+
       if (height > window.innerHeight) {
         height = window.innerHeight;
         width = height / 1.77;
       }
+
+     // console.log(data.canvasRef.current);
+     // console.log(   data.canvasRef.current.parentElement);
+      //console.log(   data.canvasRef.current.parentElement.nodeName);
+      data.canvasRef.current.parentElement.setAttribute("style",`display:block;width:${width}px`);
+      data.canvasRef.current.parentElement.style.width=`${width}px`;
+
+      data.canvasRef.current.parentElement.setAttribute("style",`display:block;height:${height}px`);
+      data.canvasRef.current.parentElement.style.height=`${height}px`;
+
+
       engine.setSize(width, height, true);
       engine.resize();
-    }
+    };
 
     resize();
     window.addEventListener("resize", resize);
 
     let loader = new Loader(scene, () => {
-      
       init();
       engine.hideLoadingUI();
       resize();
@@ -304,7 +314,6 @@ function Revive(lives: number, boostCredits: number) {
     Events.gamePlay.notifyObservers({ type: "LevelCreator:resetCansPos" });
   }, 500);
 }
-
 
 // Not sure what this is for either
 function Reset(lives: number, timer: number, boostCredits: number) {
