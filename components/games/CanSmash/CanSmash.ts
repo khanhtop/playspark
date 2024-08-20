@@ -78,6 +78,8 @@ const CanSmash = (data: any) => {
     new Timer(scene, engine);
     Utils.pause(false);
 
+    // Assume this is needed for Babylon to conform to the size?
+// I modified this slightly to conform to the size of the container
     const resize = () => {
       //let width = window.innerWidth;
       //let height = window.innerHeight;
@@ -302,8 +304,7 @@ function Revive(lives: number, boostCredits: number) {
     Events.gamePlay.notifyObservers({ type: "LevelCreator:resetCansPos" });
   }, 500);
 }
-// Assume this is needed for Babylon to conform to the size?
-// I modified this slightly to conform to the size of the container
+
 
 // Not sure what this is for either
 function Reset(lives: number, timer: number, boostCredits: number) {
