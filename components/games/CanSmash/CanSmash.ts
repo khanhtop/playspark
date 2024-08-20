@@ -41,9 +41,8 @@ import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
   useEffect(() => {
-   
     console.log(data);
-    
+
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);
@@ -78,21 +77,15 @@ const CanSmash = (data: any) => {
     new SaveLoadData();
     new Timer(scene, engine);
     Utils.pause(false);
-    // Assume this is needed for Babylon to conform to the size?
-    // I modified this slightly to conform to the size of the container
-    const resize = () => {
-      let width = window.innerWidth;
-      let height = window.innerHeight;
-      engine.setSize(width, height, true);
-      engine.resize();
-    };
 
     resize();
     window.addEventListener("resize", resize);
 
     let loader = new Loader(scene, () => {
+      
       init();
       engine.hideLoadingUI();
+      resize();
     });
 
     // This all appears to be related to loading assets
@@ -294,7 +287,23 @@ function Revive(lives: number, boostCredits: number) {
     Events.gamePlay.notifyObservers({ type: "LevelCreator:resetCansPos" });
   }, 500);
 }
+// Assume this is needed for Babylon to conform to the size?
+// I modified this slightly to conform to the size of the container
+function resize() {
+  let engine = GameData.instance.getEngine();
+  //let width = window.innerWidth;
+  //let height = window.innerHeight;
 
+  let width = window.innerWidth;
+  let height = width * 1.77;
+
+  if (height > window.innerHeight) {
+    height = window.innerHeight;
+    width = height / 1.77;
+  }
+  engine.setSize(width, height, true);
+  engine.resize();
+}
 // Not sure what this is for either
 function Reset(lives: number, timer: number, boostCredits: number) {
   Events.sound.notifyObservers({
@@ -335,7 +344,6 @@ function initParams(
 
   if (data.params.secondaryColor != undefined)
     GameData.instance.setSecondaryColor(data.params.secondaryColor);
-
 
   if (data.params.accentColor != undefined)
     GameData.instance.setAccentColor(data.params.accentColor);
