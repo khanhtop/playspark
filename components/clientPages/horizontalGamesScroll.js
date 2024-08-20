@@ -11,12 +11,15 @@ export default function HorizontalGamesScroll({
   showPrizes,
   changeScreen,
   prizes,
+  withBorder,
 }) {
   const context = useAppContext();
   if (data.length > 0) {
     return (
       <div
-        className={`${first ? "pt-6" : "pt-0"} font-octo text-2xl`}
+        className={`${first ? "pt-6" : "pt-0"} ${
+          withBorder ? "border-b-2 border-b-black/10 pb-4" : "pt-0"
+        }  font-octo text-2xl`}
         style={{ backgroundColor: user.primaryColor, color: user.textColor }}
       >
         <h1 className="px-5 mb-2 tracking-wider">{label}</h1>

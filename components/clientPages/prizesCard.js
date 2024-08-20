@@ -18,10 +18,14 @@ export default function PrizesCard({ data, inSlider, onClick, prizes }) {
     >
       <div
         style={{
-          backgroundImage: `url("/clientPages/prizeCard.jpg")`,
+          backgroundImage: `url("${
+            data?.prizeTileImage
+              ? data.prizeTileImage
+              : "/clientPages/prizeCard.jpg"
+          }")`,
           transition: "0.5s all",
         }}
-        className="bg-center flex-1 flex flex-col"
+        className="bg-center flex-1 flex flex-col bg-cover"
       >
         <div className="flex-1 flex flex-col bg-black/50 text-white">
           <div className="flex-1 p-4">
