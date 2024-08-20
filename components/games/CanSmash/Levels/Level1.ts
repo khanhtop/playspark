@@ -276,7 +276,7 @@ export const levels = [
   },
   // level 5
   {
-    time: 10,
+    time: 20,
     target_count: 10,
     powerup_appear_count: 6,
     platforms: [
