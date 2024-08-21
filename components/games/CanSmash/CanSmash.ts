@@ -92,18 +92,23 @@ const CanSmash = (data: any) => {
         width = height / 1.77;
       }
 
-     // console.log(data.canvasRef.current);
-     // console.log(   data.canvasRef.current.parentElement);
-      //console.log(   data.canvasRef.current.parentElement.nodeName);
-      data.canvasRef.current.parentElement.setAttribute("style",`display:block;width:${width}px`);
+      data.canvasRef.current.parentElement.setAttribute("style",`width:${width}px`);
       data.canvasRef.current.parentElement.style.width=`${width}px`;
 
-      data.canvasRef.current.parentElement.setAttribute("style",`display:block;height:${height}px`);
+      data.canvasRef.current.parentElement.setAttribute("style",`height:${height}px`);
       data.canvasRef.current.parentElement.style.height=`${height}px`;
 
 
       engine.setSize(width, height, true);
       engine.resize();
+
+      if(width ==  window.innerWidth){
+        data.canvasRef.current.parentElement.setAttribute("style",`height:${window.innerHeight}px`);
+        data.canvasRef.current.parentElement.style.height=`${window.innerHeight}px`;
+      }else{
+        data.canvasRef.current.parentElement.setAttribute("style",`width:${window.innerWidth}px`);
+        data.canvasRef.current.parentElement.style.width=`${window.innerWidth}px`;
+      }
     };
 
     resize();
