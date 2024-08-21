@@ -14,8 +14,8 @@ import Avatar from "./avatar";
 export default function Sidebar({ selectedPane, setSelectedPane }) {
   const context = useAppContext();
   return (
-    <div className="w-[300px] h-full rounded-r-2xl bg-[#FFF] flex flex-col items-center px-8 pb-8 text-[#364153] shadow-xl">
-      <img src="/ui/logo.png" className="mt-3 -ml-7" />
+    <div className="w-[300px] flex-shrink-0 h-full rounded-r-2xl bg-[#FFF] flex flex-col items-center px-8 pb-8 text-[#364153] shadow-xl">
+      <img src="/branding/logo.png" className="mt-3 -ml-7" />
 
       <div className="flex-1 w-full overflow-y-scroll">
         <Row
