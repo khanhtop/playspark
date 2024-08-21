@@ -28,7 +28,7 @@ export default function ClientHome({
         first
         data={tournamentsByPlayCount}
         user={user}
-        label="Trending Now"
+        label="Play Now"
         playGame={(id) => {
           setActiveGame(id);
           setScreen("game");

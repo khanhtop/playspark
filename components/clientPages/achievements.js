@@ -2,7 +2,7 @@ import { achievements } from "@/helpers/achievements";
 
 export default function Achievements({ data }) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-36">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 h-36 overflow-y-scroll">
       {achievements
         .filter((item) => data?.[item.factor] >= item.target)
         ?.map((item, key) => (
