@@ -66,7 +66,7 @@ export class Tutorial4 {
     this.message = new GUI.TextBlock();
     this.message.text = `As you flick up, release 
 your finger later for
-longer and higher lunches`;
+longer and higher launches`;
 
     this.message.color = "#FFFFFF";
     this.message.fontSize = 30;
