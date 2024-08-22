@@ -84,7 +84,7 @@ const CanSmash = (data: any) => {
       //let width = window.innerWidth;
       //let height = window.innerHeight;
 
-      let width = window.innerWidth;
+      /* let width = window.innerWidth;
       let height = width * 1.77;
 
       if (height > window.innerHeight) {
@@ -92,23 +92,49 @@ const CanSmash = (data: any) => {
         width = height / 1.77;
       }
 
-      data.canvasRef.current.parentElement.setAttribute("style",`width:${width}px`);
-      data.canvasRef.current.parentElement.style.width=`${width}px`;
+      data.canvasRef.current.parentElement.setAttribute(
+        "style",
+        `width:${width}px`
+      );
+      data.canvasRef.current.parentElement.style.width = `${width}px`;
 
-      data.canvasRef.current.parentElement.setAttribute("style",`height:${height}px`);
-      data.canvasRef.current.parentElement.style.height=`${height}px`;
-
+      data.canvasRef.current.parentElement.setAttribute(
+        "style",
+        `height:${height}px`
+      );
+      data.canvasRef.current.parentElement.style.height = `${height}px`;
 
       engine.setSize(width, height, true);
       engine.resize();
 
-      if(width ==  window.innerWidth){
-        data.canvasRef.current.parentElement.setAttribute("style",`height:${window.innerHeight}px`);
-        data.canvasRef.current.parentElement.style.height=`${window.innerHeight}px`;
-      }else{
-        data.canvasRef.current.parentElement.setAttribute("style",`width:${window.innerWidth}px`);
-        data.canvasRef.current.parentElement.style.width=`${window.innerWidth}px`;
-      }
+      if (width == window.innerWidth) {
+        data.canvasRef.current.parentElement.setAttribute(
+          "style",
+          `height:${window.innerHeight}px`
+        );
+        data.canvasRef.current.parentElement.style.height = `${window.innerHeight}px`;
+      } else {
+        data.canvasRef.current.parentElement.setAttribute(
+          "style",
+          `width:${window.innerWidth}px`
+        );
+        data.canvasRef.current.parentElement.style.width = `${window.innerWidth}px`;
+      }*/
+
+      data.canvasRef.current.parentElement.setAttribute(
+        "style",
+        `height:${window.innerHeight}px`
+      );
+      data.canvasRef.current.parentElement.style.height = `${window.innerHeight}px`;
+
+      data.canvasRef.current.parentElement.setAttribute(
+        "style",
+        `width:${window.innerWidth}px`
+      );
+      data.canvasRef.current.parentElement.style.width = `${window.innerWidth}px`;
+
+      engine.setSize(window.innerWidth, window.innerHeight, false);
+      engine.resize();
     };
 
     resize();
