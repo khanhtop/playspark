@@ -74,6 +74,16 @@ const CanSmash = (data: any) => {
     engine.loadingScreen = loadingScreen;
     engine.displayLoadingUI();
 
+
+    canvas.parentNode.setAttribute("style", `height:100%`);
+    canvas.parentNode.setAttribute("style", `width:100%`);
+
+    canvas.setAttribute("style", `height:100%`);
+    canvas.setAttribute("style", `width:100%`);
+
+    engine.setSize(window.innerWidth, window.innerHeight, true);
+    engine.resize();
+    
     new SaveLoadData();
     new Timer(scene, engine);
     Utils.pause(false);
@@ -121,10 +131,10 @@ const CanSmash = (data: any) => {
         data.canvasRef.current.parentElement.style.width = `${window.innerWidth}px`;
       }*/
 
-      setSize(data.canvasRef.current.parentElement);
-      setSize(data.canvasRef.current);
+     // setSize(data.canvasRef.current.parentElement);
+      //setSize(data.canvasRef.current);
 
-      engine.setSize(window.innerWidth, window.innerHeight, true);
+     /* engine.setSize(window.innerWidth, window.innerHeight, true);
       engine.resize();
 
       function setSize(element) {
@@ -133,7 +143,7 @@ const CanSmash = (data: any) => {
 
         element.setAttribute("style", `width:${window.innerWidth}px`);
         element.style.width = `${window.innerWidth}px`;
-      }
+      }*/
     };
 
     resize();
