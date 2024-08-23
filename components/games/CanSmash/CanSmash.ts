@@ -75,11 +75,12 @@ const CanSmash = (data: any) => {
     engine.displayLoadingUI();
 
 
-    canvas.parentNode.setAttribute("style", `height:100%`);
+
+    canvas.parentNode.setAttribute("class", `h-full w-full relative`);
     canvas.parentNode.setAttribute("style", `width:100%`);
 
-    canvas.setAttribute("style", `height:100%`);
-    canvas.setAttribute("style", `width:100%`);
+    //canvas.setAttribute("class", `h-full w-full relative`);
+    //canvas.setAttribute("style", `width:100%`);
 
     engine.setSize(window.innerWidth, window.innerHeight, true);
     engine.resize();
