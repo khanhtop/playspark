@@ -76,8 +76,8 @@ const CanSmash = (data: any) => {
 
 
 
-    canvas.parentNode.setAttribute("class", `h-full w-full relative`);
-    canvas.parentNode.setAttribute("style", `width:100%`);
+   // canvas.parentNode.setAttribute("class", `h-full w-full relative`);
+    //canvas.parentNode.setAttribute("style", `width:100%`);
 
     //canvas.setAttribute("class", `h-full w-full relative`);
     //canvas.setAttribute("style", `width:100%`);
@@ -92,6 +92,8 @@ const CanSmash = (data: any) => {
     // Assume this is needed for Babylon to conform to the size?
     // I modified this slightly to conform to the size of the container
     const resize = () => {
+     
+
       //let width = window.innerWidth;
       //let height = window.innerHeight;
 
@@ -132,10 +134,10 @@ const CanSmash = (data: any) => {
         data.canvasRef.current.parentElement.style.width = `${window.innerWidth}px`;
       }*/
 
-     // setSize(data.canvasRef.current.parentElement);
-      //setSize(data.canvasRef.current);
+     setSize(data.canvasRef.current.parentElement);
+    setSize(data.canvasRef.current);
 
-     /* engine.setSize(window.innerWidth, window.innerHeight, true);
+      engine.setSize(window.innerWidth, window.innerHeight, true);
       engine.resize();
 
       function setSize(element) {
@@ -144,7 +146,7 @@ const CanSmash = (data: any) => {
 
         element.setAttribute("style", `width:${window.innerWidth}px`);
         element.style.width = `${window.innerWidth}px`;
-      }*/
+      }
     };
 
     resize();
