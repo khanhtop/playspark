@@ -121,20 +121,19 @@ const CanSmash = (data: any) => {
         data.canvasRef.current.parentElement.style.width = `${window.innerWidth}px`;
       }*/
 
-      data.canvasRef.current.parentElement.setAttribute(
-        "style",
-        `height:${window.innerHeight}px`
-      );
-      data.canvasRef.current.parentElement.style.height = `${window.innerHeight}px`;
+      setSize(data.canvasRef.current.parentElement);
+      setSize(data.canvasRef.current);
 
-      data.canvasRef.current.parentElement.setAttribute(
-        "style",
-        `width:${window.innerWidth}px`
-      );
-      data.canvasRef.current.parentElement.style.width = `${window.innerWidth}px`;
-
-      engine.setSize(window.innerWidth, window.innerHeight, false);
+      engine.setSize(window.innerWidth, window.innerHeight, true);
       engine.resize();
+
+      function setSize(element) {
+        element.setAttribute("style", `height:${window.innerHeight}px`);
+        element.style.height = `${window.innerHeight}px`;
+
+        element.setAttribute("style", `width:${window.innerWidth}px`);
+        element.style.width = `${window.innerWidth}px`;
+      }
     };
 
     resize();
