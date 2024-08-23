@@ -74,6 +74,17 @@ const CanSmash = (data: any) => {
     engine.loadingScreen = loadingScreen;
     engine.displayLoadingUI();
 
+
+
+   // canvas.parentNode.setAttribute("class", `h-full w-full relative`);
+    //canvas.parentNode.setAttribute("style", `width:100%`);
+
+    //canvas.setAttribute("class", `h-full w-full relative`);
+    //canvas.setAttribute("style", `width:100%`);
+
+    engine.setSize(data.canvasRef.current.parentElement.width, data.canvasRef.current.parentElement.height, true);
+    engine.resize();
+    
     new SaveLoadData();
     new Timer(scene, engine);
     Utils.pause(false);
@@ -81,10 +92,12 @@ const CanSmash = (data: any) => {
     // Assume this is needed for Babylon to conform to the size?
     // I modified this slightly to conform to the size of the container
     const resize = () => {
+     
+
       //let width = window.innerWidth;
       //let height = window.innerHeight;
 
-      /* let width = window.innerWidth;
+       let width = window.innerWidth;
       let height = width * 1.77;
 
       if (height > window.innerHeight) {
@@ -107,7 +120,7 @@ const CanSmash = (data: any) => {
       engine.setSize(width, height, true);
       engine.resize();
 
-      if (width == window.innerWidth) {
+    /*  if (width == window.innerWidth) {
         data.canvasRef.current.parentElement.setAttribute(
           "style",
           `height:${window.innerHeight}px`
@@ -119,22 +132,21 @@ const CanSmash = (data: any) => {
           `width:${window.innerWidth}px`
         );
         data.canvasRef.current.parentElement.style.width = `${window.innerWidth}px`;
-      }*/
+      }
 
-      data.canvasRef.current.parentElement.setAttribute(
-        "style",
-        `height:${window.innerHeight}px`
-      );
-      data.canvasRef.current.parentElement.style.height = `${window.innerHeight}px`;
+    // setSize(data.canvasRef.current.parentElement);
+    setSize(data.canvasRef.current);
 
-      data.canvasRef.current.parentElement.setAttribute(
-        "style",
-        `width:${window.innerWidth}px`
-      );
-      data.canvasRef.current.parentElement.style.width = `${window.innerWidth}px`;
-
-      engine.setSize(window.innerWidth, window.innerHeight, false);
+      engine.setSize(data.canvasRef.current.parentElement.width, data.canvasRef.current.parentElement.height, true);
       engine.resize();
+
+      function setSize(element) {
+        element.setAttribute("style", `height:${data.canvasRef.current.parentElement.height}px`);
+        element.style.height = `${data.canvasRef.current.parentElement.height}px`;
+
+        element.setAttribute("style", `width:${data.canvasRef.current.parentElement.width}px`);
+        element.style.width = `${data.canvasRef.current.parentElement.width}px`;
+      }*/
     };
 
     resize();
