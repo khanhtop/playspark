@@ -13,7 +13,7 @@ export default function BabylonGame({
 
   return (
     <div
-      className="h-full w-full"
+      className="h-full w-full select-none"
       style={{
         backgroundColor: "black",
         color: data?.textColor,
