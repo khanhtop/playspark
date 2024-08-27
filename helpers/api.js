@@ -14,6 +14,7 @@ import { games } from "./games";
 import Runner from "@/components/runnergame/runner";
 import CanSmashGame from "@/components/games/CanSmash/CanSmash";
 import BabylonGame from "@/components/games/Babylon/babylonGame";
+import { sendSupabaseEvent } from "./analytics";
 const Pong = dynamic(() => import("@/components/games/pong"), { ssr: false });
 
 export async function getAd(id) {
@@ -422,7 +423,8 @@ export async function completeBattleForChallengee(
   challengeeId,
   challengerEmail,
   challengeeEmail,
-  clientId
+  clientId,
+  clientName
 ) {
   console.warn("DEBUG - API.JS TRIGGERED");
   const challengerWon = parseInt(challengerScore) > parseInt(score);
@@ -450,6 +452,13 @@ export async function completeBattleForChallengee(
       } the battle with ${challengerName} with a score of ${score} vs ${challengerScore} in ${gameName}`,
     }),
   });
+  sendSupabaseEvent(
+    challengerId,
+    clientId,
+    challengeId,
+    "battle_completed",
+    clientName
+  );
   await fetch("/api/email", {
     method: "POST",
     headers: {
@@ -467,6 +476,7 @@ export async function completeBattleForChallengee(
       } the battle with ${challengeeName} with a score of ${challengerScore} vs ${score} in ${gameName}`,
     }),
   });
+
   await updateDoc(doc(firestore, "challenges", challengeId), {
     challengeeResult: {
       score: score,

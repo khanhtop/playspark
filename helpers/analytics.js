@@ -35,7 +35,7 @@ export async function sendSupabaseEvent(
       tournament_id: tournamentId.toString(),
       event_name: eventName.toString(),
       client_id: clientId.toString(),
-      client_name: clientName,
+      client_name: clientName ?? null,
       event_value: eventValue ?? null,
     },
   ]);

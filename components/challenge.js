@@ -92,7 +92,8 @@ export default function Challenge({ data, withPopoutBackNav, id }) {
         data?.challengee?.id,
         data?.challenger?.email,
         data?.challengee?.email,
-        data?.game?.ownerId
+        data?.game?.ownerId,
+        data?.game?.ownerCompanyName
       );
     }
     setLockedInXpStealAmount(result);
