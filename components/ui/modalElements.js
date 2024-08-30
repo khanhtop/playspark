@@ -12,6 +12,6 @@ export function ModalButton({ text, onClick, data }) {
 
 export function ModalText({ children, data }) {
   return (
-    <p className="text-lg font-bold text-center primary-font">{children}</p>
+    <p className="text-lg font-bold text-center custom-font">{children}</p>
   );
 }

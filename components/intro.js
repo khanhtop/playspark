@@ -27,6 +27,7 @@ import LegalModal from "./dash/modals/legalModal";
 import useGoogleFont from "@/helpers/useGoogleFont";
 import WelcomeModal from "./dash/modals/welcomeModal";
 import ProfileModal from "./dash/modals/profileModal";
+import { WinModal } from "./ui/modalTypes";
 
 export default function Intro({
   waitOnAuth,

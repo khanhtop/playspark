@@ -15,7 +15,7 @@ export default function Modal({ primaryColor, landscape }) {
 
   if (!context.modal) return <div />;
   return (
-    <div className="absolute top-0 left-0 h-full w-full bg-black/70 backdrop-blur flex items-center justify-center">
+    <div className="absolute top-0 left-0 h-full w-full bg-black/70 backdrop-blur flex items-center justify-center z-10">
       <div
         style={{ top: 0, transition: "0.25s all" }}
         className="relative h-[75%] w-[90%] bg-white  rounded-2xl top-[100%]"
@@ -24,7 +24,7 @@ export default function Modal({ primaryColor, landscape }) {
           style={{ backgroundColor: primaryColor }}
           className="absolute w-[80%] h-12  border-2 border-white left-[10%] -mt-4 rounded-full flex items-center justify-center"
         >
-          <p className="font-octo text-2xl">{context?.modal?.title}</p>
+          <p className="custom-font text-3xl">{context?.modal?.title}</p>
         </div>
         <div
           className={`h-full w-full ${
