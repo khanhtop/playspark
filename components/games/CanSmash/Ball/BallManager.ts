@@ -23,6 +23,10 @@ export class BallManager {
       }
     });
     Events.gamePlay.add((data: any) => {
+      // console.log(data);
+      // if( data.dir == undefined)
+      //   return;
+
       switch (data.type) {
         case EventTypes.ON_BALL_TARGET_SET:
           //data.type
