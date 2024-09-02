@@ -21,7 +21,7 @@ export default function Application() {
   return (
     <AuthWrapper>
       <OnboardWrapper>
-        <div className="h-screen w-screen flex bg-blue-50">
+        <div className="h-screen w-screen flex bg-purple-100">
           <Script
             src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
             strategy="afterInteractive"

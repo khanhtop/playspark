@@ -5,7 +5,7 @@ export default function Pane({ title, subtext, children }) {
         <h1 className="font-bold text-blue-950 text-2xl tracking-wide">
           {title}
         </h1>
-        <p className="text-black/30">{subtext}</p>
+        <p className="text-black/50">{subtext}</p>
       </div>
       <div className="flex-1 overflow-y-scroll">{children}</div>
     </div>
