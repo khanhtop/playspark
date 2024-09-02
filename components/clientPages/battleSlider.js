@@ -289,7 +289,7 @@ function BattleCard({ battle, myUid, user }) {
     parseInt(battle?.challengeeResult?.score) >
     parseInt(battle?.challengerResult?.score);
   return (
-    <div className="inline-block h-48 w-72 relative rounded-3xl overflow-hidden text-sm">
+    <div className="inline-block h-48 w-72 relative rounded-3xl overflow-hidden text-sm text-white">
       <img src="/battle/vsbg.jpg" className="h-full w-full object-cover" />
       <div className="absolute top-0 left-0 bg-black/70 h-full w-full px-4 py-4 flex flex-col">
         <div className="flex gap-2 items-start">

@@ -41,15 +41,15 @@ export default function Usage({}) {
   }, []);
 
   return (
-    <div className="flex flex-wrap text-white flex-col overflow-x-hidden">
+    <div className="flex flex-wrap flex-col overflow-x-hidden text-black">
       <h1 className="text-2xl">Billing & Usage</h1>
       <h1 className="mt-4">
         Current Plan:{" "}
-        <span className="text-cyan-400 cursor-pointer hover:text-cyan-200 transition">
+        <span className="text-purple-400 cursor-pointer hover:text-cyan-200 transition">
           {context?.profile?.subscription?.name}
         </span>
       </h1>
-      <h3 className="text-xl text-white  mt-4">Breakdown</h3>
+      <h3 className="text-xl text-black  mt-4">Breakdown</h3>
 
       <div className="flex flex-1 flex-col gap-2 w-screen overflow-x-scroll mb-4">
         <UsageHeaderRow />
@@ -72,7 +72,7 @@ export default function Usage({}) {
           );
         })}
       </div>
-      <h3 className="text-xl text-white/70">Total Charges</h3>
+      <h3 className="text-xl text-black/70">Total Charges</h3>
       <p className="text-2xl">${totalBillable.current?.toFixed(2)}</p>
     </div>
   );

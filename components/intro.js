@@ -48,29 +48,50 @@ export default function Intro({
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
-  const audio = useRef(null);
-  useMusic(
-    hasInitialisedAudio,
-    data?.homescreenMusic ?? "/uisounds/intro.mp3",
-    0.5,
-    context.settings.bgm
+
+  // Audio
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const audio = useRef(
+    new Audio(data?.homescreenMusic ?? "/uisounds/intro.mp3")
   );
+
+  // useMusic(
+  //   hasInitialisedAudio,
+  //   data?.homescreenMusic ?? "/uisounds/intro.mp3",
+  //   context.settings.bgm
+  // );
 
   useGoogleFont(data.font || "Anton", "custom-font");
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
-    const fileName = data?.homescreenMusic ?? "/uisounds/intro.mp3";
-    audio.current = new Audio(fileName);
-    audio.current.play();
-    context.setIsAudioPlaying(true);
+    if (context.settings.bgm && !isAudioPlaying) {
+      setIsAudioPlaying(true);
+      audio.current.play();
+    }
   };
 
   useEffect(() => {
+    if (context.settings.bgm && !isAudioPlaying && !hasInitialisedAudio) {
+      playAudio();
+    }
     return () => {
-      if (audio.current) audio.current.pause();
+      if (audio.current) {
+        setIsAudioPlaying(false);
+        audio.current.pause();
+      }
     };
   }, []);
+
+  useEffect(() => {
+    console.log(context.settings.bgm);
+    if (context.settings.bgm && !isAudioPlaying) {
+      playAudio();
+    } else if (!context.settings.bgm) {
+      setIsAudioPlaying(false);
+      audio.current.pause();
+    }
+  }, [context.settings.bgm]);
 
   const theme = data?.theme || "default";
 

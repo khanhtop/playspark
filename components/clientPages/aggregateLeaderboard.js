@@ -74,7 +74,7 @@ function Rank({ item, pos, user, showModal, myId }) {
       </div>
       <div className="flex gap-2">
         <img
-          src={`/level-badges/${calculateLevel(item.currentXp) + 8}.png`}
+          src={`/level-badges/${calculateLevel(item.currentXp)}.png`}
           className="h-8"
         />
         {/* <p>{calculateLevel(item.currentXp)}</p> */}

@@ -2,6 +2,7 @@ import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { collection, getDocs } from "firebase/firestore";
+import { Card } from "flowbite-react";
 import { useEffect, useState } from "react";
 
 export function AudienceUsers({}) {
@@ -16,6 +17,7 @@ export function AudienceUsers({}) {
       ).then((res) => {
         let out = [];
         for (let doc of res.docs) {
+          console.log(doc);
           if (
             doc?.id?.toLowerCase() !== context?.loggedIn?.email.toLowerCase()
           ) {
@@ -43,12 +45,22 @@ export function AudienceUsers({}) {
       <h2 className="text-black/70 mb-4">Total: {users?.length || 0}</h2>
 
       {users?.map((item, key) => (
-        <div className="text-black/70 flex gap-2 mb-2">
-          <div className="bg-indigo-700 text-white h-6 w-6 rounded-full flex items-center justify-center text-xs">
-            {key + 1}
+        <Card className="mb-2">
+          <div className="text-black/70 flex gap-4 items-start">
+            <div className="bg-indigo-700 text-white h-6 w-6 rounded-full flex items-center justify-center text-xs">
+              {key + 1}
+            </div>
+            <div className="flex flex-col">
+              <p className="font-bold">
+                {" "}
+                {item.name !== "" && item.name !== undefined
+                  ? `${item.name}`
+                  : "Anonymous"}
+              </p>
+              <p className="text-sm">{item.email}</p>
+            </div>
           </div>
-          {item.email} {item.name !== "" ? `(${item.name})` : ""}
-        </div>
+        </Card>
       ))}
     </>
   );

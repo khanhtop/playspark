@@ -142,7 +142,6 @@ export class TutorialManager {
     close_btn.topInPixels = 0;
     close_btn.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     close_btn.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_CENTER;
-
     close_btn.onPointerClickObservable.add(() => {
       Events.ui.notifyObservers({
         type: EventTypes.TUTORIAL_CLOSE_BTN_CLICKED,
