@@ -97,7 +97,7 @@ const CanSmash = (data: any) => {
       let width = window.innerWidth;
       let height = window.innerHeight;
 
-  /*    let width = window.innerWidth;
+      /*    let width = window.innerWidth;
       let height = width * 1.77;
 
       if (height > window.innerHeight) {
@@ -119,7 +119,6 @@ const CanSmash = (data: any) => {
 
       engine.setSize(width, height, true);
       engine.resize();
-
       // // if (width == window.innerWidth) {
       // //   data.canvasRef.current.parentElement.setAttribute(
       // //     "style",
