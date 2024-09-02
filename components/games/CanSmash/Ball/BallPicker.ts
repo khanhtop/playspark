@@ -9,6 +9,7 @@ import { EventData, EventTypes, Events } from "../Events";
 import { Utils } from "../Utils";
 import { Ball } from "./Ball";
 import { Inputs } from "../Inputs";
+import { Timer } from "../Timer";
 
 export class BallPicker {
   ball: AbstractMesh;
@@ -20,6 +21,7 @@ export class BallPicker {
   isActive: boolean = true;
   isPonterUpFunCalled: boolean = false;
   speed: number;
+  autoShootTimerHandler: number;
   constructor(scene: Scene) {
     this.scene = scene;
     Events.input.add((data: EventData) => {
@@ -53,11 +55,11 @@ export class BallPicker {
 
       if (self.speed < 0.1 || (self.lastX == prevX && self.lastY == prevY)) {
         self.mouseSpeedCounnt++;
-        if (self.mouseSpeedCounnt >= 5) {
-          self.mouseSpeedCounnt = 0;
-          self.isPonterUpFunCalled = true;
-          self.onPointerUp();
-        }
+        // if (self.mouseSpeedCounnt >= 5) {
+        //   self.mouseSpeedCounnt = 0;
+        //   self.isPonterUpFunCalled = true;
+        //   self.onPointerUp();
+        // }
       }
 
       prevY = self.lastY;
@@ -89,6 +91,8 @@ export class BallPicker {
   lastY = 0;
   mouseSpeedCounnt = 0;
   onPointerMove(event: PointerEvent) {
+    // console.log(event);
+
     if (Utils.isgamePaused) return;
     if (this.isPonterUpFunCalled) return;
 
@@ -121,27 +125,47 @@ export class BallPicker {
 
     if (pickInfo.hit) {
       let currentMesh = pickInfo.pickedMesh;
-      // console.log("currentMesh: ----", currentMesh.name);
+     // console.log("currentMesh: ----", currentMesh.name);
+
       if (currentMesh.name == "ball") {
         this.ball = Ball.instance.ball; //currentMesh;
         this.startPos = Ball.instance.ball.position;
 
         this.canDrag = true;
+        this.shootByTimer();
       }
     }
   }
+  shootByTimer() {
+    // shoot after a small delay
+    this.autoShootTimerHandler = Timer.Instance.add(
+      0.8,
+      () => {
+       // console.log("pointer up by timer");
 
+        this.mouseSpeedCounnt = 0;
+        this.isPonterUpFunCalled = true;
+        this.onPointerUp();
+      },
+      this
+    );
+  }
   onPointerUp() {
+    Timer.Instance.remove(this.autoShootTimerHandler);
     if (!this.isActive) return;
     if (!this.canDrag) return;
 
     this.canDrag = false;
 
     let pInWorld = this.getPointerPositionInWorld();
-
+    //console.log("currentMesh: ----", pInWorld);
     // pInWorld.z < 0.1 => means if pointer up exacly over the ball
     if (!pInWorld || pInWorld.z < 0.1) {
+      Timer.Instance.remove(this.autoShootTimerHandler);
+      this.shootByTimer();
+      this.canDrag = true;
       return;
+      // pInWorld = new Vector3( 0.011,  -1.00,  2.25)
     }
 
     //console.log(pInWorld)

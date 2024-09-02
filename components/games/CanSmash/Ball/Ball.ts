@@ -55,74 +55,75 @@ export class Ball {
     this.resetPos();
 
     this.prepareButton(this.ball, Color3.Red(), this.ball, scene);
-    this.ball.actionManager.registerAction(
-      new SetValueAction(
-        ActionManager.OnPointerOutTrigger,
-        this.ball.material,
-        "emissiveColor",
-        Materials.instance.redMat.emissiveColor
-      )
-    );
-    this.ball.actionManager.registerAction(
-      new SetValueAction(
-        ActionManager.OnPointerOverTrigger,
-        this.ball.material,
-        "emissiveColor",
-        Color3.White()
-      )
-    );
+    // this.ball.actionManager.registerAction(
+    //   new SetValueAction(
+    //     ActionManager.OnPointerOutTrigger,
+    //     this.ball.material,
+    //     "emissiveColor",
+    //     Materials.instance.redMat.emissiveColor
+    //   )
+    // );
+    // this.ball.actionManager.registerAction(
+    //   new SetValueAction(
+    //     ActionManager.OnPointerOverTrigger,
+    //     this.ball.material,
+    //     "emissiveColor",
+    //     Color3.White()
+    //   )
+    // );
   }
-
   // On pick interpolations
   prepareButton(mesh, color, light, scene) {
-    var goToColorAction = new InterpolateValueAction(
-      ActionManager.OnPickTrigger,
-      light,
-      "diffuse",
-      color,
-      1000,
-      null,
-      true
-    );
+    //console.log(mesh, color, light, scene);
+    
+    // var goToColorAction = new InterpolateValueAction(
+    //   ActionManager.OnPickTrigger,
+    //   light,
+    //   "diffuse",
+    //   color,
+    //   1000,
+    //   null,
+    //   true
+    // );
 
-    mesh.actionManager = new ActionManager(scene);
-    mesh.actionManager
-      .registerAction(
-        new InterpolateValueAction(
-          ActionManager.OnPickTrigger,
-          light,
-          "diffuse",
-          Color3.Black(),
-          1000
-        )
-      )
-      .then(
-        new CombineAction(ActionManager.NothingTrigger, [
-          // Then is used to add a child action used alternatively with the root action.
-          goToColorAction, // First click: root action. Second click: child action. Third click: going back to root action and so on...
-          new SetValueAction(
-            ActionManager.NothingTrigger,
-            mesh.material,
-            "wireframe",
-            false
-          ),
-        ])
-      );
-    mesh.actionManager
-      .registerAction(
-        new SetValueAction(
-          ActionManager.OnPickTrigger,
-          mesh.material,
-          "wireframe",
-          true
-        )
-      )
-      .then(new DoNothingAction());
-    mesh.actionManager
-      .registerAction(
-        new SetStateAction(ActionManager.OnPickTrigger, light, "off")
-      )
-      .then(new SetStateAction(ActionManager.OnPickTrigger, light, "on"));
+    // mesh.actionManager = new ActionManager(scene);
+    // mesh.actionManager
+    //   .registerAction(
+    //     new InterpolateValueAction(
+    //       ActionManager.OnPickTrigger,
+    //       light,
+    //       "diffuse",
+    //       Color3.Black(),
+    //       1000
+    //     )
+    //   )
+    //   .then(
+    //     new CombineAction(ActionManager.NothingTrigger, [
+    //       // Then is used to add a child action used alternatively with the root action.
+    //       goToColorAction, // First click: root action. Second click: child action. Third click: going back to root action and so on...
+    //       new SetValueAction(
+    //         ActionManager.NothingTrigger,
+    //         mesh.material,
+    //         "wireframe",
+    //         false
+    //       ),
+    //     ])
+    //   );
+    // mesh.actionManager
+    //   .registerAction(
+    //     new SetValueAction(
+    //       ActionManager.OnPickTrigger,
+    //       mesh.material,
+    //       "wireframe",
+    //       true
+    //     )
+    //   )
+    //   .then(new DoNothingAction());
+    // mesh.actionManager
+    //   .registerAction(
+    //     new SetStateAction(ActionManager.OnPickTrigger, light, "off")
+    //   )
+    //   .then(new SetStateAction(ActionManager.OnPickTrigger, light, "on"));
   }
 
   resetPos() {
