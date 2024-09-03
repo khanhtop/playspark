@@ -134,12 +134,19 @@ export default function MyGames({}) {
                     }).then((result) => {
                       /* Read more about isConfirmed, isDenied below */
                       if (result.isConfirmed) {
-                        Swal.fire("Saved!", "", "success");
-                      } else if (result.isDenied) {
-                        Swal.fire("Changes are not saved", "", "info");
+                        switchActive(
+                          item.tournamentId,
+                          item?.isActive ?? false
+                        );
+                        Swal.fire({
+                          icon: "success",
+                          title: item.isActive
+                            ? "Tournament Ended"
+                            : "Tournament Restarted",
+                          confirmButtonColor: "#AAA",
+                        });
                       }
                     });
-                    // switchActive(item.tournamentId, item?.isActive ?? false),
                   },
                 },
                 {
