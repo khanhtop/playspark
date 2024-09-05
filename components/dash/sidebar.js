@@ -10,6 +10,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { switchTier } from "@/helpers/api";
 import Avatar from "./avatar";
+import { migrate } from "@/helpers/reimage";
 
 export default function Sidebar({ selectedPane, setSelectedPane }) {
   const context = useAppContext();
