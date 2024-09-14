@@ -28,6 +28,7 @@ import useGoogleFont from "@/helpers/useGoogleFont";
 import WelcomeModal from "./dash/modals/welcomeModal";
 import ProfileModal from "./dash/modals/profileModal";
 import { WinModal } from "./ui/modalTypes";
+import { cloudinaryToReimage } from "@/helpers/reimage";
 
 export default function Intro({
   waitOnAuth,
@@ -195,7 +196,10 @@ export default function Intro({
       }`}
     >
       <img
-        src={data?.backgroundImage}
+        src={cloudinaryToReimage(
+          data?.backgroundImage,
+          data?.landscape ? "w-1200" : "w-600"
+        )}
         className="absolute top-0 left-0 h-full w-full object-cover"
       />
 

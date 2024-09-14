@@ -1,20 +1,33 @@
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import CreatePreview from "./createPreview";
+import { Card } from "flowbite-react";
 
 export default function CreateSummary({ tournament, setTournament }) {
   return (
-    <div className="text-white flex flex-col gap-2">
-      <TextSummary title="Game Name" text={tournament.name} />
-      <TextSummary title="Game Description" text={tournament.description} />
-      <ColorSummary title="Primary Color" hex={tournament.primaryColor} />
-      <ColorSummary title="Text Color" hex={tournament.textColor} />
-      <CheckedSummary
-        title="Sponsored Video"
-        checked={tournament.sponsoredVideo}
-      />
-      <CheckedSummary title="Email Capture" checked={tournament.captureEmail} />
-      <CheckedSummary title="User Sharing" checked={tournament.canShare} />
-      <CheckedSummary title="Playable Ads" checked={tournament.playableAd} />
-      <CheckedSummary title="Survey" checked={tournament.survey} />
+    <div className="flex gap-4">
+      <div className="text-black flex flex-col gap-2 flex-1">
+        <Card>
+          <TextSummary title="Game Name" text={tournament.name} />
+          <TextSummary title="Game Description" text={tournament.description} />
+          <ColorSummary title="Primary Color" hex={tournament.primaryColor} />
+          <ColorSummary title="Text Color" hex={tournament.textColor} />
+          <CheckedSummary
+            title="Sponsored Video"
+            checked={tournament.sponsoredVideo}
+          />
+          <CheckedSummary
+            title="Email Capture"
+            checked={tournament.captureEmail}
+          />
+          <CheckedSummary title="User Sharing" checked={tournament.canShare} />
+          <CheckedSummary
+            title="Playable Ads"
+            checked={tournament.playableAd}
+          />
+          <CheckedSummary title="Survey" checked={tournament.survey} />
+        </Card>
+      </div>
+      <CreatePreview tournament={tournament} />
     </div>
   );
 }
@@ -23,7 +36,7 @@ function SummaryItem({ left, right }) {
   return (
     <div className="flex gap-2">
       <div className="min-w-[180px]">{left}</div>
-      <div className="text-white/70">{right}</div>
+      <div className="text-black/70">{right}</div>
     </div>
   );
 }
@@ -58,7 +71,7 @@ function ColorSummary({ title, hex }) {
       left={<p className="font-bold">{title}:</p>}
       right={
         <div
-          className="w-5 h-5 rounded-full mt-[2px]"
+          className="w-5 h-5 rounded-full mt-[2px] border-[1px]"
           style={{ backgroundColor: hex }}
         />
       }

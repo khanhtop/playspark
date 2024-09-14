@@ -2,7 +2,6 @@ import { useAppContext } from "@/helpers/store";
 
 export default function Avatar({ character, onClick }) {
   const context = useAppContext();
-
   if (
     context?.profile?.profilePhoto &&
     context?.profile?.profilePhoto?.startsWith("http")

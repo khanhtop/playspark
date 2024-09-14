@@ -5,38 +5,12 @@ import Input from "./input";
 import { useAppContext } from "@/helpers/store";
 
 export default function SurveyInput({ survey, onChange }) {
-  const context = useAppContext();
-  const [lastSurvey, setLastSurvey] = useState([
-    {
-      question: "",
-      responses: [
-        {
-          text: "",
-          correct: true,
-        },
-        {
-          text: "",
-          correct: false,
-        },
-      ],
-    },
-  ]);
-
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row mb-1 text-white">
-        <p className="text-white/70 mr-2">Add A Survey</p>
-        <Toggle
-          checked={survey}
-          onChange={() => onChange(survey ? null : lastSurvey)}
-        />
-      </div>
-      {context?.profile?.subscription?.tier == 4 && (
-        <p className="text-white text-xs mb-2 font-bold">Charged at $15</p>
-      )}
       {survey?.map((item, key) => {
         return (
           <SurveyElement
+            surveyLength={survey?.length || 0}
             index={key}
             surveyData={item}
             key={key}
@@ -83,6 +57,7 @@ export default function SurveyInput({ survey, onChange }) {
 }
 
 function SurveyElement({
+  surveyLength,
   surveyData,
   index,
   onAddQuestion,
@@ -93,7 +68,7 @@ function SurveyElement({
   onChangeQuestion,
 }) {
   return (
-    <div className="bg-white/10 px-4 py-4 rounded-lg mt-4 flex flex-col gap-4 text-white">
+    <div className="bg-white/10 rounded-lg flex flex-col gap-4 text-black">
       <div className="flex gap-2">
         <p>Question {index + 1}</p>
         {index > 0 && (
@@ -107,8 +82,8 @@ function SurveyElement({
       </div>
       <Input
         label="Enter Question"
-        className="bg-black border-cyan-400/50 border-[1px] w-full py-2 text-white"
-        labelColor="text-white"
+        className="bg-zinc-100 border-[1px] w-full py-2 text-black"
+        labelColor="text-black"
         onChange={(e) => onChangeQuestion(index, e.target.value)}
       />
       {surveyData.responses.map((item, key) => (
@@ -125,36 +100,38 @@ function SurveyElement({
           label={
             key === 0 ? "Enter Correct Response" : "Enter Incorrect Response"
           }
-          className="flex-1 bg-black border-cyan-400/50 border-[1px] w-full py-2 text-white"
-          labelColor="text-white"
+          className="flex-1 bg-zinc-100 border-[1px] w-full py-2 text-black"
+          labelColor="text-black"
         />
       ))}
       <div className="mt-4 flex justify-end w-full">
-        <button
-          onClick={() =>
-            onAddQuestion({
-              question: "",
-              responses: [
-                {
-                  text: "",
-                  correct: true,
-                },
-                {
-                  text: "",
-                  correct: false,
-                },
-              ],
-            })
-          }
-          text="Add Response"
-          className={`bg-cyan-400 text-white h-10 w-60 rounded-full flex items-center justify-center mr-2`}
-        >
-          Add New Question
-        </button>
+        {index === surveyLength - 1 && (
+          <button
+            onClick={() =>
+              onAddQuestion({
+                question: "",
+                responses: [
+                  {
+                    text: "",
+                    correct: true,
+                  },
+                  {
+                    text: "",
+                    correct: false,
+                  },
+                ],
+              })
+            }
+            text="Add Response"
+            className={`bg-indigo-600 text-white h-10 w-48 rounded-lg flex items-center justify-center mr-2`}
+          >
+            Add New Question
+          </button>
+        )}
         <button
           onClick={() => onAddResponse(index)}
           text="Add Response"
-          className={`bg-cyan-400 text-white h-10 w-60 rounded-full flex items-center justify-center`}
+          className={`bg-indigo-800 text-white h-10 w-36 rounded-lg flex items-center justify-center`}
         >
           Add Response
         </button>

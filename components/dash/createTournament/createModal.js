@@ -15,7 +15,7 @@ export default function CreateModal({ data, hide }) {
   const context = useAppContext();
   const stages = [
     "Design",
-    "Game Configuration",
+    "Game Setup",
     "Marketing",
     "Rewards",
     "Advanced",
@@ -30,6 +30,8 @@ export default function CreateModal({ data, hide }) {
     endDate: new Date(new Date().setMonth(new Date().getMonth() + 3)),
     creditCap: 1000,
     socialCta: null,
+    sponsoredVideo: null,
+    hasSponsoredVideo: false,
   });
   const [adding, setAdding] = useState(false);
   const [imageLibrary, setImageLibrary] = useState();
@@ -63,7 +65,7 @@ export default function CreateModal({ data, hide }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="overflow-hidden h-[80%] bg-[#111] w-[80%] border-2 border-cyan-400 rounded-2xl flex flex-col"
+        className="overflow-hidden h-[80%] bg-white w-[95%] border-2 border-black/10 rounded-2xl flex flex-col"
       >
         <CreateWrapper
           stages={stages}

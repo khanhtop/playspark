@@ -1,23 +1,142 @@
+import { useEffect, useMemo, useState } from "react";
 import CreateAudioPicker from "./createAudioPicker";
 import CreateGlbPicker from "./createGlbPicker";
 import CreateImageSlider from "./createImageSlider";
 import GenWordArray from "./genWordArray";
+import { configurableParameterTitles } from "@/helpers/configurability";
+import { Label, Spinner } from "flowbite-react";
+import { cloudinaryToReimage } from "@/helpers/reimage";
+import {
+  ArrowUpCircleIcon,
+  ArrowUpOnSquareIcon,
+  ArrowUpOnSquareStackIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloudArrowUpIcon,
+} from "@heroicons/react/24/solid";
 
 export default function CreateConfiguration({
   tournament,
   setTournament,
   isAdmin,
 }) {
+  const [selectedTag, setSelectedTag] = useState(null);
+  const [assets, setAssets] = useState([]);
+  const [aspect, setAspect] = useState("aspect-[1.0]");
+  const [rendering, setRendering] = useState(false);
+
+  const isSpriteSheet = useMemo(() => {
+    return configurableParameterTitles?.[tournament?.cloudinaryGameTag]?.[
+      selectedTag
+    ]?.isSpriteSheet;
+  }, [selectedTag]);
+
+  // Generate objects array
+  const getAssetsArray = useMemo(() => {
+    const mappings = Object.keys(tournament.tags).map((tag) => ({
+      tag: tag,
+      value: tournament?.tags?.[tag] ?? null,
+      text:
+        configurableParameterTitles?.[tournament?.cloudinaryGameTag]?.[tag]
+          ?.text ?? tag,
+    }));
+    setSelectedTag(mappings[0].tag);
+    return mappings;
+  }, [tournament.tags]);
+
+  //
+
+  useEffect(() => {
+    if (selectedTag) {
+      setAssets([]);
+      setRendering(true);
+      const tag = tournament.tags?.[selectedTag];
+      setAspect(`aspect-[${tag}]`);
+      fetch(
+        `https://api.reimage.dev/get/tags?${tournament.cloudinaryGameTag}&${tag}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_REIMAGE_KEY}`,
+          },
+        }
+      )
+        .then((raw) => {
+          return raw.json();
+        })
+        .then((json) => {
+          setRendering(false);
+          setAssets(json.objects);
+        });
+    }
+  }, [selectedTag]);
+
   return (
-    <div className="flex flex-col">
-      <p className="text-white/70 text-sm mb-2">Game Instructions</p>
-      <textarea
+    <div className="flex flex-col h-full flex-1">
+      <Label className="text-black/50 mb-2">Select Asset To Modify</Label>
+      <AssetSwitcher
+        tags={getAssetsArray}
+        selected={selectedTag}
+        onSelect={(asset) => setSelectedTag(asset)}
+      />
+      {rendering ? (
+        <div />
+      ) : (
+        <div className="w-full overflow-x-hidden mt-6 bg-black/5 px-4 py-4 flex gap-4 rounded-lg">
+          <div
+            className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center`}
+          >
+            <p className="text-sm text-black/50">Current</p>
+            <img
+              className={`${aspect} w-16`}
+              src={cloudinaryToReimage(tournament?.[selectedTag], "w-300")}
+            />
+          </div>
+          <div
+            className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center`}
+          >
+            <p className="text-sm text-black/50">Upload</p>
+            <ArrowUpOnSquareStackIcon
+              className={`${aspect} w-16 text-black/20`}
+            />
+          </div>
+        </div>
+      )}
+      {rendering ? (
+        <div className="flex-1 flex flex-col gap-4 items-center justify-center">
+          <Spinner className="h-12 w-12 text-indigo-600" />
+          <p className="text-black/50">Loading Assets...</p>
+        </div>
+      ) : (
+        <>
+          <p className="mt-4 mb-2">Select a new asset</p>
+          <div
+            className={`grid ${
+              isSpriteSheet ? "grid-cols-2" : "grid-cols-5"
+            } gap-4 overflow-y-scroll flex-1`}
+          >
+            {assets.map((item, key) => (
+              <Asset
+                key={key}
+                item={item}
+                aspect={aspect}
+                isSpriteSheet={isSpriteSheet}
+                currentAsset={cloudinaryToReimage(tournament?.[selectedTag])}
+                onSelect={(a) => {
+                  setTournament({ ...tournament, [selectedTag]: a });
+                }}
+              />
+            ))}
+          </div>
+        </>
+      )}
+      {/* <p className="text-white/70 text-sm mb-2">Game Instructions</p> */}
+      {/* <textarea
         onChange={(e) =>
           setTournament({ ...tournament, instructions: e.target.value })
         }
         className="bg-white/10 text-white rounded-xl p-4 mb-4"
-      ></textarea>
-      {tournament?.tags?.["glbOne"] && (
+      ></textarea> */}
+      {/* {tournament?.tags?.["glbOne"] && (
         <CreateGlbPicker
           isAdmin={isAdmin}
           dimension="glbOne"
@@ -217,7 +336,47 @@ export default function CreateConfiguration({
             setTournament({ ...tournament, wordleTheme: a });
           }}
         />
-      )}
+      )} */}
+    </div>
+  );
+}
+
+function AssetSwitcher({ tags, selected, onSelect }) {
+  return (
+    <div className="bg-black/10 flex px-1 py-1 gap-2 rounded-full items-center px-2">
+      <ChevronLeftIcon className="h-6 w-6 text-black/20" />
+      <div className="overflow-x-scroll no-scrollbar flex w-full">
+        {tags.map((item, key) => (
+          <div
+            onClick={() => onSelect(item.tag)}
+            className={`${
+              selected === item.tag
+                ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
+                : "bg-black/0 cursor-pointer text-black/30"
+            } px-4 rounded-full text-sm flex-shrink-0 h-8 flex items-center`}
+            key={key}
+          >
+            {item.text}
+          </div>
+        ))}
+      </div>
+      <ChevronRightIcon className="h-6 w-6 text-black/20" />
+    </div>
+  );
+}
+
+function Asset({ aspect, item, currentAsset, onSelect, isSpriteSheet }) {
+  return (
+    <div
+      onClick={() => onSelect(item + "/original")}
+      className={`${aspect} ${
+        currentAsset === item + "/original" ? "outline-4 border-indigo-500" : ""
+      } border-2 shadow-md p-2 rounded-lg`}
+    >
+      <img
+        className="h-full w-full object-contain"
+        src={isSpriteSheet ? `${item}/w-800.webp` : `${item}/w-400.webp`}
+      />
     </div>
   );
 }

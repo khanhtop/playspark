@@ -6,7 +6,6 @@ export const cloudinaryToReimage = (url: string, dimensions: string, format: str
     let rendition = 'original'
     if (dimensions) rendition = `${dimensions}.${format}`
     const reimageUrl = `https://files.reimage.dev/playspark/${objectId}/${rendition}`
-    console.log(reimageUrl)
     return reimageUrl;
   };
   

@@ -2,6 +2,7 @@ export const configurableParameterTitles = {
   fall: {
     playerSprite: {
       text: "Character Sprite Sheet",
+      isSpriteSheet: true,
       configurable: false,
     },
     additionalSpriteOne: {
@@ -24,6 +25,14 @@ export const configurableParameterTitles = {
       text: "Bonus / Power Up Sprite",
       configurable: true,
     },
+    backgroundSprite: {
+      text: "Pitch / Ground",
+      configurable: true,
+    },
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+    },
   },
   pong: {
     playerSprite: {
@@ -40,6 +49,14 @@ export const configurableParameterTitles = {
     },
     powerUpSprite: {
       text: "Bonus / Power Up",
+      configurable: true,
+    },
+    backgroundSprite: {
+      text: "Pitch / Ground",
+      configurable: true,
+    },
+    backgroundMusic: {
+      text: "Background Music",
       configurable: true,
     },
   },
@@ -188,6 +205,12 @@ export const configurableParameterTitles = {
     },
     additionalSpriteSix: {
       text: "Ground",
+      configurable: true,
+    },
+  },
+  "spin-to-win": {
+    backgroundSprite: {
+      text: "Background",
       configurable: true,
     },
   },

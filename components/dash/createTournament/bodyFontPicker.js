@@ -1,54 +1,46 @@
+import { Dropdown, Label } from "flowbite-react";
+
 export default function BodyFontPicker({ tournament, setTournament }) {
+  const availableFonts = [
+    "Roboto",
+    "Lato",
+    "Open Sans",
+    "DM Sans",
+    "Josefin Sans",
+    "Merriweather",
+    "Lora",
+    "Playfair Display",
+    "Poppins",
+    "Noto Sans",
+    "Raleway",
+    "Ubuntu",
+    "Source Code Pro",
+  ];
+
   return (
     <>
-      <p className="text-xs text-white/70 mt-4 mb-1">
+      <Label className="text-black/50 -mb-2">
         Primary Font (used for most text, should be readable)
-      </p>
-      <select
-        className="bg-white/5 appearance-none px-4 text-white w-full h-10"
-        value={tournament.bodyFont}
-        onChange={(e) =>
-          setTournament({ ...tournament, bodyFont: e.target.value })
-        }
+      </Label>
+      <Dropdown
+        color="dark"
+        label={tournament.bodyFont}
+        theme={{
+          floating: {
+            target: "w-72 bg-indigo-600 enabled:hover:bg-indigo-700",
+          },
+        }}
       >
-        <option value="Roboto">Roboto</option>
-        <option default value="Lato">
-          Lato
-        </option>
-        <option default value="Open Sans">
-          Open Sans
-        </option>
-        <option default value="DM Sans">
-          DM Sans
-        </option>
-        <option default value="Josefin Sans">
-          Josefin Sans
-        </option>
-        <option default value="Merriweather">
-          Merriweather
-        </option>
-        <option default value="Lora">
-          Lora
-        </option>
-        <option default value="Playfair Display">
-          Playfair Display
-        </option>
-        <option default value="Poppins">
-          Poppins
-        </option>
-        <option default value="Noto Sans">
-          Noto Sans
-        </option>
-        <option default value="Raleway">
-          Raleway
-        </option>
-        <option default value="Ubuntu">
-          Ubuntu
-        </option>
-        <option default value="Source Code Pro">
-          Source Code Pro
-        </option>
-      </select>
+        {availableFonts.map((item, key) => (
+          <Dropdown.Item
+            onClick={() => setTournament({ ...tournament, bodyFont: item })}
+            value={item}
+            key={key}
+          >
+            {item}
+          </Dropdown.Item>
+        ))}
+      </Dropdown>
     </>
   );
 }

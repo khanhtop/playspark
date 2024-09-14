@@ -4,6 +4,7 @@ import {
   ArrowRightCircleIcon,
   CheckCircleIcon,
 } from "@heroicons/react/24/solid";
+import { Button } from "flowbite-react";
 
 export default function CreateNavigator({
   stages,
@@ -13,44 +14,33 @@ export default function CreateNavigator({
   onComplete,
 }) {
   return (
-    <div className="bg-[#151515] h-16 flex items-center pl-4 justify-between">
+    <div className="bg-white border-t-2 h-16 flex items-center pl-4 justify-between text-black">
       {stage > 0 ? (
         <div
           onClick={() => !isAdding && onNavigate(stage - 1)}
-          className="flex gap-2 text-white pr-4 group cursor-pointer items-center"
+          className="flex gap-2 text-black pr-4 group cursor-pointer items-center"
         >
-          <ArrowLeftCircleIcon className="h-7 w-6 text-white group-hover:text-cyan-400" />
-          <h1 className="font-mono text-sm font-light">
-            Back To {stages[stage - 1]}
-          </h1>
+          <h1 className="text-sm font-light underline cursor-pointer">Back</h1>
         </div>
       ) : (
         <div className="flex-1" />
       )}
       {stage < stages.length - 1 ? (
-        <div
+        <Button
           onClick={() => !isAdding && onNavigate(stage + 1)}
-          className="flex gap-2 text-white pr-4 group cursor-pointer items-center"
+          className="bg-green-400 enabled:hover:bg-green-500 flex gap-2 text-white group cursor-pointer items-center mr-4"
         >
-          <h1 className="font-mono text-sm font-light">
-            Continue To {stages[stage + 1]}
-          </h1>
-          <ArrowRightCircleIcon className="h-7 w-6 text-white group-hover:text-cyan-400" />
-        </div>
+          Continue To {stages[stage + 1]}
+        </Button>
       ) : (
-        <div
+        <Button
           onClick={() => onComplete()}
-          className="flex gap-2 text-white pr-4 group cursor-pointer items-center"
+          isProcessing={isAdding}
+          disabled={isAdding}
+          className="bg-green-400 enabled:hover:bg-green-500 flex gap-2 text-white mr-4 group cursor-pointer items-center"
         >
-          <h1 className="font-mono text-sm font-light">
-            {isAdding ? "Approving" : "Approve"}
-          </h1>
-          {isAdding ? (
-            <ArrowPathIcon className="animate-spin h-7 w-6 text-green-400 group-hover:text-green-500" />
-          ) : (
-            <CheckCircleIcon className="h-7 w-6 text-green-400 group-hover:text-green-500" />
-          )}
-        </div>
+          Approve
+        </Button>
       )}
     </div>
   );
