@@ -145,6 +145,7 @@ export default function CreateDesign({ tournament, setTournament }) {
           />
           <Label className="text-black/50 -mb-2">Background Image</Label>
           <ReimagePicker
+            id="backgroundImagePicker"
             file={tournament.backgroundImage}
             setFile={(url) => {
               setTournament({ ...tournament, backgroundImage: url });
@@ -153,15 +154,25 @@ export default function CreateDesign({ tournament, setTournament }) {
           />
           <Label className="text-black/50 -mb-2">Game Icon</Label>
           <ReimagePicker
+            id="gameIconPicker"
             file={tournament.gameIcon || tournament.backgroundImage}
             setFile={(url) => {
-              setTournament({ ...tournament, backgroundImage: url });
+              setTournament({ ...tournament, gameIcon: url });
             }}
             aspectRatio={1}
           />
         </Card>
         <Card>
-          <h1 className="font-extrabold text-black/80">Welcome Screen</h1>
+          <h1 className="font-extrabold text-black/80">Homescreen Music</h1>
+          <CreateAudioPicker
+            dimension="homescreenMusic"
+            gameTag={"homescreen-bgm"}
+            title={`Homescreen Music`}
+            selected={tournament.homescreenMusic}
+            updateAudio={(a) => {
+              setTournament({ ...tournament, homescreenMusic: a });
+            }}
+          />
           {/* <CreateAudioPicker
             dimension="homescreenMusic"
             gameTag={"homescreen-bgm"}
@@ -256,7 +267,6 @@ export default function CreateDesign({ tournament, setTournament }) {
           </button>
         </div>
       </div>
-
       <div className="my-2">
         <p className="text-xs text-white/70 mt-0 mb-1">Tournament Credit Cap</p>
         <div className="flex gap-2">
@@ -294,7 +304,6 @@ export default function CreateDesign({ tournament, setTournament }) {
           </button>
         </div>
       </div>
-
       <BrandingComponent>
         <div className="mt-4">
           <ImagePicker
@@ -325,44 +334,7 @@ export default function CreateDesign({ tournament, setTournament }) {
           />
         </div>
       </BrandingComponent>
-      <CreateColorPicker
-        label="Primary Color (For Headers and Primary Elements)"
-        value={tournament.primaryColor}
-        onSelect={(a) => {
-          setTournament({ ...tournament, primaryColor: a.hex });
-        }}
-      />
-      <CreateColorPicker
-        label="Secondary Color (Used for some buttons and UI aspects)"
-        value={tournament.secondaryColor || "#000000"}
-        onSelect={(a) => {
-          setTournament({ ...tournament, secondaryColor: a.hex });
-        }}
-      />
-      <CreateColorPicker
-        label="Accent Color (Used as an accent in areas that need it)"
-        value={tournament.accentColor || "#000000"}
-        onSelect={(a) => {
-          setTournament({ ...tournament, accentColor: a.hex });
-        }}
-      />
-      <CreateColorPicker
-        label="Text Color"
-        value={tournament.textColor}
-        onSelect={(a) => {
-          setTournament({ ...tournament, textColor: a.hex });
-        }}
-      />
-      <div className="h-4" />
-      <CreateAudioPicker
-        dimension="homescreenMusic"
-        gameTag={"homescreen-bgm"}
-        title={`Homescreen Music`}
-        selected={tournament.homescreenMusic}
-        updateAudio={(a) => {
-          setTournament({ ...tournament, homescreenMusic: a });
-        }}
-      />
+      =
     </>
   );
 }

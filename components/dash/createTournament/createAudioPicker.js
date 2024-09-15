@@ -35,35 +35,20 @@ export default function CreateAudioPicker({
 
   return (
     <>
-      <div className="text-white/70 mb-3 mt-2 text-sm flex gap-2">
-        <h1 className="">{title}</h1>
-        {/* <Tag text={gameTag} />
-        <Tag text={aspectRatio} /> */}
-      </div>
-
       <div className="flex gap-2">
-        <div className="h-60 rounded-xl bg-white/10 overflow-hidden flex-1">
-          <div className="h-[15%] flex items-center pl-2 bg-black/20 text-white/50 text-xs">
-            <p>Current</p>
-          </div>
-          <div className="h-[85%] py-2 px-2 gap-2 flex flex-col overflow-y-scroll">
+        <div className="h-72 rounded-xl overflow-hidden flex-1">
+          <div className="h-full py-2 gap-2 flex flex-col overflow-y-scroll">
             {stateImages?.map((item, key) => (
               <div className={`w-full flex flex-col`}>
                 <div className="flex gap-2 mb-2">
                   {parseNameFromURL(item.secure_url)?.map((item, key) => (
-                    <div className="text-[10px] bg-cyan-500 px-2 py-1 rounded-full uppercase">
+                    <div className="text-[10px] bg-indigo-600 text-white px-2 py-1 rounded-md uppercase">
                       {item}
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-4 mb-3">
-                  <div
-                    className={`flex flex-1 rounded-full overflow-hidden border-2 flex gap-4 ${
-                      selected === item.secure_url
-                        ? "border-cyan-500"
-                        : "border-transparent"
-                    } rounded-full overflow-hidden`}
-                  >
+                  <div className={`flex flex-1 rounded-md flex gap-4`}>
                     <audio controls className="flex-1">
                       <source src={item.secure_url} type="audio/mpeg" />
                       Your browser does not support the audio element.
@@ -76,9 +61,9 @@ export default function CreateAudioPicker({
                     }
                     className={`${
                       selected === item.secure_url
-                        ? "bg-white/20 text-white/80"
-                        : "bg-cyan-500 text-white/80 font-bold"
-                    }  rounded-full w-36`}
+                        ? "bg-indigo-600 text-white"
+                        : "bg-black/10"
+                    }  rounded-md w-24 text-sm`}
                   >
                     Select{selected === item.secure_url && "ed"}
                   </button>

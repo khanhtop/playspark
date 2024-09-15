@@ -5,10 +5,10 @@ import { useState } from "react";
 export default function ReimagePicker({
   file,
   setFile,
+  id,
   height = 200,
   aspectRatio = 1,
 }) {
-  const [id, setId] = useState("reimagePicker-" + Date.now().toString());
   const [loading, setLoading] = useState(false);
   const [aspect, setAspect] = useState(aspectRatio);
 
