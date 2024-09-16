@@ -37,6 +37,12 @@ export default function CreateConfiguration({
     ]?.isGlb;
   }, [selectedTag]);
 
+  const isMusic = useMemo(() => {
+    return configurableParameterTitles?.[tournament?.cloudinaryGameTag]?.[
+      selectedTag
+    ]?.isMusic;
+  }, [selectedTag]);
+
   const glbZoom = useMemo(() => {
     return configurableParameterTitles?.[tournament?.cloudinaryGameTag]?.[
       selectedTag
@@ -96,6 +102,46 @@ export default function CreateConfiguration({
     }
   }, [selectedTag]);
 
+  if (isMusic) {
+    return (
+      <div className="flex flex-col h-full flex-1">
+        <Label className="text-black/50 mb-2">Select Asset To Modify</Label>
+        <AssetSwitcher
+          tags={getAssetsArray}
+          selected={selectedTag}
+          onSelect={(asset) => setSelectedTag(asset)}
+        />
+        {/* <div className="w-full overflow-x-hidden mt-6 bg-black/5 px-4 py-4 flex gap-4 rounded-lg">
+          <div
+            className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center`}
+          >
+            <p className="text-sm text-black/50">Current</p>
+          </div>
+        </div> */}
+        <div className="h-full overflow-y-scroll pt-4">
+          {rendering ? (
+            <div className="flex-1 flex flex-col gap-4 items-center justify-center h-full">
+              <Spinner className="h-12 w-12 text-indigo-600" />
+              <p className="text-black/50">Loading Assets...</p>
+            </div>
+          ) : (
+            <CreateAudioPicker
+              fullHeight={true}
+              isAdmin={isAdmin}
+              dimension="backgroundMusic"
+              gameTag={"bgm"}
+              title={`Background Music`}
+              selected={tournament.backgroundMusic}
+              updateAudio={(a) => {
+                setTournament({ ...tournament, backgroundMusic: a });
+              }}
+            />
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full flex-1">
       <Label className="text-black/50 mb-2">Select Asset To Modify</Label>
@@ -123,7 +169,7 @@ export default function CreateConfiguration({
             ) : (
               <img
                 className={`${aspect} h-16 rounded-md`}
-                src={cloudinaryToReimage(tournament?.[selectedTag], "w-300")}
+                src={cloudinaryToReimage(tournament?.[selectedTag], "w-800")}
               />
             )}
           </div>
@@ -428,6 +474,7 @@ function Asset({
       </div>
     );
   }
+
   return (
     <div
       onClick={() => onSelect(item + "/original")}

@@ -5,7 +5,8 @@ import { useState } from "react";
 import { configurableParameterTitles } from "@/helpers/configurability";
 
 export default function CreateAudioPicker({
-  aspectRatio,
+  setLoading,
+  fullHeight,
   title,
   selected,
   dimension,
@@ -36,7 +37,11 @@ export default function CreateAudioPicker({
   return (
     <>
       <div className="flex gap-2">
-        <div className="h-72 rounded-xl overflow-hidden flex-1">
+        <div
+          className={`${
+            fullHeight ? "h-full" : "h-72 overflow-hidden"
+          } rounded-xl  flex-1`}
+        >
           <div className="h-full py-2 gap-2 flex flex-col overflow-y-scroll">
             {stateImages?.map((item, key) => (
               <div className={`w-full flex flex-col`}>
