@@ -166,10 +166,14 @@ export const configurableParameterTitles = {
     glbOne: {
       text: "Ball 3D Model",
       configurable: false,
+      isGlb: true,
+      zoom: 0.2,
     },
     glbTwo: {
       text: "Platform 3D Model",
       configurable: false,
+      isGlb: true,
+      zoom: 0.5,
     },
     playerSprite: {
       text: "Ball Texture",

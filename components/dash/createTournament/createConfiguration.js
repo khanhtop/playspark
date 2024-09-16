@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import CreateAudioPicker from "./createAudioPicker";
-import CreateGlbPicker from "./createGlbPicker";
+import CreateGlbPicker, { BabylonModel } from "./createGlbPicker";
 import CreateImageSlider from "./createImageSlider";
 import GenWordArray from "./genWordArray";
 import { configurableParameterTitles } from "@/helpers/configurability";
@@ -31,6 +31,18 @@ export default function CreateConfiguration({
     ]?.isSpriteSheet;
   }, [selectedTag]);
 
+  const isGlb = useMemo(() => {
+    return configurableParameterTitles?.[tournament?.cloudinaryGameTag]?.[
+      selectedTag
+    ]?.isGlb;
+  }, [selectedTag]);
+
+  const glbZoom = useMemo(() => {
+    return configurableParameterTitles?.[tournament?.cloudinaryGameTag]?.[
+      selectedTag
+    ]?.zoom;
+  }, [selectedTag]);
+
   // Generate objects array
   const getAssetsArray = useMemo(() => {
     const mappings = Object.keys(tournament.tags).map((tag) => ({
@@ -47,7 +59,7 @@ export default function CreateConfiguration({
   //
 
   useEffect(() => {
-    if (selectedTag) {
+    if (selectedTag && !isGlb) {
       setAssets([]);
       setRendering(true);
       const tag = tournament.tags?.[selectedTag];
@@ -67,6 +79,20 @@ export default function CreateConfiguration({
           setRendering(false);
           setAssets(json.objects);
         });
+    } else if (selectedTag && isGlb) {
+      setAssets([]);
+      setRendering(true);
+      const tag = tournament.tags?.[selectedTag];
+      fetch(
+        `/api/cloudinaryGet?aspectRatio=${tag}&gameTag=${tournament.cloudinaryGameTag}`
+      )
+        .then((raw) => {
+          return raw.json();
+        })
+        .then((json) => {
+          setAssets(json);
+        });
+      setRendering(false);
     }
   }, [selectedTag]);
 
@@ -86,13 +112,23 @@ export default function CreateConfiguration({
             className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center`}
           >
             <p className="text-sm text-black/50">Current</p>
-            <img
-              className={`${aspect} w-16`}
-              src={cloudinaryToReimage(tournament?.[selectedTag], "w-300")}
-            />
+            {isGlb ? (
+              <div>
+                <BabylonModel
+                  modelUrl={tournament?.[selectedTag]}
+                  onSelect={() => null}
+                  pickerZoom={glbZoom || 0.2}
+                />
+              </div>
+            ) : (
+              <img
+                className={`${aspect} h-16 rounded-md`}
+                src={cloudinaryToReimage(tournament?.[selectedTag], "w-300")}
+              />
+            )}
           </div>
           <div
-            className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center`}
+            className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center w-36`}
           >
             <p className="text-sm text-black/50">Upload</p>
             <ArrowUpOnSquareStackIcon
@@ -116,6 +152,8 @@ export default function CreateConfiguration({
           >
             {assets.map((item, key) => (
               <Asset
+                type={isGlb ? "glb" : "image"}
+                glbZoom={glbZoom || 0.2}
                 key={key}
                 item={item}
                 aspect={aspect}
@@ -365,7 +403,31 @@ function AssetSwitcher({ tags, selected, onSelect }) {
   );
 }
 
-function Asset({ aspect, item, currentAsset, onSelect, isSpriteSheet }) {
+function Asset({
+  aspect,
+  item,
+  currentAsset,
+  onSelect,
+  isSpriteSheet,
+  type,
+  glbZoom,
+}) {
+  if (type === "glb" && item.secure_url) {
+    return (
+      <div
+        className={` ${
+          currentAsset === item.secure_url ? "border-2 border-indigo-500" : ""
+        } rounded-lg`}
+      >
+        <BabylonModel
+          selected={null}
+          modelUrl={item.secure_url}
+          onSelect={() => onSelect(item.secure_url)}
+          pickerZoom={glbZoom}
+        />
+      </div>
+    );
+  }
   return (
     <div
       onClick={() => onSelect(item + "/original")}
