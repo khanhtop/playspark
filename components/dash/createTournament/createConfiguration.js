@@ -14,6 +14,8 @@ import {
   ChevronRightIcon,
   CloudArrowUpIcon,
 } from "@heroicons/react/24/solid";
+import ReimagePicker from "@/components/reimage/reimagePicker";
+import ReimageUploadWidget from "@/components/reimage/reimageUploader";
 
 export default function CreateConfiguration({
   tournament,
@@ -62,43 +64,38 @@ export default function CreateConfiguration({
     return mappings;
   }, [tournament.tags]);
 
-  //
+  const fetchAssetsFromReimage = async () => {
+    setAssets([]);
+    setRendering(true);
+    const result = await fetch(
+      `https://api.reimage.dev/get/tags?${tournament.cloudinaryGameTag}&${tournament.tags?.[selectedTag]}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_REIMAGE_KEY}`,
+        },
+      }
+    );
+    const json = await result.json();
+    setAssets(json.objects);
+    setRendering(false);
+  };
+
+  const fetchAssetsFromCloudinary = async () => {
+    setAssets([]);
+    setRendering(true);
+    const result = await fetch(
+      `/api/cloudinaryGet?aspectRatio=${tournament.tags?.[selectedTag]}&gameTag=${tournament.cloudinaryGameTag}`
+    );
+    const json = await result.json();
+    setAssets(json.objects);
+    setRendering(false);
+  };
 
   useEffect(() => {
     if (selectedTag && !isGlb) {
-      setAssets([]);
-      setRendering(true);
-      const tag = tournament.tags?.[selectedTag];
-      setAspect(`aspect-[${tag}]`);
-      fetch(
-        `https://api.reimage.dev/get/tags?${tournament.cloudinaryGameTag}&${tag}`,
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_REIMAGE_KEY}`,
-          },
-        }
-      )
-        .then((raw) => {
-          return raw.json();
-        })
-        .then((json) => {
-          setRendering(false);
-          setAssets(json.objects);
-        });
+      fetchAssetsFromReimage();
     } else if (selectedTag && isGlb) {
-      setAssets([]);
-      setRendering(true);
-      const tag = tournament.tags?.[selectedTag];
-      fetch(
-        `/api/cloudinaryGet?aspectRatio=${tag}&gameTag=${tournament.cloudinaryGameTag}`
-      )
-        .then((raw) => {
-          return raw.json();
-        })
-        .then((json) => {
-          setAssets(json);
-        });
-      setRendering(false);
+      fetchAssetsFromCloudinary();
     }
   }, [selectedTag]);
 
@@ -173,14 +170,19 @@ export default function CreateConfiguration({
               />
             )}
           </div>
-          <div
+          <ReimageUploadWidget
+            gameTag={tournament.cloudinaryGameTag}
+            assetTag={tournament.tags?.[selectedTag]}
+            onComplete={() => fetchAssetsFromReimage()}
+          />
+          {/* <div
             className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center w-36`}
           >
             <p className="text-sm text-black/50">Upload</p>
             <ArrowUpOnSquareStackIcon
               className={`${aspect} w-16 text-black/20`}
             />
-          </div>
+          </div> */}
         </div>
       )}
       {rendering ? (
