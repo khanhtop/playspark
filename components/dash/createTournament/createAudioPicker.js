@@ -1,8 +1,4 @@
-import { ArrowPathIcon, CloudArrowDownIcon } from "@heroicons/react/24/solid";
-import { WidgetLoader, Widget } from "react-cloudinary-upload-widget";
-import { useEffect } from "react";
-import { useState } from "react";
-import { configurableParameterTitles } from "@/helpers/configurability";
+import { useEffect, useRef, useState, createRef } from "react";
 
 export default function CreateAudioPicker({
   setLoading,
@@ -13,19 +9,17 @@ export default function CreateAudioPicker({
   updateAudio,
   gameTag,
 }) {
-  const [stateImages, setStateImages] = useState();
+  const [stateImages, setStateImages] = useState([]);
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const audioRefs = useRef([]); // Array of refs for each audio element
 
   useEffect(() => {
-    if (!stateImages) {
+    if (stateImages.length === 0) {
       fetch(`/api/cloudinaryAudioGet?gameTag=${gameTag}`)
-        .then((raw) => {
-          return raw.json();
-        })
-        .then((json) => {
-          setStateImages(json);
-        });
+        .then((raw) => raw.json())
+        .then((json) => setStateImages(json));
     }
-  }, []);
+  }, [gameTag, stateImages]);
 
   function parseNameFromURL(url) {
     const slashSplit = url.split("/").pop();
@@ -34,28 +28,59 @@ export default function CreateAudioPicker({
     return hyphenSplit;
   }
 
+  const handlePlay = (audioRef, item) => {
+    // If a different track is currently playing, pause it first
+    if (currentTrack && currentTrack !== audioRef.current) {
+      currentTrack.pause();
+      currentTrack.currentTime = 0; // Reset the current track's time to the start
+    }
+
+    // Set this track as the current track
+    setCurrentTrack(audioRef.current);
+
+    // Load and play the audio file when the user clicks play
+    if (!audioRef.current.src) {
+      audioRef.current.src = item.secure_url;
+      audioRef.current.play();
+    } else {
+      audioRef.current.play();
+    }
+  };
+
   return (
-    <>
-      <div className="flex gap-2">
-        <div
-          className={`${
-            fullHeight ? "h-full" : "h-72 overflow-hidden"
-          } rounded-xl  flex-1`}
-        >
-          <div className="h-full py-2 gap-2 flex flex-col overflow-y-scroll">
-            {stateImages?.map((item, key) => (
-              <div className={`w-full flex flex-col`}>
+    <div className="flex gap-2">
+      <div
+        className={`${
+          fullHeight ? "h-full" : "h-72 overflow-hidden"
+        } rounded-xl flex-1`}
+      >
+        <div className="h-full py-2 gap-2 flex flex-col overflow-y-scroll">
+          {stateImages.map((item, index) => {
+            // Create a ref for each audio element and store in the refs array
+            if (!audioRefs.current[index]) {
+              audioRefs.current[index] = createRef();
+            }
+
+            return (
+              <div key={index} className="w-full flex flex-col">
                 <div className="flex gap-2 mb-2">
-                  {parseNameFromURL(item.secure_url)?.map((item, key) => (
-                    <div className="text-[10px] bg-indigo-600 text-white px-2 py-1 rounded-md uppercase">
-                      {item}
+                  {parseNameFromURL(item.secure_url)?.map((part, key) => (
+                    <div
+                      key={key}
+                      className="text-[10px] bg-indigo-600 text-white px-2 py-1 rounded-md uppercase"
+                    >
+                      {part}
                     </div>
                   ))}
                 </div>
                 <div className="flex gap-4 mb-3">
-                  <div className={`flex flex-1 rounded-md flex gap-4`}>
-                    <audio controls className="flex-1">
-                      <source src={item.secure_url} type="audio/mpeg" />
+                  <div className="flex flex-1 rounded-md flex gap-4">
+                    <audio
+                      controls
+                      className="flex-1"
+                      ref={audioRefs.current[index]} // Use the ref from the array
+                      onPlay={() => handlePlay(audioRefs.current[index], item)}
+                    >
                       Your browser does not support the audio element.
                     </audio>
                   </div>
@@ -74,10 +99,10 @@ export default function CreateAudioPicker({
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
-    </>
+    </div>
   );
 }

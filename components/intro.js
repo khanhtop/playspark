@@ -52,15 +52,16 @@ export default function Intro({
 
   // Audio
   const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-  const audio = useRef(
-    new Audio(data?.homescreenMusic ?? "/uisounds/intro.mp3")
-  );
+  const audio = useRef(null);
 
-  // useMusic(
-  //   hasInitialisedAudio,
-  //   data?.homescreenMusic ?? "/uisounds/intro.mp3",
-  //   context.settings.bgm
-  // );
+  if (!audio.current) {
+    audio.current = new Audio(data?.homescreenMusic ?? "/uisounds/intro.mp3");
+  }
+  useMusic(
+    hasInitialisedAudio,
+    data?.homescreenMusic ?? "/uisounds/intro.mp3",
+    context.settings.bgm
+  );
 
   useGoogleFont(data.font || "Anton", "custom-font");
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
