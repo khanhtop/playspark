@@ -53,15 +53,6 @@ export default function Home({ page, blogs }) {
           <BlogsSection blogs={blogs} />
         </Section>
         <Footer />
-        {/* <Section>
-          <Carousel />
-        </Section>
-        <Section>
-          <GamifySection />
-        </Section>
-        <Section>
-          <PaySection />
-        </Section> */}
       </div>
     </>
   );

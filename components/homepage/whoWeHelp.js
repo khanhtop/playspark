@@ -1,5 +1,4 @@
 export default function WhoWeHelp({ page }) {
-  console.log(page);
   return (
     <div className="w-full flex xl:gap-12 flex-col xl:flex-row bg-gradient-to-b from-blue-500/0 to-blue-500/10 items-center xl:items-start justify-center text-black pt-16 pb-16 px-4 xl:px-12">
       <div className="xl:text-left flex-1">

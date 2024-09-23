@@ -4,69 +4,99 @@ import Toggle from "react-toggle";
 import { useAppContext } from "@/helpers/store";
 import VideoPicker from "@/components/forms/videoPicker";
 import SurveyInput from "@/components/forms/surveyInput";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Card, FileInput, Label, RangeSlider, TextInput } from "flowbite-react";
+import NewVideoPicker from "@/components/forms/newVideoPicker";
+import MuxUploader from "@/components/forms/muxUploader";
+
+function MarketingCard({ title, cardState, onSetCardState, children, large }) {
+  console.log(cardState);
+  return (
+    <Card className={`${large ? "h-auto" : "h-60"} rounded-xl`}>
+      <div className="h-full flex flex-col">
+        <div className="flex w-full items-center justify-between border-b-2 mb-2 pb-4 border-b-black/5">
+          <Label className="text-black/100">{title}</Label>
+          <Toggle
+            checked={cardState}
+            onClick={() => {
+              onSetCardState(cardState === true ? false : true);
+            }}
+          />
+        </div>
+        <div
+          style={{
+            opacity: cardState ? 1 : 0.2,
+            pointerEvents: cardState ? "auto" : "none",
+          }}
+          className="flex-1"
+        >
+          {children}
+        </div>
+      </div>
+    </Card>
+  );
+}
 
 export default function CreateMarketing({ tournament, setTournament }) {
   const context = useAppContext();
   const surveyId = useRef(Date.now().toString());
+  const [sponsoredVideoBuffer, setSponsoredVideoBuffer] = useState(null);
+
+  console.log(sponsoredVideoBuffer);
+
+  console.log(tournament);
+
   return (
-    <>
-      {/* Email CTA */}
-      <BrandingComponent>
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <p className="text-white/70">Capture Players Email Addresses</p>
-            <Toggle
-              checked={tournament?.captureEmail}
-              onChange={() =>
-                setTournament({
-                  ...tournament,
-                  captureEmail: tournament?.captureEmail ? false : true,
-                })
-              }
-            />
-          </div>
-          {tournament.captureEmail && (
-            <Input
-              label="Guidance Text For Players"
-              labelColor="text-white/70"
-              className="bg-white/5 w-full py-2 text-white mb-6"
-              defaultValue={`${
-                context?.profile?.companyName
-                  ? context?.profile?.companyName
-                  : "The sponsor"
-              } would like to send you updates and information through email, would you like to be included?`}
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-2 gap-4">
+        {/* Email Address Capture */}
+
+        <MarketingCard
+          title="Capture Players Email Addresses"
+          cardState={!!tournament?.captureEmail}
+          onSetCardState={(bool) =>
+            setTournament({
+              ...tournament,
+              captureEmail: bool,
+            })
+          }
+        >
+          <>
+            <Label className="text-black/50">Guidance Text For Players</Label>
+            <TextInput
               onChange={(e) => {
                 setTournament({
                   ...tournament,
                   customEmailText: e.target.value,
                 });
               }}
+              defaultValue={`${
+                context?.profile?.companyName
+                  ? context?.profile?.companyName
+                  : "The sponsor"
+              } would like to send you updates and information through email, would you like to be included?`}
             />
-          )}
-        </div>
-      </BrandingComponent>
-      {/* Shareability */}
-      <BrandingComponent>
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <p className="text-white/70">Allow Players To Share Game</p>
-            <Toggle
-              checked={tournament?.canShare}
-              onChange={() =>
-                setTournament({
-                  ...tournament,
-                  canShare: tournament?.canShare ? false : true,
-                })
-              }
-            />
-          </div>
-          {tournament.canShare && (
-            <Input
-              label="Custom URL To Share (Leave Blank For Default)"
-              labelColor="text-white/70"
+          </>
+        </MarketingCard>
+
+        {/* Shareability */}
+
+        <MarketingCard
+          title="Allow Players To Share Game"
+          cardState={!!tournament?.canShare}
+          onSetCardState={(bool) =>
+            setTournament({
+              ...tournament,
+              canShare: bool,
+            })
+          }
+        >
+          <>
+            <Label className="text-black/50">
+              Custom URL To Share (Leave Blank For Default)
+            </Label>
+            <TextInput
               placeHolder="https://"
-              className="bg-white/5 w-full py-2 text-white mb-6"
               onChange={(e) => {
                 setTournament({
                   ...tournament,
@@ -74,41 +104,205 @@ export default function CreateMarketing({ tournament, setTournament }) {
                 });
               }}
             />
-          )}
-        </div>
-      </BrandingComponent>
-      <BrandingComponent>
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2 mb-4">
-            <p className="text-white/70">
-              Encourage Users To Like / Follow Social Account
-            </p>
-            <Toggle
-              checked={tournament?.socialCta !== null}
-              onChange={() =>
-                setTournament({
-                  ...tournament,
-                  socialCta: tournament?.socialCta != null ? null : "",
-                })
-              }
-            />
-          </div>
-          {tournament.socialCta !== null && (
-            <Input
-              label="Target URL"
-              labelColor="text-white/70"
+          </>
+        </MarketingCard>
+
+        {/* Social Follow */}
+
+        <MarketingCard
+          title="Encourage Users To Like / Follow Social Account"
+          cardState={tournament?.socialCta !== null}
+          onSetCardState={(bool) =>
+            setTournament({
+              ...tournament,
+              socialCta: bool ? "" : null,
+            })
+          }
+        >
+          <>
+            <Label className="text-black/50">Target URL</Label>
+            <TextInput
               placeHolder="https://"
-              className="bg-white/5 w-full py-2 text-white mb-6"
               onChange={(e) => {
                 setTournament({
                   ...tournament,
                   socialCta: e.target.value,
                 });
               }}
+              value={tournament.socialCta}
             />
+          </>
+        </MarketingCard>
+
+        {/* Playable Ad */}
+
+        <MarketingCard
+          title="Playable Ad"
+          cardState={tournament?.playableAd}
+          onSetCardState={(bool) =>
+            setTournament({
+              ...tournament,
+              playableAd: bool,
+            })
+          }
+        >
+          <>
+            <Label className="text-black/50">Win Probability</Label>
+            <RangeSlider
+              min={0}
+              max={1}
+              step={0.01}
+              value={tournament?.playableAd?.winProbability}
+              onChange={(e) =>
+                setTournament({
+                  ...tournament,
+                  playableAd: {
+                    winProbability: e.target.value,
+                    logo: "/branding/logo.png",
+                  },
+                })
+              }
+            />
+          </>
+        </MarketingCard>
+      </div>
+
+      {/* Rewarded Video */}
+
+      <MarketingCard
+        large
+        title="Show a Sponsored Video"
+        cardState={tournament.hasSponsoredVideo}
+        onSetCardState={(bool) => {
+          setTournament({
+            ...tournament,
+            hasSponsoredVideo: bool,
+            sponsoredVideo: bool === false ? null : tournament.sponsoredVideo,
+          });
+          setSponsoredVideoBuffer(null);
+        }}
+      >
+        <>
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <FileInput
+                accept="video/*"
+                onChange={(file) =>
+                  setSponsoredVideoBuffer(file.target.files[0])
+                }
+              />
+              <MuxUploader
+                file={sponsoredVideoBuffer}
+                onUploadComplete={(id) =>
+                  setTournament({ ...tournament, sponsoredVideo: id })
+                }
+              />
+            </div>
+            <div className="">
+              {(tournament.sponsoredVideo || sponsoredVideoBuffer) && (
+                <video
+                  key={sponsoredVideoBuffer?.name}
+                  className="h-36 rounded-lg"
+                  controls
+                >
+                  <source
+                    src={
+                      tournament.sponsoredVideo
+                        ? `https://stream.mux.com/${tournament.sponsoredVideo}.m3u8`
+                        : URL.createObjectURL(sponsoredVideoBuffer)
+                    }
+                    type="video/mp4"
+                  />
+                </video>
+              )}
+            </div>
+          </div>
+          {tournament.sponsoredVideo && (
+            <div className="pt-2">
+              <Label className="text-black/50">
+                Enter URL for Call To Action (Leave blank for none)
+              </Label>
+              <TextInput
+                placeHolder="https://"
+                onChange={(e) => {
+                  setTournament({
+                    ...tournament,
+                    sponsoredVideoCtaUrl: e.target.value,
+                  });
+                }}
+              />
+            </div>
           )}
+
+          {tournament.sponsoredVideo && (
+            <div className="pt-2">
+              <Label className="text-black/50">
+                Odds of user being able to claim
+              </Label>
+              <RangeSlider
+                min={0}
+                max={100}
+                step={0.01}
+                value={tournament?.sponsoredVideoClaimPercentage || 80}
+                onChange={(e) =>
+                  setTournament({
+                    ...tournament,
+                    sponsoredVideoClaimPercentage: Math.floor(e.target.value),
+                  })
+                }
+              />
+            </div>
+          )}
+        </>
+      </MarketingCard>
+
+      {/* Shareability */}
+
+      <MarketingCard
+        large
+        title="Show a Survey"
+        cardState={!!tournament?.survey}
+        onSetCardState={(bool) =>
+          setTournament({
+            ...tournament,
+            survey:
+              bool === true
+                ? [
+                    {
+                      question: "",
+                      responses: [
+                        {
+                          text: "",
+                          correct: true,
+                        },
+                        {
+                          text: "",
+                          correct: false,
+                        },
+                      ],
+                    },
+                  ]
+                : null,
+          })
+        }
+      >
+        <div className="">
+          <SurveyInput
+            survey={tournament.survey}
+            onChange={(survey) => {
+              setTournament({
+                ...tournament,
+                survey: survey,
+                surveyId: surveyId.current,
+              });
+            }}
+          />
         </div>
-      </BrandingComponent>
+      </MarketingCard>
+    </div>
+  );
+  return (
+    <>
       {/* Rewarded Video */}
       <RewardedComponent>
         <>

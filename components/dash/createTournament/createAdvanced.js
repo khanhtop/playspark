@@ -7,7 +7,7 @@ export default function CreateAdvanced({ tournament, setTournament }) {
       <BrandingComponent>
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-4">
-            <p className="text-white/70">Hide Back Navigation</p>
+            <p className="text-black/70">Hide Back Navigation</p>
             <Toggle
               checked={tournament?.hideBack}
               onChange={() =>
@@ -23,7 +23,7 @@ export default function CreateAdvanced({ tournament, setTournament }) {
       <BrandingComponent>
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-4">
-            <p className="text-white/70">Disable Revive Function</p>
+            <p className="text-black/70">Disable Revive Function</p>
             <Toggle
               checked={tournament?.disableRevive}
               onChange={() =>

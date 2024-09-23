@@ -1,9 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import LineChart from "./charts/lineChart";
 import { useAppContext } from "@/helpers/store";
 import BarChart from "./charts/barChart";
 import CreditsPanel from "./panels/creditsPanel";
 import Panel from "./panels/panel";
+import { Button, Card } from "flowbite-react";
+import {
+  ArrowRightIcon,
+  HeartIcon,
+  PlayIcon,
+  PlusIcon,
+  UserIcon,
+} from "@heroicons/react/24/solid";
 
 export default function Dashboard({}) {
   const context = useAppContext();
@@ -12,6 +20,18 @@ export default function Dashboard({}) {
   const [ctr, setCtr] = useState();
   const [optins, setOptins] = useState();
   const [playableAds, setPlayableAds] = useState();
+
+  const activeGames = useMemo(() => {
+    return context.myGames.filter((game) => game.isActive && !game.isArchived)
+      .length;
+  }, [context.myGames]);
+
+  const totalPlays = useMemo(() => {
+    return context.myGames.reduce((sum, game) => {
+      const playCount = parseInt(game.playCount, 10);
+      return Number.isInteger(playCount) ? sum + playCount : sum;
+    }, 0);
+  }, [context.myGames]);
 
   useEffect(() => {
     if (context?.myGames) {
@@ -63,9 +83,42 @@ export default function Dashboard({}) {
 
   return (
     <div className="pb-8">
-      <CreditsPanel />
+      <div className="flex gap-4">
+        <Button size="xl" className="bg-blue-600 enabled:hover:bg-blue-500">
+          <PlusIcon className="mr-2 h-6 w-6" />
+          Create Game
+        </Button>
+        <Button
+          size="xl"
+          className="bg-emerald-400 enabled:hover:bg-emerald-500"
+        >
+          <PlusIcon className="mr-2 h-6 w-6" />
+          Create Playable Ad
+        </Button>
+      </div>
+      <div className="mt-8 grid grid-cols-2 gap-4">
+        <DashboardStatisticCard
+          Icon={HeartIcon}
+          color="blue-500"
+          value={activeGames}
+          text="Active Games"
+        />
+        <DashboardStatisticCard
+          Icon={PlayIcon}
+          color="green-500"
+          value={totalPlays}
+          text="Games Played"
+        />
+        <DashboardStatisticCard
+          Icon={UserIcon}
+          color="pink-500"
+          value={2000}
+          text="Users"
+        />
+      </div>
+      {/* <CreditsPanel /> */}
       <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-        <Panel>
+        {/* <Panel>
           <h2 className="mb-4">Impressions Per Game</h2>
           {impressions && <BarChart chartData={impressions} />}
         </Panel>
@@ -76,7 +129,7 @@ export default function Dashboard({}) {
         <Panel>
           <h2 className="mb-4">Click Through Rate (CTR)</h2>
           {ctr && <BarChart chartData={ctr} />}
-        </Panel>
+        </Panel> */}
         {/* <div>
         <h2 className="mb-4">Email Opt Ins</h2>
         {ctr && <BarChart chartData={optins} />}
@@ -87,5 +140,24 @@ export default function Dashboard({}) {
       </div> */}
       </div>
     </div>
+  );
+}
+
+function DashboardStatisticCard({ Icon, color, value, text }) {
+  return (
+    <Card>
+      <div className="flex">
+        <div className={`bg-${color} rounded-full relative h-16 w-16`}>
+          <div className="h-full w-full bg-white/80 absolute top-0 left-0" />
+          <Icon
+            className={`text-${color} z-2 absolute h-[100%] w-[100%] p-4 right-[1px]`}
+          />
+        </div>
+        <div className="px-4 flex flex-col">
+          <h3 className="text-3xl font-bold mb-1">{value}</h3>
+          <p className="text-black/70">{text}</p>
+        </div>
+      </div>
+    </Card>
   );
 }

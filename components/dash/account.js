@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ImagePicker from "../forms/imagePicker";
 import { useAppContext } from "@/helpers/store";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import Button from "../forms/button";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
