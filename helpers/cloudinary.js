@@ -14,6 +14,19 @@
 //   return finalUrl;
 // }
 
-export function getImageWithSize(url, height = 200, width = 200) {
-  return url.replace("original", `h-${height}_w-${width}.webp`);
+export function getImageWithSize(url, height, width) {
+  console.log(url);
+
+  if (height && width) {
+    return url.replace(
+      "original",
+      `h-${parseInt(height)}_w-${parseInt(width)}.webp`
+    );
+  } else if (height) {
+    return url.replace("original", `h-${parseInt(height)}.webp`);
+  } else if (width) {
+    return url.replace("original", `w-${parseInt(width)}.webp`);
+  } else {
+    return url.replace("original", `original.webp`);
+  }
 }

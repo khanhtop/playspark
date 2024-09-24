@@ -122,7 +122,7 @@ export default class FlyCollectScene extends Phaser.Scene {
     this.load.image("item_heart", "/pong/" + gameType + "/UI/heart.png");
     this.load.image(
       "light",
-      getImageWithSize(this.params.objectSprite, ballR, ballR)
+      getImageWithSize(this.params.objectSprite, 300, 300)
     );
     this.load.image("coin", "/pong/" + gameType + "/UI/coin.png");
     this.load.image("btn_m", "/pong/" + gameType + "/UI/btn_m.png");
@@ -143,15 +143,15 @@ export default class FlyCollectScene extends Phaser.Scene {
 
     this.load.image(
       "bg",
-      getImageWithSize(this.params.backgroundSprite, h, backW)
+      getImageWithSize(this.params.backgroundSprite, 1200)
     );
     this.load.image(
       "additionalSpriteOne",
-      getImageWithSize(this.params.additionalSpriteOne, h, backW)
+      getImageWithSize(this.params.additionalSpriteOne, 1200)
     );
     this.load.image(
       "ball",
-      getImageWithSize(this.params.playerSprite, ballR, ballR)
+      getImageWithSize(this.params.playerSprite, 300, 300)
     );
 
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');

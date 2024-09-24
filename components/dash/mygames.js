@@ -11,6 +11,7 @@ import FilterPills from "./filterPills";
 import Button from "../forms/button";
 import { FolderIcon } from "@heroicons/react/24/solid";
 import CreateModal from "./createTournament/createModal";
+import Swal from "sweetalert2";
 
 export default function MyGames({}) {
   const context = useAppContext();
@@ -115,8 +116,38 @@ export default function MyGames({}) {
                 },
                 {
                   text: item.isActive ? "End Tournament" : "Restart Tournament",
-                  action: () =>
-                    switchActive(item.tournamentId, item?.isActive ?? false),
+                  action: () => {
+                    Swal.fire({
+                      icon: "question",
+                      title: item.isActive
+                        ? "End Tournament"
+                        : "Restart Tournament",
+                      text: item.isActive
+                        ? "Are you sure you want to end the tournament? The tournament will no longer be accessible, and all end-game rewards will be distributed."
+                        : "Restart Tournament",
+                      showCancelButton: true,
+                      confirmButtonText: item.isActive
+                        ? "End Tournament"
+                        : "Restart Tournament",
+                      confirmButtonColor: "#3085d6",
+                      cancelButtonColor: "#AAA",
+                    }).then((result) => {
+                      /* Read more about isConfirmed, isDenied below */
+                      if (result.isConfirmed) {
+                        switchActive(
+                          item.tournamentId,
+                          item?.isActive ?? false
+                        );
+                        Swal.fire({
+                          icon: "success",
+                          title: item.isActive
+                            ? "Tournament Ended"
+                            : "Tournament Restarted",
+                          confirmButtonColor: "#AAA",
+                        });
+                      }
+                    });
+                  },
                 },
                 {
                   text: "View Analytics",

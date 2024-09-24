@@ -26,6 +26,8 @@ export default function Ad({
   const subscriptionRef = useRef(null);
   const [deviceId, setDeviceId] = useState(null);
 
+  console.log(ad);
+
   function generateUUID() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
       /[xy]/g,
