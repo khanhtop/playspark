@@ -1,6 +1,7 @@
-import Button from "@/components/forms/button";
+// import Button from "@/components/forms/button";
 import { useAppContext } from "@/helpers/store";
 import { fireHook } from "@/helpers/webhooks";
+import { Button } from "flowbite-react";
 import { useState } from "react";
 
 export default function WebhookRewardsTestButton({ rewards }) {
@@ -36,9 +37,9 @@ export default function WebhookRewardsTestButton({ rewards }) {
 
   return (
     <Button
-      loading={firing}
+      isProcessing={firing}
       onClick={handleClick}
-      className="w-12 mt-[19px] rounded-none -ml-1"
+      className="min-w-12 mt-[23px] rounded-lg bg-green-500 enabled:hover:bg-green-600"
     >
       Test
     </Button>

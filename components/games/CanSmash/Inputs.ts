@@ -3,20 +3,21 @@ import { Events } from "./Events";
 
 export class Inputs {
   constructor(scene: Scene, canvas: HTMLCanvasElement) {
+    console.log(scene);
     canvas.addEventListener("pointerdown", this.onPointerDown, false);
     canvas.addEventListener("pointerup", this.onPointerUp, false);
     canvas.addEventListener("pointermove", this.onPointerMove, false);
 
-    canvas.addEventListener("drag", (ev) => {    
+    canvas.addEventListener("drag", (ev) => {
       ev.preventDefault();
     });
     canvas.addEventListener("touchstart", (ev) => {
-     // ev.preventDefault();
+      // ev.preventDefault();
     });
     canvas.addEventListener("dragstart", (event) => {
       event.preventDefault();
     });
-    
+
     scene.onDispose = function () {
       canvas.removeEventListener("pointerdown", this.onPointerDown);
       canvas.removeEventListener("pointerup", this.onPointerUp);
@@ -25,7 +26,7 @@ export class Inputs {
   }
 
   onPointerDown(evt: PointerEvent) {
-    evt.preventDefault();
+    // evt.preventDefault();
 
     if (evt.button !== 0) {
       return;
@@ -34,12 +35,12 @@ export class Inputs {
   }
 
   onPointerUp(evt: PointerEvent) {
-  //  evt.preventDefault();
+    //  evt.preventDefault();
     Events.input.notifyObservers({ name: "onPointerUp", data: null });
   }
 
   onPointerMove(evt: PointerEvent) {
-  //  evt.preventDefault();
+    //  evt.preventDefault();
     Events.input.notifyObservers({ name: "onPointerMove", data: evt });
   }
 }

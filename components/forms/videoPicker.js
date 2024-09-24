@@ -104,15 +104,6 @@ export default function VideoPicker({ children, video, onChange, landscape }) {
               borderRadius: 20,
               overflow: "hidden",
             }}
-            // style={style}
-            // key={key}
-            // className={className}
-            // onResize={onResize || null}
-            // poster={poster}
-            // streamType="on-demand"
-            // onPlay={onPlay || null}
-            // onPause={onPause || null}
-            // autoPlay={autoPlay}
             playbackId={video}
             metadata={{
               video_id: "video-id-54321",

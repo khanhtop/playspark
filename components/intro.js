@@ -28,6 +28,7 @@ import useGoogleFont from "@/helpers/useGoogleFont";
 import WelcomeModal from "./dash/modals/welcomeModal";
 import ProfileModal from "./dash/modals/profileModal";
 import { WinModal } from "./ui/modalTypes";
+import { cloudinaryToReimage } from "@/helpers/reimage";
 
 export default function Intro({
   waitOnAuth,
@@ -48,11 +49,17 @@ export default function Intro({
   const context = useAppContext();
   const [showModal, setShowModal] = useState(false);
   const [showLegalModal, setShowLegalModal] = useState(false);
+
+  // Audio
+  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const audio = useRef(null);
+
+  if (!audio.current) {
+    audio.current = new Audio(data?.homescreenMusic ?? "/uisounds/intro.mp3");
+  }
   useMusic(
     hasInitialisedAudio,
     data?.homescreenMusic ?? "/uisounds/intro.mp3",
-    0.5,
     context.settings.bgm
   );
 
@@ -60,17 +67,33 @@ export default function Intro({
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
-    const fileName = data?.homescreenMusic ?? "/uisounds/intro.mp3";
-    audio.current = new Audio(fileName);
-    audio.current.play();
-    context.setIsAudioPlaying(true);
+    if (context.settings.bgm && !isAudioPlaying) {
+      setIsAudioPlaying(true);
+      audio.current.play();
+    }
   };
 
   useEffect(() => {
+    if (context.settings.bgm && !isAudioPlaying && !hasInitialisedAudio) {
+      playAudio();
+    }
     return () => {
-      if (audio.current) audio.current.pause();
+      if (audio.current) {
+        setIsAudioPlaying(false);
+        audio.current.pause();
+      }
     };
   }, []);
+
+  useEffect(() => {
+    console.log(context.settings.bgm);
+    if (context.settings.bgm && !isAudioPlaying) {
+      playAudio();
+    } else if (!context.settings.bgm) {
+      setIsAudioPlaying(false);
+      audio.current.pause();
+    }
+  }, [context.settings.bgm]);
 
   const theme = data?.theme || "default";
 
@@ -174,7 +197,10 @@ export default function Intro({
       }`}
     >
       <img
-        src={data?.backgroundImage}
+        src={cloudinaryToReimage(
+          data?.backgroundImage,
+          data?.landscape ? "w-1200" : "w-600"
+        )}
         className="absolute top-0 left-0 h-full w-full object-cover"
       />
 

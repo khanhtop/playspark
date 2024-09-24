@@ -1,5 +1,4 @@
 export default function WhatWeDo({ page }) {
-  console.log(page);
   return (
     <div className="w-full flex flex-col items-center justify-center bg-[#EEE] text-black pt-16 pb-16 px-4">
       <h1 className="text-4xl font-bold text-blue-600">

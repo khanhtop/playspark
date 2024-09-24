@@ -25,11 +25,9 @@ import {
   scoreEvent,
 } from "@/helpers/events";
 import Modal from "./ui/modal";
-import { sendEvent, updateDwell } from "@/helpers/analytics";
+import { updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
-import { useRouter } from "next/router";
-import ModalRewards from "./dash/modals/rewards";
-import IntroModal from "./dash/modals/introModal";
+import { cloudinaryToReimage } from "@/helpers/reimage";
 
 const Intro = dynamic(() => import("./intro"), { ssr: false });
 
@@ -295,19 +293,21 @@ export default function Advert({
           score: score,
           level: level,
           boostCredits: boostCredits,
-          brandLogo: data?.brandLogo,
-          sponsorLogo: data?.sponsorLogo,
-          backgroundSprite: data?.backgroundSprite,
-          objectSprite: data?.objectSprite,
-          playerSprite: data?.playerSprite,
-          enemySprite: data?.enemySprite,
-          powerUpSprite: data?.powerUpSprite,
-          additionalSpriteOne: data?.additionalSpriteOne,
-          additionalSpriteTwo: data?.additionalSpriteTwo,
-          additionalSpriteThree: data?.additionalSpriteThree,
-          additionalSpriteFour: data?.additionalSpriteFour,
-          additionalSpriteFive: data?.additionalSpriteFive,
-          additionalSpriteSix: data?.additionalSpriteSix,
+          brandLogo: cloudinaryToReimage(data?.brandLogo),
+          sponsorLogo: cloudinaryToReimage(data?.sponsorLogo),
+          backgroundSprite: cloudinaryToReimage(data?.backgroundSprite),
+          objectSprite: cloudinaryToReimage(data?.objectSprite),
+          playerSprite: cloudinaryToReimage(data?.playerSprite),
+          enemySprite: cloudinaryToReimage(data?.enemySprite),
+          powerUpSprite: cloudinaryToReimage(data?.powerUpSprite),
+          additionalSpriteOne: cloudinaryToReimage(data?.additionalSpriteOne),
+          additionalSpriteTwo: cloudinaryToReimage(data?.additionalSpriteTwo),
+          additionalSpriteThree: cloudinaryToReimage(
+            data?.additionalSpriteThree
+          ),
+          additionalSpriteFour: cloudinaryToReimage(data?.additionalSpriteFour),
+          additionalSpriteFive: cloudinaryToReimage(data?.additionalSpriteFive),
+          additionalSpriteSix: cloudinaryToReimage(data?.additionalSpriteSix),
           backgroundMusic: data?.backgroundMusic,
           glbOne: data?.glbOne,
           glbTwo: data?.glbTwo,

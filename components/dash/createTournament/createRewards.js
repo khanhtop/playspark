@@ -1,4 +1,3 @@
-import Button from "@/components/forms/button";
 import ImagePicker from "@/components/forms/imagePicker";
 import Input from "@/components/forms/input";
 import UIButton from "@/components/ui/button";
@@ -9,6 +8,15 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/solid";
 import WebhookRewardsTestButton from "./webhookRewardTestButton";
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Dropdown,
+  Label,
+  TextInput,
+} from "flowbite-react";
+import ReimagePicker from "@/components/reimage/reimagePicker";
 
 const inputs = [
   {
@@ -97,7 +105,7 @@ export default function CreateRewards({ tournament, setTournament }) {
           }}
         />
       ))}
-      <button
+      <Button
         onClick={() =>
           setTournament({
             ...tournament,
@@ -119,20 +127,20 @@ export default function CreateRewards({ tournament, setTournament }) {
             ],
           })
         }
-        className="flex px-8 py-2 rounded-lg bg-cyan-500 gap-2 mt-4"
+        className="bg-indigo-600 enabled:hover:bg-indigo-600"
       >
-        <PlusCircleIcon className="h-6 w-6" />
-        <p>Add Reward</p>
-      </button>
+        {/* <PlusCircleIcon className="h-6 w-6" /> */}
+        Add Reward
+      </Button>
     </div>
   );
 }
 
 function RewardRow({ item, onChange, onDelete, index }) {
   return (
-    <div className="w-full bg-white/10 px-4 pt-5 pb-3 rounded-lg relative">
+    <Card className="w-full rounded-lg relative text-black">
       <div className="mb-4 text-sm font-bold flex gap-4 items-center h-6 ">
-        <div className="bg-cyan-500 rounded-full flex h-full  px-3 items-center justify-center">
+        <div className="bg-indigo-600 text-white rounded-full flex h-full  px-3 items-center justify-center">
           Reward #{index + 1}
         </div>
         <p>
@@ -141,7 +149,12 @@ function RewardRow({ item, onChange, onDelete, index }) {
       </div>
 
       <div className="flex gap-4 mb-0 pr-0">
-        <ImagePicker
+        <ReimagePicker
+          file={item.image}
+          setFile={(e) => onChange({ ...item, image: e })}
+          aspectRatio={1}
+        />
+        {/* <ImagePicker
           cover
           id={`rwd-img-${index}`}
           width={112}
@@ -149,26 +162,28 @@ function RewardRow({ item, onChange, onDelete, index }) {
           label="Reward Image"
           image={item.image}
           onChange={(e) => onChange({ ...item, image: e })}
-        />
-        <div className="flex flex-col flex-1">
-          <Input
-            label="Reward Name"
-            containerClassName="flex-1"
-            className="bg-white/5 w-full py-2 mb-4 text-white"
-            placeHolder={item?.name}
-            value={item?.name}
-            labelColor="text-white/70"
-            onChange={(e) => onChange({ ...item, name: e.target.value })}
-          />
-          <Input
-            label="Reward Description"
-            containerClassName="flex-1"
-            className="bg-white/5 w-full py-2 mb-4 text-white"
-            placeHolder={item?.description}
-            value={item?.description}
-            labelColor="text-white/70"
-            onChange={(e) => onChange({ ...item, description: e.target.value })}
-          />
+        /> */}
+        <div className="flex flex-col flex-1 gap-2">
+          <div>
+            <Label className="text-black/50">Reward Name</Label>
+            <TextInput
+              color="light"
+              placeHolder={item?.name}
+              value={item?.name}
+              onChange={(e) => onChange({ ...item, name: e.target.value })}
+            />
+          </div>
+          <div>
+            <Label className="text-black/50">Reward Description</Label>
+            <TextInput
+              color="light"
+              placeHolder={item?.description}
+              value={item?.description}
+              onChange={(e) =>
+                onChange({ ...item, description: e.target.value })
+              }
+            />
+          </div>
         </div>
       </div>
       <div className="flex gap-2">
@@ -186,7 +201,18 @@ function RewardRow({ item, onChange, onDelete, index }) {
           options={operands}
           className="flex-1"
         />
-        <Input
+        <div>
+          <Label className="text-black/50">Value</Label>
+          <TextInput
+            color="light"
+            placeHolder="Value"
+            value={item?.inputValue}
+            onChange={(e) =>
+              onChange({ ...item, inputValue: parseInt(e.target.value) })
+            }
+          />
+        </div>
+        {/* <Input
           label="Value"
           type="number"
           className="bg-white/5 w-full py-2 text-white"
@@ -196,9 +222,9 @@ function RewardRow({ item, onChange, onDelete, index }) {
           onChange={(e) =>
             onChange({ ...item, inputValue: parseInt(e.target.value) })
           }
-        />
+        /> */}
       </div>
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2 mt-0">
         {/* <LabelledSelect
           label="Output"
           value={item.output}
@@ -214,7 +240,37 @@ function RewardRow({ item, onChange, onDelete, index }) {
           className="flex-1"
         />
         <WebhookRewardsTestButton rewards={item} />
-        <Input
+        <div>
+          <Label className="text-black/50">
+            {item.outputAction === "xp" || item.outputAction === "coins"
+              ? "Amount"
+              : item.outputAction === "promocode"
+              ? "Code"
+              : item.outputAction === "webhook"
+              ? "Webhook URL"
+              : "Item Name"}
+          </Label>
+          <TextInput
+            color="light"
+            type={
+              item.outputAction !== "xp" && item.outputAction !== "number"
+                ? "text"
+                : "number"
+            }
+            placeHolder="Value"
+            value={item?.outputValue}
+            onChange={(e) =>
+              onChange({
+                ...item,
+                outputValue:
+                  item.outputAction !== "xp" && item.outputAction !== "coins"
+                    ? e.target.value
+                    : parseInt(e.target.value),
+              })
+            }
+          />
+        </div>
+        {/* <Input
           label={
             item.outputAction === "xp" || item.outputAction === "coins"
               ? "Amount"
@@ -242,13 +298,27 @@ function RewardRow({ item, onChange, onDelete, index }) {
                   : parseInt(e.target.value),
             })
           }
-        />
+        /> */}
       </div>
       {(item.outputAction === "physical" ||
         item.outputAction === "promocode" ||
         item.outputAction === "webhook") && (
-        <div className="mt-4">
-          <Input
+        <div className="mt-0">
+          <div>
+            <Label className="text-black/50">Redemption Instructions</Label>
+            <TextInput
+              color="light"
+              placeHolder="Instructions for a user to redeem the reward"
+              value={item?.outputInstructions}
+              onChange={(e) =>
+                onChange({
+                  ...item,
+                  outputInstructions: parseInt(e.target.value),
+                })
+              }
+            />
+          </div>
+          {/* <Input
             label="Redemption Instructions"
             className="bg-white/5 w-full py-2 text-white"
             placeHolder="Instructions for a user to redeem the reward"
@@ -260,13 +330,35 @@ function RewardRow({ item, onChange, onDelete, index }) {
                 outputInstructions: e.target.value,
               })
             }
-          />
+          /> */}
         </div>
       )}
       {(item.outputAction === "physical" ||
         item.outputAction === "promocode") && (
-        <div className="mt-4">
-          <Input
+        <div className="mt-0">
+          <div>
+            <Label className="text-black/50">
+              {item.outputAction === "physical"
+                ? "Location or Redemption Address"
+                : "Redemption URL"}
+            </Label>
+            <TextInput
+              color="light"
+              placeHolder={
+                item.outputAction === "physical"
+                  ? "101 King Street, Sydney"
+                  : "https://"
+              }
+              value={item?.outputLocation}
+              onChange={(e) =>
+                onChange({
+                  ...item,
+                  outputLocation: parseInt(e.target.value),
+                })
+              }
+            />
+          </div>
+          {/* <Input
             label={
               item.outputAction === "physical"
                 ? "Location or Redemption Address"
@@ -286,33 +378,44 @@ function RewardRow({ item, onChange, onDelete, index }) {
                 outputLocation: e.target.value,
               })
             }
-          />
+          /> */}
         </div>
       )}
 
       <XMarkIcon
         onClick={onDelete}
-        className="absolute top-2 right-2 h-6 w-6 text-white/50 cursor-pointer hover:text-white/100 transition"
+        className="absolute top-2 right-2 h-6 w-6 text-black/50 cursor-pointer hover:text-black/100 transition"
       />
-    </div>
+    </Card>
   );
 }
 
 function LabelledSelect({ options, onChange, value, label, className }) {
   return (
     <div className={className}>
-      <p className="text-xs text-white/70 mb-1">{label}</p>
-      <select
-        value={value}
-        className="bg-white/5 appearance-none px-4 text-white w-full h-10"
+      <Label className="text-black/50 mb-1">{label}</Label>
+      <Dropdown
+        label={value?.substring(0, 1)?.toUpperCase() + value?.substring(1, 200)}
+        theme={{
+          floating: {
+            target: "w-full bg-indigo-600 enabled:hover:bg-indigo-700",
+          },
+        }}
+        color="dark"
+        className="flex-1 min-w-72 capitalize"
+        // className="bg-white/5 appearance-none px-4 text-black w-full h-10"
         onChange={(e) => onChange(e.target.value)}
       >
         {options.map((item, key) => (
-          <option key={key} value={item.value}>
+          <Dropdown.Item
+            onClick={(e) => onChange(item.value)}
+            key={key}
+            value={item.value}
+          >
             {item.text}
-          </option>
+          </Dropdown.Item>
         ))}
-      </select>
+      </Dropdown>
     </div>
   );
 }

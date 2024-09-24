@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ImagePicker from "../forms/imagePicker";
 import { useAppContext } from "@/helpers/store";
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import Button from "../forms/button";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
@@ -12,6 +12,7 @@ import API from "./api";
 import { ColorPicker } from "./createTournamentModal";
 import AddRewardModal from "./qr/addRewardModal";
 import GroupedRewards from "./qr/groupedRewards";
+import FilterPills from "./filterPills";
 
 export default function Account() {
   const context = useAppContext();
@@ -63,26 +64,14 @@ export default function Account() {
 
   return (
     <div className="flex flex-col gap-4 pb-4">
-      <SubNav
+      <FilterPills
         selected={nav}
-        onSelect={(item) => setNav(item.value)}
+        onSelect={(item) => setNav(item)}
         options={[
           {
             text: "Branding",
             value: "branding",
           },
-          // {
-          //   text: "Surveys",
-          //   value: "surveys",
-          // },
-          // {
-          //   text: "Rewards",
-          //   value: "rewards",
-          // },
-          // {
-          //   text: "Email",
-          //   value: "email",
-          // },
           {
             text: "Usage",
             value: "usage",
@@ -118,6 +107,7 @@ export default function Account() {
           </div>
 
           <ImagePicker
+            darkTheme
             id="brand-logo"
             constrain
             width={500}
@@ -129,6 +119,7 @@ export default function Account() {
             }}
           />
           <ImagePicker
+            darkTheme
             id="sponsor-logo"
             constrain
             width={200}

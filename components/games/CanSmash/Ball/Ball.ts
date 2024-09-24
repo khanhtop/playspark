@@ -72,7 +72,6 @@ export class Ball {
     //   )
     // );
   }
-
   // On pick interpolations
   prepareButton(mesh, color, light, scene) {
     //console.log(mesh, color, light, scene);

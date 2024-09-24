@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 
 export default function BlogsSection({ blogs }) {
   const router = useRouter();
-  console.log(blogs);
   return (
     <>
       <div className="flex w-screen bg-white justify-center">

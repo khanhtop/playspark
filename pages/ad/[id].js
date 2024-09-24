@@ -1,6 +1,5 @@
 import Advert from "@/components/ad";
 import { getAd, getClient } from "@/helpers/api";
-import { deductCredits, getGameCreditConsumption } from "@/helpers/credits";
 import { decryptEmail, refactorEmail } from "@/helpers/crypto";
 import { auth, firestore, logoutWithoutReroute } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
@@ -163,7 +162,6 @@ export default function Ad({
             return response.json();
           })
           .then((json) => {
-            console.log(json);
             if (json.email && json.password) {
               signInWithEmailAndPassword(auth, json.email, json.password);
             }
@@ -294,7 +292,6 @@ export async function getServerSideProps(context) {
 
       externalId: externalId || null,
       name: name || null,
-      // externalPass: externalPass,
       config: {
         name: name || null,
         hideBackButton: ad.hideBack ? true : false,

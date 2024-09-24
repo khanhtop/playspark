@@ -2,6 +2,7 @@ export const configurableParameterTitles = {
   fall: {
     playerSprite: {
       text: "Character Sprite Sheet",
+      isSpriteSheet: true,
       configurable: false,
     },
     additionalSpriteOne: {
@@ -24,6 +25,15 @@ export const configurableParameterTitles = {
       text: "Bonus / Power Up Sprite",
       configurable: true,
     },
+    backgroundSprite: {
+      text: "Pitch / Ground",
+      configurable: true,
+    },
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+      isMusic: true,
+    },
   },
   pong: {
     playerSprite: {
@@ -41,6 +51,15 @@ export const configurableParameterTitles = {
     powerUpSprite: {
       text: "Bonus / Power Up",
       configurable: true,
+    },
+    backgroundSprite: {
+      text: "Pitch / Ground",
+      configurable: true,
+    },
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+      isMusic: true,
     },
   },
   fly: {
@@ -63,6 +82,11 @@ export const configurableParameterTitles = {
     additionalSpriteOne: {
       text: "Background Parallax Layer",
       configurable: true,
+    },
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+      isMusic: true,
     },
   },
   "smash-blitz": {
@@ -110,11 +134,17 @@ export const configurableParameterTitles = {
       text: "Background / Stadium",
       configurable: true,
     },
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+      isMusic: true,
+    },
   },
   target: {
     playerSprite: {
       text: "Player Body",
       configurable: true,
+      isSpriteSheet: true,
     },
     enemySprite: {
       text: "Obstacle / Danger",
@@ -144,18 +174,31 @@ export const configurableParameterTitles = {
       text: "Background / Stadium",
       configurable: true,
     },
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+      isMusic: true,
+    },
   },
   can: {
     glbOne: {
       text: "Ball 3D Model",
       configurable: false,
+      isGlb: true,
+      zoom: 0.2,
     },
     glbTwo: {
       text: "Platform 3D Model",
       configurable: false,
+      isGlb: true,
+      zoom: 0.5,
     },
     playerSprite: {
       text: "Ball Texture",
+      configurable: true,
+    },
+    powerUpSprite: {
+      text: "Power Up / Bonus",
       configurable: true,
     },
     backgroundSprite: {
@@ -189,6 +232,54 @@ export const configurableParameterTitles = {
     additionalSpriteSix: {
       text: "Ground",
       configurable: true,
+    },
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+      isMusic: true,
+    },
+  },
+  "spin-to-win": {
+    backgroundSprite: {
+      text: "Background",
+      configurable: true,
+    },
+  },
+  wordle: {
+    backgroundSprite: {
+      text: "Background",
+      configurable: true,
+    },
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+      isMusic: true,
+    },
+  },
+  nfl: {
+    backgroundMusic: {
+      text: "Background Music",
+      configurable: true,
+      isMusic: true,
+    },
+    playerSprite: {
+      text: "Player Sprite",
+      configurable: true,
+      isSpriteSheet: true,
+    },
+    backgroundSprite: {
+      text: "Pitch / Ground",
+      configurable: true,
+    },
+    objectSprite: {
+      text: "Ball Sprite",
+      configurable: true,
+      isSpriteSheet: true,
+    },
+    enemySprite: {
+      text: "Opponent Sprite",
+      configurable: true,
+      isSpriteSheet: true,
     },
   },
 };

@@ -1,4 +1,5 @@
 import { getMuxAsset } from "@/helpers/mux";
+import { cloudinaryToReimage } from "@/helpers/reimage";
 import { useAppContext } from "@/helpers/store";
 import {
   ArrowPathIcon,
@@ -32,7 +33,7 @@ export default function GameCard({
       const staticImage = new Image();
       const animatedImage = new Image();
       // staticImage.src = getMuxAsset(game.muxId, false);
-      staticImage.src = `${game.backgroundImage}`;
+      staticImage.src = `${cloudinaryToReimage(game.backgroundImage)}`;
       animatedImage.src = getMuxAsset(game.muxId);
       staticImage.onload = () => {
         setImageUrl(staticImage.src);
@@ -47,9 +48,24 @@ export default function GameCard({
       // setStaticImageUrl(`/screenshots/${game.screenshot}`);
       // setAnimatedImageUrl(`/screenshots/${game.screenshot}`);
       // setImageUrl(`/screenshots/${game.screenshot}`);
-      setStaticImageUrl(`${game.gameIcon ?? game.backgroundImage}`);
-      setAnimatedImageUrl(`${game.gameIcon ?? game.backgroundImage}`);
-      setImageUrl(`${game.gameIcon ?? game.backgroundImage}`);
+      setStaticImageUrl(
+        `${
+          cloudinaryToReimage(game.gameIcon, "w-400") ??
+          cloudinaryToReimage(game.backgroundImage, "w-400")
+        }`
+      );
+      setAnimatedImageUrl(
+        `${
+          cloudinaryToReimage(game.gameIcon, "w-400") ??
+          cloudinaryToReimage(game.backgroundImage, "w-400")
+        }`
+      );
+      setImageUrl(
+        `${
+          cloudinaryToReimage(game.gameIcon, "w-400") ??
+          cloudinaryToReimage(game.backgroundImage, "w-400")
+        }`
+      );
     }
   }, []);
 

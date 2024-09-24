@@ -62,6 +62,9 @@ export default function ModalRewards({ data }) {
     if (item.input === "level") {
       return tournamentLevel >= item.inputValue;
     }
+    if (item.input === "xp") {
+      return xp >= item.inputValue;
+    }
     if (item.input === "rank") {
       return expired && tournamentRank + 1 === item.inputValue;
     }

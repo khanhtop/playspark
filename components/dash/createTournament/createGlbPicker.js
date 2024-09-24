@@ -87,7 +87,7 @@ function Tag({ text }) {
   );
 }
 
-function BabylonModel({ modelUrl, selected, onSelect, pickerZoom }) {
+export function BabylonModel({ modelUrl, selected, onSelect, pickerZoom }) {
   const canvasRef = useRef(null);
   const engineRef = useRef(null);
 

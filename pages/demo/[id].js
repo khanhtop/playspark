@@ -1,6 +1,4 @@
 import Advert from "@/components/ad";
-import PremiumAdvert from "@/components/premiumAd";
-import Modal from "@/components/ui/modal";
 import { getClient, getDemo } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 import { useState } from "react";
@@ -15,21 +13,16 @@ export default function Demo({ ad, id, client }) {
       } flex items-center bg-black justify-center`}
     >
       {ad ? (
-        ad.isPremium ? (
-          <PremiumAdvert data={ad} />
-        ) : (
-          <Advert
-            hasInitialisedAudio={hasInitialisedAudio}
-            setHasInitialisedAudio={setHasInitialisedAudio}
-            data={ad}
-            client={client}
-            clientCredits={999}
-          />
-        )
+        <Advert
+          hasInitialisedAudio={hasInitialisedAudio}
+          setHasInitialisedAudio={setHasInitialisedAudio}
+          data={ad}
+          client={client}
+          clientCredits={999}
+        />
       ) : (
         <p>{id} - AD NOT FOUND</p>
       )}
-      {/* <Modal title="Leaderboard" /> */}
     </div>
   );
 }
