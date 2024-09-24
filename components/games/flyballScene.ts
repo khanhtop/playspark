@@ -113,7 +113,7 @@ export default class FlyBallScene extends Phaser.Scene {
     // this.load.image("bombEffect", "/pong/" + gameType + "/bomb-effect.png");
     this.load.image("levelBoard", "/pong/" + gameType + "/UI/level.png");
     this.load.image("item_heart", "/pong/" + gameType + "/UI/heart.png");
-    this.load.image("light", getImageWithSize(this.params.objectSprite, ballR, ballR));
+    this.load.image("light", getImageWithSize(this.params.objectSprite, 300, 300));
     this.load.image("coin", "/pong/" + gameType + "/UI/coin.png");
     this.load.image("btn_m", "/pong/" + gameType + "/UI/btn_m.png");
     this.load.image("btn_l", "/pong/" + gameType + "/UI/btn_l.png");
@@ -130,9 +130,9 @@ export default class FlyBallScene extends Phaser.Scene {
     this.load.image("power", "/pong/" + gameType + "/item/power.png");
     this.load.image("shrink", "/pong/" + gameType + "/item/shrink.png");
 
-    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, h, backW) );
-    this.load.image("additionalSpriteOne", getImageWithSize(this.params.additionalSpriteOne, h, backW));
-    this.load.image("ball", getImageWithSize(this.params.playerSprite, ballR, ballR));
+    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, 1200) );
+    this.load.image("additionalSpriteOne", getImageWithSize(this.params.additionalSpriteOne, 1200));
+    this.load.image("ball", getImageWithSize(this.params.playerSprite, 300, 300));
 
 
     this.load.image("enemy", this.params.enemySprite);
