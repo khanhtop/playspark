@@ -8,7 +8,7 @@ export class AssetsLoader {
 
     if (params != undefined) {
       // console.log("----[[[ params ----", params)
- 
+
       this.scene.load.image("bg", params.backgroundSprite);
       this.scene.load.image("body", params.playerSprite);
       this.scene.load.image("bomb", params.enemySprite);
@@ -24,9 +24,11 @@ export class AssetsLoader {
       this.scene.load.image("shoes", params.additionalSpriteThree);
 
       this.scene.load.image("head", params.additionalSpriteFour);
-      
+
       this.scene.load.image("right_hand", params.additionalSpriteFive);
-      this.scene.load.image("left_hand",params.additionalSpriteSix);
+      this.scene.load.image("left_hand", params.additionalSpriteSix);
+
+      this.scene.load.audio("background", params.backgroundMusic);
     }
 
     let baseUrl = "/"; ///pong/${gameType}/
@@ -49,6 +51,7 @@ export class AssetsLoader {
       this.scene.load.image("right_hand", "right_hand.png");
       this.scene.load.image("left_hand", "left_hand.png");
       this.scene.load.image("body", "body.png");
+      this.scene.load.audio("background", "background.mp3");
     }
 
     this.scene.load.image("rocket", "rocket.png");
@@ -77,7 +80,6 @@ export class AssetsLoader {
     this.scene.load.image("pointer", "pointer.png");
     this.scene.load.image("power_progress", "power_progress.png");
 
-    this.scene.load.audio("background", "background.mp3");
     this.scene.load.audio("wrong", "Crowd_v1_Booing_wav.wav");
     this.scene.load.audio("point", "DM_CGS_45.wav");
     this.scene.load.audio("powerup", "DM_CGS_28.wav");
@@ -117,6 +119,7 @@ export class AssetsLoader {
     font
       .load()
       .then(() => {
+        //@ts-ignore
         document.fonts.add(font);
       })
       .catch((error) => {

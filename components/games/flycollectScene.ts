@@ -143,7 +143,7 @@ export default class FlyCollectScene extends Phaser.Scene {
 
     this.load.image(
       "bg",
-      getImageWithSize(this.params.backgroundSprite, 1200)
+      getImageWithSize(this.params.backgroundSprite, 780)
     );
     this.load.image(
       "additionalSpriteOne",
@@ -1275,14 +1275,14 @@ export default class FlyCollectScene extends Phaser.Scene {
     STATUS.power = false;
 
     this.tileBg.tilePositionX = 0;
-    this.additionalSpriteOne.setPosition(0, 0);
+    this.additionalSpriteOne.setPosition(0, 5);
     this.additionalSpriteOne1.setPosition(
       this.additionalSpriteOne.x + backW,
-      0
+      5
     );
     this.additionalSpriteOne2.setPosition(
       this.additionalSpriteOne.x - backW,
-      0
+      5
     );
 
     this.obstacles.forEach((obj) => {
@@ -1411,14 +1411,14 @@ export default class FlyCollectScene extends Phaser.Scene {
 
   setBackgroundPos() {
     if (this.ball.x > this.additionalSpriteOne.x + 900) {
-      this.additionalSpriteOne1.setPosition(this.additionalSpriteOne.x, 0);
+      this.additionalSpriteOne1.setPosition(this.additionalSpriteOne.x, 5);
       this.additionalSpriteOne.setPosition(
         this.additionalSpriteOne.x + backW,
-        0
+        5
       );
       this.additionalSpriteOne2.setPosition(
         this.additionalSpriteOne.x + 2 * backW,
-        0
+        5
       );
 
       // this.logo.setPosition(this.additionalSpriteOne.x + 200, this.additionalSpriteOne.y + mH + 110 * h / 663);

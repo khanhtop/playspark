@@ -1,7 +1,7 @@
 import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { collection, getDocs } from "firebase/firestore";
+import { HiCurrencyDollar, HiPlay, HiViewList, HiMail } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import FilterPills from "./filterPills";
 import { AudienceUsers } from "../audience/users";
@@ -26,21 +26,25 @@ export default function Users() {
             value: "emails",
             text: "Emails",
             onSelected: () => null,
+            icon: HiMail,
           },
           {
             value: "surveys",
             text: "Surveys",
             onSelected: () => null,
+            icon: HiViewList,
           },
           {
             value: "videos",
             text: "Videos",
             onSelected: () => null,
+            icon: HiPlay,
           },
           {
             value: "playableads",
             text: "Ads",
             onSelected: () => null,
+            icon: HiCurrencyDollar,
           },
         ]}
       />
