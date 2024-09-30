@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="z-20 fixed top-0 left-0 w-full h-24 text-black hidden lg:flex items-center justify-between px-16 bg-white/90 backdrop-blur">
+      <div className="z-20 fixed top-0 left-0 w-full h-[75px] text-black hidden lg:flex items-center justify-between px-16 bg-white/90 backdrop-blur">
         <img src="/ui/logo.png" className="h-full" />
         <div className="flex items-center justify-center gap-6 font-bold">
           <Link
