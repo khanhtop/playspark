@@ -19,6 +19,17 @@ module.exports = {
         octo: ["var(--font-octo)"],
         octolight: ["var(--font-octolight)"],
       },
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        free : "#11F87B",
+        back: "#3EF8ED",
+        work : "#2FE5A7",
+        button_level : "#55FFF5",
+        power_bg : "#F7F7F7",
+        liner : "#55FFF5",
+        footer : "#484A4A"
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
