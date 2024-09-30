@@ -3,6 +3,15 @@ import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import Tabulate from "./tabulate";
+
+const columnSet = [
+  {
+    width: 400,
+    name: "Email Address",
+    dataKey: "email",
+  },
+];
 
 export function AudienceEmails({}) {
   const context = useAppContext();
@@ -17,7 +26,7 @@ export function AudienceEmails({}) {
         collection(firestore, "users", context?.loggedIn?.uid, "emails")
       ).then((r) => {
         for (let doc of r.docs) {
-          _emails.push(doc.id);
+          _emails.push({ email: doc.id });
         }
         setEmails(_emails);
       });
@@ -25,19 +34,10 @@ export function AudienceEmails({}) {
   }, []);
 
   return (
-    <>
-      <p className="text-black/70 text-sm">
-        Explore and export email addresses that have been captured through
-        PlaySpark. We will soon be launching direct integration into your email
-        marketing platforms, such as MailChimp and Klaviyo.
-      </p>
-      <div className="flex gap-2 flex-wrap mt-4">
-        {emails?.map((item, key) => (
-          <div key={key} className="bg-white/80 px-4 py-1 rounded-full">
-            <p className="text-black/70">{item}</p>
-          </div>
-        ))}
+    <div className="flex flex-col flex-1">
+      <div className="overflow-x-scroll w-[calc(100vw-360px)] flex flex-1">
+        <Tabulate columns={columnSet} data={emails} />
       </div>
-    </>
+    </div>
   );
 }
