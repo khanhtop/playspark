@@ -313,7 +313,7 @@ function RewardRow({ item, onChange, onDelete, index }) {
               onChange={(e) =>
                 onChange({
                   ...item,
-                  outputInstructions: parseInt(e.target.value),
+                  outputInstructions: e.target.value,
                 })
               }
             />
@@ -353,7 +353,7 @@ function RewardRow({ item, onChange, onDelete, index }) {
               onChange={(e) =>
                 onChange({
                   ...item,
-                  outputLocation: parseInt(e.target.value),
+                  outputLocation: e.target.value,
                 })
               }
             />

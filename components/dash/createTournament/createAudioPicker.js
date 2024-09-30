@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState, createRef } from "react";
 
 export default function CreateAudioPicker({
-  setLoading,
   fullHeight,
-  title,
   selected,
-  dimension,
   updateAudio,
   gameTag,
 }) {
   const [stateImages, setStateImages] = useState([]);
   const [currentTrack, setCurrentTrack] = useState(null);
-  const audioRefs = useRef([]); // Array of refs for each audio element
+  const audioRefs = useRef([]);
 
   useEffect(() => {
     if (stateImages.length === 0) {
@@ -29,16 +26,13 @@ export default function CreateAudioPicker({
   }
 
   const handlePlay = (audioRef, item) => {
-    // If a different track is currently playing, pause it first
     if (currentTrack && currentTrack !== audioRef.current) {
       currentTrack.pause();
-      currentTrack.currentTime = 0; // Reset the current track's time to the start
+      currentTrack.currentTime = 0;
     }
 
-    // Set this track as the current track
     setCurrentTrack(audioRef.current);
 
-    // Load and play the audio file when the user clicks play
     if (!audioRef.current.src) {
       audioRef.current.src = item.secure_url;
       audioRef.current.play();
@@ -56,7 +50,6 @@ export default function CreateAudioPicker({
       >
         <div className="h-full py-2 gap-2 flex flex-col overflow-y-scroll">
           {stateImages.map((item, index) => {
-            // Create a ref for each audio element and store in the refs array
             if (!audioRefs.current[index]) {
               audioRefs.current[index] = createRef();
             }
@@ -78,7 +71,7 @@ export default function CreateAudioPicker({
                     <audio
                       controls
                       className="flex-1"
-                      ref={audioRefs.current[index]} // Use the ref from the array
+                      ref={audioRefs.current[index]}
                       onPlay={() => handlePlay(audioRefs.current[index], item)}
                     >
                       Your browser does not support the audio element.
