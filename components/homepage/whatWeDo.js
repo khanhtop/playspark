@@ -1,33 +1,49 @@
+import backImg from '../../public/images/Ticker.png'
+
 export default function WhatWeDo({ page }) {
   return (
-    <div className="w-full flex flex-col items-center justify-center bg-[#EEE] text-black pt-16 pb-16 px-4">
-      <h1 className="text-4xl font-bold text-blue-600">
-        {page.what_we_do_title}
-      </h1>
-      <p className="text-center text-xl font-light mt-4 mb-4 max-w-[800px] text-black/80">
-        {page.what_we_do_text}
-      </p>
-      <div className="flex gap-4 mt-8 flex-wrap">
-        {page.what_we_do_items?.map((item, key) => (
-          <Element item={item} key={key} />
-        ))}
+    <div className="w-full  text-black flex flex-col items-center justify-center ">
+      <div className='bg-white flex flex-col items-center justify-center w-full'>
+        <div className="w-full h-[122px]"> <img src={backImg.src} className="w-full h-auto"/></div>
+        <h1 className="text-6xl font-bold text-black max-w-[590px] mt-32">
+          {page.what_we_do_title}
+        </h1>
+        <p className="text-center text-xl font-light my-4 mx-4 max-w-[800px] text-black">
+          {page.what_we_do_text}
+        </p>
       </div>
+    
+      <div className='bg-gradient-to-t from-back to-white w-full flex flex-col items-center justify-center pb-10 '>
+        <div className="flex gap-4 mt-8 ">
+          {page.what_we_do_items?.map((item, key) => (
+            <Element item={item} key={key} />
+          ))}
+        </div>
+        <button className="px-8 py-4 flex items-center justify-center text-center text-xl text-white bg-work rounded-full" >See How It Works </button>
+      </div>
+      
     </div>
   );
 }
 
 function Element({ item }) {
   return (
-    <div className="flex-1 flex flex-col gap-2 items-center px-8 basis-[360px] shadow-md border-black/5 border-2 py-4 rounded-2xl hover:shadow-xl group">
+    <div className="flex-1 flex flex-col gap-2 items-center px-8  py-4  w-1/3">
       <img
         src={item.image.url}
-        className="w-[200px] group-hover:scale-105 transition"
+        className="w-auto "
       />
-      <div className="min-h-20">
-        <h3 className="text-blue-600 font-bold text-3xl">{item.title}</h3>
+      <div className="flex flex-col items-start justify-start max-w-[260px]">
+        <img 
+              src={item.log.url}
+              className="w-auto"
+            />
+            <h3 className="font-bold text-[18px] text-left">{item.title}</h3>
+            <h3 className="text-[16px] text-left"> {item.text}</h3>
       </div>
-
-      <h3 className="font-light text-lg text-black/70">{item.text}</h3>
+       
     </div>
   );
 }
+
+

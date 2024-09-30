@@ -14,6 +14,7 @@ export default function Pricing({ page }) {
       />
       <div className="h-screen overflow-y-scroll">
         <Navbar />
+        <Pay page={page} />
         <Footer />
       </div>
     </>
@@ -23,6 +24,7 @@ export default function Pricing({ page }) {
 import { createClient } from "../helpers/prismic";
 import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
+import Pay from "@/components/Pricing/pay";
 
 export async function getServerSideProps(context) {
   const client = createClient();

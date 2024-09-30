@@ -155,7 +155,7 @@ export default function CreateDesign({ tournament, setTournament }) {
           <Label className="text-black/50 -mb-2">Game Icon</Label>
           <ReimagePicker
             id="gameIconPicker"
-            file={tournament.gameIcon || tournament.backgroundImage}
+            file={tournament.gameIcon}
             setFile={(url) => {
               setTournament({ ...tournament, gameIcon: url });
             }}

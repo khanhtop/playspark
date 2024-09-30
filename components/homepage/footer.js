@@ -1,99 +1,59 @@
+import Icon1 from "../../public/images/social-icons/1.png";
+import Icon2 from "../../public/images/social-icons/2.png";
+import Icon3 from "../../public/images/social-icons/3.png";
+import Icon4 from "../../public/images/social-icons/4.png";
+import Icon5 from "../../public/images/social-icons/5.png";
+import Icon6 from "../../public/images/social-icons/6.png";
+
 export default function Footer() {
   return (
-    <div className="bg-[#000e44] px-8 pt-32 flex justify-center font-light">
-      <div className="w-full max-w-[1400px]">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          <Column
-            title="About Us"
-            content={
-              <div>
-                <img
-                  src="/ui/logo.png"
-                  className="h-full max-h-24 -mt-4 -mb-4 -mx-4 contrast-50"
-                />
-                <p className="text-white leading-[40px] text-lg font-extralight">
-                  PlaySpark is changing the game for how brands connect with
-                  users and how publishers amplify their revenue streams,
-                  through incentivised gameplay solutions.
-                </p>
-              </div>
-            }
+    <div className="bg-[#484A4A] px-5 pt-10 flex justify-center font-light">
+      <div className="w-full max-w-[1400px] max-h-[238px] pb-10 px-5 flex flex-row">
+        <div className="w-1/2 flex flex-col items-start justify-start">
+          <img
+            src="/ui/logo.png"
+            className="h-full max-h-24 -mt-4 mb-1 -mx-4 "
           />
-          <Column
-            title="Quick Links"
-            content={
-              <div className="flex flex-col">
-                <a
-                  href="/"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  About Us
-                </a>
-                <a
-                  href="/case-studies"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  Case Studies
-                </a>
-                <a
-                  href="#"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  Privacy Policy
-                </a>
-                <a
-                  href="/pricing"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  Products & Pricing
-                </a>
-                <a
-                  href="#"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  Blog
-                </a>
-              </div>
-            }
-          />
-          <Column
-            title="Newsletter"
-            content={
-              <div>
-                <input
-                  className="h-10 w-full rounded-lg px-4 text-black"
-                  placeholder="Email Address"
-                />
-                <button className="bg-sky-500 rounded-lg px-8 py-2 mt-2 text-white font-bold">
-                  Join Now
-                </button>
-              </div>
-            }
-          />
-        </div>
-        <div className="pt-8 pb-16 text-white border-t-[1px] border-t-white/10 flex justify-between">
-          <div>
-            <p>Copyright © 2024 SparkUp Studios.</p>
+          <p className="text-white text-[14px] max-w-[240px]">
+            We level up your brand marketing with white-labelled arcade games
+            and playable ads.
+          </p>
+          <div className="flex-none h-7"></div>
+          <div className="flex flex-row gap-3">
+            <img src={Icon1.src} className="w-6 h-6" />
+            <img src={Icon2.src} className="w-6 h-6" />
+            <img src={Icon3.src} className="w-6 h-6" />
+            <img src={Icon4.src} className="w-6 h-6" />
+            <img src={Icon5.src} className="w-6 h-6" />
+            <img src={Icon6.src} className="w-6 h-6" />
           </div>
-          <div className="flex gap-8">
-            <p className="border-r-[1px] pr-8 border-r-white/10">
-              Cookies Policy
-            </p>
-            <p>Privacy Policy</p>
+        </div>
+        <div className="w-1/2 flex flex-row-reverse gap-12 items-start justify-start pr-5  pt-5  text-white text-[14px]">
+          <div className="flex flex-col items-center justify-center gap-5">
+            <p className="font-bold ">Legal</p>
+            <p>Privacy</p>
+            <p>Terms</p>
+            <p>Security</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-5">
+            <p className="font-bold ">Resource</p>
+            <p>Case Studies</p>
+            <p>Docs</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-5">
+            <p className="font-bold ">company</p>
+            <p>About</p>
+            <p>Blog</p>
+            <p>Contact</p>
+          </div>
+          <div className="flex flex-col items-center justify-center gap-5">
+            <p className="font-bold ">Products</p>
+            <p>Feature</p>
+            <p>FAQ</p>
+            <p>Pricing</p>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function Column({ title, content }) {
-  return (
-    <div>
-      <div className="pb-4 border-b-[1px] border-b-white/10">
-        <h1 className="text-white text-2xl uppercase">{title}</h1>
-      </div>
-      <div className="py-12">{content}</div>
     </div>
   );
 }

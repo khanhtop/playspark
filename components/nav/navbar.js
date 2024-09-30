@@ -13,9 +13,9 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="z-20 fixed top-0 left-0 w-full h-24 text-black hidden lg:flex items-center justify-between px-8 bg-white/90 backdrop-blur">
+      <div className="z-20 fixed top-0 left-0 w-full h-[75px] text-black hidden lg:flex items-center justify-between px-16 bg-white/90 backdrop-blur">
         <img src="/ui/logo.png" className="h-full" />
-        <div className="flex gap-4 font-bold">
+        <div className="flex items-center justify-center gap-6 font-bold">
           <Link
             className={`${
               isCurrent("/") ? "text-sky-600" : "text-black"
@@ -30,7 +30,7 @@ export default function Navbar() {
             } hover:text-sky-600`}
             href="/products"
           >
-            Products
+            Features
           </Link>
           <Link
             className={`${
@@ -48,13 +48,22 @@ export default function Navbar() {
           >
             Case Studies
           </Link>
-          <Link href="/blog">Blog</Link>
+          <Link
+            className={`${
+              isCurrent("/case-studies") ? "text-sky-600" : "text-black"
+            } hover:text-sky-600`}
+            href=""
+          >
+            Docs
+          </Link>
+          <button className="bg-free px-4 py-2  text-black rounded-lg" > Get for free</button>
+          
         </div>
         <button
           onClick={() => router.push("/admin")}
-          className="bg-sky-500 px-4 py-2 text-white rounded-lg"
+          className="bg-black px-4 py-2 text-white rounded-lg"
         >
-          Free Demo
+          Login
         </button>
       </div>
       <div

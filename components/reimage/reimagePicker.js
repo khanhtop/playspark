@@ -19,6 +19,7 @@ export default function ReimagePicker({
       setLoading(true);
       const { original, width, height } = await reimageUpload({ file: file });
       setAspect(width / height);
+      console.log(original);
       setFile(original);
       setLoading(false);
       //   setUploading(true);

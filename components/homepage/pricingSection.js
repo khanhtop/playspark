@@ -20,7 +20,7 @@ export default function PricingSection({ page }) {
       </div>
       <div className="">
         <img
-          src={page.pricing_image.url}
+          src={page.pricing_image?.url}
           className="max-h-[300px] lg:max-h-[400px]"
         />
       </div>

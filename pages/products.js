@@ -14,12 +14,16 @@ export default function Products({ page }) {
       />
       <div className="h-screen overflow-y-scroll">
         <Navbar />
-        <ColsWithCTA
+        {/* <ColsWithCTA
           image={page.hero_image?.url}
           title={page.hero_title}
           boldText={page.hero_bold_text}
           text={page.hero_text}
-        />
+        /> */}
+        <Hero page={page} />
+        <Marketing page={page} />
+        <Game page={page} />
+        <Demo page={page} />
         <Footer />
       </div>
     </>
@@ -30,6 +34,10 @@ import { createClient } from "../helpers/prismic";
 import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
 import ColsWithCTA from "@/components/homepage/colsWithCTA";
+import Hero from "@/components/feature/hero";
+import Marketing from "@/components/feature/marketing";
+import Demo from "@/components/feature/demo";
+import Game from "@/components/feature/game";
 
 export async function getServerSideProps(context) {
   const client = createClient();
