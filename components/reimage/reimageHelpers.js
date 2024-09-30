@@ -9,6 +9,7 @@ export async function reimageUpload({ file, tags = [] }) {
     },
     body: formData,
   });
-  const json = await response.text();
+  const json = await response.json();
+  console.log(json);
   return json;
 }

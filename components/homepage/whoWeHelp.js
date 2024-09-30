@@ -14,7 +14,7 @@ export default function WhoWeHelp({ page }) {
       </div>
 
       <div className="w-1/4">
-        <img src={page.who_we_help_image.url} className="w-full" />
+        <img src={page.who_we_help_image?.url} className="w-full" />
       </div>
     </div>
   );
