@@ -24,7 +24,7 @@ export default function Products({ page }) {
         <Marketing page={page} />
         <Game page={page} />
         <Demo page={page} />
-        <Footer />
+        <Footer page={page} bg="1" />
       </div>
     </>
   );

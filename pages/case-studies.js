@@ -14,7 +14,10 @@ export default function CaseStudies({ page }) {
       />
       <div className="h-screen overflow-y-scroll">
         <Navbar />
-        <Footer />
+        <Hero page={page} />
+        <Blog page={page} />
+        <Game page={page}/>
+        <Footer page={page} bg="2" />
       </div>
     </>
   );
@@ -23,6 +26,9 @@ export default function CaseStudies({ page }) {
 import { createClient } from "../helpers/prismic";
 import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
+import Hero from "@/components/studies/Hero";
+import Blog from "@/components/studies/Blog";
+import Game from "@/components/studies/game";
 
 export async function getServerSideProps(context) {
   const client = createClient();
