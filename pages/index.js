@@ -11,14 +11,11 @@ import GamifySection from "@/components/homepage/gamifySection";
 import VideoSection from "@/components/homepage/videoSection";
 import ClientSection from "@/components/homepage/clientsSection";
 
-
-
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
 });
 
 export default function Home({ page, blogs }) {
-
   // console.log("Homepage", page);
   // console.log("blog", blogs)
   return (
@@ -33,9 +30,12 @@ export default function Home({ page, blogs }) {
       />
       <div className="h-screen overflow-y-scroll">
         <Navbar />
-
         <Section backgroundImage={page?.hero_background_image?.url}>
           <Hero page={page} />
+        </Section>
+        <Section>
+        {/*  */}
+          <Slider items={page.level_group} />
         </Section>
         <Section>
           <WhatWeDo page={page} />
@@ -54,7 +54,7 @@ export default function Home({ page, blogs }) {
         </Section>
         <Section>
           <Game page={page} />
-        </Section> 
+        </Section>
         <Footer />
       </div>
     </>
@@ -70,9 +70,10 @@ import Footer from "@/components/homepage/footer";
 import TestimonialsSection from "@/components/homepage/testimonialsSection";
 import PricingSection from "@/components/homepage/pricingSection";
 import BlogsSection from "@/components/homepage/blogsSection";
-import PowerSection from '@/components/homepage/powerSection'
+import PowerSection from "@/components/homepage/powerSection";
 import BrandSection from "@/components/homepage/BrandSection";
 import Game from "@/components/homepage/game";
+import Slider from "@/components/homepage/slider";
 // import { Client } from "@prismicio/client/*";
 
 export async function getServerSideProps(context) {
