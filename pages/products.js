@@ -25,7 +25,7 @@ export default function Products({ page }) {
         <Game page={page} />
         <Wheel />
         <Demo page={page} />
-        <Footer page={page} bg="1" />
+        <Footer />
       </div>
     </>
   );

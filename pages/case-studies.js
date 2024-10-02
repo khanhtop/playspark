@@ -17,7 +17,7 @@ export default function CaseStudies({ page }) {
         <Hero page={page} />
         <Blog page={page} />
         <Game page={page}/>
-        <Footer page={page} bg="2" />
+        <Footer />
       </div>
     </>
   );
