@@ -24,7 +24,7 @@ const nextConfig = {
       },
     ];
   },
-  reactStrictMode: false,
+  transpilePackages: ['gsap'],
 };
 
 module.exports = withPWA({
