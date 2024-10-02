@@ -50,9 +50,9 @@ export default function Navbar() {
           </Link>
           <Link
             className={`${
-              isCurrent("/case-studies") ? "text-sky-600" : "text-black"
+              isCurrent("/blog") ? "text-sky-600" : "text-black"
             } hover:text-sky-600`}
-            href=""
+            href="/blog"
           >
             Docs
           </Link>

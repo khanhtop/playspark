@@ -55,7 +55,7 @@ export default function Home({ page, blogs }) {
         <Section>
           <Game page={page} />
         </Section>
-        <Footer />
+        <Footer page={page} bg="1" />
       </div>
     </>
   );
