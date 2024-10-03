@@ -23,8 +23,9 @@ export default function Products({ page }) {
         <Hero page={page} />
         <Marketing page={page} />
         <Game page={page} />
+        <Wheel />
         <Demo page={page} />
-        <Footer page={page} bg="1" />
+        <Footer />
       </div>
     </>
   );
@@ -38,6 +39,7 @@ import Hero from "@/components/feature/hero";
 import Marketing from "@/components/feature/marketing";
 import Demo from "@/components/feature/demo";
 import Game from "@/components/feature/game";
+import Wheel from "@/components/feature/wheel";
 
 export async function getServerSideProps(context) {
   const client = createClient();

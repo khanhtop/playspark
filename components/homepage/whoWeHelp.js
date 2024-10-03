@@ -25,8 +25,8 @@ export default function WhoWeHelp({ page }) {
 const Blog = ({item}) => {
   return (
     <div className="mx-auto max-w-[1000px] " >
-      <div className=" flex flex-row shadow-xl shadow-grey border rounded-[10px] py-10">
-        <div className="w-1/2  flex flex-col gap-10 items-center justify-center  ">
+      <div className=" flex flex-col-reverse lg:flex-row gap-5  shadow-xl shadow-grey border rounded-[10px] py-10">
+        <div className="lg:w-1/2  w-full flex flex-col gap-10 items-center justify-center  ">
           <h1 className=" font-bold text-2xl px-10">{item.title}</h1>
           <div className=" flex flex-col gap-8 text-start text-[16px] px-3">
             <div className=" flex flex-row gap-1 justify-center items-center"> 
@@ -42,9 +42,8 @@ const Blog = ({item}) => {
               <PrismicRichText field={item.text_3} />
             </div>
           </div>
-          
       </div>
-      <div className="w-1/2 flex items-center justify-center">
+      <div className="w-full lg:w-1/2 flex items-center justify-center">
           <img src = {item.image.url}  />
       </div>
       </div>

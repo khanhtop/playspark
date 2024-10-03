@@ -83,7 +83,7 @@ export default function Blog({ blogs }) {
 
         
 
-        <Footer page={blogs} bg="2" />
+        <Footer />
       </div>
     </>
   );

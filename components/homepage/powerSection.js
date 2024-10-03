@@ -14,7 +14,7 @@ export default function PowerSection({ page }) {
       <h1 className="text-6xl font-bold text-black ">
           {page.power_title}
       </h1>
-      <div className="flex gap-4 mt-8 ">
+      <div className="flex flex-col lg:flex-row gap-4 mt-8 ">
         {page.power_group?.map((item, key) => (
           <Element item={item} key={key} />
         ))}
@@ -26,8 +26,8 @@ export default function PowerSection({ page }) {
 
 function Element({ item }) {
   return (
-    <div className="flex-1 flex flex-col gap-2 items-center justify-center px-8 py-4 w-1/3">
-      <div className="flex flex-col items-start justify-start text-left max-w-[360px] gap-5">
+    <div className="flex-1 flex flex-col gap-2 items-center justify-center px-8 py-4 w-full lg:w-1/3">
+      <div className="flex flex-col items-center justify-center lg:items-start lg:justify-start text-left max-w-[360px] gap-5">
         <img 
               src={item.image.url}
               className="w-48 h-48"

@@ -17,7 +17,7 @@ export default function Pricing({ page }) {
         <Pay page={page} />
         <Client page={page} />
         <Game page={page} />
-        <Footer page={page} bg="1" />
+        <Footer />
       </div>
     </>
   );
