@@ -51,10 +51,10 @@ export default function Hero({ page }) {
             Start Creating Your Game
           </button>
         </div>
-        <div className=" flex items-center justify-center lg:justify-start pt-11 mb-12 lg:mb-0 w-full  lg:w-1/3">
+        <div className=" flex items-center justify-center lg:justify-center pt-11 mb-12 lg:mb-0 w-full lg:w-1/3">
           <img
           src={page.hero_image.url}
-          className=" lg:w-96 h-auto"
+          className=" lg:w-96 w-96 h-auto"
         />
         </div>
       </div>

@@ -2,14 +2,14 @@ import { PrismicRichText } from "@prismicio/react";
 import Icon from "../../public/images/Icons (3).png";
 import React from 'react'
 import clsx from "clsx";
-import Ticker from '../../public/images/Ticker_1.jpg'
+import Ticker from '../../public/images/logos.png'
 
 export default function BrandSection({ page }) {
   return (
     <div>
        <div className="flex flex-col items-center justify-center  gap-5 text-black bg-white pt-10">
         <h1 className="text-[54px] font-bold ">{page.brand_title_1}</h1>
-        <img src={Ticker.src} />
+        <img src={Ticker.src} className="max-w-full lg:max-w-[774px] mx-auto lg:h-[206px] h-[100px]" />
         <button className="bg-button_level w-[241px] text-black rounded-[30px] py-3 px-3 ">See Case Studies</button>
       </div>
       <div className="bg-gradient-to-t from-back to-white py-16 px-4 flex flex-col items-center justify-center gap-5 text-black bg-white">
