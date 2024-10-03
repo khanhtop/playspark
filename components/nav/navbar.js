@@ -3,8 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import header_logo from "/public/images/header_logo.png";
-import mobile_logo from "/public/images/mobile_logo.png";
-import Icon from "/public/images/right.png";
 
 export default function Navbar() {
   const router = useRouter();
@@ -78,13 +76,11 @@ export default function Navbar() {
         }}
         className="z-20 fixed top-0 left-0 w-full text-black flex flex-col overflow-hidden lg:hidden  bg-white/100 backdrop-blur"
       >
-        <div className="w-full fixed bg-[#484A4A] h-[46px] flex flex-row items-center justify-center gap-3">
-          <p className="text-white text-center ">View the complete Kit</p>{" "}
-          <img src={Icon.src} className="w-[10px] h-[10px]" />
-        </div>
+        
+
         <div className="px-8">
-          <div className="h-16 flex items-center justify-between w-full pt-20">
-            <img src={mobile_logo.src} className="  w-10 h-10" />
+          <div className="h-17 flex items-center justify-between w-full ">
+            <img src={header_logo.src} className=" h-full" />
             {navOpen ? (
               <XMarkIcon
                 onClick={() => setNavOpen(false)}
@@ -97,7 +93,7 @@ export default function Navbar() {
               />
             )}
           </div>
-          <div className="flex flex-col gap-2 font-bold mt-6 px-3">
+          <div className="flex flex-col gap-2 font-bold  px-3">
             <Link
               onClick={() => setNavOpen(false)}
               className="hover:text-sky-600"
