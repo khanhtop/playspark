@@ -19,7 +19,7 @@ export default function PowerSection({ page }) {
           <Element item={item} key={key} />
         ))}
       </div>
-      <button className="bg-button_level w-[241px] text-black rounded-lg py-3 px-3 " >{page.power_button_2}</button>
+      <button className="bg-button_level w-[241px] text-black rounded-[30px] py-3 px-3 " >{page.power_button_2}</button>
     </div>
   );
 }

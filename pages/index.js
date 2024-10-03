@@ -35,7 +35,7 @@ export default function Home({ page, blogs }) {
         </Section>
         <Section>
         {/*  */}
-          <Slider items={page.level_group} />
+          {/* <Slider items={page.level_group} /> */}
         </Section>
         <Section>
           <WhatWeDo page={page} />

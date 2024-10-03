@@ -6,7 +6,7 @@ export default function Game({ page }) {
         <h1 className="font-bold text-[54px]">{page.game_title}</h1>
         <p className="text-[16px]  px-12 mx-auto">{page.game_text}</p>
       </div>
-      <button className="bg-black px-4 py-2 my-10 text-white rounded-lg">
+      <button className="bg-black px-4 py-2 my-10 text-white rounded-[30px]">
           {page.game_button}
         </button>
     </div>

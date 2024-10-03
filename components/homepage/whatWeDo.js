@@ -1,11 +1,11 @@
-import backImg from '../../public/images/Ticker.png'
+import backImg from '../../public/images/logos.png'
 
 export default function WhatWeDo({ page }) {
   return (
     <div className="w-full  text-black flex flex-col items-center justify-center ">
       <div className='bg-white flex flex-col items-center justify-center w-full'>
-        <div className="w-full h-auto lg:h-[122px]"> <img src={backImg.src} className="w-full h-auto"/></div>
-        <h1 className="text-6xl font-bold text-black max-w-[400px] lg:max-w-[590px] mt-5 lg:mt-32">
+         <img src={backImg.src} className="max-w-full lg:max-w-[774px] mx-auto lg:h-[206px] h-[100px] mt-3"/>
+        <h1 className="text-6xl font-bold text-black max-w-[400px] lg:max-w-[590px] mt-5 lg:mt-22">
           {page.what_we_do_title}
         </h1>
         <p className="text-center text-xl font-light my-4 mx-0 lg:mx-4 max-w-[480px] lg:max-w-[800px] text-black">
@@ -19,7 +19,7 @@ export default function WhatWeDo({ page }) {
             <Element item={item} key={key} />
           ))}
         </div>
-        <button className="px-8 py-4 flex items-center justify-center text-center text-xl text-white bg-work rounded-full" >See How It Works </button>
+        <button className="px-8 py-4 flex items-center justify-center text-center text-xl text-white bg-work rounded-[30px]" >See How It Works </button>
       </div>
       
     </div>

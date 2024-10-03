@@ -23,7 +23,7 @@ export default function PaySection() {
         </h3>
         <button
           // onClick={() => router.push("/admin")}
-          className="bg-cyan-400 px-8 py-2 rounded-full flex items-center gap-4 mt-8 font-octo md:text-3xl text-black"
+          className="bg-cyan-400 px-8 py-2 rounded-[30px] flex items-center gap-4 mt-8 font-octo md:text-3xl text-black"
         >
           LAUNCH YOUR GAME
         </button>
