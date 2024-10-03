@@ -19,7 +19,7 @@ export default function WhatWeDo({ page }) {
             <Element item={item} key={key} />
           ))}
         </div>
-        <button className="px-8 py-4 flex items-center justify-center text-center text-xl text-white bg-work rounded-full" >See How It Works </button>
+        <button className="px-8 py-4 flex items-center justify-center text-center text-xl text-white bg-work rounded-[30px]" >See How It Works </button>
       </div>
       
     </div>

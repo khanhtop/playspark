@@ -10,7 +10,7 @@ export default function BrandSection({ page }) {
        <div className="flex flex-col items-center justify-center  gap-5 text-black bg-white pt-10">
         <h1 className="text-[54px] font-bold ">{page.brand_title_1}</h1>
         <img src={Ticker.src} />
-        <button className="bg-button_level w-[241px] text-black rounded-lg py-3 px-3 ">See Case Studies</button>
+        <button className="bg-button_level w-[241px] text-black rounded-[30px] py-3 px-3 ">See Case Studies</button>
       </div>
       <div className="bg-gradient-to-t from-back to-white py-16 px-4 flex flex-col items-center justify-center gap-5 text-black bg-white">
           <div className="lg:shadow-sm lg:shadow-grey lg:border  lg:rounded-[10px] lg:px-[105px] pb-4">
@@ -58,7 +58,7 @@ const Blog = ({ item }) => {
           <p className="text-[54px] font-bold text-start ">{item.title}</p>
           <img src={item.brand_logo.url} className={className} />
         </div>
-        <button className="bg-black text-white w-[271px] py-2 px-4 my-7 rounded-lg">
+        <button className="bg-black text-white w-[271px] py-2 px-4 my-7 rounded-[30px]">
           {item.button}
         </button>
       </div>

@@ -62,7 +62,7 @@ export default function Blog({ blogs }) {
             <h1 className="text-[64px] font-bold text-center">
               {blogs.title}
             </h1>
-            <div className="flex flex-row gap-12 px-24 mt-10">
+            <div className="flex lg:flex-row flex-col  gap-12 px-24 mt-10">
               {
                 blogs.blog?.map((item, key)=>{
                   return <Item item={item} key={key} />
@@ -91,9 +91,9 @@ export default function Blog({ blogs }) {
 
 const Item = ({item}) => {
   return (
-    <div className="flex flex-col justify-center items-center gap-10 text-start w-1/3 max-w-[264px]">
+    <div className="flex flex-col justify-center items-center gap-10 text-start w-full lg:w-1/3 max-w-[264px]">
         <img src={item.image.url} className="w-[263px] h-[263px] border rounded-[20px] " />
-        <div className="flex flex-col items-start min-h-[200px] gap-5">
+        <div className="flex flex-col items-start lg:min-h-[200px] min-h-fit gap-5">
           <h1 className="text-[18px] font-bold ">{item.blog_title}</h1>
           <p className="text-[16px]">{item.blog_text}</p>
         </div>

@@ -49,7 +49,7 @@ const Blog = ({item}) => {
       </div>
       <div className="h-32 py-10">
         {
-          item.button_text && <button className="bg-button_level w-[241px] text-black rounded-lg py-3 px-3 " >{item.button_text}</button>
+          item.button_text && <button className="bg-button_level w-[241px] text-black rounded-[30px] py-3 px-3 " >{item.button_text}</button>
         }
       </div>
     </div>

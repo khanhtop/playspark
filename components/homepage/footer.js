@@ -22,7 +22,7 @@ export default function Footer() {
         <div className="w-1/2 flex flex-col items-start justify-between gap-6">
           <img
             src={footer_logo.src}
-            className=" -mt-4 mx-1 bg-bal"
+            className=" -mt-4 -mx-2 bg-bal cursor-pointer"
           />
           <p className=" text-[14px] max-w-[240px]">
             We level up your brand marketing with white-labelled arcade games
@@ -31,30 +31,30 @@ export default function Footer() {
           <div className="flex flex-row gap-3">
             {
               Image_white?.map((item, key)=> {
-                return <img src = {item.src} key={key} className="w-4 h-4" />
+                return <img src = {item.src} key={key} className="w-4 h-4 cursor-pointer" />
               })
             }
           </div>
         </div>
         <div className="lg:w-1/2  w-full flex lg:flex-row-reverse flex-col-reverse  gap-12 items-start justify-start pr-5 pt-12 lg:pt-5  text-[14px]">
-          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2">
+          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
             <p className="font-bold ">Legal</p>
             <p>Privacy</p>
             <p>Terms</p>
             <p>Security</p>
           </div>
-          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2">
+          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
             <p className="font-bold ">Resource</p>
             <p>Case Studies</p>
             <p>Docs</p>
           </div>
-          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2">
+          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
             <p className="font-bold ">company</p>
             <p>About</p>
             <p>Blog</p>
             <p>Contact</p>
           </div>
-          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2">
+          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
             <p className="font-bold ">Products</p>
             <p>Feature</p>
             <p>FAQ</p>
