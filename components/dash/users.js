@@ -12,7 +12,7 @@ export default function Users() {
   const [pane, setPane] = useState("users");
 
   return (
-    <div>
+    <div className="flex-1 flex flex-col">
       <FilterPills
         selected={pane}
         onSelect={(a) => setPane(a)}

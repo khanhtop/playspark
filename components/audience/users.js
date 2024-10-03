@@ -1,7 +1,7 @@
 import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Tabulate from "./tabulate";
 import { Button } from "flowbite-react";
@@ -10,14 +10,23 @@ const columnSet = [
   {
     width: 200,
     name: "Name",
-    dataKey: "name",
+    dataKey: "companyName",
     nullValue: "Anonymous",
+    searchable: true,
   },
   {
     width: 200,
     name: "Email Address",
     dataKey: "email",
     nullValue: "Anonymous",
+    searchable: true,
+  },
+  {
+    width: 100,
+    name: "XP",
+    dataKey: "totalXp",
+    nullValue: "0",
+    searchable: false,
   },
 ];
 
@@ -26,23 +35,29 @@ export function AudienceUsers({}) {
 
   const [users, setUsers] = useState();
 
+  console.log(users);
+
   useEffect(() => {
     if (context?.loggedIn?.uid && !users) {
-      getDocs(
-        collection(firestore, "users", context.loggedIn.uid, "users")
-      ).then((res) => {
+      // Create a query to fetch users where 'memberOf' contains the logged-in user's UID
+      const q = query(
+        collection(firestore, "users"),
+        where("memberOf", "array-contains", context.loggedIn.uid)
+      );
+
+      getDocs(q).then((res) => {
         let out = [];
         for (let doc of res.docs) {
           if (
             doc?.id?.toLowerCase() !== context?.loggedIn?.email.toLowerCase()
           ) {
-            out.push({ email: doc.id, ...doc.data() });
+            out.push({ ...doc.data() });
           }
         }
         setUsers(out);
       });
     }
-  }, [context?.loggedIn]);
+  }, [context?.loggedIn, users]);
 
   if (!users) {
     return (
@@ -53,8 +68,8 @@ export function AudienceUsers({}) {
   }
 
   return (
-    <div className="flex flex-col">
-      <div className="overflow-x-scroll w-[calc(100vw-360px)] flex flex-1 h-full">
+    <div className="flex flex-col flex-1">
+      <div className="overflow-x-scroll w-[calc(100vw-360px)] flex flex-col flex-1 h-full">
         <Tabulate columns={columnSet} data={users} />
       </div>
     </div>
