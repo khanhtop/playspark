@@ -16,6 +16,7 @@ export default function Ad({
   config,
   userId,
   email,
+  em,
   externalId,
 }) {
   const context = useAppContext();
@@ -26,7 +27,7 @@ export default function Ad({
   const subscriptionRef = useRef(null);
   const [deviceId, setDeviceId] = useState(null);
 
-  console.log(ad);
+  console.log("EMAIL", em, externalId);
 
   function generateUUID() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
@@ -266,9 +267,11 @@ export async function getServerSideProps(context) {
   const { deviceIdSignIn } = context?.query;
 
   let externalId = null;
+  let em = platform.toString();
 
   if (user && platform) {
     const emailAddress = decryptEmail(user, platform);
+    em = user;
     externalId = refactorEmail(emailAddress, platform);
   }
 
@@ -281,6 +284,7 @@ export async function getServerSideProps(context) {
     props: {
       id: id,
       client: client,
+      em: em,
       ad: {
         ...ad,
         endDate: ad.endDate ? JSON.stringify(ad.endDate) : null,

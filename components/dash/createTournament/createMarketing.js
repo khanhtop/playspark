@@ -42,10 +42,6 @@ export default function CreateMarketing({ tournament, setTournament }) {
   const surveyId = useRef(Date.now().toString());
   const [sponsoredVideoBuffer, setSponsoredVideoBuffer] = useState(null);
 
-  console.log(sponsoredVideoBuffer);
-
-  console.log(tournament);
-
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 gap-4">
