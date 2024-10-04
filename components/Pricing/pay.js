@@ -7,13 +7,13 @@ import checkImgBlack from "/public/images/check_black.png";
 
 export default function Pay({ page }) {
   return (
-    <div className=" pt-52 pb-10 bg-white ">
-      <div className=" flex flex-col items-center justify-center gap-10 max-w-[1300px] mx-auto">
-        <h1 className="text-[54px] font-bold text-center">{page.pay_title}</h1>
+    <div className=" pt-[154px] pb-10 bg-white ">
+      <div className=" flex flex-col items-center justify-center gap-10">
+        <h1 className="text-[54px] font-bold text-center -tracking-[3px] leading-[60px] whitespace-nowrap">{page.pay_title}</h1>
         <div className="text-[22px] text-center items-center justify-center px-5">
           <PrismicRichText field={page.pay_text} />
         </div>
-        <div className="flex lg:flex-row  flex-col items-end gap-10 lg:px-0 px-5">
+        <div className="flex lg:flex-row  flex-col items-end gap-10 lg:px-0 px-10">
           {page.pay_blog?.map((item, key) => {
             return <Blog item={item} page={page} key={key} />;
           })}
@@ -75,12 +75,12 @@ const Blog = ({ item, page }) => {
   return (
     <div
       className={clsx(
-        " flex flex-col w-full lg:w-1/3  lg:justify-start justify-center shadow-xl shadow-grey border rounded-[24px] gap-5 px-10 py-10 ",
+        " flex flex-col lg:w-1/3 max-w-[351px]  justify-start shadow-xl shadow-grey border rounded-[24px] gap-5 px-[31px] pt-10 ",
         className
       )}
     >
       <div className="flex justify-between ">
-        <h1 className="font-bold text-[18px] text-[#6F6C90] text-left">
+        <h1 className="font-bold text-[18px] text-[#6F6C90] text-left ">
           {item.title}
         </h1>
         {item.pay_badge ? (
@@ -100,7 +100,7 @@ const Blog = ({ item, page }) => {
         </div>
       ) : (
         <div>
-          <p className="font-bold text-[54px]">Pay per play</p>
+          <p className="font-bold text-[54px] tracking-[-3px] leading-[60px] whitespace-nowrap">Pay per play</p>
         </div>
       )}
       <button

@@ -19,8 +19,8 @@ export default function Slider({items}) {
 const Blog = ({item}) => {
     return (
       <div className="mx-auto w-full h-[800px] " >
-        <div className=" flex flex-col-reverse gap-5  shadow-xl shadow-grey border rounded-[10px] py-10 px-5 h-full">
-          <div className="w-full flex flex-col gap-10 items-center justify-center  ">
+        <div className=" flex flex-col-reverse gap-5 items-center justify-center shadow-xl shadow-grey border rounded-[10px]  px-5 h-full">
+          <div className="w-full flex flex-col gap-5 items-center justify-center  ">
             <h1 className=" font-bold text-[26px] px-10">{item.title}</h1>
             <div className=" flex flex-col gap-3 text-start justify-start items-start text-[16px] px-3">
               <div className=" flex flex-row gap-1 justify-center items-center text-[16px]"> 
@@ -37,8 +37,8 @@ const Blog = ({item}) => {
               </div>
             </div>
         </div>
-        <div className="w-full flex items-start justify-center">
-            <img src = {item.image.url} className="w-[170px] h-[230px] " />
+        <div className="w-full flex items-end justify-center">
+            <img src = {item.image.url} className="w-[160px] h-[244px] " />
         </div>
         </div>
         

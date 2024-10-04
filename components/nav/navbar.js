@@ -14,60 +14,62 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="z-20 fixed top-0 left-0 w-full h-[75px] text-black hidden lg:flex items-center justify-between px-16 bg-white/90 backdrop-blur">
-        <img src={header_logo.src} className="h-full" />
-        <div className="flex items-center justify-center gap-6 font-bold">
-          <Link
-            className={`${
-              isCurrent("/") ? "text-sky-600" : "text-black"
-            } hover:text-sky-600`}
-            href="/"
+      <div className="z-20 fixed top-0 left-0 w-full ">
+        <div className="max-w-[1200px] mx-auto h-[80px] text-black hidden lg:flex items-center justify-between  lg:px-16 px-5 bg-white/90 backdrop-blur">
+          <img src={header_logo.src} className="h-full" />
+          <div className="flex items-center justify-center gap-6 font-bold">
+            <Link
+              className={`${
+                isCurrent("/") ? "text-sky-600" : "text-black"
+              } hover:text-sky-600`}
+              href="/"
+            >
+              Home
+            </Link>
+            <Link
+              className={`${
+                isCurrent("/products") ? "text-sky-600" : "text-black"
+              } hover:text-sky-600`}
+              href="/products"
+            >
+              Features
+            </Link>
+            <Link
+              className={`${
+                isCurrent("/pricing") ? "text-sky-600" : "text-black"
+              } hover:text-sky-600`}
+              href="/pricing"
+            >
+              Pricing
+            </Link>
+            <Link
+              className={`${
+                isCurrent("/case-studies") ? "text-sky-600" : "text-black"
+              } hover:text-sky-600`}
+              href="/case-studies"
+            >
+              Case Studies
+            </Link>
+            <Link
+              className={`${
+                isCurrent("/blog") ? "text-sky-600" : "text-black"
+              } hover:text-sky-600`}
+              href="/blog"
+            >
+              Docs
+            </Link>
+            <button className="bg-free px-4 py-2  text-black rounded-lg">
+              {" "}
+              Get for free
+            </button>
+          </div>
+          <button
+            onClick={() => router.push("/admin")}
+            className="bg-black px-4 py-2 text-white rounded-lg"
           >
-            Home
-          </Link>
-          <Link
-            className={`${
-              isCurrent("/products") ? "text-sky-600" : "text-black"
-            } hover:text-sky-600`}
-            href="/products"
-          >
-            Features
-          </Link>
-          <Link
-            className={`${
-              isCurrent("/pricing") ? "text-sky-600" : "text-black"
-            } hover:text-sky-600`}
-            href="/pricing"
-          >
-            Pricing
-          </Link>
-          <Link
-            className={`${
-              isCurrent("/case-studies") ? "text-sky-600" : "text-black"
-            } hover:text-sky-600`}
-            href="/case-studies"
-          >
-            Case Studies
-          </Link>
-          <Link
-            className={`${
-              isCurrent("/blog") ? "text-sky-600" : "text-black"
-            } hover:text-sky-600`}
-            href="/blog"
-          >
-            Docs
-          </Link>
-          <button className="bg-free px-4 py-2  text-black rounded-lg">
-            {" "}
-            Get for free
+            Login
           </button>
         </div>
-        <button
-          onClick={() => router.push("/admin")}
-          className="bg-black px-4 py-2 text-white rounded-lg"
-        >
-          Login
-        </button>
       </div>
       <div
         style={{
@@ -76,8 +78,6 @@ export default function Navbar() {
         }}
         className="z-20 fixed top-0 left-0 w-full text-black flex flex-col overflow-hidden lg:hidden  bg-white/100 backdrop-blur"
       >
-        
-
         <div className="px-8">
           <div className="h-17 flex items-center justify-between w-full ">
             <img src={header_logo.src} className=" h-full" />
