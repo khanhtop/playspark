@@ -9,7 +9,9 @@ export default function Pay({ page }) {
   return (
     <div className=" pt-[154px] pb-10 bg-white ">
       <div className=" flex flex-col items-center justify-center gap-10">
-        <h1 className="text-[54px] font-bold text-center -tracking-[3px] leading-[60px] whitespace-nowrap">{page.pay_title}</h1>
+        <h1 className="text-[54px] font-bold text-center -tracking-[3px] leading-[60px] whitespace-nowrap">
+          {page.pay_title}
+        </h1>
         <div className="text-[22px] text-center items-center justify-center px-5">
           <PrismicRichText field={page.pay_text} />
         </div>
@@ -29,15 +31,17 @@ export default function Pay({ page }) {
             </div>
           </div>
         </div>
-        <div className=" hidden lg:block max-w-full w-full mx-auto">
-          <div className="   flex flex-col items-center justify-center gap-3 bg-gradient-to-l from-liner to-white border rounded-[30px] shadow-xl shadow-grey py-5 px-80">
-            <h1 className="font-bold text-[40px]">{page.enterprise_title}</h1>
-            <p className="font-bold text-[18px] text-[#6F6C90]">
-              {page.enterprise_text}
-            </p>
-            <button className=" border rounded-[30px] bg-black text-white lg:px-[84px] py-[10px]">
-              {page.enterprise_button}
-            </button>
+        <div className=" hidden lg:block max-w-full w-full mx-auto px-10">
+          <div className="flex flex-col items-center justify-center  bg-gradient-to-l from-liner to-white border rounded-[30px] shadow-xl shadow-grey py-5">
+            <div className="max-w-[300px] mx-auto flex flex-col items-center gap-3">
+              <h1 className="font-bold text-[40px]">{page.enterprise_title}</h1>
+              <p className="font-bold text-[18px] text-[#6F6C90]">
+                {page.enterprise_text}
+              </p>
+              <button className=" border rounded-[30px] bg-black text-white lg:px-[84px] py-[10px]">
+                {page.enterprise_button}
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -70,8 +74,6 @@ const Blog = ({ item, page }) => {
     }
   }, [item.size]);
 
-  console.log(text_list);
-
   return (
     <div
       className={clsx(
@@ -100,7 +102,9 @@ const Blog = ({ item, page }) => {
         </div>
       ) : (
         <div>
-          <p className="font-bold text-[54px] tracking-[-3px] leading-[60px] whitespace-nowrap">Pay per play</p>
+          <p className="font-bold text-[54px] tracking-[-3px] leading-[60px] whitespace-nowrap">
+            Pay per play
+          </p>
         </div>
       )}
       <button

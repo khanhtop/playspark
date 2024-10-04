@@ -3,10 +3,9 @@ import clsx from "clsx";
 
 
 export default function Blog({page}){
-    console.log(page)
     return (
-        <div className="bg-gradient-to-b from-liner to-white py-20">
-            <div className="flex lg:flex-row  flex-col gap-5 items-start justify-normal max-w-[1500px] mx-auto">
+        <div className="bg-gradient-to-b from-liner to-white pt-20 lg:pb-20">
+            <div className="flex lg:flex-row  flex-col gap-[54px]  items-start justify-normal lg:px-[140px]">
                 {page.studies_blog?.map((item, key)=>{
                    return  <Element item={item} key={key} />
                 })}
@@ -29,13 +28,12 @@ const Element = ({item}) => {
 
 
     return (
-        <div className="lg:w-1/3  w-full flex flex-col justify-start items-center px-10 py-5 min-h-[600px] gap-5">
-            <img src={item.image.url} className="w-[276px] h-[288px]" />
-            <div className="flex flex-col gap-5 items-start min-h-[225px] w-[276px] ">
+        <div className="lg:w-1/3 w-[290px] mx-auto flex flex-col justify-start items-center  py-5 max-h-[600px] gap-5">
+            <img src={item.image.url} className="w-full h-[270px]" />
+            <div className="flex flex-col gap-5 items-start h-auto lg:h-[225px] w-full">
                 <h1 className="font-bold text-[18px]">{item.title}</h1>
                 <p className="text-[16px]">{item.text}</p>
             </div>
-            
             <button className={clsx(" border rounded-[30px] px-[70px] py-[10px]", className)}>{item.button_text}</button>
         </div>
     )

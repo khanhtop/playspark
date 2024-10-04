@@ -49,7 +49,7 @@ export default function Home({ page, blogs }) {
           <ClientSection page={page} />
         </Section>
         <Section>
-          <Game page={page} />
+          <Game  />
         </Section>
         <Footer />
       </div>
@@ -68,7 +68,7 @@ import PricingSection from "@/components/homepage/pricingSection";
 import BlogsSection from "@/components/homepage/blogsSection";
 import PowerSection from "@/components/homepage/powerSection";
 import BrandSection from "@/components/homepage/BrandSection";
-import Game from "@/components/homepage/game";
+import Game from "@/components/forms/game"
 import Slider from "@/components/homepage/slider";
 // import { Client } from "@prismicio/client/*";
 

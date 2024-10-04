@@ -16,7 +16,7 @@ export default function Pricing({ page }) {
         <Navbar />
         <Pay page={page} />
         <Client page={page} />
-        <Game page={page} />
+        <Game />
         <Footer />
       </div>
     </>
@@ -28,7 +28,7 @@ import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
 import Pay from "@/components/Pricing/pay";
 import Client from '@/components/Pricing/client'
-import Game from "@/components/Pricing/game";
+import Game from "@/components/forms/game"
 
 export async function getServerSideProps(context) {
   const client = createClient();
