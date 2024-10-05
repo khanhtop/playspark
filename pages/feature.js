@@ -3,12 +3,14 @@ import Head from "next/head";
 import PrivacyImage from "/public/images/privacy.png";
 import Luke from "/public/images/luke.png";
 import React, { useCallback, useState } from 'react';
-
+import { createClient } from "../helpers/prismic";
+import Navbar from "@/components/nav/navbar";
+import Footer from "@/components/homepage/footer";
+import Game from "@/components/forms/game";
+// import Calendar from "@/components/forms/calendar";
+import { Calendar } from "@/components/forms/Calendar-1"; 
 
 export default function Feature({ page }) {
-
-
-
   return (
     <>
       <Head>
@@ -79,15 +81,12 @@ export default function Feature({ page }) {
                 </button>
               </div>
             </div>
-            <div className="w-[369px] h-[610px] bg-[#3A516B] flex flex-col items-center justify-col  gap-5 py-10 ">
+            <div className="w-[369px] h-[610px] bg-[#3A516B] flex flex-col items-center justify-start  gap-5 py-10 ">
               <img src={Luke.src} className="w-20 h-20" />
               <p className="text-white text-[20px]">
                 Meet with Luke Santamaria
               </p>
-
-              <div className="flex">
                 <Calendar />
-              </div>
             </div>
           </div>
         </div>
@@ -98,11 +97,8 @@ export default function Feature({ page }) {
   );
 }
 
-import { createClient } from "../helpers/prismic";
-import Navbar from "@/components/nav/navbar";
-import Footer from "@/components/homepage/footer";
-import Game from "@/components/forms/game";
-import Calendar from "@/components/forms/calendar";
+
+
 
 export async function getServerSideProps(context) {
   const client = createClient();

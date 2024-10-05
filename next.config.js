@@ -25,6 +25,9 @@ const nextConfig = {
     ];
   },
   transpilePackages: ['gsap'],
+  compiler: {
+      styledComponents: true,
+  }
 };
 
 module.exports = withPWA({
