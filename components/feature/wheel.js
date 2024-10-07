@@ -96,7 +96,7 @@ export default function Wheel() {
                     <Blobs type={'v2'} classVariable={`${styles.blob} ${styles.blobV2}`}/>
                     <Blobs type={'v1'} classVariable={`${styles.blob} ${styles.blobV1}`}/>
                 </div> */}
-                <div className={styles.grid}>
+                {/* <div className={styles.grid}> */}
                     <div className={styles.circularCarouselWrapper}>
                         <div className={styles.collisionDiv} ref={collisionDiv}></div>
                         <div className={styles.circularCarousel}>
@@ -121,7 +121,7 @@ export default function Wheel() {
                             </div>
                         ))}
                     </div>
-                </div>
+                {/* </div> */}
 
                 <div ref={sphere} className={styles.sphereWrapper}>
                     <div className={`${styles.sphere} ${dragStatus === 'pressed' ? styles.isActive : ''}`}></div>

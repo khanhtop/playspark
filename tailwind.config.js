@@ -18,6 +18,7 @@ module.exports = {
         anton: ["var(--font-anton)"],
         octo: ["var(--font-octo)"],
         octolight: ["var(--font-octolight)"],
+        Sans : ["var(--font-DM Sans)"]
       },
       colors: {
         background: "var(--background)",

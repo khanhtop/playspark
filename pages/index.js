@@ -28,14 +28,10 @@ export default function Home({ page, blogs }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-screen overflow-y-scroll">
+      <div className="h-auto overflow-y-scroll max-w-[1200px] min-w-[430px] mx-auto">
         <Navbar />
         <Section backgroundImage={page?.hero_background_image?.url}>
           <Hero page={page} />
-        </Section>
-        <Section>
-          {/*  */}
-          {/* <Slider items={page.level_group} /> */}
         </Section>
         <Section>
           <WhatWeDo page={page} />
@@ -53,7 +49,7 @@ export default function Home({ page, blogs }) {
           <ClientSection page={page} />
         </Section>
         <Section>
-          <Game page={page} />
+          <Game />
         </Section>
         <Footer />
       </div>
@@ -72,7 +68,7 @@ import PricingSection from "@/components/homepage/pricingSection";
 import BlogsSection from "@/components/homepage/blogsSection";
 import PowerSection from "@/components/homepage/powerSection";
 import BrandSection from "@/components/homepage/BrandSection";
-import Game from "@/components/homepage/game";
+import Game from "@/components/forms/game";
 import Slider from "@/components/homepage/slider";
 // import { Client } from "@prismicio/client/*";
 

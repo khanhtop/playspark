@@ -7,9 +7,9 @@ import Ticker from '../../public/images/logos.png'
 export default function BrandSection({ page }) {
   return (
     <div>
-       <div className="flex flex-col items-center justify-center  gap-5 text-black bg-white pt-10">
-        <h1 className="text-[54px] font-bold ">{page.brand_title_1}</h1>
-        <img src={Ticker.src} className="max-w-full lg:max-w-[774px] mx-auto lg:h-[206px] h-[100px]" />
+       <div className="flex flex-col items-center justify-center  gap-10 text-black bg-white pt-[75px]">
+        <h1 className="lg:text-[54px] text-[48px] font-bold max-w-[348px] lg:max-w-full leading-[40px] mx-auto">{page.brand_title_1}</h1>
+        <img src={Ticker.src} className="max-w-full lg:max-w-[774px] mx-auto lg:h-[200px] h-[100px]" />
         <button className="bg-button_level w-[241px] text-black rounded-[30px] py-3 px-3 ">See Case Studies</button>
       </div>
       <div className="bg-gradient-to-t from-back to-white py-16 px-4 flex flex-col items-center justify-center gap-5 text-black bg-white">

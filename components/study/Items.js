@@ -3,7 +3,7 @@ import selectImage from "../../public/images/select.png"
 
 export default function Items({ page }) {
   return (
-    <div className="w-full flex flex-col bg-white from-blue-500/0 to-blue-500/10 items-center justify-center text-black pt-16 pb-16 px-4">
+    <div className="w-full flex flex-col bg-white from-blue-500/0 to-blue-500/10 items-center justify-center text-black py-10 px-4">
       <div className="text-center">
         {page.blog?.map((item, key) => (
           <Blog item={item} key={key} />
@@ -15,8 +15,8 @@ export default function Items({ page }) {
 
 const Blog = ({item}) => {
   return (
-    <div className="mx-auto max-w-[1000px] " >
-      <p className="text-[54px] text-center font-bold mt-5">{item.title}</p>
+    <div className="mx-auto max-w-[1000px]" >
+      <p className="text-[54px] text-center font-bold ">{item.title}</p>
       <div className=" flex flex-col-reverse lg:flex-row gap-5  shadow-xl shadow-grey border rounded-[10px] my-5 py-10">
         <div className="lg:w-1/2  w-full flex flex-col gap-10 items-center justify-center  ">
           <h1 className=" font-bold text-2xl px-12 text-start">{item.blog_title}</h1>

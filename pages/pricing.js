@@ -12,11 +12,11 @@ export default function Pricing({ page }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-screen overflow-y-scroll">
+      <div className="h-screen overflow-y-scroll max-w-[1200px] min-w-[430px] mx-auto">
         <Navbar />
         <Pay page={page} />
         <Client page={page} />
-        <Game page={page} />
+        <Game />
         <Footer />
       </div>
     </>
@@ -28,7 +28,7 @@ import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
 import Pay from "@/components/Pricing/pay";
 import Client from '@/components/Pricing/client'
-import Game from "@/components/Pricing/game";
+import Game from "@/components/forms/game"
 
 export async function getServerSideProps(context) {
   const client = createClient();
