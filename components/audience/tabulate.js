@@ -2,7 +2,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { Button, Card } from "flowbite-react";
 import { useCallback, useEffect, useState } from "react";
 
-export default function Tabulate({ columns, data }) {
+export default function Tabulate({ columns, data, onRowClick }) {
   const [filteredData, setFilteredData] = useState(data);
   const [searchPhrase, setSearchPhrase] = useState("");
 
@@ -110,7 +110,12 @@ export default function Tabulate({ columns, data }) {
         </div>
         <div className="flex-1">
           {filteredData?.map((item, key) => (
-            <Card className="mb-2 w-full overflow-y-scroll">
+            <Card
+              onClick={() => {
+                if (onRowClick) onRowClick(item);
+              }}
+              className="mb-2 w-full overflow-y-scroll"
+            >
               <div className="text-black/70 flex gap-4 items-start text-sm">
                 <div className="flex flex-row">
                   {columns.map((column, key) => (

@@ -5,6 +5,8 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Tabulate from "./tabulate";
 import { Button } from "flowbite-react";
+import ModalSkin from "../dash/dashModals/modalSkin";
+import UserModal from "../dash/dashModals/userModal";
 
 const columnSet = [
   {
@@ -34,12 +36,10 @@ export function AudienceUsers({}) {
   const context = useAppContext();
 
   const [users, setUsers] = useState();
-
-  console.log(users);
+  const [showInfoModal, setShowInfoModal] = useState(false);
 
   useEffect(() => {
     if (context?.loggedIn?.uid && !users) {
-      // Create a query to fetch users where 'memberOf' contains the logged-in user's UID
       const q = query(
         collection(firestore, "users"),
         where("memberOf", "array-contains", context.loggedIn.uid)
@@ -51,7 +51,7 @@ export function AudienceUsers({}) {
           if (
             doc?.id?.toLowerCase() !== context?.loggedIn?.email.toLowerCase()
           ) {
-            out.push({ ...doc.data() });
+            out.push({ ...doc.data(), id: doc.id });
           }
         }
         setUsers(out);
@@ -70,8 +70,20 @@ export function AudienceUsers({}) {
   return (
     <div className="flex flex-col flex-1">
       <div className="overflow-x-scroll w-[calc(100vw-360px)] flex flex-col flex-1 h-full">
-        <Tabulate columns={columnSet} data={users} />
+        <Tabulate
+          columns={columnSet}
+          data={users}
+          onRowClick={(item) => setShowInfoModal(item)}
+        />
       </div>
+      {showInfoModal && (
+        <UserModal
+          onClose={() => setShowInfoModal(false)}
+          narrow
+          data={showInfoModal}
+          clientId={context.loggedIn.uid}
+        />
+      )}
     </div>
   );
 }

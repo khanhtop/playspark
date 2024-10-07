@@ -34,7 +34,7 @@ export default function Home({ page, blogs }) {
           <Hero page={page} />
         </Section>
         <Section>
-        {/*  */}
+          {/*  */}
           {/* <Slider items={page.level_group} /> */}
         </Section>
         <Section>

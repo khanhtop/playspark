@@ -14,11 +14,13 @@ import {
 } from "@heroicons/react/24/solid";
 import GameListModal from "./dashModals/gameListModal";
 import PlayableAdListModal from "./dashModals/playableAdListModal";
+import CreateModal from "./createTournament/createModal";
 
 export default function Dashboard({}) {
   const context = useAppContext();
   const [showCreateGameModal, setShowCreateGameModal] = useState(false);
   const [showCreateAdModal, setShowCreateAdModal] = useState(false);
+  const [showAddTournamentModal, setShowAddTournamentModal] = useState(false);
   const [impressions, setImpressions] = useState();
   const [plays, setPlays] = useState();
   const [ctr, setCtr] = useState();
@@ -126,10 +128,22 @@ export default function Dashboard({}) {
         />
       </div>
       {showCreateGameModal && (
-        <GameListModal onClose={() => setShowCreateGameModal(false)} />
+        <GameListModal
+          onClose={() => setShowCreateGameModal(false)}
+          onAdd={(item) => {
+            setShowAddTournamentModal(item);
+            setShowCreateGameModal(false);
+          }}
+        />
       )}
       {showCreateAdModal && (
         <PlayableAdListModal onClose={() => setShowCreateAdModal(false)} />
+      )}
+      {showAddTournamentModal && (
+        <CreateModal
+          hide={() => setShowAddTournamentModal(false)}
+          data={showAddTournamentModal}
+        />
       )}
       {/* <CreditsPanel /> */}
       {/* <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4"> */}
