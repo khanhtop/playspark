@@ -19,7 +19,7 @@ import Image from "next/image";
 import { SubTitle } from 'chart.js';
 // import Ticker from "@/components/UI/Elements/Ticker/Ticker";
 
-export default function Wheel() {
+export default function Wheel({page}) {
     gsap.registerPlugin(Draggable, InertiaPlugin, MotionPathPlugin, ScrollTrigger);
 
     const container = useRef();
@@ -104,20 +104,19 @@ export default function Wheel() {
                                 <path strokeWidth="2" stroke="red" id="circularCarouselPath" fill="none"
                                       d="M396,200 C396,308.24781 308.24781,396 200,396 91.75219,396 4,308.24781 4,200 4,91.75219 91.75219,4 200,4 308.24781,4 396,91.75219 396,200 z"></path>
                             </svg>
-                            {Skills.map((skill, index) => (
-                                <div key={index}
+                            {page.circle_card?.map((skill, index) => (
+                                <div key={index} 
                                      className={`${styles.box} ${activeIndex === index ? styles.isActive : ''}`}>
-                                    <Image className={styles.image} src={WheelImage.src} alt={skill.title} width={80}
-                                           height={80}
+                                    <img className="lg:w-[220px] lg:h-[220px] w-full h-full " src={skill.image.url} alt={skill.title} 
                                            loading={'lazy'}/>
                                 </div>
                             ))}
                         </div>
-                        {Skills.map((skill, index) => (
+                        {page.circle_card.map((skill, index) => (
                             <div key={index}
                                  className={`${styles.circularDescriptions} ${activeIndex === index ? styles.isActive : ''}`}>
-                                <h2 className={styles.title}>Title <br/> SubTitle</h2>
-                                <p className={styles.description}>Description</p>
+                                <h2 className=""><span className='font-bold lg:text-[33px]  text-[12px]'>{skill.title}</span> <br /> <span className='font-bold lg:text-[20px] text-[10px] items-center justify-end '>{skill.subtitle}</span></h2>
+                                <p className="lg:text-[20px] text-[7px] text-center justify-center items-center">{skill.description}</p>
                             </div>
                         ))}
                     </div>
@@ -127,7 +126,6 @@ export default function Wheel() {
                     <div className={`${styles.sphere} ${dragStatus === 'pressed' ? styles.isActive : ''}`}></div>
                 </div>
             </section>
-            {/* <Ticker words={['accessibility', 'responsiveness', 'interactive', 'performance']}></Ticker> */}
         </>
     )
 }

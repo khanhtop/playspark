@@ -21,7 +21,7 @@ export default function Feature({ page }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-screen overflow-y-scroll max-w-[1200px] min-w-[430px] mx-auto bg-white">
+      <div className="h-screen overflow-y-scroll  min-w-[430px] mx-auto bg-white">
         <Navbar />
         {/* <ColsWithCTA
           image={page.hero_image?.url}

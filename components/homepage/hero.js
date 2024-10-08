@@ -35,9 +35,9 @@ export default function Hero({ page }) {
     <div
       className="lg:min-h-[710px] min-h-[1000px]  bg-cover flex  bg-gradient-to-t from-back to-white  "
     >
-      <div className="flex flex-col md:flex-col lg:flex-row text-black bg-cover px-8 lg:px-12  lg:gap-8 bg-black/0 items-center">
+      <div className="flex flex-col md:flex-col lg:flex-row text-black bg-cover px-8 lg:px-12  lg:gap-8 bg-black/0 items-center max-w-[1200px] mx-auto">
         <div className="flex flex-col items-center  lg:items-start justify-center flex-1 text-center lg:text-left gap-6 lg:gap-7 min-w-[364px]  lg:w-2/3 pt-40 pb-32 ">
-          <h1 className=" lg:text-[90px] text-[48px] font-bold leading-[48px] lg:leading-[90px] max-w-[606px] font-sans">
+          <h1 className=" lg:text-[90px] text-[48px] font-bold leading-[48px] lg:leading-[90px] max-w-[606px] font-roboto -tracking-wider">
             {page.hero_title_text}
           </h1>
           <h1 className="text-xl lg:text-2xl font-light mt-4">

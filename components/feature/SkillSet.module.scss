@@ -15,7 +15,7 @@
 }
 
 .sphereWrapper {
-  --size: 16dvw;
+  --size: 13dvw;
   position: absolute;
   bottom: calc(-1 * var(--size) / 2);
   left: calc(50% - var(--size) / 2);
@@ -110,7 +110,7 @@
   padding: calc(var(--cardSize) / 2);
   margin: 0 auto 0 auto;
   width: fit-content;
-  height: calc(var(--circSize) * 0.66);
+  height: calc(var(--circSize) * 0.7);
   overflow: hidden;
 
   @include respond-below(xl) {
@@ -151,7 +151,7 @@
     border-radius: 2rem;
 
     .image {
-      max-width: calc(var(--cardSize) - (var(--cardSize) / 2));
+      max-width: calc(var(--cardSize) );
     }
   }
   .collisionDiv {
@@ -167,7 +167,7 @@
   .circularDescriptions {
     position: absolute;
     left: 50%;
-    top: calc(var(--cardSize) * 1.1);
+    top: calc(var(--cardSize) * 1.4);
     transform: translate(-50%, 20%);
 
     display: flex;
