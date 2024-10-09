@@ -33,10 +33,10 @@ export default function Hero({ page }) {
 
   return (
     <div
-      className="lg:min-h-[710px] min-h-[1000px]  bg-cover flex  bg-gradient-to-t from-back to-white  "
+      className="lg:min-h-[710px] min-h-auto  bg-cover flex  bg-gradient-to-t from-back to-white  "
     >
       <div className="flex flex-col md:flex-col lg:flex-row text-black bg-cover px-8 lg:px-12  lg:gap-8 bg-black/0 items-center max-w-[1200px] mx-auto">
-        <div className="flex flex-col items-center  lg:items-start justify-center flex-1 text-center lg:text-left gap-6 lg:gap-7 min-w-[364px]  lg:w-2/3 pt-40 pb-32 ">
+        <div className="flex flex-col items-center lg:items-start justify-center flex-1 text-center lg:text-left gap-6 lg:gap-7 min-w-[364px]  lg:w-2/3 lg:pt-40 pt-40 lg:pb-32 pb-3 ">
           <h1 className=" lg:text-[90px] text-[48px] font-bold leading-[48px] lg:leading-[90px] max-w-[606px] font-roboto -tracking-wider">
             {page.hero_title_text}
           </h1>
@@ -50,10 +50,10 @@ export default function Hero({ page }) {
             Start Creating Your Game
           </button>
         </div>
-        <div className=" flex items-center justify-start lg:justify-center pt-0 lg:pt-[107px] pb-0 lg:pb-[51px]   w-full lg:w-1/3">
+        <div className=" flex items-center justify-center lg:justify-center pt-0 lg:pt-[107px] pb-0 lg:pb-[51px] w-full lg:w-1/3">
           <img
           src={page.hero_image.url}
-          className=" w-[369px] h-[552px] "
+          className=" lg:w-[369px] lg:h-[552px]  w-[184px] "
         />
         </div>
       </div>

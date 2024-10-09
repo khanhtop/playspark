@@ -44,18 +44,22 @@ const Blog = ({ item, key, page }) => {
   let className;
   let buttonColor;
   let textList;
+  let topMargin;
   const imagePositionClassName = React.useMemo(() => {
     if (item.image_position == null) {
       className = "absolute right-[-30px] w-32  ";
       buttonColor = "bg-black text-white ";
+      topMargin  = "py-11"
       textList = page.first_list;
     } else if (item.image_position == "top-right") {
       className = "absolute bottom-12 right-0   w-20";
       buttonColor = "bg-free text-black";
+      topMargin  = "pt-0"
       textList = page.second_list;
     } else if (item.image_position == "bottom-right") {
       className = "absolute top-12   right-[-25px] w-20";
       buttonColor = "bg-black text-white ";
+      topMargin  = "pt-0"
       textList = page.last_list;
     }
   }, [item.image_position]);
@@ -66,7 +70,7 @@ const Blog = ({ item, key, page }) => {
         <p className="text-[#6F6C90] text-[18px] font-bold font-roboto ">
           {item.text}
         </p>
-        <div className="flex flex-row items-center justify-start w-full relative">
+        <div className={clsx("flex flex-row items-center justify-start w-full relative", topMargin)}>
           <p className="text-[54px] font-bold text-start leading-[60px] font-roboto -tracking-widest">
             {item.title}
           </p>

@@ -2,8 +2,19 @@
 
 .section {
   position: relative;
-  padding: var(--x-spacing) 0;
+  // padding: var(--x-spacing) 0;
   background: white;
+  padding-top: 150px;
+
+  @include respond-below(sm) {
+    position: relative;
+  // padding: var(--x-spacing) 0;
+  background: white;
+  padding-top: 80px;
+  padding-bottom: 100px;
+  }
+
+  
 }
 .grid {
   display: grid;

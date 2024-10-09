@@ -1,14 +1,10 @@
-import Script from "next/script";
 import Head from "next/head";
-import PrivacyImage from "/public/images/privacy.png";
-import Luke from "/public/images/luke.png";
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState } from "react";
 import { createClient } from "../helpers/prismic";
 import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
-import Game from "@/components/forms/game";
-// import Calendar from "@/components/forms/calendar";
-import { Calendar } from "@/components/forms/Calendar-1"; 
+import Script from "next/script";
+// import Script from "next/script";
 
 export default function Feature({ page }) {
   return (
@@ -16,6 +12,7 @@ export default function Feature({ page }) {
       <Head>
         <title>{page.seo_title}</title>
         <meta property="description" content={page.seo_description} />
+        <script src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js" />
       </Head>
       <Script
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
@@ -39,66 +36,33 @@ export default function Feature({ page }) {
           <p className="text-[22px] text-center max-w-[610px] mx-auto">
             {page.hero_text}
           </p>
-          <div className="border shadow-xl shadow-grey rounded-[20px] w-full mx-auto p-10 flex flex-row items-center justify-center gap-2">
-            <div className="w-[445px] flex flex-col items-start justify-center gap-5">
-              <div>
-                <h1 className="text-center text-[26px] font-bold">
-                  {page.blog_title}
-                </h1>
-                <p className="text-[16px] text-start max-w-[350px] px-5">
-                  {page.blog_text}
-                </p>
-              </div>
-
-              <div className="bg-[#EBF5F7] w-full  h-[500px] flex flex-col gap-2 p-5 text-[#5B5B5B] ">
-                <div>
-                  <label>Email*</label>
-                  <input className="w-full bg-[#EBF5F7] border border-gray-500" />
-                </div>
-                <div>
-                  <label>Contact Number*</label>
-                  <input className="w-full bg-[#EBF5F7] border border-gray-500" />
-                </div>
-                <div>
-                  <label>First name</label>
-                  <input className="w-full bg-[#EBF5F7] border border-gray-500" />
-                </div>
-                <div>
-                  <label>Last name</label>
-                  <input className="w-full bg-[#EBF5F7] border border-gray-500" />
-                </div>
-                <div>
-                  <label>Business Name</label>
-                  <input className="w-full bg-[#EBF5F7] border border-gray-500" />
-                </div>
-                <div>
-                  <label>Message</label>
-                  <textarea className="w-full bg-[#EBF5F7] border border-gray-500 max-h-14" />
-                </div>
-                <img src={PrivacyImage.src} className="w-36" />
-                <button className="bg-[#4FB7FF] px-2 py-1 w-20 font-bold border rounded-lg">
-                  submit
-                </button>
-              </div>
-            </div>
-            <div className="w-[369px] h-[610px] bg-[#3A516B] flex flex-col items-center justify-start  gap-5 py-10 ">
-              <img src={Luke.src} className="w-20 h-20" />
-              <p className="text-white text-[20px]">
-                Meet with Luke Santamaria
-              </p>
-                <Calendar />
-            </div>
+          <div className="relative box-content h-[690px] w-[100%] aspect-[1.935979513444302] px-10 mt-10">
+            <iframe
+              className="w-[100%] h-[100%] absolute top-0 left-0 meetings-iframe-container"
+              src="https://meetings.hubspot.com/lsantamaria?embed=true"
+            ></iframe>
           </div>
         </div>
-        <Game />
+        <div className="  text-black bg-gradient-to-t from-liner to-white  ">
+          <div className="flex flex-col gap-5 max-w-[520px] mx-auto items-center justify-center">
+            <h1 className="font-bold lg:text-[54px] text-[36px] lg:leading-[60px] leading-[32px] text-center px-5 lg:px-0 font-roboto -tracking-wider">
+              Create your game for free today
+            </h1>
+            <p className="text-[16px]  px-10 mx-auto text-center leading-[23px]">
+              Elevate your marketing outcomes with branded mobile games and
+              playable ads. Create, test and iterate for free and then enjoy low
+              cost games that deliver amazing ROI.
+            </p>
+            <button className="bg-free px-4 py-2 my-10 text-black rounded-[30px]">
+              Sign Up Free
+            </button>
+          </div>
+        </div>
         <Footer />
       </div>
     </>
   );
 }
-
-
-
 
 export async function getServerSideProps(context) {
   const client = createClient();

@@ -10,7 +10,6 @@ import {Draggable} from "gsap/Draggable";
 import {InertiaPlugin} from "gsap/InertiaPlugin";
 import {MotionPathPlugin} from "gsap/MotionPathPlugin";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
-import WheelImage from '/public/images/face.png'
 
 // import Title from "@/components/UI/Elements/Title/Title";
 import Skills from './Skills.json';
@@ -90,7 +89,7 @@ export default function Wheel({page}) {
 
 
     return (
-        <>
+        <div>
             <section className={`${styles.section}`} id={'skills'} ref={container}>
                 {/* <div className={styles.blobs}>
                     <Blobs type={'v2'} classVariable={`${styles.blob} ${styles.blobV2}`}/>
@@ -115,7 +114,7 @@ export default function Wheel({page}) {
                         {page.circle_card.map((skill, index) => (
                             <div key={index}
                                  className={`${styles.circularDescriptions} ${activeIndex === index ? styles.isActive : ''}`}>
-                                <h2 className=""><span className='font-bold lg:text-[33px]  text-[12px]'>{skill.title}</span> <br /> <span className='font-bold lg:text-[20px] text-[10px] items-center justify-end '>{skill.subtitle}</span></h2>
+                                <h2 className=""><span className='font-bold lg:text-[33px] text-[12px] lg:leading-[40px] leading-[30px]'>{skill.title}</span> <br /> <span className='font-bold lg:text-[20px] text-[10px] items-center justify-end leading-[10px]'>{skill.subtitle}</span></h2>
                                 <p className="lg:text-[20px] text-[7px] text-center justify-center items-center">{skill.description}</p>
                             </div>
                         ))}
@@ -126,6 +125,6 @@ export default function Wheel({page}) {
                     <div className={`${styles.sphere} ${dragStatus === 'pressed' ? styles.isActive : ''}`}></div>
                 </div>
             </section>
-        </>
+        </div>
     )
 }

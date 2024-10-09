@@ -22,7 +22,7 @@ export default function Pay({ page }) {
           <div className=" lg:hidden block max-w-full w-full mx-auto">
             <div className="  flex flex-col items-center justify-center gap-3 bg-gradient-to-l from-liner to-white border rounded-[30px] shadow-xl shadow-grey py-5 ">
               <h1 className="font-bold text-[40px] font-roboto">{page.enterprise_title}</h1>
-              <p className="font-bold text-[18px] text-[#6F6C90]">
+              <p className=" text-[18px] text-[#6F6C90]">
                 {page.enterprise_text}
               </p>
               <button className=" border rounded-[30px] bg-black text-white px-[28px] py-[10px]">
@@ -35,7 +35,7 @@ export default function Pay({ page }) {
           <div className="flex flex-col items-center justify-center  bg-gradient-to-l from-liner to-white border rounded-[30px] shadow-xl shadow-grey py-5">
             <div className="max-w-[300px] mx-auto flex flex-col items-center gap-3">
               <h1 className="font-bold text-[40px] font-roboto">{page.enterprise_title}</h1>
-              <p className="font-bold text-[18px] text-[#6F6C90]">
+              <p className=" text-[18px] text-[#6F6C90]">
                 {page.enterprise_text}
               </p>
               <button className=" border rounded-[30px] bg-black text-white lg:px-[84px] py-[10px]">
@@ -120,7 +120,7 @@ const Blog = ({ item, page }) => {
       <div className="flex flex-col justify-center items-start gap-3">
         {text_list?.map((item, key) => {
           return (
-            <div className="text-[14px] flex flex-row items-center gap-2">
+            <div key={key} className="text-[14px] flex flex-row items-center gap-2">
               <img src={imageUrl} className="" />
               <div>
                 <h1 className="font-bold ">{item.title}</h1>
