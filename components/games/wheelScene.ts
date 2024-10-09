@@ -86,8 +86,10 @@ export default class WheelScene extends Phaser.Scene {
 
     this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + '/back3.jpg';
     this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : "/pong/" + gameType + '/star.png';
-    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : "/pong/" + gameType + '/lose.jpg';
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : "/pong/" + gameType + '/star.jpg';
+    this.params.powerUpSprite = !!this.params.powerUpSprite? this.params.powerUpSprite : "/pong/" + gameType + '/star.jpg';
 
+    
 
     this.load.image('logo', this.params.logo);
     this.load.image('background',this.params.backgroundSprite);
@@ -104,7 +106,9 @@ export default class WheelScene extends Phaser.Scene {
     this.load.image('wheel', "/pong/" + gameType + '/center-circle.png');
     this.load.image('item', "/pong/" + gameType + '/item.png');
     this.load.image('star', this.params.playerSprite);
-    this.load.image('lose', this.params.enemySprite);
+    this.load.image('star1', this.params.enemySprite);
+    this.load.image('star2', this.params.powerUpSprite);
+    this.load.image('lose', "/pong/" + gameType + '/lose.jpg');
     this.load.image('button', "/pong/" + gameType + '/spin.png');
 
     // TILE PART
@@ -264,13 +268,15 @@ export default class WheelScene extends Phaser.Scene {
       let bonusType = 'lose';
       if(p.type === "bonus"){
         if(p.amount == 10) {
+          bonusType = 'star'
           type = 'tileYellow'
         } else if(p.amount == 25) {
+          bonusType = 'star1'
           type = 'tileBlue'
         } else if(p.amount == 50) {
+          bonusType = 'star2'
           type = 'tileGreen';
         }
-        bonusType = 'star'
       }
       this.tiles.push(this.add.sprite(w/2, h/2 + offsetY, type).setDisplaySize(wheelR * 0.3 * 309 / 437, wheelR * 0.3).setOrigin(0.5, -0.35));
 
