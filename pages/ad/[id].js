@@ -267,7 +267,7 @@ export async function getServerSideProps(context) {
   const { deviceIdSignIn } = context?.query;
 
   let externalId = null;
-  let em = platform.toString();
+  let em = platform?.toString() ?? null;
 
   if (user && platform) {
     const emailAddress = decryptEmail(user, platform);

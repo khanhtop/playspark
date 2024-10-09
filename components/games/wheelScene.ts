@@ -13,7 +13,7 @@ let centerY = 0;
 let btnW = 0;
 let btnH = 0;
 let spinTimes = 5;
-let bonus = {};
+let bonus = [];
 let win_bone = [];
 let lose_bone = [];
 let win_probability = 0;
@@ -46,7 +46,9 @@ export default class WheelScene extends Phaser.Scene {
   private downUI : any;
   private arrow : any;
   private item : any;
-
+  private center: any;
+  private tiles: any[];
+  private imageTiles: any[];
 
   constructor(newGameType: string, newParams: any) {
     super();
@@ -57,6 +59,8 @@ export default class WheelScene extends Phaser.Scene {
   }
 
   preload() {
+    this.tiles = [];
+    this.imageTiles = [];
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     wheelR = w / 1.2;
@@ -78,9 +82,11 @@ export default class WheelScene extends Phaser.Scene {
 
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
 
-    console.log("Preload");
+    console.log(this.params);
 
     this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + '/back3.jpg';
+    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : "/pong/" + gameType + '/star.png';
+    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : "/pong/" + gameType + '/lose.jpg';
 
 
     this.load.image('logo', this.params.logo);
@@ -97,9 +103,16 @@ export default class WheelScene extends Phaser.Scene {
 
     this.load.image('wheel', "/pong/" + gameType + '/center-circle.png');
     this.load.image('item', "/pong/" + gameType + '/item.png');
-    this.load.image('star', "/pong/" + gameType + '/star.png');
-    this.load.image('lose', "/pong/" + gameType + '/lose.png');
+    this.load.image('star', this.params.playerSprite);
+    this.load.image('lose', this.params.enemySprite);
     this.load.image('button', "/pong/" + gameType + '/spin.png');
+
+    // TILE PART
+    this.load.image('center', "/pong/" + gameType + '/center.png');
+    this.load.image('tileRed', "/pong/" + gameType + '/tile-red.png');
+    this.load.image('tileBlue', "/pong/" + gameType + '/tile-blue.png');
+    this.load.image('tileYellow', "/pong/" + gameType + '/tile-yellow.png');
+    this.load.image('tileGreen', "/pong/" + gameType + '/tile-green.png');
 
     this.load.spritesheet('prize-anim', "/pong/" + gameType + "/prize-anim.png", { frameWidth: 160, frameHeight: 320 });
     
@@ -130,7 +143,6 @@ export default class WheelScene extends Phaser.Scene {
     
     //this.add.sprite(centerX, centerY, 'ui-center').setOrigin(0.5, 0).setDisplaySize(centerW, centerH);
     
-
     
     // this.wheel.setScale(0.65);
     let offsetY = 50;
@@ -138,9 +150,11 @@ export default class WheelScene extends Phaser.Scene {
     this.add.sprite(w / 2, h / 2 + wheelR / 2 + offsetY, 'ui-btn-down').setDisplaySize(w / 4, w / 4 * 389 / 514);
     this.outCircle = this.add.sprite(w / 2, h / 2 + offsetY, 'out-circle').setDisplaySize(wheelR, wheelR);
 
-    this.wheel=this.add.sprite(w/2, h/2 + offsetY,'wheel').setDisplaySize(wheelR * 0.8, wheelR * 0.8);
+    // this.wheel=this.add.sprite(w/2, h/2 + offsetY,'wheel').setDisplaySize(wheelR * 0.8, wheelR * 0.8);
+    this.game_text=this.add.text(10,10 + offsetY,"Tap to Spin",this.font_style).setVisible(false);
 
-    this.arrow = this.add.sprite(w / 2, h / 2 - 15 + offsetY, 'center-arrow').setDisplaySize(w / 10, w / 10 * 281 / 155);
+    this.wheel = this.add.sprite(w/2, h/2 + offsetY, 'center').setDisplaySize(wheelR * 0.16, wheelR * 0.16);
+
     
     this.item = this.add.sprite(w/2, h/2 + offsetY, 'item').setDisplaySize(wheelR * 0.7, wheelR * 0.7 * 927 / 1022);
 
@@ -168,10 +182,10 @@ export default class WheelScene extends Phaser.Scene {
         fontSize: "15px",
     }
     this.font_score={
-        font:"bold 15px Roboto",
+        fontFamily: 'customFont', 
+        fontSize: '35px', 
         align:"center",
-        color:"white",
-        fontSize: "15px",
+        fill: '#ffffff' 
     }
 
     this.font_text_style = { 
@@ -181,12 +195,7 @@ export default class WheelScene extends Phaser.Scene {
       fill: '#ffffff' 
     }
     
-    this.game_text=this.add.text(10,10 + offsetY,"Tap to Spin",this.font_style).setVisible(false);
-    // this.game_text=this.add.text(10,10,"Welcome to Spin & Win",this.font_style);
 
-    this.score_text = this.add.text(w - 70, 10 + offsetY,"Score : 0",  this.font_score).setVisible(false);
-
-    this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0);
 
     // BONUS TEXT PART
     // this.bonus_top = this.add.sprite(w/2 + 10, h / 2 - wheelR / 2 - 100 + offsetY, 'bonus').setDisplaySize(wheelR * 0.15, wheelR * 0.15);
@@ -199,10 +208,6 @@ export default class WheelScene extends Phaser.Scene {
 
     var but = this.add.image(w / 2, h / 2 + wheelR / 2 + 35 + offsetY, 'ui-btn').setDisplaySize(w / 2.5, w / 2.5 * 0.4).setOrigin(0.5, 0).setInteractive();
     but.on('pointerup', this.spinwheel, this);
-    // but.setScale(0.6);
-
-    // var btn = this.add.image(centerX, centerY + centerH - 100, 'ui-btn-down').setDisplaySize(w / 3, 50).setInteractive();
-    // btn.on('pointerup', this.spinwheel, this);
 
 
     this.music = this.sound.add('audio1');
@@ -220,51 +225,66 @@ export default class WheelScene extends Phaser.Scene {
 
     this.initGame();
 
-    bonus = {
-      0 : {
-        amount: 20,
-        type: "bonus"
-      },
-      1 : {
-        amount: 0,
-        type: "lose"
-      },
-      2 : {
-        amount: 1,
-        type: "spin"
-      },
-      3 : {
-        amount: 20,
-        type: "bonus"
-      },
-      4 : {
-        amount: 0,
-        type: "lose"
-      },
-      5 : {
-        amount: 20,
-        type: "bonus"
-      },
-      6 : {
-        amount: 0,
-        type: "lose"
-      },
-      7 : {
-        amount: 1,
-        type: "spin"
-      },
-      8 : {
-        amount: 20,
-        type: "bonus"
-      },
-      9 : {
-        amount: 0,
-        type: "lose"
-      },
+    win_probability = this.params.winProbability;
 
+    let endTileCount = 2;
+    if(win_probability <= 0.3) {
+      endTileCount = 2;
+    } else if(win_probability <= 0.6){
+      endTileCount = 4;
+    } else if(win_probability <= 0.8){
+      endTileCount = 6;
+    } else if(win_probability <= 1){
+      endTileCount = 8;
     }
 
-    win_bone = [0, 3, 5, 8]
+
+    let shuffledArr = [];
+    for(let i = 0; i < 10; i++) {
+      if(i < endTileCount) {
+        shuffledArr.push({
+          amount: 0,
+          type: "lose"
+        });
+      } else {
+        let point = Math.ceil(Math.random() * 10) % 3;
+        let scoreArry = [50, 10, 25];
+        shuffledArr.push({
+          amount: scoreArry[point],
+          type: "bonus"
+        })
+      }
+    }
+
+    bonus = shuffledArr.sort(() => Math.random() - 0.5);
+
+
+    bonus.forEach(p => {
+      let type = 'tileRed';
+      let bonusType = 'lose';
+      if(p.type === "bonus"){
+        if(p.amount == 10) {
+          type = 'tileYellow'
+        } else if(p.amount == 25) {
+          type = 'tileBlue'
+        } else if(p.amount == 50) {
+          type = 'tileGreen';
+        }
+        bonusType = 'star'
+      }
+      this.tiles.push(this.add.sprite(w/2, h/2 + offsetY, type).setDisplaySize(wheelR * 0.3 * 309 / 437, wheelR * 0.3).setOrigin(0.5, -0.35));
+
+      this.imageTiles.push(this.add.sprite(w/2, h/2 + offsetY, bonusType).setDisplaySize(wheelR * 0.1, wheelR * 0.1).setOrigin(0.5, -2.5).setFlipY(true));
+
+    })
+
+    this.arrow = this.add.sprite(w / 2, h / 2 - 15 + offsetY, 'center-arrow').setDisplaySize(w / 10, w / 10 * 281 / 155);
+
+    this.score_text = this.add.text(this.base.x, this.base.y - 25, "0",  this.font_score).setOrigin(0.5, 0.5).setVisible(true);
+
+    this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0);
+
+    win_bone = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     lose_bone = [1, 4, 6, 9]
   }
 
@@ -299,11 +319,15 @@ export default class WheelScene extends Phaser.Scene {
     let rounds = Phaser.Math.Between(5, 8);
     var degree=Phaser.Math.Between(0, deltaAmount - 1) * deltaDegree;
     
-    if(Math.random() > win_probability) {
-      degree = 9 - win_bone[Math.round(100 * Math.random()) % win_bone.length];
-    } else {
-      degree = 9 - lose_bone[Math.round(100 * Math.random()) % lose_bone.length];
-    }
+    // if(Math.random() > win_probability) {
+    //   degree = 9 - win_bone[Math.round(100 * Math.random()) % win_bone.length];
+    // } else {
+    //   degree = 9 - lose_bone[Math.round(100 * Math.random()) % lose_bone.length];
+    // }
+
+    degree = win_bone[Math.round(100 * Math.random()) % win_bone.length];
+
+
     console.log(degree, "--------------selelct", bonus[degree])
 
     degree = degree * deltaDegree;
@@ -337,32 +361,14 @@ export default class WheelScene extends Phaser.Scene {
 
     if(type == 'bonus') {
 
-      // this.bonus_top.setScale(0)
-      // .setAlpha(0)
-
-      // this.tweens.add({
-      //   targets: this.bonus_top,
-      //   scaleX: 0.2, // Scale to 1 (original size)
-      //   scaleY: 0.2,
-      //   alpha: 1, // Fade in to full opacity
-      //   duration: 600, // Duration of the animation in milliseconds
-      //   ease: 'Bounce', // Easing function for a bouncing effect
-      // });
-
-      // setTimeout(() => {
-      //   if(!!this.bonus_top) {
-      //     this.bonus_top.setAlpha(0);
-      //   }
-      // }, 2000);
-
-      resultText = "YOU WIN!"
+      resultText = `YOU GET + ${amount}`
       this.win.play();
       counter += amount;
       this.prizeAnim.play('prize')
 
     } else if(type == 'lose') {
       spinTimes -= amount;
-      resultText = "NO LUCK!"
+      resultText = "GAME END"
       this.lose.play();
 
     } else if(type == 'spin') {
@@ -372,7 +378,7 @@ export default class WheelScene extends Phaser.Scene {
       this.prizeAnim.play('prize')
     }
     this.game_text.setText("spins " + spinTimes);
-    this.score_text.setText("Score : " + counter);
+    this.score_text.setText(counter);
 
     this.result_text.setText(resultText);
 
@@ -394,10 +400,10 @@ export default class WheelScene extends Phaser.Scene {
       }
     }, 2000);
 
-    if(type == 'bonus') {
+    if(type == 'lose') {
       setTimeout(() => {
        this.endRound();
-      }, 4000);
+      }, 2000);
     }
   }
 
@@ -411,9 +417,18 @@ export default class WheelScene extends Phaser.Scene {
 
   }
 
+  initTilePosition() {
+    if(this.tiles.length == 10 && this.imageTiles.length == 10) {
+      this.tiles.forEach((tile, i) => {
+        const originAngle = this.wheel.angle;
+        const angle = originAngle + 360 / 10 * i + 180;
+        tile.setAngle(angle);
+        this.imageTiles[i].setAngle(angle);
+      })
+    }
+  }
 
   update(time, delta) {
-    // this.aiUpdate(time, delta);
-
+    this.initTilePosition();    
   }
 }
