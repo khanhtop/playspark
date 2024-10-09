@@ -114,7 +114,7 @@ export default function Wheel({page}) {
                         {page.circle_card.map((skill, index) => (
                             <div key={index}
                                  className={`${styles.circularDescriptions} ${activeIndex === index ? styles.isActive : ''}`}>
-                                <h2 className=""><span className='font-bold lg:text-[33px] text-[12px] lg:leading-[40px] leading-[30px]'>{skill.title}</span> <br /> <span className='font-bold lg:text-[20px] text-[10px] items-center justify-end leading-[10px]'>{skill.subtitle}</span></h2>
+                                <h2 className="flex flex-col lg:gap-5 gap-2"><span className='font-bold lg:text-[33px] text-[12px] lg:leading-[40px] leading-[10px]'>{skill.title}</span> <span className='font-medium lg:text-[20px] text-[10px] items-center justify-end lg:leading-[30px] leading-[10px]'>{skill.subtitle}</span></h2>
                                 <p className="lg:text-[20px] text-[7px] text-center justify-center items-center">{skill.description}</p>
                             </div>
                         ))}

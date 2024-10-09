@@ -20,7 +20,7 @@ export default function Demo({ page }) {
           {page.demo_text}
         </p>
       </div>
-      <div className=" relative box-content max-h-[80svh] w-[100%] aspect-[1.935979513444302] px-10 py-0">
+      <div className=" relative box-content max-h-[80svh] w-[100%] lg:max-w-full  max-w-[430px] aspect-[1.935979513444302] ">
         <iframe
           src="https://app.supademo.com/embed/cm21dmk9l1pe113b3b9xs68g5?embed_v=2"
           loading="lazy"

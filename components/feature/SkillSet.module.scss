@@ -11,7 +11,7 @@
   // padding: var(--x-spacing) 0;
   background: white;
   padding-top: 80px;
-  padding-bottom: 100px;
+  padding-bottom: 10px;
   }
 
   
@@ -189,9 +189,9 @@
     opacity: 0;
     transition: all 0.3s ease-in-out;
     @include respond-below(sm) {
-      padding: 0 1.5rem;
-      top: calc(var(--cardSize));
-      gap: 1rem;
+      padding: 0 1rem;
+      top: calc(var(--cardSize)* 1.3);
+      gap: 4px;
     }
     &.isActive {
       opacity: 1;
