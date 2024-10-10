@@ -1,31 +1,36 @@
 import { PrismicRichText } from "@prismicio/react";
 import selectImage from "../../public/images/select.png";
 import Slider from "./slider";
+import { useRouter } from "next/router";
 
 export default function WhoWeHelp({ page }) {
+  const router = useRouter();
   return (
     <div className="w-full flex flex-col bg-white from-blue-500/0 to-blue-500/10 items-center justify-center text-black pt-[90px]  px-0 lg:px-4">
       <div className="text-center flex flex-col items-center mx-auto gap-5 pb-[60px] max-w-full ">
         <button className="max-w-[226px] mx-auto text-center text-[13px] font-medium rounded-[10px] border border-[#E9E9E9] border-1 px-[10px] py-1 ">
           {page.level_sub_title}
         </button>
-        <h1 className="lg:text-[54px] text-[48px] font-bold w-full -tracking-widest leading-[40px] lg:leading-[60px] whitespace-nowrap px-2 font-roboto ">{page.level_title}</h1>
+        <h1 className="lg:text-[54px] text-[48px] font-bold w-full -tracking-widest leading-[40px] lg:leading-[60px] whitespace-nowrap px-2 font-roboto ">
+          {page.level_title}
+        </h1>
         <p className="text-[22px] my-4 mb-10 text-center lg:max-w-[535px]  max-w-[358px] mx-auto text-subtitle">
           {page.level_text}
         </p>
         <div className="lg:hidden block max-w-[430px] mx-auto">
-          <Slider items={page.level_group}  />
+          <Slider items={page.level_group} />
         </div>
-        
-          {page.level_group?.map((item, key) => {
-            return <Blog item={item} key={key} />;
-          })}
+
+        {page.level_group?.map((item, key) => {
+          return <Blog item={item} key={key} />;
+        })}
       </div>
     </div>
   );
 }
 
 const Blog = ({ item }) => {
+  const router = useRouter();
   return (
     <div className="mx-auto max-w-[924px] lg:block hidden">
       <div className=" flex flex-col-reverse lg:flex-row gap-5  shadow-xl shadow-grey border rounded-[10px] py-10">
@@ -51,8 +56,14 @@ const Blog = ({ item }) => {
         </div>
       </div>
       <div className="h-32 py-10">
+        {/* {item.button_text && (
+          showButton(item.button_text)
+        )} */}
         {item.button_text && (
-          <button className="bg-free w-[232px] text-black rounded-[30px] py-3 px-3 ">
+          <button
+            className="bg-free w-[232px] text-black rounded-[30px] py-3 px-3 "
+            onClick={() => router.push(item.button_url)}
+          >
             {item.button_text}
           </button>
         )}
@@ -63,4 +74,12 @@ const Blog = ({ item }) => {
 
 const SelectImg = () => {
   return <img src={selectImage.src} />;
+};
+
+const showButton = (item) => {
+  return (
+    <button className="bg-free w-[232px] text-black rounded-[30px] py-3 px-3 ">
+      {item}
+    </button>
+  );
 };

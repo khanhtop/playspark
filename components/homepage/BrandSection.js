@@ -3,8 +3,10 @@ import Icon from "../../public/images/Icons (3).png";
 import React from "react";
 import clsx from "clsx";
 import Ticker from "../../public/images/logos.png";
+import { useRouter } from "next/router";
 
 export default function BrandSection({ page }) {
+  const router = useRouter();
   return (
     <div>
       <div className="flex flex-col items-center justify-center  gap-10 text-black bg-white pt-[75px]">
@@ -15,7 +17,10 @@ export default function BrandSection({ page }) {
           src={Ticker.src}
           className="max-w-full lg:max-w-[774px] mx-auto lg:h-[200px] h-[100px]"
         />
-        <button className="bg-free w-[241px] text-black rounded-[30px] py-3 px-3 ">
+        <button
+          className="bg-free w-[241px] text-black rounded-[30px] py-3 px-3 "
+          onClick={() => router.push("/case-studies")}
+        >
           See Case Studies
         </button>
       </div>
@@ -41,6 +46,7 @@ export default function BrandSection({ page }) {
 }
 
 const Blog = ({ item, key, page }) => {
+  const router = useRouter();
   let className;
   let buttonColor;
   let textList;
@@ -49,17 +55,17 @@ const Blog = ({ item, key, page }) => {
     if (item.image_position == null) {
       className = "absolute right-[-30px] w-32  ";
       buttonColor = "bg-black text-white ";
-      topMargin  = "py-11"
+      topMargin = "py-11";
       textList = page.first_list;
     } else if (item.image_position == "top-right") {
       className = "absolute bottom-12 right-0   w-20";
       buttonColor = "bg-free text-black";
-      topMargin  = "pt-0"
+      topMargin = "pt-0";
       textList = page.second_list;
     } else if (item.image_position == "bottom-right") {
       className = "absolute top-12   right-[-25px] w-20";
       buttonColor = "bg-black text-white ";
-      topMargin  = "pt-0"
+      topMargin = "pt-0";
       textList = page.last_list;
     }
   }, [item.image_position]);
@@ -70,7 +76,12 @@ const Blog = ({ item, key, page }) => {
         <p className="text-[#6F6C90] text-[18px] font-bold font-roboto ">
           {item.text}
         </p>
-        <div className={clsx("flex flex-row items-center justify-start w-full relative", topMargin)}>
+        <div
+          className={clsx(
+            "flex flex-row items-center justify-start w-full relative",
+            topMargin
+          )}
+        >
           <p className="text-[54px] font-bold text-start leading-[60px] font-roboto -tracking-widest">
             {item.title}
           </p>
@@ -81,6 +92,7 @@ const Blog = ({ item, key, page }) => {
             " w-[271px] py-2 px-4 my-7 rounded-[30px]",
             buttonColor
           )}
+          onClick={() => router.push("/case-studies")}
         >
           {item.button}
         </button>
@@ -88,7 +100,7 @@ const Blog = ({ item, key, page }) => {
       <div className="flex flex-col items-start justify-start gap-5 my-2 mx-2">
         {textList?.map((item, key) => {
           return (
-            <div className="flex flex-row items-start justify-start">
+            <div className="flex flex-row items-start justify-start" key={key}>
               <IconImage />
               <div className="flex flex-col justify-center items-start">
                 <p className="font-bold text-[14px] ">{item.maintext}</p>

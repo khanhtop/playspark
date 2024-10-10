@@ -16,7 +16,7 @@ export default function Navbar() {
     <div>
       <div className="z-20 fixed top-0 left-0 w-full  bg-white/90 backdrop-blur ">
         <div className=" mx-auto h-[80px] lg:max-w-[1200px] max-w-[430px]  text-black hidden lg:flex items-center justify-between  lg:px-10 px-5">
-          <img src={header_logo.src} className="h-full" />
+          <img src={header_logo.src} className="h-full cursor-pointer" onClick={() => router.push("/")} />
           <div className="flex items-center justify-center gap-6 ">
             <Link
               className={`${
@@ -56,9 +56,12 @@ export default function Navbar() {
               } hover:text-sky-600`}
               href="/blog"
             >
-              Docs
+              Blog
             </Link>
-            <button className="bg-free px-4 py-2  text-black font-bold rounded-lg">
+            <button
+              className="bg-free px-4 py-2  text-black font-bold rounded-lg "
+              onClick={() => router.push("/admin")}
+            >
               {" "}
               Get for free
             </button>
@@ -80,7 +83,7 @@ export default function Navbar() {
       >
         <div className="px-8">
           <div className="h-17 flex items-center justify-between w-full ">
-            <img src={header_logo.src} className=" h-full" />
+            <img src={header_logo.src} className=" h-full cursor-pointer" onClick={() => router.push("/admin")} />
             {navOpen ? (
               <XMarkIcon
                 onClick={() => setNavOpen(false)}

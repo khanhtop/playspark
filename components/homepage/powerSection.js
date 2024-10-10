@@ -20,7 +20,10 @@ export default function PowerSection({ page }) {
             <Element item={item} key={key} />
           ))}
         </div>
-        <button className="bg-free w-[241px] text-black rounded-[30px] py-3 px-3 ">
+        <button
+          className="bg-free w-[241px] text-black rounded-[30px] py-3 px-3 "
+          onClick={() => router.push("/admin")}
+        >
           {page.power_button_2}
         </button>
       </div>
