@@ -18,18 +18,18 @@ module.exports = {
         anton: ["var(--font-anton)"],
         octo: ["var(--font-octo)"],
         octolight: ["var(--font-octolight)"],
-        Sans : ["var(--font-DM Sans)"]
+        Sans: ["var(--font-DM Sans)"],
       },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        free : "#11F87B",
+        subtitle: "#6F6C90",
+        free: "#36FA61",
         back: "#3EF8ED",
-        work : "#2FE5A7",
-        button_level : "#55FFF5",
-        power_bg : "#F7F7F7",
-        liner : "#55FFF5",
-        footer : "#484A4A"
+        work: "#2FE5A7",
+        power_bg: "#F7F7F7",
+        liner: "#55FFF5",
+        footer: "#484A4A",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

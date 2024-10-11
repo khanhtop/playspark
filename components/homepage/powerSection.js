@@ -12,7 +12,7 @@ export default function PowerSection({ page }) {
         <button className="text-center text-[13px] rounded-[10px] border border-black border-1 px-3 py-1 mt-24 ">
           {page.power_button_1}
         </button>
-        <h1 className="text-6xl font-bold text-black -tracking-[3px]">
+        <h1 className="text-6xl font-bold text-black -tracking-[3px] font-roboto">
           {page.power_title}
         </h1>
         <div className="flex flex-col lg:flex-row gap-4 mt-8 w- ">
@@ -20,7 +20,7 @@ export default function PowerSection({ page }) {
             <Element item={item} key={key} />
           ))}
         </div>
-        <button className="bg-button_level w-[241px] text-black rounded-[30px] py-3 px-3 ">
+        <button className="bg-free w-[241px] text-black rounded-[30px] py-3 px-3 ">
           {page.power_button_2}
         </button>
       </div>

@@ -8,14 +8,14 @@ export default function WhatWeDo({ page }) {
           src={backImg.src}
           className="max-w-full lg:max-w-[774px] mx-auto lg:h-[166px] h-[100px] my-3"
         />
-        <h1 className=" text-5xl lg:text-6xl font-bold text-black max-w-[400px] lg:max-w-[590px] lg:mt-22">
+        <h1 className=" text-5xl lg:text-6xl font-bold text-black  max-w-[400px] lg:max-w-[590px] lg:mt-22 leading-[60px] font-roboto -tracking-wider  ">
           {page.what_we_do_title}
         </h1>
         <div className="flex flex-col gap-0 text-center text-xl font-light mx-auto max-w-[373px] lg:max-w-[668px] lg:px-10 text-black">
-          <p className="text-center text-[22px] font-light mx-auto max-w-[373px] lg:max-w-[668px]  text-black">
+          <p className="text-center text-[22px] font-light mx-auto max-w-[373px] lg:max-w-[668px]  text-subtitle">
             {page.what_we_do_text}
           </p>
-          <p className="text-center text-[22px] font-light mx-auto max-w-[373px] lg:max-w-[668px] text-black">
+          <p className="text-center text-[22px] font-light mx-auto max-w-[373px] lg:max-w-[668px] text-subtitle">
             {page.what_we_do_text_1}
           </p>
         </div>
@@ -27,7 +27,7 @@ export default function WhatWeDo({ page }) {
             <Element item={item} key={key} />
           ))}
         </div>
-        <button className="px-8 py-4 flex items-center justify-center text-center font-medium text-[16px] text-white bg-work rounded-[30px]">
+        <button className="px-8 py-4 flex items-center justify-center text-center font-medium text-[16px] text-black bg-free rounded-[30px]">
           See How It Works{" "}
         </button>
       </div>
