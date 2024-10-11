@@ -41,7 +41,7 @@ export default function Blog({ blogs }) {
         <meta property="og:url" content={"https://playspark.co/blog"} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className=" flex flex-col  min-w-[430px] mx-auto">
+      <div className=" flex flex-col  h-auto mx-auto w-full max-w-full">
         <Navbar />
 
         {/* <div className="flex-1 pt-32 px-4 grid grid-cols-1 md:grid-cols-3 md:gap-x-[32px] lg:gap-y-[48px] gap-y-[32px]">

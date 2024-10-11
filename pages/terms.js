@@ -10,7 +10,7 @@ export default function Terms() {
 
   return (
     <>
-      <div className="h-screen overflow-y-scroll  min-w-[430px] mx-auto bg-white">
+      <div className="h-auto mx-auto w-full max-w-full bg-white">
         <Navbar />
         <div className="flex flex-row items-start justify-start mt-[150px] max-w-[890px] mx-auto gap-20 text-[16px]">
           <div className="flex flex-col w-1/5 items-center justify-center text-start gap-24">

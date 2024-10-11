@@ -15,8 +15,12 @@ export default function Navbar() {
   return (
     <div>
       <div className="z-20 fixed top-0 left-0 w-full  bg-white/90 backdrop-blur ">
-        <div className=" mx-auto h-[80px] lg:max-w-[1200px] max-w-[430px]  text-black hidden lg:flex items-center justify-between  lg:px-10 px-5">
-          <img src={header_logo.src} className="h-full cursor-pointer" onClick={() => router.push("/")} />
+        <div className=" mx-auto h-[80px] max-w-[1200px] text-black hidden lg:flex items-center justify-between  px-10">
+          <img
+            src={header_logo.src}
+            className="h-full cursor-pointer"
+            onClick={() => router.push("/")}
+          />
           <div className="flex items-center justify-center gap-6 ">
             <Link
               className={`${
@@ -79,53 +83,55 @@ export default function Navbar() {
           height: navOpen ? 350 : 100,
           transition: "0.25s height ease-in-out",
         }}
-        className="z-20 fixed top-0 left-0 w-full text-black flex flex-col overflow-hidden lg:hidden  bg-white/100 backdrop-blur"
+        className="z-20 fixed top-0 left-0 w-full mx-auto text-black flex flex-col overflow-hidden lg:hidden  bg-white/100 backdrop-blur"
       >
-        <div className="px-8">
-          <div className="h-17 flex items-center justify-between w-full ">
-            <img src={header_logo.src} className=" h-full cursor-pointer" onClick={() => router.push("/admin")} />
-            {navOpen ? (
-              <XMarkIcon
-                onClick={() => setNavOpen(false)}
-                className="h-12 w-12 text-black"
-              />
-            ) : (
-              <Bars3Icon
-                onClick={() => setNavOpen(true)}
-                className="h-12 w-12 text-black"
-              />
-            )}
-          </div>
-          <div className="flex flex-col gap-2 font-bold  px-3">
-            <Link
+        <div className="h-17 flex items-center justify-between w-full mx-auto px-5">
+          <img
+            src={header_logo.src}
+            className=" h-full cursor-pointer"
+            onClick={() => router.push("/admin")}
+          />
+          {navOpen ? (
+            <XMarkIcon
               onClick={() => setNavOpen(false)}
-              className="hover:text-sky-600"
-              href="/"
-            >
-              Home
-            </Link>
-            <Link onClick={() => setNavOpen(false)} href="/products">
-              Products
-            </Link>
-            <Link onClick={() => setNavOpen(false)} href="/pricing">
-              Pricing
-            </Link>
-            <Link onClick={() => setNavOpen(false)} href="/case-studies">
-              Case Studies
-            </Link>
-            <Link onClick={() => setNavOpen(false)} href="/blog">
-              Blog
-            </Link>
-            <button
-              onClick={() => {
-                router.push("/admin");
-                setNavOpen(false);
-              }}
-              className="mt-2 bg-sky-500 px-4 py-2 text-white rounded-lg"
-            >
-              Free Demo
-            </button>
-          </div>
+              className="h-12 w-12 text-black"
+            />
+          ) : (
+            <Bars3Icon
+              onClick={() => setNavOpen(true)}
+              className="h-12 w-12 text-black"
+            />
+          )}
+        </div>
+        <div className="flex flex-col gap-2 font-bold  px-3">
+          <Link
+            onClick={() => setNavOpen(false)}
+            className="hover:text-sky-600"
+            href="/"
+          >
+            Home
+          </Link>
+          <Link onClick={() => setNavOpen(false)} href="/products">
+            Products
+          </Link>
+          <Link onClick={() => setNavOpen(false)} href="/pricing">
+            Pricing
+          </Link>
+          <Link onClick={() => setNavOpen(false)} href="/case-studies">
+            Case Studies
+          </Link>
+          <Link onClick={() => setNavOpen(false)} href="/blog">
+            Blog
+          </Link>
+          <button
+            onClick={() => {
+              router.push("/admin");
+              setNavOpen(false);
+            }}
+            className="mt-2 bg-sky-500 px-4 py-2 text-white rounded-lg"
+          >
+            Free Demo
+          </button>
         </div>
       </div>
     </div>
