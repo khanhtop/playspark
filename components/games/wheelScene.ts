@@ -19,6 +19,20 @@ let lose_bone = [];
 let win_probability = 0;
 let isSpinBtn = false;
 
+let fontUrl = "/pong/TitanOne-Regular.ttf";
+const font = new FontFace('customFont', `url(${fontUrl})`);
+font.load().then(() => {
+  // Font loaded successfully
+  document.fonts.add(font);
+
+  // this.result_text.setStyle(this.font_text_style);
+  // this.score_text.setStyle(this.font_score);
+
+}).catch((error) => {
+  // Font failed to load
+  console.log('Failed to load font:', error);
+});
+
 export default class WheelScene extends Phaser.Scene {
   public static instance: WheelScene;
   private bg : any;
@@ -70,15 +84,20 @@ export default class WheelScene extends Phaser.Scene {
     centerX = w / 2;
     centerY = h * 0.05;
 
-    let fontUrl = "/pong/" + gameType + '/TitanOne-Regular.ttf';
-    const font = new FontFace('customFont', `url(${fontUrl})`);
-    font.load().then(() => {
-      // Font loaded successfully
-      document.fonts.add(font);
-    }).catch((error) => {
-      // Font failed to load
-      console.log('Failed to load font:', error);
-    });
+    // let fontUrl = "/pong/TitanOne-Regular.ttf";
+    // const font = new FontFace('customFont', `url(${fontUrl})`);
+    // font.load().then(() => {
+    //   // Font loaded successfully
+    //   document.fonts.add(font);
+
+    //   this.result_text.setStyle(this.font_text_style);
+    //   this.score_text.setStyle(this.font_score);
+
+    // }).catch((error) => {
+    //   // Font failed to load
+    //   console.log('Failed to load font:', error);
+    // });
+
 
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
 
@@ -196,7 +215,7 @@ export default class WheelScene extends Phaser.Scene {
       fontFamily: 'customFont', 
       fontSize: '58px', 
       align:"center",
-      fill: '#ffffff' 
+      fill: '#ffffff',
     }
     
 
@@ -288,7 +307,7 @@ export default class WheelScene extends Phaser.Scene {
 
     this.score_text = this.add.text(this.base.x, this.base.y - 25, "0",  this.font_score).setOrigin(0.5, 0.5).setVisible(true);
 
-    this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0);
+    this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0).setStroke('#000000', 2);;
 
     win_bone = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     lose_bone = [1, 4, 6, 9]
@@ -310,6 +329,8 @@ export default class WheelScene extends Phaser.Scene {
   public spinwheel(){
     if(isSpinBtn) return;
     isSpinBtn = true;
+
+    this.prizeAnim.setVisible(false);
 
     win_probability = this.params.winProbability;
     console.log(this.params.winProbability)
@@ -367,20 +388,22 @@ export default class WheelScene extends Phaser.Scene {
 
     if(type == 'bonus') {
 
-      resultText = `YOU GET + ${amount}`
+      resultText = `${amount}`
       this.win.play();
       counter += amount;
+      this.prizeAnim.setVisible(true);
       this.prizeAnim.play('prize')
 
     } else if(type == 'lose') {
       spinTimes -= amount;
-      resultText = "GAME END"
+      resultText = "GAME OVER"
       this.lose.play();
 
     } else if(type == 'spin') {
       resultText = "SPIN AGAIN!"
       spinTimes += amount;
       this.bonus.play();
+      this.prizeAnim.setVisible(true);
       this.prizeAnim.play('prize')
     }
     this.game_text.setText("spins " + spinTimes);
