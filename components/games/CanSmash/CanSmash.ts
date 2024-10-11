@@ -41,8 +41,6 @@ import { CustomLoadingScreen } from "./CustomLoadingScreen";
 
 const CanSmash = (data: any) => {
   useEffect(() => {
-    console.log(data);
-
     let timerHandle = null;
     Events.gamePlay.add((_data: any) => {
       timerHandle = ShowWraperGameOver(_data, timerHandle, data);

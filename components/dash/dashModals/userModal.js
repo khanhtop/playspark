@@ -7,8 +7,6 @@ import { Card } from "flowbite-react";
 export default function UserModal({ onClose, data, clientId }) {
   const [rewards, setRewards] = useState(null);
 
-  console.log(rewards);
-
   const fetchRewards = async () => {
     try {
       const rewardsRef = collection(firestore, "users", data.id, "rewards");

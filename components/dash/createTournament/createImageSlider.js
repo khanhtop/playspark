@@ -84,7 +84,7 @@ export default function CreateImageSlider({
               }, 2000);
             }
           }}
-          onFailure={(a) => console.log(a)}
+          onFailure={() => null}
           customPublicId={"sample"}
           use_filename={false}
           destroy={false}

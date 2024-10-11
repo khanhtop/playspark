@@ -1,5 +1,4 @@
 export default function Game({ page }) {
-  console.log(page);
   return (
     <div className="w-full lg:relative bg-gradient-to-t from-liner to-white lg:bg-none">
       <img

@@ -1,9 +1,9 @@
 import Advert from "@/components/ad";
-import { getClient, getDemo } from "@/helpers/api";
+import { getAd, getClient, getDemo } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 import { useState } from "react";
 
-export default function Demo({ ad, id, client }) {
+export default function PlayableAd({ ad, id, client }) {
   const context = useAppContext();
   const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
   return (
@@ -29,12 +29,11 @@ export default function Demo({ ad, id, client }) {
 
 export async function getServerSideProps(context) {
   // Get the ad from the id here:
-  const ad = await getDemo(context.query?.id);
-  // const client = await getClient(ad.ownerId);
+  const ad = await getAd(context.query?.id);
   return {
     props: {
       id: context.query?.id,
-      ad: { ...ad, theme: "default", demo: true, isActive: true },
+      ad: { ...ad, theme: "default", isActive: true },
     },
   };
 }

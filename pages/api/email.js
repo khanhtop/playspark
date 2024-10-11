@@ -29,8 +29,6 @@ export default async function handler(req, res) {
     react: templates[template],
   });
 
-  console.log(response);
-
   return res.status(200).json({ status: "success" });
 }
 

@@ -12,14 +12,12 @@ export default function ReimagePicker({
   const [loading, setLoading] = useState(false);
   const [aspect, setAspect] = useState(aspectRatio);
 
-  console.log(aspect);
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
       setLoading(true);
       const { original, width, height } = await reimageUpload({ file: file });
       setAspect(width / height);
-      console.log(original);
       setFile(original);
       setLoading(false);
       //   setUploading(true);

@@ -17,7 +17,6 @@ export default function Carousel() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleSlideChange = (swiper) => {
-    console.log(activeIndex);
     setActiveIndex(swiper.activeIndex);
   };
   return (
