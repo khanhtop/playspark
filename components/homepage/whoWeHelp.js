@@ -9,8 +9,8 @@ export default function WhoWeHelp({ page }) {
         <button className="max-w-[226px] mx-auto text-center text-[13px] font-medium rounded-[10px] border border-[#E9E9E9] border-1 px-[10px] py-1 ">
           {page.level_sub_title}
         </button>
-        <h1 className="lg:text-[54px] text-[48px] font-bold w-full -tracking-[3px] leading-[40px] lg:leading-[60px] whitespace-nowrap px-2">{page.level_title}</h1>
-        <p className="text-[22px] my-4 mb-10 text-center lg:max-w-[535px]  max-w-[358px] mx-auto ">
+        <h1 className="lg:text-[54px] text-[48px] font-bold w-full -tracking-widest leading-[40px] lg:leading-[60px] whitespace-nowrap px-2 font-roboto ">{page.level_title}</h1>
+        <p className="text-[22px] my-4 mb-10 text-center lg:max-w-[535px]  max-w-[358px] mx-auto text-subtitle">
           {page.level_text}
         </p>
         <div className="lg:hidden block max-w-[430px] mx-auto">
@@ -52,7 +52,7 @@ const Blog = ({ item }) => {
       </div>
       <div className="h-32 py-10">
         {item.button_text && (
-          <button className="bg-button_level w-[232px] text-black rounded-[30px] py-3 px-3 ">
+          <button className="bg-free w-[232px] text-black rounded-[30px] py-3 px-3 ">
             {item.button_text}
           </button>
         )}

@@ -20,8 +20,6 @@ const handler = async (req, res) => {
       body: JSON.stringify(slackMessage),
     });
 
-    console.log(response);
-
     if (!response.ok) {
       const errorData = await response.text();
       return res.status(response.status).json({ error: errorData });

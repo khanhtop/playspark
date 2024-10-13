@@ -10,7 +10,6 @@ import NewVideoPicker from "@/components/forms/newVideoPicker";
 import MuxUploader from "@/components/forms/muxUploader";
 
 function MarketingCard({ title, cardState, onSetCardState, children, large }) {
-  console.log(cardState);
   return (
     <Card className={`${large ? "h-auto" : "h-60"} rounded-xl`}>
       <div className="h-full flex flex-col">

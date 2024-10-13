@@ -15,12 +15,14 @@ import {
 import GameListModal from "./dashModals/gameListModal";
 import PlayableAdListModal from "./dashModals/playableAdListModal";
 import CreateModal from "./createTournament/createModal";
+import CreateModalPlayableAd from "./createTournament/createModalPlayableAd";
 
 export default function Dashboard({}) {
   const context = useAppContext();
   const [showCreateGameModal, setShowCreateGameModal] = useState(false);
   const [showCreateAdModal, setShowCreateAdModal] = useState(false);
   const [showAddTournamentModal, setShowAddTournamentModal] = useState(false);
+  const [showAddPlayableAdModal, setShowAddPlayableAdModal] = useState(false);
   const [impressions, setImpressions] = useState();
   const [plays, setPlays] = useState();
   const [ctr, setCtr] = useState();
@@ -137,12 +139,25 @@ export default function Dashboard({}) {
         />
       )}
       {showCreateAdModal && (
-        <PlayableAdListModal onClose={() => setShowCreateAdModal(false)} />
+        <PlayableAdListModal
+          onClose={() => setShowCreateAdModal(false)}
+          onAdd={(item) => {
+            setShowAddPlayableAdModal(item);
+            setShowCreateAdModal(false);
+          }}
+        />
       )}
       {showAddTournamentModal && (
         <CreateModal
           hide={() => setShowAddTournamentModal(false)}
           data={showAddTournamentModal}
+        />
+      )}
+
+      {showAddPlayableAdModal && (
+        <CreateModalPlayableAd
+          hide={() => setShowAddPlayableAdModal(false)}
+          data={showAddPlayableAdModal}
         />
       )}
       {/* <CreditsPanel /> */}

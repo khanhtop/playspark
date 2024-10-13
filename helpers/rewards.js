@@ -28,7 +28,6 @@ export function groupRewards(rewards) {
 }
 
 export function groupPrizes(rewards) {
-  console.log(rewards);
   if (!rewards) return [];
   let out = [];
   for (let elem of rewards) {

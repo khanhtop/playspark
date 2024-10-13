@@ -41,7 +41,7 @@ export default function Blog({ blogs }) {
         <meta property="og:url" content={"https://playspark.co/blog"} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className=" flex flex-col max-w-[1200px] min-w-[430px] mx-auto">
+      <div className=" flex flex-col  min-w-[430px] mx-auto">
         <Navbar />
 
         {/* <div className="flex-1 pt-32 px-4 grid grid-cols-1 md:grid-cols-3 md:gap-x-[32px] lg:gap-y-[48px] gap-y-[32px]">
@@ -59,7 +59,7 @@ export default function Blog({ blogs }) {
           setCurrentPage={setCurrentPage}
         /> */}
         <div className="flex flex-col items-center justify-center pt-[119px] bg-white">
-            <h1 className="text-[64px] font-bold text-center">
+            <h1 className="text-[64px] font-bold text-center font-roboto">
               {blogs.title}
             </h1>
             <div className="flex lg:flex-row flex-col  gap-12 lg:px-[140px] mt-10">
@@ -81,7 +81,7 @@ const Item = ({item}) => {
   let buttonColor
   useMemo(()=>{
     if(item.blog_button == "Read More"){
-      buttonColor = "bg-[#2FE5A7] text-black"
+      buttonColor = "bg-free text-black"
     }
     else {
       buttonColor = " bg-[#364153] text-white"

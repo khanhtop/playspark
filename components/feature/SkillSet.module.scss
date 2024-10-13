@@ -2,8 +2,19 @@
 
 .section {
   position: relative;
-  padding: var(--x-spacing) 0;
+  // padding: var(--x-spacing) 0;
   background: white;
+  padding-top: 150px;
+
+  @include respond-below(sm) {
+    position: relative;
+  // padding: var(--x-spacing) 0;
+  background: white;
+  padding-top: 80px;
+  padding-bottom: 10px;
+  }
+
+  
 }
 .grid {
   display: grid;
@@ -15,7 +26,7 @@
 }
 
 .sphereWrapper {
-  --size: 16dvw;
+  --size: 13dvw;
   position: absolute;
   bottom: calc(-1 * var(--size) / 2);
   left: calc(50% - var(--size) / 2);
@@ -110,7 +121,7 @@
   padding: calc(var(--cardSize) / 2);
   margin: 0 auto 0 auto;
   width: fit-content;
-  height: calc(var(--circSize) * 0.66);
+  height: calc(var(--circSize) * 0.7);
   overflow: hidden;
 
   @include respond-below(xl) {
@@ -151,7 +162,7 @@
     border-radius: 2rem;
 
     .image {
-      max-width: calc(var(--cardSize) - (var(--cardSize) / 2));
+      max-width: calc(var(--cardSize) );
     }
   }
   .collisionDiv {
@@ -167,7 +178,7 @@
   .circularDescriptions {
     position: absolute;
     left: 50%;
-    top: calc(var(--cardSize) * 1.1);
+    top: calc(var(--cardSize) * 1.4);
     transform: translate(-50%, 20%);
 
     display: flex;
@@ -178,9 +189,9 @@
     opacity: 0;
     transition: all 0.3s ease-in-out;
     @include respond-below(sm) {
-      padding: 0 1.5rem;
-      top: calc(var(--cardSize));
-      gap: 1rem;
+      padding: 0 1rem;
+      top: calc(var(--cardSize)* 1.3);
+      gap: 4px;
     }
     &.isActive {
       opacity: 1;

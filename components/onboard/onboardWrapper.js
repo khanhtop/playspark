@@ -29,10 +29,6 @@ export default function OnboardWrapper({ children }) {
     });
   };
 
-  useEffect(() => {
-    console.log(companyName, purpose);
-  }, [companyName, purpose]);
-
   if (!context.profile) {
     return <div className="h-screen w-screen bg-black" />;
   } else if (context?.profile?.hasOnboarded) {

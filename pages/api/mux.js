@@ -12,7 +12,6 @@ export default function handler(req, res) {
     },
   })
     .then((upload) => {
-      console.log("UP", upload);
       res.send(JSON.stringify(upload));
     })
     .catch((e) => console.log(e));

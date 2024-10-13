@@ -27,8 +27,6 @@ export default function Ad({
   const subscriptionRef = useRef(null);
   const [deviceId, setDeviceId] = useState(null);
 
-  console.log("EMAIL", em, externalId);
-
   function generateUUID() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
       /[xy]/g,
@@ -148,7 +146,6 @@ export default function Ad({
         !context?.profile?.isAdmin)
     ) {
       const uuid = getDeviceID();
-      console.log(uuid);
 
       if (uuid !== null) {
         const emailStructure = uuid + "@playspark.co";
@@ -279,6 +276,8 @@ export async function getServerSideProps(context) {
 
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);
+
+  console.log(client);
 
   return {
     props: {

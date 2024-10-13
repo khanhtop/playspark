@@ -15,8 +15,6 @@
 // }
 
 export function getImageWithSize(url, height, width) {
-  console.log(url);
-
   if (height && width) {
     return url.replace(
       "original",

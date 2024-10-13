@@ -18,7 +18,7 @@ export default function Footer() {
 
   return (
     <div className="px-5 pt-10  font-light bg-[#484A4A] text-white">
-      <div className="w-full flex flex-col lg:flex-row justify-center  max-w-[1400px] lg:max-h-[238px] pb-10 px-5 ">
+      <div className="w-full flex flex-col lg:flex-row justify-center   lg:max-h-[238px] pb-10 px-5 ">
         <div className="w-1/2 flex flex-col items-start justify-between gap-6">
           <img
             src={footer_logo.src}

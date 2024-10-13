@@ -13,22 +13,22 @@ export default function Navbar() {
   };
 
   return (
-    <>
-      <div className="z-20 fixed top-0 left-0 w-full ">
-        <div className="max-w-[1200px] mx-auto h-[80px] text-black hidden lg:flex items-center justify-between  lg:px-16 px-5 bg-white/90 backdrop-blur">
+    <div>
+      <div className="z-20 fixed top-0 left-0 w-full  bg-white/90 backdrop-blur ">
+        <div className=" mx-auto h-[80px] lg:max-w-[1200px] max-w-[430px]  text-black hidden lg:flex items-center justify-between  lg:px-10 px-5">
           <img src={header_logo.src} className="h-full" />
-          <div className="flex items-center justify-center gap-6 font-bold">
+          <div className="flex items-center justify-center gap-6 ">
             <Link
               className={`${
-                isCurrent("/") ? "text-sky-600" : "text-black"
+                isCurrent("/") ? "text-sky-600" : "text-[#666666]"
               } hover:text-sky-600`}
               href="/"
             >
-              Home
+              About
             </Link>
             <Link
               className={`${
-                isCurrent("/products") ? "text-sky-600" : "text-black"
+                isCurrent("/products") ? "text-sky-600" : "text-[#666666]"
               } hover:text-sky-600`}
               href="/products"
             >
@@ -36,7 +36,7 @@ export default function Navbar() {
             </Link>
             <Link
               className={`${
-                isCurrent("/pricing") ? "text-sky-600" : "text-black"
+                isCurrent("/pricing") ? "text-sky-600" : "text-[#666666]"
               } hover:text-sky-600`}
               href="/pricing"
             >
@@ -44,7 +44,7 @@ export default function Navbar() {
             </Link>
             <Link
               className={`${
-                isCurrent("/case-studies") ? "text-sky-600" : "text-black"
+                isCurrent("/case-studies") ? "text-sky-600" : "text-[#666666]"
               } hover:text-sky-600`}
               href="/case-studies"
             >
@@ -52,13 +52,13 @@ export default function Navbar() {
             </Link>
             <Link
               className={`${
-                isCurrent("/blog") ? "text-sky-600" : "text-black"
+                isCurrent("/blog") ? "text-sky-600" : "text-[#666666]"
               } hover:text-sky-600`}
               href="/blog"
             >
               Docs
             </Link>
-            <button className="bg-free px-4 py-2  text-black rounded-lg">
+            <button className="bg-free px-4 py-2  text-black font-bold rounded-lg">
               {" "}
               Get for free
             </button>
@@ -125,6 +125,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

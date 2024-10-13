@@ -86,7 +86,6 @@ export default function Intro({
   }, []);
 
   useEffect(() => {
-    console.log(context.settings.bgm);
     if (context.settings.bgm && !isAudioPlaying) {
       playAudio();
     } else if (!context.settings.bgm) {
