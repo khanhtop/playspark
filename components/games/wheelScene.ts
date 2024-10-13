@@ -307,7 +307,7 @@ export default class WheelScene extends Phaser.Scene {
 
     this.score_text = this.add.text(this.base.x, this.base.y - 25, "0",  this.font_score).setOrigin(0.5, 0.5).setVisible(true);
 
-    this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0).setStroke('#000000', 2);;
+    this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0).setStroke('#000000', 10);;
 
     win_bone = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     lose_bone = [1, 4, 6, 9]
@@ -388,7 +388,7 @@ export default class WheelScene extends Phaser.Scene {
 
     if(type == 'bonus') {
 
-      resultText = `${amount}`
+      resultText = `+ ${amount}`
       this.win.play();
       counter += amount;
       this.prizeAnim.setVisible(true);
@@ -407,7 +407,7 @@ export default class WheelScene extends Phaser.Scene {
       this.prizeAnim.play('prize')
     }
     this.game_text.setText("spins " + spinTimes);
-    this.score_text.setText(counter);
+    this.score_text.setText(`${ counter }`);
 
     this.result_text.setText(resultText);
 
