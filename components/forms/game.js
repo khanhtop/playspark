@@ -1,4 +1,6 @@
+import { useRouter } from "next/router";
 export default function Game({ page }) {
+  const router = useRouter();
   return (
     <div className="  text-black bg-gradient-to-t from-liner to-white pt-[132px] ">
       <div className="flex flex-col gap-5 max-w-[520px] mx-auto items-center justify-center">
@@ -10,7 +12,9 @@ export default function Game({ page }) {
           ads. Create, test and iterate for free and then enjoy low cost games
           that deliver amazing ROI.
         </p>
-        <button className="bg-free px-4 py-2 my-10 text-black rounded-[30px]">
+        <button className="bg-free px-4 py-2 my-10 text-black rounded-[30px]"
+        onClick={() => router.push("/admin")}
+        >
           Sign Up Free
         </button>
       </div>

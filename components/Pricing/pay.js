@@ -4,8 +4,10 @@ import clsx from "clsx";
 import { Badge } from "flowbite-react";
 import checkImgWhite from "/public/images/check_white.png";
 import checkImgBlack from "/public/images/check_black.png";
+import { useRouter } from "next/router";
 
 export default function Pay({ page }) {
+  const router = useRouter();
   return (
     <div className=" pt-[154px] pb-10 bg-white ">
       <div className=" flex flex-col items-center justify-center gap-10">
@@ -21,11 +23,16 @@ export default function Pay({ page }) {
           })}
           <div className=" lg:hidden block max-w-full w-full mx-auto">
             <div className="  flex flex-col items-center justify-center gap-3 bg-gradient-to-l from-liner to-white border rounded-[30px] shadow-xl shadow-grey py-5 ">
-              <h1 className="font-bold text-[40px] font-roboto">{page.enterprise_title}</h1>
+              <h1 className="font-bold text-[40px] font-roboto">
+                {page.enterprise_title}
+              </h1>
               <p className=" text-[18px] text-[#6F6C90]">
                 {page.enterprise_text}
               </p>
-              <button className=" border rounded-[30px] bg-black text-white px-[28px] py-[10px]">
+              <button
+                className=" border rounded-[30px] bg-black text-white px-[28px] py-[10px]"
+                onClick={() => router.push("/feature")}
+              >
                 {page.enterprise_button}
               </button>
             </div>
@@ -34,11 +41,16 @@ export default function Pay({ page }) {
         <div className=" hidden lg:block max-w-full w-[1200px] mx-auto px-11 ">
           <div className="flex flex-col items-center justify-center  bg-gradient-to-l from-liner to-white border rounded-[30px] shadow-xl shadow-grey py-5">
             <div className="max-w-[300px] mx-auto flex flex-col items-center gap-3">
-              <h1 className="font-bold text-[40px] font-roboto">{page.enterprise_title}</h1>
+              <h1 className="font-bold text-[40px] font-roboto">
+                {page.enterprise_title}
+              </h1>
               <p className=" text-[18px] text-[#6F6C90]">
                 {page.enterprise_text}
               </p>
-              <button className=" border rounded-[30px] bg-black text-white lg:px-[84px] py-[10px]">
+              <button
+                className=" border rounded-[30px] bg-black text-white lg:px-[84px] py-[10px]"
+                onClick={() => router.push("/feature")}
+              >
                 {page.enterprise_button}
               </button>
             </div>
@@ -97,8 +109,12 @@ const Blog = ({ item, page }) => {
       {item.price ? (
         <div>
           {" "}
-          <span className="text-[54px] font-bold font-roboto">{item.price}</span>{" "}
-          <span className="font-bold text-[18px] text-[#6F6C90] font-roboto">/monthly</span>
+          <span className="text-[54px] font-bold font-roboto">
+            {item.price}
+          </span>{" "}
+          <span className="font-bold text-[18px] text-[#6F6C90] font-roboto">
+            /monthly
+          </span>
         </div>
       ) : (
         <div>
@@ -120,7 +136,10 @@ const Blog = ({ item, page }) => {
       <div className="flex flex-col justify-center items-start gap-3">
         {text_list?.map((item, key) => {
           return (
-            <div key={key} className="text-[14px] flex flex-row items-center gap-2">
+            <div
+              key={key}
+              className="text-[14px] flex flex-row items-center gap-2"
+            >
               <img src={imageUrl} className="" />
               <div>
                 <h1 className="font-bold ">{item.title}</h1>
