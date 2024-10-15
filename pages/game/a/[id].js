@@ -9,15 +9,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import Head from "next/head";
 import { useEffect, useState, useMemo, useRef } from "react";
 
-export default function Ad({
-  ad,
-  client,
-  id,
-  config,
-  userId,
-  email,
-  externalId,
-}) {
+export default function Ad({ ad, client, id, externalId }) {
   const context = useAppContext();
   const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
   const [signingIn, setSigingIn] = useState(0);
@@ -25,92 +17,6 @@ export default function Ad({
   const [clientCredits, setClientCredits] = useState();
   const subscriptionRef = useRef(null);
   const [deviceId, setDeviceId] = useState(null);
-
-  function generateUUID() {
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-      /[xy]/g,
-      function (c) {
-        const r = (Math.random() * 16) | 0,
-          v = c === "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      }
-    );
-  }
-
-  // Function to create a fingerprint from browser details
-  function createFingerprint() {
-    const navigatorInfo = window.navigator;
-    const screenInfo = window.screen;
-    const fingerprint = [
-      navigatorInfo.userAgent,
-      navigatorInfo.language,
-      screenInfo.colorDepth,
-      new Date().getTimezoneOffset(),
-      navigatorInfo.platform,
-      navigatorInfo.doNotTrack,
-      screenInfo.height,
-      screenInfo.width,
-    ].join("");
-    return fingerprint;
-  }
-
-  // Simple hash function to create a 16-bit hash
-  function simpleHash(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32bit integer
-    }
-    return (hash & 0xffff).toString(16).padStart(4, "0"); // Return 16-bit hash
-  }
-
-  // Function to get or generate a device ID
-  function getDeviceID() {
-    // Check if a device ID is already stored
-    let deviceID = localStorage.getItem("psUUID");
-    if (!deviceID) {
-      // Create a fingerprint and generate a UUID
-      const fingerprint = createFingerprint();
-      const uuid = generateUUID();
-      // Hash the fingerprint with a simple hash function
-      const hashedFingerprint = simpleHash(fingerprint);
-      // Combine the hashed fingerprint with the UUID to create the device ID
-      deviceID = `${hashedFingerprint}-${uuid}`;
-      // Store the device ID in localStorage
-      localStorage.setItem("psUUID", deviceID);
-    }
-    return deviceID;
-  }
-
-  // LISTEN TO CLIENT CREDITS
-
-  useEffect(() => {
-    if (ad.ownerId && !clientCredits && !subscriptionRef?.current) {
-      subscriptionRef.current = onSnapshot(
-        doc(firestore, "users", ad.ownerId),
-        (doc) => {
-          if (doc.exists()) {
-            setClientCredits(() => {
-              const newCreditBalance = doc.data().creditBalance;
-              return newCreditBalance;
-            });
-          }
-        },
-        (error) => {
-          console.log("Error getting document:", error);
-        }
-      );
-    }
-  }, [ad.ownerId, clientCredits]);
-
-  useEffect(() => {
-    if (subscriptionRef.current) {
-      return () => subscriptionRef?.current();
-    }
-  }, []);
-
-  // END LISTEN
 
   const getImageURL = (url) => {
     if (url.startsWith("http")) return url;
@@ -120,7 +26,7 @@ export default function Ad({
   // AUTO-SIGN IN WITH PROVIDED EMAIL
 
   useEffect(() => {
-    if (externalId && externalId !== "override") {
+    if (externalId) {
       setWaitOnAuth(true);
       logoutWithoutReroute();
       fetch("https://playspark.co/api/auth/externalUser", {
@@ -138,34 +44,6 @@ export default function Ad({
             signInWithEmailAndPassword(auth, json.email, json.password);
           }
         });
-    } else if (
-      (externalId && externalId === "override") ||
-      (ad.ownerId === "xwMcL84YdoRXAV52oNjmhVhCHD63" &&
-        // context.loggedIn?.uid &&
-        !context?.profile?.isAdmin)
-    ) {
-      const uuid = getDeviceID();
-
-      if (uuid !== null) {
-        const emailStructure = uuid + "@playspark.co";
-        setWaitOnAuth(true);
-        logoutWithoutReroute();
-        fetch("/api/auth/externalUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: emailStructure, name: config.name }),
-        })
-          .then((response) => {
-            return response.json();
-          })
-          .then((json) => {
-            if (json.email && json.password) {
-              signInWithEmailAndPassword(auth, json.email, json.password);
-            }
-          });
-      }
     }
   }, [externalId, ad]);
 
@@ -192,10 +70,6 @@ export default function Ad({
       });
     }
   }, [context]);
-
-  useEffect(() => {
-    context.setConfig(config);
-  }, [config]);
 
   return (
     <>
@@ -254,16 +128,9 @@ export default function Ad({
 }
 
 export async function getServerSideProps(context) {
-  // Get the ad from the id here:
-  const { id, email, xp, coins, userId, user, platform } = context?.query;
-
-  // Additional parameters
-  const { name, hideback, hiderevive, forcelogout } = context?.query;
-
-  const { deviceIdSignIn } = context?.query;
+  const { id, user, platform } = context?.query;
 
   let externalId = null;
-  let em = platform?.toString() ?? null;
 
   if (user && platform) {
     const emailAddress = decryptEmail(user, platform);
@@ -271,40 +138,19 @@ export async function getServerSideProps(context) {
     externalId = refactorEmail(emailAddress, platform);
   }
 
-  if (deviceIdSignIn) externalId = "override";
-
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);
-
-  const leaderboard = ad?.leaderboard
-    ? ad.leaderboard?.map(({ email, ...rest }) => rest)
-    : [];
 
   return {
     props: {
       id: id,
       client: client,
-      em: em,
       ad: {
         ...ad,
         endDate: ad.endDate ? JSON.stringify(ad.endDate) : null,
         xpWebhook: client?.xpWebhook || null,
-        leaderboard: leaderboard,
       },
-      email: email || null,
-      xp: xp || null,
-      coins: coins || null,
-      userId: userId || null,
-      xpWebhook: client?.xpWebhook || null,
-
       externalId: externalId || null,
-      name: name || null,
-      config: {
-        name: name || null,
-        hideBackButton: ad.hideBack ? true : false,
-        hideRevive: ad.disableRevive ? true : false,
-        forceLogout: forcelogout === "true" ? true : false,
-      },
     },
   };
 }

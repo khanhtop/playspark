@@ -38,7 +38,6 @@ export default function ModalGameOver({ data }) {
         if (context?.loggedIn?.uid) {
           updateLeaderboard(data.data?.tournamentId, [
             {
-              email: context?.profile?.email || null,
               score: data.gameOverScore,
               uid: context?.loggedIn?.uid,
               name: context?.profile?.companyName || null,
@@ -66,7 +65,6 @@ export default function ModalGameOver({ data }) {
         lb,
         context.loggedIn?.uid,
         data?.gameOverScore,
-        context.loggedIn?.email,
         context?.profile?.companyName || "",
         context?.profile?.profilePhoto
       );

@@ -238,9 +238,7 @@ export default function Intro({
         </div>
         {(!premium || ready) && (
           <GameButton
-            disabled={
-              !clientCredits || expired || clientCredits < shutoffBalance
-            }
+            disabled={expired}
             bgColor={
               data.secondaryColor ||
               data.accentColor ||
