@@ -1,7 +1,7 @@
-
+import { useRouter } from "next/router"
 
 export default function Game({page}) {
-    console.log(page)
+    const router = useRouter();
     return (
         <div className="lg:relative bg-gradient-to-t from-liner to-white lg:bg-none ">
             <div>
@@ -15,7 +15,9 @@ export default function Game({page}) {
                 <div className="w-full lg:w-1/2 flex justify-center">
                     <img src={page.your_game_image.url} />
                 </div>
-                <button className=" rounded-[30px] px-[50px] py-[18px] text-[16px]  text-black bg-free  lg:hidden block" >Play A Demo Game</button>
+                <button className=" rounded-[30px] px-[50px] py-[18px] text-[16px]  text-black bg-free  lg:hidden block" 
+                    onClick={()=>{ router.push(page.demo_game_url)}}
+                >Play A Demo Game</button>
             </div>
             </div>
            

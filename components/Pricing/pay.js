@@ -5,6 +5,9 @@ import { Badge } from "flowbite-react";
 import checkImgWhite from "/public/images/check_white.png";
 import checkImgBlack from "/public/images/check_black.png";
 import { useRouter } from "next/router";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 export default function Pay({ page }) {
   const router = useRouter();
@@ -67,7 +70,6 @@ const Blog = ({ item, page }) => {
   let text_list;
   let imageUrl;
 
-  useMemo(() => {
     if (item.size == "small") {
       className = "h-[581px] bg-white text-black";
       buttonStyle = "text-white bg-black";
@@ -84,7 +86,23 @@ const Blog = ({ item, page }) => {
       text_list = page.large_list;
       imageUrl = checkImgBlack.src;
     }
-  }, [item.size]);
+
+    const controls = useAnimation();
+  const [ref, inView] = useInView({
+    threshold: 0.2, // Trigger animation when 20% of the element is in view
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start({
+        y: 0,
+        opacity: 1,
+        transition: { duration: 0.8, ease: "easeOut" },
+      });
+    } else {
+      controls.start({ y: -100, opacity: 0 });
+    }
+  }, [controls, inView]);
 
   return (
     <div
@@ -92,6 +110,12 @@ const Blog = ({ item, page }) => {
         " flex flex-col lg:w-1/3 max-w-[351px]  justify-start shadow-xl shadow-grey border rounded-[24px] gap-5 px-[31px] pt-10 ",
         className
       )}
+    >
+      <motion.div
+      ref={ref}
+      initial={{ y: -100, opacity: 0 }}
+      animate={controls}
+      className="flex flex-col gap-5"
     >
       <div className="flex justify-between ">
         <h1 className="font-bold text-[18px] text-[#6F6C90] text-left font-roboto">
@@ -132,7 +156,7 @@ const Blog = ({ item, page }) => {
         {item.button_text}
       </button>
       <p className="font-bold text-[14px]">{item.list_text}</p>
-
+      
       <div className="flex flex-col justify-center items-start gap-3">
         {text_list?.map((item, key) => {
           return (
@@ -149,6 +173,7 @@ const Blog = ({ item, page }) => {
           );
         })}
       </div>
+      </motion.div>
     </div>
   );
 };

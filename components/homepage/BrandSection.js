@@ -4,6 +4,9 @@ import React from "react";
 import clsx from "clsx";
 import Ticker from "../../public/images/logos.png";
 import { useRouter } from "next/router";
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 export default function BrandSection({ page }) {
   const router = useRouter();
@@ -51,27 +54,48 @@ const Blog = ({ item, key, page }) => {
   let buttonColor;
   let textList;
   let topMargin;
-  const imagePositionClassName = React.useMemo(() => {
-    if (item.image_position == null) {
-      className = "absolute right-[-30px] w-32  ";
-      buttonColor = "bg-black text-white ";
-      topMargin = "py-11";
-      textList = page.first_list;
-    } else if (item.image_position == "top-right") {
-      className = "absolute bottom-12 right-0   w-20";
-      buttonColor = "bg-free text-black";
-      topMargin = "pt-0";
-      textList = page.second_list;
-    } else if (item.image_position == "bottom-right") {
-      className = "absolute top-12   right-[-25px] w-20";
-      buttonColor = "bg-black text-white ";
-      topMargin = "pt-0";
-      textList = page.last_list;
+  if (item.image_position == null) {
+    className = "absolute right-[-30px] w-32  ";
+    buttonColor = "bg-black text-white ";
+    topMargin = "py-11";
+    textList = page.first_list;
+  } else if (item.image_position == "top-right") {
+    className = "absolute bottom-12 right-0   w-20";
+    buttonColor = "bg-free text-black";
+    topMargin = "pt-0";
+    textList = page.second_list;
+  } else if (item.image_position == "bottom-right") {
+    className = "absolute top-12   right-[-25px] w-20";
+    buttonColor = "bg-black text-white ";
+    topMargin = "pt-0";
+    textList = page.last_list;
+  }
+
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    threshold: 0.2, // Trigger animation when 20% of the element is in view
+  });
+
+  useEffect(() => {
+    if (inView) {
+      controls.start({
+        y: 0,
+        opacity: 1,
+        transition: { duration: 0.8, ease: "easeOut" },
+      });
+    } else {
+      controls.start({ y: -100, opacity: 0 });
     }
-  }, [item.image_position]);
+  }, [controls, inView]);
 
   return (
     <div className="lg:w-1/3 w-full h-[610px] max-w-[351px] bg-white shadow-lg shadow-grey border rounded-[24px] flex flex-col  pt-10 px-10">
+      <motion.div
+      ref={ref}
+      initial={{ y: -100, opacity: 0 }}
+      animate={controls}
+      className="flex flex-col "
+    >
       <div className=" flex flex-col items-center justify-center ">
         <p className="text-[#6F6C90] text-[18px] font-bold font-roboto ">
           {item.text}
@@ -110,6 +134,7 @@ const Blog = ({ item, key, page }) => {
           );
         })}
       </div>
+      </motion.div>
     </div>
   );
 };
