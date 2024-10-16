@@ -19,7 +19,6 @@ export default function Leaderboard({ score, gameData }) {
         lb,
         context.loggedIn?.uid,
         score,
-        context.loggedIn?.email,
         context?.profile?.companyName || "",
         context?.profile?.profilePhoto
       );

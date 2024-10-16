@@ -2,7 +2,22 @@
 const withPWA = require("next-pwa")({
   dest: "public",
 });
+const JavaScriptObfuscator = require("webpack-obfuscator");
 const nextConfig = {
+  productionBrowserSourceMaps: false,
+  webpack: (config, { isServer, dev }) => {
+    if (!isServer && !dev) {
+      config.plugins.push(
+        new JavaScriptObfuscator(
+          {
+            rotateStringArray: true,
+          },
+          []
+        )
+      );
+    }
+    return config;
+  },
   async headers() {
     return [
       {
@@ -24,7 +39,10 @@ const nextConfig = {
       },
     ];
   },
-  reactStrictMode: false,
+  transpilePackages: ['gsap'],
+  compiler: {
+      styledComponents: true,
+  }
 };
 
 module.exports = withPWA({

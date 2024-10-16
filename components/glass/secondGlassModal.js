@@ -10,7 +10,6 @@ export default function SecondGlassModal({
   textColor,
 }) {
   if (!showWhen) return <div />;
-  console.log(showWhen);
   return (
     <div
       style={{

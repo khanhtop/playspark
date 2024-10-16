@@ -19,7 +19,6 @@ export default async function handler(req, res) {
       .max_results(30)
       .execute()
       .then((result) => {
-        console.log(result.resources);
         res.status(200).json(result.resources);
       });
   } catch (error) {

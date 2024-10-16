@@ -11,14 +11,7 @@ export const getLeaderboard = async (tournamentId) => {
   return sorted;
 };
 
-export const rankMe = (
-  leaderboard,
-  uid,
-  score,
-  email,
-  companyName,
-  avatar = null
-) => {
+export const rankMe = (leaderboard, uid, score, companyName, avatar = null) => {
   if (score === 0)
     return {
       rankedBoard: leaderboard,
@@ -30,7 +23,6 @@ export const rankMe = (
     leaderboard[position].avatar = avatar;
   } else if (position === -1) {
     leaderboard.push({
-      email: email,
       score: score,
       uid: uid,
       name: companyName,

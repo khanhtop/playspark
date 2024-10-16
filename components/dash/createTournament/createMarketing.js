@@ -10,7 +10,6 @@ import NewVideoPicker from "@/components/forms/newVideoPicker";
 import MuxUploader from "@/components/forms/muxUploader";
 
 function MarketingCard({ title, cardState, onSetCardState, children, large }) {
-  console.log(cardState);
   return (
     <Card className={`${large ? "h-auto" : "h-60"} rounded-xl`}>
       <div className="h-full flex flex-col">
@@ -41,10 +40,6 @@ export default function CreateMarketing({ tournament, setTournament }) {
   const context = useAppContext();
   const surveyId = useRef(Date.now().toString());
   const [sponsoredVideoBuffer, setSponsoredVideoBuffer] = useState(null);
-
-  console.log(sponsoredVideoBuffer);
-
-  console.log(tournament);
 
   return (
     <div className="flex flex-col gap-4">

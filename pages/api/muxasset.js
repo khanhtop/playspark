@@ -24,7 +24,6 @@ export default function handler(req, res) {
       return response.json();
     })
     .then((data) => {
-      console.log(data);
       res.send(JSON.stringify(data));
     })
     .catch((error) => {

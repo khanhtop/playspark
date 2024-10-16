@@ -3,7 +3,6 @@ import CreateColorPicker from "./createColorPicker";
 import ImagePicker from "@/components/forms/imagePicker";
 import { BrandingComponent } from "../unlocksWithTier";
 import CreateAudioPicker from "./createAudioPicker";
-// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import FontPicker from "./fontPicker";
 import BodyFontPicker from "./bodyFontPicker";
@@ -12,7 +11,6 @@ import CreatePreview from "./createPreview";
 import ReimagePicker from "@/components/reimage/reimagePicker";
 
 export default function CreateDesign({ tournament, setTournament }) {
-  console.log(tournament);
   return (
     <div className="flex items-start gap-4">
       <div className="flex-1 flex flex-col gap-4">
@@ -173,28 +171,8 @@ export default function CreateDesign({ tournament, setTournament }) {
               setTournament({ ...tournament, homescreenMusic: a });
             }}
           />
-          {/* <CreateAudioPicker
-            dimension="homescreenMusic"
-            gameTag={"homescreen-bgm"}
-            title={`Homescreen Music`}
-            selected={tournament.homescreenMusic}
-            updateAudio={(a) => {
-              setTournament({ ...tournament, homescreenMusic: a });
-            }}
-          /> */}
         </Card>
       </div>
-      {/* <ImagePicker
-            cover
-            id="bg-image"
-            width={tournament.landscape ? 400 : 200}
-            height={tournament.landscape ? 200 : 400}
-            label="Background Image (Aim for 800px x 1600px)"
-            image={tournament.backgroundImage}
-            onChange={(url) => {
-              setTournament({ ...tournament, backgroundImage: url });
-            }}
-          /> */}
       <CreatePreview tournament={tournament} />
     </div>
   );

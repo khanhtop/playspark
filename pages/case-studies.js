@@ -12,8 +12,11 @@ export default function CaseStudies({ page }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-screen overflow-y-scroll">
+      <div className="h-auto mx-auto w-full max-w-full">
         <Navbar />
+        <Hero page={page} />
+        <Blog page={page} />
+        <Game />
         <Footer />
       </div>
     </>
@@ -23,6 +26,9 @@ export default function CaseStudies({ page }) {
 import { createClient } from "../helpers/prismic";
 import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
+import Hero from "@/components/studies/Hero";
+import Blog from "@/components/studies/Blog";
+import Game from "@/components/forms/game"
 
 export async function getServerSideProps(context) {
   const client = createClient();

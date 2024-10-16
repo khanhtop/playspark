@@ -7,7 +7,7 @@ export default function Pane({ title, subtext, children }) {
         </h1>
         <p className="text-black/50 mt-3">{subtext}</p>
       </div>
-      <div className="flex-1 overflow-y-scroll">{children}</div>
+      <div className="flex-1 overflow-y-scroll pb-4">{children}</div>
     </div>
   );
 }

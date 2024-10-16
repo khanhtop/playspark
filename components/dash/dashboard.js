@@ -12,9 +12,17 @@ import {
   PlusIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
+import GameListModal from "./dashModals/gameListModal";
+import PlayableAdListModal from "./dashModals/playableAdListModal";
+import CreateModal from "./createTournament/createModal";
+import CreateModalPlayableAd from "./createTournament/createModalPlayableAd";
 
 export default function Dashboard({}) {
   const context = useAppContext();
+  const [showCreateGameModal, setShowCreateGameModal] = useState(false);
+  const [showCreateAdModal, setShowCreateAdModal] = useState(false);
+  const [showAddTournamentModal, setShowAddTournamentModal] = useState(false);
+  const [showAddPlayableAdModal, setShowAddPlayableAdModal] = useState(false);
   const [impressions, setImpressions] = useState();
   const [plays, setPlays] = useState();
   const [ctr, setCtr] = useState();
@@ -84,11 +92,16 @@ export default function Dashboard({}) {
   return (
     <div className="pb-8">
       <div className="flex gap-4">
-        <Button size="xl" className="bg-blue-600 enabled:hover:bg-blue-500">
+        <Button
+          onClick={() => setShowCreateGameModal(true)}
+          size="xl"
+          className="bg-blue-600 enabled:hover:bg-blue-500"
+        >
           <PlusIcon className="mr-2 h-6 w-6" />
           Create Game
         </Button>
         <Button
+          onClick={() => setShowCreateAdModal(true)}
           size="xl"
           className="bg-emerald-400 enabled:hover:bg-emerald-500"
         >
@@ -116,9 +129,40 @@ export default function Dashboard({}) {
           text="Users"
         />
       </div>
+      {showCreateGameModal && (
+        <GameListModal
+          onClose={() => setShowCreateGameModal(false)}
+          onAdd={(item) => {
+            setShowAddTournamentModal(item);
+            setShowCreateGameModal(false);
+          }}
+        />
+      )}
+      {showCreateAdModal && (
+        <PlayableAdListModal
+          onClose={() => setShowCreateAdModal(false)}
+          onAdd={(item) => {
+            setShowAddPlayableAdModal(item);
+            setShowCreateAdModal(false);
+          }}
+        />
+      )}
+      {showAddTournamentModal && (
+        <CreateModal
+          hide={() => setShowAddTournamentModal(false)}
+          data={showAddTournamentModal}
+        />
+      )}
+
+      {showAddPlayableAdModal && (
+        <CreateModalPlayableAd
+          hide={() => setShowAddPlayableAdModal(false)}
+          data={showAddPlayableAdModal}
+        />
+      )}
       {/* <CreditsPanel /> */}
-      <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-        {/* <Panel>
+      {/* <div className="text-white grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4"> */}
+      {/* <Panel>
           <h2 className="mb-4">Impressions Per Game</h2>
           {impressions && <BarChart chartData={impressions} />}
         </Panel>
@@ -130,7 +174,7 @@ export default function Dashboard({}) {
           <h2 className="mb-4">Click Through Rate (CTR)</h2>
           {ctr && <BarChart chartData={ctr} />}
         </Panel> */}
-        {/* <div>
+      {/* <div>
         <h2 className="mb-4">Email Opt Ins</h2>
         {ctr && <BarChart chartData={optins} />}
       </div>
@@ -138,14 +182,14 @@ export default function Dashboard({}) {
         <h2 className="mb-4">Playable Ad Views</h2>
         {ctr && <BarChart chartData={playableAds} />}
       </div> */}
-      </div>
+      {/* </div> */}
     </div>
   );
 }
 
 function DashboardStatisticCard({ Icon, color, value, text }) {
   return (
-    <Card>
+    <Card className="hover:shadow-sm transition">
       <div className="flex">
         <div className={`bg-${color} rounded-full relative h-16 w-16`}>
           <div className="h-full w-full bg-white/80 absolute top-0 left-0" />

@@ -10,6 +10,7 @@ const columnSet = [
     width: 400,
     name: "Email Address",
     dataKey: "email",
+    searchable: true,
   },
 ];
 
@@ -35,7 +36,7 @@ export function AudienceEmails({}) {
 
   return (
     <div className="flex flex-col flex-1">
-      <div className="overflow-x-scroll w-[calc(100vw-360px)] flex flex-1">
+      <div className="overflow-x-scroll w-[calc(100vw-360px)] flex flex-1 ">
         <Tabulate columns={columnSet} data={emails} />
       </div>
     </div>

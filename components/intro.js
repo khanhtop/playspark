@@ -86,7 +86,6 @@ export default function Intro({
   }, []);
 
   useEffect(() => {
-    console.log(context.settings.bgm);
     if (context.settings.bgm && !isAudioPlaying) {
       playAudio();
     } else if (!context.settings.bgm) {
@@ -239,9 +238,7 @@ export default function Intro({
         </div>
         {(!premium || ready) && (
           <GameButton
-            disabled={
-              !clientCredits || expired || clientCredits < shutoffBalance
-            }
+            disabled={expired}
             bgColor={
               data.secondaryColor ||
               data.accentColor ||

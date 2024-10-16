@@ -1,99 +1,90 @@
-export default function Footer() {
-  return (
-    <div className="bg-[#000e44] px-8 pt-32 flex justify-center font-light">
-      <div className="w-full max-w-[1400px]">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-          <Column
-            title="About Us"
-            content={
-              <div>
-                <img
-                  src="/ui/logo.png"
-                  className="h-full max-h-24 -mt-4 -mb-4 -mx-4 contrast-50"
-                />
-                <p className="text-white leading-[40px] text-lg font-extralight">
-                  PlaySpark is changing the game for how brands connect with
-                  users and how publishers amplify their revenue streams,
-                  through incentivised gameplay solutions.
-                </p>
-              </div>
-            }
-          />
-          <Column
-            title="Quick Links"
-            content={
-              <div className="flex flex-col">
-                <a
-                  href="/"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  About Us
-                </a>
-                <a
-                  href="/case-studies"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  Case Studies
-                </a>
-                <a
-                  href="#"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  Privacy Policy
-                </a>
-                <a
-                  href="/pricing"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  Products & Pricing
-                </a>
-                <a
-                  href="#"
-                  className="text-white leading-[40px] text-lg font-extralight"
-                >
-                  Blog
-                </a>
-              </div>
-            }
-          />
-          <Column
-            title="Newsletter"
-            content={
-              <div>
-                <input
-                  className="h-10 w-full rounded-lg px-4 text-black"
-                  placeholder="Email Address"
-                />
-                <button className="bg-sky-500 rounded-lg px-8 py-2 mt-2 text-white font-bold">
-                  Join Now
-                </button>
-              </div>
-            }
-          />
-        </div>
-        <div className="pt-8 pb-16 text-white border-t-[1px] border-t-white/10 flex justify-between">
-          <div>
-            <p>Copyright © 2024 SparkUp Studios.</p>
-          </div>
-          <div className="flex gap-8">
-            <p className="border-r-[1px] pr-8 border-r-white/10">
-              Cookies Policy
-            </p>
-            <p>Privacy Policy</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { useMemo } from "react";
+import Twitter from "/public/images/social-icons/white/1.png"
+import Instergram from "/public/images/social-icons/white/2.png"
+import Pinterest from "/public/images/social-icons/white/3.png"
+import Linkdin from "/public/images/social-icons/white/4.png"
+import TikTok from "/public/images/social-icons/white/5.png"
+import Youtub from "/public/images/social-icons/white/6.png"
+import { useRouter } from "next/router";
 
-function Column({ title, content }) {
+
+const Image_white = [
+  {
+    icon:Twitter,
+    url : ""
+  },
+  {
+    icon : Instergram,
+    url : "https://www.instagram.com/playspark.co"
+  },
+  {
+    icon : Pinterest,
+    url : " "
+  },
+  {
+    icon : Linkdin,
+    url : "https://www.linkedin.com/company/playspark/"
+  },
+  {
+    icon : TikTok,
+    url : ""
+  },
+  {
+    icon : Youtub,
+    url: ""
+  }
+]
+
+import footer_logo from '/public/images/footer_logo.png'
+
+export default function Footer() {
+const router= useRouter();
   return (
-    <div>
-      <div className="pb-4 border-b-[1px] border-b-white/10">
-        <h1 className="text-white text-2xl uppercase">{title}</h1>
+    <div className="px-5 pt-10  font-light bg-[#484A4A] text-white">
+      <div className="w-full flex flex-col lg:flex-row justify-center   lg:max-h-[238px] pb-10 px-5 ">
+        <div className="w-1/2 flex flex-col items-start justify-between gap-6">
+          <img
+            src={footer_logo.src}
+            className=" -mt-4 -mx-2 bg-bal cursor-pointer"
+          />
+          <p className=" text-[14px] max-w-[240px]">
+            We level up your brand marketing with white-labelled arcade games
+            and playable ads.
+          </p>
+          <div className="flex flex-row gap-3">
+            {
+              Image_white?.map((item, key)=> {
+                return <img src = {item.icon.src} key={key} className="w-4 h-4 cursor-pointer" onClick={()=>{router.push(item.url)}} />
+              })
+            }
+          </div>
+        </div>
+        <div className="lg:w-1/2  w-full flex lg:flex-row-reverse flex-col-reverse  gap-12 items-start justify-start pr-5 pt-12 lg:pt-5  text-[14px]">
+          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
+            <p className="font-bold ">Legal</p>
+            <p onClick={()=>{router.push("/privacy")}}>Privacy</p>
+            <p onClick={()=>{router.push("/terms")}}>Terms</p>
+            <p>Security</p>
+          </div>
+          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
+            <p className="font-bold ">Resource</p>
+            <p onClick={()=>{router.push("/case-studies")}}>Case Studies</p>
+            <p>Docs</p>
+          </div>
+          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
+            <p className="font-bold ">company</p>
+            <p>About</p>
+            <p onClick={()=>{router.push("/blog")}}>Blog</p>
+            <p onClick={()=>{router.push("/feature")}}>Contact</p>
+          </div>
+          <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
+            <p className="font-bold ">Products</p>
+            <p onClick={()=>{router.push("/products")}}>Feature</p>
+            <p>FAQ</p>
+            <p onClick={()=>{router.push("/pricing")}}>Pricing</p>
+          </div>
+        </div>
       </div>
-      <div className="py-12">{content}</div>
     </div>
   );
 }

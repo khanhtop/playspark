@@ -12,14 +12,19 @@ export default function Products({ page }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-screen overflow-y-scroll">
+      <div className="h-auto mx-auto w-full max-w-full">
         <Navbar />
-        <ColsWithCTA
+        {/* <ColsWithCTA
           image={page.hero_image?.url}
           title={page.hero_title}
           boldText={page.hero_bold_text}
           text={page.hero_text}
-        />
+        /> */}
+        <Hero page={page} />
+        <Marketing page={page} />
+        <Game page={page} />
+        <Wheel page={page} />
+        <Demo page={page} />
         <Footer />
       </div>
     </>
@@ -30,6 +35,11 @@ import { createClient } from "../helpers/prismic";
 import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
 import ColsWithCTA from "@/components/homepage/colsWithCTA";
+import Hero from "@/components/feature/hero";
+import Marketing from "@/components/feature/marketing";
+import Demo from "@/components/feature/demo";
+import Game from "@/components/feature/game";
+import Wheel from "@/components/feature/wheel";
 
 export async function getServerSideProps(context) {
   const client = createClient();

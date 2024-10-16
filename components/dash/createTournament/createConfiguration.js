@@ -1,20 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import CreateAudioPicker from "./createAudioPicker";
-import CreateGlbPicker, { BabylonModel } from "./createGlbPicker";
-import CreateImageSlider from "./createImageSlider";
-import GenWordArray from "./genWordArray";
 import { configurableParameterTitles } from "@/helpers/configurability";
 import { Label, Spinner } from "flowbite-react";
 import { cloudinaryToReimage } from "@/helpers/reimage";
-import {
-  ArrowUpCircleIcon,
-  ArrowUpOnSquareIcon,
-  ArrowUpOnSquareStackIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CloudArrowUpIcon,
-} from "@heroicons/react/24/solid";
-import ReimagePicker from "@/components/reimage/reimagePicker";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import ReimageUploadWidget from "@/components/reimage/reimageUploader";
 
 export default function CreateConfiguration({
@@ -108,13 +97,6 @@ export default function CreateConfiguration({
           selected={selectedTag}
           onSelect={(asset) => setSelectedTag(asset)}
         />
-        {/* <div className="w-full overflow-x-hidden mt-6 bg-black/5 px-4 py-4 flex gap-4 rounded-lg">
-          <div
-            className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center`}
-          >
-            <p className="text-sm text-black/50">Current</p>
-          </div>
-        </div> */}
         <div className="h-full overflow-y-scroll pt-4">
           {rendering ? (
             <div className="flex-1 flex flex-col gap-4 items-center justify-center h-full">
@@ -175,14 +157,6 @@ export default function CreateConfiguration({
             assetTag={tournament.tags?.[selectedTag]}
             onComplete={() => fetchAssetsFromReimage()}
           />
-          {/* <div
-            className={`bg-white px-2 flex flex-col gap-2 py-2 rounded-lg items-center w-36`}
-          >
-            <p className="text-sm text-black/50">Upload</p>
-            <ArrowUpOnSquareStackIcon
-              className={`${aspect} w-16 text-black/20`}
-            />
-          </div> */}
         </div>
       )}
       {rendering ? (

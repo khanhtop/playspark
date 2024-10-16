@@ -26,8 +26,6 @@ export default function Ad({
   const subscriptionRef = useRef(null);
   const [deviceId, setDeviceId] = useState(null);
 
-  console.log(ad);
-
   function generateUUID() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
       /[xy]/g,
@@ -147,7 +145,6 @@ export default function Ad({
         !context?.profile?.isAdmin)
     ) {
       const uuid = getDeviceID();
-      console.log(uuid);
 
       if (uuid !== null) {
         const emailStructure = uuid + "@playspark.co";
@@ -266,9 +263,11 @@ export async function getServerSideProps(context) {
   const { deviceIdSignIn } = context?.query;
 
   let externalId = null;
+  let em = platform?.toString() ?? null;
 
   if (user && platform) {
     const emailAddress = decryptEmail(user, platform);
+    em = user;
     externalId = refactorEmail(emailAddress, platform);
   }
 
@@ -277,14 +276,20 @@ export async function getServerSideProps(context) {
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);
 
+  const leaderboard = ad?.leaderboard
+    ? ad.leaderboard?.map(({ email, ...rest }) => rest)
+    : [];
+
   return {
     props: {
       id: id,
       client: client,
+      em: em,
       ad: {
         ...ad,
         endDate: ad.endDate ? JSON.stringify(ad.endDate) : null,
         xpWebhook: client?.xpWebhook || null,
+        leaderboard: leaderboard,
       },
       email: email || null,
       xp: xp || null,

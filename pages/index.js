@@ -9,6 +9,7 @@ import PaySection from "@/components/homepage/paySection";
 import Carousel from "@/components/homepage/carousel";
 import GamifySection from "@/components/homepage/gamifySection";
 import VideoSection from "@/components/homepage/videoSection";
+import ClientSection from "@/components/homepage/clientsSection";
 
 const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
   ssr: false,
@@ -25,32 +26,26 @@ export default function Home({ page, blogs }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-screen overflow-y-scroll">
+      <div className="h-auto mx-auto w-full max-w-full">
         <Navbar />
-
         <Section backgroundImage={page?.hero_background_image?.url}>
           <Hero page={page} />
         </Section>
-        <Section>
-          <WhatWeDo page={page} />
-        </Section>
+        <WhatWeDo page={page} />
         <Section>
           <WhoWeHelp page={page} />
         </Section>
         <Section>
-          <ClientsSection clients={page.clients_logos} />
+          <PowerSection page={page} />
         </Section>
         <Section>
-          <TestimonialsSection
-            testimonials={page.testimonials}
-            title={page.testimonials_title}
-          />
+          <BrandSection page={page} />
         </Section>
         <Section>
-          <PricingSection page={page} />
+          <ClientSection page={page} />
         </Section>
         <Section>
-          <BlogsSection blogs={blogs} />
+          <Game />
         </Section>
         <Footer />
       </div>
@@ -64,10 +59,14 @@ import Script from "next/script";
 import WhatWeDo from "@/components/homepage/whatWeDo";
 import WhoWeHelp from "@/components/homepage/whoWeHelp";
 import Footer from "@/components/homepage/footer";
-import ClientsSection from "@/components/homepage/clientsSection";
 import TestimonialsSection from "@/components/homepage/testimonialsSection";
 import PricingSection from "@/components/homepage/pricingSection";
 import BlogsSection from "@/components/homepage/blogsSection";
+import PowerSection from "@/components/homepage/powerSection";
+import BrandSection from "@/components/homepage/BrandSection";
+import Game from "@/components/forms/game";
+import Slider from "@/components/homepage/slider";
+// import { Client } from "@prismicio/client/*";
 
 export async function getServerSideProps(context) {
   const client = createClient();
