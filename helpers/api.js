@@ -15,6 +15,7 @@ import Runner from "@/components/runnergame/runner";
 import CanSmashGame from "@/components/games/CanSmash/CanSmash";
 import BabylonGame from "@/components/games/Babylon/babylonGame";
 import { sendSupabaseEvent } from "./analytics";
+import { playable_ads } from "./playable_ads";
 const Pong = dynamic(() => import("@/components/games/pong"), { ssr: false });
 
 export async function getAd(id) {
@@ -60,6 +61,26 @@ export async function getClient(id) {
 
 export async function getDemo(id) {
   const game = games.find((a) => a.id === parseInt(id));
+  return {
+    ...game,
+    backgroundImage:
+      game?.backgroundImage ??
+      "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
+    primaryColor: game.primaryColor ?? "#132257",
+    textColor: game.textColor ?? "#FFF",
+    demo: true,
+    leaderboard: [
+      {
+        name: "Demo Player",
+        uid: "demoplayer",
+        score: Math.floor(Math.random() * 10000),
+      },
+    ],
+  };
+}
+
+export async function getPlayableAdDemo(id) {
+  const game = playable_ads.find((a) => a.id === parseInt(id));
   return {
     ...game,
     backgroundImage:
@@ -288,6 +309,18 @@ export function getGame(id, data, callback, params) {
         callback={callback}
         params={params}
         gameComponent={<CanSmashGame />}
+      />
+    );
+}
+
+export function getPlayableAd(id, data, callback, params) {
+  if (id === 1)
+    return (
+      <Pong
+        data={data}
+        gameType="wheelspin"
+        callback={callback}
+        params={params}
       />
     );
 }
