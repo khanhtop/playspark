@@ -4,6 +4,7 @@ import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
 import { Button, Modal } from "flowbite-react";
+import MuxPlayer from "@mux/mux-player-react";
 
 export default function Marketing({ page }) {
   const router = useRouter();
@@ -28,10 +29,11 @@ export default function Marketing({ page }) {
       <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Body>
           <div>
-            <video className="h-full w-full rounded-lg" controls autoPlay muted>
-              <source src={page.video.url} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            <MuxPlayer
+              playbackId="Ich7WJrJMupVVOTOUCv54rKVGceLqlHpCd8ddj7uFpA"
+              autoPlay={true}
+              muted={true}
+            />
           </div>
         </Modal.Body>
       </Modal>
