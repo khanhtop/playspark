@@ -31,7 +31,7 @@ export default function Demo({ page }) {
           frameBorder="0"
           webkitallowfullscreen="true"
           mozallowfullscreen="true"
-          allowfullscreen
+          allowFullScreen
           className="w-[100%] h-[100%] absolute top-0 left-0"
         ></iframe>
       </div>

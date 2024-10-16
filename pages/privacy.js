@@ -8,7 +8,7 @@ export default function Privacy() {
     <>
       <div className="h-auto mx-auto w-full max-w-full bg-white">
         <Navbar />
-        <div className=" py-12 max-w-[624px] mx-auto mt-[120px] text-[16px] items-start text-start">
+        <div className=" py-12 max-w-[624px] mx-auto pt-[120px] text-[16px] items-start text-start">
           <h1 className="text-[26px] font-bold mb-[50px] px-10">
             Privacy Policy
           </h1>

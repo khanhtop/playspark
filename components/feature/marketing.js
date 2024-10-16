@@ -26,23 +26,15 @@ export default function Marketing({ page }) {
         See How It Works
       </button>
       <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
-          <Modal.Body>
-            <div>
-              <video
-                className="h-full w-full rounded-lg"
-                controls
-                autoPlay
-                muted
-              >
-                <source
-                  src={page.video.url}
-                  type="video/mp4"
-                />
-                Your browser does not support the video tag.
-              </video>
-            </div>
-          </Modal.Body>
-        </Modal>
+        <Modal.Body>
+          <div>
+            <video className="h-full w-full rounded-lg" controls autoPlay muted>
+              <source src={page.video.url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

@@ -1,26 +1,49 @@
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
+import { Button, Modal } from "flowbite-react";
+import { useEffect, useState } from "react";
 
-export default function Game({page}) {
-    const router = useRouter();
-    return (
-        <div className="lg:relative bg-gradient-to-t from-liner to-white lg:bg-none ">
-            <div>
-            <img src={page.demo_background.url} className="w-full -z-10 lg:absolute h-[700px] lg:block hidden"  />
-            <div className="max-h-auto lg:max-h-[700px] flex flex-col lg:flex-row items-center justify-center py-[64px] gap-10 max-w-[1200px] mx-auto">
-                <div className="flex flex-col justify-center items-center gap-10 w-full lg:px-5 lg:w-1/2">
-                    <h1 className="lg:text-[54px] text-[48px] font-bold text-center lg:px-5 px-10 lg:max-w-full max-w-[350px] lg:leading-[60px] leading-[40px] lg:-tracking-widest -tracking-normal  font-roboto ">{page.your_game_title}</h1>
-                    <p className="text-[22px] lg:max-w-[629px] max-w-[351px] mx-auto text-center px-9 lg:px-0" >{page.your_game_text}</p>
-                    <button className=" rounded-[30px] px-[50px] py-[18px] text-[16px] bg-free text-black hidden lg:block" >Play A Demo Game</button>
-                </div>
-                <div className="w-full lg:w-1/2 flex justify-center">
-                    <img src={page.your_game_image.url} />
-                </div>
-                <button className=" rounded-[30px] px-[50px] py-[18px] text-[16px]  text-black bg-free  lg:hidden block" 
-                    onClick={()=>{ router.push(page.demo_game_url)}}
-                >Play A Demo Game</button>
-            </div>
-            </div>
-           
+export default function Game({ page }) {
+  const router = useRouter();
+  const [openModal, setOpenModal] = useState(false);
+  return (
+    <div className="lg:relative bg-gradient-to-t from-liner to-white lg:bg-none ">
+      <div>
+        <img
+          src={page.demo_background.url}
+          className="w-full -z-10 lg:absolute h-[700px] lg:block hidden"
+        />
+        <div className="max-h-auto lg:max-h-[700px] flex flex-col lg:flex-row items-center justify-center py-[64px] gap-10 max-w-[1200px] mx-auto">
+          <div className="flex flex-col justify-center items-center gap-10 w-full lg:px-5 lg:w-1/2">
+            <h1 className="lg:text-[54px] text-[48px] font-bold text-center lg:px-5 px-10 lg:max-w-full max-w-[350px] lg:leading-[60px] leading-[40px] lg:-tracking-widest -tracking-normal  font-roboto ">
+              {page.your_game_title}
+            </h1>
+            <p className="text-[22px] lg:max-w-[629px] max-w-[351px] mx-auto text-center px-9 lg:px-0">
+              {page.your_game_text}
+            </p>
+            <button
+              className=" rounded-[30px] px-[50px] py-[18px] text-[16px] bg-free text-black hidden lg:block"
+              onClick={() => setOpenModal(true)}
+            >
+              Play A Demo Game
+            </button>
+          </div>
+          <div className="w-full lg:w-1/2 flex justify-center">
+            <img src={page.your_game_image.url} />
+          </div>
+          <button
+            className=" rounded-[30px] px-[50px] py-[18px] text-[16px]  text-black bg-free  lg:hidden block"
+            onClick={() => console.log("123")}
+          >
+            Play A Demo Game
+          </button>
         </div>
-    )
+        <Modal size="xl" dismissible show={openModal} onClose={() => setOpenModal(false)}>
+          <iframe
+            src="https://dev.playspark.co/ad/1729028839207"
+            className="w-[100%] h-[880px]  mx-auto "
+          />
+        </Modal>
+      </div>
+    </div>
+  );
 }
