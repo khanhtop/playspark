@@ -13,7 +13,7 @@ export default function Navbar() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="z-20 fixed top-0 left-0 w-full  bg-white/90 backdrop-blur ">
         <div className=" mx-auto h-[80px] max-w-[1200px] text-black hidden lg:flex items-center justify-between  px-10">
           <img
@@ -28,7 +28,7 @@ export default function Navbar() {
               } hover:text-sky-600`}
               href="/"
             >
-              About
+              Home
             </Link>
             <Link
               className={`${

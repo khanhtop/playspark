@@ -5,7 +5,7 @@ import clsx from "clsx";
 export default function Blog({page}){
     console.log(page)
     return (
-        <div className="bg-gradient-to-b from-liner to-white py-20">
+        <div className="bg-gradient-to-b from-liner to-white py-20 ">
             <div className="flex lg:flex-row  flex-col gap-5 items-start justify-normal max-w-[1500px] mx-auto">
                 {page.studies_blog?.map((item, key)=>{
                    return  <Element item={item} key={key} />

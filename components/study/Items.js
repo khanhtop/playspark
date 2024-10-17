@@ -15,7 +15,7 @@ export default function Items({ page }) {
 
 const Blog = ({item}) => {
   return (
-    <div className="mx-auto max-w-[1000px]" >
+    <div className="mx-auto max-w-[1000px] " >
       <p className="text-[54px] text-center font-bold ">{item.title}</p>
       <div className=" flex flex-col-reverse lg:flex-row gap-5  shadow-xl shadow-grey border rounded-[10px] my-5 py-10">
         <div className="lg:w-1/2  w-full flex flex-col gap-10 items-center justify-center  ">

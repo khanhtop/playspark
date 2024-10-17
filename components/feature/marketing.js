@@ -10,7 +10,7 @@ export default function Marketing({ page }) {
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
   return (
-    <div className=" bg-gradient-to-b from-[#50F8EE] to-white flex flex-col justify-center items-center py-10 gap-5">
+    <div className="bg-gradient-to-b from-[#50F8EE] to-white flex flex-col justify-center items-center py-10 gap-5 w-full mx-auto">
       <h1 className="font-bold text-center lg:text-[54px] text-[48px] max-w-[420px] lg:max-w-[590px] mx-auto lg:-tracking-normal -tracking-wider  leading-[40px] lg:leading-[60px] font-roboto  ">
         {page.marketing_title}
       </h1>

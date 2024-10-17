@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 
 import styles from './SkillSet.module.scss';
 
@@ -53,9 +53,11 @@ export default function Wheel({page}) {
             snap: (endVal) => gsap.utils.snap(360 / boxes.length, endVal),
             onPress: () => {
                 setDragStatus('pressed');
+                // stopAutoScroll();
             },
             onRelease: () => {
                 setDragStatus(null);
+                // startAutoScroll(); 
             },
             onDragStart: () => {
                 setActiveIndex(null);
@@ -88,8 +90,40 @@ export default function Wheel({page}) {
     }, { scope: container });
 
 
+    useEffect(() => {
+        let interval;
+
+        const rotateCarousel = () => {
+            const boxes = gsap.utils.toArray(`.${styles.box}`);
+            const nextIndex = (activeIndex + 1) % boxes.length;
+            const rotationAmount = 360 / boxes.length;
+
+            // Rotate the carousel
+            gsap.to(`.${styles.circularCarousel}`, {
+                rotation: `+=${rotationAmount}`,
+                duration: 1,
+                onComplete: () => setActiveIndex(nextIndex),
+            });
+        };
+
+        const startAutoScroll = () => {
+            interval = setInterval(rotateCarousel, 3000); // Rotate every 3 seconds
+        };
+
+        const stopAutoScroll = () => {
+            clearInterval(interval);
+        };
+
+        startAutoScroll(); // Start auto-scroll when component mounts
+
+        return () => {
+            stopAutoScroll(); // Cleanup on unmount
+        };
+    }, [activeIndex]);
+
+
     return (
-        <div>
+        <div className=''>
             <section className={`${styles.section}`} id={'skills'} ref={container}>
                 {/* <div className={styles.blobs}>
                     <Blobs type={'v2'} classVariable={`${styles.blob} ${styles.blobV2}`}/>

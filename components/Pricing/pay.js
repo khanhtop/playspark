@@ -12,7 +12,7 @@ import { useEffect } from "react";
 export default function Pay({ page }) {
   const router = useRouter();
   return (
-    <div className=" pt-[154px] pb-10 bg-white ">
+    <div className=" pt-[154px] pb-10 bg-white">
       <div className=" flex flex-col items-center justify-center gap-10">
         <h1 className="text-[54px] font-bold text-center -tracking-[3px] leading-[60px] whitespace-nowrap">
           {page.pay_title}

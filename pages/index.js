@@ -34,7 +34,7 @@ export default function Home({ page, blogs }) {
         <WhatWeDo page={page} />
         <Section>
           <WhoWeHelp page={page} />
-        </Section>
+        </Section> 
         <Section>
           <PowerSection page={page} />
         </Section>

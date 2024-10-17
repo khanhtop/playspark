@@ -10,6 +10,7 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 
 export default function Blog({ blogs }) {
+  console.log("blogs",blogs)
   // Define the number of items to display per page
   // const itemsPerPage = 6;
 
@@ -38,6 +39,7 @@ export default function Blog({ blogs }) {
   const router = useRouter();
 
   return (
+    
     <>
       <Head>
         <title>Blog | PlaySpark</title>
@@ -47,7 +49,7 @@ export default function Blog({ blogs }) {
         <meta property="og:url" content={"https://playspark.co/blog"} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <div className=" flex flex-col  h-auto mx-auto w-full max-w-full">
+      <div className=" flex flex-col  h-auto mx-auto w-full max-w-full ">
         <Navbar />
 
         {/* <div className="flex-1 pt-32 px-4 grid grid-cols-1 md:grid-cols-3 md:gap-x-[32px] lg:gap-y-[48px] gap-y-[32px]">
@@ -112,13 +114,13 @@ const Item = ({ item }) => {
       ref={ref}
       initial={{ y: -100, opacity: 0 }}
       animate={controls}
-      className="flex flex-col justify-center items-center gap-10 text-start w-full lg:w-1/3 max-w-[264px]"
+      className="flex flex-col justify-start items-center gap-10 text-start w-full lg:w-1/3 max-w-[300px]"
     >
       <img
         src={item.image.url}
         className="w-[263px] h-[263px] border rounded-[20px] "
       />
-      <div className="flex flex-col items-start lg:min-h-[200px] min-h-fit gap-5">
+      <div className="flex flex-col items-center lg:min-h-[200px] min-h-fit gap-5">
         <h1 className="text-[18px] font-bold ">{item.blog_title}</h1>
         <p className="text-[16px]">{item.blog_text}</p>
       </div>
