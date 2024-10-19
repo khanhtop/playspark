@@ -8,7 +8,7 @@ export default function Game({ page }) {
         />
         <div className="max-h-auto lg:max-h-[700px] flex flex-col lg:flex-row items-center justify-center py-[64px] gap-10 max-w-[1200px] mx-auto">
           <div className="flex flex-col justify-center items-center gap-10 w-full lg:px-5 lg:w-1/2">
-            <h1 className="lg:text-[54px] text-[48px] font-bold text-center lg:px-5 px-10 lg:max-w-full max-w-[350px] lg:leading-[60px] leading-[40px] lg:-tracking-widest -tracking-normal  font-roboto ">
+            <h1 className="lg:text-[54px] text-[48px] font-bold text-center lg:px-5 lg:max-w-full max-w-[350px] lg:leading-[60px] leading-[40px] lg:-tracking-widest -tracking-normal  font-roboto ">
               {page.your_game_title}
             </h1>
             <p className="text-[22px] lg:max-w-[629px] max-w-[351px] mx-auto text-center px-9 lg:px-0">
@@ -22,7 +22,7 @@ export default function Game({ page }) {
             </button>
           </div>
           <div className="w-full lg:w-1/2 flex justify-center">
-            <img src={page.your_game_image.url} />
+            <img src={page.your_game_image.url} className="w-auto h-auto" />
           </div>
           <button
             className=" rounded-[30px] px-[50px] py-[18px] text-[16px]  text-black bg-free  lg:hidden block"

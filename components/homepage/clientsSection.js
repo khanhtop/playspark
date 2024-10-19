@@ -2,7 +2,7 @@ import ClientBlog from "../forms/client_blog"
 export default function ClientSection ({page}) {
     console.log(page)
     return (
-        <div className=" flex flex-col items-center justify-center text-black bg-white py-10 relative">
+        <div className=" flex flex-col items-center justify-center text-black bg-white py-10 relative ">
             <button className="border border-black rounded-xl px-3 py-2 mt-[59px]"  >{page.client_button}</button>
             <h1 className="text-[54px] lg:w-full w-[322px] font-bold my-5 font-roboto ">
                 {page.client_title}

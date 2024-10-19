@@ -45,6 +45,9 @@ export default function Home({ page, blogs }) {
           <ClientSection page={page} />
         </Section>
         <Section>
+          <FAQ page={page} />
+        </Section>
+        <Section>
           <Game />
         </Section>
         <Footer />
@@ -66,6 +69,7 @@ import PowerSection from "@/components/homepage/powerSection";
 import BrandSection from "@/components/homepage/BrandSection";
 import Game from "@/components/forms/game";
 import Slider from "@/components/homepage/slider";
+import FAQ from "@/components/homepage/FAQ";
 // import { Client } from "@prismicio/client/*";
 
 export async function getServerSideProps(context) {
