@@ -1,6 +1,3 @@
-
-
-
 import ClientBlog from "../forms/client_blog"
 export default function Client ({page}) {
     return (

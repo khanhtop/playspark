@@ -8,8 +8,8 @@ export default function ClientSection ({page}) {
                 {page.client_title}
             </h1>
             <div className="w-full flex flex-col items-center justify-start">
-                <div className="w-full h-80 lg:h-80 absolute z-10 bg-gradient-to-b from-white to-transparent"></div>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-center justify-center lg:max-w-[1200px]  mx-auto lg:overflow-hidden overflow-y-scroll lg:h-auto h-[800px] ">
+                {/* <div className="w-full h-80 lg:h-80 absolute z-10 bg-gradient-to-b from-white to-transparent"></div> */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start justify-center lg:max-w-[1200px]  mx-auto lg:overflow-hidden overflow-y-scroll lg:h-auto h-[800px] ">
                     {page.client_blog?.map((item, key)=> {
                         return <ClientBlog item={item} key={key} />
                     })}
