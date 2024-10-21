@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
 import ImagePicker from "../forms/imagePicker";
 import { useAppContext } from "@/helpers/store";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
-import Button from "../forms/button";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import Input from "../forms/input";
-import SubNav from "../nav/subnav";
 import Usage from "./usage";
 import API from "./api";
 import { ColorPicker } from "./createTournamentModal";
-import AddRewardModal from "./qr/addRewardModal";
-import GroupedRewards from "./qr/groupedRewards";
 import FilterPills from "./filterPills";
+import { updateDocument } from "@/helpers/firebaseApi";
 
 export default function Account() {
   const context = useAppContext();
@@ -51,7 +45,7 @@ export default function Account() {
 
   const updateProfile = async () => {
     setLoading(true);
-    await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    await updateDocument("users", context.loggedIn?.uid, {
       ...(brandLogo && { brandLogo: brandLogo }),
       ...(sponsorLogo && { sponsorLogo: sponsorLogo }),
       ...(privacyPolicyUrl && { privacyPolicyUrl: privacyPolicyUrl }),
@@ -59,6 +53,14 @@ export default function Account() {
       ...(accentColor && { accentColor: accentColor }),
       ...(textColor && { textColor: textColor }),
     });
+    // await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    //   ...(brandLogo && { brandLogo: brandLogo }),
+    //   ...(sponsorLogo && { sponsorLogo: sponsorLogo }),
+    //   ...(privacyPolicyUrl && { privacyPolicyUrl: privacyPolicyUrl }),
+    //   ...(primaryColor && { primaryColor: primaryColor }),
+    //   ...(accentColor && { accentColor: accentColor }),
+    //   ...(textColor && { textColor: textColor }),
+    // });
     setLoading(false);
   };
 

@@ -1,9 +1,7 @@
-import { games, sanitiseGameObject } from "@/helpers/games";
+import { sanitiseGameObject } from "@/helpers/games";
 import { useState } from "react";
 import GameCard from "./gameCard";
 import { useAppContext } from "@/helpers/store";
-import { deleteDoc, doc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import Embed from "./embed";
 import AnalyticsModal from "./analyticsModal";
 import { archive, switchActive } from "@/helpers/api";
@@ -12,6 +10,7 @@ import Button from "../forms/button";
 import { FolderIcon } from "@heroicons/react/24/solid";
 import CreateModal from "./createTournament/createModal";
 import Swal from "sweetalert2";
+import { deleteDocument } from "@/helpers/firebaseApi";
 
 export default function MyGames({}) {
   const context = useAppContext();
@@ -29,7 +28,8 @@ export default function MyGames({}) {
       ) == true
     ) {
       const tId = item.tournamentId.toString();
-      await deleteDoc(doc(firestore, "tournaments", tId));
+      await deleteDocument("tournaments", tId);
+      // await deleteDoc(doc(firestore, "tournaments", tId));
     }
   };
 

@@ -1,7 +1,4 @@
 import AuthModal from "@/components/auth/authModal";
-import Areas from "@/components/clientPages/areas";
-import Hero from "@/components/clientPages/hero";
-import HorizontalGamesScroll from "@/components/clientPages/horizontalGamesScroll";
 import ProfileWrapper from "@/components/clientPages/profileWrapper";
 import ClientAchievements from "@/components/clientPages/subpages/clientAchievements";
 import ClientChat from "@/components/clientPages/subpages/clientChat";
@@ -13,12 +10,7 @@ import ClientPrizes from "@/components/clientPages/subpages/clientPrizes";
 import ClientProfile from "@/components/clientPages/subpages/clientProfile";
 import ClientXP from "@/components/clientPages/subpages/clientXp";
 import TopNav from "@/components/clientPages/topnav";
-import UIButton from "@/components/ui/button";
 import { auth, firestore, logoutWithoutReroute } from "@/helpers/firebase";
-import {
-  computeAggregateLeaderboard,
-  computeTotalScore,
-} from "@/helpers/leaderboard";
 import { useAppContext } from "@/helpers/store";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import {
@@ -26,8 +18,6 @@ import {
   collection,
   where,
   getDocs,
-  orderBy,
-  limit,
   onSnapshot,
   setDoc,
   doc,

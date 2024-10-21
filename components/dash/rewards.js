@@ -1,14 +1,12 @@
 import { useState } from "react";
 import AddRewardModal from "./qr/addRewardModal";
 import GroupedRewards from "./qr/groupedRewards";
-import SubNav from "../nav/subnav";
 import AddPrizeModal from "./prizes/addPrizeModal";
 import GroupedPrizes from "./prizes/groupedPrizes";
 import FilterPills from "./filterPills";
 import ImagePicker from "../forms/imagePicker";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
+import { updateDocument } from "@/helpers/firebaseApi";
 
 export default function Rewards() {
   const context = useAppContext();
@@ -20,9 +18,12 @@ export default function Rewards() {
   const [nav, setNav] = useState("rewards");
 
   const updateProfile = async (url) => {
-    await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    await updateDocument("users", context.loggedIn?.uid, {
       prizeTileImage: url,
     });
+    // await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    //   prizeTileImage: url,
+    // });
     if (url) {
       setPrizeTileImage(url);
     } else {

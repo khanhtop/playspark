@@ -1,9 +1,7 @@
-import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { collection, getDocs } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Tabulate from "./tabulate";
+import { getCollection } from "@/helpers/firebaseApi";
 
 const columnSet = [
   {
@@ -22,13 +20,10 @@ export function AudienceEmails({}) {
 
   useEffect(() => {
     if (!emails) {
-      let _emails = [];
-      getDocs(
-        collection(firestore, "users", context?.loggedIn?.uid, "emails")
-      ).then((r) => {
-        for (let doc of r.docs) {
-          _emails.push({ email: doc.id });
-        }
+      getCollection(`users/${context.loggedIn?.uid}/emails`).then((res) => {
+        const _emails = res.map((elem) => ({
+          email: elem.id,
+        }));
         setEmails(_emails);
       });
     }

@@ -1,12 +1,20 @@
-import { doc, getDoc, increment, setDoc, arrayUnion } from "firebase/firestore";
+import {
+  doc,
+  increment,
+  setDoc,
+  arrayUnion,
+  updateDoc,
+} from "firebase/firestore";
 import { firestore } from "./firebase";
+import { getDocument, updateDocument } from "./firebaseApi";
 
 export const getLeaderboard = async (tournamentId) => {
   if (!tournamentId) return [];
-  const response = await getDoc(
-    doc(firestore, "tournaments", tournamentId.toString())
-  );
-  const rankings = response.data()?.leaderboard || [];
+  const response = await getDocument("tournaments", tournamentId.toString());
+  // const response = await getDoc(
+  //   doc(firestore, "tournaments", tournamentId.toString())
+  // );
+  const rankings = response?.leaderboard || [];
   const sorted = rankings.sort((a, b) => b.score - a.score);
   return sorted;
 };
@@ -37,13 +45,16 @@ export const rankMe = (leaderboard, uid, score, companyName, avatar = null) => {
 };
 
 export const updateLeaderboard = async (tournamentId, leaderboard) => {
-  await setDoc(
-    doc(firestore, "tournaments", tournamentId.toString()),
-    {
-      leaderboard: leaderboard,
-    },
-    { merge: true }
-  );
+  await updateDocument("tournaments", tournamentId.toString(), {
+    leaderboard: leaderboard,
+  });
+  // await setDoc(
+  //   doc(firestore, "tournaments", tournamentId.toString()),
+  //   {
+  //     leaderboard: leaderboard,
+  //   },
+  //   { merge: true }
+  // );
 };
 
 export const updateScoreAndXP = async (uid, score, companyId) => {
@@ -61,10 +72,11 @@ export const updateScoreAndXP = async (uid, score, companyId) => {
 
 export const getHighScore = async (tournamentId, uid) => {
   if (!tournamentId) return [];
-  const response = await getDoc(
-    doc(firestore, "tournaments", tournamentId.toString())
-  );
-  const rankings = response.data()?.leaderboard || [];
+  const response = await getDocument("tournaments", tournamentId.toString());
+  // const response = await getDoc(
+  //   doc(firestore, "tournaments", tournamentId.toString())
+  // );
+  const rankings = response?.leaderboard || [];
   const position = rankings?.findIndex((a) => a.uid === uid);
   if (position === -1) return 0;
   return rankings[position].score;

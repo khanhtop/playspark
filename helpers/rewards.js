@@ -1,9 +1,7 @@
-import e from "cors";
-import { addDoc, collection } from "firebase/firestore";
-import { firestore } from "./firebase";
 import { rewardWithCoins, rewardWithXP } from "./events";
 import { fireHook } from "./webhooks";
 import { sendSupabaseEvent } from "./analytics";
+import { addDocument } from "./firebaseApi";
 
 export function groupRewards(rewards) {
   if (!rewards) return [];
@@ -113,13 +111,18 @@ export const claimReward = async (reward, data, context) => {
       reward.id
     );
   }
-  await addDoc(
-    collection(firestore, "users", context.loggedIn.uid, "rewards"),
-    {
-      ...reward,
-      tournamentId: data.tournamentId,
-      ownerId: data.ownerId,
-    }
-  );
+  await addDocument(`users/${context.loggedIn.uid}/rewards`, {
+    ...reward,
+    tournamentId: data.tournamentId,
+    ownerId: data.ownerId,
+  });
+  // await addDoc(
+  //   collection(firestore, "users", context.loggedIn.uid, "rewards"),
+  //   {
+  //     ...reward,
+  //     tournamentId: data.tournamentId,
+  //     ownerId: data.ownerId,
+  //   }
+  // );
   return;
 };

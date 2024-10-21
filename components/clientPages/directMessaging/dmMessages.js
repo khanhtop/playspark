@@ -4,12 +4,10 @@ import { createChatName } from "@/helpers/chat";
 import { useEffect, useRef, useState } from "react";
 import {
   collection,
-  doc,
   limit,
   onSnapshot,
   orderBy,
   query,
-  updateDoc,
 } from "firebase/firestore";
 import { firestore } from "@/helpers/firebase";
 import { timeAgo } from "@/helpers/datetime";

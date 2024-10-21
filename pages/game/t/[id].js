@@ -1,11 +1,7 @@
 import Advert from "@/components/ad";
 import { getAd, getClient } from "@/helpers/api";
-import { decryptEmail, refactorEmail } from "@/helpers/crypto";
-import { auth, firestore, logoutWithoutReroute } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { determineStreak } from "@/helpers/streaks";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
 import Head from "next/head";
 import { useEffect, useState, useMemo, useRef } from "react";
 

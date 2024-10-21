@@ -1,11 +1,9 @@
 import { useAppContext } from "@/helpers/store";
 import { useEffect, useState } from "react";
-import Input from "./input";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { doc, setDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import { incrementOptInCount } from "@/helpers/api";
 import { emailAddedCTA } from "@/helpers/events";
+import { setDocument } from "@/helpers/firebaseApi";
 
 export default function EmailSlide({ data }) {
   const context = useAppContext();
@@ -25,13 +23,16 @@ export default function EmailSlide({ data }) {
 
   const submitToList = async () => {
     setLoading(true);
-    await setDoc(
-      doc(firestore, "users", data.ownerId, "emails", email),
-      {
-        consented: true,
-      },
-      { merge: true }
-    );
+    await setDocument(`users/${data.ownerId}/emails`, email, {
+      consented: true,
+    });
+    // await setDoc(
+    //   doc(firestore, "users", data.ownerId, "emails", email),
+    //   {
+    //     consented: true,
+    //   },
+    //   { merge: true }
+    // );
     await incrementOptInCount(data.tournamentId);
     context.setHasSubscribedToList(true);
     emailAddedCTA(context, data);

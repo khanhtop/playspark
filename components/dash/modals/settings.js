@@ -1,6 +1,5 @@
-import { firestore } from "@/helpers/firebase";
+import { setDocument } from "@/helpers/firebaseApi";
 import { useAppContext } from "@/helpers/store";
-import { doc, setDoc } from "firebase/firestore";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 
@@ -39,16 +38,22 @@ function ToggleRow({ parameter, changeKey, title, theme }) {
       [changeKey]: !context.settings[changeKey],
     });
     if (context.loggedIn?.uid) {
-      await setDoc(
-        doc(firestore, "users", context.loggedIn.uid),
-        {
-          gameConfig: {
-            ...context.settings,
-            [changeKey]: !context.settings[changeKey],
-          },
+      await setDocument("users", context.loggedIn.uid, {
+        gameConfig: {
+          ...context.settings,
+          [changeKey]: !context.settings[changeKey],
         },
-        { merge: true }
-      );
+      });
+      // await setDoc(
+      //   doc(firestore, "users", context.loggedIn.uid),
+      //   {
+      //     gameConfig: {
+      //       ...context.settings,
+      //       [changeKey]: !context.settings[changeKey],
+      //     },
+      //   },
+      //   { merge: true }
+      // );
     }
   };
 

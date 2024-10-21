@@ -4,6 +4,7 @@ import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { WinModal } from "./ui/modalTypes";
 import { surveyCompleteCTA, surveyResponseCTA } from "@/helpers/events";
+import { setDocument } from "@/helpers/firebaseApi";
 
 export default function Survey({ data, onComplete }) {
   const context = useAppContext();
@@ -34,12 +35,16 @@ export default function Survey({ data, onComplete }) {
       surveyData[qIndex].responses[rIndex].chosenBy =
         (surveyData[qIndex].responses[rIndex].chosenBy || 0) + 1;
     }
-
-    await setDoc(doc(firestore, "surveys", data?.surveyId), {
+    await setDocument("surveys", data?.surveyId, {
       id: data.surveyId,
       survey: surveyData,
       respondents: respondents,
     });
+    // await setDoc(doc(firestore, "surveys", data?.surveyId), {
+    //   id: data.surveyId,
+    //   survey: surveyData,
+    //   respondents: respondents,
+    // });
     await updateDoc(
       doc(firestore, "tournaments", data.tournamentId.toString()),
       {

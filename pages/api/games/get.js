@@ -1,3 +1,5 @@
+// FBJOE - UNSAFE
+
 import { firestore } from "@/helpers/firebase";
 import {
   collection,

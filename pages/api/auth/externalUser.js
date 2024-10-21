@@ -1,3 +1,5 @@
+// FBJOE - Unsafe
+
 import { auth, firestore } from "@/helpers/firebase";
 import { generateProfile } from "@/helpers/profileGen";
 import {

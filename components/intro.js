@@ -142,7 +142,10 @@ export default function Intro({
     if (
       context.loggedIn?.uid &&
       !demo &&
-      !context.profile?.termsAgreed?.includes(data.tournamentId)
+      !(
+        Array.isArray(context.profile?.termsAgreed) &&
+        context.profile.termsAgreed.includes(data.tournamentId)
+      )
     ) {
       setHasInitialisedAudio(true);
       setShowModal({
@@ -170,6 +173,7 @@ export default function Intro({
     } else if (
       context.loggedIn?.uid &&
       !demo &&
+      Array.isArray(context.profile?.termsAgreed) &&
       context.profile?.termsAgreed?.includes(data.tournamentId) &&
       !hasInitialisedAudio
     ) {

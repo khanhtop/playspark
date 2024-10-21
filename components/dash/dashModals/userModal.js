@@ -1,23 +1,26 @@
 import { useEffect, useState } from "react";
 import ModalSkin from "./modalSkin";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import { Card } from "flowbite-react";
+import { filterCollection } from "@/helpers/firebaseApi";
 
 export default function UserModal({ onClose, data, clientId }) {
   const [rewards, setRewards] = useState(null);
 
   const fetchRewards = async () => {
     try {
-      const rewardsRef = collection(firestore, "users", data.id, "rewards");
-      const rewardsQuery = query(rewardsRef, where("ownerId", "==", clientId));
-      const querySnapshot = await getDocs(rewardsQuery);
+      // const rewardsRef = collection(firestore, "users", data.id, "rewards");
+      // const rewardsQuery = query(rewardsRef, where("ownerId", "==", clientId));
+      // const querySnapshot = await getDocs(rewardsQuery);
 
-      const rewardsList = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
+      // const rewardsList = querySnapshot.docs.map((doc) => ({
+      //   id: doc.id,
+      //   ...doc.data(),
+      // }));
+      const rewardsList = await filterCollection(
+        `users/${data.id}/rewards`,
+        "ownerId",
+        clientId
+      );
       setRewards(rewardsList);
     } catch (error) {
       console.error("Error fetching rewards:", error);

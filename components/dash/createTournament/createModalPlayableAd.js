@@ -4,12 +4,11 @@ import CreateDesign from "./createDesign";
 import CreateMarketing from "./createMarketing";
 import CreateSummary from "./createSummary";
 import { useAppContext } from "@/helpers/store";
-import { doc, setDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import CreateConfiguration from "./createConfiguration";
 import CreateConfigReimage from "./createConfigReimage";
 import CreateRewards from "./createRewards";
 import CreateAdvanced from "./createAdvanced";
+import { setDocument } from "@/helpers/firebaseApi";
 
 export default function CreateModalPlayableAd({ data, hide }) {
   const context = useAppContext();
@@ -34,7 +33,7 @@ export default function CreateModalPlayableAd({ data, hide }) {
     const _myGames = context.profile?.myGames || [];
     const _uid = Date.now();
     _myGames.push(_uid);
-    await setDoc(doc(firestore, "tournaments", _uid.toString()), {
+    await setDocument("tournaments", _uid.toString(), {
       ...tournament,
       isActive: true,
       tournamentId: _uid,
@@ -47,6 +46,19 @@ export default function CreateModalPlayableAd({ data, hide }) {
         brandLogo: context.profile.brandLogo,
       }),
     });
+    // await setDoc(doc(firestore, "tournaments", _uid.toString()), {
+    //   ...tournament,
+    //   isActive: true,
+    //   tournamentId: _uid,
+    //   ownerId: context.loggedIn?.uid,
+    //   ownerCompanyName: context?.profile?.companyName,
+    //   ...(context?.profile?.sponsorLogo && {
+    //     sponsorLogo: context.profile.sponsorLogo,
+    //   }),
+    //   ...(context?.profile?.brandLogo && {
+    //     brandLogo: context.profile.brandLogo,
+    //   }),
+    // });
     setAdding(false);
     hide();
   };
