@@ -2,8 +2,6 @@ import { useRef, useState } from "react";
 import Input from "../forms/input";
 import { TwitterPicker } from "react-color";
 import { useAppContext } from "@/helpers/store";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -20,6 +18,7 @@ import {
   RewardedComponent,
 } from "./unlocksWithTier";
 import Toggle from "react-toggle";
+import { setDocument } from "@/helpers/firebaseApi";
 
 export default function CreateTournamentModal({ data, hide }) {
   const context = useAppContext();
@@ -32,7 +31,7 @@ export default function CreateTournamentModal({ data, hide }) {
     const _myGames = context.profile?.myGames || [];
     const _uid = Date.now();
     _myGames.push(_uid);
-    await setDoc(doc(firestore, "tournaments", _uid.toString()), {
+    await setDocument("tournaments", _uid.toString(), {
       ...tournament,
       isActive: true,
       tournamentId: _uid,
@@ -45,6 +44,19 @@ export default function CreateTournamentModal({ data, hide }) {
         brandLogo: context.profile.brandLogo,
       }),
     });
+    // await setDoc(doc(firestore, "tournaments", _uid.toString()), {
+    //   ...tournament,
+    //   isActive: true,
+    //   tournamentId: _uid,
+    //   ownerId: context.loggedIn?.uid,
+    //   ownerCompanyName: context?.profile?.companyName,
+    //   ...(context?.profile?.sponsorLogo && {
+    //     sponsorLogo: context.profile.sponsorLogo,
+    //   }),
+    //   ...(context?.profile?.brandLogo && {
+    //     brandLogo: context.profile.brandLogo,
+    //   }),
+    // });
     setAdding(false);
     hide();
   };

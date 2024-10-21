@@ -1,9 +1,7 @@
 import Button from "@/components/forms/button";
 import ImagePicker from "@/components/forms/imagePicker";
 import Input from "@/components/forms/input";
-import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
-import { addDoc, collection } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -40,7 +38,7 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
     setLoading(true);
     const uniqueId = uuidv4();
     const { name, description, quantity, price, address } = reward;
-    const rewardsCollection = collection(firestore, "rewards");
+    // const rewardsCollection = collection(firestore, "rewards");
     for (let i = 0; i < quantity; i++) {
       const newReward = {
         name: name,
@@ -56,7 +54,8 @@ export default function AddRewardModal({ user, isOpen, onClose, children }) {
         isPurchased: false,
         isRedeemed: false,
       };
-      await addDoc(rewardsCollection, newReward);
+      await addDocument("rewards", newReward);
+      // await addDoc(rewardsCollection, newReward);
     }
     setLoading(false);
     onClose();

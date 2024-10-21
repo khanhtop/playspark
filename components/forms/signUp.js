@@ -1,10 +1,6 @@
-import {
-  ArrowPathIcon,
-  InformationCircleIcon,
-} from "@heroicons/react/24/solid";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, firestore } from "@/helpers/firebase";
+import { auth } from "@/helpers/firebase";
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -13,6 +9,7 @@ import {
 import UIButton from "../ui/button";
 import { useAppContext } from "@/helpers/store";
 import { loginEvent, signupEvent } from "@/helpers/events";
+import { setDocument } from "@/helpers/firebaseApi";
 
 export default function SignUp({ data, closeDialog }) {
   const context = useAppContext();
@@ -120,14 +117,18 @@ export default function SignUp({ data, closeDialog }) {
     setLoading(true);
     await createUserWithEmailAndPassword(auth, email.trim(), password)
       .then(async (user) => {
-        await setDoc(
-          doc(firestore, "users", user.user.uid),
-          {
-            email: email.trim(),
-            uid: user.user.uid,
-          },
-          { merge: true }
-        );
+        await setDocument("users", user.user.uid, {
+          email: email.trim(),
+          uid: user.user.uid,
+        });
+        // await setDoc(
+        //   doc(firestore, "users", user.user.uid),
+        //   {
+        //     email: email.trim(),
+        //     uid: user.user.uid,
+        //   },
+        //   { merge: true }
+        // );
         signupEvent(context, data);
         await verifyUserTracked(user.user.id, true);
         closeDialog();
@@ -140,24 +141,32 @@ export default function SignUp({ data, closeDialog }) {
 
   const verifyUserTracked = async (id, withName) => {
     if (withName) {
-      await setDoc(
-        doc(firestore, "users", data.ownerId, "users", email.trim()),
-        {
-          active: true,
-          id: id ?? "",
-        },
-        { merge: true }
-      );
+      await setDocument(`users/${data.ownerId}/users`, email.trim(), {
+        active: true,
+        id: id ?? "",
+      });
+      // await setDoc(
+      //   doc(firestore, "users", data.ownerId, "users", email.trim()),
+      //   {
+      //     active: true,
+      //     id: id ?? "",
+      //   },
+      //   { merge: true }
+      // );
       return;
     } else {
-      await setDoc(
-        doc(firestore, "users", data.ownerId, "users", email.trim()),
-        {
-          active: true,
-          id: id ?? "",
-        },
-        { merge: true }
-      );
+      await setDocument(`users/${data.ownerId}/users`, email.trim(), {
+        active: true,
+        id: id ?? "",
+      });
+      // await setDoc(
+      //   doc(firestore, "users", data.ownerId, "users", email.trim()),
+      //   {
+      //     active: true,
+      //     id: id ?? "",
+      //   },
+      //   { merge: true }
+      // );
       return;
     }
   };

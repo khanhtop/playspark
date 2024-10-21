@@ -6,9 +6,8 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
-import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
-import { setDoc } from "firebase/firestore";
 
 export default function AuthModal({ action, closeModal, user }) {
   const context = useAppContext();

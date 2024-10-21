@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AreaTabs from "../areaTabs";
 import ClientPageWrapper from "../clientPageWrapper";
-import { collection, doc, getDocs, query } from "firebase/firestore";
 import { useAppContext } from "@/helpers/store";
 import { getAvailableReward } from "@/helpers/rewards";
 import RewardCard from "../rewardCard";
-import { firestore } from "@/helpers/firebase";
 import AreaPills from "../pills";
 
 export default function ClientCoins({ user, rewards, setScreen }) {

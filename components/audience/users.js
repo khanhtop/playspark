@@ -1,12 +1,9 @@
-import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import Tabulate from "./tabulate";
-import { Button } from "flowbite-react";
-import ModalSkin from "../dash/dashModals/modalSkin";
 import UserModal from "../dash/dashModals/userModal";
+import { filterArrayCollection } from "@/helpers/firebaseApi";
 
 const columnSet = [
   {
@@ -40,24 +37,14 @@ export function AudienceUsers({}) {
 
   useEffect(() => {
     if (context?.loggedIn?.uid && !users) {
-      const q = query(
-        collection(firestore, "users"),
-        where("memberOf", "array-contains", context.loggedIn.uid)
-      );
-
-      getDocs(q).then((res) => {
-        let out = [];
-        for (let doc of res.docs) {
-          if (
-            doc?.id?.toLowerCase() !== context?.loggedIn?.email.toLowerCase()
-          ) {
-            out.push({ ...doc.data(), id: doc.id });
-          }
+      filterArrayCollection("users", "memberOf", context?.loggedIn?.uid).then(
+        (res) => {
+          console.log(res);
+          setUsers(res);
         }
-        setUsers(out);
-      });
+      );
     }
-  }, [context?.loggedIn, users]);
+  }, [context?.loggedIn]);
 
   if (!users) {
     return (

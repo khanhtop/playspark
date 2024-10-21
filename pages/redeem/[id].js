@@ -1,13 +1,9 @@
+// FBJOE - Safe for users, touches rewards
+
 import Button from "@/components/forms/button";
 import { firestore } from "@/helpers/firebase";
-import {
-  collection,
-  doc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { updateDocument } from "@/helpers/firebaseApi";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -16,10 +12,14 @@ export default function Redeem({ status, data, id }) {
   const router = useRouter();
   const redeem = async () => {
     setLoading(true);
-    await updateDoc(doc(firestore, "rewards", id), {
+    await updateDocument("rewards", id, {
       isPurchased: true,
       isRedeemed: true,
     });
+    // await updateDoc(doc(firestore, "rewards", id), {
+    //   isPurchased: true,
+    //   isRedeemed: true,
+    // });
     setLoading(false);
     router.reload();
   };

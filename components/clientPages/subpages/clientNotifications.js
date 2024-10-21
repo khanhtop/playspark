@@ -1,15 +1,10 @@
 import { useAppContext } from "@/helpers/store";
 import ClientPageWrapper from "../clientPageWrapper";
 import { useRouter } from "next/router";
-import {
-  BellAlertIcon,
-  ChevronRightIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { ChevronRightIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { formatTimeDifference } from "@/helpers/datetime";
 import { useEffect, useState } from "react";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
+import { updateDocument } from "@/helpers/firebaseApi";
 
 export default function ClientNotifications({ user, setScreen }) {
   const context = useAppContext();
@@ -43,9 +38,12 @@ function NotificationModal({ showMessage, setShowMessage }) {
   if (!showMessage) return <div />;
 
   useEffect(() => {
-    updateDoc(doc(firestore, "notifications", showMessage.id), {
+    updateDocument("notifications", showMessage.id, {
       read: true,
     });
+    // updateDoc(doc(firestore, "notifications", showMessage.id), {
+    //   read: true,
+    // });
   }, [showMessage]);
 
   return (

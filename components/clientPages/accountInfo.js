@@ -1,11 +1,5 @@
-import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PencilIcon,
-} from "@heroicons/react/24/solid";
-import { doc, setDoc } from "firebase/firestore";
+import { PencilIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import AvatarModal from "./avatarModal";
 
@@ -25,13 +19,7 @@ export default function AccountInfo({
 
   const updateProfile = () => {
     if (name) {
-      setDoc(
-        doc(firestore, "users", context?.loggedIn?.uid),
-        {
-          companyName: name,
-        },
-        { merge: true }
-      );
+      setDocument("users", context?.loggedIn?.uid, { companyName: name });
     }
   };
 
@@ -46,13 +34,7 @@ export default function AccountInfo({
   }, [context.profile]);
 
   const changeImage = async (av) => {
-    await setDoc(
-      doc(firestore, "users", context?.loggedIn?.uid),
-      {
-        profilePhoto: av,
-      },
-      { merge: true }
-    );
+    setDocument("users", context?.loggedIn?.uid, { profilePhoto: av });
   };
 
   if (context.loggedIn?.uid)

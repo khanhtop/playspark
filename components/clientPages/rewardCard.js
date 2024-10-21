@@ -1,10 +1,9 @@
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
 import UIButton from "../ui/button";
-import { firestore } from "@/helpers/firebase";
 import { useState } from "react";
 import { useAppContext } from "@/helpers/store";
 import EmbeddedModal from "./embeddedModal";
 import QR from "../dash/qr/qr";
+import { updateDocument } from "@/helpers/firebaseApi";
 
 export default function RewardCard({ user, item, isRedeem }) {
   const context = useAppContext();
@@ -13,13 +12,20 @@ export default function RewardCard({ user, item, isRedeem }) {
 
   const claimReward = async () => {
     setLoading(true);
-    await updateDoc(doc(firestore, "rewards", item.id), {
+    await updateDocument("rewards", item.id, {
       isPurchased: true,
       purchasedBy: context?.loggedIn?.uid,
     });
-    await updateDoc(doc(firestore, "users", context?.loggedIn?.uid), {
+    // await updateDoc(doc(firestore, "rewards", item.id), {
+    //   isPurchased: true,
+    //   purchasedBy: context?.loggedIn?.uid,
+    // });
+    await updateDocument("users", context?.loggedIn?.uid, {
       totalScore: context?.profile?.totalScore - item.price,
     });
+    // await updateDoc(doc(firestore, "users", context?.loggedIn?.uid), {
+    //   totalScore: context?.profile?.totalScore - item.price,
+    // });
     setLoading(false);
     alert("Reward Claimed");
   };

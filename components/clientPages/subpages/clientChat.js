@@ -1,12 +1,9 @@
 import { useAppContext } from "@/helpers/store";
 import ClientPageWrapper from "../clientPageWrapper";
-import DMHeader from "../directMessaging/dmHeader";
 import { useState, useEffect } from "react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import DMMessages from "../directMessaging/dmMessages";
-import { createChatName, sortUsers } from "@/helpers/chat";
 import { timeAgo } from "@/helpers/datetime";
+import { getDocument } from "@/helpers/firebaseApi";
 
 export default function ClientChat({ user, screen, setScreen }) {
   const context = useAppContext();
@@ -15,11 +12,15 @@ export default function ClientChat({ user, screen, setScreen }) {
 
   useEffect(() => {
     if (context.latestChat) {
-      getDoc(doc(firestore, "users", context.latestChat)).then((document) => {
+      getDocument("users", context.latestChat).then((document) => {
         setSelectedChatter({ ...document.data(), id: document.id });
-
         setPhase("dm");
       });
+      // getDoc(doc(firestore, "users", context.latestChat)).then((document) => {
+      //   setSelectedChatter({ ...document.data(), id: document.id });
+
+      //   setPhase("dm");
+      // });
     }
   }, [context.latestChat]);
 

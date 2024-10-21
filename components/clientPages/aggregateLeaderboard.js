@@ -1,7 +1,5 @@
 import { useState } from "react";
 import UserModal from "./userModal";
-import { doc, getDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { calculateLevel } from "@/helpers/xp";
 

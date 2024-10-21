@@ -1,3 +1,5 @@
+
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   getGame,
@@ -9,7 +11,7 @@ import {
 import dynamic from "next/dynamic";
 import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
-import { doc, increment, setDoc, updateDoc } from "firebase/firestore";
+import { doc, increment, updateDoc } from "firebase/firestore";
 import { firestore, logout } from "@/helpers/firebase";
 import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";

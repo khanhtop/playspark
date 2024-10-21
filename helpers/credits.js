@@ -1,5 +1,4 @@
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "./firebase";
+import { updateDocument } from "./firebaseApi";
 
 // Variable Amounts
 export const shutoffBalance = -100;
@@ -62,7 +61,10 @@ export async function deductCredits(clientId, openingCredits, deductCredits) {
 }
 
 async function applyDeduction(clientId, closingCredits) {
-  await updateDoc(doc(firestore, "users", clientId), {
+  await updateDocument("users", clientId, {
     creditBalance: closingCredits,
   });
+  // await updateDoc(doc(firestore, "users", clientId), {
+  //   creditBalance: closingCredits,
+  // });
 }
