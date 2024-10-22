@@ -114,6 +114,7 @@ export function AppWrapper({ children }) {
     let _chatsUnsub = () => null;
     let _battleUnsub = () => null;
     if (loggedIn && !profile) {
+      console.log("GET PROFILE");
       _profileUnsub = onSnapshot(
         doc(firestore, "users", loggedIn.uid),
         (doc) => {

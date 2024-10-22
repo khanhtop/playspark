@@ -29,6 +29,7 @@ import WelcomeModal from "./dash/modals/welcomeModal";
 import ProfileModal from "./dash/modals/profileModal";
 import { WinModal } from "./ui/modalTypes";
 import { cloudinaryToReimage } from "@/helpers/reimage";
+import { updateDocument } from "@/helpers/firebaseApi";
 
 export default function Intro({
   waitOnAuth,
@@ -138,14 +139,27 @@ export default function Intro({
     }
   }, [gameOver.score]);
 
+  console.log(context.loggedIn?.uid, context.profile);
+
+  useEffect(() => {
+    if (
+      typeof context.profile?.termsAgreed === "object" &&
+      !Array.isArray(context.profile.termsAgreed)
+    ) {
+      updateDocument("users", context.loggedIn?.uid, {
+        termsAgreed: [],
+      });
+    } else {
+      console.log("OK");
+    }
+  }, [context.profile]);
+
   useEffect(() => {
     if (
       context.loggedIn?.uid &&
       !demo &&
-      !(
-        Array.isArray(context.profile?.termsAgreed) &&
-        context.profile.termsAgreed.includes(data.tournamentId)
-      )
+      context.profile &&
+      !context?.profile?.termsAgreed?.includes(data.tournamentId)
     ) {
       setHasInitialisedAudio(true);
       setShowModal({
@@ -173,7 +187,8 @@ export default function Intro({
     } else if (
       context.loggedIn?.uid &&
       !demo &&
-      Array.isArray(context.profile?.termsAgreed) &&
+      context.profile &&
+      Array.isArray(context.profile.termsAgreed) &&
       context.profile?.termsAgreed?.includes(data.tournamentId) &&
       !hasInitialisedAudio
     ) {
