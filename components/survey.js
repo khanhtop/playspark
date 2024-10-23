@@ -1,10 +1,10 @@
 import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
-import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
+import { doc, increment, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { WinModal } from "./ui/modalTypes";
 import { surveyCompleteCTA, surveyResponseCTA } from "@/helpers/events";
-import { setDocument } from "@/helpers/firebaseApi";
+import { getDocument, setDocument } from "@/helpers/firebaseApi";
 
 export default function Survey({ data, onComplete }) {
   const context = useAppContext();
@@ -13,14 +13,15 @@ export default function Survey({ data, onComplete }) {
   const [canClick, setCanClick] = useState(true);
 
   const submitResponse = async (resp) => {
-    const currentSurvey = await getDoc(
-      doc(firestore, "surveys", data.surveyId)
-    );
+    const currentSurvey = await getDocument("surveys", data.surveyId);
+    // const currentSurvey = await getDoc(
+    //   doc(firestore, "surveys", data.surveyId)
+    // );
     const surveyData = currentSurvey.exists()
-      ? currentSurvey.data()?.survey
+      ? currentSurvey?.survey
       : data?.survey;
     const respondents = currentSurvey.exists()
-      ? currentSurvey.data()?.respondents || []
+      ? currentSurvey?.respondents || []
       : [];
     if (context?.loggedIn?.uid) {
       if (!respondents.includes(context?.loggedIn?.uid))

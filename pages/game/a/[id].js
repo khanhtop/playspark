@@ -1,5 +1,5 @@
 import Advert from "@/components/ad";
-import { getAd, getClient } from "@/helpers/api";
+import { getAd, getClient } from "@/helpers/firebaseServerSide";
 import { decryptEmail, refactorEmail } from "@/helpers/crypto";
 import { auth, logoutWithoutReroute } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";

@@ -24,50 +24,6 @@ import {
 } from "./firebaseApi";
 const Pong = dynamic(() => import("@/components/games/pong"), { ssr: false });
 
-export async function getAd(id) {
-  // const ad = await getDocument("tournaments", id);
-  const ad = await getDoc(doc(firestore, "tournaments", id));
-  if (ad.exists()) {
-    const packet = {
-      ...ad.data(),
-      primaryColor: ad.data()?.primaryColor ?? "#132257",
-      textColor: ad.data()?.textColor ?? "#FFF",
-      backgroundImage:
-        ad.data()?.backgroundImage ??
-        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
-    };
-    return packet;
-  } else {
-    return null;
-  }
-}
-
-export async function getChallenge(id) {
-  // const ad = await getDocument("challenges", id);
-  const ad = await getDoc(doc(firestore, "challenges", id));
-  if (ad.exists()) {
-    const packet = {
-      ...ad.data(),
-    };
-    return packet;
-  } else {
-    return null;
-  }
-}
-
-export async function getClient(id) {
-  // const user = await getDocument("users", id);
-  const user = await getDoc(doc(firestore, "users", id));
-  if (user.exists()) {
-    const packet = {
-      ...user.data(),
-    };
-    return packet;
-  } else {
-    return null;
-  }
-}
-
 export async function getDemo(id) {
   const game = games.find((a) => a.id === parseInt(id));
   return {

@@ -139,8 +139,6 @@ export default function Intro({
     }
   }, [gameOver.score]);
 
-  console.log(context.loggedIn?.uid, context.profile);
-
   useEffect(() => {
     if (
       typeof context.profile?.termsAgreed === "object" &&

@@ -11,17 +11,17 @@ import ClientProfile from "@/components/clientPages/subpages/clientProfile";
 import ClientXP from "@/components/clientPages/subpages/clientXp";
 import TopNav from "@/components/clientPages/topnav";
 import { auth, firestore, logoutWithoutReroute } from "@/helpers/firebase";
+import { setDocument } from "@/helpers/firebaseApi";
+import {
+  getLeaderboardForUser,
+  getTournamentsByOwnerId,
+  getUserBySlug,
+  sortTournamentsByDate,
+  sortTournamentsByPlayCount,
+} from "@/helpers/firebaseServerSide";
 import { useAppContext } from "@/helpers/store";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import {
-  query,
-  collection,
-  where,
-  getDocs,
-  onSnapshot,
-  setDoc,
-  doc,
-} from "firebase/firestore";
+import { query, collection, where, onSnapshot } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
 
@@ -180,16 +180,20 @@ export default function PageHandler({
 
   useEffect(() => {
     if (context?.avatars && context.profile && !context.profile.profilePhoto) {
-      setDoc(
-        doc(firestore, "users", context?.loggedIn?.uid),
-        {
-          profilePhoto:
-            context?.avatars[
-              Math.floor(Math.random() * context?.avatars.length)
-            ],
-        },
-        { merge: true }
-      );
+      setDocument("users", context?.loggedIn?.uid, {
+        profilePhoto:
+          context?.avatars[Math.floor(Math.random() * context?.avatars.length)],
+      });
+      // setDoc(
+      //   doc(firestore, "users", context?.loggedIn?.uid),
+      //   {
+      //     profilePhoto:
+      //       context?.avatars[
+      //         Math.floor(Math.random() * context?.avatars.length)
+      //       ],
+      //   },
+      //   { merge: true }
+      // );
     }
   }, [context?.avatars, context.profile]);
 
@@ -255,73 +259,35 @@ export async function getServerSideProps(context) {
   const { id, deviceIdSignIn } = context.query;
 
   try {
-    const usersRef = query(
-      collection(firestore, "users"),
-      where("slug", "==", id)
-    );
-    const querySnapshot = await getDocs(usersRef);
-    const userDoc = querySnapshot.docs[0];
-    if (userDoc) {
-      const userData = { id: userDoc.id, ...userDoc.data() };
-      const tournamentsRef = query(
-        collection(firestore, "tournaments"),
-        where("isActive", "==", true),
-        where("ownerId", "==", userDoc.id)
-      );
-      const tournamentsSnapshot = await getDocs(tournamentsRef);
-      const tournamentsData = tournamentsSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        endDate: doc.data().endDate ? JSON.stringify(doc.data().endDate) : null,
-      }));
+    // Fetch user data by slug
+    const userData = await getUserBySlug(id);
+    console.log(userData);
 
-      const tournamentsByPlayCount = tournamentsData
-        ? [...tournamentsData]
-            .sort((a, b) => {
-              const playCountA = a.freemiumPlayCount || 0;
-              const playCountB = b.freemiumPlayCount || 0;
-              return playCountB - playCountA;
-            })
-            .slice(0, 5)
-        : [];
-
-      const tournamentsByDate = tournamentsData
-        ? [...tournamentsData]
-            .sort((a, b) => {
-              const dateB = a.timestamp || 0;
-              const dateA = b.timestamp || 0;
-              return dateB - dateA;
-            })
-            .slice(0, 5)
-        : [];
-
-      const leaderboardRef = query(
-        collection(firestore, "users"),
-        where("memberOf", "array-contains", userDoc.id)
-      );
-      const leaderboardSnapshot = await getDocs(leaderboardRef);
-      const leaderboard = leaderboardSnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-        currentXp: doc.data()?.dataByClient?.[userDoc.id]?.xp || 0,
-      }));
-
-      return {
-        props: {
-          user: userData,
-          tournaments: tournamentsData,
-          tournamentsByPlayCount: tournamentsByPlayCount,
-          tournamentsByDate: tournamentsByDate,
-          leaderboard: leaderboard,
-          shouldAuthWithDeviceId:
-            deviceIdSignIn || userData?.id === "xwMcL84YdoRXAV52oNjmhVhCHD63",
-        },
-      };
-    } else {
-      return {
-        notFound: true,
-      };
+    if (!userData) {
+      return { notFound: true };
     }
+
+    // Fetch tournaments by user ID
+    const tournamentsData = await getTournamentsByOwnerId(userData.id);
+
+    // Sort tournaments by play count and date
+    const tournamentsByPlayCount = sortTournamentsByPlayCount(tournamentsData);
+    const tournamentsByDate = sortTournamentsByDate(tournamentsData);
+
+    // Fetch leaderboard for the user
+    const leaderboard = await getLeaderboardForUser(userData.id);
+
+    return {
+      props: {
+        user: userData,
+        tournaments: tournamentsData,
+        tournamentsByPlayCount,
+        tournamentsByDate,
+        leaderboard,
+        shouldAuthWithDeviceId:
+          deviceIdSignIn || userData?.id === "xwMcL84YdoRXAV52oNjmhVhCHD63",
+      },
+    };
   } catch (error) {
     console.error("Error fetching user data:", error.message);
     return {

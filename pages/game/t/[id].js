@@ -1,5 +1,5 @@
 import Advert from "@/components/ad";
-import { getAd, getClient } from "@/helpers/api";
+import { getAd, getClient } from "@/helpers/firebaseServerSide";
 import { useAppContext } from "@/helpers/store";
 import { determineStreak } from "@/helpers/streaks";
 import Head from "next/head";

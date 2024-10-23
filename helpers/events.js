@@ -3,6 +3,7 @@
 import { doc, increment, setDoc, arrayUnion } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { sendSupabaseEvent } from "./analytics";
+import { setDocument } from "./firebaseApi";
 
 export function playEvent(context, data) {
   allocateXp(
@@ -108,13 +109,16 @@ export async function levelEvent(context, level, data) {
     ...gameSpecificData[data.tournamentId],
     level: level,
   };
-  await setDoc(
-    doc(firestore, "users", context.loggedIn.uid.toString()),
-    {
-      tournamentSpecificData: gameSpecificData,
-    },
-    { merge: true }
-  );
+  await setDocument("users", context.loggedIn.uid.toString(), {
+    tournamentSpecificData: gameSpecificData,
+  });
+  // await setDoc(
+  //   doc(firestore, "users", context.loggedIn.uid.toString()),
+  //   {
+  //     tournamentSpecificData: gameSpecificData,
+  //   },
+  //   { merge: true }
+  // );
 }
 
 export async function rewardWithXP(xp, context, data) {

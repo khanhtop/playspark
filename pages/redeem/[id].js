@@ -16,10 +16,6 @@ export default function Redeem({ status, data, id }) {
       isPurchased: true,
       isRedeemed: true,
     });
-    // await updateDoc(doc(firestore, "rewards", id), {
-    //   isPurchased: true,
-    //   isRedeemed: true,
-    // });
     setLoading(false);
     router.reload();
   };
