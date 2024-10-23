@@ -47,10 +47,9 @@ export default function IntroPanel({
 
   const tournamentScore =
     lb?.find((a) => a.uid === context?.loggedIn?.uid)?.score || 0;
+
   const maxStreak =
     context.profile?.streaks?.[data.tournamentId]?.maxStreak || 0;
-
-  const playCount = context.profile?.analytics?.playCount || 0;
 
   const xp = context.profile?.dataByTournament?.[data.tournamentId]?.xp || 0;
 
