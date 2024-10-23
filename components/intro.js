@@ -57,40 +57,39 @@ export default function Intro({
 
   if (!audio.current) {
     audio.current = new Audio(data?.homescreenMusic ?? "/uisounds/intro.mp3");
+    audio.current.muted = true;
   }
-  useMusic(
-    hasInitialisedAudio,
-    data?.homescreenMusic ?? "/uisounds/intro.mp3",
-    context.settings.bgm
-  );
+
+  // useMusic(
+  //   hasInitialisedAudio,
+  //   data?.homescreenMusic ?? "/uisounds/intro.mp3",
+  //   context.settings.bgm
+  // );
 
   useGoogleFont(data.font || "Anton", "custom-font");
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
-    if (context.settings.bgm && !isAudioPlaying) {
-      setIsAudioPlaying(true);
-      audio.current.play();
+    if (audio.current) {
+      if (audio.current.muted) audio.current.muted = false;
+      if (audio.current.paused) audio.current.play();
     }
   };
 
   useEffect(() => {
-    if (context.settings.bgm && !isAudioPlaying && !hasInitialisedAudio) {
-      playAudio();
-    }
+    if (context.settings.bgm) playAudio();
     return () => {
       if (audio.current) {
-        setIsAudioPlaying(false);
+        audio.current.muted = true;
         audio.current.pause();
       }
     };
   }, []);
 
   useEffect(() => {
-    if (context.settings.bgm && !isAudioPlaying) {
+    if (context.settings.bgm) {
       playAudio();
     } else if (!context.settings.bgm) {
-      setIsAudioPlaying(false);
       audio.current.pause();
     }
   }, [context.settings.bgm]);
