@@ -1,10 +1,4 @@
-import {
-  doc,
-  increment,
-  setDoc,
-  arrayUnion,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, increment, setDoc, arrayUnion } from "firebase/firestore";
 import { firestore } from "./firebase";
 import { getDocument, updateDocument } from "./firebaseApi";
 
@@ -73,6 +67,7 @@ export const updateScoreAndXP = async (uid, score, companyId) => {
 export const getHighScore = async (tournamentId, uid) => {
   if (!tournamentId) return [];
   const response = await getDocument("tournaments", tournamentId.toString());
+  console.log(response, " LB");
   // const response = await getDoc(
   //   doc(firestore, "tournaments", tournamentId.toString())
   // );

@@ -17,12 +17,8 @@ export default function Survey({ data, onComplete }) {
     // const currentSurvey = await getDoc(
     //   doc(firestore, "surveys", data.surveyId)
     // );
-    const surveyData = currentSurvey.exists()
-      ? currentSurvey?.survey
-      : data?.survey;
-    const respondents = currentSurvey.exists()
-      ? currentSurvey?.respondents || []
-      : [];
+    const surveyData = currentSurvey ? currentSurvey?.survey : data?.survey;
+    const respondents = currentSurvey ? currentSurvey?.respondents || [] : [];
     if (context?.loggedIn?.uid) {
       if (!respondents.includes(context?.loggedIn?.uid))
         respondents.push(context.loggedIn?.uid);
