@@ -9,8 +9,9 @@ import { useEffect } from "react";
 export default function WhoWeHelp({ page }) {
   const router = useRouter();
   return (
-    <div className="w-full flex flex-col bg-white from-blue-500/0 to-blue-500/10 items-center justify-center text-black pt-[90px]  px-0 lg:px-4">
-      <div className="text-center flex flex-col items-center mx-auto gap-5 pb-[60px] max-w-full ">
+    <div className="bg-white max-w-full mx-auto">
+    <div className="flex flex-col from-blue-500/0 to-blue-500/10 items-center justify-center text-black pt-[90px]  px-0 lg:px-4">
+      <div className="text-center flex flex-col items-center mx-auto gap-5 pb-[60px]">
         <button className="max-w-[226px] mx-auto text-center text-[13px] font-medium rounded-[10px] border border-[#E9E9E9] border-1 px-[10px] py-1 ">
           {page.level_sub_title}
         </button>
@@ -20,7 +21,7 @@ export default function WhoWeHelp({ page }) {
         <p className="text-[22px] my-4 mb-10 text-center lg:max-w-[535px]  max-w-[358px] mx-auto text-subtitle">
           {page.level_text}
         </p>
-        <div className="lg:hidden block max-w-[430px] mx-auto">
+        <div className="lg:hidden block max-w-[380px] mx-auto">
           <Slider items={page.level_group} />
         </div>
 
@@ -28,6 +29,7 @@ export default function WhoWeHelp({ page }) {
           return <Blog item={item} key={key} />;
         })}
       </div>
+    </div>
     </div>
   );
 }

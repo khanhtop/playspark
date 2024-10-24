@@ -81,7 +81,7 @@ export default function App({ Component, pageProps }) {
 
   return (
     <main
-      className={`${titan.variable} ${roboto.variable} ${tiltneon.variable} ${pixel.variable} ${anton.variable} ${octomed.variable} ${octolight.variable} font-sans font-roboto`}
+      className={`${titan.variable} ${roboto.variable} ${tiltneon.variable} ${pixel.variable} ${anton.variable} ${octomed.variable} ${octolight.variable} font-sans font-roboto w-full max-w-full overflow-x-hidden`}
     >
       <AppWrapper>
         <Component {...pageProps} />

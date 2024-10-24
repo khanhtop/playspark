@@ -11,8 +11,8 @@ import { useEffect } from "react";
 export default function BrandSection({ page }) {
   const router = useRouter();
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center  gap-10 text-black bg-white pt-[75px]">
+    <div className="">
+      <div className="flex flex-col items-center justify-center  gap-10 text-black bg-white pt-[75px] ">
         <h1 className="lg:text-[54px] text-[48px] font-bold max-w-[348px] lg:max-w-full leading-[60px] mx-auto font-roboto -tracking-wide">
           {page.brand_title_1}
         </h1>
@@ -28,7 +28,7 @@ export default function BrandSection({ page }) {
         </button>
       </div>
       <div className="bg-gradient-to-t from-back to-white py-16 px-4 flex flex-col items-center justify-center gap-5 text-black bg-white">
-        <div className="lg:shadow-sm lg:shadow-grey lg:border  lg:rounded-[10px] lg:px-[105px] pb-4 ">
+        <div className=" lg:px-[105px] pb-4 ">
           <h1 className="my-4 font-bold text-[54px] leading-[60px] font-roboto -tracking-wide">
             {page.brand_title_2}
           </h1>
