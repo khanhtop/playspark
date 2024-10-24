@@ -38,7 +38,7 @@ const Blog = ({item}) => {
             </div>
         </div>
         <div className="w-full flex items-end justify-center">
-            <img src = {item.image.url} className="w-[160px] h-[244px] " />
+            <img src = {item.image.url} className="w-[260px] h-[244px] " />
         </div>
         </div>
         

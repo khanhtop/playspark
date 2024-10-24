@@ -29,11 +29,10 @@ export default function Marketing({ page }) {
       <Modal dismissible show={openModal} onClose={() => setOpenModal(false)}>
         <Modal.Body>
           <div>
-            <MuxPlayer
-              playbackId="Ich7WJrJMupVVOTOUCv54rKVGceLqlHpCd8ddj7uFpA"
-              autoPlay={true}
-              muted={true}
-            />
+            <video className="h-full w-full rounded-lg" controls autoPlay muted>
+              <source src={page.video.url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
         </Modal.Body>
       </Modal>

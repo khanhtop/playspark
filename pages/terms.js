@@ -12,7 +12,7 @@ export default function Terms() {
     <>
       <div className="h-auto mx-auto w-full max-w-full bg-white">
         <Navbar />
-        <div className="flex flex-row items-start justify-start mt-[150px] max-w-[890px] mx-auto gap-20 text-[16px]">
+        <div className="flex flex-row items-start justify-start pt-[150px] max-w-[890px] mx-auto gap-20 text-[16px]">
           <div className="flex flex-col w-1/5 items-center justify-center text-start gap-24">
             <input
               className="border rounded-[24px] bg-white  text-black px-5 py-2 text-[16px] shadow-xl shadow-grey"
