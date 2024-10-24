@@ -1,8 +1,9 @@
 import GameButton from "@/components/uiv2/gameButton";
+import { firestore } from "@/helpers/firebase";
 import { updateDocument } from "@/helpers/firebaseApi";
 import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { arrayUnion } from "firebase/firestore";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 
 export default function IntroModal({ data }) {
@@ -13,12 +14,12 @@ export default function IntroModal({ data }) {
   const agree = async () => {
     setLoading(true);
     if (context?.loggedIn?.uid) {
-      await updateDocument("users", context?.loggedIn?.uid, {
-        termsAgreed: data.tournamentId ? arrayUnion(data.tournamentId) : "demo",
-      });
-      // await updateDoc(doc(firestore, "users", context?.loggedIn?.uid), {
+      // await updateDocument("users", context?.loggedIn?.uid, {
       //   termsAgreed: data.tournamentId ? arrayUnion(data.tournamentId) : "demo",
       // });
+      await updateDoc(doc(firestore, "users", context?.loggedIn?.uid), {
+        termsAgreed: data.tournamentId ? arrayUnion(data.tournamentId) : "demo",
+      });
     }
 
     setLoading(false);

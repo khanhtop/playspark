@@ -1,5 +1,5 @@
 import Advert from "@/components/ad";
-import { getClient, getDemo } from "@/helpers/api";
+import { getDemo } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 import { useState } from "react";
 
@@ -30,7 +30,6 @@ export default function Demo({ ad, id, client }) {
 export async function getServerSideProps(context) {
   // Get the ad from the id here:
   const ad = await getDemo(context.query?.id);
-  // const client = await getClient(ad.ownerId);
   return {
     props: {
       id: context.query?.id,

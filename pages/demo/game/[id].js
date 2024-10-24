@@ -1,5 +1,5 @@
 import Advert from "@/components/ad";
-import { getClient, getDemo } from "@/helpers/api";
+import { getDemo } from "@/helpers/api";
 import { useAppContext } from "@/helpers/store";
 import { useState } from "react";
 

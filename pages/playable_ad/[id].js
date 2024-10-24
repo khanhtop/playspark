@@ -1,5 +1,5 @@
 import Advert from "@/components/ad";
-import { getAd, getClient, getDemo } from "@/helpers/api";
+import { getAd } from "@/helpers/firebaseServerSide";
 import { useAppContext } from "@/helpers/store";
 import { useState } from "react";
 

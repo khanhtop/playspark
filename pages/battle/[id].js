@@ -1,6 +1,5 @@
 import Challenge from "@/components/challenge";
-import { getAd, getChallenge } from "@/helpers/api";
-import { useAppContext } from "@/helpers/store";
+import { getChallenge } from "@/helpers/firebaseServerSide";
 import Head from "next/head";
 
 export default function ChallengeHome({ ad, id }) {

@@ -29,6 +29,7 @@ import WelcomeModal from "./dash/modals/welcomeModal";
 import ProfileModal from "./dash/modals/profileModal";
 import { WinModal } from "./ui/modalTypes";
 import { cloudinaryToReimage } from "@/helpers/reimage";
+import { updateDocument } from "@/helpers/firebaseApi";
 
 export default function Intro({
   waitOnAuth,
@@ -56,40 +57,39 @@ export default function Intro({
 
   if (!audio.current) {
     audio.current = new Audio(data?.homescreenMusic ?? "/uisounds/intro.mp3");
+    audio.current.muted = true;
   }
-  useMusic(
-    hasInitialisedAudio,
-    data?.homescreenMusic ?? "/uisounds/intro.mp3",
-    context.settings.bgm
-  );
+
+  // useMusic(
+  //   hasInitialisedAudio,
+  //   data?.homescreenMusic ?? "/uisounds/intro.mp3",
+  //   context.settings.bgm
+  // );
 
   useGoogleFont(data.font || "Anton", "custom-font");
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
 
   const playAudio = () => {
-    if (context.settings.bgm && !isAudioPlaying) {
-      setIsAudioPlaying(true);
-      audio.current.play();
+    if (audio.current) {
+      if (audio.current.muted) audio.current.muted = false;
+      if (audio.current.paused) audio.current.play();
     }
   };
 
   useEffect(() => {
-    if (context.settings.bgm && !isAudioPlaying && !hasInitialisedAudio) {
-      playAudio();
-    }
+    if (context.settings.bgm) playAudio();
     return () => {
       if (audio.current) {
-        setIsAudioPlaying(false);
+        audio.current.muted = true;
         audio.current.pause();
       }
     };
   }, []);
 
   useEffect(() => {
-    if (context.settings.bgm && !isAudioPlaying) {
+    if (context.settings.bgm) {
       playAudio();
     } else if (!context.settings.bgm) {
-      setIsAudioPlaying(false);
       audio.current.pause();
     }
   }, [context.settings.bgm]);
@@ -140,12 +140,23 @@ export default function Intro({
 
   useEffect(() => {
     if (
+      typeof context.profile?.termsAgreed === "object" &&
+      !Array.isArray(context.profile.termsAgreed)
+    ) {
+      updateDocument("users", context.loggedIn?.uid, {
+        termsAgreed: [],
+      });
+    } else {
+      console.log("OK");
+    }
+  }, [context.profile]);
+
+  useEffect(() => {
+    if (
       context.loggedIn?.uid &&
       !demo &&
-      !(
-        Array.isArray(context.profile?.termsAgreed) &&
-        context.profile.termsAgreed.includes(data.tournamentId)
-      )
+      context.profile &&
+      !context?.profile?.termsAgreed?.includes(data.tournamentId)
     ) {
       setHasInitialisedAudio(true);
       setShowModal({
@@ -173,7 +184,8 @@ export default function Intro({
     } else if (
       context.loggedIn?.uid &&
       !demo &&
-      Array.isArray(context.profile?.termsAgreed) &&
+      context.profile &&
+      Array.isArray(context.profile.termsAgreed) &&
       context.profile?.termsAgreed?.includes(data.tournamentId) &&
       !hasInitialisedAudio
     ) {
