@@ -52,6 +52,11 @@ export default function Hero({ page }) {
           <img
             src={page.hero_gif.url}
             className="w-[100%] lg:h-[450px] h-auto"
+            style={{
+              backgroundColor: 'transparent',
+              mixBlendMode: 'multiply',  // Multiplies background color with the image
+              filter: 'opacity(0.8)',     // Adjust opacity to blend colors
+            }}
           />
          
         </div>

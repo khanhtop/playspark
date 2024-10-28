@@ -65,6 +65,7 @@ export default function Pay({ page }) {
 }
 
 const Blog = ({ item, page }) => {
+  const router = useRouter();
   let className;
   let buttonStyle;
   let text_list;
@@ -152,6 +153,8 @@ const Blog = ({ item, page }) => {
           "w-[271px] mx-auto border rounded-[30px] py-[10px] px-[64px]",
           buttonStyle
         )}
+
+        onClick={()=>{router.push('/admin')}}
       >
         {item.button_text}
       </button>
