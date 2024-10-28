@@ -1,63 +1,11 @@
-import { useAppContext } from "@/helpers/store";
 import GameButton from "./uiv2/gameButton";
-import { useEffect, useRef, useState } from "react";
-import useMusic from "@/helpers/useMusic";
 
 import useGoogleFont from "@/helpers/useGoogleFont";
 import { cloudinaryToReimage } from "@/helpers/reimage";
 
-export default function PlayableAdIntro({
-  data,
-  setStage,
-  score,
-  hasInitialisedAudio,
-}) {
-  const context = useAppContext();
-
-  // Audio
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
-  const audio = useRef(null);
-
-  if (typeof window !== "undefined" && !audio.current) {
-    audio.current = new Audio(data?.homescreenMusic ?? "/uisounds/intro.mp3");
-  }
-
-  useMusic(
-    hasInitialisedAudio,
-    data?.homescreenMusic ?? "/uisounds/intro.mp3",
-    context.settings.bgm
-  );
-
+export default function PlayableAdIntro({ data, setStage, score }) {
   useGoogleFont(data.font || "Anton", "custom-font");
   useGoogleFont(data.bodyFont || "Roboto", "primary-font");
-
-  const playAudio = () => {
-    if (context.settings.bgm && !isAudioPlaying) {
-      setIsAudioPlaying(true);
-      audio.current.play();
-    }
-  };
-
-  useEffect(() => {
-    if (context.settings.bgm && !isAudioPlaying && !hasInitialisedAudio) {
-      playAudio();
-    }
-    return () => {
-      if (audio.current) {
-        setIsAudioPlaying(false);
-        audio.current.pause();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (context.settings.bgm && !isAudioPlaying) {
-      playAudio();
-    } else if (!context.settings.bgm) {
-      setIsAudioPlaying(false);
-      audio.current.pause();
-    }
-  }, [context.settings.bgm]);
 
   const theme = data?.theme || "default";
 
@@ -66,7 +14,7 @@ export default function PlayableAdIntro({
       <img
         src={cloudinaryToReimage(
           data?.backgroundImage,
-          data?.landscape ? "w-1200" : "w-600"
+          data?.landscape ? "w-1200" : "w-1200"
         )}
         className="absolute top-0 left-0 h-full w-full object-cover"
       />

@@ -1,41 +1,28 @@
 import { useState, useEffect } from "react";
 import CreateWrapper from "./createWrapper";
-import CreateDesign from "./createDesign";
-import CreateMarketing from "./createMarketing";
 import CreateSummary from "./createSummary";
 import { useAppContext } from "@/helpers/store";
 import CreateConfiguration from "./createConfiguration";
 import CreateConfigReimage from "./createConfigReimage";
 import CreateRewards from "./createRewards";
-import CreateAdvanced from "./createAdvanced";
 import { setDocument } from "@/helpers/firebaseApi";
+import CreatePaDesign from "./playableAds/createPaDesign";
 
 export default function CreateModalPlayableAd({ data, hide }) {
   const context = useAppContext();
-  const stages = ["Design", "Game Setup", "Rewards", "Summary"];
+  const stages = ["Design", "Asset Setup", "Rewards", "Summary"];
   const [stage, setStage] = useState(0);
   const [tournament, setTournament] = useState({
     ...data,
-    homescreenMusic:
-      "https://res.cloudinary.com/dmj6utxgp/video/upload/v1713844467/slowtempo-softrock-intro.mp3",
     rewards: [],
-    endDate: new Date(new Date().setMonth(new Date().getMonth() + 3)),
-    creditCap: 1000,
-    socialCta: null,
-    sponsoredVideo: null,
-    hasSponsoredVideo: false,
   });
   const [adding, setAdding] = useState(false);
-  const [imageLibrary, setImageLibrary] = useState();
 
   const createTournament = async () => {
     setAdding(true);
-    const _myGames = context.profile?.myGames || [];
     const _uid = Date.now();
-    _myGames.push(_uid);
-    await setDocument("tournaments", _uid.toString(), {
+    await setDocument("playable_ads", _uid.toString(), {
       ...tournament,
-      isActive: true,
       tournamentId: _uid,
       ownerId: context.loggedIn?.uid,
       ownerCompanyName: context?.profile?.companyName,
@@ -46,19 +33,6 @@ export default function CreateModalPlayableAd({ data, hide }) {
         brandLogo: context.profile.brandLogo,
       }),
     });
-    // await setDoc(doc(firestore, "tournaments", _uid.toString()), {
-    //   ...tournament,
-    //   isActive: true,
-    //   tournamentId: _uid,
-    //   ownerId: context.loggedIn?.uid,
-    //   ownerCompanyName: context?.profile?.companyName,
-    //   ...(context?.profile?.sponsorLogo && {
-    //     sponsorLogo: context.profile.sponsorLogo,
-    //   }),
-    //   ...(context?.profile?.brandLogo && {
-    //     brandLogo: context.profile.brandLogo,
-    //   }),
-    // });
     setAdding(false);
     hide();
   };
@@ -81,7 +55,7 @@ export default function CreateModalPlayableAd({ data, hide }) {
           isAdding={adding}
         >
           {stage === 0 && (
-            <CreateDesign
+            <CreatePaDesign
               tournament={tournament}
               setTournament={setTournament}
             />
@@ -101,24 +75,12 @@ export default function CreateModalPlayableAd({ data, hide }) {
             )
           )}
           {stage === 2 && (
-            <CreateMarketing
-              tournament={tournament}
-              setTournament={setTournament}
-            />
-          )}
-          {stage === 3 && (
             <CreateRewards
               tournament={tournament}
               setTournament={setTournament}
             />
           )}
-          {stage === 4 && (
-            <CreateAdvanced
-              tournament={tournament}
-              setTournament={setTournament}
-            />
-          )}
-          {stage === 5 && (
+          {stage === 3 && (
             <CreateSummary
               tournament={tournament}
               setTournament={setTournament}

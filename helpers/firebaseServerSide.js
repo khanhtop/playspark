@@ -19,6 +19,24 @@ export async function getAd(id) {
   }
 }
 
+export async function getPlayableAd(id) {
+  const adRef = admin.firestore().collection("playable_ads").doc(id);
+  const ad = await adRef.get();
+  if (ad.exists) {
+    const packet = {
+      ...ad.data(),
+      primaryColor: ad.data()?.primaryColor ?? "#132257",
+      textColor: ad.data()?.textColor ?? "#FFF",
+      backgroundImage:
+        ad.data()?.backgroundImage ??
+        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
+    };
+    return packet;
+  } else {
+    return null;
+  }
+}
+
 export async function getChallenge(id) {
   const challengeRef = admin.firestore().collection("challenges").doc(id);
   const challenge = await challengeRef.get();

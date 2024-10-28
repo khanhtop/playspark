@@ -5,7 +5,6 @@ export const playable_ads = [
       "Spin your way to victory in our game of chance! Every turn unlocks a world of rewards, making every moment a winning sensation!",
     backgroundImage:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259239/1_jxkksl.png",
-    screenshot: "wheelspin.jpg",
     primaryColor: "#F69B01",
     accentColor: "#EB144C",
     textColor: "#FFF",
@@ -13,6 +12,9 @@ export const playable_ads = [
     cloudinaryGameTag: "spin-to-win",
     tags: {
       backgroundSprite: "0.6",
+      playerSprite: "1.0",
+      enemySprite: "1.0",
+      powerUpSprite: "1.0",
     },
     font: "Play",
     bodyFont: "Roboto",
