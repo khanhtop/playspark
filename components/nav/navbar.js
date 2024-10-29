@@ -36,7 +36,7 @@ export default function Navbar() {
               } hover:text-sky-600`}
               href="/products"
             >
-              Features
+              Products
             </Link>
             <Link
               className={`${
@@ -103,7 +103,7 @@ export default function Navbar() {
             />
           )}
         </div>
-        <div className="flex flex-col gap-2 font-bold  px-3">
+        <div className="flex flex-col gap-2   px-3">
           <Link
             onClick={() => setNavOpen(false)}
             className="hover:text-sky-600"
@@ -130,7 +130,7 @@ export default function Navbar() {
             }}
             className="mt-2 bg-sky-500 px-4 py-2 text-white rounded-lg"
           >
-            Free Demo
+            Get for free
           </button>
         </div>
       </div>

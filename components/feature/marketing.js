@@ -68,6 +68,11 @@ const Blog = ({ item }) => {
         <img
           src={item.image.url}
           className="max-w-[200px] lg:max-w-[405px] h-[272px] lg:h-[455px] max-h-[455px]"
+          style={{
+            backgroundColor: 'transparent',
+            mixBlendMode: 'multiply',  // Multiplies background color with the image
+            filter: 'opacity(0.8)',     // Adjust opacity to blend colors
+          }}
         />
         <div className="flex flex-col items-center lg:items-start justify-center gap-5 px-10">
           <h1 className="font-bold text-[18px]">{item.title}</h1>

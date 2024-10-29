@@ -15,7 +15,7 @@ export default function PowerSection({ page }) {
         <h1 className="text-6xl font-bold text-black -tracking-[3px] font-roboto">
           {page.power_title}
         </h1>
-        <div className="flex flex-col lg:flex-row gap-4 mt-8  ">
+        <div className="flex flex-col lg:flex-row gap-4 mt-8 justify-start items-start ">
           {page.power_group?.map((item, key) => (
             <Element item={item} key={key} />
           ))}

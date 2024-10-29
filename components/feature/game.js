@@ -11,6 +11,11 @@ export default function Game({ page }) {
         <img
           src={page.demo_background.url}
           className="w-full -z-10 lg:absolute h-[700px] lg:block hidden"
+          style={{
+            backgroundColor: 'transparent',
+            mixBlendMode: 'multiply',  // Multiplies background color with the image
+            filter: 'opacity(0.8)',     // Adjust opacity to blend colors
+          }}
         />
         <div className="max-h-auto lg:max-h-[700px] flex flex-col lg:flex-row items-center justify-center py-[64px] gap-10 max-w-[1200px] mx-auto">
           <div className="flex flex-col justify-center items-center gap-10 w-full lg:px-5 lg:w-1/2">
