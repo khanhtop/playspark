@@ -4,17 +4,18 @@ import CreateSummary from "./createSummary";
 import { useAppContext } from "@/helpers/store";
 import CreateConfiguration from "./createConfiguration";
 import CreateConfigReimage from "./createConfigReimage";
-import CreateRewards from "./createRewards";
 import { setDocument } from "@/helpers/firebaseApi";
 import CreatePaDesign from "./playableAds/createPaDesign";
+import CreatePaRewards from "./playableAds/createPaRewards";
 
 export default function CreateModalPlayableAd({ data, hide }) {
   const context = useAppContext();
-  const stages = ["Design", "Asset Setup", "Rewards", "Summary"];
+  const stages = ["Design", "Look & Feel", "Configuration", "Summary"];
   const [stage, setStage] = useState(0);
   const [tournament, setTournament] = useState({
     ...data,
     rewards: [],
+    winProbability: 0.8,
   });
   const [adding, setAdding] = useState(false);
 
@@ -75,7 +76,7 @@ export default function CreateModalPlayableAd({ data, hide }) {
             )
           )}
           {stage === 2 && (
-            <CreateRewards
+            <CreatePaRewards
               tournament={tournament}
               setTournament={setTournament}
             />
