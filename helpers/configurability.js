@@ -244,6 +244,18 @@ export const configurableParameterTitles = {
       text: "Background",
       configurable: true,
     },
+    playerSprite: {
+      text: "Low Score Segment",
+      configurable: true,
+    },
+    enemySprite: {
+      text: "Medium Score Segment",
+      configurable: true,
+    },
+    powerUpSprite: {
+      text: "High Score Segment",
+      configurable: true,
+    },
   },
   wordle: {
     backgroundSprite: {

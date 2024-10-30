@@ -1,11 +1,10 @@
 import Advert from "@/components/ad";
-import { getAd, getClient } from "@/helpers/api";
+import { getAd, getClient } from "@/helpers/firebaseServerSide";
 import { decryptEmail, refactorEmail } from "@/helpers/crypto";
-import { auth, firestore, logoutWithoutReroute } from "@/helpers/firebase";
+import { auth, logoutWithoutReroute } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
 import { determineStreak } from "@/helpers/streaks";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, onSnapshot } from "firebase/firestore";
 import Head from "next/head";
 import { useEffect, useState, useMemo, useRef } from "react";
 
@@ -16,14 +15,13 @@ export default function Ad({
   config,
   userId,
   email,
-  em,
   externalId,
 }) {
   const context = useAppContext();
   const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
   const [signingIn, setSigingIn] = useState(0);
   const [waitOnAuth, setWaitOnAuth] = useState(false);
-  const [clientCredits, setClientCredits] = useState();
+  const [clientCredits, setClientCredits] = useState(10000000);
   const subscriptionRef = useRef(null);
   const [deviceId, setDeviceId] = useState(null);
 
@@ -86,24 +84,24 @@ export default function Ad({
 
   // LISTEN TO CLIENT CREDITS
 
-  useEffect(() => {
-    if (ad.ownerId && !clientCredits && !subscriptionRef?.current) {
-      subscriptionRef.current = onSnapshot(
-        doc(firestore, "users", ad.ownerId),
-        (doc) => {
-          if (doc.exists()) {
-            setClientCredits(() => {
-              const newCreditBalance = doc.data().creditBalance;
-              return newCreditBalance;
-            });
-          }
-        },
-        (error) => {
-          console.log("Error getting document:", error);
-        }
-      );
-    }
-  }, [ad.ownerId, clientCredits]);
+  // useEffect(() => {
+  //   if (ad.ownerId && !clientCredits && !subscriptionRef?.current) {
+  //     subscriptionRef.current = onSnapshot(
+  //       doc(firestore, "users", ad.ownerId),
+  //       (doc) => {
+  //         if (doc.exists()) {
+  //           setClientCredits(() => {
+  //             const newCreditBalance = doc.data().creditBalance;
+  //             return newCreditBalance;
+  //           });
+  //         }
+  //       },
+  //       (error) => {
+  //         console.log("Error getting document:", error);
+  //       }
+  //     );
+  //   }
+  // }, [ad.ownerId, clientCredits]);
 
   useEffect(() => {
     if (subscriptionRef.current) {
@@ -277,7 +275,9 @@ export async function getServerSideProps(context) {
   const ad = await getAd(id);
   const client = await getClient(ad.ownerId);
 
-  console.log(client);
+  const leaderboard = ad?.leaderboard
+    ? ad.leaderboard?.map(({ email, ...rest }) => rest)
+    : [];
 
   return {
     props: {
@@ -288,6 +288,7 @@ export async function getServerSideProps(context) {
         ...ad,
         endDate: ad.endDate ? JSON.stringify(ad.endDate) : null,
         xpWebhook: client?.xpWebhook || null,
+        leaderboard: leaderboard,
       },
       email: email || null,
       xp: xp || null,

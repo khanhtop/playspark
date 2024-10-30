@@ -9,7 +9,7 @@ import {
 import dynamic from "next/dynamic";
 import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
-import { doc, increment, setDoc, updateDoc } from "firebase/firestore";
+import { doc, increment, updateDoc } from "firebase/firestore";
 import { firestore, logout } from "@/helpers/firebase";
 import VideoAd from "./videoAd";
 import { mockVideos } from "@/helpers/mocks";
@@ -248,13 +248,6 @@ export default function Advert({
       {!context?.config?.hideBackButton && (
         <PopoutBackNav action={withPopoutBackNav} />
       )}
-      {/* {stage === 0 && context?.loggedIn?.uid && (
-        <img
-          onClick={() => logout()}
-          className="absolute bottom-4 left-4 text-black z-20 underline h-10 w-10"
-          src="/clientPages/signout.png"
-        />
-      )} */}
 
       {shouldRotate && (
         <div className="absolute h-screen w-screen top-0 left-0 bg-black/90 z-30 flex items-center justify-center text-white font-octo text-2xl">

@@ -1,7 +1,7 @@
 import * as GUI from "@babylonjs/gui";
 import { EventTypes, Events } from "../Events";
 import { Images } from "../Images";
-import { Color4} from "@babylonjs/core";
+import { Color4 } from "@babylonjs/core";
 import { GameData } from "../GameData";
 import { TintedImage } from "./TintedImage";
 
@@ -81,7 +81,7 @@ export class PauseUI {
     //this.level_title_txt.fontStyle = "bold";
     this.level_title_txt.topInPixels = -200;
     //this.level_title_txt.leftInPixels = -20;
-    this.level_title_txt.color = GameData.instance.getAccentColor();//"#117FB2";
+    this.level_title_txt.color = GameData.instance.getAccentColor(); //"#117FB2";
     this.level_title_txt.outlineWidth = 0;
     this.container.addControl(this.level_title_txt);
 
@@ -114,7 +114,7 @@ export class PauseUI {
 
     score_txt.topInPixels = -40;
     score_txt.leftInPixels = 57;
-    score_txt.color = GameData.instance.getAccentColor();//"#1979B3";
+    score_txt.color = GameData.instance.getAccentColor(); //"#1979B3";
     score_txt.outlineWidth = 0;
     details.addControl(score_txt);
 
@@ -236,7 +236,7 @@ export class PauseUI {
     );
     this.setSwitchState(this.musicSwitchBtn, false);
 
-    var btn_base = GUI.Button.CreateImageOnlyButton("but", Images.data.BtnBase);
+    var btn_base = GUI.Button.CreateImageOnlyButton("but", Images.data.btnBase);
 
     btn_base.widthInPixels = 190 / 1.3;
     btn_base.heightInPixels = 74 / 1.3;
@@ -247,7 +247,6 @@ export class PauseUI {
     //btn_base.color = "transparent";
     this.container.addControl(btn_base);
 
-  
     var save_btn = new GUI.Image();
     save_btn.source = Images.data.SaveBtn;
     save_btn.widthInPixels = 190 / 1.3;

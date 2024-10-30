@@ -1,18 +1,6 @@
-import { games } from "@/helpers/games";
 import { useState, useEffect, useRef } from "react";
-import GameCard from "./gameCard";
 import { useAppContext } from "@/helpers/store";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
-import Embed from "./embed";
+import { filterCollection } from "@/helpers/firebaseApi";
 
 export default function Usage({}) {
   const context = useAppContext();
@@ -26,18 +14,16 @@ export default function Usage({}) {
 
   useEffect(() => {
     if (myTournaments?.length && !refreshOnLoad) return;
-    const tournamentsRef = collection(firestore, "tournaments");
-    const q = query(
-      tournamentsRef,
-      where("ownerId", "==", context.loggedIn?.uid)
+
+    filterCollection("tournaments", "ownerId", context.loggedIn?.uid).then(
+      (docs) => {
+        let out = [];
+        docs.forEach((doc) => {
+          out.push(doc);
+        });
+        setMyTournaments(out);
+      }
     );
-    let out = [];
-    getDocs(q).then((result) => {
-      result.forEach((doc) => {
-        out.push(doc.data());
-      });
-    });
-    setMyTournaments(out);
   }, []);
 
   return (

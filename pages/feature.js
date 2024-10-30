@@ -5,8 +5,10 @@ import Navbar from "@/components/nav/navbar";
 import Footer from "@/components/homepage/footer";
 import Script from "next/script";
 import privacyLogo from '/public/images/privacy_logo.png'
+import { useRouter } from "next/router";
 
 export default function Feature({ page }) {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -18,7 +20,7 @@ export default function Feature({ page }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-screen overflow-y-scroll  min-w-[430px] mx-auto bg-white">
+      <div className="h-auto mx-auto w-full max-w-full bg-white">
         <Navbar />
         {/* <ColsWithCTA
           image={page.hero_image?.url}
@@ -94,7 +96,9 @@ export default function Feature({ page }) {
               playable ads. Create, test and iterate for free and then enjoy low
               cost games that deliver amazing ROI.
             </p>
-            <button className="bg-free px-4 py-2 my-10 text-black rounded-[30px]">
+            <button className="bg-free px-4 py-2 my-10 text-black rounded-[30px]"
+              onClick={()=>{router.push("/admin")}}
+            >
               Sign Up Free
             </button>
           </div>

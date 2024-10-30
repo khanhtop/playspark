@@ -7,8 +7,7 @@ import {
   PlayCircleIcon,
   PlayIcon,
 } from "@heroicons/react/24/solid";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
+import { setDocument } from "@/helpers/firebaseApi";
 
 export default function OnboardWrapper({ children }) {
   const context = useAppContext();
@@ -21,12 +20,18 @@ export default function OnboardWrapper({ children }) {
   // Methods
 
   const saveProfile = async () => {
-    await setDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    await setDocument("users", context.loggedIn?.uid, {
       tier: 0,
       companyName: companyName,
       purpose: purpose,
       hasOnboarded: true,
     });
+    // await setDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    //   tier: 0,
+    //   companyName: companyName,
+    //   purpose: purpose,
+    //   hasOnboarded: true,
+    // });
   };
 
   if (!context.profile) {

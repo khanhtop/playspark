@@ -1,7 +1,6 @@
-import { firestore } from "@/helpers/firebase";
+import { setDocument } from "@/helpers/firebaseApi";
 import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { doc, setDoc } from "firebase/firestore";
 import { useMemo, useState } from "react";
 
 export default function StripeSuccess({
@@ -13,13 +12,16 @@ export default function StripeSuccess({
   const [updated, setUpdated] = useState(false);
 
   const updateCredits = async () => {
-    await setDoc(
-      doc(firestore, "users", context?.loggedIn?.uid),
-      {
-        creditBalance: currentCredits + stripePayload.amount,
-      },
-      { merge: true }
-    );
+    await setDocument("users", context?.loggedIn?.uid, {
+      creditBalance: currentCredits + stripePayload.amount,
+    });
+    // await setDoc(
+    //   doc(firestore, "users", context?.loggedIn?.uid),
+    //   {
+    //     creditBalance: currentCredits + stripePayload.amount,
+    //   },
+    //   { merge: true }
+    // );
     setUpdated(currentCredits + stripePayload.amount);
     return;
   };

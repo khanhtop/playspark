@@ -1,9 +1,10 @@
 import { firestore } from "@/helpers/firebase";
 import { useAppContext } from "@/helpers/store";
-import { doc, getDoc, increment, setDoc, updateDoc } from "firebase/firestore";
+import { doc, increment, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import { WinModal } from "./ui/modalTypes";
 import { surveyCompleteCTA, surveyResponseCTA } from "@/helpers/events";
+import { getDocument, setDocument } from "@/helpers/firebaseApi";
 
 export default function Survey({ data, onComplete }) {
   const context = useAppContext();
@@ -12,15 +13,12 @@ export default function Survey({ data, onComplete }) {
   const [canClick, setCanClick] = useState(true);
 
   const submitResponse = async (resp) => {
-    const currentSurvey = await getDoc(
-      doc(firestore, "surveys", data.surveyId)
-    );
-    const surveyData = currentSurvey.exists()
-      ? currentSurvey.data()?.survey
-      : data?.survey;
-    const respondents = currentSurvey.exists()
-      ? currentSurvey.data()?.respondents || []
-      : [];
+    const currentSurvey = await getDocument("surveys", data.surveyId);
+    // const currentSurvey = await getDoc(
+    //   doc(firestore, "surveys", data.surveyId)
+    // );
+    const surveyData = currentSurvey ? currentSurvey?.survey : data?.survey;
+    const respondents = currentSurvey ? currentSurvey?.respondents || [] : [];
     if (context?.loggedIn?.uid) {
       if (!respondents.includes(context?.loggedIn?.uid))
         respondents.push(context.loggedIn?.uid);
@@ -34,12 +32,16 @@ export default function Survey({ data, onComplete }) {
       surveyData[qIndex].responses[rIndex].chosenBy =
         (surveyData[qIndex].responses[rIndex].chosenBy || 0) + 1;
     }
-
-    await setDoc(doc(firestore, "surveys", data?.surveyId), {
+    await setDocument("surveys", data?.surveyId, {
       id: data.surveyId,
       survey: surveyData,
       respondents: respondents,
     });
+    // await setDoc(doc(firestore, "surveys", data?.surveyId), {
+    //   id: data.surveyId,
+    //   survey: surveyData,
+    //   respondents: respondents,
+    // });
     await updateDoc(
       doc(firestore, "tournaments", data.tournamentId.toString()),
       {

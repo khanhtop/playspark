@@ -1,10 +1,7 @@
-
-
-
 import ClientBlog from "../forms/client_blog"
 export default function Client ({page}) {
     return (
-        <div className=" flex flex-col items-center justify-center text-black bg-white relative">
+        <div className=" flex flex-col items-center justify-center text-black bg-white relative ">
             <button className="border border-black rounded-xl px-3 py-2 mt-[59px]"  >{page.client_button}</button>
             <h1 className="lg:text-[54px] text-[48px] text-center lg:w-full w-[350px]  font-bold my-5 px-[48px] lg:px-5 font-roboto" >
                 {page.client_title}
@@ -18,7 +15,6 @@ export default function Client ({page}) {
                 </div>
                 <div className="w-full h-96 absolute z-10 bg-gradient-to-t from-white to-transparent bottom-0 lg:hidden block "></div>
             </div>
-           
         </div>
     )
 }

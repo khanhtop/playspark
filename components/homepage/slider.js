@@ -6,7 +6,7 @@ import selectImage from "../../public/images/select.png"
 
 export default function Slider({items}) {
   return (
-    <div className="flex w-full items-center justify-center bg-white text-black px-2 py-2">
+    <div className="flex w-full  items-center justify-center bg-white text-black px-2 py-2">
       <Carousel>
         {items?.map((item, key)=>{
             return <Blog item={item} key={key} />
@@ -38,7 +38,7 @@ const Blog = ({item}) => {
             </div>
         </div>
         <div className="w-full flex items-end justify-center">
-            <img src = {item.image.url} className="w-[160px] h-[244px] " />
+            <img src = {item.image.url} className="w-[260px] h-[244px] " />
         </div>
         </div>
         

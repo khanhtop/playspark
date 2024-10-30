@@ -1,14 +1,10 @@
-import GameButton from "@/components/uiv2/gameButton";
-import { firestore } from "@/helpers/firebase";
+import { setDocument } from "@/helpers/firebaseApi";
 import { useAppContext } from "@/helpers/store";
 import {
   ArrowLeftCircleIcon,
   ArrowPathIcon,
   ArrowRightCircleIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
 } from "@heroicons/react/24/solid";
-import { doc, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function ProfileModal({ data }) {
@@ -28,13 +24,16 @@ export default function ProfileModal({ data }) {
     const av =
       context.avatars[Math.floor(Math.random() * context.avatars.length)];
     setAvatar(av);
-    await setDoc(
-      doc(firestore, "users", context?.loggedIn?.uid),
-      {
-        profilePhoto: av,
-      },
-      { merge: true }
-    );
+    await setDocument("users", context?.loggedIn?.uid, {
+      profilePhoto: av,
+    });
+    // await setDoc(
+    //   doc(firestore, "users", context?.loggedIn?.uid),
+    //   {
+    //     profilePhoto: av,
+    //   },
+    //   { merge: true }
+    // );
     method(false);
   };
 

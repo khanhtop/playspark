@@ -12,7 +12,7 @@ export default function CaseStudies({ page }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-screen overflow-y-scroll  min-w-[430px] mx-auto">
+      <div className="h-auto mx-auto w-full max-w-full">
         <Navbar />
         <Hero page={page} />
         <Blog page={page} />

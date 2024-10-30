@@ -1,6 +1,5 @@
-import { firestore } from "@/helpers/firebase";
+import { getDocument } from "@/helpers/firebaseApi";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
 export default function GameAnalytics({ item }) {
@@ -10,11 +9,16 @@ export default function GameAnalytics({ item }) {
 
   useEffect(() => {
     if (item?.surveyId) {
-      getDoc(doc(firestore, "surveys", item.surveyId)).then((result) => {
-        if (result.data()) {
-          setSurveyData(result.data());
+      getDocument("surveys", item.surveyId).then((result) => {
+        if (result) {
+          setSurveyData(result);
         }
       });
+      // getDoc(doc(firestore, "surveys", item.surveyId)).then((result) => {
+      //   if (result.data()) {
+      //     setSurveyData(result.data());
+      //   }
+      // });
     }
   }, []);
 

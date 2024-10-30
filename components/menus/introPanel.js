@@ -16,16 +16,19 @@ export default function IntroPanel({
   const context = useAppContext();
   const [open, setOpen] = useState(false);
   const [rank, setRank] = useState(null);
+  const [lb, setLb] = useState([]);
 
   useMemo(() => {
-    if (!data?.tournamentId || !context?.loggedIn?.uid || waitOnAuth) return;
-    getLeaderboard(data?.tournamentId).then(async (lb) => {
-      const index = lb.findIndex((a) => a.uid === context.loggedIn.uid);
+    if (!data?.tournamentId || !context?.loggedIn?.uid || waitOnAuth || !open)
+      return;
+    getLeaderboard(data?.tournamentId).then(async (_lb) => {
+      setLb(_lb);
+      const index = _lb.findIndex((a) => a.uid === context.loggedIn.uid);
       if (index > -1) {
         setRank(index + 1);
       }
     });
-  }, [data.tournamentId, context?.loggedIn]);
+  }, [data.tournamentId, context?.loggedIn, open]);
 
   if (waitOnAuth) return <div />;
 
@@ -43,12 +46,10 @@ export default function IntroPanel({
     );
 
   const tournamentScore =
-    data?.leaderboard?.find((a) => a.uid === context?.loggedIn?.uid)?.score ||
-    0;
+    lb?.find((a) => a.uid === context?.loggedIn?.uid)?.score || 0;
+
   const maxStreak =
     context.profile?.streaks?.[data.tournamentId]?.maxStreak || 0;
-
-  const playCount = context.profile?.analytics?.playCount || 0;
 
   const xp = context.profile?.dataByTournament?.[data.tournamentId]?.xp || 0;
 

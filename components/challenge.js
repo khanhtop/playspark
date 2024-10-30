@@ -3,27 +3,12 @@ import {
   completeBattleForChallengee,
   completeBattleForChallenger,
   getGame,
-  incrementImpressions,
-  incrementOptInCount,
-  incrementPlayCount,
-  incrementPlayCountWithImpressions,
 } from "@/helpers/api";
 import dynamic from "next/dynamic";
-import Outro from "./outro";
 import { useAppContext } from "@/helpers/store";
-import { doc, increment, setDoc, updateDoc } from "firebase/firestore";
-import { firestore, logout } from "@/helpers/firebase";
-import VideoAd from "./videoAd";
-import { mockVideos } from "@/helpers/mocks";
-import Survey from "./survey";
-import Pong from "./games/pong";
+import { logout } from "@/helpers/firebase";
 import { isIOS, isAndroid } from "react-device-detect";
-import { WinModal } from "./ui/modalTypes";
-import { getHighScore } from "@/helpers/leaderboard";
-import NotificationBar from "./ui/notification";
-import { playableAdFinishedCTA, scoreEvent } from "@/helpers/events";
 import Modal from "./ui/modal";
-import { sendEvent, updateDwell } from "@/helpers/analytics";
 import PopoutBackNav from "./clientPages/popoutBackNav";
 import ChallengeIntro from "./challengeIntro";
 import ChallengeOutro from "./challengeOutro";

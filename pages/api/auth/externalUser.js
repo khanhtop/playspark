@@ -1,58 +1,42 @@
-import { auth, firestore } from "@/helpers/firebase";
+import admin from "@/helpers/firebaseAdmin";
 import { generateProfile } from "@/helpers/profileGen";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "firebase/firestore";
 
 export default async function handler(req, res) {
   const { email, name } = req.body;
   let password = null;
   let previousName = null;
-  // Check whether a user document exists
+
+  const firestore = admin.firestore();
+  const auth = admin.auth();
+
+  // Check if a user document exists by querying the Firestore "users" collection
   if (email) {
-    const snapshot = await getDocs(
-      query(collection(firestore, "users"), where("email", "==", email))
-    );
-    const pwd = snapshot.docs[0]?.data()?.pwd;
-    previousName = snapshot.docs[0]?.data()?.companyName;
-    if (pwd) {
-      password = pwd;
-    } else {
-      password = Math.random().toString(36).substring(2, 14);
-    }
+    const snapshot = await firestore
+      .collection("users")
+      .where("email", "==", email)
+      .get();
+
+    const userData = snapshot.docs[0]?.data();
+    previousName = userData?.companyName;
+    password = userData?.pwd || Math.random().toString(36).substring(2, 14);
   }
 
-  // Try and sign in
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    if (userCredential?.user?.uid) {
+    // Attempt to sign in with the existing user credentials via Admin SDK
+    const userRecord = await auth.getUserByEmail(email);
+
+    if (userRecord && userRecord.uid) {
       if (name && name !== previousName) {
-        await setDoc(
-          doc(firestore, "users", userCredential?.user?.uid),
-          {
-            companyName: name,
-          },
-          { merge: true }
-        );
+        await firestore
+          .collection("users")
+          .doc(userRecord.uid)
+          .set({ companyName: name }, { merge: true });
       }
-      return res.send({ email: email, password: password });
+      return res.send({ email, password });
     }
   } catch (error) {
     if (error.code === "auth/user-not-found") {
+      // If user is not found, create a new user
       const avatarResponse = await fetch(
         "https://api.reimage.dev/get/tags?avatar",
         {
@@ -64,31 +48,39 @@ export default async function handler(req, res) {
       const avatars = await avatarResponse.json();
 
       try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
+        // Create the new user with the generated password
+        const userRecord = await auth.createUser({
           email,
-          password
-        );
+          password,
+        });
+
         const username = generateProfile();
-        const user = userCredential.user;
-        const uid = user.uid;
-        await setDoc(
-          doc(firestore, "users", uid),
-          {
-            companyName: name || username,
-            email: email,
-            pwd: password,
-            profilePhoto:
-              avatars.thumbnails[
-                Math.floor(Math.random() * avatars.thumbnails.length)
-              ],
-          },
-          { merge: true }
-        );
-        return res.send({ email: email, password: password });
+        const uid = userRecord.uid;
+
+        // Save user data in Firestore
+        await firestore
+          .collection("users")
+          .doc(uid)
+          .set(
+            {
+              companyName: name || username,
+              email,
+              pwd: password,
+              profilePhoto:
+                avatars.thumbnails[
+                  Math.floor(Math.random() * avatars.thumbnails.length)
+                ],
+            },
+            { merge: true }
+          );
+
+        return res.send({ email, password });
       } catch (error) {
         return res.send({ email: null, password: null });
       }
+    } else {
+      console.error("Error during user lookup or creation:", error);
+      return res.status(500).send({ email: null, password: null });
     }
   }
 }

@@ -2,9 +2,8 @@ import { useState } from "react";
 import Button from "../forms/button";
 import Input from "../forms/input";
 import { useAppContext } from "@/helpers/store";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore } from "@/helpers/firebase";
 import Toggle from "react-toggle";
+import { updateDocument } from "@/helpers/firebaseApi";
 
 export default function API() {
   const context = useAppContext();
@@ -20,17 +19,23 @@ export default function API() {
       },
     });
     const json = await response.json();
-    await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    await updateDocument("users", context.loggedIn?.uid, {
       apiKey: json.message,
     });
+    // await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    //   apiKey: json.message,
+    // });
     setLoading(false);
   };
 
   const updateWebhook = async () => {
     if (!xpWebhook) return;
-    await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    await updateDocument("users", context.loggedIn?.uid, {
       xpWebhook: xpWebhook,
     });
+    // await updateDoc(doc(firestore, "users", context.loggedIn?.uid), {
+    //   xpWebhook: xpWebhook,
+    // });
   };
 
   const testWebhook = async () => {

@@ -4,11 +4,9 @@ import { auth, logout } from "@/helpers/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  sendPasswordResetEmail,
 } from "firebase/auth";
-import { ArrowPathIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useRouter } from "next/router";
-import { setDoc } from "firebase/firestore";
 
 export default function AuthWrapper({ children, action }) {
   const context = useAppContext();
@@ -66,7 +64,7 @@ export default function AuthWrapper({ children, action }) {
     );
   }
 
- if (
+  if (
     context.isAuthed &&
     context.loggedIn &&
     context.profile &&

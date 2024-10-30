@@ -16,8 +16,6 @@ const MuxPlayer = dynamic(() => import("@mux/mux-player-react"), {
 });
 
 export default function Home({ page, blogs }) {
-  // console.log("Homepage", page);
-  // console.log("blog", blogs)
   return (
     <>
       <Head>
@@ -28,17 +26,15 @@ export default function Home({ page, blogs }) {
         src="//code.tidio.co/o1tu31nt1q7jgvu7jqounf2czebgif2m.js"
         strategy="afterInteractive"
       />
-      <div className="h-auto overflow-y-scroll  min-w-[430px] mx-auto">
+      <div className="h-auto mx-auto w-full max-w-full">
         <Navbar />
         <Section backgroundImage={page?.hero_background_image?.url}>
           <Hero page={page} />
         </Section>
-        <Section>
-          <WhatWeDo page={page} />
-        </Section>
+        <WhatWeDo page={page} />
         <Section>
           <WhoWeHelp page={page} />
-        </Section>
+        </Section> 
         <Section>
           <PowerSection page={page} />
         </Section>
@@ -47,6 +43,9 @@ export default function Home({ page, blogs }) {
         </Section>
         <Section>
           <ClientSection page={page} />
+        </Section>
+        <Section>
+          <FAQ page={page} />
         </Section>
         <Section>
           <Game />
@@ -70,6 +69,7 @@ import PowerSection from "@/components/homepage/powerSection";
 import BrandSection from "@/components/homepage/BrandSection";
 import Game from "@/components/forms/game";
 import Slider from "@/components/homepage/slider";
+import FAQ from "@/components/homepage/FAQ";
 // import { Client } from "@prismicio/client/*";
 
 export async function getServerSideProps(context) {

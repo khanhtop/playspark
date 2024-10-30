@@ -1,11 +1,10 @@
 import { useState } from "react";
 import ImagePicker from "../forms/imagePicker";
 import { useAppContext } from "@/helpers/store";
-import { doc, updateDoc } from "firebase/firestore";
-import { firestore, logout } from "@/helpers/firebase";
-import Button from "../forms/button";
+import { logout } from "@/helpers/firebase";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import Input from "../forms/input";
+import { updateDocument } from "@/helpers/firebaseApi";
 
 export default function Profile() {
   const context = useAppContext();
@@ -14,7 +13,8 @@ export default function Profile() {
 
   const updateProfile = async () => {
     setLoading(true);
-    await updateDoc(doc(firestore, "users", context.loggedIn?.uid), profile);
+    await updateDocument("users", context.loggedIn?.uid, profile);
+    // await updateDoc(doc(firestore, "users", context.loggedIn?.uid), profile);
     setLoading(false);
   };
 

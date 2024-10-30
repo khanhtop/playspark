@@ -1,8 +1,7 @@
-import { createChatName, sortUsers } from "@/helpers/chat";
-import { firestore } from "@/helpers/firebase";
+import { sortUsers } from "@/helpers/chat";
+import { addDocument, setDocument } from "@/helpers/firebaseApi";
 import { useAppContext } from "@/helpers/store";
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 
 export default function DMPost({ chatId, chatter }) {
@@ -14,42 +13,74 @@ export default function DMPost({ chatId, chatter }) {
     if (text.length > 0) {
       setPosting(true);
       const sortedParticipants = sortUsers(context?.loggedIn?.uid, chatter.id);
-      await setDoc(
-        doc(firestore, "chats", chatId),
-        {
-          updatedAt: Date.now(),
-          chatterA:
-            sortedParticipants[0] === chatter.id
-              ? {
-                  name: chatter.companyName,
-                  avatar: chatter.profilePhoto,
-                  id: chatter.id,
-                }
-              : {
-                  name: context?.profile?.companyName,
-                  avatar: context?.profile?.profilePhoto,
-                  id: context?.loggedIn?.uid,
-                },
-          chatterB:
-            sortedParticipants[1] === chatter.id
-              ? {
-                  name: chatter.companyName,
-                  avatar: chatter.profilePhoto,
-                  id: chatter.id,
-                }
-              : {
-                  name: context?.profile?.companyName,
-                  avatar: context?.profile?.profilePhoto,
-                  id: context?.loggedIn?.uid,
-                },
-        },
-        { merge: true }
-      );
-      await addDoc(collection(firestore, "chats", chatId, "messages"), {
+      await setDocument("chats", chatId, {
+        updatedAt: Date.now(),
+        chatterA:
+          sortedParticipants[0] === chatter.id
+            ? {
+                name: chatter.companyName,
+                avatar: chatter.profilePhoto,
+                id: chatter.id,
+              }
+            : {
+                name: context?.profile?.companyName,
+                avatar: context?.profile?.profilePhoto,
+                id: context?.loggedIn?.uid,
+              },
+        chatterB:
+          sortedParticipants[1] === chatter.id
+            ? {
+                name: chatter.companyName,
+                avatar: chatter.profilePhoto,
+                id: chatter.id,
+              }
+            : {
+                name: context?.profile?.companyName,
+                avatar: context?.profile?.profilePhoto,
+                id: context?.loggedIn?.uid,
+              },
+      });
+      // await setDoc(
+      //   doc(firestore, "chats", chatId),
+      //   {
+      //     updatedAt: Date.now(),
+      //     chatterA:
+      //       sortedParticipants[0] === chatter.id
+      //         ? {
+      //             name: chatter.companyName,
+      //             avatar: chatter.profilePhoto,
+      //             id: chatter.id,
+      //           }
+      //         : {
+      //             name: context?.profile?.companyName,
+      //             avatar: context?.profile?.profilePhoto,
+      //             id: context?.loggedIn?.uid,
+      //           },
+      //     chatterB:
+      //       sortedParticipants[1] === chatter.id
+      //         ? {
+      //             name: chatter.companyName,
+      //             avatar: chatter.profilePhoto,
+      //             id: chatter.id,
+      //           }
+      //         : {
+      //             name: context?.profile?.companyName,
+      //             avatar: context?.profile?.profilePhoto,
+      //             id: context?.loggedIn?.uid,
+      //           },
+      //   },
+      //   { merge: true }
+      // );
+      await addDocument(`"chats/${chatId}/messages"`, {
         timestamp: Date.now(),
         content: text,
         senderId: context.loggedIn?.uid,
       });
+      // await addDoc(collection(firestore, "chats", chatId, "messages"), {
+      //   timestamp: Date.now(),
+      //   content: text,
+      //   senderId: context.loggedIn?.uid,
+      // });
       setPosting(false);
       setText("");
     }

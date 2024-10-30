@@ -15,51 +15,37 @@ import Runner from "@/components/runnergame/runner";
 import CanSmashGame from "@/components/games/CanSmash/CanSmash";
 import BabylonGame from "@/components/games/Babylon/babylonGame";
 import { sendSupabaseEvent } from "./analytics";
+import { playable_ads } from "./playable_ads";
+import {
+  addDocument,
+  getDocument,
+  setDocument,
+  updateDocument,
+} from "./firebaseApi";
 const Pong = dynamic(() => import("@/components/games/pong"), { ssr: false });
-
-export async function getAd(id) {
-  const ad = await getDoc(doc(firestore, "tournaments", id));
-  if (ad.exists()) {
-    const packet = {
-      ...ad.data(),
-      primaryColor: ad.data()?.primaryColor ?? "#132257",
-      textColor: ad.data()?.textColor ?? "#FFF",
-      backgroundImage:
-        ad.data()?.backgroundImage ??
-        "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
-    };
-    return packet;
-  } else {
-    return null;
-  }
-}
-
-export async function getChallenge(id) {
-  const ad = await getDoc(doc(firestore, "challenges", id));
-  if (ad.exists()) {
-    const packet = {
-      ...ad.data(),
-    };
-    return packet;
-  } else {
-    return null;
-  }
-}
-
-export async function getClient(id) {
-  const user = await getDoc(doc(firestore, "users", id));
-  if (user.exists()) {
-    const packet = {
-      ...user.data(),
-    };
-    return packet;
-  } else {
-    return null;
-  }
-}
 
 export async function getDemo(id) {
   const game = games.find((a) => a.id === parseInt(id));
+  return {
+    ...game,
+    backgroundImage:
+      game?.backgroundImage ??
+      "https://dailypost.ng/wp-content/uploads/2019/07/Tottenham-Hotspur.jpg",
+    primaryColor: game.primaryColor ?? "#132257",
+    textColor: game.textColor ?? "#FFF",
+    demo: true,
+    leaderboard: [
+      {
+        name: "Demo Player",
+        uid: "demoplayer",
+        score: Math.floor(Math.random() * 10000),
+      },
+    ],
+  };
+}
+
+export async function getPlayableAdDemo(id) {
+  const game = playable_ads.find((a) => a.id === parseInt(id));
   return {
     ...game,
     backgroundImage:
@@ -292,6 +278,18 @@ export function getGame(id, data, callback, params) {
     );
 }
 
+export function getPlayableAd(id, data, callback, params) {
+  if (id === 1)
+    return (
+      <Pong
+        data={data}
+        gameType="wheelspin"
+        callback={callback}
+        params={params}
+      />
+    );
+}
+
 export function incrementPlayCount(tournamentId, gameType = "freemium") {
   const key =
     gameType === "freemium" ? "freemiumPlayCount" : "premiumPlayCount";
@@ -337,40 +335,63 @@ export function incrementPlayCountWithImpressions(
 // Subscriptions
 
 export function switchTier(uid, tier) {
-  updateDoc(doc(firestore, "users", uid), {
+  updateDocument("users", uid, {
     tier: tier,
   });
+  // updateDoc(doc(firestore, "users", uid), {
+  //   tier: tier,
+  // });
 }
 
 export function switchActive(tournamentId, state) {
-  updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+  updateDocument("tournaments", tournamentId.toString(), {
     isActive: !state,
   });
+  // updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+  //   isActive: !state,
+  // });
 }
 
 export async function archive(tournamentId) {
-  updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+  updateDocument("tournaments", tournamentId.toString(), {
     isArchived: true,
     isActive: false,
   });
+  // updateDoc(doc(firestore, "tournaments", tournamentId.toString()), {
+  //   isArchived: true,
+  //   isActive: false,
+  // });
   return;
 }
 
 export async function createChallenge(game, challengee, challenger, referrer) {
   const challengeId = Date.now().toString();
-  await setDoc(doc(firestore, "challenges", challengeId), {
+  await setDocument("challenges", challengeId, {
     game: game,
     challengee: challengee,
     challenger: challenger,
     referrer: referrer,
     timestamp: Date.now(),
   });
-  await addDoc(collection(firestore, "notifications"), {
+  // await setDoc(doc(firestore, "challenges", challengeId), {
+  //   game: game,
+  //   challengee: challengee,
+  //   challenger: challenger,
+  //   referrer: referrer,
+  //   timestamp: Date.now(),
+  // });
+  await addDocument("notifications", {
     timestamp: Date.now(),
     link: `https://playspark.co/battle/${challengeId}`,
     text: `The battle has begun with ${challengee?.companyName}`,
     uid: challenger.id,
   });
+  // await addDoc(collection(firestore, "notifications"), {
+  //   timestamp: Date.now(),
+  //   link: `https://playspark.co/battle/${challengeId}`,
+  //   text: `The battle has begun with ${challengee?.companyName}`,
+  //   uid: challenger.id,
+  // });
   return challengeId;
 }
 
@@ -397,18 +418,30 @@ export async function completeBattleForChallenger(
       customText: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
     }),
   });
-  await updateDoc(doc(firestore, "challenges", challengeId), {
+  await updateDocument("challenges", challengeId, {
     challengerResult: {
       score: score,
       timestamp: Date.now(),
     },
   });
-  await addDoc(collection(firestore, "notifications"), {
+  // await updateDoc(doc(firestore, "challenges", challengeId), {
+  //   challengerResult: {
+  //     score: score,
+  //     timestamp: Date.now(),
+  //   },
+  // });
+  await addDocument("notifications", {
     timestamp: Date.now(),
     link: `https://playspark.co/battle/${challengeId}`,
     text: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
     uid: challengeeId,
   });
+  // await addDoc(collection(firestore, "notifications"), {
+  //   timestamp: Date.now(),
+  //   link: `https://playspark.co/battle/${challengeId}`,
+  //   text: `${challengerName} has invited you to beat their score of ${score} in ${gameName}.  Win the battle and steal XP from ${challengerName}!`,
+  //   uid: challengeeId,
+  // });
   return;
 }
 
@@ -476,8 +509,7 @@ export async function completeBattleForChallengee(
       } the battle with ${challengeeName} with a score of ${challengerScore} vs ${score} in ${gameName}`,
     }),
   });
-
-  await updateDoc(doc(firestore, "challenges", challengeId), {
+  await updateDocument("challenges", challengeId, {
     challengeeResult: {
       score: score,
       timestamp: Date.now(),
@@ -487,7 +519,17 @@ export async function completeBattleForChallengee(
       amount: xpStealAmount,
     },
   });
-  await addDoc(collection(firestore, "notifications"), {
+  // await updateDoc(doc(firestore, "challenges", challengeId), {
+  //   challengeeResult: {
+  //     score: score,
+  //     timestamp: Date.now(),
+  //   },
+  //   xpMovement: {
+  //     to: challengerWon ? "challenger" : "challengee",
+  //     amount: xpStealAmount,
+  //   },
+  // });
+  await addDocument("notifications", {
     timestamp: Date.now(),
     link: ``,
     text: `${
@@ -495,7 +537,15 @@ export async function completeBattleForChallengee(
     } the battle with ${challengerName}`,
     uid: challengeeId,
   });
-  await addDoc(collection(firestore, "notifications"), {
+  // await addDoc(collection(firestore, "notifications"), {
+  //   timestamp: Date.now(),
+  //   link: ``,
+  //   text: `${
+  //     challengerWon ? "You Lost" : "You Won"
+  //   } the battle with ${challengerName}`,
+  //   uid: challengeeId,
+  // });
+  await addDocument("notifications", {
     timestamp: Date.now(),
     link: ``,
     text: `${
@@ -503,6 +553,14 @@ export async function completeBattleForChallengee(
     } the battle with ${challengeeName}`,
     uid: challengerId,
   });
+  // await addDoc(collection(firestore, "notifications"), {
+  //   timestamp: Date.now(),
+  //   link: ``,
+  //   text: `${
+  //     challengerWon ? "You Won" : "You Lost"
+  //   } the battle with ${challengeeName}`,
+  //   uid: challengerId,
+  // });
   const challengerOutputData = {
     dataByClient: {
       ...challengerDataByClient,
@@ -543,7 +601,8 @@ export async function completeBattleForChallengee(
 }
 
 async function getDataByClientAndXP(userId) {
-  const result = await getDoc(doc(firestore, "users", userId.toString()));
+  const result = await getDocument("users", userId.toString());
+  // const result = await getDoc(doc(firestore, "users", userId.toString()));
   return {
     dataByClient: result.data()?.dataByClient,
     xp: result.data()?.totalXp,

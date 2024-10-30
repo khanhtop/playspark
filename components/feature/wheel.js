@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 
 import styles from './SkillSet.module.scss';
 
@@ -53,9 +53,11 @@ export default function Wheel({page}) {
             snap: (endVal) => gsap.utils.snap(360 / boxes.length, endVal),
             onPress: () => {
                 setDragStatus('pressed');
+                // stopAutoScroll();
             },
             onRelease: () => {
                 setDragStatus(null);
+                // startAutoScroll(); 
             },
             onDragStart: () => {
                 setActiveIndex(null);
@@ -88,8 +90,40 @@ export default function Wheel({page}) {
     }, { scope: container });
 
 
+    useEffect(() => {
+        let interval;
+
+        const rotateCarousel = () => {
+            const boxes = gsap.utils.toArray(`.${styles.box}`);
+            const nextIndex = (activeIndex + 1) % boxes.length;
+            const rotationAmount = 360 / boxes.length;
+
+            // Rotate the carousel
+            gsap.to(`.${styles.circularCarousel}`, {
+                rotation: `+=${rotationAmount}`,
+                duration: 1,
+                onComplete: () => setActiveIndex(nextIndex),
+            });
+        };
+
+        const startAutoScroll = () => {
+            interval = setInterval(rotateCarousel, 3000); // Rotate every 3 seconds
+        };
+
+        const stopAutoScroll = () => {
+            clearInterval(interval);
+        };
+
+        startAutoScroll(); // Start auto-scroll when component mounts
+
+        return () => {
+            stopAutoScroll(); // Cleanup on unmount
+        };
+    }, [activeIndex]);
+
+
     return (
-        <div>
+        <div className=''>
             <section className={`${styles.section}`} id={'skills'} ref={container}>
                 {/* <div className={styles.blobs}>
                     <Blobs type={'v2'} classVariable={`${styles.blob} ${styles.blobV2}`}/>
@@ -114,8 +148,8 @@ export default function Wheel({page}) {
                         {page.circle_card.map((skill, index) => (
                             <div key={index}
                                  className={`${styles.circularDescriptions} ${activeIndex === index ? styles.isActive : ''}`}>
-                                <h2 className="flex flex-col lg:gap-5 gap-2"><span className='font-bold lg:text-[33px] text-[12px] lg:leading-[40px] leading-[10px]'>{skill.title}</span> <span className='font-medium lg:text-[20px] text-[10px] items-center justify-end lg:leading-[30px] leading-[10px]'>{skill.subtitle}</span></h2>
-                                <p className="lg:text-[20px] text-[7px] text-center justify-center items-center">{skill.description}</p>
+                                <h2 className="flex flex-col lg:gap-5 gap-2"><span className='font-bold lg:text-[33px] text-[20px] lg:leading-[40px] leading-[20px]'>{skill.title}</span> <span className='font-medium lg:text-[20px] text-[14px] items-center justify-end lg:leading-[30px] leading-[13px]'>{skill.subtitle}</span></h2>
+                                {/* <p className="lg:text-[20px] text-[10px] text-center justify-center items-center">{skill.description}</p> */}
                             </div>
                         ))}
                     </div>
