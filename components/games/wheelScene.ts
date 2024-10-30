@@ -127,7 +127,7 @@ export default class WheelScene extends Phaser.Scene {
     this.load.image('star', this.params.playerSprite);
     this.load.image('star1', this.params.enemySprite);
     this.load.image('star2', this.params.powerUpSprite);
-    this.load.image('lose', "/pong/" + gameType + '/lose.jpg');
+    this.load.image('lose', "/pong/" + gameType + '/lose.png');
     this.load.image('button', "/pong/" + gameType + '/spin.png');
 
     // TILE PART
