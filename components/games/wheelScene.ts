@@ -386,7 +386,7 @@ export default class WheelScene extends Phaser.Scene {
 
     let resultText = "";
 
-    if(spinTimes == 1 && type == "lose") {
+    if(spinTimes == 1 && type == "lose" && counter == 0) {
       type = "spin";
     }
 
