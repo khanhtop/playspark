@@ -404,7 +404,7 @@ export default class WheelScene extends Phaser.Scene {
       this.lose.play();
 
     } else if(type == 'spin') {
-      resultText = "SPIN AGAIN!"
+      resultText = "TRY AGAIN!"
       spinTimes += amount;
       this.bonus.play();
       this.prizeAnim.setVisible(true);
