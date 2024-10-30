@@ -335,9 +335,9 @@ export default class WheelScene extends Phaser.Scene {
     win_probability = this.params.winProbability;
     console.log(this.params.winProbability)
 
-    if(spinTimes <= 0) {
-      this.endRound();
-    }
+    // if(spinTimes <= 0) {
+    //   this.endRound();
+    // }
     // spinTimes--;
 
     this.music.setLoop(true).play();
@@ -385,6 +385,10 @@ export default class WheelScene extends Phaser.Scene {
   score({type, amount}) {
 
     let resultText = "";
+
+    if(spinTimes == 1 && type == "lose") {
+      type = "spin";
+    }
 
     if(type == 'bonus') {
 
