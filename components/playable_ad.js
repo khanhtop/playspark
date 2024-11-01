@@ -104,7 +104,7 @@ export default function PlayableAd({ data, hasInitialisedAudio }) {
 
       {stage === 1 &&
         getPlayableAd(data.id, data, callback, {
-          winProbability: 0.5,
+          winProbability: data?.winProbability,
           score: 0,
           brandLogo: cloudinaryToReimage(data?.brandLogo),
           sponsorLogo: cloudinaryToReimage(data?.sponsorLogo),

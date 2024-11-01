@@ -19,6 +19,8 @@ export default function CreateModalPlayableAd({ data, hide }) {
   });
   const [adding, setAdding] = useState(false);
 
+  console.log(tournament);
+
   const createTournament = async () => {
     setAdding(true);
     const _uid = Date.now();

@@ -4,6 +4,7 @@ import { useAppContext } from "@/helpers/store";
 import { useState } from "react";
 
 export default function PlayableAdWrapper({ ad, id, client }) {
+  console.log(ad);
   const context = useAppContext();
   const [hasInitialisedAudio, setHasInitialisedAudio] = useState(false);
   return (
@@ -28,10 +29,19 @@ export default function PlayableAdWrapper({ ad, id, client }) {
 export async function getServerSideProps(context) {
   // Get the ad from the id here:'
   const ad = await getPlayableAd(context.query.id);
+
   return {
     props: {
       id: context.query?.id,
-      ad: { ...ad, theme: "default", isActive: true },
+      ad: {
+        ...ad,
+        theme: "default",
+        isActive: true,
+        winProbability:
+          typeof ad.winProbability === "string"
+            ? parseFloat(ad.winProbability)
+            : ad.winProbability,
+      },
     },
   };
 }
