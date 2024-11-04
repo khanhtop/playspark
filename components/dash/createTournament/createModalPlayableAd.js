@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import CreateWrapper from "./createWrapper";
-import CreateSummary from "./createSummary";
 import { useAppContext } from "@/helpers/store";
 import CreateConfiguration from "./createConfiguration";
 import CreateConfigReimage from "./createConfigReimage";
 import { setDocument } from "@/helpers/firebaseApi";
 import CreatePaDesign from "./playableAds/createPaDesign";
 import CreatePaRewards from "./playableAds/createPaRewards";
+import CreatePaSummary from "./playableAds/createPaSummary";
 
 export default function CreateModalPlayableAd({ data, hide }) {
   const context = useAppContext();
@@ -16,6 +16,10 @@ export default function CreateModalPlayableAd({ data, hide }) {
     ...data,
     rewards: [],
     winProbability: 0.8,
+    headerImage: "/ads/backdrop.webp",
+    footerImage: "/ads/backdrop.webp",
+    primaryColor: "#DDD",
+    textColor: "black",
   });
   const [adding, setAdding] = useState(false);
 
@@ -84,7 +88,7 @@ export default function CreateModalPlayableAd({ data, hide }) {
             />
           )}
           {stage === 3 && (
-            <CreateSummary
+            <CreatePaSummary
               tournament={tournament}
               setTournament={setTournament}
             />
