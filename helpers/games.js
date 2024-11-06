@@ -26,7 +26,7 @@ export const games = [
     description:
       "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1730866124/Homescreen_BG-_Landscape_5_fndwey.gif",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     accentColor: "#0693E3",
