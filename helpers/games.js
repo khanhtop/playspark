@@ -21,7 +21,7 @@ export const games = [
   //     "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
   // },
   {
-    name: "Cricket Smash",
+    name: "Cricket Smash BBL",
     creditConsumption: 2,
     description:
       "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
