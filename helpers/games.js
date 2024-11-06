@@ -39,6 +39,7 @@ export const games = [
     },
     font: "Play",
     bodyFont: "Roboto",
+    winProbability: 0.5,
     backgroundSprite:
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
     playerSprite:
