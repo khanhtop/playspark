@@ -30,7 +30,6 @@ export const games = [
     accentColor: "#EB144C",
     textColor: "#FFF",
     id: 10,
-    winProbability: 0.8,
     cloudinaryGameTag: "spin-to-win",
     tags: {
       backgroundSprite: "0.6",
@@ -50,12 +49,12 @@ export const games = [
       "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
   },
   {
-    name: "Cricket Smash",
+    name: "Cricket Smash BBL",
     creditConsumption: 2,
     description:
       "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1730866124/Homescreen_BG-_Landscape_5_fndwey.gif",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     accentColor: "#0693E3",
