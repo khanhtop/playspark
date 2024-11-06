@@ -21,6 +21,35 @@ export const games = [
   //     "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
   // },
   {
+    name: "Spin To Win",
+    description:
+      "Spin your way to victory in our game of chance! Every turn unlocks a world of rewards, making every moment a winning sensation!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259239/1_jxkksl.png",
+    primaryColor: "#F69B01",
+    accentColor: "#EB144C",
+    textColor: "#FFF",
+    id: 10,
+    winProbability: 0.8,
+    cloudinaryGameTag: "spin-to-win",
+    tags: {
+      backgroundSprite: "0.6",
+      playerSprite: "1.0",
+      enemySprite: "1.0",
+      powerUpSprite: "1.0",
+    },
+    font: "Play",
+    bodyFont: "Roboto",
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169648/kjacp92e8wrlbbkdlksm.png",
+    powerUpSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+  },
+  {
     name: "Cricket Smash",
     creditConsumption: 2,
     description:
