@@ -6,8 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import FontPicker from "../fontPicker";
 import BodyFontPicker from "../bodyFontPicker";
 import { Card, Datepicker, Dropdown, Label, TextInput } from "flowbite-react";
-import CreatePreview from "../createPreview";
 import ReimagePicker from "@/components/reimage/reimagePicker";
+import CreatePaPreview from "./createPaPreview";
 
 export default function CreatePaDesign({ tournament, setTournament }) {
   return (
@@ -26,7 +26,7 @@ export default function CreatePaDesign({ tournament, setTournament }) {
               setTournament({ ...tournament, name: e.target.value })
             }
           />
-          <Label className="text-black/50 -mb-2">Ad Description</Label>
+          {/* <Label className="text-black/50 -mb-2">Ad Description</Label>
           <TextInput
             color="light"
             placeHolder={tournament.description}
@@ -34,6 +34,27 @@ export default function CreatePaDesign({ tournament, setTournament }) {
             onChange={(e) =>
               setTournament({ ...tournament, description: e.target.value })
             }
+          /> */}
+        </Card>
+        <Card>
+          <h1 className="font-extrabold text-black/80">Imagery & Branding</h1>
+          <Label className="text-black/50 -mb-2">Header Image</Label>
+          <ReimagePicker
+            id="headerImagePicker"
+            file={tournament.headerImage}
+            setFile={(url) => {
+              setTournament({ ...tournament, headerImage: url });
+            }}
+            aspectRatio={1.6}
+          />
+          <Label className="text-black/50 -mb-2">Header Image</Label>
+          <ReimagePicker
+            id="footerImagePicker"
+            file={tournament.footerImage}
+            setFile={(url) => {
+              setTournament({ ...tournament, footerImage: url });
+            }}
+            aspectRatio={1.6}
           />
         </Card>
         <Card>
@@ -84,13 +105,6 @@ export default function CreatePaDesign({ tournament, setTournament }) {
             }}
           />
           <CreateColorPicker
-            label="Secondary Color (Used for some buttons and UI aspects)"
-            value={tournament.secondaryColor || "#000000"}
-            onSelect={(a) => {
-              setTournament({ ...tournament, secondaryColor: a.hex });
-            }}
-          />
-          <CreateColorPicker
             label="Accent Color (Used as an accent in areas that need it)"
             value={tournament.accentColor || "#000000"}
             onSelect={(a) => {
@@ -104,27 +118,9 @@ export default function CreatePaDesign({ tournament, setTournament }) {
               setTournament({ ...tournament, textColor: a.hex });
             }}
           />
-          <Label className="text-black/50 -mb-2">Background Image</Label>
-          <ReimagePicker
-            id="backgroundImagePicker"
-            file={tournament.backgroundImage}
-            setFile={(url) => {
-              setTournament({ ...tournament, backgroundImage: url });
-            }}
-            aspectRatio={0.6}
-          />
-          <Label className="text-black/50 -mb-2">Ad Icon</Label>
-          <ReimagePicker
-            id="gameIconPicker"
-            file={tournament.gameIcon}
-            setFile={(url) => {
-              setTournament({ ...tournament, gameIcon: url });
-            }}
-            aspectRatio={1}
-          />
         </Card>
       </div>
-      <CreatePreview tournament={tournament} />
+      <CreatePaPreview tournament={tournament} />
     </div>
   );
 

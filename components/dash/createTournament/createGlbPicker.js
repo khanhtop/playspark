@@ -134,7 +134,7 @@ export function BabylonModel({ modelUrl, selected, onSelect, pickerZoom }) {
       onClick={() => {
         onSelect(modelUrl);
       }}
-      className={`w-48 h-full flex-shrink-0 rounded-lg overflow-hidden border-2 ${
+      className={`flex-1 h-full flex-shrink-0 rounded-lg overflow-hidden border-2 ${
         selected ? "border-white" : "border-transparent cursor-pointer"
       }`}
       style={{ position: "relative", overflow: "hidden" }}

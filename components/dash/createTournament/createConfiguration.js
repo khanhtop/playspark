@@ -5,6 +5,7 @@ import { Label, Spinner } from "flowbite-react";
 import { cloudinaryToReimage } from "@/helpers/reimage";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import ReimageUploadWidget from "@/components/reimage/reimageUploader";
+import { BabylonModel } from "./createGlbPicker";
 
 export default function CreateConfiguration({
   tournament,
@@ -15,6 +16,8 @@ export default function CreateConfiguration({
   const [assets, setAssets] = useState([]);
   const [aspect, setAspect] = useState("aspect-[1.0]");
   const [rendering, setRendering] = useState(false);
+
+  console.log(assets);
 
   const isSpriteSheet = useMemo(() => {
     return configurableParameterTitles?.[tournament?.cloudinaryGameTag]?.[
@@ -76,6 +79,7 @@ export default function CreateConfiguration({
       `/api/cloudinaryGet?aspectRatio=${tournament.tags?.[selectedTag]}&gameTag=${tournament.cloudinaryGameTag}`
     );
     const json = await result.json();
+    console.log(json);
     setAssets(json.objects);
     setRendering(false);
   };
@@ -172,7 +176,7 @@ export default function CreateConfiguration({
               isSpriteSheet ? "grid-cols-2" : "grid-cols-5"
             } gap-4 overflow-y-scroll flex-1`}
           >
-            {assets.map((item, key) => (
+            {assets?.map((item, key) => (
               <Asset
                 type={isGlb ? "glb" : "image"}
                 glbZoom={glbZoom || 0.2}
@@ -180,7 +184,8 @@ export default function CreateConfiguration({
                 item={item}
                 aspect={aspect}
                 isSpriteSheet={isSpriteSheet}
-                currentAsset={cloudinaryToReimage(tournament?.[selectedTag])}
+                // currentAsset={cloudinaryToReimage(tournament?.[selectedTag])}
+                currentAsset={tournament?.[selectedTag]}
                 onSelect={(a) => {
                   setTournament({ ...tournament, [selectedTag]: a });
                 }}
@@ -438,13 +443,17 @@ function Asset({
     return (
       <div
         className={` ${
-          currentAsset === item.secure_url ? "border-2 border-indigo-500" : ""
+          currentAsset === item.secure_url
+            ? "border-2 border-indigo-500"
+            : "border-2"
         } rounded-lg`}
       >
         <BabylonModel
           selected={null}
           modelUrl={item.secure_url}
-          onSelect={() => onSelect(item.secure_url)}
+          onSelect={() => {
+            onSelect(item.secure_url);
+          }}
           pickerZoom={glbZoom}
         />
       </div>

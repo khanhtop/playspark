@@ -11,6 +11,7 @@ import {
 } from "flowbite-react";
 import ReimagePicker from "@/components/reimage/reimagePicker";
 import { useMemo } from "react";
+import CreatePaPreview from "./createPaPreview";
 
 const inputs = [
   {
@@ -55,70 +56,75 @@ export default function CreatePaRewards({ tournament, setTournament }) {
   }, [tournament.winProbability]);
 
   return (
-    <div className="text-white flex flex-col gap-2 w-full items-start">
-      <h3 className="text-black/50">Ad Difficulty {difficulty}</h3>
-      <div>
-        <RangeSlider
-          min={0}
-          max={1}
-          step={0.01}
-          value={tournament.winProbability}
-          className="w-[600px]"
-          onChange={(e) =>
-            setTournament({ ...tournament, winProbability: e.target.value })
+    <div className="flex items-start gap-4">
+      <div className="text-white flex flex-col gap-2 w-full items-start flex-1">
+        <Card className="flex-1 w-full">
+          <h3 className="text-black/50">Ad Difficulty {difficulty}</h3>
+          <div className="w-full">
+            <RangeSlider
+              min={0}
+              max={1}
+              step={0.01}
+              value={tournament.winProbability}
+              className="w-full"
+              onChange={(e) =>
+                setTournament({ ...tournament, winProbability: e.target.value })
+              }
+            />
+          </div>
+        </Card>
+        <h3 className="text-black/50 mt-8">Ad Outputs</h3>
+        {tournament?.rewards?.map((item, key) => (
+          <RewardRow
+            item={item}
+            key={key}
+            index={key}
+            onDelete={() => {
+              let rewards = [...tournament.rewards];
+              rewards.splice(key, 1);
+              setTournament({
+                ...tournament,
+                rewards: rewards || null,
+              });
+            }}
+            onChange={(e) => {
+              let rewards = [...tournament.rewards];
+              rewards[key] = e;
+              setTournament({
+                ...tournament,
+                rewards: rewards,
+              });
+            }}
+          />
+        ))}
+        <Button
+          onClick={() =>
+            setTournament({
+              ...tournament,
+              rewards: [
+                ...(tournament?.rewards ?? []),
+                {
+                  name: "New Reward",
+                  id: Date.now().toString(),
+                  description: "My awesome reward",
+                  image: null,
+                  input: "score",
+                  inputOperand: "==",
+                  inputValue: 10,
+                  outputAction: "webhook",
+                  outputValue: "https://",
+                  outputLocation: null,
+                  outputInstructions: null,
+                },
+              ],
+            })
           }
-        />
+          className="bg-indigo-600 enabled:hover:bg-indigo-600"
+        >
+          Add Reward
+        </Button>
       </div>
-      <h3 className="text-black/50 mt-8">Ad Outputs</h3>
-      {tournament?.rewards?.map((item, key) => (
-        <RewardRow
-          item={item}
-          key={key}
-          index={key}
-          onDelete={() => {
-            let rewards = [...tournament.rewards];
-            rewards.splice(key, 1);
-            setTournament({
-              ...tournament,
-              rewards: rewards || null,
-            });
-          }}
-          onChange={(e) => {
-            let rewards = [...tournament.rewards];
-            rewards[key] = e;
-            setTournament({
-              ...tournament,
-              rewards: rewards,
-            });
-          }}
-        />
-      ))}
-      <Button
-        onClick={() =>
-          setTournament({
-            ...tournament,
-            rewards: [
-              ...(tournament?.rewards ?? []),
-              {
-                name: "New Reward",
-                id: Date.now().toString(),
-                description: "My awesome reward",
-                image: null,
-                input: "score",
-                inputOperand: "==",
-                inputValue: 10,
-                outputAction: "webhook",
-                outputValue: "https://",
-                outputLocation: null,
-                outputInstructions: null,
-              },
-            ],
-          })
-        }
-        className="bg-indigo-600 enabled:hover:bg-indigo-600"
-      >
-        Add Reward
-      </Button>
+      <CreatePaPreview tournament={tournament} />
     </div>
   );
 }

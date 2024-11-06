@@ -20,46 +20,48 @@ let win_probability = 0;
 let isSpinBtn = false;
 
 let fontUrl = "/pong/TitanOne-Regular.ttf";
-const font = new FontFace('customFont', `url(${fontUrl})`);
-font.load().then(() => {
-  // Font loaded successfully
-  document.fonts.add(font);
+const font = new FontFace("customFont", `url(${fontUrl})`);
+font
+  .load()
+  .then(() => {
+    // Font loaded successfully
+    document.fonts.add(font);
 
-  // this.result_text.setStyle(this.font_text_style);
-  // this.score_text.setStyle(this.font_score);
-
-}).catch((error) => {
-  // Font failed to load
-  console.log('Failed to load font:', error);
-});
+    // this.result_text.setStyle(this.font_text_style);
+    // this.score_text.setStyle(this.font_score);
+  })
+  .catch((error) => {
+    // Font failed to load
+    console.log("Failed to load font:", error);
+  });
 
 export default class WheelScene extends Phaser.Scene {
   public static instance: WheelScene;
-  private bg : any;
-  private logo : any;
-  private base : any;
-  private wheel : any;
-  private wheelGroup : any;
-  private pin : any;
-  private bonus_top : any;
-  private font_style : any;
-  private font_score : any;
-  private font_text_style : any;
-  private game_text : any;
-  private score_text : any;
-  private result_text : any;
-  private pop : any;
-  private music : any;
-  private win : any;
-  private lose : any;
-  private bonus : any;
-  private prizeAnim : any;
+  private bg: any;
+  private logo: any;
+  private base: any;
+  private wheel: any;
+  private wheelGroup: any;
+  private pin: any;
+  private bonus_top: any;
+  private font_style: any;
+  private font_score: any;
+  private font_text_style: any;
+  private game_text: any;
+  private score_text: any;
+  private result_text: any;
+  private pop: any;
+  private music: any;
+  private win: any;
+  private lose: any;
+  private bonus: any;
+  private prizeAnim: any;
   private params: any;
-  private outCircle : any;
-  private topUI : any;
-  private downUI : any;
-  private arrow : any;
-  private item : any;
+  private outCircle: any;
+  private topUI: any;
+  private downUI: any;
+  private arrow: any;
+  private item: any;
   private center: any;
   private tiles: any[];
   private imageTiles: any[];
@@ -68,8 +70,8 @@ export default class WheelScene extends Phaser.Scene {
     super();
     WheelScene.instance = this;
     gameType = newGameType;
-    this.params = newParams
-    console.log(newParams)
+    this.params = newParams;
+    console.log(newParams);
   }
 
   preload() {
@@ -98,60 +100,65 @@ export default class WheelScene extends Phaser.Scene {
     //   console.log('Failed to load font:', error);
     // });
 
-
     this.load.audio("bg", "/pong/" + gameType + "/sfx/bgNoise.mp3");
 
     console.log(this.params);
 
-    this.params.backgroundSprite = !!this.params.backgroundSprite? getImageWithSize(this.params.backgroundSprite, w, h) : "/pong/" + gameType + '/back3.jpg';
-    this.params.playerSprite = !!this.params.playerSprite? this.params.playerSprite : "/pong/" + gameType + '/star.png';
-    this.params.enemySprite = !!this.params.enemySprite? this.params.enemySprite : "/pong/" + gameType + '/star.jpg';
-    this.params.powerUpSprite = !!this.params.powerUpSprite? this.params.powerUpSprite : "/pong/" + gameType + '/star.jpg';
+    this.params.backgroundSprite = !!this.params.backgroundSprite
+      ? getImageWithSize(this.params.backgroundSprite, 1200)
+      : "/pong/" + gameType + "/back3.jpg";
+    this.params.playerSprite = !!this.params.playerSprite
+      ? this.params.playerSprite
+      : "/pong/" + gameType + "/star.png";
+    this.params.enemySprite = !!this.params.enemySprite
+      ? this.params.enemySprite
+      : "/pong/" + gameType + "/star.jpg";
+    this.params.powerUpSprite = !!this.params.powerUpSprite
+      ? this.params.powerUpSprite
+      : "/pong/" + gameType + "/star.jpg";
 
-    
+    this.load.image("logo", this.params.logo);
+    this.load.image("background", this.params.backgroundSprite);
+    this.load.image("ui-center", "/pong/" + gameType + "/out-circle.png");
+    this.load.image("ui-btn-top", "/pong/" + gameType + "/ui-top.png");
+    this.load.image("ui-btn-down", "/pong/" + gameType + "/ui-down.png");
+    this.load.image("bonus", "/pong/" + gameType + "/bonus.png");
 
-    this.load.image('logo', this.params.logo);
-    this.load.image('background',this.params.backgroundSprite);
-    this.load.image('ui-center', "/pong/" + gameType + '/out-circle.png');
-    this.load.image('ui-btn-top', "/pong/" + gameType + '/ui-top.png');
-    this.load.image('ui-btn-down', "/pong/" + gameType + '/ui-down.png');
-    this.load.image('bonus', "/pong/" + gameType + '/bonus.png');
+    this.load.image("ui-btn", "/pong/" + gameType + "/ui-btn-down.png");
 
-    this.load.image('ui-btn', "/pong/" + gameType + '/ui-btn-down.png');
+    this.load.image("out-circle", "/pong/" + gameType + "/out-circle.png");
+    this.load.image("center-arrow", "/pong/" + gameType + "/center-arrow.png");
 
-    this.load.image('out-circle', "/pong/" + gameType + '/out-circle.png');
-    this.load.image('center-arrow', "/pong/" + gameType + '/center-arrow.png');
-
-    this.load.image('wheel', "/pong/" + gameType + '/center-circle.png');
-    this.load.image('item', "/pong/" + gameType + '/item.png');
-    this.load.image('star', this.params.playerSprite);
-    this.load.image('star1', this.params.enemySprite);
-    this.load.image('star2', this.params.powerUpSprite);
-    this.load.image('lose', "/pong/" + gameType + '/lose.png');
-    this.load.image('button', "/pong/" + gameType + '/spin.png');
+    this.load.image("wheel", "/pong/" + gameType + "/center-circle.png");
+    this.load.image("item", "/pong/" + gameType + "/item.png");
+    this.load.image("star", this.params.playerSprite);
+    this.load.image("star1", this.params.enemySprite);
+    this.load.image("star2", this.params.powerUpSprite);
+    this.load.image("lose", "/pong/" + gameType + "/lose.png");
+    this.load.image("button", "/pong/" + gameType + "/spin.png");
 
     // TILE PART
-    this.load.image('center', "/pong/" + gameType + '/center.png');
-    this.load.image('tileRed', "/pong/" + gameType + '/tile-red.png');
-    this.load.image('tileBlue', "/pong/" + gameType + '/tile-blue.png');
-    this.load.image('tileYellow', "/pong/" + gameType + '/tile-yellow.png');
-    this.load.image('tileGreen', "/pong/" + gameType + '/tile-green.png');
+    this.load.image("center", "/pong/" + gameType + "/center.png");
+    this.load.image("tileRed", "/pong/" + gameType + "/tile-red.png");
+    this.load.image("tileBlue", "/pong/" + gameType + "/tile-blue.png");
+    this.load.image("tileYellow", "/pong/" + gameType + "/tile-yellow.png");
+    this.load.image("tileGreen", "/pong/" + gameType + "/tile-green.png");
 
-    this.load.spritesheet('prize-anim', "/pong/" + gameType + "/prize-anim.png", { frameWidth: 160, frameHeight: 320 });
-    
+    this.load.spritesheet(
+      "prize-anim",
+      "/pong/" + gameType + "/prize-anim.png",
+      { frameWidth: 160, frameHeight: 320 }
+    );
+
     // this.load.image('base', "/pong/" + gameType + '/base1.png');
-    this.load.audio('audio1', ["/pong/" + gameType + '/spina.mp3']);
-    this.load.audio('pop', ["/pong/" + gameType + 
-        '/pop.mp3'
-    ]);
+    this.load.audio("audio1", ["/pong/" + gameType + "/spina.mp3"]);
+    this.load.audio("pop", ["/pong/" + gameType + "/pop.mp3"]);
 
-    this.load.audio('win', "/pong/" + gameType + '/win.mp3');
-    this.load.audio('lose', "/pong/" + gameType + '/lose.mp3');
-    this.load.audio('bonus', "/pong/" + gameType + '/bonus.mp3');
+    this.load.audio("win", "/pong/" + gameType + "/win.mp3");
+    this.load.audio("lose", "/pong/" + gameType + "/lose.mp3");
+    this.load.audio("bonus", "/pong/" + gameType + "/bonus.mp3");
 
     // this.load.font('customFont', "/pong/" + gameType + '/TitanOne-Regular.ttf');
-
-
   }
 
   // 400 800
@@ -159,66 +166,78 @@ export default class WheelScene extends Phaser.Scene {
   create() {
     // this.sound.add("bg").setVolume(0.3).setLoop(true).play();
 
-
-    this.bg=this.add.sprite(0, 0,'background').setOrigin(0).setDisplaySize(w, h);
+    this.bg = this.add
+      .sprite(0, 0, "background")
+      .setOrigin(0)
+      .setDisplaySize(w, h);
     // this.bg.setScale(1);
     // this.logo=this.add.sprite(w / 2, 30,'logo').setOrigin(0.5, 0).setDisplaySize(w * 0.5, 70);
-    
+
     //this.add.sprite(centerX, centerY, 'ui-center').setOrigin(0.5, 0).setDisplaySize(centerW, centerH);
-    
-    
+
     // this.wheel.setScale(0.65);
     let offsetY = 50;
-    this.base=this.add.sprite(w / 2, h / 2 - wheelR / 2 - 10 + offsetY, 'ui-btn-top').setDisplaySize(w / 2, w / 2 * 513 / 982);
-    this.add.sprite(w / 2, h / 2 + wheelR / 2 + offsetY, 'ui-btn-down').setDisplaySize(w / 4, w / 4 * 389 / 514);
-    this.outCircle = this.add.sprite(w / 2, h / 2 + offsetY, 'out-circle').setDisplaySize(wheelR, wheelR);
+    this.base = this.add
+      .sprite(w / 2, h / 2 - wheelR / 2 - 10 + offsetY, "ui-btn-top")
+      .setDisplaySize(w / 2, ((w / 2) * 513) / 982);
+    this.add
+      .sprite(w / 2, h / 2 + wheelR / 2 + offsetY, "ui-btn-down")
+      .setDisplaySize(w / 4, ((w / 4) * 389) / 514);
+    this.outCircle = this.add
+      .sprite(w / 2, h / 2 + offsetY, "out-circle")
+      .setDisplaySize(wheelR, wheelR);
 
     // this.wheel=this.add.sprite(w/2, h/2 + offsetY,'wheel').setDisplaySize(wheelR * 0.8, wheelR * 0.8);
-    this.game_text=this.add.text(10,10 + offsetY,"Tap to Spin",this.font_style).setVisible(false);
+    this.game_text = this.add
+      .text(10, 10 + offsetY, "Tap to Spin", this.font_style)
+      .setVisible(false);
 
-    this.wheel = this.add.sprite(w/2, h/2 + offsetY, 'center').setDisplaySize(wheelR * 0.16, wheelR * 0.16);
+    this.wheel = this.add
+      .sprite(w / 2, h / 2 + offsetY, "center")
+      .setDisplaySize(wheelR * 0.16, wheelR * 0.16);
 
-    
-    this.item = this.add.sprite(w/2, h/2 + offsetY, 'item').setDisplaySize(wheelR * 0.7, wheelR * 0.7 * 927 / 1022);
+    this.item = this.add
+      .sprite(w / 2, h / 2 + offsetY, "item")
+      .setDisplaySize(wheelR * 0.7, (wheelR * 0.7 * 927) / 1022);
 
     // this.pin=this.add.sprite(w/2,h/2-170,'pin');
     // this.pin.setScale(0.25);
 
-    const anim = this.anims.generateFrameNumbers('prize-anim', { start: 0, end: 140 });
+    const anim = this.anims.generateFrameNumbers("prize-anim", {
+      start: 0,
+      end: 140,
+    });
     this.anims.create({
-      key: 'prize',
+      key: "prize",
       frames: anim,
       frameRate: 24,
-      repeat: 0
+      repeat: 0,
     });
-   
 
     this.prizeAnim = this.add
-    .sprite(w / 2, h / 2 - 80 + offsetY, "prize-anim")
-    .setDisplaySize(w * 0.8, w * 1.6)
-    .setOrigin(0.5, 0.5)
+      .sprite(w / 2, h / 2 - 80 + offsetY, "prize-anim")
+      .setDisplaySize(w * 0.8, w * 1.6)
+      .setOrigin(0.5, 0.5);
 
-    this.font_style={
-        font:"bold 15px Roboto",
-        align:"center",
-        color:"white",
-        fontSize: "15px",
-    }
-    this.font_score={
-        fontFamily: 'customFont', 
-        fontSize: '35px', 
-        align:"center",
-        fill: '#ffffff' 
-    }
+    this.font_style = {
+      font: "bold 15px Roboto",
+      align: "center",
+      color: "white",
+      fontSize: "15px",
+    };
+    this.font_score = {
+      fontFamily: "customFont",
+      fontSize: "35px",
+      align: "center",
+      fill: "#ffffff",
+    };
 
-    this.font_text_style = { 
-      fontFamily: 'customFont', 
-      fontSize: '58px', 
-      align:"center",
-      fill: '#ffffff',
-    }
-    
-
+    this.font_text_style = {
+      fontFamily: "customFont",
+      fontSize: "58px",
+      align: "center",
+      fill: "#ffffff",
+    };
 
     // BONUS TEXT PART
     // this.bonus_top = this.add.sprite(w/2 + 10, h / 2 - wheelR / 2 - 100 + offsetY, 'bonus').setDisplaySize(wheelR * 0.15, wheelR * 0.15);
@@ -229,15 +248,18 @@ export default class WheelScene extends Phaser.Scene {
     // but.on('pointerup', this.spinwheel, this);
     // but.setScale(0.6);
 
-    var but = this.add.image(w / 2, h / 2 + wheelR / 2 + 35 + offsetY, 'ui-btn').setDisplaySize(w / 2.5, w / 2.5 * 0.4).setOrigin(0.5, 0).setInteractive();
-    but.on('pointerup', this.spinwheel, this);
+    var but = this.add
+      .image(w / 2, h / 2 + wheelR / 2 + 35 + offsetY, "ui-btn")
+      .setDisplaySize(w / 2.5, (w / 2.5) * 0.4)
+      .setOrigin(0.5, 0)
+      .setInteractive();
+    but.on("pointerup", this.spinwheel, this);
 
-
-    this.music = this.sound.add('audio1');
-    this.pop = this.sound.add('pop');
-    this.win = this.sound.add('win');
-    this.lose = this.sound.add('lose');
-    this.bonus = this.sound.add('bonus');
+    this.music = this.sound.add("audio1");
+    this.pop = this.sound.add("pop");
+    this.win = this.sound.add("win");
+    this.lose = this.sound.add("lose");
+    this.bonus = this.sound.add("bonus");
 
     this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
     this.cameras.main.postFX
@@ -251,66 +273,83 @@ export default class WheelScene extends Phaser.Scene {
     win_probability = this.params.winProbability;
 
     let endTileCount = 2;
-    if(win_probability <= 0.3) {
+    if (win_probability <= 0.3) {
       endTileCount = 2;
-    } else if(win_probability <= 0.6){
+    } else if (win_probability <= 0.6) {
       endTileCount = 4;
-    } else if(win_probability <= 0.8){
+    } else if (win_probability <= 0.8) {
       endTileCount = 6;
-    } else if(win_probability <= 1){
+    } else if (win_probability <= 1) {
       endTileCount = 8;
     }
 
-
     let shuffledArr = [];
-    for(let i = 0; i < 10; i++) {
-      if(i < endTileCount) {
+    for (let i = 0; i < 10; i++) {
+      if (i < endTileCount) {
         shuffledArr.push({
           amount: 0,
-          type: "lose"
+          type: "lose",
         });
       } else {
         let point = Math.ceil(Math.random() * 10) % 3;
         let scoreArry = [50, 10, 25];
         shuffledArr.push({
           amount: scoreArry[point],
-          type: "bonus"
-        })
+          type: "bonus",
+        });
       }
     }
 
     bonus = shuffledArr.sort(() => Math.random() - 0.5);
 
-
-    bonus.forEach(p => {
-      let type = 'tileRed';
-      let bonusType = 'lose';
-      if(p.type === "bonus"){
-        if(p.amount == 10) {
-          bonusType = 'star'
-          type = 'tileYellow'
-        } else if(p.amount == 25) {
-          bonusType = 'star1'
-          type = 'tileBlue'
-        } else if(p.amount == 50) {
-          bonusType = 'star2'
-          type = 'tileGreen';
+    bonus.forEach((p) => {
+      let type = "tileRed";
+      let bonusType = "lose";
+      if (p.type === "bonus") {
+        if (p.amount == 10) {
+          bonusType = "star";
+          type = "tileYellow";
+        } else if (p.amount == 25) {
+          bonusType = "star1";
+          type = "tileBlue";
+        } else if (p.amount == 50) {
+          bonusType = "star2";
+          type = "tileGreen";
         }
       }
-      this.tiles.push(this.add.sprite(w/2, h/2 + offsetY, type).setDisplaySize(wheelR * 0.3 * 309 / 437, wheelR * 0.3).setOrigin(0.5, -0.35));
+      this.tiles.push(
+        this.add
+          .sprite(w / 2, h / 2 + offsetY, type)
+          .setDisplaySize((wheelR * 0.3 * 309) / 437, wheelR * 0.3)
+          .setOrigin(0.5, -0.35)
+      );
 
-      this.imageTiles.push(this.add.sprite(w/2, h/2 + offsetY, bonusType).setDisplaySize(wheelR * 0.1, wheelR * 0.1).setOrigin(0.5, -2.5).setFlipY(true));
+      this.imageTiles.push(
+        this.add
+          .sprite(w / 2, h / 2 + offsetY, bonusType)
+          .setDisplaySize(wheelR * 0.1, wheelR * 0.1)
+          .setOrigin(0.5, -2.5)
+          .setFlipY(true)
+      );
+    });
 
-    })
+    this.arrow = this.add
+      .sprite(w / 2, h / 2 - 15 + offsetY, "center-arrow")
+      .setDisplaySize(w / 10, ((w / 10) * 281) / 155);
 
-    this.arrow = this.add.sprite(w / 2, h / 2 - 15 + offsetY, 'center-arrow').setDisplaySize(w / 10, w / 10 * 281 / 155);
+    this.score_text = this.add
+      .text(this.base.x, this.base.y - 25, "0", this.font_score)
+      .setOrigin(0.5, 0.5)
+      .setVisible(true);
 
-    this.score_text = this.add.text(this.base.x, this.base.y - 25, "0",  this.font_score).setOrigin(0.5, 0.5).setVisible(true);
+    this.result_text = this.add
+      .text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style)
+      .setOrigin(0.5, 0.5)
+      .setAlpha(0)
+      .setStroke("#000000", 10);
 
-    this.result_text = this.add.text(w / 2, h / 2 + offsetY, "SPIN AGAIN!", this.font_text_style).setOrigin(0.5, 0.5).setAlpha(0).setStroke('#000000', 10);;
-
-    win_bone = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-    lose_bone = [1, 4, 6, 9]
+    win_bone = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    lose_bone = [1, 4, 6, 9];
   }
 
   private scoreHandler;
@@ -326,14 +365,14 @@ export default class WheelScene extends Phaser.Scene {
     setTimeout(() => this.startRound(), 2500);
   }
 
-  public spinwheel(){
-    if(isSpinBtn) return;
+  public spinwheel() {
+    if (isSpinBtn) return;
     isSpinBtn = true;
 
     this.prizeAnim.setVisible(false);
 
     win_probability = this.params.winProbability;
-    console.log(this.params.winProbability)
+    console.log(this.params.winProbability);
 
     // if(spinTimes <= 0) {
     //   this.endRound();
@@ -342,10 +381,10 @@ export default class WheelScene extends Phaser.Scene {
 
     this.music.setLoop(true).play();
     let deltaAmount = 10;
-    let deltaDegree = 360 / deltaAmount
+    let deltaDegree = 360 / deltaAmount;
     let rounds = Phaser.Math.Between(5, 8);
-    var degree=Phaser.Math.Between(0, deltaAmount - 1) * deltaDegree;
-    
+    var degree = Phaser.Math.Between(0, deltaAmount - 1) * deltaDegree;
+
     // if(Math.random() > win_probability) {
     //   degree = 9 - win_bone[Math.round(100 * Math.random()) % win_bone.length];
     // } else {
@@ -354,69 +393,63 @@ export default class WheelScene extends Phaser.Scene {
 
     degree = win_bone[Math.round(100 * Math.random()) % win_bone.length];
 
-
-    console.log(degree, "--------------selelct", bonus[degree])
+    console.log(degree, "--------------selelct", bonus[degree]);
 
     degree = degree * deltaDegree;
     let total = rounds * 360 + degree;
 
     let tween = this.tweens.add({
-        targets:this.wheel,
-        angle:total,
-        ease:"Cubic.easeOut",
-        duration:5000,
-        callbackScope:this,
-        onComplete:function(){
-            this.music.stop();
-            // this.pop.play();
-            let index = (deltaAmount - (degree / deltaDegree)) % deltaAmount;
-            let status = bonus[index];
-            this.score(status)
+      targets: this.wheel,
+      angle: total,
+      ease: "Cubic.easeOut",
+      duration: 5000,
+      callbackScope: this,
+      onComplete: function () {
+        this.music.stop();
+        // this.pop.play();
+        let index = (deltaAmount - degree / deltaDegree) % deltaAmount;
+        let status = bonus[index];
+        this.score(status);
 
-            console.log(status, index);
-            isSpinBtn = false;
-        },
-        onUpdate: function(tween, target) {
-          this.item.setAngle(target.angle);
+        console.log(status, index);
+        isSpinBtn = false;
+      },
+      onUpdate: function (tween, target) {
+        this.item.setAngle(target.angle);
       },
     });
   }
 
-  score({type, amount}) {
-
+  score({ type, amount }) {
     let resultText = "";
 
-    if(spinTimes == 1 && type == "lose" && counter == 0) {
+    if (spinTimes == 1 && type == "lose" && counter == 0) {
       type = "spin";
     }
 
-    if(type == 'bonus') {
-
-      resultText = `+ ${amount}`
+    if (type == "bonus") {
+      resultText = `+ ${amount}`;
       this.win.play();
       counter += amount;
       this.prizeAnim.setVisible(true);
-      this.prizeAnim.play('prize')
-
-    } else if(type == 'lose') {
+      this.prizeAnim.play("prize");
+    } else if (type == "lose") {
       spinTimes -= amount;
-      resultText = "GAME OVER"
+      resultText = "GAME OVER";
       this.lose.play();
-
-    } else if(type == 'spin') {
-      resultText = "TRY AGAIN!"
+    } else if (type == "spin") {
+      resultText = "TRY AGAIN!";
       spinTimes += amount;
       this.bonus.play();
       this.prizeAnim.setVisible(true);
-      this.prizeAnim.play('prize')
+      this.prizeAnim.play("prize");
     }
     this.game_text.setText("spins " + spinTimes);
-    this.score_text.setText(`${ counter }`);
+    this.score_text.setText(`${counter}`);
 
     this.result_text.setText(resultText);
 
-    this.result_text.setScale(0)
-    .setAlpha(0)
+    this.result_text.setScale(0).setAlpha(0);
 
     this.tweens.add({
       targets: this.result_text,
@@ -424,18 +457,18 @@ export default class WheelScene extends Phaser.Scene {
       scaleY: 1,
       alpha: 1, // Fade in to full opacity
       duration: 600, // Duration of the animation in milliseconds
-      ease: 'Bounce', // Easing function for a bouncing effect
+      ease: "Bounce", // Easing function for a bouncing effect
     });
 
     setTimeout(() => {
-      if(!!this.result_text) {
+      if (!!this.result_text) {
         this.result_text.setAlpha(0);
       }
     }, 2000);
 
-    if(type == 'lose') {
+    if (type == "lose") {
       setTimeout(() => {
-       this.endRound();
+        this.endRound();
       }, 2000);
     }
   }
@@ -445,23 +478,20 @@ export default class WheelScene extends Phaser.Scene {
     this.scoreHandler(counter);
   }
 
-  startRound() {
-
-
-  }
+  startRound() {}
 
   initTilePosition() {
-    if(this.tiles.length == 10 && this.imageTiles.length == 10) {
+    if (this.tiles.length == 10 && this.imageTiles.length == 10) {
       this.tiles.forEach((tile, i) => {
         const originAngle = this.wheel.angle;
-        const angle = originAngle + 360 / 10 * i + 180;
+        const angle = originAngle + (360 / 10) * i + 180;
         tile.setAngle(angle);
         this.imageTiles[i].setAngle(angle);
-      })
+      });
     }
   }
 
   update(time, delta) {
-    this.initTilePosition();    
+    this.initTilePosition();
   }
 }

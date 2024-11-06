@@ -21,7 +21,7 @@ export default async function handler(req, res) {
     const doc = await documentRef.get();
 
     if (!doc.exists) {
-      return res.status(404).json({ error: "Document not found" });
+      return res.status(404).json(null);
     }
 
     // Return the document data along with the document ID

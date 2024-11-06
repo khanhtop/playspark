@@ -8,7 +8,7 @@ export default function Embed({ setShowEmbed, id, playableAd }) {
 
   const suffix = useMemo(() => {
     if (playableAd) return "plad";
-    return "ad";
+    return "game";
   }, [playableAd]);
 
   useEffect(() => {

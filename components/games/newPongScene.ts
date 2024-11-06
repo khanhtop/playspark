@@ -23,10 +23,10 @@ let w: number,
   boosterNum: number;
 let powerups = [];
 let STATUS = {
-  FREEZE : false,
-  MAGNIFY : false,
-  SHRINK : false
-}
+  FREEZE: false,
+  MAGNIFY: false,
+  SHRINK: false,
+};
 let gameType = "football";
 
 export default class NewPongScene extends Phaser.Scene {
@@ -51,12 +51,11 @@ export default class NewPongScene extends Phaser.Scene {
     super();
     NewPongScene.instance = this;
     gameType = newGameType;
-    console.log(newParams)
+    console.log(newParams);
     this.params = newParams;
   }
 
   preload() {
-
     w = this.game.canvas.clientWidth;
     h = this.game.canvas.clientHeight;
     ballR = w * 0.1;
@@ -73,42 +72,46 @@ export default class NewPongScene extends Phaser.Scene {
     ballVX = w * 0.75;
     collW = w * 0.24;
     scrW = w * 0.375;
-    scrH = w * 0.175 / 1.614;
+    scrH = (w * 0.175) / 1.614;
     heartR = w * 0.0625;
-    heartNum = this.params.lives
+    heartNum = this.params.lives;
 
-    this.load.image("ball", getImageWithSize(this.params.objectSprite, ballR, ballR));
-    this.load.image("enemy", getImageWithSize(this.params.enemySprite, playerR, playerR));
-    this.load.image("peck", getImageWithSize(this.params.playerSprite, playerR, playerR));
-    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, w, h));
+    this.load.image("ball", getImageWithSize(this.params.objectSprite, 300));
+    this.load.image("enemy", getImageWithSize(this.params.enemySprite, 300));
+    this.load.image("peck", getImageWithSize(this.params.playerSprite, 300));
+    this.load.image("bg", getImageWithSize(this.params.backgroundSprite, 1000));
     //this.load.image('bgGls', '/pong' + gameType + 'n/bgGoals.png');
     this.load.image("heart", "/pong/" + gameType + "/heart.png");
     this.load.image("score", "/pong/" + gameType + "/score.png");
     this.load.image("bar", "/pong/" + gameType + "/bar.png");
     this.load.spritesheet(
-      'hit_effect',
-      '/pong/' + gameType + '/hit-effect.png',
+      "hit_effect",
+      "/pong/" + gameType + "/hit-effect.png",
       { frameWidth: 200, frameHeight: 200 }
     );
 
-    this.load.spritesheet(
-      'firework',
-      "/pong/pongassets/firework1.png",
-      { frameWidth: 200, frameHeight: 200 }
-    );
+    this.load.spritesheet("firework", "/pong/pongassets/firework1.png", {
+      frameWidth: 200,
+      frameHeight: 200,
+    });
 
     this.load.image("middleAd", this.params.sponsorLogo);
 
     // PONG ASSETS
-    this.load.image("booster", getImageWithSize(this.params.powerUpSprite, 30, 30));
+    this.load.image(
+      "booster",
+      getImageWithSize(this.params.powerUpSprite, 300, 300)
+    );
     this.load.image("FREEZE", "/pong/pongassets/freeze.png");
     this.load.image("MAGNIFY", "/pong/pongassets/magnify.png");
     this.load.image("SHRINK", "/pong/pongassets/shrink.png");
     this.load.audio("boosterAudio", "/pong/pongassets/audio/booster.mp3");
     this.load.audio("powerup", "/pong/pongassets/audio/powerup.mp3");
 
-
-    this.load.audio("bg", this.params.backgroundMusic ?? ("/pong/" + gameType + "/sfx/bgNoise.mp3"));
+    this.load.audio(
+      "bg",
+      this.params.backgroundMusic ?? "/pong/" + gameType + "/sfx/bgNoise.mp3"
+    );
     this.load.audio("whistle", "/pong/" + gameType + "/sfx/startWhistle.mp3");
     this.load.audio("ballHit", "/pong/" + gameType + "/sfx/ballHit.mp3");
     this.load.audio("goal", "/pong/" + gameType + "/sfx/goalScored.mp3");
@@ -117,9 +120,9 @@ export default class NewPongScene extends Phaser.Scene {
 
     this.load.image("help-board", "/pong/help-board.png");
     this.load.image("arrow", "/pong/arrow.png");
-    
-    let fontUrl = '/pong/TitanOne-Regular.ttf';
-    const font = new FontFace('customFont', `url(${fontUrl})`);
+
+    let fontUrl = "/pong/TitanOne-Regular.ttf";
+    const font = new FontFace("customFont", `url(${fontUrl})`);
     font
       .load()
       .then(() => {
@@ -128,16 +131,15 @@ export default class NewPongScene extends Phaser.Scene {
       })
       .catch((error) => {
         // Font failed to load
-        console.log('Failed to load font:', error);
+        console.log("Failed to load font:", error);
       });
 
-      this.text_main_style = {
-        fontFamily: 'customFont',
-        fontSize: 24 + 'px',
-        align: 'center',
-        fill: '#ffffff',
-      }
-
+    this.text_main_style = {
+      fontFamily: "customFont",
+      fontSize: 24 + "px",
+      align: "center",
+      fill: "#ffffff",
+    };
   }
 
   // 400 800
@@ -172,45 +174,60 @@ export default class NewPongScene extends Phaser.Scene {
       false,
       false
     );
-    const bg = this.add.image(0, 0, "bg").setOrigin(0).setDisplaySize(w, h).setInteractive().on("pointerup", () => {
-      if(!this.isStart) {
-        this.startRound();
-        this.isStart = false;
-        this.help_board.setVisible(false);
-      }
-    });
-    this.add.image(mW, mH, "middleAd").setDisplaySize(80, 80).setAlpha(this.textures.exists('middleAd') ? 1 : 0);
+    const bg = this.add
+      .image(0, 0, "bg")
+      .setOrigin(0)
+      .setDisplaySize(w, h)
+      .setInteractive()
+      .on("pointerup", () => {
+        if (!this.isStart) {
+          this.startRound();
+          this.isStart = false;
+          this.help_board.setVisible(false);
+        }
+      });
+    this.add
+      .image(mW, mH, "middleAd")
+      .setDisplaySize(80, 80)
+      .setAlpha(this.textures.exists("middleAd") ? 1 : 0);
     //this.add.image(0, 0, 'bg').setOrigin(0).setDisplaySize(w, h);
 
     // firework effect
-    const firework_frame = this.anims.generateFrameNames(
-      'firework',
-      { start: 0, end: 110 }
-    );
+    const firework_frame = this.anims.generateFrameNames("firework", {
+      start: 0,
+      end: 110,
+    });
     this.anims.create({
-      key: 'fire',
+      key: "fire",
       frames: firework_frame,
       frameRate: 25,
       repeat: 0,
     });
 
-    this.fireworkEffect = this.add.sprite(w / 2, h - scrH - 10, 'firework').setOrigin(0.5, 1).setDisplaySize(300, 300).setVisible(false);
+    this.fireworkEffect = this.add
+      .sprite(w / 2, h - scrH - 10, "firework")
+      .setOrigin(0.5, 1)
+      .setDisplaySize(300, 300)
+      .setVisible(false);
 
     // this.fireworkEffect.play('fire')
     // HIT EFFECT
-    const hit_frame = this.anims.generateFrameNames(
-      'hit_effect',
-      { start: -3, end: 12 }
-    );
-    
+    const hit_frame = this.anims.generateFrameNames("hit_effect", {
+      start: -3,
+      end: 12,
+    });
+
     this.anims.create({
-      key: 'hit',
+      key: "hit",
       frames: hit_frame,
       frameRate: 25,
       repeat: 0,
     });
 
-    this.hitEffect = this.add.sprite(w / 2, h / 2, 'score').setOrigin(0.5, 0.5).setDisplaySize(100, 100);
+    this.hitEffect = this.add
+      .sprite(w / 2, h / 2, "score")
+      .setOrigin(0.5, 0.5)
+      .setDisplaySize(100, 100);
 
     this.hitEffect.play("hit");
 
@@ -239,7 +256,8 @@ export default class NewPongScene extends Phaser.Scene {
       .setCollideWorldBounds(true)
       .setPushable(false);
 
-    this.aa = this.physics.add.image(0, h - goalH, "peck")
+    this.aa = this.physics.add
+      .image(0, h - goalH, "peck")
       .setTint(0xff0000)
       .setAlpha(0.75)
       .setOrigin(0)
@@ -249,7 +267,8 @@ export default class NewPongScene extends Phaser.Scene {
       .setVisible(false)
       .setPushable(false);
 
-    this.aa1 = this.physics.add.image(0, h - goalH, "peck")
+    this.aa1 = this.physics.add
+      .image(0, h - goalH, "peck")
       .setTint(0xff0000)
       .setAlpha(0.75)
       .setOrigin(0)
@@ -259,78 +278,102 @@ export default class NewPongScene extends Phaser.Scene {
       .setVisible(false)
       .setPushable(false);
 
-    this.booster = this.physics.add.image(w / 2, h / 2, 'booster')
+    this.booster = this.physics.add
+      .image(w / 2, h / 2, "booster")
       .setOrigin(0.5, 0.5)
       .setDisplaySize(ballR, ballR)
       .setVisible(false);
 
-    console.log(h)
+    console.log(h);
 
     powerups.push(
-      this.physics.add.image(sideW, goalH + 50 * h / 663, 'SHRINK')
-      .setOrigin(0, 0)
-      .setDisplaySize(ballR, ballR)
-      .setInteractive()
-    )
+      this.physics.add
+        .image(sideW, goalH + (50 * h) / 663, "SHRINK")
+        .setOrigin(0, 0)
+        .setDisplaySize(ballR, ballR)
+        .setInteractive()
+    );
 
     powerups.push(
-      this.physics.add.image(sideW, goalH + 100 * h / 663, 'MAGNIFY')
-      .setOrigin(0, 0)
-      .setDisplaySize(ballR, ballR)
-      .setInteractive()
-    )
+      this.physics.add
+        .image(sideW, goalH + (100 * h) / 663, "MAGNIFY")
+        .setOrigin(0, 0)
+        .setDisplaySize(ballR, ballR)
+        .setInteractive()
+    );
 
     powerups.push(
-      this.physics.add.image(sideW, goalH + 150 * h / 663, 'FREEZE')
-      .setOrigin(0, 0)
-      .setDisplaySize(ballR, ballR)
-      .setInteractive()
-    )
+      this.physics.add
+        .image(sideW, goalH + (150 * h) / 663, "FREEZE")
+        .setOrigin(0, 0)
+        .setDisplaySize(ballR, ballR)
+        .setInteractive()
+    );
 
-    powerups.forEach(power => {
-      console.log(power.texture.key)
+    powerups.forEach((power) => {
+      console.log(power.texture.key);
       const key = power.texture.key;
-      power.on("pointerup", function(pointer) {
-        let isSelect = false;
-        console.log(STATUS.FREEZE, boosterNum)
+      power.on(
+        "pointerup",
+        function (pointer) {
+          let isSelect = false;
+          console.log(STATUS.FREEZE, boosterNum);
 
-        if(key == "FREEZE" && !STATUS.FREEZE) {
-          if(boosterNum >= 3) {
-            boosterNum -= 3;
-            isSelect = true;
+          if (key == "FREEZE" && !STATUS.FREEZE) {
+            if (boosterNum >= 3) {
+              boosterNum -= 3;
+              isSelect = true;
+            }
+          } else if (
+            (key == "SHRINK" && !STATUS.SHRINK) ||
+            (key == "MAGNIFY" && !STATUS.MAGNIFY)
+          ) {
+            if (boosterNum >= 2) {
+              boosterNum -= 2;
+              isSelect = true;
+            }
           }
-        } else if((key == "SHRINK" && !STATUS.SHRINK) || (key == "MAGNIFY" && !STATUS.MAGNIFY)){
-          if(boosterNum >= 2) {
-            boosterNum -= 2;
-            isSelect = true;
-          }
-        }
-        this.boosterNumText.setText(boosterNum);
+          this.boosterNumText.setText(boosterNum);
 
-        this.setPowerUps();
+          this.setPowerUps();
 
-        this.powerup.play();
+          this.powerup.play();
 
-        if(isSelect) {
+          if (isSelect) {
             STATUS[key] = true;
             this.time.delayedCall(
-            5000,
-            () => {
-              STATUS[key] = false;
-            },
-            null,
-            this
-          );
-        }
-      }, this);
-      console.log(power.x, power.y, power.width)
-      this.add.sprite(power.x + ballR * 0.7 + 8, power.y + ballR * 0.9, 'bar').setOrigin(0.5, 0.5).setDisplaySize(34, 80)
-      this.add.sprite(power.x + ballR * 0.7 + 19, power.y + ballR * 0.9, 'booster').setOrigin(0.5, 0.5).setDisplaySize(15, 15)
-      this.add.text(power.x + ballR * 0.7 + 3, power.y + ballR * 0.9, key == "FREEZE"?'3':'2').setStyle({
-        fontSize: "15px",
-        color: "#ffffff",
-      }).setOrigin(0.5, 0.5)
-    })
+              5000,
+              () => {
+                STATUS[key] = false;
+              },
+              null,
+              this
+            );
+          }
+        },
+        this
+      );
+      console.log(power.x, power.y, power.width);
+      this.add
+        .sprite(power.x + ballR * 0.7 + 8, power.y + ballR * 0.9, "bar")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(34, 80);
+      this.add
+        .sprite(power.x + ballR * 0.7 + 19, power.y + ballR * 0.9, "booster")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(15, 15);
+      this.add
+        .text(
+          power.x + ballR * 0.7 + 3,
+          power.y + ballR * 0.9,
+          key == "FREEZE" ? "3" : "2"
+        )
+        .setStyle({
+          fontSize: "15px",
+          color: "#ffffff",
+        })
+        .setOrigin(0.5, 0.5);
+    });
 
     this.gr = this.physics.add.staticGroup();
 
@@ -364,24 +407,21 @@ export default class NewPongScene extends Phaser.Scene {
     //this.physics.add.collider(this.player, gr);
     //this.physics.add.collider(this.ai, gr);
 
-    this.lifeNumText = this.add
-    .text(w - 70, 13, heartNum.toString(), {
+    this.lifeNumText = this.add.text(w - 70, 13, heartNum.toString(), {
       fontFamily: "enhanced_led_board-7",
       fontSize: "22px",
       color: "#ffffff",
-    })
-
+    });
 
     // BOOSTER PART
     this.add.image(30, 30, "booster").setDisplaySize(30, 30);
     this.boosterNumText = this.add
-    .text(70, 30, "0", {
-      fontFamily: "enhanced_led_board-7",
-      fontSize: "22px",
-      color: "#ffffff",
-    })
-    .setOrigin(0.5, 0.5);
-
+      .text(70, 30, "0", {
+        fontFamily: "enhanced_led_board-7",
+        fontSize: "22px",
+        color: "#ffffff",
+      })
+      .setOrigin(0.5, 0.5);
 
     this.player.setInteractive();
     //(this.player as any).setDraggable(true);
@@ -497,15 +537,26 @@ export default class NewPongScene extends Phaser.Scene {
         const deltaX = this.ball.x - this.player.x;
         const deltaY = this.ball.y - this.player.y;
 
-        if(STATUS.MAGNIFY) {
-          this.hitEffect.setPosition(this.ball.x + deltaX * ballR / (playerR * 2), this.ball.y + deltaY * ballR / (playerR * 2))
+        if (STATUS.MAGNIFY) {
+          this.hitEffect.setPosition(
+            this.ball.x + (deltaX * ballR) / (playerR * 2),
+            this.ball.y + (deltaY * ballR) / (playerR * 2)
+          );
         } else {
-          this.hitEffect.setPosition(this.ball.x + deltaX * ballR / playerR, this.ball.y + deltaY * ballR / playerR)
+          this.hitEffect.setPosition(
+            this.ball.x + (deltaX * ballR) / playerR,
+            this.ball.y + (deltaY * ballR) / playerR
+          );
         }
 
-        this.hitEffect.play("hit")
-        const angle = Phaser.Math.Angle.Between(this.player.x - this.hitEffect.x , this.player.y - this.hitEffect.y, 0, 0);
-        this.hitEffect.setAngle(angle * 180 / Math.PI + 180)
+        this.hitEffect.play("hit");
+        const angle = Phaser.Math.Angle.Between(
+          this.player.x - this.hitEffect.x,
+          this.player.y - this.hitEffect.y,
+          0,
+          0
+        );
+        this.hitEffect.setAngle((angle * 180) / Math.PI + 180);
       },
       null,
       this
@@ -519,37 +570,48 @@ export default class NewPongScene extends Phaser.Scene {
 
         const deltaX = this.ball.x - this.ai.x;
         const deltaY = this.ball.y - this.ai.y;
-        this.hitEffect.setPosition(this.ball.x + deltaX, this.ball.y + deltaY)
-        this.hitEffect.play("hit")
-        const angle = Phaser.Math.Angle.Between(this.ai.x - this.hitEffect.x , this.ai.y - this.hitEffect.y, 0, 0);
-        this.hitEffect.setAngle(angle * 180 / Math.PI + 180)
+        this.hitEffect.setPosition(this.ball.x + deltaX, this.ball.y + deltaY);
+        this.hitEffect.play("hit");
+        const angle = Phaser.Math.Angle.Between(
+          this.ai.x - this.hitEffect.x,
+          this.ai.y - this.hitEffect.y,
+          0,
+          0
+        );
+        this.hitEffect.setAngle((angle * 180) / Math.PI + 180);
       },
       null,
       this
     );
     this.physics.add.collider(this.ball, this.gr, () => {
-        this.ballHit.stop();
-        this.ballHit.play();
+      this.ballHit.stop();
+      this.ballHit.play();
     });
 
     this.physics.add.collider(this.ai, this.gr, () => {
       // if (!this.ballHit.isPlaying) this.ballHit.play();
     });
 
-    this.physics.add.collider(this.ball, this.aa, () => {})
-    this.physics.add.collider(this.ball, this.aa1, () => {})
+    this.physics.add.collider(this.ball, this.aa, () => {});
+    this.physics.add.collider(this.ball, this.aa1, () => {});
 
-    this.physics.add.overlap(this.player, this.booster, () => {
-      this.booster.setPosition(-200, -200)
+    this.physics.add.overlap(
+      this.player,
+      this.booster,
+      () => {
+        this.booster.setPosition(-200, -200);
 
-      this.booster.setVisible(false);
-      boosterNum++;
-      this.boosterNumText.setText(boosterNum);
-      
-      this.setPowerUps();
-      this.boosterAudio.play();
-      this.randomBoosterPos();
-    }, null, this);
+        this.booster.setVisible(false);
+        boosterNum++;
+        this.boosterNumText.setText(boosterNum);
+
+        this.setPowerUps();
+        this.boosterAudio.play();
+        this.randomBoosterPos();
+      },
+      null,
+      this
+    );
 
     //this.cameras.main.postFX.addBloom(0xffffff, 1, 1, 10, 0.5);
     //this.cameras.main.postFX.addBokeh(0.1, 0.5, 0.05);
@@ -569,108 +631,143 @@ export default class NewPongScene extends Phaser.Scene {
 
     this.help_board = this.add.group();
 
-    const first = this.add.graphics()
-    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
-    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height)
-    .setInteractive()
-    .on("pointerup", (pointer) => {
-      console.log("___click___")
-      this.startRound();
-    })
-    this.help_board.add(first)
+    const first = this.add
+      .graphics()
+      .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+      .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height)
+      .setInteractive()
+      .on("pointerup", (pointer) => {
+        console.log("___click___");
+        this.startRound();
+      });
+    this.help_board.add(first);
 
     this.help_board.add(
-      this.add.text(mW, mH, "CLICK TO PLAY").setOrigin(0.5, 0.5).setStyle({
-        ...this.text_main_style,
-        fontSize: "35" + "px",
-      }).setStroke(
-        "#5b6437",
-        5
-      )
-    )
+      this.add
+        .text(mW, mH, "CLICK TO PLAY")
+        .setOrigin(0.5, 0.5)
+        .setStyle({
+          ...this.text_main_style,
+          fontSize: "35" + "px",
+        })
+        .setStroke("#5b6437", 5)
+    );
 
     this.help_board.add(
-      this.add.sprite(mW, mH - 200, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 100)
-    )
+      this.add
+        .sprite(mW, mH - 200, "help-board")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(200, 100)
+    );
 
     this.help_board.add(
-      this.add.sprite(mW - 130, mH - 150, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(90)
-    )
+      this.add
+        .sprite(mW - 130, mH - 150, "arrow")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(80, 80)
+        .setAngle(90)
+    );
 
     this.help_board.add(
-      this.add.text(mW,  mH - 200, "Click here for\npower ups").setOrigin(0.5, 0.5).setStyle({
-        ...this.text_main_style,
-        fontSize: "16" + "px",
-      })
-    )
+      this.add
+        .text(mW, mH - 200, "Click here for\npower ups")
+        .setOrigin(0.5, 0.5)
+        .setStyle({
+          ...this.text_main_style,
+          fontSize: "16" + "px",
+        })
+    );
 
     this.help_board.add(
-      this.add.sprite(mW, mH - 50, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(60)
-    )
+      this.add
+        .sprite(mW, mH - 50, "arrow")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(80, 80)
+        .setAngle(60)
+    );
 
     this.help_board.add(
-      this.add.sprite(mW + 80, mH - 100, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 80)
-    )
-
-
-
-    this.help_board.add(
-      this.add.text(mW + 80,  mH - 100, "Hit the object\ninto the target").setOrigin(0.5, 0.5).setStyle({
-        ...this.text_main_style,
-        fontSize: "16" + "px",
-      })
-    )
-
+      this.add
+        .sprite(mW + 80, mH - 100, "help-board")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(200, 80)
+    );
 
     this.help_board.add(
-      this.add.sprite(mW - 70, mH + 150, "help-board").setOrigin(0.5, 0.5).setDisplaySize(200, 80)
-    )
+      this.add
+        .text(mW + 80, mH - 100, "Hit the object\ninto the target")
+        .setOrigin(0.5, 0.5)
+        .setStyle({
+          ...this.text_main_style,
+          fontSize: "16" + "px",
+        })
+    );
 
     this.help_board.add(
-      this.add.sprite(mW - 70, mH + 200, "arrow").setOrigin(0.5, 0.5).setDisplaySize(80, 80).setAngle(-20)
-    )
+      this.add
+        .sprite(mW - 70, mH + 150, "help-board")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(200, 80)
+    );
 
     this.help_board.add(
-      this.add.text(mW - 70, mH + 150, "Click and drag\nplayer to move").setOrigin(0.5, 0.5).setStyle({
-        ...this.text_main_style,
-        fontSize: "20" + "px",
-      })
-    )
+      this.add
+        .sprite(mW - 70, mH + 200, "arrow")
+        .setOrigin(0.5, 0.5)
+        .setDisplaySize(80, 80)
+        .setAngle(-20)
+    );
+
+    this.help_board.add(
+      this.add
+        .text(mW - 70, mH + 150, "Click and drag\nplayer to move")
+        .setOrigin(0.5, 0.5)
+        .setStyle({
+          ...this.text_main_style,
+          fontSize: "20" + "px",
+        })
+    );
 
     this.gameover_board = this.add.group();
     this.gameover_board.add(
-      this.add.graphics()
-    .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
-    .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height).setScrollFactor(0, 0).setDepth(200)
-    )
+      this.add
+        .graphics()
+        .fillStyle(0x000000, 0.5) // 0x000000 represents black, and 0.5 represents the transparency (0.0 to 1.0)
+        .fillRect(0, 0, this.cameras.main.width, this.cameras.main.height)
+        .setScrollFactor(0, 0)
+        .setDepth(200)
+    );
     this.gameover_board.add(
-      this.add.text(mW, mH - 150, "GAME OVER").setOrigin(0.5, 0.5).setStyle({
-        ...this.text_main_style,
-        fontSize: "35" + "px",
-      }).setStroke(
-        "#5b6437",
-        5
-      ).setScrollFactor(0, 0).setDepth(201)
-    )
-    this.gameover_board.setVisible(false)
+      this.add
+        .text(mW, mH - 150, "GAME OVER")
+        .setOrigin(0.5, 0.5)
+        .setStyle({
+          ...this.text_main_style,
+          fontSize: "35" + "px",
+        })
+        .setStroke("#5b6437", 5)
+        .setScrollFactor(0, 0)
+        .setDepth(201)
+    );
+    this.gameover_board.setVisible(false);
 
     this.initGame();
   }
 
   public setPowerUps() {
-    powerups.forEach(power => {
+    powerups.forEach((power) => {
       power.setAlpha(0.6);
       const key = power.texture.key;
-      if(key == "SHRINK" || key == "MAGNIFY") {
-        if(boosterNum >= 2) {
+      if (key == "SHRINK" || key == "MAGNIFY") {
+        if (boosterNum >= 2) {
           power.setAlpha(1);
         }
-      } else if(key == "FREEZE") {
-        if(boosterNum >= 3) {
+      } else if (key == "FREEZE") {
+        if (boosterNum >= 3) {
           power.setAlpha(1);
         }
       }
-    })
+    });
   }
 
   private ballDir: number = 1;
@@ -736,10 +833,10 @@ export default class NewPongScene extends Phaser.Scene {
 
     boosterNum = this.params.boostCredits ?? 0;
     STATUS = {
-      FREEZE : false,
-      MAGNIFY : false,
-      SHRINK : false
-    }
+      FREEZE: false,
+      MAGNIFY: false,
+      SHRINK: false,
+    };
     this.setPowerUps();
     this.randomBoosterPos();
     //setTimeout(() => this.startRound(), 2500);
@@ -748,12 +845,12 @@ export default class NewPongScene extends Phaser.Scene {
   loseGame() {
     this.cameras.main.fadeOut(3000);
     this.final.play();
-    this.gameover_board.setVisible(true)
+    this.gameover_board.setVisible(true);
     this.tweens.add({
       targets: this.sound,
       volume: 0,
       duration: 2000, // Duration of the animation in milliseconds
-      ease: 'Bounce', // Easing function for a bouncing effect
+      ease: "Bounce", // Easing function for a bouncing effect
     });
     this.time.delayedCall(3000, this.gameEnd, [], this);
     // game is lost
@@ -809,7 +906,7 @@ export default class NewPongScene extends Phaser.Scene {
     //this.cameras.main.fadeIn(1000);
     this.ball.setVelocity(0, 0);
     setTimeout(() => {
-      if(!!this.ball) {
+      if (!!this.ball) {
         this.ball.setPosition(mW, mH);
         this.ball.setImmovable(true);
       }
@@ -831,8 +928,8 @@ export default class NewPongScene extends Phaser.Scene {
       this.goalTxt.text = this.touches === 1 ? "COMBO HIT!" : "GOAL!";
       this.addedScrTxt.text = this.touches === 1 ? "+200" : "+100";
 
-      this.fireworkEffect.setVisible(true)
-      this.fireworkEffect.play('fire');
+      this.fireworkEffect.setVisible(true);
+      this.fireworkEffect.play("fire");
 
       if (this.touches === 1) {
         //this.cameras.main.flash(50);
@@ -857,8 +954,8 @@ export default class NewPongScene extends Phaser.Scene {
       5000,
       () => {
         const x = sideW + Math.random() * (w - 2 * sideW);
-        const y = mH + Math.random() * (h - goalH - mH)
-        this.booster.setPosition(x, y)
+        const y = mH + Math.random() * (h - goalH - mH);
+        this.booster.setPosition(x, y);
         this.booster.setVisible(true);
       },
       null,
@@ -930,21 +1027,21 @@ export default class NewPongScene extends Phaser.Scene {
 
     // Set the AI's velocity
     this.ai.setVelocity(vx, vy);
-    if(this.ai.y < 0 || this.ai.x < 0 || this.ai.x > w + 20) {
+    if (this.ai.y < 0 || this.ai.x < 0 || this.ai.x > w + 20) {
       this.ai.setPosition(x, 20);
     }
 
-    if(STATUS.FREEZE) {
+    if (STATUS.FREEZE) {
       this.ai.setVelocity(0, 0);
     }
 
-    if(STATUS.SHRINK) {
-      this.ai.setDisplaySize(aiR * this.aiSize / 2, aiR * this.aiSize / 2)
+    if (STATUS.SHRINK) {
+      this.ai.setDisplaySize((aiR * this.aiSize) / 2, (aiR * this.aiSize) / 2);
     } else {
-      this.ai.setDisplaySize(aiR * this.aiSize, aiR * this.aiSize)
+      this.ai.setDisplaySize(aiR * this.aiSize, aiR * this.aiSize);
     }
 
-    if(STATUS.MAGNIFY) {
+    if (STATUS.MAGNIFY) {
       this.player.setDisplaySize(playerR * 2, playerR * 2);
     } else {
       this.player.setDisplaySize(playerR, playerR);
