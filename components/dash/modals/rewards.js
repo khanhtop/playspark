@@ -2,6 +2,7 @@ import TapHold from "@/components/ui/tapHold";
 import GameButton from "@/components/uiv2/gameButton";
 import { playClickSound } from "@/helpers/audio";
 import { firestore } from "@/helpers/firebase";
+import { filterCollection } from "@/helpers/firebaseApi";
 import { getLeaderboard } from "@/helpers/leaderboard";
 import { claimReward } from "@/helpers/rewards";
 import { useAppContext } from "@/helpers/store";
@@ -76,18 +77,12 @@ export default function ModalRewards({ data }) {
 
   const fetchRewards = async () => {
     if (!context?.loggedIn?.uid) return;
-    getDocs(
-      query(
-        collection(firestore, "users", context?.loggedIn?.uid, "rewards"),
-        where("tournamentId", "==", data.tournamentId)
-      )
-    ).then((snapshot) => {
-      let rwd = [];
-      for (let doc of snapshot.docs) {
-        rwd.push({ ...doc.data(), firebaseId: doc.id });
-      }
-      setRewards(rwd);
-    });
+    const res = await filterCollection(
+      `users/${context.loggedIn?.uid}/rewards`,
+      "tournamentId",
+      data.tournamentId
+    );
+    setRewards(res);
   };
 
   useEffect(() => {
