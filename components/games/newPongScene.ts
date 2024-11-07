@@ -616,12 +616,12 @@ export default class NewPongScene extends Phaser.Scene {
     //this.cameras.main.postFX.addBloom(0xffffff, 1, 1, 10, 0.5);
     //this.cameras.main.postFX.addBokeh(0.1, 0.5, 0.05);
     //this.cameras.main.postFX.addTiltShift(0.5, 0.25, 0.0015, 0.05, 0.05, 1);
-    this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
-    this.cameras.main.postFX
-      .addColorMatrix()
-      .contrast(1.25)
-      .polaroid()
-      .brightness(0.9);
+    // this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
+    // this.cameras.main.postFX
+    //   .addColorMatrix()
+    //   .contrast(1.25)
+    //   .polaroid()
+    //   .brightness(0.9);
     this.ball.preFX.addShadow();
     this.player.preFX.addShadow();
     this.ai.preFX.addShadow();

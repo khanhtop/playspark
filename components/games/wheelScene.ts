@@ -261,12 +261,12 @@ export default class WheelScene extends Phaser.Scene {
     this.lose = this.sound.add("lose");
     this.bonus = this.sound.add("bonus");
 
-    this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
-    this.cameras.main.postFX
-      .addColorMatrix()
-      .contrast(1.25)
-      .polaroid()
-      .brightness(0.9);
+    // this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
+    // this.cameras.main.postFX
+    //   .addColorMatrix()
+    //   .contrast(1.25)
+    //   .polaroid()
+    //   .brightness(0.9);
 
     this.initGame();
 
