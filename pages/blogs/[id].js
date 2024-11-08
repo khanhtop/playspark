@@ -47,17 +47,22 @@ export default function BlogPost({ blogPost, url }) {
   );
 }
 
-import { createClient } from "../../helpers/prismic";
+import { createClient, predicate } from "../../helpers/prismic";
 import { useRouter } from "next/router";
 import BlogFooter from "@/components/blog/blogFooter";
 import Navbar from "@/components/nav/navbar";
 
 export async function getServerSideProps(context) {
   const client = createClient();
-  const { id } = context.query;
-  const _blogPost = await client.getByID(id);
-  const blogPost = _blogPost.data;
+  const { id: slug } = context.query;
+  const response = await client.getByType("blog-post", {
+    predicates: [predicate.at("my.blog-post.slug", slug)],
+    pageSize: 1,
+  });
+
+  const blogPost = response?.results?.[0]?.data || null;
   const url = context.resolvedUrl;
+
   return {
     props: { blogPost, url },
   };

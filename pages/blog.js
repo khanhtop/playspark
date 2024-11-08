@@ -10,7 +10,7 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 
 export default function Blog({ blogs }) {
-  console.log("blogs",blogs)
+  console.log("blogs", blogs);
   // Define the number of items to display per page
   // const itemsPerPage = 6;
 
@@ -39,7 +39,6 @@ export default function Blog({ blogs }) {
   const router = useRouter();
 
   return (
-    
     <>
       <Head>
         <title>Blog | PlaySpark</title>
@@ -71,8 +70,8 @@ export default function Blog({ blogs }) {
             {blogs.title}
           </h1>
           <div className="flex lg:flex-row flex-col  gap-12 lg:px-[140px] mt-10">
-            {blogs.blog?.map((item, key) => {
-              return <Item item={item} key={key} />;
+            {blogs.map((item, key) => {
+              return <Item item={item.data} key={key} />;
             })}
           </div>
         </div>
@@ -86,11 +85,11 @@ export default function Blog({ blogs }) {
 const Item = ({ item }) => {
   const router = useRouter();
   let buttonColor;
-    if (item.blog_button == "Read More") {
-      buttonColor = "bg-free text-black";
-    } else {
-      buttonColor = " bg-[#364153] text-white";
-    }
+  if (item.blog_button == "Read More") {
+    buttonColor = "bg-free text-black";
+  } else {
+    buttonColor = " bg-[#364153] text-white";
+  }
 
   const controls = useAnimation();
   const [ref, inView] = useInView({
@@ -117,12 +116,12 @@ const Item = ({ item }) => {
       className="flex flex-col justify-start items-center gap-10 text-start w-full lg:w-1/3 max-w-[300px]"
     >
       <img
-        src={item.image.url}
+        src={item.featured_image?.url}
         className="w-[263px] h-[263px] border rounded-[20px] "
       />
-      <div className="flex flex-col items-center lg:min-h-[200px] min-h-fit gap-5">
-        <h1 className="text-[18px] font-bold ">{item.blog_title}</h1>
-        <p className="text-[16px]">{item.blog_text}</p>
+      <div className="flex flex-col items-center min-h-fit gap-5">
+        <h1 className="text-[18px] font-bold line-clamp-2">{item.title}</h1>
+        <p className="text-[16px] line-clamp-2">{item.seo_description}</p>
       </div>
       <button
         className={clsx(
@@ -130,10 +129,10 @@ const Item = ({ item }) => {
           buttonColor
         )}
         onClick={() => {
-          router.push(item.button_url);
+          router.push(`/blogs/${item.slug}`);
         }}
       >
-        {item.blog_button}
+        Read More
       </button>
     </motion.div>
   );
@@ -147,8 +146,8 @@ import Game from "@/components/forms/game";
 
 export async function getStaticProps(context) {
   const client = createClient();
-  // const blogs = await client.getAllByType("blog");
-  const blogs = (await client.getSingle("blog"))?.data;
+  const blogs = await client.getAllByType("blog-post");
+  // const blogs = (await client.getSingle("blog"))?.data;
   return {
     props: { blogs },
   };
