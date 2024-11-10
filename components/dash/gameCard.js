@@ -70,6 +70,7 @@ export default function GameCard({
   }, []);
 
   const gameTier = useMemo(() => {
+    if (!game.tier) return null;
     if (game.tier === 1) {
       return {
         name: "Bronze",
@@ -102,12 +103,14 @@ export default function GameCard({
         <h3 className="text-lg font-titan uppercase text-black/80">
           {game.name}
         </h3>
-        <div
-          className="px-4 text-black rounded-full"
-          style={{ backgroundColor: gameTier.color }}
-        >
-          <p>{gameTier.name}</p>
-        </div>
+        {gameTier && (
+          <div
+            className="px-4 text-black rounded-full"
+            style={{ backgroundColor: gameTier.color }}
+          >
+            <p>{gameTier.name}</p>
+          </div>
+        )}
 
         {!game.isActive && onDelete && (
           <XMarkIcon
