@@ -5,26 +5,29 @@ import { useMemo } from "react";
 
 export default function CreateAdvanced({ tournament, setTournament }) {
   const difficulty = useMemo(() => {
+    if (!tournament.winProbability) return 0;
     return (tournament.winProbability * 100).toFixed(0) + "/100";
   }, [tournament.winProbability]);
 
   return (
     <div className="flex flex-col gap-4">
-      <Card className="flex-1 w-full">
-        <h3 className="text-black/50">Game Difficulty {difficulty}</h3>
-        <div className="w-full">
-          <RangeSlider
-            min={0}
-            max={1}
-            step={0.01}
-            value={tournament.winProbability}
-            className="w-full"
-            onChange={(e) =>
-              setTournament({ ...tournament, winProbability: e.target.value })
-            }
-          />
-        </div>
-      </Card>
+      {tournament.winProbability && (
+        <Card className="flex-1 w-full">
+          <h3 className="text-black/50">Game Difficulty {difficulty}</h3>
+          <div className="w-full">
+            <RangeSlider
+              min={0}
+              max={1}
+              step={0.01}
+              value={tournament.winProbability}
+              className="w-full"
+              onChange={(e) =>
+                setTournament({ ...tournament, winProbability: e.target.value })
+              }
+            />
+          </div>
+        </Card>
+      )}
       <Card>
         <h3 className="text-black/50">Game Tweaks</h3>
         <div className="flex flex-col">
