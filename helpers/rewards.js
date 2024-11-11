@@ -111,7 +111,7 @@ export const claimReward = async (reward, data, context) => {
       reward.id
     );
   }
-  await addDocument(`users/${context.loggedIn.uid}/rewards`, {
+  const res = await addDocument(`users/${context.loggedIn.uid}/rewards`, {
     ...reward,
     tournamentId: data.tournamentId,
     ownerId: data.ownerId,

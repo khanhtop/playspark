@@ -556,13 +556,13 @@ export default class newFallGameScene extends Phaser.Scene {
 
     
 
-    this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
-    this.cameras.main.postFX
-      .addColorMatrix()
-      .contrast(1.25)
-      .polaroid()
-      .brightness(0.9);
-    this.player.preFX.addShadow();
+    // this.cameras.main.postFX.addVignette(0.5, 0.5, 0.975);
+    // this.cameras.main.postFX
+    //   .addColorMatrix()
+    //   .contrast(1.25)
+    //   .polaroid()
+    //   .brightness(0.9);
+    // this.player.preFX.addShadow();
 
     this.gameover_board = this.add.group();
     this.gameover_board.add(

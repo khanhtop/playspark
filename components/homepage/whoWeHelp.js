@@ -9,8 +9,9 @@ import { useEffect } from "react";
 export default function WhoWeHelp({ page }) {
   const router = useRouter();
   return (
-    <div className="w-full flex flex-col bg-white from-blue-500/0 to-blue-500/10 items-center justify-center text-black pt-[90px]  px-0 lg:px-4">
-      <div className="text-center flex flex-col items-center mx-auto gap-5 pb-[60px] max-w-full ">
+    <div className="bg-white max-w-full mx-auto">
+    <div className="flex flex-col from-blue-500/0 to-blue-500/10 items-center justify-center text-black pt-[90px]  px-0 lg:px-4">
+      <div className="text-center flex flex-col items-center mx-auto gap-5 pb-[60px]">
         <button className="max-w-[226px] mx-auto text-center text-[13px] font-medium rounded-[10px] border border-[#E9E9E9] border-1 px-[10px] py-1 ">
           {page.level_sub_title}
         </button>
@@ -20,7 +21,7 @@ export default function WhoWeHelp({ page }) {
         <p className="text-[22px] my-4 mb-10 text-center lg:max-w-[535px]  max-w-[358px] mx-auto text-subtitle">
           {page.level_text}
         </p>
-        <div className="lg:hidden block max-w-[430px] mx-auto">
+        <div className="lg:hidden block max-w-[380px] mx-auto">
           <Slider items={page.level_group} />
         </div>
 
@@ -28,6 +29,7 @@ export default function WhoWeHelp({ page }) {
           return <Blog item={item} key={key} />;
         })}
       </div>
+    </div>
     </div>
   );
 }
@@ -59,7 +61,7 @@ const Blog = ({ item }) => {
     >
       <div>
         <div className=" flex flex-col-reverse lg:flex-row gap-5  shadow-xl shadow-grey border rounded-[10px] py-10">
-          <div className="lg:w-1/2  w-full flex flex-col gap-10 items-center justify-center  ">
+          <div className="w-1/2   flex flex-col gap-10 items-center justify-center  ">
             <h1 className=" font-bold text-2xl px-10">{item.title}</h1>
             <div className=" flex flex-col gap-8 text-start text-[16px] px-3">
               <div className=" flex flex-row gap-1 justify-center items-center">
@@ -76,8 +78,8 @@ const Blog = ({ item }) => {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-1/2 flex items-center justify-center">
-            <img src={item.image.url} className="w-[232px] h-[333px]" />
+          <div className="w-1/2 flex items-center justify-center">
+            <img src={item.image.url} className="w-[333px] h-[333px] " />
           </div>
         </div>
         <div className="h-32 py-10">

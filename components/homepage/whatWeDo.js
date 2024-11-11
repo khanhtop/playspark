@@ -11,8 +11,8 @@ export default function WhatWeDo({ page }) {
   const router = useRouter();
   const [openModal, setOpenModal] = useState(false);
   return (
-    <div className=" text-black flex flex-col items-center justify-center min-w-[430px] bg-white">
-      <div className=" flex flex-col w-full gap-5 max-w-[668px] items-center justify-center mx-auto">
+    <div className=" text-black flex flex-col items-center justify-center  bg-white">
+      <div className=" flex flex-col w-full gap-5 lg:max-w-[668px] items-center justify-center mx-auto">
         <img
           src={backImg.src}
           className=" mx-auto lg:h-[166px] h-[100px] my-3"

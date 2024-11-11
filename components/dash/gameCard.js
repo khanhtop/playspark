@@ -7,7 +7,7 @@ import {
   EllipsisVerticalIcon,
   XMarkIcon,
 } from "@heroicons/react/24/solid";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 export default function GameCard({
   game,
@@ -69,6 +69,26 @@ export default function GameCard({
     }
   }, []);
 
+  const gameTier = useMemo(() => {
+    if (!game.tier) return null;
+    if (game.tier === 1) {
+      return {
+        name: "Bronze",
+        color: "#cd7f32",
+      };
+    } else if (game.tier === 2) {
+      return {
+        name: "Silver",
+        color: "#C0C0C0",
+      };
+    } else if (game.tier === 3) {
+      return {
+        name: "Gold",
+        color: "#FFD700",
+      };
+    }
+  }, [game.tier]);
+
   return (
     <div
       onMouseOver={() => setImageUrl(animatedImageUrl)}
@@ -83,6 +103,15 @@ export default function GameCard({
         <h3 className="text-lg font-titan uppercase text-black/80">
           {game.name}
         </h3>
+        {gameTier && (
+          <div
+            className="px-4 text-black rounded-full"
+            style={{ backgroundColor: gameTier.color }}
+          >
+            <p>{gameTier.name}</p>
+          </div>
+        )}
+
         {!game.isActive && onDelete && (
           <XMarkIcon
             onClick={() => onDelete()}

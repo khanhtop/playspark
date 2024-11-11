@@ -1,32 +1,42 @@
 export const games = [
-  // {
-  //   name: "Spin To Win",
-  //   creditConsumption: 1,
-  //   description:
-  //     "Spin your way to victory in our game of chance! Every turn unlocks a world of rewards, making every moment a winning sensation!",
-  //   backgroundImage:
-  //     "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259239/1_jxkksl.png",
-  //   screenshot: "wheelspin.jpg",
-  //   primaryColor: "#F69B01",
-  //   accentColor: "#EB144C",
-  //   textColor: "#FFF",
-  //   id: 10,
-  //   cloudinaryGameTag: "spin-to-win",
-  //   tags: {
-  //     backgroundSprite: "0.6",
-  //   },
-  //   font: "Play",
-  //   bodyFont: "Roboto",
-  //   backgroundSprite:
-  //     "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
-  // },
   {
-    name: "Cricket Smash",
+    tier: 1,
+    name: "Spin To Win",
+    description:
+      "Spin your way to victory in our game of chance! Every turn unlocks a world of rewards, making every moment a winning sensation!",
+    backgroundImage:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259239/1_jxkksl.png",
+    primaryColor: "#F69B01",
+    accentColor: "#EB144C",
+    textColor: "#FFF",
+    id: 10,
+    cloudinaryGameTag: "spin-to-win",
+    tags: {
+      backgroundSprite: "0.6",
+      playerSprite: "1.0",
+      enemySprite: "1.0",
+      powerUpSprite: "1.0",
+    },
+    font: "Play",
+    bodyFont: "Roboto",
+    winProbability: 0.5,
+    backgroundSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1707448069/nwseiw4wvsfpcp9cg1sq.png",
+    playerSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+    enemySprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704169648/kjacp92e8wrlbbkdlksm.png",
+    powerUpSprite:
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1704162276/qhdlrak2jpw9ft5z9vte.png",
+  },
+  {
+    name: "Cricket Smash BBL",
+    tier: 3,
     creditConsumption: 2,
     description:
       "Unlock cricket legends, time your shots, and dominate the high score leaderboard in this precision-packed game!",
     backgroundImage:
-      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1706259240/2_ca3g2n.png",
+      "https://res.cloudinary.com/dmj6utxgp/image/upload/v1730866124/Homescreen_BG-_Landscape_5_fndwey.gif",
     screenshot: "cricketsmash.jpg",
     primaryColor: "#F69B01",
     accentColor: "#0693E3",
@@ -38,6 +48,7 @@ export const games = [
   },
   {
     name: "Power Pong",
+    tier: 2,
     creditConsumption: 2,
     description:
       "Customize your Pong experience, choose your graphics, and compete for glory on the leaderboard in this sleek and stylish arcade game!",
@@ -91,6 +102,7 @@ export const games = [
   {
     name: "Baller Faller",
     creditConsumption: 2,
+    tier: 2,
     description:
       "Dodge obstacles, catch falling objects, and set high scores in this customizable and action-packed game where every move is a step closer to victory!",
     backgroundImage:
@@ -135,6 +147,7 @@ export const games = [
   },
   {
     name: "Wordle",
+    tier: 1,
     creditConsumption: 1,
     description:
       "Experience a new twist in Wordle with AI-generated puzzles! Test your word skills against machine-crafted challenges for a thrilling and compact guessing game!",
@@ -161,6 +174,7 @@ export const games = [
   {
     name: "Fly Ball",
     creditConsumption: 2,
+    tier: 2,
     font: "Play",
     bodyFont: "Roboto",
     description:
@@ -198,6 +212,7 @@ export const games = [
   {
     name: "Throwdown Frenzy",
     creditConsumption: 2,
+    tier: 3,
     font: "Play",
     bodyFont: "Roboto",
     description: `Throwdown Frenzy propels players into an adrenaline-fueled frenzy as they hurl projectiles at targets, dodge relentless enemy obstacles, and compete for high scores in a heart-pounding test of skill and survival!`,
@@ -257,6 +272,7 @@ export const games = [
   {
     name: "Bounce Blitz",
     creditConsumption: 2,
+    tier: 3,
     font: "Play",
     bodyFont: "Roboto",
     description: `"Bounce Blitz" invites players into a high-octane world where they must master the art of timing and precision as they ricochet a ball off the ground to hit targets, evade perilous obstacles, and conquer levels in a thrilling battle for supremacy`,
@@ -306,6 +322,7 @@ export const games = [
   {
     name: "Endzone Blitz",
     creditConsumption: 2,
+    tier: 2,
     font: "Play",
     bodyFont: "Roboto",
     description: `In 'Endzone Blitz,' players become gridiron heroes, strategically passing the ball to teammates, dodging opponents, and making daring catches to score touchdowns in an intense, endless runner challenge where every missed play costs a precious life, culminating in a thrilling final score!"`,
@@ -341,6 +358,7 @@ export const games = [
   {
     name: "Sky Soar",
     creditConsumption: 2,
+    tier: 2,
     font: "Play",
     bodyFont: "Roboto",
     description:
@@ -389,6 +407,7 @@ export const games = [
   {
     name: "Sidestep Surge",
     creditConsumption: 2,
+    tier: 2,
     font: "Play",
     bodyFont: "Roboto",
     description:
@@ -434,6 +453,7 @@ export const games = [
   {
     name: "Airborne Ace",
     creditConsumption: 2,
+    tier: 3,
     font: "Play",
     bodyFont: "Roboto",
     description:
@@ -481,6 +501,7 @@ export const games = [
   {
     name: "Can Smash",
     creditConsumption: 2,
+    tier: 3,
     font: "Play",
     bodyFont: "Roboto",
     description:

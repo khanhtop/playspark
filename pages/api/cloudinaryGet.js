@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       .max_results(30)
       .execute()
       .then((result) => {
-        res.status(200).json(result.resources);
+        res.status(200).json({ objects: result.resources });
       });
   } catch (error) {
     console.error("Error fetching images:", error);

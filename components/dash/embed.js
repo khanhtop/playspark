@@ -1,21 +1,26 @@
 import { platforms } from "@/helpers/platforms";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
-export default function Embed({ setShowEmbed, id, onClick, link, setLink }) {
+export default function Embed({ setShowEmbed, id, playableAd }) {
   const [platform, setPlatform] = useState(platforms[0]);
   const [embedCode, setEmbedCode] = useState("");
   const [copied, setCopied] = useState(false);
+
+  const suffix = useMemo(() => {
+    if (playableAd) return "plad";
+    return "game";
+  }, [playableAd]);
 
   useEffect(() => {
     setCopied(false);
     if (platform.value != "email") {
       setEmbedCode(
-        `<iframe src="https://playspark.co/ad/` +
+        `<iframe src="https://playspark.co/${suffix}/` +
           id +
           `" style="height: 884px; width: 500px;"/>`
       );
     } else {
-      setEmbedCode(`https://playspark.co/ad/` + id);
+      setEmbedCode(`https://playspark.co/${suffix}/` + id);
     }
   }, [platform]);
 

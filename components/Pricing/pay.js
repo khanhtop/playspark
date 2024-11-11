@@ -12,7 +12,7 @@ import { useEffect } from "react";
 export default function Pay({ page }) {
   const router = useRouter();
   return (
-    <div className=" pt-[154px] pb-10 bg-white ">
+    <div className=" pt-[154px] pb-10 bg-white">
       <div className=" flex flex-col items-center justify-center gap-10">
         <h1 className="text-[54px] font-bold text-center -tracking-[3px] leading-[60px] whitespace-nowrap">
           {page.pay_title}
@@ -65,6 +65,7 @@ export default function Pay({ page }) {
 }
 
 const Blog = ({ item, page }) => {
+  const router = useRouter();
   let className;
   let buttonStyle;
   let text_list;
@@ -152,6 +153,8 @@ const Blog = ({ item, page }) => {
           "w-[271px] mx-auto border rounded-[30px] py-[10px] px-[64px]",
           buttonStyle
         )}
+
+        onClick={()=>{router.push('/admin')}}
       >
         {item.button_text}
       </button>

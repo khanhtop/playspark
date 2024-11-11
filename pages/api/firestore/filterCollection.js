@@ -8,16 +8,15 @@ export default async function handler(req, res) {
   }
 
   if (!collectionName || !filterField || !filterValue) {
-    return res
-      .status(400)
-      .json({
-        error: "Collection name, filter field, and filter value are required",
-      }); // Validate parameters
+    return res.status(400).json({
+      error: "Collection name, filter field, and filter value are required",
+    }); // Validate parameters
   }
 
   try {
     const firestore = admin.firestore();
     const collectionRef = firestore.collection(collectionName);
+
     const querySnapshot = await collectionRef
       .where(filterField, "==", filterValue)
       .get();

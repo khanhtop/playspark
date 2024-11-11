@@ -2,6 +2,7 @@ import { useAppContext } from "@/helpers/store";
 import {
   ChartBarIcon,
   Cog6ToothIcon,
+  CurrencyDollarIcon,
   GiftIcon,
   ShoppingCartIcon,
   Squares2X2Icon,
@@ -48,6 +49,12 @@ export default function Sidebar({ selectedPane, setSelectedPane }) {
           selected={selectedPane === 1}
           setSelectedPane={() => setSelectedPane(1)}
           icon={<TrophyIcon className="h-8" />}
+        />
+        <Row
+          text="My Playable Ads"
+          selected={selectedPane === 9}
+          setSelectedPane={() => setSelectedPane(9)}
+          icon={<CurrencyDollarIcon className="h-8" />}
         />
         <Row
           text="Rewards"

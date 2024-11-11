@@ -6,6 +6,7 @@ import FilterPills from "./filterPills";
 import CreateModal from "./createTournament/createModal";
 import { playable_ads } from "@/helpers/playable_ads";
 import { FaGamepad, FaAd } from "react-icons/fa";
+import CreateModalPlayableAd from "./createTournament/createModalPlayableAd";
 
 export default function MarketPlace({}) {
   const context = useAppContext();
@@ -16,6 +17,7 @@ export default function MarketPlace({}) {
   const [filter, setFilter] = useState("games");
   const [adding, setAdding] = useState(false);
   const [showAddTournamentModal, setShowAddTournamentModal] = useState(false);
+  const [showAddPlayableAdModal, setShowAddPlayableAdModal] = useState(false);
 
   return (
     <>
@@ -54,7 +56,11 @@ export default function MarketPlace({}) {
               })
             }
             onAdd={() => {
-              if (filter === "games") setShowAddTournamentModal(item);
+              if (filter === "games") {
+                setShowAddTournamentModal(item);
+              } else {
+                setShowAddPlayableAdModal(item);
+              }
             }}
           />
         ))}
@@ -85,6 +91,12 @@ export default function MarketPlace({}) {
           <CreateModal
             hide={() => setShowAddTournamentModal(false)}
             data={showAddTournamentModal}
+          />
+        )}
+        {showAddPlayableAdModal && (
+          <CreateModalPlayableAd
+            hide={() => setShowAddPlayableAdModal(false)}
+            data={showAddPlayableAdModal}
           />
         )}
       </div>

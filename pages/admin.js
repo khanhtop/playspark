@@ -3,6 +3,7 @@ import Account from "@/components/dash/account";
 import Analytics from "@/components/dash/analytics";
 import Dashboard from "@/components/dash/dashboard";
 import MarketPlace from "@/components/dash/marketplace";
+import MyPlayableAds from "@/components/dash/myDeployments/myPlayableAds";
 import MyGames from "@/components/dash/mygames";
 import Pane from "@/components/dash/pane";
 import Profile from "@/components/dash/profile";
@@ -86,6 +87,13 @@ export default function Application() {
               subtext="Set up and configure various rewards and prizes that users can engage with."
             >
               <Rewards />
+            </Pane>
+          ) : selectedPane === 9 ? (
+            <Pane
+              title="My Playable Ads"
+              subtext="Review playable ads that are currently active, and those which have ended or have been manually archived."
+            >
+              <MyPlayableAds />
             </Pane>
           ) : (
             <Pane />

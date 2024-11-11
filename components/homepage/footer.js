@@ -1,38 +1,20 @@
 import { useMemo } from "react";
-import Twitter from "/public/images/social-icons/white/1.png"
 import Instergram from "/public/images/social-icons/white/2.png"
-import Pinterest from "/public/images/social-icons/white/3.png"
 import Linkdin from "/public/images/social-icons/white/4.png"
-import TikTok from "/public/images/social-icons/white/5.png"
-import Youtub from "/public/images/social-icons/white/6.png"
 import { useRouter } from "next/router";
 
 
 const Image_white = [
-  {
-    icon:Twitter,
-    url : ""
-  },
+  
   {
     icon : Instergram,
     url : "https://www.instagram.com/playspark.co"
   },
-  {
-    icon : Pinterest,
-    url : " "
-  },
+  
   {
     icon : Linkdin,
     url : "https://www.linkedin.com/company/playspark/"
   },
-  {
-    icon : TikTok,
-    url : ""
-  },
-  {
-    icon : Youtub,
-    url: ""
-  }
 ]
 
 import footer_logo from '/public/images/footer_logo.png'
@@ -67,19 +49,17 @@ const router= useRouter();
             <p>Security</p>
           </div>
           <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
-            <p className="font-bold ">Resource</p>
+            <p className="font-bold ">Resources</p>
             <p onClick={()=>{router.push("/case-studies")}}>Case Studies</p>
-            <p>Docs</p>
           </div>
           <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
-            <p className="font-bold ">company</p>
-            <p>About</p>
+            <p className="font-bold ">Company</p>
             <p onClick={()=>{router.push("/blog")}}>Blog</p>
             <p onClick={()=>{router.push("/feature")}}>Contact</p>
           </div>
           <div className="flex flex-col items-start justify-start lg:gap-5 gap-2 cursor-pointer">
             <p className="font-bold ">Products</p>
-            <p onClick={()=>{router.push("/products")}}>Feature</p>
+            <p onClick={()=>{router.push("/products")}}>Products</p>
             <p>FAQ</p>
             <p onClick={()=>{router.push("/pricing")}}>Pricing</p>
           </div>
