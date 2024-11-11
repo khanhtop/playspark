@@ -10,6 +10,7 @@ export default function CreateWrapper({
   onNavigate,
   isAdding,
   onComplete,
+  disableSteps,
 }) {
   const currentStage = useMemo(() => {}, [stage]);
 
@@ -20,6 +21,7 @@ export default function CreateWrapper({
           stages={stages}
           currentStage={stage}
           onNavigate={onNavigate}
+          disableSteps={disableSteps}
         />
       </div>
       <div className="flex-1 p-4 flex overflow-y-scroll ">
@@ -42,23 +44,26 @@ export default function CreateWrapper({
   );
 }
 
-function ProgressBar({ stages, currentStage, onNavigate }) {
+function ProgressBar({ stages, currentStage, onNavigate, disableSteps }) {
   return (
     <div className="flex w-full justify-between text-xs relative">
       <div className="absolute h-[2px] top-[10px] bg-[#DDD] w-full" />
-      {stages.map((item, key) => (
-        <div
-          onClick={() => onNavigate(key)}
-          className={`${
-            currentStage + 1 > key
-              ? "bg-indigo-600 text-white"
-              : "bg-indigo-200 text-white"
-          } w-32 transition hover:bg-indigo-600 cursor-pointer flex items-center justify-center py-1 rounded-md z-10`}
-          key={key}
-        >
-          {item}
-        </div>
-      ))}
+      {stages.map((item, key) => {
+        if (!disableSteps || !disableSteps.includes(key))
+          return (
+            <div
+              onClick={() => onNavigate(key)}
+              className={`${
+                currentStage + 1 > key
+                  ? "bg-indigo-600 text-white"
+                  : "bg-indigo-200 text-white"
+              } w-32 transition hover:bg-indigo-600 cursor-pointer flex items-center justify-center py-1 rounded-md z-10`}
+              key={key}
+            >
+              {item}
+            </div>
+          );
+      })}
     </div>
   );
 }

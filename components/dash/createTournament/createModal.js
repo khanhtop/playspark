@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import CreateWrapper from "./createWrapper";
 import CreateDesign from "./createDesign";
 import CreateMarketing from "./createMarketing";
@@ -70,6 +70,11 @@ export default function CreateModal({ data, hide }) {
     hide();
   };
 
+  const disableSteps = useMemo(() => {
+    if (!tournament.tags) return [1];
+    return [];
+  }, [tournament]);
+
   return (
     <div
       onClick={() => hide()}
@@ -86,6 +91,7 @@ export default function CreateModal({ data, hide }) {
           onNavigate={(step) => setStage(step)}
           onComplete={() => createTournament()}
           isAdding={adding}
+          disableSteps={disableSteps}
         >
           {stage === 0 && (
             <CreateDesign
